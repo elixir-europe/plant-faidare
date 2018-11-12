@@ -5,7 +5,7 @@
 ### Branches
 
 * One stable & protected master branch
-* Feature branches for development following the pattern `[dev_type]/[dev_name]` (ie. `chore/explaining_how_to_merge`) where [dev_type] can be:
+* Feature branches for development following the pattern `[dev_type]/[dev_name]` (ie. `chore/explaining_how_to_merge`) where `[dev_type]` can be:
 	* fix (bug fixes)
 	* feat (new feature)
 	* style (style modification)
@@ -40,9 +40,9 @@
 * Continuous Integration is launched automatically by Gitlab on each commit push or merge request creation.
 
 ## Data management
-* Git LFS feature is enable on this project in order to store JSON test data
+* Git LFS feature is enabled on this project in order to store JSON test data
 * Another dedicated Git LFS project (internal only) will be created to handle all private + public JSON files
-* TODO: refer to the good Git LFS project in the CI settings for indexing the relevant data into the relevant Elasticsearch indices/instances
+* **TODO**: refer to the good Git LFS project in the CI settings for indexing the relevant data into the relevant Elasticsearch indices/instances
 * the JSON files generation will be handled by an external ET (extract/transform) tool.
 
 ## Development environment
@@ -50,5 +50,5 @@
 * Recommanded IDE is [Intellij IDEA](https://www.jetbrains.com/idea/)
 * Use linting to apply code standards within the team:
 	* Use `ng lint` (for frontend code only)
-	* Use [Checkstyle](https://checkstyle.org/) and [PMD](https://pmd.github.io/) (TODO: implement) for backend (+frontend?) code
+	* Use [Checkstyle](https://checkstyle.org/) and [PMD](https://pmd.github.io/) (**TODO**: implement) for backend (+frontend?) code
 * All runtime variables should be externalized from the code in order to facilitate the CI management (database host/port, application name, public URL, JSON location...) and the adoption by partners
