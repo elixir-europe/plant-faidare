@@ -1,0 +1,35 @@
+// non-public variables used in this theme only
+$_theme-black: #222222;
+$_theme-green: rgba(#28A745, 0.4);
+$_theme-light-gray: #eaeaea;
+
+$component-active-bg: $_theme-green;
+
+// override default link colors
+$link-color: #79c93f;
+$link-hover-color: $_theme-black;
+
+// override default shadows behavior
+$enable-shadows: true;
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+// public custom variables used in this theme, and in component styles
+
+// custom button
+$theme-btn-color: $white;
+$theme-btn-bg-color: $_theme-black;
+$theme-btn-border-color: $_theme-black;
+$theme-btn-hover-color: $white;
+$theme-btn-hover-bg-color: $_theme-green;
+$theme-btn-hover-border-color: $_theme-green;
+
+// custom navbar
+$theme-navbar-height: 4rem;
+$theme-navbar-color: $black;
+$theme-navbar-bg-color: $_theme-light-gray;
+$theme-navbar-hover-color: $white;
+$theme-navbar-hover-bg-color: $_theme-green;
+
