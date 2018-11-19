@@ -4,13 +4,14 @@
 
 ### Branches
 
-* One stable & protected master branch
+* One stable & protected [master](/) branch
 * Feature branches for development following the pattern `[dev_type]/[dev_name]` (ie. `chore/explaining_how_to_merge`) where `[dev_type]` can be:
 	* fix (bug fixes)
 	* feat (new feature)
 	* style (style modification)
  	* refactor (code refactoring)
  	* chore (base maintenance such as version bump)
+ 	* test (for anything related to tests)
 
 ### Commit & branches merge
 * Commit name should follow pattern `[dev_type]: [brief description of the commit, lower than 50 characters]. [JIRA-KEY]`
@@ -40,7 +41,7 @@
 * Continuous Integration is launched automatically by Gitlab on each commit push or merge request creation.
 
 ## Data management
-* Git LFS feature is enabled on this project in order to store JSON test data
+* Git LFS (look at [how to install](https://git-lfs.github.com/)) feature is enabled on this project in order to store JSON test data
 * Another dedicated Git LFS project (internal only) will be created to handle all private + public JSON files
 * **TODO**: refer to the good Git LFS project in the CI settings for indexing the relevant data into the relevant Elasticsearch indices/instances
 * the JSON files generation will be handled by an external ET (extract/transform) tool.
