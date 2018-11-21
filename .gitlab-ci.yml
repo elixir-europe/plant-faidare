@@ -1,13 +1,16 @@
 image: urgi/docker-rare:latest
 
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  policy: pull
+  paths:
+  - ".gradle/"
+  - "frontend/.gradle/"
+  - "frontend/node_modules/"
+
 test:
   stage: test
   script: "./gradlew test --parallel"
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
-    paths:
-    - "frontend/node_modules/"
   artifacts:
     reports:
       junit:
