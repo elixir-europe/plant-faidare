@@ -22,7 +22,12 @@ tasks {
 
     val test by creating {
         dependsOn("npm_run_lint")
-        dependsOn("npm_run_test")
+
+        if (isCi) {
+            dependsOn("npm_run_test-ci")
+        } else {
+            dependsOn("npm_run_test")
+        }
     }
 
     val check by getting {
@@ -30,7 +35,9 @@ tasks {
     }
 
     val assemble by getting {
-        dependsOn("npm_run_lint")
+        doFirst {
+            dependsOn("npm_run_lint")
+        }
         dependsOn("npm_run_build")
     }
 

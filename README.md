@@ -47,7 +47,9 @@ ng serve
 
 ## GitLab CI
 
+1. [Install gitlab-runner](https://docs.gitlab.com/runner/install/)
+2. Run the following command (with the correct GnpIS security token):
 
-TODO: lint on test/dev 
-TODO: add gitlab ci (ng test --browsers FirefoxHeadless,ChromeHeadlessNoSandbox)
-
+```sh
+gitlab-runner exec docker test 
+```
