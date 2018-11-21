@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+    production: false,
+    navbar: {
+        title: 'GnpIS Plant Data Search',
+        links: [{label: 'URGI', url: 'http://urgi.versailles.inra.fr'}]
+    }
 };
 
 /*

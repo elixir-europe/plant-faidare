@@ -13,22 +13,23 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    FormComponent,
-    ResultComponent,
-    GermplasmCardComponent,
-    StudyCardComponent,
-    SiteCardComponent,
-    NavbarComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        FormComponent,
+        ResultComponent,
+        GermplasmCardComponent,
+        StudyCardComponent,
+        SiteCardComponent,
+        NavbarComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

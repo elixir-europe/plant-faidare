@@ -1,39 +1,36 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# Created by https://www.gitignore.io/api/angular
+# Edit at https://www.gitignore.io/?templates=angular
+
+### Angular ###
+## Angular ##
 # compiled output
 /dist
 /tmp
-/out-tsc
+/app/**/*.js
+/app/**/*.js.map
+
+# karma report
+/karma-junit-tests-report
 
 # dependencies
 /node_modules
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+/bower_components
 
 # misc
 /.sass-cache
 /connect.lock
-/coverage
+/coverage/*
 /libpeerconnection.log
 npm-debug.log
-yarn-error.log
 testem.log
 /typings
 
-# System Files
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+#System Files
 .DS_Store
-Thumbs.db
+
+# End of https://www.gitignore.io/api/angular

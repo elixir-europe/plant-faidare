@@ -23,12 +23,16 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
-              { "glob": "**/*", "input": "src/assets/gnpis", "output": "/assets" },
+              {
+                "glob": "**/*",
+                "input": "src/assets/gpds",
+                "output": "/assets"
+              },
               "src/assets"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/assets/gnpis/"
+                "src/assets/gpds/"
               ]
             },
             "styles": [
@@ -51,18 +55,18 @@
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
+              "vendorChunk": true,
               "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "650kb",
+                  "maximumError": "900kb"
                 }
               ],
               "stylePreprocessorOptions": {
                 "includePaths": [
-                  "src/assets/gnpis/"
+                  "src/assets/gpds/"
                 ]
               }
             }
@@ -80,12 +84,6 @@
             }
           }
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "frontend:build"
-          }
-        },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
@@ -93,14 +91,23 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "src/assets/gpds",
+                "output": "/assets"
+              },
+              "src/assets"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/assets/gpds/"
+              ]
+            },
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [],
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ]
+            "scripts": []
           }
         },
         "lint": {

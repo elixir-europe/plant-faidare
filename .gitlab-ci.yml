@@ -1,0 +1,21 @@
+image: urgi/docker-rare:latest
+
+test-frontend:
+  stage: test
+  before_script:
+    - "npm install"
+  script:
+    - "cd frontend"
+    - "ng lint"
+    - "ng test --browsers FirefoxHeadless,ChromeHeadlessNoSandbox"
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+    - "frontend/node_modules/"
+  artifacts:
+    reports:
+      junit:
+      - "./frontend/karma-junit-tests-report/TEST*.xml"
+
+

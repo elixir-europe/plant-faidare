@@ -1,19 +1,17 @@
 import { Component } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
-  selector: 'gpds-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+    selector: 'gpds-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
 
-  navbar = {
-    title: 'GnpIS Plant Data Search',
-    links: [{label: 'URGI', url: 'http://urgi.versailles.inra.fr'}]
-  };
-  navbarCollapsed = true;
+    navbar = environment.navbar;
+    navbarCollapsed = true;
 
-  toggleNavbar() {
-    this.navbarCollapsed = !this.navbarCollapsed;
-  }
+    toggleNavbar() {
+        this.navbarCollapsed = !this.navbarCollapsed;
+    }
 }
