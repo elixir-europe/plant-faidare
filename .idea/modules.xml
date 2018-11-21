@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontend/frontend.iml" filepath="$PROJECT_DIR$/.idea/modules/frontend/frontend.iml" group="frontend" />
       <module fileurl="file://$PROJECT_DIR$/.idea/gpds.iml" filepath="$PROJECT_DIR$/.idea/gpds.iml" />
     </modules>
   </component>

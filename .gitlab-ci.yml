@@ -1,13 +1,8 @@
 image: urgi/docker-rare:latest
 
-test-frontend:
+test:
   stage: test
-  before_script:
-    - "npm install"
-  script:
-    - "cd frontend"
-    - "ng lint"
-    - "ng test --browsers FirefoxHeadless,ChromeHeadlessNoSandbox"
+  script: "./gradlew test --parallel"
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
