@@ -35,9 +35,6 @@ tasks {
     }
 
     val assemble by getting {
-        doFirst {
-            dependsOn("npm_run_lint")
-        }
         dependsOn("npm_run_build")
     }
 
@@ -48,4 +45,3 @@ tasks {
         dependsOn("npm_run_e2e")
     }
 }
-
