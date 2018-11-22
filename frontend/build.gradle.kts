@@ -20,9 +20,8 @@ node {
 
 tasks {
 
+    // Unit tests
     val test by creating {
-        dependsOn("npm_run_lint")
-
         if (isCi) {
             dependsOn("npm_run_test-ci")
         } else {
@@ -30,18 +29,27 @@ tasks {
         }
     }
 
-    val check by getting {
-        dependsOn(test)
-    }
-
-    val assemble by getting {
-        dependsOn("npm_run_build")
-    }
-
-    val clean by getting {
-    }
-
-    val clientIntegrationTest by creating(NpmTask::class) {
+    // E2E tests
+    val clientIntegrationTest by creating {
         dependsOn("npm_run_e2e")
     }
+
+    // Run lint before tests
+    test.dependsOn("npm_run_lint")
+    test.mustRunAfter("npm_run_lint")
+    clientIntegrationTest.dependsOn("npm_run_lint")
+    clientIntegrationTest.mustRunAfter("npm_run_lint")
+
+    val check by getting {}
+    check.dependsOn(test)
+
+    val assemble by getting {}
+
+    // Build
+    val npm_run_build by getting {}
+    assemble.dependsOn("npm_run_lint")
+    assemble.dependsOn(npm_run_build)
+    npm_run_build.mustRunAfter("npm_run_lint")
+
 }
+
