@@ -1,6 +1,6 @@
 
-# Created by https://www.gitignore.io/api/angular
-# Edit at https://www.gitignore.io/?templates=angular
+# Created by https://www.gitignore.io/api/angular,sass
+# Edit at https://www.gitignore.io/?templates=angular,sass
 
 ### Angular ###
 ## Angular ##
@@ -10,12 +10,12 @@
 /app/**/*.js
 /app/**/*.js.map
 
-# karma report
-/karma-junit-tests-report
-
 # dependencies
 /node_modules
 /bower_components
+
+# IDEs and editors
+/.idea
 
 # misc
 /.sass-cache
@@ -33,4 +33,10 @@ testem.log
 #System Files
 .DS_Store
 
-# End of https://www.gitignore.io/api/angular
+### Sass ###
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map
+
+# End of https://www.gitignore.io/api/angular,sass

@@ -47,6 +47,11 @@ ng serve
 
 ## GitLab CI
 
+When creating merge requests on the ForgeMIA GitLab, the GitLab CI will 
+automatically run the tests of the project (no need to do anything).
+
+If you want to run the GitLab CI locally, you have to follow this steps:
+
 1. [Install gitlab-runner](https://docs.gitlab.com/runner/install/)
 2. Run the following command (with the correct GnpIS security token):
 
