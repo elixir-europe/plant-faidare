@@ -6,7 +6,7 @@ export const environment = {
     production: false,
     navbar: {
         title: 'GnpIS Plant Data Search',
-        links: [{label: 'URGI', url: 'http://urgi.versailles.inra.fr'}]
+        links: [{ label: 'URGI', url: 'http://urgi.versailles.inra.fr' }]
     }
 };
 

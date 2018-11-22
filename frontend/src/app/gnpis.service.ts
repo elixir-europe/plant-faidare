@@ -20,8 +20,8 @@ export class GnpisService {
      * @return an observable of field values
      */
     suggest(field: string, fetchSize: number, text: string = ''): Observable<string[]> {
-        const params = {field, text, fetchSize: fetchSize.toString()};
-        return this.http.post<string[]>(`${BASE_URL}/suggest`, null, {params});
+        const params = { field, text, fetchSize: fetchSize.toString() };
+        return this.http.post<string[]>(`${BASE_URL}/suggest`, null, { params });
     }
 
 }
