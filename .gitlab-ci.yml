@@ -1,0 +1,27 @@
+image: urgi/docker-browsers:latest
+
+# Disable the Gradle daemon for Continuous Integration servers as correctness
+# is usually a priority over speed in CI environments. Using a fresh
+# runtime for each build is more reliable since the runtime is completely
+# isolated from any previous builds.
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
+
+# Gradle cache for all jobs
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  paths:
+  - ".gradle"
+  - "frontend/.gradle/"
+  - "frontend/node_modules/"
+
+test:
+  stage: test
+  script: "./gradlew test --parallel"
+  artifacts:
+    reports:
+      junit:
+      - "./frontend/karma-junit-tests-report/TEST*.xml"
+
+
