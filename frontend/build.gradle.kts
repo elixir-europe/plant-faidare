@@ -28,7 +28,7 @@ tasks {
     // Unit tests
     val test by creating {
         if (isCi) {
-            dependsOn("npm_run_test-ci")
+            dependsOn("npm_run_test-multi-browsers")
         } else {
             dependsOn("npm_run_test")
         }
