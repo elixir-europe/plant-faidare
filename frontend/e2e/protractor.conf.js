@@ -8,12 +8,23 @@ exports.config = {
     specs: [
         './src/**/*.e2e-spec.ts'
     ],
-    multiCapabilities: [{
-        'browserName': 'chrome'
-    }],
     directConnect: true,
     baseUrl: 'http://localhost:4200/',
     framework: 'jasmine',
+    multiCapabilities: [
+        {
+            browserName: 'chrome',
+            chromeOptions: {
+                args: ["--headless", "--disable-gpu"]
+            }
+        },
+        {
+            browserName: 'firefox',
+            'moz:firefoxOptions': {
+                args: ["--headless"]
+            }
+        }
+    ],
     jasmineNodeOpts: {
         showColors: true,
         defaultTimeoutInterval: 30000,
