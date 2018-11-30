@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NamedSelection } from './suggestion-field/suggestion-field.component';
+import { DataDiscoveryCriteria } from '../model/criteria/dataDiscoveryCriteria';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'gpds-form',
@@ -6,11 +9,13 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit {
+    @Input() criteria$: Observable<DataDiscoveryCriteria>;
+
+    @Output() selectionChange = new EventEmitter<NamedSelection>();
 
     constructor() {
     }
 
     ngOnInit() {
     }
-
 }

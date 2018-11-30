@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { DataDiscoveryCriteria } from './model/criteria/dataDiscoveryCriteria';
 
 const BASE_URL = '/gnpis/v1/datadiscovery';
 
@@ -17,11 +18,19 @@ export class GnpisService {
      * @param field the field on which to suggest values
      * @param fetchSize number of values to fetch
      * @param text search text that needs to match in field values
+     * @param criteria used to filter document before suggestion
      * @return an observable of field values
      */
-    suggest(field: string, fetchSize: number, text: string = ''): Observable<string[]> {
+    suggest(
+        field: string,
+        fetchSize: number,
+        text: string = '',
+        criteria: DataDiscoveryCriteria = null
+    ): Observable<string[]> {
         const params = { field, text, fetchSize: fetchSize.toString() };
-        return this.http.post<string[]>(`${BASE_URL}/suggest`, null, { params });
+        return this.http.post<string[]>(
+            `${BASE_URL}/suggest`, criteria, { params }
+        );
     }
 
 }

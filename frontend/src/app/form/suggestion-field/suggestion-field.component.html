@@ -1,0 +1,28 @@
+
+<!-- List of selected elements -->
+<div class="mb-2">
+  <span class="badge badge-pill badge-secondary mr-1"
+        tabindex="0"
+        *ngFor="let key of selectedKeys"
+        (keydown.delete)="removeKey(key)"
+        (keydown.backspace)="removeKey(key)">
+        {{ key }}
+    <button tabindex="-1" type="button" class="btn btn-link" (click)="removeKey(key)">&times;</button>
+  </span>
+</div>
+
+<!-- Typeahead input -->
+<ng-template #resultTemplate let-r="result" let-t="term">
+  <ngb-highlight [result]="r" [term]="t"></ngb-highlight>
+</ng-template>
+<input type="text"
+       class="form-control"
+       id="{{inputId}}"
+       #instance="ngbTypeahead"
+       [formControl]="input"
+       [ngbTypeahead]="search"
+       [resultTemplate]="resultTemplate"
+       (selectItem)="selectKey($event)"
+       (focus)="focus$.next($event.target.value)"
+       (click)="click$.next($event.target.value)"
+/>
