@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NamedSelection } from '../form/suggestion-field/suggestion-field.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DataDiscoveryCriteria } from '../model/criteria/dataDiscoveryCriteria';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { DataDiscoveryCriteria, EMPTY_CRITERIA } from '../model/criteria/dataDiscoveryCriteria';
 import { BehaviorSubject } from 'rxjs';
 
 
@@ -12,12 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ResultComponent implements OnInit {
 
-    static EMPTY_CRITERIA: DataDiscoveryCriteria = {
-        crops: [],
-        germplasmLists: []
-    };
-
-    criteria: DataDiscoveryCriteria = { ...ResultComponent.EMPTY_CRITERIA };
+    criteria: DataDiscoveryCriteria = { ...EMPTY_CRITERIA };
     criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(this.criteria);
 
     constructor(private route: ActivatedRoute, private router: Router) {
@@ -29,13 +24,13 @@ export class ResultComponent implements OnInit {
 
         this.router.navigate(['.'], {
             relativeTo: this.route,
-            queryParams: this.criteria
+            queryParams: <Params>this.criteria
         });
     }
 
     ngOnInit(): void {
         this.route.queryParams.subscribe(queryParams => {
-            this.criteria = { ...ResultComponent.EMPTY_CRITERIA };
+            this.criteria = { ...EMPTY_CRITERIA };
             for (const key of Object.keys(queryParams)) {
                 const value = queryParams[key];
                 if (Array.isArray(value)) {

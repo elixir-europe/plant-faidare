@@ -8,4 +8,8 @@ export class AppPage {
     getTitleText() {
         return element(by.css('gpds-root p')).getText();
     }
+
+    getLabel(id) {
+        return element(by.css('gpds-root label[for=' + id + ']')).getText();
+    }
 }

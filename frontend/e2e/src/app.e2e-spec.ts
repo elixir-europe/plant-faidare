@@ -14,7 +14,7 @@ describe('workspace-project App', () => {
 
     it('should display result page message', () => {
         page.navigateTo('/results');
-        expect(page.getTitleText()).toEqual('result works!');
+        expect(page.getLabel('crops')).toContain('Crops');
     });
 
     it('should display site card message', () => {

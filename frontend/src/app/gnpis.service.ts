@@ -3,12 +3,11 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DataDiscoveryCriteria } from './model/criteria/dataDiscoveryCriteria';
 
-const BASE_URL = '/gnpis/v1/datadiscovery';
-
 @Injectable({
     providedIn: 'root'
 })
 export class GnpisService {
+    static BASE_URL = '/gnpis/v1/datadiscovery';
 
     constructor(private http: HttpClient) {
     }
@@ -29,7 +28,7 @@ export class GnpisService {
     ): Observable<string[]> {
         const params = { field, text, fetchSize: fetchSize.toString() };
         return this.http.post<string[]>(
-            `${BASE_URL}/suggest`, criteria, { params }
+            `${GnpisService.BASE_URL}/suggest`, criteria, { params }
         );
     }
 
