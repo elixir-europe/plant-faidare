@@ -1,3 +1,26 @@
-<p>
-  germplasm-card works!
-</p>
+<h2>
+  Germplasm {{ germplasm.result.defaultDisplayName }}
+</h2>
+
+
+<h3>Identification</h3>
+
+<div>Accession number {{ germplasm.result.accessionNumber }}</div>
+<div>Accession name</div>
+<div>Permanent Unique Identifier {{ germplasm.result.germplasmPUI }}</div>
+<div>Accession synonyms <div *ngFor="let syn of germplasm.result.synonyms">{{ syn }}</div></div>
+<div>Taxon name {{ germplasm.result.species }}</div>
+
+
+<h3>Holding</h3>
+
+<div>Institution name {{ germplasm.result.instituteName }}</div>
+<div>Presence status {{  }}</div>
+
+<h3>Origin</h3>
+
+<div>Geographical origin {{ germplasm.result.countryOfOriginCode }}</div>
+<div>Collecting {{ germplasm.result.instituteName }}</div>
+
+
+
