@@ -6,4 +6,4 @@ export interface DataDiscoveryCriteria {
 export const EMPTY_CRITERIA: DataDiscoveryCriteria = {
     crops: [],
     germplasmLists: []
-}
+};

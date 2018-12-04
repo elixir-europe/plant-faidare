@@ -1,10 +1,9 @@
-import { getTestBed, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { GnpisService } from './gnpis.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 describe('GnpisService', () => {
-    let injector;
     let service;
     let httpMock;
 
@@ -13,9 +12,8 @@ describe('GnpisService', () => {
             imports: [HttpClientTestingModule],
             providers: [HttpClientTestingModule]
         });
-        injector = getTestBed();
-        service = injector.get(GnpisService);
-        httpMock = injector.get(HttpTestingController);
+        service = TestBed.get(GnpisService);
+        httpMock = TestBed.get(HttpTestingController);
     });
 
     it('should be created', () => {

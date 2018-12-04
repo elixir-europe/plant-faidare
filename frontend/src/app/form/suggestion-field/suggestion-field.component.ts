@@ -6,6 +6,9 @@ import { GnpisService } from '../../gnpis.service';
 import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
 import { DataDiscoveryCriteria } from '../../model/criteria/dataDiscoveryCriteria';
 
+/**
+ * Represent field selection along with the name of the field
+ */
 export interface NamedSelection {
     name: string;
     selection: string[];
@@ -33,7 +36,7 @@ export class SuggestionFieldComponent implements OnInit {
 
     @ViewChild('instance') instance: NgbTypeahead;
 
-    private lastCriteria: DataDiscoveryCriteria;
+    private criteria: DataDiscoveryCriteria = null;
     private criteriaChanged = true;
 
     constructor(private gnpisService: GnpisService) {
@@ -41,9 +44,14 @@ export class SuggestionFieldComponent implements OnInit {
 
     ngOnInit(): void {
         this.criteria$.subscribe(criteria => {
+            // When criteria changes
             this.criteriaChanged = true;
-            this.lastCriteria = criteria;
-            this.selectedKeys = criteria[this.criteriaField];
+
+            if (!this.criteria) {
+                // Criteria first initialized
+                this.criteria = criteria;
+                this.selectedKeys = this.criteria[this.criteriaField];
+            }
         });
     }
 
@@ -52,6 +60,7 @@ export class SuggestionFieldComponent implements OnInit {
      * suggestions
      */
     search = (text$: Observable<string>): Observable<string[]> => {
+        // Observable of clicks when the suggestion popup is closed
         const clicksWithClosedPopup$ = this.click$.pipe(
             filter(() => !this.instance.isPopupOpen())
         );
@@ -59,13 +68,25 @@ export class SuggestionFieldComponent implements OnInit {
         let lastSearchTerm: string = null;
         let lastSuggestions: string[] = null;
 
+        // When new text or focus or click with popup closed
         return merge(text$, this.focus$, clicksWithClosedPopup$).pipe(
             debounceTime(250),
             switchMap((term: string) => {
-                if (!this.criteriaChanged && lastSearchTerm === term && lastSuggestions) {
+                // Criteria hasn't changed and text hasn't changed and
+                // suggestions already fetched
+                if (
+                    !this.criteriaChanged
+                    && lastSearchTerm === term
+                    && lastSuggestions
+                ) {
+                    // Return last suggestions without selected values
                     return of(this.removeAlreadySelected(lastSuggestions));
                 }
+
+                // Otherwise, we fetch new suggestions
                 const suggestions$ = this.fetchSuggestion(term);
+
+                // Store text and suggestions for re-use
                 lastSearchTerm = term;
                 this.criteriaChanged = false;
                 return suggestions$.pipe(map(suggestions => {
@@ -76,10 +97,13 @@ export class SuggestionFieldComponent implements OnInit {
         );
     };
 
-    fetchSuggestion(term: string): Observable<string[]> {
+    /**
+     * Fetch new suggestions for term
+     */
+    private fetchSuggestion(term: string): Observable<string[]> {
         // Fetch suggestions
         const suggestions$ = this.gnpisService.suggest(
-            this.criteriaField, 10, term, this.lastCriteria
+            this.criteriaField, 10, term, this.criteria
         );
 
         // Filter out already selected suggestions
@@ -122,6 +146,9 @@ export class SuggestionFieldComponent implements OnInit {
         this.emitSelectionChange();
     }
 
+    /**
+     * Emit current selection when changed
+     */
     private emitSelectionChange() {
         this.selectionChange.emit({
             name: this.criteriaField,

@@ -17,7 +17,7 @@
 </ng-template>
 <input type="text"
        class="form-control"
-       id="{{inputId}}"
+       [id]="inputId"
        #instance="ngbTypeahead"
        [formControl]="input"
        [ngbTypeahead]="search"
