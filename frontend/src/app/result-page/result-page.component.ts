@@ -1,20 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { NamedSelection } from '../form/suggestion-field/suggestion-field.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DataDiscoveryCriteria, EMPTY_CRITERIA } from '../model/criteria/dataDiscoveryCriteria';
+import { DataDiscoveryCriteria, EMPTY_CRITERIA } from '../model/dataDiscoveryCriteria';
 import { BehaviorSubject } from 'rxjs';
+import { DataDiscoveryDocument } from '../model/dataDiscoveryDocument';
+import { GnpisService } from '../gnpis.service';
 
 
 @Component({
     selector: 'gpds-result',
-    templateUrl: './result.component.html',
-    styleUrls: ['./result.component.scss'],
+    templateUrl: './result-page.component.html',
+    styleUrls: ['./result-page.component.scss'],
 })
-export class ResultComponent implements OnInit {
+export class ResultPageComponent implements OnInit {
 
     criteria$ = new BehaviorSubject<DataDiscoveryCriteria>({ ...EMPTY_CRITERIA });
+    documents: DataDiscoveryDocument[];
 
-    constructor(private route: ActivatedRoute, private router: Router) {
+    constructor(private route: ActivatedRoute, private router: Router, private gnpisService: GnpisService) {
     }
 
     onSelectionChanges(namedSelection: NamedSelection) {
@@ -23,6 +26,12 @@ export class ResultComponent implements OnInit {
             queryParams: { [namedSelection.name]: namedSelection.selection },
             queryParamsHandling: 'merge'
         });
+    }
+
+    fetchDocuments(criteria: DataDiscoveryCriteria) {
+        this.gnpisService.search(criteria)
+            .subscribe(brapiResult => this.documents = brapiResult.result.data );
+
     }
 
     ngOnInit(): void {
@@ -39,6 +48,7 @@ export class ResultComponent implements OnInit {
                 }
             }
             this.criteria$.next(criteria);
+            this.fetchDocuments(criteria);
         });
     }
 }

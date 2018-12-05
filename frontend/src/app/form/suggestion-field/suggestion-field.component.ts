@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 import { GnpisService } from '../../gnpis.service';
 import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
-import { DataDiscoveryCriteria } from '../../model/criteria/dataDiscoveryCriteria';
+import { DataDiscoveryCriteria } from '../../model/dataDiscoveryCriteria';
 
 /**
  * Represent field selection along with the name of the field

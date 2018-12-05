@@ -1,0 +1,22 @@
+
+
+<!-- Form -->
+<gpds-form
+  [criteria$]="criteria$"
+  (selectionChange)="onSelectionChanges($event)">
+</gpds-form>
+
+<!-- Result list -->
+<div>
+  <!-- Pagination status -->
+  <div>Results from 21 to 40 over 165</div>
+
+  <!-- Result document -->
+  <gpds-document
+    *ngFor="let document of documents"
+    [document]="document">
+  </gpds-document>
+</div>
+
+<!-- Pagination -->
+<div></div>

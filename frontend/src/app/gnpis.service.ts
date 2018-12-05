@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { DataDiscoveryCriteria } from './model/criteria/dataDiscoveryCriteria';
+import { DataDiscoveryCriteria } from './model/dataDiscoveryCriteria';
+import { BrapiResults } from './model/brapi';
+import { DataDiscoveryDocument } from './model/dataDiscoveryDocument';
 
 @Injectable({
     providedIn: 'root'
@@ -29,6 +31,19 @@ export class GnpisService {
         const params = { field, text, fetchSize: fetchSize.toString() };
         return this.http.post<string[]>(
             `${GnpisService.BASE_URL}/suggest`, criteria, { params }
+        );
+    }
+
+    /**
+     * Fetch data discovery documents by criteria
+     * @param criteria the criteria
+     * @return an observable of BrAPI results list of documents
+     */
+    search(
+        criteria: DataDiscoveryCriteria = null
+    ): Observable<BrapiResults<DataDiscoveryDocument>> {
+        return this.http.post<BrapiResults<DataDiscoveryDocument>>(
+            `${GnpisService.BASE_URL}/search`, criteria,
         );
     }
 

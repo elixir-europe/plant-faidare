@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResultComponent } from './result.component';
+import { ResultPageComponent } from './result-page.component';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { fakeRoute } from 'ngx-speculoos';
+import { DocumentComponent } from './document/document.component';
 
 
 @Component({
@@ -16,19 +17,23 @@ class MockFormComponent {
 }
 
 
-describe('ResultComponent', () => {
-    let component: ResultComponent;
-    let fixture: ComponentFixture<ResultComponent>;
+describe('ResultPageComponent', () => {
+    let component: ResultPageComponent;
+    let fixture: ComponentFixture<ResultPageComponent>;
+
+    const service = jasmine.createSpyObj(
+        'GnpisService', ['search']
+    );
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
                 RouterTestingModule,
             ],
-            declarations: [ResultComponent, MockFormComponent],
+            declarations: [ResultPageComponent, MockFormComponent, DocumentComponent],
             schemas: [NO_ERRORS_SCHEMA],
         });
-        fixture = TestBed.createComponent(ResultComponent);
+        fixture = TestBed.createComponent(ResultPageComponent);
         component = fixture.componentInstance;
     }));
 
@@ -48,7 +53,7 @@ describe('ResultComponent', () => {
         const activatedRoute = fakeRoute({
             queryParams: of(params as Params)
         });
-        const resultComponent = new ResultComponent(activatedRoute, router);
+        const resultComponent = new ResultPageComponent(activatedRoute, router, service);
         resultComponent.ngOnInit();
 
         resultComponent.criteria$.subscribe(criteria => {
@@ -69,7 +74,7 @@ describe('ResultComponent', () => {
             queryParams: of(params as Params)
         } as ActivatedRoute;
 
-        const resultComponent = new ResultComponent(activatedRoute, router);
+        const resultComponent = new ResultPageComponent(activatedRoute, router, service);
 
         resultComponent.onSelectionChanges({ name: 'crops', selection: ['Wheat', 'Vitis'] });
 

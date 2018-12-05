@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NamedSelection } from './suggestion-field/suggestion-field.component';
-import { DataDiscoveryCriteria } from '../model/criteria/dataDiscoveryCriteria';
+import { DataDiscoveryCriteria } from '../model/dataDiscoveryCriteria';
 import { Observable } from 'rxjs';
 
 @Component({
