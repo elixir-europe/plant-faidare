@@ -12,6 +12,7 @@
     </gpds-suggestion-field>
   </div>
 </div>
+
 <div class="form-group row">
   <label for="germplasmList" class="col-sm-4 col-form-label">
     Germplasm list<br/>
@@ -27,3 +28,17 @@
   </div>
 </div>
 
+<div class="form-group row">
+  <label for="accessions" class="col-sm-4 col-form-label">
+    Accession<br/>
+    <small>(accession name, number & synonyms)</small>
+  </label>
+  <div class="col-sm-8">
+    <gpds-suggestion-field
+      inputId="accessions"
+      criteriaField="accessions"
+      [criteria$]="criteria$"
+      (selectionChange)="selectionChange.emit($event)">
+    </gpds-suggestion-field>
+  </div>
+</div>
