@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { GnpisService } from '../../gnpis.service';
 import { of } from 'rxjs';
-import { EMPTY_CRITERIA } from '../../model/dataDiscoveryCriteria';
+import { newCriteria } from '../../model/dataDiscoveryCriteria';
 
 
 describe('SuggestionFieldComponent', () => {
@@ -30,7 +30,7 @@ describe('SuggestionFieldComponent', () => {
         });
         fixture = TestBed.createComponent(SuggestionFieldComponent);
         component = fixture.componentInstance;
-        component.criteria$ = of(EMPTY_CRITERIA);
+        component.criteria$ = of(newCriteria());
     });
 
     it('should create', () => {
@@ -51,7 +51,7 @@ describe('SuggestionFieldComponent', () => {
 
     it('should display the selected criteria as pills', () => {
         component.criteriaField = 'crops';
-        component.criteria$ = of({ ...EMPTY_CRITERIA, crops: ['Zea', 'Wheat'] });
+        component.criteria$ = of({ ...newCriteria(), crops: ['Zea', 'Wheat'] });
 
         fixture.detectChanges();
 
@@ -66,7 +66,7 @@ describe('SuggestionFieldComponent', () => {
     it('should fetch suggestion', async(() => {
         component.criteriaField = 'crops';
         const selectedCrops = ['Zea', 'Wheat'];
-        component.criteria$ = of({ ...EMPTY_CRITERIA, crops: selectedCrops });
+        component.criteria$ = of({ ...newCriteria(), crops: selectedCrops });
 
         const allSuggestions = ['Zea', 'Wheat', 'Vitis', 'Grapevine'];
         service.suggest.and.returnValue(of(allSuggestions));

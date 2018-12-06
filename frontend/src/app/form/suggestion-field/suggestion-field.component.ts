@@ -43,15 +43,17 @@ export class SuggestionFieldComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.criteria = null;
         this.criteria$.subscribe(criteria => {
             // When criteria changes
             this.criteriaChanged = true;
 
             if (!this.criteria) {
                 // Criteria first initialized
-                this.criteria = criteria;
-                this.selectedKeys = this.criteria[this.criteriaField];
+                this.selectedKeys = criteria[this.criteriaField];
             }
+
+            this.criteria = criteria;
         });
     }
 

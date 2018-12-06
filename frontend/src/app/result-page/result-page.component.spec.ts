@@ -4,12 +4,12 @@ import { ResultPageComponent } from './result-page.component';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { fakeRoute } from 'ngx-speculoos';
 import { DocumentComponent } from './document/document.component';
-import { EMPTY_CRITERIA } from '../model/dataDiscoveryCriteria';
+import { newCriteria } from '../model/dataDiscoveryCriteria';
 import { GnpisService } from '../gnpis.service';
-import { DataDiscoveryDocument } from '../model/dataDiscoveryDocument';
+import { DataDiscoveryDocument, DataDiscoverySource } from '../model/dataDiscoveryDocument';
 
 
 @Component({
@@ -90,17 +90,18 @@ describe('ResultPageComponent', () => {
     });
 
     it('should fetch documents', () => {
-        const criteria = EMPTY_CRITERIA;
-        const documents: Observable<DataDiscoveryDocument[]> = of([{
-            '@type': ['doc'],
+        const criteria = newCriteria();
+        const document: DataDiscoveryDocument = {
+            '@type': ['Germplasm'],
             '@id': 'urn',
             'schema:identifier': 'schema',
             'schema:name': 'doc_name',
             'schema:url': 'http://dco/url',
             'schema:description': 'description',
-            'schema:includedInDataCatalog': 'catalog'
-        }]);
-        service.search.and.returnValue(of(documents));
+            'schema:includedInDataCatalog': {} as DataDiscoverySource
+        };
+        const documents = of([document]);
+        service.search.and.returnValue(documents);
         component.fetchDocuments(criteria);
         expect(component.documents).not.toBe(null);
     });

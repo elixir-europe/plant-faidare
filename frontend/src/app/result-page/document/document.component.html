@@ -1,3 +1,20 @@
-<p>
-  {{document["schema:name"]}}
-</p>
+<div>
+  <h5>
+    <span *ngFor="let type of document['@type']"
+          class="badge {{ getBadgeType(type) }} mr-2">
+      {{ type }}
+    </span>
+    <a class="badge badge-source mr-2" [href]="getSourceURL()" target="_blank">
+      {{ getSource() }}
+    </a>
+    <a *ngIf="getURL()" [href]="getURL()">
+      {{ document["schema:name"] }}
+    </a>
+    <a *ngIf="getRouterLink()" [routerLink]="getRouterLink()">
+      {{ document["schema:name"] }}
+    </a>
+  </h5>
+  <p>
+    {{ document["schema:description"] }}
+  </p>
+</div>

@@ -16,11 +16,6 @@ describe('GnpisService', () => {
         httpMock = TestBed.get(HttpTestingController);
     });
 
-    it('should be created', () => {
-        expect(service).toBeTruthy();
-        httpMock.verify();
-    });
-
     it('should suggest with criteria', () => {
         const expectedSuggestions = ['a', 'b', 'c'];
         const field = 'foo';

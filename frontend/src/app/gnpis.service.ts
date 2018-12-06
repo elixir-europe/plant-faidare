@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject, zip } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DataDiscoveryCriteria } from './model/dataDiscoveryCriteria';
 import { BrapiResults } from './model/brapi';
-import { DataDiscoveryDocument } from './model/dataDiscoveryDocument';
+import { DataDiscoveryDocument, DataDiscoverySource } from './model/dataDiscoveryDocument';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -12,7 +12,22 @@ import { map } from 'rxjs/operators';
 export class GnpisService {
     static BASE_URL = '/gnpis/v1/datadiscovery';
 
+    sourceByURI$ = new ReplaySubject<{ [key: string]: DataDiscoverySource }>(1);
+
     constructor(private http: HttpClient) {
+        this.fetchSources();
+    }
+
+    private fetchSources() {
+        this.http.get(`${GnpisService.BASE_URL}/sources`).subscribe(
+            (brapiResults: BrapiResults<DataDiscoverySource>) => {
+                const sourceByURI = {};
+                for (const source of brapiResults.result.data) {
+                    sourceByURI[source['@id']] = source;
+                }
+                this.sourceByURI$.next(sourceByURI);
+            }
+        );
     }
 
     /**
@@ -43,10 +58,21 @@ export class GnpisService {
     search(
         criteria: DataDiscoveryCriteria
     ): Observable<DataDiscoveryDocument[]> {
-        return this.http.post<BrapiResults<DataDiscoveryDocument>>(
-            `${GnpisService.BASE_URL}/search`, criteria,
-        ).pipe(map((brapiResult: BrapiResults<DataDiscoveryDocument>) => {
-            return brapiResult.result.data;
+        return zip(
+            // Get source by URI
+            this.sourceByURI$,
+            // Get documents by criteria
+            this.http.post<any>(`${GnpisService.BASE_URL}/search`, criteria)
+        ).pipe(map(([sourceByURI, brapiResult]) => {
+            // Extract BrAPI documents from result
+            const documents = brapiResult.result.data;
+
+            // Transform document to have the source details in place of the source URI
+            return documents.map(document => {
+                const sourceURI = document['schema:includedInDataCatalog'] as string;
+                document['schema:includedInDataCatalog'] = sourceByURI[sourceURI];
+                return document;
+            });
         }));
     }
 

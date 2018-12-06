@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DocumentComponent } from './document.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { DataDiscoverySource } from '../../model/dataDiscoveryDocument';
 
 describe('DocumentComponent', () => {
     let component: DocumentComponent;
@@ -19,14 +20,13 @@ describe('DocumentComponent', () => {
         fixture = TestBed.createComponent(DocumentComponent);
         component = fixture.componentInstance;
         component.document = {
-
-            '@type': ['doc'],
+            '@type': ['Germplasm'],
             '@id': 'urn',
             'schema:identifier': 'schema',
             'schema:name': 'doc_name',
             'schema:url': 'http://dco/url',
             'schema:description': 'description',
-            'schema:includedInDataCatalog': 'catalog'
+            'schema:includedInDataCatalog': {} as DataDiscoverySource
         };
         fixture.detectChanges();
     });

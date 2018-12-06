@@ -4,8 +4,10 @@ export interface DataDiscoveryCriteria {
     germplasmLists: string[];
 }
 
-export const EMPTY_CRITERIA: DataDiscoveryCriteria = {
-    accessions: [],
-    crops: [],
-    germplasmLists: []
-};
+export function newCriteria(): DataDiscoveryCriteria {
+    return {
+        accessions: [],
+        crops: [],
+        germplasmLists: []
+    };
+}

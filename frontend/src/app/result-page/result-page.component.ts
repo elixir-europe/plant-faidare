@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NamedSelection } from '../form/suggestion-field/suggestion-field.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DataDiscoveryCriteria, EMPTY_CRITERIA } from '../model/dataDiscoveryCriteria';
+import { DataDiscoveryCriteria, newCriteria } from '../model/dataDiscoveryCriteria';
 import { BehaviorSubject } from 'rxjs';
 import { DataDiscoveryDocument } from '../model/dataDiscoveryDocument';
 import { GnpisService } from '../gnpis.service';
@@ -14,7 +14,7 @@ import { GnpisService } from '../gnpis.service';
 })
 export class ResultPageComponent implements OnInit {
 
-    criteria$ = new BehaviorSubject<DataDiscoveryCriteria>({ ...EMPTY_CRITERIA });
+    criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(newCriteria());
     documents: DataDiscoveryDocument[] = [];
 
     constructor(private route: ActivatedRoute, private router: Router, private gnpisService: GnpisService) {
@@ -35,7 +35,7 @@ export class ResultPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.queryParams.subscribe(queryParams => {
-            const criteria = this.criteria$.value;
+            const criteria = newCriteria();
             for (const key of Object.keys(queryParams)) {
                 const value = queryParams[key];
                 if (Array.isArray(value)) {
