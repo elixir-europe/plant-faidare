@@ -40,4 +40,38 @@ describe('GnpisService', () => {
         req.flush(expectedSuggestions);
         expect(req.request.body).toBe(criteria);
     });
+
+    it('should search documents with criteria', () => {
+        const expectedDocuments = [{
+            '@type': ['doc'],
+            '@id': 'urn',
+            'schema:identifier': 'schema',
+            'schema:name': 'doc_name',
+            'schema:url': 'http://dco/url',
+            'schema:description': 'description',
+            'schema:includedInDataCatalog': 'catalog'
+        }, {
+            '@type': ['doc'],
+            '@id': 'urn',
+            'schema:identifier': 'schema',
+            'schema:name': 'doc_name',
+            'schema:url': 'http://dco/url',
+            'schema:description': 'description',
+            'schema:includedInDataCatalog': 'catalog'
+        }];
+
+        const criteria = { crops: ['d'] };
+
+        service.search(criteria).subscribe(documents => {
+            expect(documents.length).toBe(2);
+            expect(documents).toBe(expectedDocuments);
+        });
+
+        const req = httpMock.expectOne({
+            url: `${GnpisService.BASE_URL}/search`,
+            method: 'POST'
+        });
+        req.flush(expectedDocuments);
+        expect(req.request.body).toBe(criteria);
+    });
 });

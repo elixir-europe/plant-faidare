@@ -4,9 +4,12 @@ import { ResultPageComponent } from './result-page.component';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { fakeRoute } from 'ngx-speculoos';
 import { DocumentComponent } from './document/document.component';
+import { EMPTY_CRITERIA } from '../model/dataDiscoveryCriteria';
+import { GnpisService } from '../gnpis.service';
+import { DataDiscoveryDocument } from '../model/dataDiscoveryDocument';
 
 
 @Component({
@@ -31,16 +34,14 @@ describe('ResultPageComponent', () => {
                 RouterTestingModule,
             ],
             declarations: [ResultPageComponent, MockFormComponent, DocumentComponent],
+            providers: [
+                { provide: GnpisService, useValue: service }
+            ],
             schemas: [NO_ERRORS_SCHEMA],
         });
         fixture = TestBed.createComponent(ResultPageComponent);
         component = fixture.componentInstance;
     }));
-
-    it('should create', () => {
-        fixture.detectChanges();
-        expect(component).toBeTruthy();
-    });
 
 
     it('should generate criteria from URL', () => {
@@ -87,4 +88,23 @@ describe('ResultPageComponent', () => {
         });
 
     });
-});
+
+    it('should fetch documents', () => {
+        const criteria = EMPTY_CRITERIA;
+        const documents: Observable<DataDiscoveryDocument[]> = of([{
+            '@type': ['doc'],
+            '@id': 'urn',
+            'schema:identifier': 'schema',
+            'schema:name': 'doc_name',
+            'schema:url': 'http://dco/url',
+            'schema:description': 'description',
+            'schema:includedInDataCatalog': 'catalog'
+        }]);
+        service.search.and.returnValue(of(documents));
+        component.fetchDocuments(criteria);
+        expect(component.documents).not.toBe(null);
+    });
+
+
+})
+;

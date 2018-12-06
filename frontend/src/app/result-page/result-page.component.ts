@@ -15,7 +15,7 @@ import { GnpisService } from '../gnpis.service';
 export class ResultPageComponent implements OnInit {
 
     criteria$ = new BehaviorSubject<DataDiscoveryCriteria>({ ...EMPTY_CRITERIA });
-    documents: DataDiscoveryDocument[];
+    documents: DataDiscoveryDocument[] = [];
 
     constructor(private route: ActivatedRoute, private router: Router, private gnpisService: GnpisService) {
     }
@@ -30,8 +30,7 @@ export class ResultPageComponent implements OnInit {
 
     fetchDocuments(criteria: DataDiscoveryCriteria) {
         this.gnpisService.search(criteria)
-            .subscribe(brapiResult => this.documents = brapiResult.result.data );
-
+            .subscribe(documents => this.documents = documents);
     }
 
     ngOnInit(): void {

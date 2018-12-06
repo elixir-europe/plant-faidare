@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { DataDiscoveryCriteria } from './model/dataDiscoveryCriteria';
 import { BrapiResults } from './model/brapi';
 import { DataDiscoveryDocument } from './model/dataDiscoveryDocument';
+import { map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -40,11 +41,13 @@ export class GnpisService {
      * @return an observable of BrAPI results list of documents
      */
     search(
-        criteria: DataDiscoveryCriteria = null
-    ): Observable<BrapiResults<DataDiscoveryDocument>> {
+        criteria: DataDiscoveryCriteria
+    ): Observable<DataDiscoveryDocument[]> {
         return this.http.post<BrapiResults<DataDiscoveryDocument>>(
             `${GnpisService.BASE_URL}/search`, criteria,
-        );
+        ).pipe(map((brapiResult: BrapiResults<DataDiscoveryDocument>) => {
+            return brapiResult.result.data;
+        }));
     }
 
 }
