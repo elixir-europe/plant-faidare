@@ -9,7 +9,7 @@ export interface DataDiscoverySource {
 
 export interface DataDiscoveryDocument {
     ['@id']: string;
-    ['@type']: DataDiscoveryDocumentType[];
+    ['@type']: DataDiscoveryType[];
     ['schema:identifier']: string;
     ['schema:name']: string;
     ['schema:url']: string;
@@ -17,4 +17,4 @@ export interface DataDiscoveryDocument {
     ['schema:includedInDataCatalog']: DataDiscoverySource;
 }
 
-export type DataDiscoveryDocumentType = 'Germplasm' | 'Phenotyping Study';
+export type DataDiscoveryType = 'Germplasm' | 'Phenotyping Study';

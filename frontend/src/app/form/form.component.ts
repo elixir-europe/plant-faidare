@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NamedSelection } from './suggestion-field/suggestion-field.component';
+import { Param } from '../model/common';
 import { DataDiscoveryCriteria } from '../model/dataDiscoveryCriteria';
 import { Observable } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class FormComponent implements OnInit {
     @Input() criteria$: Observable<DataDiscoveryCriteria>;
 
-    @Output() selectionChange = new EventEmitter<NamedSelection>();
+    @Output() selectionChange = new EventEmitter<Param>();
 
     constructor() {
     }

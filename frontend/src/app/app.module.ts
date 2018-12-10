@@ -12,7 +12,7 @@ import { SiteCardComponent } from './site-card/site-card.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SuggestionFieldComponent } from './form/suggestion-field/suggestion-field.component';
 import { DocumentComponent } from './result-page/document/document.component';
@@ -35,6 +35,7 @@ import { DocumentComponent } from './result-page/document/document.component';
         BrowserModule,
         AppRoutingModule,
         NgbTypeaheadModule,
+        NgbPaginationModule,
         ReactiveFormsModule,
         HttpClientModule
     ],

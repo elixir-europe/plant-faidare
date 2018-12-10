@@ -18,7 +18,7 @@ export class GnpisService {
         this.fetchSources();
     }
 
-    private fetchSources() {
+    private fetchSources(): void {
         this.http.get(`${GnpisService.BASE_URL}/sources`).subscribe(
             (brapiResults: BrapiResults<DataDiscoverySource>) => {
                 const sourceByURI = {};
@@ -57,7 +57,7 @@ export class GnpisService {
      */
     search(
         criteria: DataDiscoveryCriteria
-    ): Observable<DataDiscoveryDocument[]> {
+    ): Observable<BrapiResults<DataDiscoveryDocument>> {
         return zip(
             // Get source by URI
             this.sourceByURI$,
@@ -68,11 +68,12 @@ export class GnpisService {
             const documents = brapiResult.result.data;
 
             // Transform document to have the source details in place of the source URI
-            return documents.map(document => {
+            brapiResult.result.data = documents.map(document => {
                 const sourceURI = document['schema:includedInDataCatalog'] as string;
                 document['schema:includedInDataCatalog'] = sourceByURI[sourceURI];
                 return document;
             });
+            return brapiResult;
         }));
     }
 

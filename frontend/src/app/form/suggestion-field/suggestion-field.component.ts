@@ -5,14 +5,7 @@ import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-boot
 import { GnpisService } from '../../gnpis.service';
 import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
 import { DataDiscoveryCriteria } from '../../model/dataDiscoveryCriteria';
-
-/**
- * Represent field selection along with the name of the field
- */
-export interface NamedSelection {
-    name: string;
-    selection: string[];
-}
+import { Param } from '../../model/common';
 
 @Component({
     selector: 'gpds-suggestion-field',
@@ -25,7 +18,7 @@ export class SuggestionFieldComponent implements OnInit {
     @Input() inputId: string;
     @Input() criteria$: Observable<DataDiscoveryCriteria>;
 
-    @Output() selectionChange = new EventEmitter<NamedSelection>();
+    @Output() selectionChange = new EventEmitter<Param>();
 
     focus$ = new Subject();
     click$ = new Subject();
@@ -153,8 +146,8 @@ export class SuggestionFieldComponent implements OnInit {
      */
     private emitSelectionChange() {
         this.selectionChange.emit({
-            name: this.criteriaField,
-            selection: this.selectedKeys
+            key: this.criteriaField,
+            value: this.selectedKeys
         });
     }
 }

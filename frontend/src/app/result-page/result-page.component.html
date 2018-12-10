@@ -1,22 +1,45 @@
-
-
 <!-- Form -->
 <gpds-form
   [criteria$]="criteria$"
-  (selectionChange)="onSelectionChanges($event)">
+  (selectionChange)="updateParams($event)">
 </gpds-form>
 
 <!-- Result list -->
-<div>
+<div *ngIf="documents.length">
   <!-- Pagination status -->
-  <div>Results from 21 to 40 over 165</div>
+  <div *ngIf="pagination.totalResult" class="mb-3 small text-muted">
+    Results from {{ pagination.startResult | number }} to {{ pagination.endResult | number }}
+    over {{ pagination.totalResult| number }} documents
+    <span *ngIf="pagination.totalResult > pagination.maxResults">
+      (limited to {{ pagination.maxResults | number }})
+    </span>
+  </div>
 
   <!-- Result document -->
   <gpds-document
     *ngFor="let document of documents"
     [document]="document">
   </gpds-document>
+
+  <!-- Pagination -->
+  <div>
+    <!-- we add 1 to the page because ngb-pagination is 1 based -->
+    <ngb-pagination [page]="pagination.currentPage + 1"
+                    (pageChange)="updateParams({ key:'page', value : $event })"
+                    [collectionSize]="collectionSize()"
+                    [pageSize]="pagination.pageSize"
+                    [maxSize]="5"
+                    [boundaryLinks]="true"
+                    [ellipses]="false"
+                    size="sm">
+    </ngb-pagination>
+  </div>
 </div>
 
-<!-- Pagination -->
-<div></div>
+<!-- else we display a simple message -->
+<div *ngIf="pagination.totalResult == 0" id="no-results" class="text-center">
+  <div class="no-result-icon">
+    <span class="fa fa-meh-o"></span>
+  </div>
+  No results.
+</div>

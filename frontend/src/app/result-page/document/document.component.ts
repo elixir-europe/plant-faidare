@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DataDiscoveryDocument, DataDiscoveryDocumentType } from '../../model/dataDiscoveryDocument';
+import { DataDiscoveryDocument, DataDiscoveryType } from '../../model/dataDiscoveryDocument';
 
 @Component({
     selector: 'gpds-document',
@@ -43,7 +43,7 @@ export class DocumentComponent {
         return this.document['schema:includedInDataCatalog']['schema:url'];
     }
 
-    getBadgeType(type: DataDiscoveryDocumentType) {
+    getBadgeType(type: DataDiscoveryType) {
         return DocumentComponent.BADGE_TYPE[type];
     }
 
