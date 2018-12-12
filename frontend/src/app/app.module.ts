@@ -9,13 +9,15 @@ import { ResultPageComponent } from './result-page/result-page.component';
 import { GermplasmCardComponent } from './germplasm-card/germplasm-card.component';
 import { StudyCardComponent } from './study-card/study-card.component';
 import { SiteCardComponent } from './site-card/site-card.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
 import { NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SuggestionFieldComponent } from './form/suggestion-field/suggestion-field.component';
 import { DocumentComponent } from './result-page/document/document.component';
+import { ErrorComponent } from './error/error.component';
+import { ErrorInterceptorService } from './error-interceptor.service';
 
 @NgModule({
     declarations: [
@@ -29,7 +31,8 @@ import { DocumentComponent } from './result-page/document/document.component';
         NavbarComponent,
         MapComponent,
         SuggestionFieldComponent,
-        DocumentComponent
+        DocumentComponent,
+        ErrorComponent
     ],
     imports: [
         BrowserModule,
@@ -39,7 +42,7 @@ import { DocumentComponent } from './result-page/document/document.component';
         ReactiveFormsModule,
         HttpClientModule
     ],
-    providers: [],
+    providers: [{ provide: HTTP_INTERCEPTORS, useExisting: ErrorInterceptorService, multi: true }],
     bootstrap: [AppComponent]
 })
 export class AppModule {

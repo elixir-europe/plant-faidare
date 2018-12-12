@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Param } from '../model/common';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { DataDiscoveryCriteria, newCriteria } from '../model/dataDiscoveryCriteria';
 import { BehaviorSubject } from 'rxjs';
 import { DataDiscoveryDocument } from '../model/dataDiscoveryDocument';
@@ -23,9 +23,9 @@ function asArray(obj) {
     styleUrls: ['./result-page.component.scss'],
 })
 export class ResultPageComponent implements OnInit {
+
     static MAX_RESULTS = 10000;
     static PAGE_SIZE = 10;
-
     criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(newCriteria());
     documents: DataDiscoveryDocument[] = [];
     pagination = {
@@ -70,14 +70,14 @@ export class ResultPageComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
+        this.route.queryParams.subscribe((queryParams: Params) => {
             // Update criteria using URL query params
             const criteria: DataDiscoveryCriteria = {
-                crops: asArray(queryParams.getAll('crops')),
-                germplasmLists: asArray(queryParams.getAll('germplasmLists')),
-                accessions: asArray(queryParams.getAll('accessions')),
+                crops: asArray(queryParams.crops),
+                germplasmLists: asArray(queryParams.germplasmLists),
+                accessions: asArray(queryParams.accessions),
 
-                page: Math.max(+queryParams.get('page') - 1, 0),
+                page: queryParams.page - 1 || 0,
                 pageSize: ResultPageComponent.PAGE_SIZE
             };
             this.criteria$.next(criteria);
@@ -90,6 +90,15 @@ export class ResultPageComponent implements OnInit {
             this.pagination.totalResult,
             ResultPageComponent.MAX_RESULTS - ResultPageComponent.PAGE_SIZE
         );
+    }
+
+    resetAll() {
+        this.router.navigate(['.'], {
+            relativeTo: this.route,
+
+            // Use of empty param to force re-parse of URL in ngOnInit
+            queryParams: { empty: [] }
+        });
     }
 
 }

@@ -11,7 +11,6 @@ import { map } from 'rxjs/operators';
 })
 export class GnpisService {
     static BASE_URL = '/gnpis/v1/datadiscovery';
-
     sourceByURI$ = new ReplaySubject<{ [key: string]: DataDiscoverySource }>(1);
 
     constructor(private http: HttpClient) {

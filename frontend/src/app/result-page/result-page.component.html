@@ -1,3 +1,8 @@
+<!-- Reset all button -->
+<p class="text-right">
+  <button type="button" class="btn btn-sm btn-danger" (click)="resetAll()">Reset all</button>
+</p>
+
 <!-- Form -->
 <gpds-form
   [criteria$]="criteria$"
@@ -9,7 +14,7 @@
   <!-- Pagination status -->
   <div *ngIf="pagination.totalResult" class="mb-3 small text-muted">
     Results from {{ pagination.startResult | number }} to {{ pagination.endResult | number }}
-    over {{ pagination.totalResult| number }} documents
+    over {{ pagination.totalResult | number }} documents
     <span *ngIf="pagination.totalResult > pagination.maxResults">
       (limited to {{ pagination.maxResults | number }})
     </span>

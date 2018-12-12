@@ -1,0 +1,19 @@
+<div class="error alert alert-warning" *ngIf="error$ | async as error">
+  <div class="d-flex">
+    <div class="mr-3" style="font-size: 3em;">
+      <span class="fa fa-frown-o"></span>
+    </div>
+    <div>
+      <p>
+        An unexpected error occurred.<br/>
+        Refresh the page or try later.<br/>
+      </p>
+      <small *ngIf="error.status" id="error-status">
+        Status: {{ error.status }}
+      </small>
+      <small *ngIf="error.message" id="error-message">
+        Message: {{ error.message }}
+      </small>
+    </div>
+  </div>
+</div>

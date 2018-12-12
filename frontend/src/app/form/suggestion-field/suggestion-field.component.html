@@ -17,11 +17,13 @@
 <input type="text"
        class="form-control"
        [id]="inputId"
-       #instance="ngbTypeahead"
+       #inputElement
+       #typeahead="ngbTypeahead"
        [formControl]="input"
        [ngbTypeahead]="search"
        [resultTemplate]="resultTemplate"
        (selectItem)="selectKey($event)"
        (focus)="focus$.next($event.target.value)"
        (click)="click$.next($event.target.value)"
+       [placeholder]= "placeholder"
 />

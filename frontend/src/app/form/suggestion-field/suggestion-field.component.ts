@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { merge, Observable, of, Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -17,17 +17,21 @@ export class SuggestionFieldComponent implements OnInit {
     @Input() criteriaField: string;
     @Input() inputId: string;
     @Input() criteria$: Observable<DataDiscoveryCriteria>;
+    @Input() placeholder: string;
 
     @Output() selectionChange = new EventEmitter<Param>();
 
+    selectedKeys: string[] = [];
+
     focus$ = new Subject();
+
     click$ = new Subject();
 
     input = new FormControl();
 
-    selectedKeys: string[] = [];
+    @ViewChild('inputElement') inputElement: ElementRef;
 
-    @ViewChild('instance') instance: NgbTypeahead;
+    @ViewChild('typeahead') typeahead: NgbTypeahead;
 
     private criteria: DataDiscoveryCriteria = null;
     private criteriaChanged = true;
@@ -41,12 +45,17 @@ export class SuggestionFieldComponent implements OnInit {
             // When criteria changes
             this.criteriaChanged = true;
 
-            if (!this.criteria) {
-                // Criteria first initialized
-                this.selectedKeys = criteria[this.criteriaField];
-            }
+            // Clear list of selected keys
+            this.selectedKeys.splice(0);
+
+            // Add selection from criteria into list of selected keys
+            this.selectedKeys.push.apply(this.selectedKeys, criteria[this.criteriaField]);
 
             this.criteria = criteria;
+
+            // Empty input value and blur
+            this.input.setValue('');
+            this.inputElement.nativeElement.blur();
         });
     }
 
@@ -57,7 +66,7 @@ export class SuggestionFieldComponent implements OnInit {
     search = (text$: Observable<string>): Observable<string[]> => {
         // Observable of clicks when the suggestion popup is closed
         const clicksWithClosedPopup$ = this.click$.pipe(
-            filter(() => !this.instance.isPopupOpen())
+            filter(() => !this.typeahead.isPopupOpen())
         );
 
         let lastSearchTerm: string = null;
@@ -124,7 +133,6 @@ export class SuggestionFieldComponent implements OnInit {
     selectKey($event: NgbTypeaheadSelectItemEvent) {
         $event.preventDefault();
         this.selectedKeys.push($event.item);
-        this.input.setValue('');
         this.emitSelectionChange();
     }
 

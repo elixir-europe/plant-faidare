@@ -1,6 +1,7 @@
+
 <div class="form-group row">
-  <label for="crops" class="col-sm-4 col-form-label">
-    <div>Crops</div>
+  <label for="crops" class="col-sm-4">
+    <span>Crops</span>
     <small class="small text-muted">
       (common name, species, genus, subtaxa & synonyms)
     </small>
@@ -10,14 +11,15 @@
       inputId="crops"
       criteriaField="crops"
       [criteria$]="criteria$"
-      (selectionChange)="selectionChange.emit($event)">
+      (selectionChange)="selectionChange.emit($event)"
+      placeholder="Select or search crops">
     </gpds-suggestion-field>
   </div>
 </div>
 
 <div class="form-group row">
-  <label for="germplasmList" class="col-sm-4 col-form-label">
-    <div>Germplasm list</div>
+  <label for="germplasmList" class="col-sm-4">
+    <span>Germplasm list</span>
     <small class="small text-muted">
       (panel, collection & population)
     </small>
@@ -27,14 +29,15 @@
       inputId="germplasmList"
       criteriaField="germplasmLists"
       [criteria$]="criteria$"
-      (selectionChange)="selectionChange.emit($event)">
+      (selectionChange)="selectionChange.emit($event)"
+      placeholder="Select or search germplasm lists">
     </gpds-suggestion-field>
   </div>
 </div>
 
 <div class="form-group row">
-  <label for="accessions" class="col-sm-4 col-form-label">
-    <div>Accession</div>
+  <label for="accessions" class="col-sm-4">
+    <span>Accession</span>
     <small class="small text-muted">
       (accession name, number & synonyms)
     </small>
@@ -44,7 +47,8 @@
       inputId="accessions"
       criteriaField="accessions"
       [criteria$]="criteria$"
-      (selectionChange)="selectionChange.emit($event)">
+      (selectionChange)="selectionChange.emit($event)"
+      placeholder="Select or search germplasm accession">
     </gpds-suggestion-field>
   </div>
 </div>
