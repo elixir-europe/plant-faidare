@@ -34,7 +34,8 @@ export class SuggestionFieldComponent implements OnInit {
     @ViewChild('typeahead') typeahead: NgbTypeahead;
 
     private criteria: DataDiscoveryCriteria = null;
-    private criteriaChanged = true;
+    private criteriaChanged = false;
+    private lastSuggestions: string[] = null;
 
     constructor(private gnpisService: GnpisService) {
     }
@@ -42,16 +43,20 @@ export class SuggestionFieldComponent implements OnInit {
     ngOnInit(): void {
         this.criteria = null;
         this.criteria$.subscribe(criteria => {
-            // When criteria changes
-            this.criteriaChanged = true;
+            if (this.criteria) {
+                // When criteria changes
+                this.criteriaChanged = true;
+            } else {
+                // On initial criteria => pre-fetch suggestions
+                this.fetchSuggestion('').subscribe(() => null);
+            }
+            this.criteria = criteria;
 
             // Clear list of selected keys
             this.selectedKeys.splice(0);
 
             // Add selection from criteria into list of selected keys
             this.selectedKeys.push.apply(this.selectedKeys, criteria[this.criteriaField]);
-
-            this.criteria = criteria;
 
             // Empty input value and blur
             this.input.setValue('');
@@ -69,8 +74,7 @@ export class SuggestionFieldComponent implements OnInit {
             filter(() => !this.typeahead.isPopupOpen())
         );
 
-        let lastSearchTerm: string = null;
-        let lastSuggestions: string[] = null;
+        let lastSearchTerm = '';
 
         // When new text or focus or click with popup closed
         return merge(text$, this.focus$, clicksWithClosedPopup$).pipe(
@@ -81,22 +85,18 @@ export class SuggestionFieldComponent implements OnInit {
                 if (
                     !this.criteriaChanged
                     && lastSearchTerm === term
-                    && lastSuggestions
+                    && this.lastSuggestions
                 ) {
                     // Return last suggestions without selected values
-                    return of(this.removeAlreadySelected(lastSuggestions));
+                    return of(this.removeAlreadySelected(this.lastSuggestions));
                 }
-
-                // Otherwise, we fetch new suggestions
-                const suggestions$ = this.fetchSuggestion(term);
 
                 // Store text and suggestions for re-use
                 lastSearchTerm = term;
                 this.criteriaChanged = false;
-                return suggestions$.pipe(map(suggestions => {
-                    lastSuggestions = suggestions;
-                    return suggestions;
-                }));
+
+                // Otherwise, we fetch new suggestions
+                return this.fetchSuggestion(term);
             })
         );
     };
@@ -111,9 +111,11 @@ export class SuggestionFieldComponent implements OnInit {
         );
 
         // Filter out already selected suggestions
-        return suggestions$.pipe(
-            map(this.removeAlreadySelected.bind(this))
-        );
+        return suggestions$.pipe(map(suggestions => {
+            const filteredSuggestions = this.removeAlreadySelected(suggestions);
+            this.lastSuggestions = filteredSuggestions;
+            return filteredSuggestions;
+        }));
     }
 
     /**
