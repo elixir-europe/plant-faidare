@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResultPageComponent } from './result-page.component';
+import { ResultPageComponent, URLCriteria } from './result-page.component';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Params, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { fakeRoute } from 'ngx-speculoos';
 import { DocumentComponent } from './document/document.component';
-import { newCriteria } from '../model/dataDiscoveryCriteria';
+import { DataDiscoveryCriteria, emptyCriteria } from '../model/dataDiscoveryCriteria';
 import { GnpisService } from '../gnpis.service';
 import { DataDiscoveryDocument, DataDiscoverySource } from '../model/dataDiscoveryDocument';
 import { BrapiResults } from '../model/brapi';
@@ -31,9 +31,12 @@ describe('ResultPageComponent', () => {
     const params = {
         crops: 'Genus',
         germplasmLists: ['Panel 1', 'Collection 2']
-    };
+    } as Params;
     const activatedRoute = fakeRoute({
-        queryParams: of(params as Params)
+        queryParams: of(params),
+        snapshot: {
+            queryParams: params
+        } as ActivatedRouteSnapshot
     });
 
     const document: DataDiscoveryDocument = {
@@ -87,26 +90,30 @@ describe('ResultPageComponent', () => {
     });
 
 
-    it('should navigate on selection change', () => {
+    it('should navigate on criteria change', () => {
         const router = TestBed.get(Router) as Router;
         spyOn(router, 'navigate');
+        fixture.detectChanges();
 
-        component.updateParams({ key: 'crops', value: ['Wheat', 'Vitis'] });
-
+        const criteria = { crops: ['Wheat', 'Vitis'] } as DataDiscoveryCriteria;
+        component.criteria$.next(criteria);
+        const newQueryParams: URLCriteria = {
+            crops: criteria.crops,
+            accessions: criteria.accessions,
+            germplasmLists: criteria.germplasmLists,
+            observationVariableIds: criteria.topSelectedTraitOntologyIds,
+            page: 1
+        };
 
         expect(router.navigate).toHaveBeenCalledWith(['.'], {
             relativeTo: activatedRoute,
-            queryParams: {
-                page: null,
-                crops: ['Wheat', 'Vitis']
-            },
-            queryParamsHandling: 'merge'
+            queryParams: newQueryParams
         });
 
     });
 
     it('should fetch documents', () => {
-        const criteria = newCriteria();
+        const criteria = emptyCriteria();
         component.fetchDocuments(criteria);
         expect(component.documents).not.toBe(null);
     });

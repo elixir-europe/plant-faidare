@@ -167,6 +167,6 @@
     "use-life-cycle-interface": true,
     "use-output-property-decorator": true,
     "use-pipe-transform-interface": true,
-    "use-view-encapsulation": true
+    "use-view-encapsulation": false
   }
 }

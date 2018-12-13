@@ -4,8 +4,8 @@ import { SuggestionFieldComponent } from './suggestion-field.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { GnpisService } from '../../gnpis.service';
-import { of } from 'rxjs';
-import { newCriteria } from '../../model/dataDiscoveryCriteria';
+import { BehaviorSubject, of } from 'rxjs';
+import { emptyCriteria } from '../../model/dataDiscoveryCriteria';
 
 
 describe('SuggestionFieldComponent', () => {
@@ -30,28 +30,37 @@ describe('SuggestionFieldComponent', () => {
         });
         fixture = TestBed.createComponent(SuggestionFieldComponent);
         component = fixture.componentInstance;
-        component.criteria$ = of(newCriteria());
     });
 
     it('should create', () => {
+        component.criteria$ = new BehaviorSubject(emptyCriteria());
         fixture.detectChanges();
         expect(component).toBeTruthy();
     });
 
-    it('should fetch suggestion', async(() => {
+    it('should fetch suggestion on text change', async(() => {
+        const criteria = emptyCriteria();
+        component.criteria$ = new BehaviorSubject(criteria);
         component.criteriaField = 'crops';
+        fixture.detectChanges();
+
         const expectedSuggestions = ['a', 'b', 'c'];
         service.suggest.and.returnValue(of(expectedSuggestions));
 
         component.search(of('bar'))
             .subscribe((actualSuggestions: string[]) => {
                 expect(actualSuggestions).toEqual(expectedSuggestions);
+
+                expect(service.suggest).toHaveBeenCalledWith(
+                    component.criteriaField, 10, 'bar', criteria
+                );
             });
     }));
 
     it('should display the selected criteria as pills', () => {
         component.criteriaField = 'crops';
-        component.criteria$ = of({ ...newCriteria(), crops: ['Zea', 'Wheat'] });
+        const criteria = { ...emptyCriteria(), crops: ['Zea', 'Wheat'] };
+        component.criteria$ = new BehaviorSubject(criteria);
 
         fixture.detectChanges();
 
@@ -66,7 +75,8 @@ describe('SuggestionFieldComponent', () => {
     it('should fetch suggestion', async(() => {
         component.criteriaField = 'crops';
         const selectedCrops = ['Zea', 'Wheat'];
-        component.criteria$ = of({ ...newCriteria(), crops: selectedCrops });
+        const criteria = { ...emptyCriteria(), crops: selectedCrops };
+        component.criteria$ = new BehaviorSubject(criteria);
 
         const allSuggestions = ['Zea', 'Wheat', 'Vitis', 'Grapevine'];
         service.suggest.and.returnValue(of(allSuggestions));
@@ -78,7 +88,10 @@ describe('SuggestionFieldComponent', () => {
         component.search(of('bar'))
             .subscribe((actualSuggestions: string[]) => {
                 expect(actualSuggestions).toEqual(expectedSuggestions);
+
+                expect(service.suggest).toHaveBeenCalledWith(
+                    component.criteriaField, 10, 'bar', criteria
+                );
             });
     }));
-
 });

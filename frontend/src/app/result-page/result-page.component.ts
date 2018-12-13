@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { Param } from '../model/common';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { DataDiscoveryCriteria, newCriteria } from '../model/dataDiscoveryCriteria';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DataDiscoveryCriteria, emptyCriteria } from '../model/dataDiscoveryCriteria';
 import { BehaviorSubject } from 'rxjs';
 import { DataDiscoveryDocument } from '../model/dataDiscoveryDocument';
 import { GnpisService } from '../gnpis.service';
+import { asArray } from '../utils';
 
 
-function asArray(obj) {
-    if (!obj) {
-        return [];
-    }
-    if (Array.isArray(obj)) {
-        return obj;
-    }
-    return [obj];
+export interface URLCriteria {
+    accessions: string[];
+    crops: string[];
+    germplasmLists: string[];
+    observationVariableIds: string[];
+
+    page: number;
 }
 
 @Component({
@@ -26,7 +25,8 @@ export class ResultPageComponent implements OnInit {
 
     static MAX_RESULTS = 10000;
     static PAGE_SIZE = 10;
-    criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(newCriteria());
+
+    criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(emptyCriteria());
     documents: DataDiscoveryDocument[] = [];
     pagination = {
         startResult: 1,
@@ -38,21 +38,10 @@ export class ResultPageComponent implements OnInit {
         maxResults: ResultPageComponent.MAX_RESULTS
     };
 
-    constructor(private route: ActivatedRoute, private router: Router, private gnpisService: GnpisService) {
-    }
-
-    /**
-     * Update URL params with one param. Also reset page
-     */
-    updateParams(param: Param) {
-        this.router.navigate(['.'], {
-            relativeTo: this.route,
-            queryParams: {
-                page: null,
-                [param.key]: param.value
-            },
-            queryParamsHandling: 'merge'
-        });
+    constructor(private route: ActivatedRoute,
+                private router: Router,
+                private gnpisService: GnpisService
+    ) {
     }
 
     fetchDocuments(criteria: DataDiscoveryCriteria) {
@@ -70,18 +59,36 @@ export class ResultPageComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.route.queryParams.subscribe((queryParams: Params) => {
-            // Update criteria using URL query params
-            const criteria: DataDiscoveryCriteria = {
-                crops: asArray(queryParams.crops),
-                germplasmLists: asArray(queryParams.germplasmLists),
-                accessions: asArray(queryParams.accessions),
+        const queryParams = this.route.snapshot.queryParams;
 
-                page: queryParams.page - 1 || 0,
-                pageSize: ResultPageComponent.PAGE_SIZE
+        // Update criteria using URL query params
+        const criteria: DataDiscoveryCriteria = {
+            crops: asArray(queryParams.crops),
+            germplasmLists: asArray(queryParams.germplasmLists),
+            accessions: asArray(queryParams.accessions),
+            topSelectedTraitOntologyIds: asArray(queryParams.observationVariableIds),
+            observationVariableIds: [],
+
+            page: queryParams.page - 1 || 0,
+            pageSize: ResultPageComponent.PAGE_SIZE
+        };
+        this.criteria$.next(criteria);
+
+        this.criteria$.subscribe(newCriteria => {
+            newCriteria.page = 0;
+            this.fetchDocuments(newCriteria);
+
+            const newQueryParams: URLCriteria = {
+                crops: newCriteria.crops,
+                accessions: newCriteria.accessions,
+                germplasmLists: newCriteria.germplasmLists,
+                observationVariableIds: newCriteria.topSelectedTraitOntologyIds,
+                page: 1
             };
-            this.criteria$.next(criteria);
-            this.fetchDocuments(criteria);
+            this.router.navigate(['.'], {
+                relativeTo: this.route,
+                queryParams: newQueryParams
+            });
         });
     }
 
@@ -99,6 +106,17 @@ export class ResultPageComponent implements OnInit {
             // Use of empty param to force re-parse of URL in ngOnInit
             queryParams: { empty: [] }
         });
+        this.criteria$.next(emptyCriteria());
     }
 
+    changePage(page: number) {
+        const criteria = this.criteria$.value;
+        criteria.page = page - 1;
+        this.fetchDocuments(criteria);
+        this.router.navigate(['.'], {
+            relativeTo: this.route,
+            queryParams: { page },
+            queryParamsHandling: 'merge'
+        });
+    }
 }

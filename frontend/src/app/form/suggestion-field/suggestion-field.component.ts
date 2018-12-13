@@ -1,11 +1,10 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { merge, Observable, of, Subject } from 'rxjs';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { BehaviorSubject, merge, Observable, of, Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 import { GnpisService } from '../../gnpis.service';
 import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
 import { DataDiscoveryCriteria } from '../../model/dataDiscoveryCriteria';
-import { Param } from '../../model/common';
 
 @Component({
     selector: 'gpds-suggestion-field',
@@ -16,12 +15,10 @@ export class SuggestionFieldComponent implements OnInit {
 
     @Input() criteriaField: string;
     @Input() inputId: string;
-    @Input() criteria$: Observable<DataDiscoveryCriteria>;
+    @Input() criteria$: BehaviorSubject<DataDiscoveryCriteria>;
     @Input() placeholder: string;
 
-    @Output() selectionChange = new EventEmitter<Param>();
-
-    selectedKeys: string[] = [];
+    private selectedKeys: string[] = [];
 
     focus$ = new Subject();
 
@@ -33,7 +30,7 @@ export class SuggestionFieldComponent implements OnInit {
 
     @ViewChild('typeahead') typeahead: NgbTypeahead;
 
-    private criteria: DataDiscoveryCriteria = null;
+    private localCriteria: DataDiscoveryCriteria = null;
     private criteriaChanged = false;
     private lastSuggestions: string[] = null;
 
@@ -41,27 +38,23 @@ export class SuggestionFieldComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.criteria = null;
-        this.criteria$.subscribe(criteria => {
-            if (this.criteria) {
+        this.criteria$
+            .pipe(filter(c => c !== this.localCriteria))
+            .subscribe(newCriteria => {
                 // When criteria changes
                 this.criteriaChanged = true;
-            } else {
-                // On initial criteria => pre-fetch suggestions
-                this.fetchSuggestion('').subscribe(() => null);
-            }
-            this.criteria = criteria;
 
-            // Clear list of selected keys
-            this.selectedKeys.splice(0);
+                this.localCriteria = newCriteria;
 
-            // Add selection from criteria into list of selected keys
-            this.selectedKeys.push.apply(this.selectedKeys, criteria[this.criteriaField]);
+                // Clear list of selected keys
+                this.selectedKeys.splice(0);
 
-            // Empty input value and blur
-            this.input.setValue('');
-            this.inputElement.nativeElement.blur();
-        });
+                // Add selection from criteria into list of selected keys
+                const selectedInCriteria = newCriteria[this.criteriaField];
+                if (selectedInCriteria) {
+                    this.selectedKeys.push.apply(this.selectedKeys, selectedInCriteria);
+                }
+            });
     }
 
     /**
@@ -107,7 +100,7 @@ export class SuggestionFieldComponent implements OnInit {
     private fetchSuggestion(term: string): Observable<string[]> {
         // Fetch suggestions
         const suggestions$ = this.gnpisService.suggest(
-            this.criteriaField, 10, term, this.criteria
+            this.criteriaField, 10, term, this.localCriteria
         );
 
         // Filter out already selected suggestions
@@ -136,6 +129,12 @@ export class SuggestionFieldComponent implements OnInit {
         $event.preventDefault();
         this.selectedKeys.push($event.item);
         this.emitSelectionChange();
+
+        // Empty input value and blur
+        this.input.setValue('');
+        setTimeout(() => {
+            this.inputElement.nativeElement.blur();
+        }, 200);
     }
 
     /**
@@ -155,9 +154,10 @@ export class SuggestionFieldComponent implements OnInit {
      * Emit current selection when changed
      */
     private emitSelectionChange() {
-        this.selectionChange.emit({
-            key: this.criteriaField,
-            value: this.selectedKeys
-        });
+        this.localCriteria = {
+            ...this.localCriteria,
+            [this.criteriaField]: this.selectedKeys
+        };
+        this.criteria$.next(this.localCriteria);
     }
 }

@@ -1,54 +1,65 @@
+<ngb-tabset [destroyOnHide]="false" class="mb-3">
+  <ngb-tab title="Germplasm">
+    <ng-template ngbTabContent>
+      <div class="form-group row pt-3">
+        <label for="crops" class="col-sm-4">
+          <span>Crops</span>
+          <small class="small text-muted">
+            (common name, species, genus, subtaxa & synonyms)
+          </small>
+        </label>
+        <div class="col-sm-8">
+          <gpds-suggestion-field
+            inputId="crops"
+            criteriaField="crops"
+            [criteria$]="criteria$"
+            placeholder="Select or search crops">
+          </gpds-suggestion-field>
+        </div>
+      </div>
 
-<div class="form-group row">
-  <label for="crops" class="col-sm-4">
-    <span>Crops</span>
-    <small class="small text-muted">
-      (common name, species, genus, subtaxa & synonyms)
-    </small>
-  </label>
-  <div class="col-sm-8">
-    <gpds-suggestion-field
-      inputId="crops"
-      criteriaField="crops"
-      [criteria$]="criteria$"
-      (selectionChange)="selectionChange.emit($event)"
-      placeholder="Select or search crops">
-    </gpds-suggestion-field>
-  </div>
-</div>
+      <div class="form-group row">
+        <label for="germplasmList" class="col-sm-4">
+          <span>Germplasm list</span>
+          <small class="small text-muted">
+            (panel, collection & population)
+          </small>
+        </label>
+        <div class="col-sm-8">
+          <gpds-suggestion-field
+            inputId="germplasmList"
+            criteriaField="germplasmLists"
+            [criteria$]="criteria$"
+            placeholder="Select or search germplasm lists">
+          </gpds-suggestion-field>
+        </div>
+      </div>
 
-<div class="form-group row">
-  <label for="germplasmList" class="col-sm-4">
-    <span>Germplasm list</span>
-    <small class="small text-muted">
-      (panel, collection & population)
-    </small>
-  </label>
-  <div class="col-sm-8">
-    <gpds-suggestion-field
-      inputId="germplasmList"
-      criteriaField="germplasmLists"
-      [criteria$]="criteria$"
-      (selectionChange)="selectionChange.emit($event)"
-      placeholder="Select or search germplasm lists">
-    </gpds-suggestion-field>
-  </div>
-</div>
+      <div class="form-group row">
+        <label for="accessions" class="col-sm-4">
+          <span>Accession</span>
+          <small class="small text-muted">
+            (accession name, number & synonyms)
+          </small>
+        </label>
+        <div class="col-sm-8">
+          <gpds-suggestion-field
+            inputId="accessions"
+            criteriaField="accessions"
+            [criteria$]="criteria$"
+            placeholder="Select or search germplasm accession">
+          </gpds-suggestion-field>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
 
-<div class="form-group row">
-  <label for="accessions" class="col-sm-4">
-    <span>Accession</span>
-    <small class="small text-muted">
-      (accession name, number & synonyms)
-    </small>
-  </label>
-  <div class="col-sm-8">
-    <gpds-suggestion-field
-      inputId="accessions"
-      criteriaField="accessions"
-      [criteria$]="criteria$"
-      (selectionChange)="selectionChange.emit($event)"
-      placeholder="Select or search germplasm accession">
-    </gpds-suggestion-field>
-  </div>
-</div>
+  <ngb-tab title="Variable">
+    <ng-template ngbTabContent>
+      <gpds-trait-ontology-widget
+        [criteria$]="criteria$">
+      </gpds-trait-ontology-widget>
+    </ng-template>
+  </ngb-tab>
+
+</ngb-tabset>
