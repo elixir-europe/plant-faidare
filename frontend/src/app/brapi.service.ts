@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-const BASE_URL = '/brapi/v1/germplasm';
+
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +15,31 @@ export class BrapiService {
     }
 
     germplasm(germplasmDbId: string): Observable<object> {
-        return this.http.get<object>(`${BASE_URL}/${germplasmDbId}`);
+        return this.http.get<object>(`/brapi/v1/germplasm/${germplasmDbId}`);
     }
+
+    germplasmPedigree(germplasmDbId: string): Observable<object> {
+        return this.http.get<object>(`/brapi/v1/germplasm/${germplasmDbId}/pedigree`);
+    }
+
+    germplasmProgeny(germplasmDbId: string): Observable<object> {
+        return this.http.get<object>(`/brapi/v1/germplasm/${germplasmDbId}/progeny`);
+    }
+
+    germplasmAttributes(germplasmDbId: string): Observable<object> {
+        return this.http.get<object>(`/brapi/v1/germplasm/${germplasmDbId}/attributes`);
+    }
+
+    study(studyDbId: string): Observable<object> {
+        return this.http.get<object>(`/brapi/v1/studies/${studyDbId}`);
+    }
+
+    studyGermplasms(studyDbId: string): Observable<string[]> {
+        return this.http.get<string[]>(`/brapi/v1/studies/${studyDbId}/germplasm`);
+    }
+
+    studyObservationVariables(studyDbId: string): Observable<string[]> {
+        return this.http.get<string[]>(`/brapi/v1/studies/${studyDbId}/observationVariables`);
+    }
+
 }

@@ -1,3 +1,59 @@
-<p>
-  study-card works!
-</p>
+<h3>
+  Study: {{ study.result.name }}
+</h3>
+
+
+<div class="row">
+  <table class="table table-sm">
+    <!--<tr>
+      <td><b>Data source</b></td>
+      <td>{{ }}</td>
+    </tr>-->
+    <tr>
+      <td><b>Name</b></td>
+      <td>{{ study.result.name }}</td>
+    </tr>
+    <tr>
+      <td><b>Program name</b></td>
+      <td>{{ study.result.programName }}</td>
+    </tr>
+    <tr>
+      <td><b>Description</b></td>
+      <td>{{ study.result.studyDescription }}</td>
+    </tr>
+    <tr>
+      <td><b>Permanent Unique Identifier</b></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><b>Active</b></td>
+      <td>{{ study.result.active }}</td>
+    </tr>
+    <tr>
+      <td><b>Seasons</b></td>
+      <td *ngFor="let season of study.result.seasons"><div>{{ season }}</div></td>
+    </tr>
+    <tr *ngIf="study.result.startDate != null">
+      <td><b>Date</b></td>
+      <td *ngIf="study.result.endDate != null; else withoutEnd">From {{ study.result.startDate }} to {{ study.result.endDate }}</td>
+      <ng-template><td>{{ study.result.startDate }}</td></ng-template>
+    </tr>
+    <tr>
+      <td><b>Location name</b></td>
+      <td>{{ study.result.locationName }}</td>
+    </tr>
+    <tr>
+      <td><b>Source</b></td>
+      <td>{{ study.result.dataLinks.name }} {{ study.result.dataLinks.documentationURL }}</td>
+    </tr>
+   <!-- <ng-container *ngFor="let info of objectKeys(study.result.additionalInfo)">
+      <tr>
+        <td><b>{{ info }}</b></td><td>{{ study.result.additionalInfo[info] }}</td>
+      </tr>
+    </ng-container>-->
+    <!--<tr>
+      <td>Additional information</td>
+      <td>{{ study.result.additionalInfo }}</td>
+    </tr>-->
+  </table>
+</div>
