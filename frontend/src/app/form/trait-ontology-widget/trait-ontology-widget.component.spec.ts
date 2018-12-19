@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { CropOntologyWidgetFactory, TraitOntologyWidgetComponent } from './trait-ontology-widget.component';
 import { GnpisService } from '../../gnpis.service';
 import { BehaviorSubject } from 'rxjs';
-import { emptyCriteria } from '../../model/dataDiscoveryCriteria';
+import { emptyCriteria } from '../../model/data-discovery.model';
 
 describe('TraitOntologyWidgetComponent', () => {
     const service = jasmine.createSpyObj(

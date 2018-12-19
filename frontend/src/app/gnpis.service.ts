@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, zip } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { DataDiscoveryCriteria } from './model/dataDiscoveryCriteria';
-import { BrapiResults } from './model/brapi';
-import { DataDiscoveryDocument, DataDiscoverySource } from './model/dataDiscoveryDocument';
+import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDiscoverySource } from './model/data-discovery.model';
+import { BrapiResults } from './model/brapi.model';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -19,9 +18,9 @@ export class GnpisService {
 
     private fetchSources(): void {
         this.http.get(`${GnpisService.BASE_URL}/sources`).subscribe(
-            (brapiResults: BrapiResults<DataDiscoverySource>) => {
+            (response: BrapiResults<DataDiscoverySource>) => {
                 const sourceByURI = {};
-                for (const source of brapiResults.result.data) {
+                for (const source of response.result.data) {
                     sourceByURI[source['@id']] = source;
                 }
                 this.sourceByURI$.next(sourceByURI);
@@ -56,23 +55,36 @@ export class GnpisService {
      */
     search(
         criteria: DataDiscoveryCriteria
-    ): Observable<BrapiResults<DataDiscoveryDocument>> {
+    ): Observable<DataDiscoveryResults> {
         return zip(
             // Get source by URI
             this.sourceByURI$,
             // Get documents by criteria
             this.http.post<any>(`${GnpisService.BASE_URL}/search`, criteria)
-        ).pipe(map(([sourceByURI, brapiResult]) => {
+        ).pipe(map(([sourceByURI, response]) => {
             // Extract BrAPI documents from result
-            const documents = brapiResult.result.data;
+            const documents = response.result.data;
 
             // Transform document to have the source details in place of the source URI
-            brapiResult.result.data = documents.map(document => {
-                const sourceURI = document['schema:includedInDataCatalog'] as string;
+            response.result.data = documents.map(document => {
+                const sourceURI = document['schema:includedInDataCatalog'];
                 document['schema:includedInDataCatalog'] = sourceByURI[sourceURI];
                 return document;
             });
-            return brapiResult;
+            if (response.facets) {
+                response.facets = response.facets.map((facet: DataDiscoveryFacet) => {
+                    facet.terms = facet.terms.map(term => {
+                        if (facet.field === 'sources') {
+                            term.label = sourceByURI[term.term]['schema:name'];
+                        } else {
+                            term.label = term.term;
+                        }
+                        return term;
+                    });
+                    return facet;
+                });
+            }
+            return response;
         }));
     }
 

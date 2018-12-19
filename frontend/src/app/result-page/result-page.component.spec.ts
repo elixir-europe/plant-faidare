@@ -7,10 +7,9 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Params, Router } from '@angular
 import { of } from 'rxjs';
 import { fakeRoute } from 'ngx-speculoos';
 import { DocumentComponent } from './document/document.component';
-import { DataDiscoveryCriteria, emptyCriteria } from '../model/dataDiscoveryCriteria';
+import { DataDiscoveryCriteria, DataDiscoveryDocument, DataDiscoverySource, emptyCriteria } from '../model/data-discovery.model';
 import { GnpisService } from '../gnpis.service';
-import { DataDiscoveryDocument, DataDiscoverySource } from '../model/dataDiscoveryDocument';
-import { BrapiResults } from '../model/brapi';
+import { BrapiResults } from '../model/brapi.model';
 
 
 @Component({

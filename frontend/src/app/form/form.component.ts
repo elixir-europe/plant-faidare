@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DataDiscoveryCriteria } from '../model/dataDiscoveryCriteria';
+import { DataDiscoveryCriteria } from '../model/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({

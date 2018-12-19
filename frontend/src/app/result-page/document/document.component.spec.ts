@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DocumentComponent } from './document.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { DataDiscoverySource } from '../../model/dataDiscoveryDocument';
+import { DataDiscoverySource } from '../../model/data-discovery.model';
 
 describe('DocumentComponent', () => {
     let component: DocumentComponent;

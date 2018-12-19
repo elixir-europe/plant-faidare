@@ -1,6 +1,6 @@
 import { Component, Injectable, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { CropOntologyWidget } from 'trait-ontology-widget/dist/module/cropOntologyWidget.module';
-import { DataDiscoveryCriteria } from '../../model/dataDiscoveryCriteria';
+import { DataDiscoveryCriteria } from '../../model/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
 import { GnpisService } from '../../gnpis.service';
 import { filter } from 'rxjs/operators';
@@ -46,18 +46,26 @@ export class TraitOntologyWidgetComponent implements OnInit {
         );
         this.widget.setHeight(450);
 
+        let initialized = false;
         this.criteria$
             .pipe(filter(c => c !== this.localCriteria))
             .subscribe(newCriteria => {
                 this.localCriteria = newCriteria;
 
-                const selectedNodeIds = this.localCriteria.topSelectedTraitOntologyIds;
-                this.widget.jsTreePanel.load().then(() => {
+                if (!initialized) {
+                    const selectedNodeIds = this.localCriteria.topSelectedTraitOntologyIds;
+                    this.widget.jsTreePanel.load().then(() => {
+                        this.setSelected(selectedNodeIds);
+                        this.localCriteria = {
+                            ...this.localCriteria,
+                            observationVariableIds: this.getBottomSelected()
+                        };
+                        this.criteria$.next(this.localCriteria);
+                    });
+                    initialized = true;
+                } else {
                     this.widget.reset();
-                    this.widget.setSelectedNodeIds(selectedNodeIds);
-                    this.localCriteria.observationVariableIds = this.getBottomSelected();
-                    this.criteria$.next(this.localCriteria);
-                });
+                }
 
                 const field = 'observationVariableIds';
                 const fetchSize = 2147483647;
@@ -75,6 +83,14 @@ export class TraitOntologyWidgetComponent implements OnInit {
             };
             this.criteria$.next(this.localCriteria);
         });
+    }
+
+    private setSelected(selectedNodeIds: string[]) {
+        if (selectedNodeIds) {
+            for (const nodeId of selectedNodeIds) {
+                this.widget.jsTreePanel.jstree.select_node(nodeId);
+            }
+        }
     }
 
     private getTopSelected(): string[] {

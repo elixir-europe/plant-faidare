@@ -2,9 +2,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { GnpisService } from './gnpis.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { BrapiMetaData, BrapiResults } from './model/brapi';
-import { DataDiscoverySource } from './model/dataDiscoveryDocument';
-import { DataDiscoveryCriteria } from './model/dataDiscoveryCriteria';
+import { BrapiMetaData, BrapiResults } from './model/brapi.model';
+import { DataDiscoveryCriteria, DataDiscoverySource } from './model/data-discovery.model';
 
 describe('GnpisService', () => {
     let service: GnpisService;

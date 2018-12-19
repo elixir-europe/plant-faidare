@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DataDiscoveryCriteria, emptyCriteria } from '../model/dataDiscoveryCriteria';
+import { DataDiscoveryCriteria, DataDiscoveryDocument, DataDiscoveryFacet, emptyCriteria } from '../model/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
-import { DataDiscoveryDocument } from '../model/dataDiscoveryDocument';
 import { GnpisService } from '../gnpis.service';
 import { asArray } from '../utils';
 
@@ -12,6 +11,8 @@ export interface URLCriteria {
     crops: string[];
     germplasmLists: string[];
     observationVariableIds: string[];
+    sources: string[];
+    types: string[];
 
     page: number;
 }
@@ -28,6 +29,7 @@ export class ResultPageComponent implements OnInit {
 
     criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(emptyCriteria());
     documents: DataDiscoveryDocument[] = [];
+    facets: DataDiscoveryFacet[] = [];
     pagination = {
         startResult: 1,
         endResult: 10,
@@ -46,7 +48,7 @@ export class ResultPageComponent implements OnInit {
 
     fetchDocuments(criteria: DataDiscoveryCriteria) {
         this.gnpisService.search(criteria)
-            .subscribe(({ metadata, result }) => {
+            .subscribe(({ metadata, result, facets }) => {
                 this.documents = result.data;
                 const { currentPage, pageSize, totalCount, totalPages } = metadata.pagination;
                 this.pagination.currentPage = currentPage;
@@ -55,6 +57,8 @@ export class ResultPageComponent implements OnInit {
                 this.pagination.startResult = pageSize * currentPage + 1;
                 this.pagination.endResult = this.pagination.startResult + pageSize - 1;
                 this.pagination.totalResult = totalCount;
+
+                this.facets = facets;
             });
     }
 
@@ -68,7 +72,10 @@ export class ResultPageComponent implements OnInit {
             accessions: asArray(queryParams.accessions),
             topSelectedTraitOntologyIds: asArray(queryParams.observationVariableIds),
             observationVariableIds: [],
+            sources: asArray(queryParams.sources),
+            types: asArray(queryParams.types),
 
+            facetFields: ['sources', 'types'],
             page: queryParams.page - 1 || 0,
             pageSize: ResultPageComponent.PAGE_SIZE
         };
@@ -83,6 +90,9 @@ export class ResultPageComponent implements OnInit {
                 accessions: newCriteria.accessions,
                 germplasmLists: newCriteria.germplasmLists,
                 observationVariableIds: newCriteria.topSelectedTraitOntologyIds,
+                sources: newCriteria.sources,
+                types: newCriteria.types,
+
                 page: 1
             };
             this.router.navigate(['.'], {

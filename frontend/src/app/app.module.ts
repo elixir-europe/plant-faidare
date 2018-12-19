@@ -19,6 +19,7 @@ import { DocumentComponent } from './result-page/document/document.component';
 import { ErrorComponent } from './error/error.component';
 import { ErrorInterceptorService } from './error-interceptor.service';
 import { TraitOntologyWidgetComponent } from './form/trait-ontology-widget/trait-ontology-widget.component';
+import { FacetsComponent } from './result-page/facets/facets.component';
 
 @NgModule({
     declarations: [
@@ -34,7 +35,8 @@ import { TraitOntologyWidgetComponent } from './form/trait-ontology-widget/trait
         SuggestionFieldComponent,
         DocumentComponent,
         ErrorComponent,
-        TraitOntologyWidgetComponent
+        TraitOntologyWidgetComponent,
+        FacetsComponent
     ],
     imports: [
         BrowserModule,

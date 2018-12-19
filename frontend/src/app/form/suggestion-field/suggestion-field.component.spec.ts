@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { GnpisService } from '../../gnpis.service';
 import { BehaviorSubject, of } from 'rxjs';
-import { emptyCriteria } from '../../model/dataDiscoveryCriteria';
+import { emptyCriteria } from '../../model/data-discovery.model';
 
 
 describe('SuggestionFieldComponent', () => {
