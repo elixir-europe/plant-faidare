@@ -57,7 +57,8 @@
   <ngb-tab title="Variable">
     <ng-template ngbTabContent>
       <gpds-trait-ontology-widget
-        [criteria$]="criteria$">
+        [criteria$]="criteria$"
+        (initialized)="traitWidgetInitialized.emit($event)">
       </gpds-trait-ontology-widget>
     </ng-template>
   </ngb-tab>

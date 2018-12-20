@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DataDiscoveryCriteria } from '../model/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
 
@@ -9,4 +9,5 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class FormComponent {
     @Input() criteria$: BehaviorSubject<DataDiscoveryCriteria>;
+    @Output() traitWidgetInitialized = new EventEmitter();
 }

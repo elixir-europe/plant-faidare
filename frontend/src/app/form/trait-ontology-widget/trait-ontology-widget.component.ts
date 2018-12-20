@@ -1,4 +1,4 @@
-import { Component, Injectable, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Injectable, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { CropOntologyWidget } from 'trait-ontology-widget/dist/module/cropOntologyWidget.module';
 import { DataDiscoveryCriteria } from '../../model/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
@@ -27,6 +27,9 @@ export class CropOntologyWidgetFactory {
 export class TraitOntologyWidgetComponent implements OnInit {
 
     @Input() criteria$: BehaviorSubject<DataDiscoveryCriteria>;
+    @Output() initialized = new EventEmitter();
+
+    variablesList: string[] = [];
 
     private localCriteria: DataDiscoveryCriteria = null;
 
@@ -56,11 +59,8 @@ export class TraitOntologyWidgetComponent implements OnInit {
                     const selectedNodeIds = this.localCriteria.topSelectedTraitOntologyIds;
                     this.widget.jsTreePanel.load().then(() => {
                         this.setSelected(selectedNodeIds);
-                        this.localCriteria = {
-                            ...this.localCriteria,
-                            observationVariableIds: this.getBottomSelected()
-                        };
-                        this.criteria$.next(this.localCriteria);
+                        this.localCriteria.observationVariableIds = this.getBottomSelected();
+                        this.initialized.emit(true);
                     });
                     initialized = true;
                 } else {
@@ -69,8 +69,10 @@ export class TraitOntologyWidgetComponent implements OnInit {
 
                 const field = 'observationVariableIds';
                 const fetchSize = 2147483647;
+
                 this.gnpisService.suggest(field, fetchSize, '', this.localCriteria)
                     .subscribe(ids => {
+                        this.variablesList = ids;
                         this.widget.showOnly(ids);
                     });
             });

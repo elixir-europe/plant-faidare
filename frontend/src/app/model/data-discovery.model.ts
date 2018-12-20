@@ -1,4 +1,10 @@
 import { BrapiResults } from './brapi.model';
+import { Params } from '@angular/router';
+import { asArray } from '../utils';
+
+
+export const MAX_RESULTS = 10000;
+export const DEFAULT_PAGE_SIZE = 10;
 
 export interface DataDiscoveryCriteria {
     accessions: string[];
@@ -18,20 +24,54 @@ export interface DataDiscoveryCriteria {
     pageSize: number;
 }
 
-export function emptyCriteria(): DataDiscoveryCriteria {
-    return {
-        accessions: null,
-        crops: null,
-        facetFields: ['sources', 'types'],
-        germplasmLists: null,
-        observationVariableIds: null,
-        topSelectedTraitOntologyIds: null,
-        sources: null,
-        types: null,
+export class DataDiscoveryCriteriaUtils {
+    static emptyCriteria(): DataDiscoveryCriteria {
+        return {
+            accessions: null,
+            crops: null,
+            facetFields: ['sources', 'types'],
+            germplasmLists: null,
+            observationVariableIds: null,
+            topSelectedTraitOntologyIds: null,
+            sources: null,
+            types: null,
 
-        page: 0,
-        pageSize: 10
-    };
+            page: 0,
+            pageSize: DEFAULT_PAGE_SIZE
+        };
+    }
+
+    static fromQueryParams(queryParams: Params): DataDiscoveryCriteria {
+        return {
+            ...DataDiscoveryCriteriaUtils.emptyCriteria(),
+
+            crops: asArray(queryParams.crops),
+            germplasmLists: asArray(queryParams.germplasmLists),
+            accessions: asArray(queryParams.accessions),
+            sources: asArray(queryParams.sources),
+            types: asArray(queryParams.types),
+
+            // The URL should only contain top selected trait ontology node ids
+            topSelectedTraitOntologyIds: asArray(queryParams.observationVariableIds),
+
+            page: queryParams.page - 1 || 0
+        };
+    }
+
+    static toQueryParams(newCriteria: DataDiscoveryCriteria) {
+        return {
+            crops: newCriteria.crops,
+            accessions: newCriteria.accessions,
+            germplasmLists: newCriteria.germplasmLists,
+            sources: newCriteria.sources,
+            types: newCriteria.types,
+
+            // The URL should only contain top selected trait ontology node ids
+            observationVariableIds: newCriteria.topSelectedTraitOntologyIds,
+
+            page: newCriteria.page + 1
+        };
+    }
 }
 
 export interface DataDiscoverySource {

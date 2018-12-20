@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResultPageComponent, URLCriteria } from './result-page.component';
+import { ResultPageComponent } from './result-page.component';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot, Params, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { fakeRoute } from 'ngx-speculoos';
 import { DocumentComponent } from './document/document.component';
-import { DataDiscoveryCriteria, DataDiscoveryDocument, DataDiscoverySource, emptyCriteria } from '../model/data-discovery.model';
+import { DataDiscoveryCriteria, DataDiscoveryDocument, DataDiscoverySource } from '../model/data-discovery.model';
 import { GnpisService } from '../gnpis.service';
 import { BrapiResults } from '../model/brapi.model';
 
@@ -96,7 +96,7 @@ describe('ResultPageComponent', () => {
 
         const criteria = { crops: ['Wheat', 'Vitis'] } as DataDiscoveryCriteria;
         component.criteria$.next(criteria);
-        const newQueryParams: URLCriteria = {
+        const newQueryParams = {
             crops: criteria.crops,
             accessions: criteria.accessions,
             germplasmLists: criteria.germplasmLists,
@@ -112,8 +112,7 @@ describe('ResultPageComponent', () => {
     });
 
     it('should fetch documents', () => {
-        const criteria = emptyCriteria();
-        component.fetchDocuments(criteria);
+        component.fetchDocumentsAndFacets();
         expect(component.documents).not.toBe(null);
     });
 

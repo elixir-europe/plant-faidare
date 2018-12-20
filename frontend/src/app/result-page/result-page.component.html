@@ -1,15 +1,19 @@
 <div class="row justify-content-end">
+
   <!-- Column for form -->
   <div class="col-lg-9">
     <!-- Reset all button -->
-    <div class="text-right">
-      <button type="button" class="btn btn-sm btn-danger reset-all" (click)="resetAll()">
+    <div class="text-right reset-all-div">
+      <button type="button" class="btn btn-sm btn-danger mt-1" (click)="resetAll()">
         Reset all
       </button>
     </div>
 
     <!-- Form -->
-    <gpds-form [criteria$]="criteria$"></gpds-form>
+    <gpds-form
+      #form
+      [criteria$]="criteria$">
+    </gpds-form>
   </div>
 
   <!-- Column for facets -->
@@ -19,22 +23,44 @@
         class="col-12 col-lg-12 col-sm-6"
         *ngFor="let facet of facets"
         [criteria$]="criteria$"
-        [facet]="facet"></gpds-facets>
+        [facet]="facet">
+      </gpds-facets>
     </div>
 
   </div>
 
+
   <!-- Column for result -->
   <div *ngIf="documents.length" class="col-lg-9">
-    <hr/>
 
     <!-- Pagination status -->
-    <div *ngIf="pagination.totalResult" class="mb-4 small text-muted mt-4">
-      Results from {{ pagination.startResult | number }} to {{ pagination.endResult | number }}
-      over {{ pagination.totalResult | number }} documents
-      <span *ngIf="pagination.totalResult > pagination.maxResults">
-          (limited to {{ pagination.maxResults | number }})
+    <div class="container">
+      <div class="row result align-content-center">
+        <span class="col-4" id="result-part">
+          Results :
         </span>
+        <span *ngIf="pagination.totalResult" class="col-8 text-right small text-muted pt-1">
+          From {{ pagination.startResult | number }} to {{ pagination.endResult | number }}
+          over {{ pagination.totalResult | number }} documents
+          <span *ngIf="pagination.totalResult > pagination.maxResults">
+          (limited to {{ pagination.maxResults | number }})
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <!--Top page navigator-->
+    <div class="d-flex justify-content-center mt-3" *ngIf="pagination.totalPages > 1">
+      <!-- we add 1 to the page because ngb-pagination is 1 based -->
+      <ngb-pagination [page]="pagination.currentPage + 1"
+                      (pageChange)="changePage($event)"
+                      [collectionSize]="resultCount()"
+                      [pageSize]="pagination.pageSize"
+                      [maxSize]="5"
+                      [boundaryLinks]="true"
+                      [ellipses]="false"
+                      size="sm">
+      </ngb-pagination>
     </div>
 
     <!-- Result document -->
@@ -44,11 +70,12 @@
     </gpds-document>
 
     <!-- Pagination -->
-    <div>
+    <!--Bottom page navigator-->
+    <div class="d-flex justify-content-center mt-5" *ngIf="pagination.totalPages > 1">
       <!-- we add 1 to the page because ngb-pagination is 1 based -->
       <ngb-pagination [page]="pagination.currentPage + 1"
                       (pageChange)="changePage($event)"
-                      [collectionSize]="collectionSize()"
+                      [collectionSize]="resultCount()"
                       [pageSize]="pagination.pageSize"
                       [maxSize]="5"
                       [boundaryLinks]="true"

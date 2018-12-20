@@ -1,21 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DataDiscoveryCriteria, DataDiscoveryDocument, DataDiscoveryFacet, emptyCriteria } from '../model/data-discovery.model';
+import {
+    DataDiscoveryCriteria,
+    DataDiscoveryCriteriaUtils,
+    DataDiscoveryDocument,
+    DataDiscoveryFacet,
+    DEFAULT_PAGE_SIZE,
+    MAX_RESULTS
+} from '../model/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
 import { GnpisService } from '../gnpis.service';
-import { asArray } from '../utils';
+import { filter } from 'rxjs/operators';
+import { FormComponent } from '../form/form.component';
 
-
-export interface URLCriteria {
-    accessions: string[];
-    crops: string[];
-    germplasmLists: string[];
-    observationVariableIds: string[];
-    sources: string[];
-    types: string[];
-
-    page: number;
-}
 
 @Component({
     selector: 'gpds-result',
@@ -24,20 +21,19 @@ export interface URLCriteria {
 })
 export class ResultPageComponent implements OnInit {
 
-    static MAX_RESULTS = 10000;
-    static PAGE_SIZE = 10;
+    @ViewChild('form') form: FormComponent;
 
-    criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(emptyCriteria());
+    criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
     documents: DataDiscoveryDocument[] = [];
     facets: DataDiscoveryFacet[] = [];
     pagination = {
         startResult: 1,
-        endResult: 10,
+        endResult: DEFAULT_PAGE_SIZE,
         totalResult: null,
         currentPage: 0,
-        pageSize: ResultPageComponent.PAGE_SIZE,
+        pageSize: DEFAULT_PAGE_SIZE,
         totalPages: null,
-        maxResults: ResultPageComponent.MAX_RESULTS
+        maxResults: MAX_RESULTS
     };
 
     constructor(private route: ActivatedRoute,
@@ -46,66 +42,56 @@ export class ResultPageComponent implements OnInit {
     ) {
     }
 
-    fetchDocuments(criteria: DataDiscoveryCriteria) {
+    fetchDocumentsAndFacets() {
+        const criteria = this.criteria$.value;
         this.gnpisService.search(criteria)
             .subscribe(({ metadata, result, facets }) => {
                 this.documents = result.data;
-                const { currentPage, pageSize, totalCount, totalPages } = metadata.pagination;
-                this.pagination.currentPage = currentPage;
-                this.pagination.pageSize = pageSize;
-                this.pagination.totalPages = totalPages;
-                this.pagination.startResult = pageSize * currentPage + 1;
-                this.pagination.endResult = this.pagination.startResult + pageSize - 1;
-                this.pagination.totalResult = totalCount;
-
+                this.updatePagination(metadata.pagination);
                 this.facets = facets;
             });
+    }
+
+    private updatePagination({ currentPage, pageSize, totalCount, totalPages }) {
+        this.pagination.currentPage = currentPage;
+        this.pagination.pageSize = pageSize;
+        this.pagination.totalPages = totalPages;
+        this.pagination.startResult = pageSize * currentPage + 1;
+        this.pagination.endResult = this.pagination.startResult + pageSize - 1;
+        this.pagination.totalResult = totalCount;
     }
 
     ngOnInit(): void {
         const queryParams = this.route.snapshot.queryParams;
 
-        // Update criteria using URL query params
-        const criteria: DataDiscoveryCriteria = {
-            crops: asArray(queryParams.crops),
-            germplasmLists: asArray(queryParams.germplasmLists),
-            accessions: asArray(queryParams.accessions),
-            topSelectedTraitOntologyIds: asArray(queryParams.observationVariableIds),
-            observationVariableIds: [],
-            sources: asArray(queryParams.sources),
-            types: asArray(queryParams.types),
+        // Parse criteria from URL query params
+        const initialCriteria = DataDiscoveryCriteriaUtils.fromQueryParams(queryParams);
+        this.criteria$.next(initialCriteria);
 
-            facetFields: ['sources', 'types'],
-            page: queryParams.page - 1 || 0,
-            pageSize: ResultPageComponent.PAGE_SIZE
-        };
-        this.criteria$.next(criteria);
-
-        this.criteria$.subscribe(newCriteria => {
-            newCriteria.page = 0;
-            this.fetchDocuments(newCriteria);
-
-            const newQueryParams: URLCriteria = {
-                crops: newCriteria.crops,
-                accessions: newCriteria.accessions,
-                germplasmLists: newCriteria.germplasmLists,
-                observationVariableIds: newCriteria.topSelectedTraitOntologyIds,
-                sources: newCriteria.sources,
-                types: newCriteria.types,
-
-                page: 1
-            };
-            this.router.navigate(['.'], {
-                relativeTo: this.route,
-                queryParams: newQueryParams
-            });
+        this.form.traitWidgetInitialized.subscribe(() => {
+            this.fetchDocumentsAndFacets();
         });
+
+        this.criteria$
+            .pipe(filter(c => c !== initialCriteria))
+            .subscribe(newCriteria => {
+                // Reset pagination
+                newCriteria.page = 0;
+                // Fetch documents and facets
+                this.fetchDocumentsAndFacets();
+
+                // Update URL query params
+                this.router.navigate(['.'], {
+                    relativeTo: this.route,
+                    queryParams: DataDiscoveryCriteriaUtils.toQueryParams(newCriteria)
+                });
+            });
     }
 
-    collectionSize() {
+    resultCount() {
         return Math.min(
             this.pagination.totalResult,
-            ResultPageComponent.MAX_RESULTS - ResultPageComponent.PAGE_SIZE
+            MAX_RESULTS - DEFAULT_PAGE_SIZE
         );
     }
 
@@ -116,17 +102,18 @@ export class ResultPageComponent implements OnInit {
             // Use of empty param to force re-parse of URL in ngOnInit
             queryParams: { empty: [] }
         });
-        this.criteria$.next(emptyCriteria());
+        this.criteria$.next(DataDiscoveryCriteriaUtils.emptyCriteria());
     }
 
     changePage(page: number) {
         const criteria = this.criteria$.value;
         criteria.page = page - 1;
-        this.fetchDocuments(criteria);
+        this.fetchDocumentsAndFacets();
         this.router.navigate(['.'], {
             relativeTo: this.route,
             queryParams: { page },
             queryParamsHandling: 'merge'
         });
     }
+
 }
