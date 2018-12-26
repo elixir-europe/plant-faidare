@@ -44,7 +44,7 @@ export class GermplasmCardComponent implements OnInit {
                 this.germplasmAttributes = germplasmAttributes;
             });
 
-        this.gnpisService.germplasm(germplasmId)
+        this.brapiService.germplasm(germplasmId)
             .subscribe(germplasmGnpis =>
             this.germplasmGnpis = germplasmGnpis);
     }
