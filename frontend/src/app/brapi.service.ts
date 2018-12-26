@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-
-
+import { delay } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
-
 
 export class BrapiService {
 
@@ -40,6 +38,10 @@ export class BrapiService {
 
     studyObservationVariables(studyDbId: string): Observable<string[]> {
         return this.http.get<string[]>(`/brapi/v1/studies/${studyDbId}/observationVariables`);
+    }
+
+    location(locationId: number): Observable<object> {
+        return this.http.get<object>(`/brapi/v1/locations/${locationId}`);
     }
 
 }

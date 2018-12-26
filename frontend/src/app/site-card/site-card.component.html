@@ -1,3 +1,85 @@
-<p>
-  site-card works!
-</p>
+<div *ngIf="site.result">
+  <h1>
+    Site: {{ site.result.name }}
+  </h1>
+  <br/>
+  <h4>Details:</h4>
+  <br/>
+  <div class="container-fluid">
+    <div class="row">
+      <table class="table float-right w-75 p-2 table-sm">
+        <tr>
+          <td><b>Site type</b></td>
+          <td>{{ site.result.locationType }}</td>
+        </tr>
+        <tr>
+          <td><b>Abbreviation</b></td>
+          <td>{{ site.result.abbreviation }}</td>
+        </tr>
+        <tr>
+          <td><b>Country code</b></td>
+          <td>{{ site.result.countryCode }}</td>
+        </tr>
+        <tr>
+          <td><b>Country name</b></td>
+          <td>{{ site.result.countryName }}</td>
+        </tr>
+        <tr>
+          <td><b>Institution address</b></td>
+          <td>{{ site.result.institutionAdress }}</td>
+        </tr>
+        <tr>
+          <td><b>Institution name</b></td>
+          <td>{{ site.result.institutionName }}</td>
+        </tr>
+        <tr>
+          <td><b>Altitude</b></td>
+          <td>{{ site.result.altitude }}</td>
+        </tr>
+        <tr>
+          <td><b>Latitude</b></td>
+          <td>{{ site.result.latitude }}</td>
+        </tr>
+        <tr>
+          <td><b>Longitude</b></td>
+          <td>{{ site.result.longitude }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div *ngIf="site.result.additionalInfo">
+    <br/>
+    <h4>Additional informations:</h4>
+    <br/>
+    <div class="container-fluid">
+      <div class="row">
+        <table class="table float-right w-75 p-2 table-sm">
+          <tr>
+            <td><b>Exposure</b></td>
+            <td>{{ site.result.additionalInfo.Exposure }}</td>
+          </tr>
+          <tr>
+            <td><b>Distance to city</b></td>
+            <td>{{ site.result.additionalInfo['Distance to city'] }}</td>
+          </tr>
+          <tr>
+            <td><b>Comment</b></td>
+            <td>{{ site.result.additionalInfo.Comment }}</td>
+          </tr>
+          <tr>
+            <td><b>Geographical location</b></td>
+            <td>{{ site.result.additionalInfo['Geographical location'] }}</td>
+          </tr>
+          <tr>
+            <td><b>Slope</b></td>
+            <td>{{ site.result.additionalInfo.Slope }}</td>
+          </tr>
+          <tr>
+            <td><b>Coordinates precision</b></td>
+            <td>{{ site.result.additionalInfo['Coordinates precision'] }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

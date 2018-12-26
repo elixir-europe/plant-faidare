@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { BrapiService } from '../brapi.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'gpds-site-card',
@@ -7,10 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SiteCardComponent implements OnInit {
 
-    constructor() {
+    site: object = {};
+
+    constructor(private brapiService: BrapiService, private route: ActivatedRoute) {
     }
 
     ngOnInit() {
+        const locationId = +this.route.snapshot.paramMap.get('id');
+        this.brapiService.location(locationId).subscribe(
+          site => { this.site = site; },
+          () => console.log('Unable to load site...')
+        );
     }
 
 }
