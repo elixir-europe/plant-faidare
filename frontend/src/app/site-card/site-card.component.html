@@ -1,7 +1,10 @@
-<div *ngIf="site.result">
+<div *ngIf="site">
   <h1>
     Site: {{ site.result.name }}
   </h1>
+</div>
+<gpds-map [site]="site" *ngIf="site"></gpds-map>
+<div *ngIf="site">
   <br/>
   <h4>Details:</h4>
   <br/>

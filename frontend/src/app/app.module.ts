@@ -11,6 +11,7 @@ import { StudyCardComponent } from './study-card/study-card.component';
 import { SiteCardComponent } from './site-card/site-card.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { NavbarComponent } from './navbar/navbar.component';
         GermplasmCardComponent,
         StudyCardComponent,
         SiteCardComponent,
-        NavbarComponent
+        NavbarComponent,
+        MapComponent
     ],
     imports: [
         BrowserModule,
