@@ -23,12 +23,27 @@ export class MapComponent implements OnInit {
             }).addTo(myfrugalmap);
             // add marker
             const myIcon = L.icon({
-                iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/images/marker-icon.png'
+                iconUrl: this.getMarkerIconUrl()
             });
             L.marker(
                 [this.site.result.latitude, this.site.result.longitude],
                 { icon: myIcon }
                 ).bindPopup(this.site.result.locationType).addTo(myfrugalmap).openPopup();
+        }
+    }
+
+    getMarkerIconUrl(): string {
+        if (this.site.result.locationType === 'Origin and Collecting site') {
+            return 'assets/gpds/images/marker-icon-purple.png';
+        }
+        if (this.site.result.locationType === 'Origin site') {
+            return 'assets/gpds/images/marker-icon-red.png';
+        }
+        if (this.site.result.locationType === 'Collecting site') {
+            return 'assets/gpds/images/marker-icon-blue.png';
+        }
+        if (this.site.result.locationType === 'Evaluation site') {
+            return 'assets/gpds/images/marker-icon-green.png';
         }
     }
 
