@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
-import { SiteModel, SiteResultModel } from '../model/site.model';
+import { SiteModel } from '../model/site.model';
 
 @Component({
     selector: 'gpds-site-card',
