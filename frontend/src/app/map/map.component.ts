@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SiteModel } from '../model/site.model';
 import * as L from 'leaflet';
+import { MarkerClusterGroup } from 'leaflet.markercluster/src';
 
 @Component({
     selector: 'gpds-map',
@@ -20,9 +21,10 @@ export class MapComponent implements OnInit {
         if (container) {
             const map = L.map('map').setView([firstSite.result.latitude, firstSite.result.longitude], 5);
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: 'Frugal Map'
+                attribution: 'INRA - URGI'
             }).addTo(map);
-            // add markers for all sites
+            // add markers for all sites using markercluster plugin
+            const markers = new MarkerClusterGroup();
             for (const site of this.sites) {
                 const icon = L.icon({
                     iconUrl: this.getMarkerIconUrl(site)
@@ -30,11 +32,17 @@ export class MapComponent implements OnInit {
                 let iconText: string = '<b>' + site.result.name + '</b><br/>';
                 iconText += site.result.locationType + '<br/>';
                 iconText += `<a href="sites/${site.result.locationDbId}">Details</a>`;
-                L.marker(
+                markers.addLayer(L.marker(
+                    [site.result.latitude, site.result.longitude ],
+                    { icon: icon }
+                    ).bindPopup(iconText)
+                );
+                /* L.marker(
                     [site.result.latitude, site.result.longitude],
                     { icon: icon }
-                ).bindPopup(iconText).addTo(map);
+                ).bindPopup(iconText).addTo(map); */
             }
+            map.addLayer(markers);
         }
     }
 

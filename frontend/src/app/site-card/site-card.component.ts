@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
-import * as L from 'leaflet';
-import { assertNumber } from '@angular/core/src/render3/assert';
 import { SiteModel, SiteResultModel } from '../model/site.model';
 
 @Component({
@@ -23,9 +21,16 @@ export class SiteCardComponent implements OnInit {
         // initialize site from location index
         const locationId = +this.route.snapshot.paramMap.get('id');
         this.brapiService.location(locationId).subscribe(
-          site => { this.site = site; this.sites.push(site); },
+          site => { this.site = site; this.sites.push(site); /* this.sites.push(this.getRandomSite(site)); */ },
           () => console.log('Unable to load site...')
         );
+    }
+
+    getRandomSite(site: SiteModel): SiteModel {
+        const newSite = site;
+        newSite.result.latitude = site.result.latitude - 1;
+        newSite.result.longitude = site.result.longitude - 1;
+        return newSite;
     }
 
 }
