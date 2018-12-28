@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { delay } from 'rxjs/operators';
-import { SiteModel, SiteResultModel } from './model/site.model';
+import { SiteModel, SiteResultModel } from './models/site.model';
 
 @Injectable({
     providedIn: 'root'
