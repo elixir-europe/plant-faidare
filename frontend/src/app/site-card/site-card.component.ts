@@ -14,6 +14,8 @@ export class SiteCardComponent implements OnInit {
 
     site: SiteModel;
 
+    sites: Array<SiteModel> = new Array<SiteModel>();
+
     constructor(private brapiService: BrapiService, private route: ActivatedRoute) {
     }
 
@@ -21,21 +23,9 @@ export class SiteCardComponent implements OnInit {
         // initialize site from location index
         const locationId = +this.route.snapshot.paramMap.get('id');
         this.brapiService.location(locationId).subscribe(
-          site => { this.site = site; },
+          site => { this.site = site; this.sites.push(site); },
           () => console.log('Unable to load site...')
         );
-        // console.log(this.site.result.latitude);
-        // initialize map
-        /*const container = L.DomUtil.get('map');
-        if (container) {
-            // const result = this.site['result'];
-            // const latitude = result['latitude'];
-            // console.log(latitude);
-            const myfrugalmap = L.map('map').setView([50.6311634, 3.0599573], 12);
-            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: 'Frugal Map'
-            }).addTo(myfrugalmap);
-        }*/
     }
 
 }
