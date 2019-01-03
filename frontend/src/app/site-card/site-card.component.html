@@ -11,39 +11,39 @@
   <div class="container-fluid">
     <div class="row">
       <table class="table float-right w-75 p-2 table-sm">
-        <tr>
+        <tr *ngIf="site.result.locationType">
           <td><b>Site type</b></td>
           <td>{{ site.result.locationType }}</td>
         </tr>
-        <tr>
+        <tr *ngIf="site.result.abbreviation">
           <td><b>Abbreviation</b></td>
           <td>{{ site.result.abbreviation }}</td>
         </tr>
-        <tr>
+        <tr *ngIf="site.result.countryCode">
           <td><b>Country code</b></td>
           <td>{{ site.result.countryCode }}</td>
         </tr>
-        <tr>
+        <tr *ngIf="site.result.countryName">
           <td><b>Country name</b></td>
           <td>{{ site.result.countryName }}</td>
         </tr>
-        <tr>
+        <tr *ngIf="site.result.institutionAdress">
           <td><b>Institution address</b></td>
           <td>{{ site.result.institutionAdress }}</td>
         </tr>
-        <tr>
+        <tr *ngIf="site.result.institutionName">
           <td><b>Institution name</b></td>
           <td>{{ site.result.institutionName }}</td>
         </tr>
-        <tr>
+        <tr *ngIf="site.result.altitude">
           <td><b>Altitude</b></td>
           <td>{{ site.result.altitude }}</td>
         </tr>
-        <tr>
+        <tr *ngIf="site.result.latitude">
           <td><b>Latitude</b></td>
           <td>{{ site.result.latitude }}</td>
         </tr>
-        <tr>
+        <tr *ngIf="site.result.longitude">
           <td><b>Longitude</b></td>
           <td>{{ site.result.longitude }}</td>
         </tr>
@@ -57,27 +57,27 @@
     <div class="container-fluid">
       <div class="row">
         <table class="table float-right w-75 p-2 table-sm">
-          <tr>
+          <tr *ngIf="site.result.additionalInfo.Exposure">
             <td><b>Exposure</b></td>
             <td>{{ site.result.additionalInfo.Exposure }}</td>
           </tr>
-          <tr>
+          <tr *ngIf="site.result.additionalInfo['Distance to city']">
             <td><b>Distance to city</b></td>
             <td>{{ site.result.additionalInfo['Distance to city'] }}</td>
           </tr>
-          <tr>
+          <tr *ngIf="site.result.additionalInfo.Comment">
             <td><b>Comment</b></td>
             <td>{{ site.result.additionalInfo.Comment }}</td>
           </tr>
-          <tr>
+          <tr *ngIf="site.result.additionalInfo['Geographical location']">
             <td><b>Geographical location</b></td>
             <td>{{ site.result.additionalInfo['Geographical location'] }}</td>
           </tr>
-          <tr>
+          <tr *ngIf="site.result.additionalInfo.Slope">
             <td><b>Slope</b></td>
             <td>{{ site.result.additionalInfo.Slope }}</td>
           </tr>
-          <tr>
+          <tr *ngIf="site.result.additionalInfo['Coordinates precision']">
             <td><b>Coordinates precision</b></td>
             <td>{{ site.result.additionalInfo['Coordinates precision'] }}</td>
           </tr>
