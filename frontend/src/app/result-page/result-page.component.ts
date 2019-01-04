@@ -12,6 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 import { GnpisService } from '../gnpis.service';
 import { filter } from 'rxjs/operators';
 import { FormComponent } from '../form/form.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -38,7 +39,8 @@ export class ResultPageComponent implements OnInit {
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
-                private gnpisService: GnpisService
+                private gnpisService: GnpisService,
+                private  spinner: NgxSpinnerService
     ) {
     }
 
@@ -49,7 +51,8 @@ export class ResultPageComponent implements OnInit {
                 this.documents = result.data;
                 this.updatePagination(metadata.pagination);
                 this.facets = facets;
-            });
+                this.spinner.hide();
+            }, error => this.spinner.hide());
     }
 
     private updatePagination({ currentPage, pageSize, totalCount, totalPages }) {
@@ -62,6 +65,7 @@ export class ResultPageComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.spinner.show();
         const queryParams = this.route.snapshot.queryParams;
 
         // Parse criteria from URL query params

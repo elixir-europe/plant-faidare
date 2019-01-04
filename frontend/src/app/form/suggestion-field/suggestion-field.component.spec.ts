@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { GnpisService } from '../../gnpis.service';
 import { BehaviorSubject, of } from 'rxjs';
-import { emptyCriteria } from '../../model/data-discovery.model';
+import { DataDiscoveryCriteriaUtils } from '../../model/data-discovery.model';
 
 
 describe('SuggestionFieldComponent', () => {
@@ -33,13 +33,13 @@ describe('SuggestionFieldComponent', () => {
     });
 
     it('should create', () => {
-        component.criteria$ = new BehaviorSubject(emptyCriteria());
+        component.criteria$ = new BehaviorSubject(DataDiscoveryCriteriaUtils.emptyCriteria());
         fixture.detectChanges();
         expect(component).toBeTruthy();
     });
 
     it('should fetch suggestion on text change', async(() => {
-        const criteria = emptyCriteria();
+        const criteria = DataDiscoveryCriteriaUtils.emptyCriteria();
         component.criteria$ = new BehaviorSubject(criteria);
         component.criteriaField = 'crops';
         fixture.detectChanges();
@@ -59,7 +59,7 @@ describe('SuggestionFieldComponent', () => {
 
     it('should display the selected criteria as pills', () => {
         component.criteriaField = 'crops';
-        const criteria = { ...emptyCriteria(), crops: ['Zea', 'Wheat'] };
+        const criteria = { ...DataDiscoveryCriteriaUtils.emptyCriteria(), crops: ['Zea', 'Wheat'] };
         component.criteria$ = new BehaviorSubject(criteria);
 
         fixture.detectChanges();
@@ -75,7 +75,7 @@ describe('SuggestionFieldComponent', () => {
     it('should fetch suggestion', async(() => {
         component.criteriaField = 'crops';
         const selectedCrops = ['Zea', 'Wheat'];
-        const criteria = { ...emptyCriteria(), crops: selectedCrops };
+        const criteria = { ...DataDiscoveryCriteriaUtils.emptyCriteria(), crops: selectedCrops };
         component.criteria$ = new BehaviorSubject(criteria);
 
         const allSuggestions = ['Zea', 'Wheat', 'Vitis', 'Grapevine'];

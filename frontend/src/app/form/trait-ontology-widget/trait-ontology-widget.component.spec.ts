@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { CropOntologyWidgetFactory, TraitOntologyWidgetComponent } from './trait-ontology-widget.component';
 import { GnpisService } from '../../gnpis.service';
 import { BehaviorSubject } from 'rxjs';
-import { emptyCriteria } from '../../model/data-discovery.model';
+import { DataDiscoveryCriteriaUtils } from '../../model/data-discovery.model';
 
 describe('TraitOntologyWidgetComponent', () => {
     const service = jasmine.createSpyObj(
@@ -61,14 +61,14 @@ describe('TraitOntologyWidgetComponent', () => {
 
 
     it('should create', () => {
-        component.criteria$ = new BehaviorSubject(emptyCriteria());
+        component.criteria$ = new BehaviorSubject(DataDiscoveryCriteriaUtils.emptyCriteria());
         fixture.detectChanges();
         expect(component).toBeTruthy();
     });
 
 
     it('should initialize selection from criteria', () => {
-        const criteria = emptyCriteria();
+        const criteria = DataDiscoveryCriteriaUtils.emptyCriteria();
         criteria.topSelectedTraitOntologyIds = fakeWidget.jsTreePanel.jstree.get_top_selected();
 
         const expectedBottomIds = fakeWidget.jsTreePanel.jstree.get_bottom_selected();

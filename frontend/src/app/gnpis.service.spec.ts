@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { GnpisService } from './gnpis.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { BrapiMetaData, BrapiResults } from './model/brapi.model';
-import { DataDiscoveryCriteria, DataDiscoverySource } from './model/data-discovery.model';
+import { DataDiscoveryCriteria, DataDiscoveryResults, DataDiscoverySource } from './model/data-discovery.model';
 
 describe('GnpisService', () => {
     let service: GnpisService;
@@ -11,7 +11,7 @@ describe('GnpisService', () => {
 
     const source1: DataDiscoverySource = {
         '@id': 'id1',
-        '@type': ['source'],
+        '@type': ['schema:DataCatalog'],
         'schema:identifier': 'ID 1',
         'schema:name': 'source 1',
         'schema:url': 'http://source1.com',
@@ -19,7 +19,7 @@ describe('GnpisService', () => {
     };
     const source2: DataDiscoverySource = {
         '@id': 'id2',
-        '@type': ['source'],
+        '@type': ['schema:DataCatalog'],
         'schema:identifier': 'ID 2',
         'schema:name': 'source 2',
         'schema:url': 'http://source2.com',
@@ -80,7 +80,7 @@ describe('GnpisService', () => {
 
     it('should search documents with criteria', () => {
 
-        const expectedResult: BrapiResults<any> = {
+        const expectedResult: DataDiscoveryResults = {
             metadata: {} as BrapiMetaData,
             result: {
                 data: [{
@@ -90,7 +90,7 @@ describe('GnpisService', () => {
                     'schema:name': 'doc_name',
                     'schema:url': 'http://dco/url',
                     'schema:description': 'description',
-                    'schema:includedInDataCatalog': 'id1'
+                    'schema:includedInDataCatalog': source1
                 }, {
                     '@type': ['Phenotyping Study'],
                     '@id': 'urn',
@@ -98,9 +98,10 @@ describe('GnpisService', () => {
                     'schema:name': 'doc_name',
                     'schema:url': 'http://dco/url',
                     'schema:description': 'description',
-                    'schema:includedInDataCatalog': 'id2'
+                    'schema:includedInDataCatalog': source2
                 }]
-            }
+            },
+            facets: []
         };
 
         const criteria = { crops: ['d'] } as DataDiscoveryCriteria;

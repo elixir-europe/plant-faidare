@@ -74,14 +74,15 @@ describe('ResultPageComponent', () => {
             ],
             schemas: [NO_ERRORS_SCHEMA],
         });
+
         fixture = TestBed.createComponent(ResultPageComponent);
         component = fixture.componentInstance;
     }));
 
 
     it('should generate criteria from URL', () => {
-        fixture.detectChanges();
 
+        fixture.detectChanges();
         component.criteria$.subscribe(criteria => {
             expect(criteria.crops).toEqual([params.crops]);
             expect(criteria.germplasmLists).toEqual(params.germplasmLists);
@@ -115,7 +116,6 @@ describe('ResultPageComponent', () => {
         component.fetchDocumentsAndFacets();
         expect(component.documents).not.toBe(null);
     });
-
 
 })
 ;

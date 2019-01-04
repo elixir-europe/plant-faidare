@@ -13,13 +13,15 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
 import { NgbAlertModule, NgbPaginationModule, NgbTabsetModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SuggestionFieldComponent } from './form/suggestion-field/suggestion-field.component';
 import { DocumentComponent } from './result-page/document/document.component';
 import { ErrorComponent } from './error/error.component';
 import { ErrorInterceptorService } from './error-interceptor.service';
 import { TraitOntologyWidgetComponent } from './form/trait-ontology-widget/trait-ontology-widget.component';
 import { FacetsComponent } from './result-page/facets/facets.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+
 
 @NgModule({
     declarations: [
@@ -45,8 +47,11 @@ import { FacetsComponent } from './result-page/facets/facets.component';
         NgbPaginationModule,
         NgbTabsetModule,
         NgbAlertModule,
+        FormsModule,
         ReactiveFormsModule,
-        HttpClientModule
+        HttpClientModule,
+        NgxSpinnerModule
+
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useExisting: ErrorInterceptorService, multi: true }
