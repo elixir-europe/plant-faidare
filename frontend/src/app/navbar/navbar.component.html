@@ -9,26 +9,32 @@
     <div id="navbar" class="collapse navbar-collapse" [class.collapse]="navbarCollapsed">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item" *ngFor="let link of navbar.links">
+
+          <!-- Simple link -->
           <div *ngIf="!link.subMenu">
             <a class="nav-link d-flex align-items-center"
                [href]="link.url" target="_blank">{{ link.label }}</a>
           </div>
-          <!-- Dropdown -->
 
+          <!-- OR Dropdown button -->
+          <div *ngIf="link.subMenu" class="dropdown-container" ngbDropdown>
 
-          <div *ngIf="link.subMenu" class="dropdown-container">
-
-
-            <a class="nav-link d-flex align-items-center dropdown-toggle" data-toggle="dropdown"
-               [href]="link.url"
+            <!-- Toggle button -->
+            <a class="nav-link d-flex align-items-center dropdown-toggle" ngbDropdownToggle
                role="button"
                aria-haspopup="true"
-               aria-expanded="false"
-               target="_blank">{{ link.label }}</a>
-            <div class="dropdown-menu">
+               aria-expanded="false">
+              {{ link.label }}
+            </a>
+
+            <!-- Items -->
+            <div class="dropdown-menu" ngbDropdownMenu>
               <div *ngFor="let subItem of link.subMenu">
                 <a class="dropdown-item"
-                   href="{{ subItem.url }}">{{ subItem.label }}</a>
+                   target="_blank"
+                   [href]="subItem.url">
+                  {{ subItem.label }}
+                </a>
               </div>
             </div>
           </div>

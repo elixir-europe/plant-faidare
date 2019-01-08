@@ -18,7 +18,7 @@ export class SuggestionFieldComponent implements OnInit {
     @Input() criteria$: BehaviorSubject<DataDiscoveryCriteria>;
     @Input() placeholder: string;
 
-    private selectedKeys: string[] = [];
+    selectedKeys: string[] = [];
 
     focus$ = new Subject();
 

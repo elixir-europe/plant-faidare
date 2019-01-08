@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
 import { FormComponent } from './form/form.component';
 import { ResultPageComponent } from './result-page/result-page.component';
 import { GermplasmCardComponent } from './germplasm-card/germplasm-card.component';
@@ -12,7 +11,7 @@ import { SiteCardComponent } from './site-card/site-card.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
-import { NgbAlertModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbDropdownModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SuggestionFieldComponent } from './form/suggestion-field/suggestion-field.component';
 import { DocumentComponent } from './result-page/document/document.component';
@@ -25,7 +24,6 @@ import { FacetsComponent } from './result-page/facets/facets.component';
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent,
         FormComponent,
         ResultPageComponent,
         GermplasmCardComponent,
@@ -45,6 +43,7 @@ import { FacetsComponent } from './result-page/facets/facets.component';
         NgbTypeaheadModule,
         NgbPaginationModule,
         NgbAlertModule,
+        NgbDropdownModule,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
