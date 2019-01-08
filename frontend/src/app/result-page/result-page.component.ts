@@ -12,7 +12,6 @@ import { BehaviorSubject } from 'rxjs';
 import { GnpisService } from '../gnpis.service';
 import { filter } from 'rxjs/operators';
 import { FormComponent } from '../form/form.component';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -37,10 +36,11 @@ export class ResultPageComponent implements OnInit {
         maxResults: MAX_RESULTS
     };
 
+    criteriaIsEmpty = true;
+
     constructor(private route: ActivatedRoute,
                 private router: Router,
                 private gnpisService: GnpisService,
-                private  spinner: NgxSpinnerService
     ) {
     }
 
@@ -51,8 +51,7 @@ export class ResultPageComponent implements OnInit {
                 this.documents = result.data;
                 this.updatePagination(metadata.pagination);
                 this.facets = facets;
-                this.spinner.hide();
-            }, error => this.spinner.hide());
+            });
     }
 
     private updatePagination({ currentPage, pageSize, totalCount, totalPages }) {
@@ -65,12 +64,23 @@ export class ResultPageComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.spinner.show();
         const queryParams = this.route.snapshot.queryParams;
 
         // Parse criteria from URL query params
         const initialCriteria = DataDiscoveryCriteriaUtils.fromQueryParams(queryParams);
         this.criteria$.next(initialCriteria);
+
+        this.criteria$.subscribe(criteria => {
+            for (const field of Object.keys(criteria)) {
+                const facetFieldsTypes = criteria['facetFields'];
+                if (!criteria[field] || !criteria[field].length || criteria[field] === facetFieldsTypes) {
+                    this.criteriaIsEmpty = true;
+                } else {
+                    this.criteriaIsEmpty = false;
+                    break;
+                }
+            }
+        });
 
         this.form.traitWidgetInitialized.subscribe(() => {
             this.fetchDocumentsAndFacets();

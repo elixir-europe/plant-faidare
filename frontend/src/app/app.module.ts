@@ -20,7 +20,6 @@ import { ErrorComponent } from './error/error.component';
 import { ErrorInterceptorService } from './error-interceptor.service';
 import { TraitOntologyWidgetComponent } from './form/trait-ontology-widget/trait-ontology-widget.component';
 import { FacetsComponent } from './result-page/facets/facets.component';
-import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -50,7 +49,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
-        NgxSpinnerModule
 
     ],
     providers: [

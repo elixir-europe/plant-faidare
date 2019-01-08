@@ -1,6 +1,8 @@
 <ngb-tabset [destroyOnHide]="false" class="mb-3">
+  <!-- Germplasm tab -->
   <ngb-tab title="Germplasm">
     <ng-template ngbTabContent>
+      <!-- Input for the crops field -->
       <div class="form-group row pt-3">
         <label for="crops" class="col-sm-4">
           <span>Crops</span>
@@ -17,7 +19,7 @@
           </gpds-suggestion-field>
         </div>
       </div>
-
+      <!-- Input for the germplasmList field -->
       <div class="form-group row">
         <label for="germplasmList" class="col-sm-4">
           <span>Germplasm list</span>
@@ -34,7 +36,7 @@
           </gpds-suggestion-field>
         </div>
       </div>
-
+      <!-- Input for the accessions field -->
       <div class="form-group row">
         <label for="accessions" class="col-sm-4">
           <span>Accession</span>
@@ -53,7 +55,7 @@
       </div>
     </ng-template>
   </ngb-tab>
-
+  <!-- Variable tab -->
   <ngb-tab title="Variable">
     <ng-template ngbTabContent>
       <gpds-trait-ontology-widget
@@ -62,5 +64,4 @@
       </gpds-trait-ontology-widget>
     </ng-template>
   </ngb-tab>
-
 </ngb-tabset>
