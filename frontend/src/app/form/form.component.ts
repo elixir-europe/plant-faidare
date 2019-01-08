@@ -10,4 +10,5 @@ import { BehaviorSubject } from 'rxjs';
 export class FormComponent {
     @Input() criteria$: BehaviorSubject<DataDiscoveryCriteria>;
     @Output() traitWidgetInitialized = new EventEmitter();
+    activeTab = 'Germplasm';
 }

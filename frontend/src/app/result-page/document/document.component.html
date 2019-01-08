@@ -1,5 +1,5 @@
-<div>
-  <h5>
+<div class="mt-3 mb-3">
+  <h5 class="">
     <span *ngFor="let type of document['@type']"
           class="badge {{ getBadgeType(type) }} mr-2">
       {{ type }}
@@ -14,7 +14,7 @@
       {{ document["schema:name"] }}
     </a>
   </h5>
-  <p>
+  <span class="text-justify">
     {{ document["schema:description"] }}
-  </p>
+  </span>
 </div>

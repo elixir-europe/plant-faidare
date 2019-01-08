@@ -12,7 +12,7 @@ import { SiteCardComponent } from './site-card/site-card.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
-import { NgbAlertModule, NgbPaginationModule, NgbTabsetModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SuggestionFieldComponent } from './form/suggestion-field/suggestion-field.component';
 import { DocumentComponent } from './result-page/document/document.component';
@@ -44,7 +44,6 @@ import { FacetsComponent } from './result-page/facets/facets.component';
         AppRoutingModule,
         NgbTypeaheadModule,
         NgbPaginationModule,
-        NgbTabsetModule,
         NgbAlertModule,
         FormsModule,
         ReactiveFormsModule,

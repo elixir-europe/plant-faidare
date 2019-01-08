@@ -37,6 +37,7 @@ export class ResultPageComponent implements OnInit {
     };
 
     criteriaIsEmpty = true;
+    loading = true;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
@@ -45,9 +46,11 @@ export class ResultPageComponent implements OnInit {
     }
 
     fetchDocumentsAndFacets() {
+        this.loading = true;
         const criteria = this.criteria$.value;
         this.gnpisService.search(criteria)
             .subscribe(({ metadata, result, facets }) => {
+                this.loading = false;
                 this.documents = result.data;
                 this.updatePagination(metadata.pagination);
                 this.facets = facets;
@@ -71,11 +74,14 @@ export class ResultPageComponent implements OnInit {
         this.criteria$.next(initialCriteria);
 
         this.criteria$.subscribe(criteria => {
+            this.criteriaIsEmpty = true;
             for (const field of Object.keys(criteria)) {
-                const facetFieldsTypes = criteria['facetFields'];
-                if (!criteria[field] || !criteria[field].length || criteria[field] === facetFieldsTypes) {
-                    this.criteriaIsEmpty = true;
-                } else {
+                if (field === 'facetFields') {
+                    // Ignore facet fields criteria
+                    continue;
+                }
+
+                if (criteria[field] && criteria[field].length) {
                     this.criteriaIsEmpty = false;
                     break;
                 }
