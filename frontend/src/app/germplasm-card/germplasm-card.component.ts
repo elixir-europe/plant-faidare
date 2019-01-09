@@ -25,9 +25,9 @@ export class GermplasmCardComponent implements OnInit {
         const germplasmId = this.route.snapshot.paramMap.get('id');
 
         this.brapiService.germplasm(germplasmId)
-        .subscribe(germplasm => {
-            this.germplasm = germplasm;
-        });
+            .subscribe(germplasm => {
+                this.germplasm = germplasm;
+            });
 
         this.brapiService.germplasmProgeny(germplasmId)
             .subscribe(germplasmProgeny => {
