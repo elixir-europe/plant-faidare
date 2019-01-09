@@ -90,6 +90,7 @@ export class SuggestionFieldComponent implements OnInit {
 
         // Filter out already selected suggestions
         return suggestions$.pipe(map(suggestions => {
+            suggestions.push('REFINE');
             return this.removeAlreadySelected(suggestions);
         }));
     }
@@ -110,11 +111,13 @@ export class SuggestionFieldComponent implements OnInit {
      */
     selectKey($event: NgbTypeaheadSelectItemEvent) {
         $event.preventDefault();
-        this.selectedKeys.push($event.item);
-        this.emitSelectionChange();
+        if ($event.item !== 'REFINE') {
+            this.selectedKeys.push($event.item);
+            this.emitSelectionChange();
 
-        // Empty input value and blur
-        this.input.setValue('');
+            // Empty input value and blur
+            this.input.setValue('');
+        }
         setTimeout(() => {
             this.inputElement.nativeElement.blur();
         }, 200);

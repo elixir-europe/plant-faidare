@@ -94,7 +94,7 @@ describe('SuggestionFieldComponent', () => {
 
         component.search(of('bar'))
             .subscribe((actualSuggestions: string[]) => {
-                expect(actualSuggestions).toEqual(expectedSuggestions);
+                expect(actualSuggestions).toEqual(expectedSuggestions.concat(['REFINE']));
 
                 expect(service.suggest).toHaveBeenCalledWith(
                     component.criteriaField, 10, 'bar', criteria

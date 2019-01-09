@@ -12,7 +12,16 @@
 
 <!-- Typeahead input -->
 <ng-template #resultTemplate let-r="result" let-t="term">
-  <ngb-highlight [result]="r" [term]="t"></ngb-highlight>
+  <!-- Normal term suggestion -->
+  <ngb-highlight
+    *ngIf="r !== 'REFINE'"
+    [result]="r"
+    [term]="t">
+  </ngb-highlight>
+  <!-- Refine suggestion message -->
+  <div *ngIf="r === 'REFINE'" class="text-muted small">
+    Refine your search to see more results.
+  </div>
 </ng-template>
 <input type="text"
        class="form-control"
