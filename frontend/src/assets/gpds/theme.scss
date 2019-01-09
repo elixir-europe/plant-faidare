@@ -33,6 +33,13 @@ $enable-shadows: true;
 
 // public custom variables used in this theme, and in component styles
 
+
+//custom tables
+.table {
+  border-bottom: 2px solid #79c93f;
+  border-top: 2px solid #79c93f;
+}
+
 // custom button
 $theme-btn-color: $white;
 $theme-btn-bg-color: $_theme-black;
