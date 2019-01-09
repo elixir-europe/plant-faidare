@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DataDiscoveryDocument, DataDiscoveryType } from '../../model/data-discovery.model';
 
 @Component({
@@ -6,7 +6,8 @@ import { DataDiscoveryDocument, DataDiscoveryType } from '../../model/data-disco
     templateUrl: './document.component.html',
     styleUrls: ['./document.component.scss']
 })
-export class DocumentComponent {
+export class DocumentComponent implements OnInit {
+    private static MAX_LENGTH = 256;
     private static BADGE_TYPE = {
         'Germplasm': 'badge-germplasm',
         'Phenotyping Study': 'badge-study'
@@ -18,6 +19,8 @@ export class DocumentComponent {
     };
 
     @Input() document: DataDiscoveryDocument;
+    needTruncation = false;
+    opened = false;
 
     getURL() {
         return this.document['schema:url'] || '';
@@ -47,4 +50,15 @@ export class DocumentComponent {
         return DocumentComponent.BADGE_TYPE[type];
     }
 
+    ngOnInit(): void {
+        this.needTruncation = this.document['schema:description'].length > DocumentComponent.MAX_LENGTH;
+    }
+
+    toggleDescription() {
+        this.opened = !this.opened;
+    }
+
+    getTruncatedDescription() {
+        return this.document['schema:description'].slice(0, DocumentComponent.MAX_LENGTH);
+    }
 }

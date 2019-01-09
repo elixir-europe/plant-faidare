@@ -15,6 +15,23 @@
     </a>
   </h5>
   <span class="text-justify description">
-    {{ document["schema:description"] }}
+    <ng-container *ngIf="!needTruncation || opened">
+      {{ document["schema:description"] }}
+
+      <button *ngIf="needTruncation"
+              class="btn btn-link btn-inline"
+              (click)="toggleDescription()">
+        Reduce
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="needTruncation && !opened">
+      {{ getTruncatedDescription() }}
+
+      <button class="btn btn-link btn-inline"
+              (click)="toggleDescription()">
+        ...(Show More)
+      </button>
+    </ng-container>
   </span>
 </div>

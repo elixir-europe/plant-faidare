@@ -26,6 +26,10 @@ describe('DocumentComponent', () => {
         get description() {
             return this.element('span.description');
         }
+
+        get showMoreButton() {
+            return this.button('span.description button');
+        }
     }
 
     beforeEach(() => TestBed.configureTestingModule({
@@ -93,5 +97,38 @@ describe('DocumentComponent', () => {
         expect(tester.title).toContainText('doc_name');
         expect(tester.title.nativeElement['routerLink']).toEqual('/germplasm/g1');
 
+    });
+
+    it('should truncate description', () => {
+        const tester = new DocumentComponentTester();
+        const component = tester.componentInstance;
+
+        component.document = {
+            '@type': ['Germplasm'],
+            '@id': 'urn',
+            'schema:identifier': 'g1',
+            'schema:name': 'doc_name',
+            'schema:url': null,
+            'schema:description': 'Lorem ipsum dolor sit amet, consectetur ' +
+                'adipiscing elit. Suspendisse velit purus, congue euismod ' +
+                'leo vel, pharetra euismod lorem. Suspendisse sed tempus ante, ' +
+                'eu mattis neque. Quisque eget dui feugiat, pulvinar mi vel, ' +
+                'imperdiet orci. Morbi ac mollis ex. Aliuam justo.',
+            'schema:includedInDataCatalog': {} as DataDiscoverySource
+        };
+        tester.detectChanges();
+        expect(component).toBeTruthy();
+
+        expect(tester.description).not.toContainText('justo');
+
+        expect(tester.showMoreButton).toBeTruthy();
+        tester.showMoreButton.click();
+
+        expect(tester.description).toContainText('justo');
+
+        expect(tester.showMoreButton).toBeTruthy();
+        tester.showMoreButton.click();
+
+        expect(tester.description).not.toContainText('justo');
     });
 });
