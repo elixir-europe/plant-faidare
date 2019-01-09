@@ -32,7 +32,7 @@
     "leaflet.markercluster": "^1.4.1",
     "popper": "^1.0.1",
     "rxjs": "6.3.3",
-    "trait-ontology-widget": "git+https://github.com/gnpis/trait-ontology-widget.git#npm_import",
+    "trait-ontology-widget": "git+https://github.com/gnpis/trait-ontology-widget.git#v2.2.1",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
