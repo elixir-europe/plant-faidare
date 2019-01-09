@@ -79,8 +79,7 @@ describe('GnpisService', () => {
     });
 
     it('should search documents with criteria', () => {
-
-        const expectedResult: DataDiscoveryResults = {
+        const rawResult = {
             metadata: {} as BrapiMetaData,
             result: {
                 data: [{
@@ -90,7 +89,7 @@ describe('GnpisService', () => {
                     'schema:name': 'doc_name',
                     'schema:url': 'http://dco/url',
                     'schema:description': 'description',
-                    'schema:includedInDataCatalog': source1
+                    'schema:includedInDataCatalog': source1['@id']
                 }, {
                     '@type': ['Phenotyping Study'],
                     '@id': 'urn',
@@ -98,7 +97,7 @@ describe('GnpisService', () => {
                     'schema:name': 'doc_name',
                     'schema:url': 'http://dco/url',
                     'schema:description': 'description',
-                    'schema:includedInDataCatalog': source2
+                    'schema:includedInDataCatalog': source2['@id']
                 }]
             },
             facets: []
@@ -108,7 +107,6 @@ describe('GnpisService', () => {
 
         service.search(criteria).subscribe(result => {
             expect(result.result.data.length).toBe(2);
-            expect(result).toBe(expectedResult);
             expect(result.result.data[0]['schema:includedInDataCatalog']).toEqual(source1);
             expect(result.result.data[1]['schema:includedInDataCatalog']).toEqual(source2);
         });
@@ -117,7 +115,7 @@ describe('GnpisService', () => {
             url: `${GnpisService.BASE_URL}/search`,
             method: 'POST'
         });
-        req.flush(expectedResult);
+        req.flush(rawResult);
 
         expect(req.request.body).toBe(criteria);
     });

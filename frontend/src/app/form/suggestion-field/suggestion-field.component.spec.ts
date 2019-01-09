@@ -6,46 +6,48 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { GnpisService } from '../../gnpis.service';
 import { BehaviorSubject, of } from 'rxjs';
 import { DataDiscoveryCriteriaUtils } from '../../model/data-discovery.model';
+import { ComponentTester } from 'ngx-speculoos';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 
 describe('SuggestionFieldComponent', () => {
-    const service = jasmine.createSpyObj(
-        'GnpisService', ['suggest']
-    );
-    let component;
-    let fixture;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [
-                ReactiveFormsModule,
-                NgbTypeaheadModule
-            ],
-            declarations: [
-                SuggestionFieldComponent
-            ],
-            providers: [
-                { provide: GnpisService, useValue: service }
-            ]
-        });
-        fixture = TestBed.createComponent(SuggestionFieldComponent);
-        component = fixture.componentInstance;
-    });
+    class SuggestionFieldComponentTester extends ComponentTester<SuggestionFieldComponent> {
+        constructor() {
+            super(SuggestionFieldComponent);
+        }
+    }
+
+    beforeEach(() => TestBed.configureTestingModule({
+        imports: [
+            ReactiveFormsModule,
+            NgbTypeaheadModule,
+            HttpClientTestingModule,
+        ],
+        declarations: [
+            SuggestionFieldComponent
+        ]
+    }));
 
     it('should create', () => {
+        const tester = new SuggestionFieldComponentTester();
+        const component = tester.componentInstance;
         component.criteria$ = new BehaviorSubject(DataDiscoveryCriteriaUtils.emptyCriteria());
-        fixture.detectChanges();
+        tester.detectChanges();
         expect(component).toBeTruthy();
     });
 
     it('should fetch suggestion on text change', async(() => {
+        const tester = new SuggestionFieldComponentTester();
+        const component = tester.componentInstance;
         const criteria = DataDiscoveryCriteriaUtils.emptyCriteria();
         component.criteria$ = new BehaviorSubject(criteria);
         component.criteriaField = 'crops';
-        fixture.detectChanges();
 
         const expectedSuggestions = ['a', 'b', 'c'];
-        service.suggest.and.returnValue(of(expectedSuggestions));
+        const service = TestBed.get(GnpisService) as GnpisService;
+        spyOn(service, 'suggest').and.returnValue(of(expectedSuggestions));
+        tester.detectChanges();
 
         component.search(of('bar'))
             .subscribe((actualSuggestions: string[]) => {
@@ -58,13 +60,15 @@ describe('SuggestionFieldComponent', () => {
     }));
 
     it('should display the selected criteria as pills', () => {
+        const tester = new SuggestionFieldComponentTester();
+        const component = tester.componentInstance;
         component.criteriaField = 'crops';
         const criteria = { ...DataDiscoveryCriteriaUtils.emptyCriteria(), crops: ['Zea', 'Wheat'] };
         component.criteria$ = new BehaviorSubject(criteria);
 
-        fixture.detectChanges();
+        tester.detectChanges();
 
-        const pills = fixture.nativeElement.querySelectorAll('.badge-pill');
+        const pills = tester.nativeElement.querySelectorAll('.badge-pill');
 
         expect(pills.length).toBe(2);
         expect(pills[0].textContent).toContain('Zea');
@@ -73,17 +77,20 @@ describe('SuggestionFieldComponent', () => {
 
 
     it('should fetch suggestion', async(() => {
+        const tester = new SuggestionFieldComponentTester();
+        const component = tester.componentInstance;
         component.criteriaField = 'crops';
         const selectedCrops = ['Zea', 'Wheat'];
         const criteria = { ...DataDiscoveryCriteriaUtils.emptyCriteria(), crops: selectedCrops };
         component.criteria$ = new BehaviorSubject(criteria);
 
         const allSuggestions = ['Zea', 'Wheat', 'Vitis', 'Grapevine'];
-        service.suggest.and.returnValue(of(allSuggestions));
+        const service = TestBed.get(GnpisService) as GnpisService;
+        spyOn(service, 'suggest').and.returnValue(of(allSuggestions));
 
         const expectedSuggestions = allSuggestions.filter(s => selectedCrops.indexOf(s) < 0);
 
-        fixture.detectChanges();
+        tester.detectChanges();
 
         component.search(of('bar'))
             .subscribe((actualSuggestions: string[]) => {

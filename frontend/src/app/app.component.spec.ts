@@ -3,17 +3,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ErrorComponent } from './error/error.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AppComponent', () => {
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            imports: [
-                RouterTestingModule
-            ],
-            declarations: [
-                AppComponent, NavbarComponent, ErrorComponent
-            ],
-        }).compileComponents();
+    beforeEach(() => TestBed.configureTestingModule({
+        imports: [RouterTestingModule, HttpClientTestingModule],
+        declarations: [AppComponent, ErrorComponent, NavbarComponent]
     }));
 
     it('should create the app', () => {
@@ -21,11 +16,4 @@ describe('AppComponent', () => {
         const app = fixture.debugElement.componentInstance;
         expect(app).toBeTruthy();
     });
-
-    it(`should have as title 'frontend'`, () => {
-        const fixture = TestBed.createComponent(AppComponent);
-        const app = fixture.debugElement.componentInstance;
-        expect(app.title).toEqual('frontend');
-    });
-
 });

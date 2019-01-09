@@ -39,10 +39,10 @@ export class FacetsComponent implements OnInit {
             });
 
         this.checkBoxes.valueChanges.subscribe(values => {
-            const selected = Object.keys(values).filter(key => values[key]);
+            const selectedTerms = Object.keys(values).filter(key => values[key]);
             this.localCriteria = {
                 ...this.localCriteria,
-                [this.facet.field]: selected
+                [this.facet.field]: selectedTerms
             };
             this.criteria$.next(this.localCriteria);
         });

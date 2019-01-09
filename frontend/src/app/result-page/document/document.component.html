@@ -1,5 +1,5 @@
 <div class="mt-3 mb-3">
-  <h5 class="">
+  <h5>
     <span *ngFor="let type of document['@type']"
           class="badge {{ getBadgeType(type) }} mr-2">
       {{ type }}
@@ -7,14 +7,14 @@
     <a class="badge badge-source mr-2" [href]="getSourceURL()" target="_blank">
       {{ getSource() }}
     </a>
-    <a *ngIf="getURL()" [href]="getURL()">
+    <a class="title" *ngIf="getURL()" [href]="getURL()">
       {{ document["schema:name"] }}
     </a>
-    <a *ngIf="getRouterLink()" [routerLink]="getRouterLink()">
+    <a class="title" *ngIf="getRouterLink()" [routerLink]="getRouterLink()">
       {{ document["schema:name"] }}
     </a>
   </h5>
-  <span class="text-justify">
+  <span class="text-justify description">
     {{ document["schema:description"] }}
   </span>
 </div>

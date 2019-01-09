@@ -1,28 +1,31 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ResultPageComponent } from './result-page.component';
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot, Params, Router } from '@angular/router';
-import { of } from 'rxjs';
-import { fakeRoute } from 'ngx-speculoos';
+import { BehaviorSubject, of } from 'rxjs';
+import { ComponentTester, fakeRoute } from 'ngx-speculoos';
 import { DocumentComponent } from './document/document.component';
-import { DataDiscoveryCriteria, DataDiscoveryDocument, DataDiscoverySource } from '../model/data-discovery.model';
+import {
+    DataDiscoveryCriteria,
+    DataDiscoveryCriteriaUtils,
+    DataDiscoveryDocument,
+    DataDiscoverySource
+} from '../model/data-discovery.model';
 import { GnpisService } from '../gnpis.service';
 import { BrapiResults } from '../model/brapi.model';
 
 
-@Component({
-    selector: 'gpds-form',
-    template: '<br/>'
-})
-class MockFormComponent {
+class ResultPageComponentTester extends ComponentTester<ResultPageComponent> {
+    constructor() {
+        super(ResultPageComponent);
+        this.componentInstance.form.traitWidgetInitialized = new EventEmitter();
+        this.componentInstance.form.traitWidgetInitialized.emit();
+    }
 }
 
-
 describe('ResultPageComponent', () => {
-    let component: ResultPageComponent;
-    let fixture: ComponentFixture<ResultPageComponent>;
 
     const service = jasmine.createSpyObj(
         'GnpisService', ['search']
@@ -62,27 +65,25 @@ describe('ResultPageComponent', () => {
     };
     service.search.and.returnValue(of(searchedDocuments));
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            imports: [
-                RouterTestingModule,
-            ],
-            declarations: [ResultPageComponent, MockFormComponent, DocumentComponent],
-            providers: [
-                { provide: GnpisService, useValue: service },
-                { provide: ActivatedRoute, useValue: activatedRoute }
-            ],
-            schemas: [NO_ERRORS_SCHEMA],
-        });
-
-        fixture = TestBed.createComponent(ResultPageComponent);
-        component = fixture.componentInstance;
+    beforeEach(() => TestBed.configureTestingModule({
+        imports: [
+            RouterTestingModule,
+        ],
+        declarations: [ResultPageComponent, DocumentComponent],
+        providers: [
+            { provide: GnpisService, useValue: service },
+            { provide: ActivatedRoute, useValue: activatedRoute }
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
     }));
 
 
     it('should generate criteria from URL', () => {
+        const tester = new ResultPageComponentTester();
+        const component = tester.componentInstance;
+        component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
 
-        fixture.detectChanges();
+        tester.detectChanges();
         component.criteria$.subscribe(criteria => {
             expect(criteria.crops).toEqual([params.crops]);
             expect(criteria.germplasmLists).toEqual(params.germplasmLists);
@@ -91,9 +92,12 @@ describe('ResultPageComponent', () => {
 
 
     it('should navigate on criteria change', () => {
+        const tester = new ResultPageComponentTester();
+        const component = tester.componentInstance;
+
         const router = TestBed.get(Router) as Router;
         spyOn(router, 'navigate');
-        fixture.detectChanges();
+        tester.detectChanges();
 
         const criteria = { crops: ['Wheat', 'Vitis'] } as DataDiscoveryCriteria;
         component.criteria$.next(criteria);
@@ -102,6 +106,8 @@ describe('ResultPageComponent', () => {
             accessions: criteria.accessions,
             germplasmLists: criteria.germplasmLists,
             observationVariableIds: criteria.topSelectedTraitOntologyIds,
+            sources: criteria.sources,
+            types: criteria.types,
             page: 1
         };
 
@@ -113,9 +119,9 @@ describe('ResultPageComponent', () => {
     });
 
     it('should fetch documents', () => {
+        const tester = new ResultPageComponentTester();
+        const component = tester.componentInstance;
         component.fetchDocumentsAndFacets();
         expect(component.documents).not.toBe(null);
     });
-
-})
-;
+});

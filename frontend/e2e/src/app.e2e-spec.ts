@@ -7,13 +7,8 @@ describe('workspace-project App', () => {
         page = new AppPage();
     });
 
-    it('should display welcome message', () => {
-        page.navigateTo();
-        expect(page.getTitleText()).toEqual('home works! Go to results');
-    });
-
     it('should display result page message', () => {
-        page.navigateTo('/results');
+        page.navigateTo();
         expect(page.getLabel('crops')).toContain('Crops');
     });
 
