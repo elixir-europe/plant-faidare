@@ -1,3 +1,6 @@
+<div class="alert alert-danger" *ngIf="loadingError">
+  Error: this site cannot be loaded.
+</div>
 <div *ngIf="site">
   <h1>
     Site: {{ site.result.name }}
