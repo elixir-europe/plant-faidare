@@ -95,5 +95,7 @@ export class GnpisService {
     getSource(sourceURI: string): Observable<DataDiscoverySource> {
         return this.sourceByURI$.pipe(map(sourceByURI => sourceByURI[sourceURI]));
     }
-
+    germplasm(germplasmDbId: string): Observable<object> {
+        return this.http.get<object>(`/gnpis/v1/germplasm/${germplasmDbId}`);
+    }
 }

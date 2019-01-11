@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
 import { FormComponent } from './form/form.component';
 import { ResultPageComponent } from './result-page/result-page.component';
 import { GermplasmCardComponent } from './germplasm-card/germplasm-card.component';
@@ -23,10 +24,12 @@ import { CardRowComponent } from './card-row/card-row.component';
 import { CardSectionComponent } from './card-section/card-section.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { CardTableComponent } from './card-table/card-table.component';
+import { NgbAlertModule, NgbDropdownModule, NgbPaginationModule, NgbTypeaheadModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [
         AppComponent,
+        HomeComponent,
         FormComponent,
         ResultPageComponent,
         GermplasmCardComponent,
@@ -47,13 +50,15 @@ import { CardTableComponent } from './card-table/card-table.component';
     imports: [
         BrowserModule,
         AppRoutingModule,
+        HttpClientModule,
         NgbTypeaheadModule,
         NgbPaginationModule,
         NgbAlertModule,
         NgbDropdownModule,
+        NgbPopoverModule,
+        NgbDropdownModule,
         FormsModule,
-        ReactiveFormsModule,
-        HttpClientModule,
+        ReactiveFormsModule
 
     ],
     providers: [

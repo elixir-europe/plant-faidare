@@ -45,8 +45,9 @@ export class GermplasmCardComponent implements OnInit {
             });
 
         this.gnpisService.germplasm(germplasmId)
-            .subscribe(germplasmGnpis =>
-            this.germplasmGnpis = germplasmGnpis);
+            .subscribe(germplasmGnpis => {
+                this.germplasmGnpis = germplasmGnpis;
+            });
     }
 
 }
