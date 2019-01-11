@@ -18,10 +18,14 @@ export interface SiteResultModel {
 }
 
 export interface AdditionalInfo {
+    'Site status': string;
     Exposure: string;
     'Distance to city': string;
-    Comment: string;
+    'Direction from city': string;
+    'Environment type': string;
+    Topography: string;
     'Geographical location': string;
     Slope: string;
     'Coordinates precision': string;
+    Comment: string;
 }

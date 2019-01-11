@@ -23,7 +23,7 @@
           <td><b>Country code</b></td>
           <td>{{ site.result.countryCode }}</td>
         </tr>
-        <tr *ngIf="site.result.countryName">
+        <tr *ngIf="site.result.countryName && !site.result.additionalInfo['Geographical location']">
           <td><b>Country name</b></td>
           <td>{{ site.result.countryName }}</td>
         </tr>
@@ -57,6 +57,10 @@
     <div class="container-fluid">
       <div class="row">
         <table class="table float-right w-75 p-2 table-sm">
+          <tr *ngIf="site.result.additionalInfo['Site status']">
+            <td><b>Site status</b></td>
+            <td>{{ site.result.additionalInfo['Site status'] }}</td>
+          </tr>
           <tr *ngIf="site.result.additionalInfo.Exposure">
             <td><b>Exposure</b></td>
             <td>{{ site.result.additionalInfo.Exposure }}</td>
@@ -65,9 +69,17 @@
             <td><b>Distance to city</b></td>
             <td>{{ site.result.additionalInfo['Distance to city'] }}</td>
           </tr>
-          <tr *ngIf="site.result.additionalInfo.Comment">
-            <td><b>Comment</b></td>
-            <td>{{ site.result.additionalInfo.Comment }}</td>
+          <tr *ngIf="site.result.additionalInfo['Direction from city']">
+            <td><b>Direction from city</b></td>
+            <td>{{ site.result.additionalInfo['Direction from city'] }}</td>
+          </tr>
+          <tr *ngIf="site.result.additionalInfo['Environment type']">
+            <td><b>Environment type</b></td>
+            <td>{{ site.result.additionalInfo['Environment type'] }}</td>
+          </tr>
+          <tr *ngIf="site.result.additionalInfo.Topography">
+            <td><b>Topography</b></td>
+            <td>{{ site.result.additionalInfo.Topography }}</td>
           </tr>
           <tr *ngIf="site.result.additionalInfo['Geographical location']">
             <td><b>Geographical location</b></td>
@@ -80,6 +92,10 @@
           <tr *ngIf="site.result.additionalInfo['Coordinates precision']">
             <td><b>Coordinates precision</b></td>
             <td>{{ site.result.additionalInfo['Coordinates precision'] }}</td>
+          </tr>
+          <tr *ngIf="site.result.additionalInfo.Comment">
+            <td><b>Comment</b></td>
+            <td>{{ site.result.additionalInfo.Comment }}</td>
           </tr>
         </table>
       </div>
