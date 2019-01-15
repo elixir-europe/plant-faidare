@@ -7,3 +7,7 @@ export function asArray(obj) {
     }
     return [obj];
 }
+
+export function arrayToString(arr: string[], sep: string) {
+    return arr.join(sep);
+}

@@ -1,0 +1,27 @@
+.row {
+  border-top: 0.5px solid #c2c2c2;
+  border-bottom: 0.5px solid #c2c2c2;
+
+}
+
+h3 {
+  font-weight: bold;
+  color: #0f6191;
+}
+
+.contact-list {
+  height: auto;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.contact-header {
+  font-weight: bold;
+  color: #0c53a7;
+}
+
+.contact-list > div:nth-of-type(even) {
+  .display-contacts-info{
+    background: rgba(32, 115, 201, 0.05);
+  }
+}
