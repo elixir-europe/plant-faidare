@@ -32,10 +32,30 @@ cd frontend
 npm install
 ```
 
+### Install Java JDK8
+
+See instructions for your operating system
+
+
+## Run backend development server
+
+If you just need access to API (to run the Angular serve on top) without the frontend interface, you can run:
+
+```sh
+./gradlew bootRun
+```
+
+Otherwise, for the complete server (backend API + frontend interface), you can run:
+
+```sh
+./gradlew assemble && java -jar backend/build/libs/gpds.jar
+```
+
+The server should then be accessible at http://localhost:8080/gnpis-core
+
 ## Run frontend development server
 
-The frontend requests are redirected to the production server API of GnpIS core 
-(https://urgi.versailles.inra.fr/gnpis-core-srv/swagger-ui.html) via the 
+The frontend requests are redirected to the local backend API server (see instructions above to launch) via the
 Angular proxy.
 
 You can run the development server with the following command:

@@ -4,7 +4,7 @@ const PROXY_CONFIG = [
             "/brapi",
             "/gnpis",
         ],
-        target: "https://urgi.versailles.inra.fr/beta/gnpis-core-srv",
+        target: "http://localhost:8080/gnpis-core",
         secure: false
     }
 ];

@@ -1,0 +1,40 @@
+data:
+  elasticsearch:
+      cluster:
+        name: es-gpds
+      host: 127.0.0.1
+      port: 9300
+
+management:
+  endpoint:
+    health:
+      show-details: 'always'
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+server:
+  compression:
+    enabled: true
+    mime-types:
+      - application/json
+      - application/javascript
+      - text/html
+      - text/css
+
+logging.level:
+  root: ERROR
+  org.springframework:
+    boot.web.embedded.tomcat.TomcatWebServer: INFO
+    web.client.RestTemplate: DEBUG
+
+---
+spring:
+  profiles: gnpis
+  cloud.config.name: gpds
+
+server:
+  port: 8080
+  servlet:
+    context-path: /gnpis-core
