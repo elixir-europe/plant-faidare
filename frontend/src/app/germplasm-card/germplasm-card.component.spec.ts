@@ -24,10 +24,4 @@ describe('GermplasmCardComponent', () => {
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
-
-    it('should create', () => {
-        //const service: BrapiService = TestBed.get(BrapiService) as BrapiService;
-        //const component = new GermplasmCardComponent(service, null);
-        expect(component).toBeTruthy();
-    });
 });
