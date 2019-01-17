@@ -12,7 +12,7 @@ import { GnpisService } from '../gnpis.service';
 })
 export class GermplasmCardComponent implements OnInit {
 
-    constructor(private brapiService: BrapiService, private gnpisService : GnpisService, private route: ActivatedRoute) {
+    constructor(private brapiService: BrapiService, private gnpisService: GnpisService, private route: ActivatedRoute) {
     }
 
     germplasm: object = {};
