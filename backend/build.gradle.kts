@@ -90,25 +90,31 @@ dependencyManagement {
 }
 
 dependencies {
+    // Spring
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
 
-    implementation("io.swagger:swagger-annotations:1.5.21")
-
     // Elasticsearch
-    implementation("org.elasticsearch:elasticsearch:6.5.1")
-    implementation("org.elasticsearch.client:transport:6.5.1")
+    implementation("org.elasticsearch:elasticsearch:6.5.4")
+    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:6.5.4")
 
+    // Swagger
+    implementation("io.swagger:swagger-annotations:1.5.21")
+    implementation("io.springfox:springfox-swagger2:2.9.2")
+
+    // Others
+    implementation("com.google.guava:guava:27.0.1-jre")
+    implementation("com.opencsv:opencsv:4.4")
+
+    // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "junit")
     }
-
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.mockito:mockito-junit-jupiter:2.23.0")
     testImplementation("org.junit-pioneer:junit-pioneer:0.3.0")
-
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }

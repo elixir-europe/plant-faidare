@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * The main gpds Application
+ *
  * @author gcornut
  */
 @SpringBootApplication

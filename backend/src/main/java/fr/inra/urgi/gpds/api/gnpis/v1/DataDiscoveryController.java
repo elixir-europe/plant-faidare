@@ -1,25 +1,76 @@
 package fr.inra.urgi.gpds.api.gnpis.v1;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import fr.inra.urgi.gpds.domain.JSONView;
+import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiListResponse;
+import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiResponseFactory;
+import fr.inra.urgi.gpds.domain.criteria.DataDiscoveryCriteriaImpl;
+import fr.inra.urgi.gpds.domain.data.DataSource;
+import fr.inra.urgi.gpds.domain.response.DataDiscoveryResponse;
+import fr.inra.urgi.gpds.repository.es.DataDiscoveryRepository;
+import fr.inra.urgi.gpds.repository.file.DataSourceRepository;
+import fr.inra.urgi.gpds.utils.StringFunctions;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-/**
- * @author gcornut
- *
- *         Copyright (c) 2019 INRA URGI
- */
-@Api(tags = { "GnpIS API", "Data discovery" }, description = "GnpIS API data discovery endpoint")
+import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
+@Api(tags = {"GnpIS API", "Data discovery"})
 @RestController
-@RequestMapping("/gnpis/v1/datadiscovery")
+@RequestMapping(value= "/gnpis/v1/datadiscovery")
 public class DataDiscoveryController {
 
-    @ResponseBody
-    @PostMapping("/suggest")
-    public String calls() {
-        return "ok";
+	private final static Logger LOGGER = LoggerFactory.getLogger(DataDiscoveryController.class);
+
+	private final DataDiscoveryRepository dataDiscoveryRepository;
+	private final DataSourceRepository dataSourceRepository;
+
+    @Autowired
+    public DataDiscoveryController(DataDiscoveryRepository dataDiscoveryRepository, DataSourceRepository dataSourceRepository) {
+        this.dataDiscoveryRepository = dataDiscoveryRepository;
+        this.dataSourceRepository = dataSourceRepository;
     }
+
+    @ApiOperation("Suggest data discovery document field values")
+	@RequestMapping(value = "/suggest", method = POST, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public Collection<String> suggest(
+			@RequestParam String field,
+			@RequestParam(required = false) String text,
+			@RequestParam(required = false) Long fetchSize,
+			@RequestBody(required = false) @Valid DataDiscoveryCriteriaImpl criteria
+	) throws UnsupportedEncodingException {
+		return dataDiscoveryRepository.suggest(field, StringFunctions.asUTF8(text), fetchSize, criteria);
+	}
+
+	@ApiOperation("Search for data discovery documents")
+	@RequestMapping(value = "/search", method = POST, produces = APPLICATION_JSON_VALUE, consumes= APPLICATION_JSON_VALUE)
+	@ResponseBody
+	@JsonView(JSONView.GnpISAPI.class)
+	public DataDiscoveryResponse search(
+			@RequestBody @Valid DataDiscoveryCriteriaImpl criteria
+	) {
+		return dataDiscoveryRepository.find(criteria);
+	}
+
+	@ApiOperation("Get list of data sources")
+	@RequestMapping(value = "/sources", method = GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	@JsonView(JSONView.GnpISAPI.class)
+	public BrapiListResponse<? extends DataSource> sources() {
+		Collection<DataSource> dataSources = dataSourceRepository.listAll();
+		return BrapiResponseFactory.createSubListResponse(dataSources.size(), 0, new ArrayList<>(dataSources));
+	}
 
 }

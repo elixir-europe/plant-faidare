@@ -1,0 +1,18 @@
+[
+  {
+    "germplasmDbId": "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4Njg4NjAyMzEwNUUxMg==",
+    "defaultDisplayName": "663300829",
+    "progeny": []
+  },
+  {
+    "germplasmDbId": "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwMjc4NDQ4MkUxMg==",
+    "defaultDisplayName": "302",
+    "progeny": [
+      {
+        "germplasmDbId": "ZG9pOjEwLjE1NDU0LzEuNDkzODIxNDk4MDEwMTgxMkUxMg==",
+        "defaultDisplayName": "276",
+        "parentType": "FEMALE"
+      }
+    ]
+  }
+]

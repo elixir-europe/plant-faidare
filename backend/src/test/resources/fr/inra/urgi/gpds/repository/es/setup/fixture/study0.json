@@ -1,0 +1,109 @@
+[
+  {
+    "studyDbId": "BTH_Orgeval_2008_SetA2",
+    "name": "BTH_Orgeval_2008_SetA2",
+    "location": {
+      "locationDbId": "805"
+    }
+  },
+  {
+    "studyDbId": "S2",
+    "name": "Study 2",
+    "locationName": "Bordeaux"
+  },
+  {
+    "studyDbId": "S3",
+    "name": "Study 3",
+    "locationName": "Cavallermaggiore"
+  },
+  {
+    "studyDbId": "S4",
+    "name": "Study 4",
+    "locationName": "Bordeaux"
+  },
+  {
+    "studyDbId": "S5",
+    "name": "BTH_Lusignan_2015_SetB1"
+  },
+  {
+    "studyDbId": "S6",
+    "name": "BTH_Le_Moulon_2006_SetA2"
+  },
+  {
+    "studyDbId": "S7",
+    "name": "Study 7"
+  },
+  {
+    "studyDbId": "181000402",
+    "studyName": "Test de comparaison de provenances de chene sessile - 181000402",
+    "name": "Test de comparaison de provenances de chene sessile - 181000402",
+    "startDate": "1993-03-01",
+    "active": true,
+    "studyType": "Provenance trial",
+    "trialDbIds": [
+      "15",
+      "3"
+    ],
+    "programDbId": "PlantaComp",
+    "programName": "PlantaComp",
+    "seasons": [
+      "1996",
+      "1999",
+      "2003"
+    ],
+    "locationDbId": "33585",
+    "locationName": "Saint-Laurent - Forêt domaniale de Vierzon",
+    "location": {
+      "locationDbId": "33585"
+    },
+    "observationVariableDbIds": [
+      "CO_357:0000011",
+      "CO_357:0000021",
+      "CO_357:0000048"
+    ],
+    "germplasmDbIds": [
+      "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjkxNTQwMjg5NkUxMg==",
+      "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwNDI2MzA1NEUxMg==",
+      "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwNDI5NzY2RTEy",
+      "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwNDQ3MzcyM0UxMg==",
+      "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwNDU2ODgwNEUxMg==",
+      "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwNDUzMzIzMkUxMg=="
+    ]
+  },
+  {
+    "studyDbId": "181000102",
+    "studyName": "Test de comparaison de provenances de chene sessile - 181000102",
+    "name": "Test de comparaison de provenances de chene sessile - 181000102",
+    "startDate": "1990-03-01",
+    "active": true,
+    "studyType": "Provenance trial",
+    "trialDbIds": [
+      "1",
+      "15"
+    ],
+    "programDbId": "PlantaComp",
+    "programName": "PlantaComp",
+    "seasons": [
+      "1991",
+      "1992",
+      "1993",
+      "1996",
+      "1999"
+    ],
+    "locationDbId": "33585",
+    "locationName": "Saint-Laurent - Forêt domaniale de Vierzon",
+    "observationVariableDbIds": [
+      "CO_357:0000011",
+      "CO_357:0000019",
+      "CO_357:0000045",
+      "CO_357:0000063"
+    ],
+    "germplasmDbIds": [
+      "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwMzAyMDkxOEUxMg==",
+      "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwMzE5ODQ4MUUxMg==",
+      "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwMzEwMDA1MUUxMg==",
+      "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwMzI1MTI5NkUxMg==",
+      "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwMzM0NzY1NkUxMg=="
+    ]
+  }
+]

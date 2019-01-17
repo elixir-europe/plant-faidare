@@ -1,0 +1,127 @@
+{
+  "study": {
+    "dynamic": false,
+    "properties": {
+      "active": {
+        "type": "boolean"
+      },
+      "additionalInfo": {
+        "type": "object",
+        "properties": {}
+      },
+      "contacts": {
+        "properties": {
+          "contactDbId": {
+            "type": "keyword"
+          },
+          "email": {
+            "type": "keyword"
+          },
+          "institutionName": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword"
+          },
+          "orcid": {
+            "type": "keyword"
+          },
+          "type": {
+            "type": "keyword"
+          }
+        }
+      },
+      "dataLinks": {
+        "properties": {
+          "name": {
+            "type": "keyword"
+          },
+          "type": {
+            "type": "keyword"
+          },
+          "url": {
+            "type": "keyword"
+          }
+        }
+      },
+      "endDate": {
+        "type": "date",
+        "format": "YYYY-MM-dd"
+      },
+      "germplasmDbIds": {
+        "type": "keyword"
+      },
+      "groupId": {
+        "type": "long"
+      },
+      "lastUpdate": {
+        "properties": {
+          "version": {
+            "type": "keyword"
+          },
+          "timestamp": {
+            "type": "date",
+            "format": "yyyy-MM-dd||yyyy-MM-dd'T'HH:mm:ss'Z'"
+          }
+        }
+      },
+      "locationDbId": {
+        "type": "keyword"
+      },
+      "locationName": {
+        "type": "keyword"
+      },
+      "location": {
+        "dynamic": "true",
+        "properties": {
+          "locationDbId": {
+            "type": "keyword"
+          }
+        }
+      },
+      "name": {
+        "type": "keyword"
+      },
+      "observationVariableDbIds": {
+        "type": "keyword"
+      },
+      "programDbId": {
+        "type": "keyword"
+      },
+      "programName": {
+        "type": "keyword"
+      },
+      "seasons": {
+        "type": "keyword"
+      },
+      "source": {
+        "type": "keyword"
+      },
+      "speciesGroup": {
+        "type": "integer"
+      },
+      "startDate": {
+        "type": "date",
+        "format": "YYYY-MM-dd"
+      },
+      "studyDbId": {
+        "type": "keyword"
+      },
+      "studyType": {
+        "type": "keyword"
+      },
+      "trialName": {
+        "type": "keyword"
+      },
+      "trialDbId": {
+        "type": "keyword"
+      },
+      "trialDbIds": {
+        "type": "keyword"
+      },
+      "url": {
+        "type": "keyword"
+      }
+    }
+  }
+}

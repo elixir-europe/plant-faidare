@@ -1,0 +1,94 @@
+{
+  "trial": {
+    "dynamic": false,
+    "properties": {
+      "active": {
+        "type": "boolean"
+      },
+      "additionalInfo": {
+        "type": "object",
+        "properties": {}
+      },
+      "contacts": {
+        "properties": {
+          "contactDbId": {
+            "type": "keyword"
+          },
+          "email": {
+            "type": "keyword"
+          },
+          "institutionName": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword"
+          },
+          "orcid": {
+            "type": "keyword"
+          },
+          "type": {
+            "type": "keyword"
+          }
+        }
+      },
+      "datasetAuthorship": {
+        "properties": {
+          "license": {
+            "type": "keyword"
+          },
+          "datasetPUI": {
+            "type": "keyword"
+          }
+        }
+      },
+      "docId": {
+        "type": "keyword"
+      },
+      "endDate": {
+        "type": "date",
+        "format": "YYYY-MM-dd"
+      },
+      "groupId": {
+        "type": "long"
+      },
+      "source": {
+        "type": "keyword"
+      },
+      "speciesGroup": {
+        "type": "integer"
+      },
+      "startDate": {
+        "type": "date",
+        "format": "YYYY-MM-dd"
+      },
+      "studies": {
+        "properties": {
+          "locationName": {
+            "type": "keyword"
+          },
+          "locationDbId": {
+            "type": "keyword"
+          },
+          "studyDbId": {
+            "type": "keyword"
+          },
+          "studyName": {
+            "type": "keyword"
+          }
+        }
+      },
+      "trialDbId": {
+        "type": "keyword"
+      },
+      "trialName": {
+        "type": "keyword"
+      },
+      "trialType": {
+        "type": "keyword"
+      },
+      "url": {
+        "type": "keyword"
+      }
+    }
+  }
+}

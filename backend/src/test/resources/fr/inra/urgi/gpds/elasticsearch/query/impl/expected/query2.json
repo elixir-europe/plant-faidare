@@ -1,0 +1,71 @@
+{
+  "bool" : {
+    "must" : [
+      {
+        "terms" : {
+          "schema:includedInDataCatalog" : [
+            "S1"
+          ],
+          "boost" : 1.0
+        }
+      },
+      {
+        "terms" : {
+          "@type" : [
+            "T1",
+            "T2"
+          ],
+          "boost" : 1.0
+        }
+      },
+      {
+        "match_phrase" : {
+          "germplasm.accession.suggest" : {
+            "query" : "A1",
+            "slop" : 0,
+            "zero_terms_query" : "NONE",
+            "boost" : 1.0
+          }
+        }
+      },
+      {
+        "match_phrase" : {
+          "germplasm.accession.suggest" : {
+            "query" : "A2",
+            "slop" : 0,
+            "zero_terms_query" : "NONE",
+            "boost" : 1.0
+          }
+        }
+      },
+      {
+        "terms" : {
+          "germplasm.cropName" : [
+            "C1"
+          ],
+          "boost" : 1.0
+        }
+      },
+      {
+        "terms" : {
+          "germplasm.germplasmList" : [
+            "G1",
+            "G2",
+            "G3"
+          ],
+          "boost" : 1.0
+        }
+      },
+      {
+        "terms" : {
+          "trait.observationVariableIds" : [
+            "V1"
+          ],
+          "boost" : 1.0
+        }
+      }
+    ],
+    "adjust_pure_negative" : true,
+    "boost" : 1.0
+  }
+}

@@ -1,0 +1,88 @@
+[
+  {
+    "observationUnitDbId": "1",
+    "observationLevel": "BLOCK"
+  },
+  {
+    "observationUnitDbId": "2",
+    "observationLevel": "BLOCK",
+    "programDbId": "P2",
+    "observations": [
+      {
+        "observationTimeStamp": "2001-12-30T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "observationUnitDbId": "3",
+    "observationLevel": "BLOCK",
+    "studyLocationDbId": "34069",
+    "studyDbId": "POP2-Orleans-chancre",
+    "programDbId": "P1",
+    "germplasmDbId": "G2",
+    "observations": [
+      {
+        "observationTimeStamp": "2001-12-31T01:00:00Z",
+        "season": "2002"
+      },
+      {
+        "observationTimeStamp": "2002-12-31T02:00:00Z",
+        "observationVariableDbId": "CO_357:0000089",
+        "season": "2002"
+      }
+    ]
+  },
+  {
+    "observationUnitDbId": "4",
+    "observationLevel": "BLOCK",
+    "studyLocationDbId": "34069",
+    "studyDbId": "POP2-Orleans-chancre",
+    "programDbId": "P2",
+    "germplasmDbId": "G1",
+    "observations": [
+      {
+        "observationTimeStamp": "2004-12-31T01:00:00Z",
+        "observationVariableDbId": "CO_357:0000088",
+        "season": "2002"
+      },
+      {
+        "observationTimeStamp": "2003-12-31T02:00:00Z",
+        "season": "2002"
+      }
+    ]
+  },
+  {
+    "observationUnitDbId": "5",
+    "programDbId": "P1",
+    "germplasmDbId": "G0",
+    "observations": [
+      {
+        "observationTimeStamp": "2005-12-31T02:00:00Z"
+      }
+    ]
+  },
+  {
+    "observationUnitDbId": "6",
+    "observationLevel": "BLOCK",
+    "germplasmDbId": "G2",
+    "observations": [
+      {
+        "observationTimeStamp": "2002-12-31T02:00:00Z",
+        "observationVariableDbId": "CO_357:0000089",
+        "season": "2002"
+      }
+    ]
+  },
+  {
+    "observationUnitDbId": "7",
+    "studyLocationDbId": "34069",
+    "studyDbId": "POP2-Orleans-chancre",
+    "germplasmDbId": "G1",
+    "observations": [
+      {
+        "observationTimeStamp": "2004-12-31T01:00:00Z",
+        "observationVariableDbId": "CO_357:0000088"
+      }
+    ]
+  }
+]

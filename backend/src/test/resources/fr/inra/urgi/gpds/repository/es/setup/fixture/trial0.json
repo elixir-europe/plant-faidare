@@ -1,0 +1,35 @@
+[
+  {
+    "trialDbId": "T1",
+    "trialName": "Trial 1"
+  },
+  {
+    "trialDbId": "T2",
+    "trialName": "Trial 2"
+  },
+  {
+    "trialDbId": "T3",
+    "trialName": "Trial 3",
+    "studies": [
+      {
+        "locationDbId": "37497"
+      }
+    ]
+  },
+  {
+    "trialDbId": "T4",
+    "trialName": "Trial 4"
+  },
+  {
+    "trialDbId": "T5",
+    "trialName": "Trial 5"
+  },
+  {
+    "trialDbId": "T6",
+    "trialName": "Trial 6"
+  },
+  {
+    "trialDbId": "T7",
+    "trialName": "Trial 7"
+  }
+]

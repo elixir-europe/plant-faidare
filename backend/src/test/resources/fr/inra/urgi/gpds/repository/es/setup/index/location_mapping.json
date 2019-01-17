@@ -1,0 +1,56 @@
+{
+  "location": {
+    "dynamic": false,
+    "properties": {
+      "abbreviation": {
+        "type": "keyword"
+      },
+      "additionalInfo": {
+        "dynamic": "true",
+        "properties": {}
+      },
+      "altitude": {
+        "type": "keyword"
+      },
+      "countryCode": {
+        "type": "keyword"
+      },
+      "countryName": {
+        "type": "keyword"
+      },
+      "groupId": {
+        "type": "long"
+      },
+      "institutionAdress": {
+        "type": "keyword"
+      },
+      "institutionName": {
+        "type": "keyword"
+      },
+      "latitude": {
+        "type": "double"
+      },
+      "locationDbId": {
+        "type": "keyword"
+      },
+      "locationType": {
+        "type": "keyword"
+      },
+      "longitude": {
+        "type": "double"
+      },
+      "name": {
+        "type": "keyword"
+      },
+      "source": {
+        "type": "keyword"
+      },
+      "speciesGroup": {
+        "type": "long"
+      },
+      "url": {
+        "type": "keyword"
+      }
+    }
+  }
+}

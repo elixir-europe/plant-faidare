@@ -1,0 +1,58 @@
+{
+  "germplasmPedigree": {
+    "properties": {
+      "docId": {
+        "type": "keyword"
+      },
+      "groupId": {
+        "type": "long"
+      },
+      "siblings": {
+        "properties": {
+          "defaultDisplayName": {
+            "type": "keyword"
+          },
+          "germplasmDbId": {
+            "type": "keyword"
+          }
+        }
+      },
+      "parent1DbId": {
+        "type": "keyword"
+      },
+      "parent2Name": {
+        "type": "keyword"
+      },
+      "familyCode": {
+        "type": "keyword"
+      },
+      "germplasmDbId": {
+        "type": "keyword"
+      },
+      "parent1Type": {
+        "type": "keyword"
+      },
+      "pedigree": {
+        "type": "keyword"
+      },
+      "parent2DbId": {
+        "type": "keyword"
+      },
+      "defaultDisplayName": {
+        "type": "keyword"
+      },
+      "crossingPlan": {
+        "type": "keyword"
+      },
+      "parent2Type": {
+        "type": "keyword"
+      },
+      "parent1Name": {
+        "type": "keyword"
+      },
+      "crossingYear": {
+        "type": "keyword"
+      }
+    }
+  }
+}

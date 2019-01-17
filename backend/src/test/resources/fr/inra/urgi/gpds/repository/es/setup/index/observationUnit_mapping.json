@@ -1,0 +1,219 @@
+{
+  "observationUnit": {
+    "dynamic": false,
+    "properties": {
+      "groupId": {
+        "type": "long"
+      },
+      "speciesGroup": {
+        "type": "integer"
+      },
+      "url": {
+        "type": "keyword"
+      },
+      "source": {
+        "type": "keyword"
+      },
+      "observationUnitDbId": {
+        "type": "keyword"
+      },
+      "observationLevel": {
+        "type": "keyword"
+      },
+      "observationLevels": {
+        "type": "keyword"
+      },
+      "observationLevelDetails": {
+        "properties": {
+          "type": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword"
+          },
+          "value": {
+            "type": "keyword"
+          }
+        }
+      },
+      "plotNumber": {
+        "type": "keyword",
+        "index": false
+      },
+      "plantNumber": {
+        "type": "keyword",
+        "index": false
+      },
+      "blockNumber": {
+        "type": "keyword",
+        "index": false
+      },
+      "replicate": {
+        "type": "keyword",
+        "index": false
+      },
+      "observationUnitName": {
+        "type": "keyword"
+      },
+      "germplasmId": {
+        "type": "long"
+      },
+      "germplasmDbId": {
+        "type": "keyword"
+      },
+      "germplasmName": {
+        "type": "keyword"
+      },
+      "observationUnitXref": {
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "source": {
+            "type": "keyword"
+          }
+        }
+      },
+      "studyDbId": {
+        "type": "keyword"
+      },
+      "studyName": {
+        "type": "keyword"
+      },
+      "studyLocationDbId": {
+        "type": "keyword"
+      },
+      "studyLocation": {
+        "type": "keyword"
+      },
+      "programDbId": {
+        "type": "keyword"
+      },
+      "programName": {
+        "type": "keyword"
+      },
+      "X": {
+        "type": "keyword"
+      },
+      "Y": {
+        "type": "keyword"
+      },
+      "Xname": {
+        "type": "keyword"
+      },
+      "Yname": {
+        "type": "keyword"
+      },
+      "Xm": {
+        "type": "keyword"
+      },
+      "Ym": {
+        "type": "keyword"
+      },
+      "entryType": {
+        "type": "keyword",
+        "index": false
+      },
+      "entryNumber": {
+        "type": "keyword",
+        "index": false
+      },
+      "treatments": {
+        "properties": {
+          "factor": {
+            "type": "keyword"
+          },
+          "modality": {
+            "type": "keyword"
+          }
+        }
+      },
+      "observations": {
+        "type": "nested",
+        "properties": {
+          "observationDbId": {
+            "type": "keyword"
+          },
+          "observationVariableDbId": {
+            "type": "keyword"
+          },
+          "observationVariableName": {
+            "type": "keyword"
+          },
+          "observationTimeStamp": {
+            "type": "date",
+            "format": "yyyy-MM-dd'T'HH:mm:ss'Z'"
+          },
+          "season": {
+            "type": "keyword"
+          },
+          "collector": {
+            "type": "keyword",
+            "index": false
+          },
+          "value": {
+            "type": "keyword"
+          },
+          "specificName": {
+            "type": "keyword"
+          },
+          "observationVariableId": {
+            "type": "long"
+          },
+          "isDataFile": {
+            "type": "boolean",
+            "index": false
+          },
+          "gdd": {
+            "type": "float"
+          }
+        }
+      },
+      "studyId": {
+        "type": "long"
+      },
+      "trials": {
+        "properties": {
+          "id": {
+            "type": "long"
+          },
+          "name": {
+            "type": "keyword"
+          }
+        }
+      },
+      "accessionNumber": {
+        "type": "keyword"
+      },
+      "taxonId": {
+        "type": "long"
+      },
+      "taxonScientificName": {
+        "type": "keyword"
+      },
+      "germplasmGenus": {
+        "type": "keyword"
+      },
+      "germplasmCollections": {
+        "properties": {
+          "id": {
+            "type": "long"
+          },
+          "name": {
+            "type": "keyword"
+          }
+        }
+      },
+      "germplasmPanels": {
+        "properties": {
+          "id": {
+            "type": "long"
+          },
+          "name": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
