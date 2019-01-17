@@ -38,7 +38,6 @@ describe('SiteCardComponent', () => {
             }
         }
     };
-    brapiService.location.and.returnValues(of(site));
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -66,6 +65,7 @@ describe('SiteCardComponent', () => {
     it('should display site', () => {
         const fixture = TestBed.createComponent(SiteCardComponent);
         const component = fixture.componentInstance;
+        brapiService.location.and.returnValues(of(site));
         fixture.detectChanges();
         const element = fixture.nativeElement;
         expect(element.querySelector('h1').textContent).toBe(' Site: site1 ');
