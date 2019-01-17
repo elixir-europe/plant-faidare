@@ -48,9 +48,23 @@ describe('MapComponent', () => {
         component = fixture.componentInstance;
     });
 
-    it('should create', () => {
+    it('should create component', () => {
         component.sites = sites;
         fixture.detectChanges();
         expect(component).toBeTruthy();
+    });
+
+    it('should display map', () => {
+        component.sites = sites;
+        fixture.detectChanges();
+        const element = fixture.nativeElement;
+        expect(element.querySelector('#map')).toBeTruthy();
+    });
+
+    it('should display map legend', () => {
+        component.sites = sites;
+        fixture.detectChanges();
+        const element = fixture.nativeElement;
+        expect(element.querySelector('#maplegend')).toBeTruthy();
     });
 });

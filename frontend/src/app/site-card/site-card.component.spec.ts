@@ -57,7 +57,7 @@ describe('SiteCardComponent', () => {
         });
     }));
 
-    it('should create', () => {
+    it('should create component', () => {
         const fixture = TestBed.createComponent(SiteCardComponent);
         const component = fixture.componentInstance;
         expect(component).toBeTruthy();
@@ -69,5 +69,15 @@ describe('SiteCardComponent', () => {
         fixture.detectChanges();
         const element = fixture.nativeElement;
         expect(element.querySelector('h1').textContent).toBe(' Site: site1 ');
+    });
+
+    it('should display error message when site loading is in error', () => {
+        const fixture = TestBed.createComponent(SiteCardComponent);
+        const component = fixture.componentInstance;
+        brapiService.location.and.returnValues(of(site));
+        component.loadingError = true;
+        fixture.detectChanges();
+        const element = fixture.nativeElement;
+        expect(element.querySelector('#error')).toBeTruthy();
     });
 });

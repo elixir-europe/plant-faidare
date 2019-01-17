@@ -12,7 +12,8 @@ export class MapComponent implements OnInit {
 
     @Input() sites: Array<SiteModel>;
 
-    constructor() { }
+    constructor() {
+    }
 
     ngOnInit() {
         // initialize map centered on the first site
@@ -33,7 +34,7 @@ export class MapComponent implements OnInit {
                 iconText += site.result.locationType + '<br/>';
                 iconText += `<a href="sites/${site.result.locationDbId}">Details</a>`;
                 markers.addLayer(L.marker(
-                    [site.result.latitude, site.result.longitude ],
+                    [site.result.latitude, site.result.longitude],
                     { icon: icon }
                     ).bindPopup(iconText)
                 );
