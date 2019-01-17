@@ -10,6 +10,10 @@ import {
     BrapiStudy,
     BrapiTrial
 } from './models/brapi.model';
+import {
+    GermplasmResult
+} from './model/gnpis.model';
+import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from './model/brapi.model';
 
 export const BASE_URL = 'brapi/v1';
 
@@ -21,18 +25,20 @@ export class BrapiService {
     constructor(private http: HttpClient) {
     }
 
-    germplasm(germplasmDbId: string): Observable<object> {
-        return this.http.get<object>(`${BASE_URL}/germplasm/${germplasmDbId}`);
+    germplasm(germplasmDbId: string): Observable<GermplasmResult<null>> {
+        return this.http.get<GermplasmResult<null>>(`/brapi/v1/germplasm/${germplasmDbId}`);
     }
 
-    germplasmPedigree(germplasmDbId: string): Observable<object> {
-        return this.http.get<object>(`${BASE_URL}/germplasm/${germplasmDbId}/pedigree`);
+    germplasmPedigree(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmPedigree>> {
+        return this.http.get<GermplasmResult<BrapiGermplasmPedigree>>(`/brapi/v1/germplasm/${germplasmDbId}/pedigree`);
     }
 
-    germplasmProgeny(germplasmDbId: string): Observable<object> {
-        return this.http.get<object>(`${BASE_URL}/germplasm/${germplasmDbId}/progeny`);
+    germplasmProgeny(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmProgeny>> {
+        return this.http.get<GermplasmResult<BrapiGermplasmProgeny>>(`/brapi/v1/germplasm/${germplasmDbId}/progeny`);
     }
 
+    germplasmAttributes(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmAttributes[]>> {
+        return this.http.get<GermplasmResult<BrapiGermplasmAttributes[]>>(`/brapi/v1/germplasm/${germplasmDbId}/attributes`);
     germplasmAttributes(germplasmDbId: string): Observable<object> {
         return this.http.get<object>(`${BASE_URL}/germplasm/${germplasmDbId}/attributes`);
     }

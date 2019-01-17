@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDiscoverySource } from './models/data-discovery.model';
 import { BrapiResults } from './models/brapi.model';
 import { map } from 'rxjs/operators';
+import { GermplasmResult } from './model/gnpis.model';
+
 
 export const BASE_URL = 'gnpis/v1/datadiscovery';
 
@@ -95,7 +97,7 @@ export class GnpisService {
     getSource(sourceURI: string): Observable<DataDiscoverySource> {
         return this.sourceByURI$.pipe(map(sourceByURI => sourceByURI[sourceURI]));
     }
-    germplasm(germplasmDbId: string): Observable<object> {
-        return this.http.get<object>(`/gnpis/v1/germplasm/${germplasmDbId}`);
+    germplasm(germplasmDbId: string): Observable<GermplasmResult<null>> {
+        return this.http.get<GermplasmResult<null>>(`/gnpis/v1/germplasm?id=${germplasmDbId}`);
     }
 }

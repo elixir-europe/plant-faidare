@@ -13,6 +13,13 @@ $link-hover-color: $_theme-black;
 // override default shadows behavior
 $enable-shadows: true;
 
+a.btn.popovers {
+  text-decoration: underline;
+}
+
+
+
+
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
@@ -29,6 +36,8 @@ $enable-shadows: true;
 .table {
   border-bottom: 2px solid #79c93f;
   border-top: 2px solid #79c93f;
+  table-layout: fixed;
+  overflow-y: scroll;
 }
 
 // custom button

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
+import { GermplasmResult
+} from '../model/gnpis.model';
+import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from '../model/brapi.model';
 
 @Component({
     selector: 'gpds-germplasm-card',
@@ -15,11 +18,11 @@ export class GermplasmCardComponent implements OnInit {
     constructor(private brapiService: BrapiService, private gnpisService: GnpisService, private route: ActivatedRoute) {
     }
 
-    germplasm: object = {};
-    germplasmGnpis: object = {};
-    germplasmPedigree: object = {};
-    germplasmProgeny: object = {};
-    germplasmAttributes: object = {};
+    germplasm: GermplasmResult<null>;
+    germplasmGnpis: GermplasmResult<null>;
+    germplasmPedigree: GermplasmResult<BrapiGermplasmPedigree>;
+    germplasmProgeny: GermplasmResult<BrapiGermplasmProgeny>;
+    germplasmAttributes: BrapiGermplasmAttributes[];
 
     ngOnInit() {
         const germplasmId = this.route.snapshot.paramMap.get('id');
@@ -41,7 +44,7 @@ export class GermplasmCardComponent implements OnInit {
 
         this.brapiService.germplasmAttributes(germplasmId)
             .subscribe(germplasmAttributes => {
-                this.germplasmAttributes = germplasmAttributes;
+                this.germplasmAttributes = germplasmAttributes.result.data;
             });
 
         this.gnpisService.germplasm(germplasmId)
