@@ -22,7 +22,7 @@ import java.util.Collection;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Api(tags = {"GnpIS API", "Data discovery"})
+@Api(tags = {"GnpIS API"})
 @RestController
 @RequestMapping(value= "/gnpis/v1/datadiscovery")
 public class DataDiscoveryController {
