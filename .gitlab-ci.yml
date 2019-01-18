@@ -22,10 +22,33 @@ lint:
   stage: test
   script: "./gradlew lint"
 
-test:
+test-frontend:
   stage: test
-  script: "./gradlew test --parallel"
+  script: "./gradlew :frontend:test --parallel"
   artifacts:
     reports:
       junit:
       - "./frontend/karma-junit-tests-report/TEST*.xml"
+
+test-backend:
+  stage: test
+  script: "./gradlew :backend:test --parallel"
+  services:
+    # even if that would be ideal
+    # we can't just launch the service with just elasticsearch:6.3.1
+    # because we need to pass some variables, but they are passed to _all_ containers
+    # so they fail the start of other docker images like urgi/docker-browsers
+    # the only solution is to override the entrypoint of the service and pass the arguments manually
+    - name: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
+      alias: elasticsearch
+      # discovery.type=single-node
+      # single-node is necessary to start in development mode
+      # so there will be no bootstrap checks that would fail on CI
+      # especially the error regarding
+      # `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
+      command: ["bin/elasticsearch", "-Ediscovery.type=single-node", "-Ecluster.name=es-gpds"]
+  artifacts:
+    reports:
+      junit:
+        - "./backend/build/test-results/test/TEST-*.xml"
+
