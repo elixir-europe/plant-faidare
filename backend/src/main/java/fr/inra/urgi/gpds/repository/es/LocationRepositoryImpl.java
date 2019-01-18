@@ -3,6 +3,7 @@ package fr.inra.urgi.gpds.repository.es;
 import fr.inra.urgi.gpds.domain.criteria.LocationCriteria;
 import fr.inra.urgi.gpds.domain.data.impl.LocationVO;
 import fr.inra.urgi.gpds.elasticsearch.ESRequestFactory;
+import fr.inra.urgi.gpds.elasticsearch.ESResponseParser;
 import fr.inra.urgi.gpds.elasticsearch.repository.impl.BaseESRepository;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,11 @@ public class LocationRepositoryImpl
 
 	@Autowired
 	public LocationRepositoryImpl(
-        RestHighLevelClient client, ESRequestFactory requestFactory
+        RestHighLevelClient client,
+        ESRequestFactory requestFactory,
+        ESResponseParser parser
     ) {
-		super(client, requestFactory, LocationVO.class);
+		super(client, requestFactory, LocationVO.class, parser);
 	}
 
 }

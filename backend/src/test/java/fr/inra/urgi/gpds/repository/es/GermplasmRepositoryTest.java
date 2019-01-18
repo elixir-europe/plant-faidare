@@ -2,6 +2,7 @@ package fr.inra.urgi.gpds.repository.es;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.inra.urgi.gpds.Application;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmGETSearchCriteria;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmPOSTSearchCriteria;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmSearchCriteria;
@@ -12,10 +13,14 @@ import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.domain.response.Pagination;
 import fr.inra.urgi.gpds.repository.es.setup.ESSetUp;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
@@ -28,19 +33,20 @@ import static org.assertj.core.api.Assertions.fail;
 
 
 @ExtendWith(SpringExtension.class)
+@Import({ESSetUp.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestPropertySource("/test.properties")
+@SpringBootTest(classes = Application.class)
 class GermplasmRepositoryTest {
 
 	@Autowired
 	ESSetUp esSetUp;
 
-	private static boolean dbInitialized = false;
-	@BeforeEach
+	@BeforeAll
 	void before() {
-		if (!dbInitialized) {
-			dbInitialized = esSetUp.initialize(GermplasmVO.class, 0)
-				&& esSetUp.initialize(ProgenyVO.class, 0)
-				&& esSetUp.initialize(PedigreeVO.class, 0);
-		}
+		esSetUp.initialize(GermplasmVO.class, 0);
+		esSetUp.initialize(ProgenyVO.class, 0);
+		esSetUp.initialize(PedigreeVO.class, 0);
 	}
 
     @Autowired

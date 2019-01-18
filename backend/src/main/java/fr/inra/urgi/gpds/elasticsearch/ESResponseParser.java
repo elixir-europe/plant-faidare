@@ -7,7 +7,6 @@ import fr.inra.urgi.gpds.domain.JSONView;
 import fr.inra.urgi.gpds.domain.data.impl.FacetTermImpl;
 import fr.inra.urgi.gpds.elasticsearch.document.DocumentAnnotationUtil;
 import fr.inra.urgi.gpds.elasticsearch.document.DocumentMetadata;
-import fr.inra.urgi.gpds.utils.JacksonFactory;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -15,6 +14,7 @@ import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.SingleBucketAggregation;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -28,18 +28,20 @@ import java.util.List;
  *
  *
  */
+@Component
 public class ESResponseParser {
 
-	private static ObjectMapper objectMapper;
-	static {
-		objectMapper = JacksonFactory.createPermissiveMapper();
-	}
+	private final ObjectMapper objectMapper;
 
-	/**
+    public ESResponseParser(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
+    /**
 	 * Parse the total hits number from an ElasticSearch search response
 	 * @param response the ElasticSearch search response
 	 */
-	public static Long parseTotalHits(SearchResponse response) {
+	public Long parseTotalHits(SearchResponse response) {
 		if (response == null) return null;
 		SearchHits hits = response.getHits();
 		if (hits == null) return null;
@@ -52,7 +54,7 @@ public class ESResponseParser {
 	 * @param clazz the value object class
 	 * @return the list of value object
 	 */
-	public static <T> List<T> parseHits(SearchResponse response, Class<T> clazz) throws IOException, ReflectiveOperationException {
+	public <T> List<T> parseHits(SearchResponse response, Class<T> clazz) throws IOException, ReflectiveOperationException {
 		SearchHits hits = response.getHits();
 		if (hits == null) return null;
 
@@ -109,7 +111,7 @@ public class ESResponseParser {
 	 * @param response the ElasticSearch search response
 	 * @param aggregationPath array of aggregation name used as path to find the term aggregation
 	 */
-	public static List<String> parseTermAggKeys(SearchResponse response, List<String> aggregationPath) {
+	public List<String> parseTermAggKeys(SearchResponse response, List<String> aggregationPath) {
 		Terms termAgg = findAggregation(response, aggregationPath, Terms.class);
 		if (termAgg == null) return null;
 
@@ -123,7 +125,7 @@ public class ESResponseParser {
 	/**
 	 * Find aggregation result in search response using the aggregation path and its type
 	 */
-	private static <T> T findAggregation(
+	private <T> T findAggregation(
 			SearchResponse response, List<String> aggregationPath, Class<T> aggregationType
 	) {
 		Aggregations aggregations = response.getAggregations();
@@ -152,7 +154,7 @@ public class ESResponseParser {
 	/**
 	 * Parse terms aggregation results into facet VO
 	 */
-	public static List<FacetTermImpl> parseFacetTerms(SearchResponse response, List<String> aggregationPath) {
+	public List<FacetTermImpl> parseFacetTerms(SearchResponse response, List<String> aggregationPath) {
 		Terms termAgg = findAggregation(response, aggregationPath, Terms.class);
 		if (termAgg == null) return null;
 
@@ -166,7 +168,7 @@ public class ESResponseParser {
 	/**
 	 * Parse terms aggregation results into facet VO
 	 */
-	public static List<FacetTermImpl> parseFacetTerms(SearchResponse response, String... aggregationPath) {
+	public List<FacetTermImpl> parseFacetTerms(SearchResponse response, String... aggregationPath) {
 		return parseFacetTerms(response, Arrays.asList(aggregationPath));
 	}
 }

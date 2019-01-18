@@ -28,20 +28,24 @@ public class ESGenericGetByIdRepository<VO> implements ESGetByIdRepository<VO> {
 	private final RestHighLevelClient client;
 	private final ESRequestFactory requestFactory;
 	private final Class<VO> voClass;
+    private final ESResponseParser parser;
+
 	private DocumentMetadata<VO> documentMetadata;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	public ESGenericGetByIdRepository(
+    public ESGenericGetByIdRepository(
         RestHighLevelClient client,
         ESRequestFactory requestFactory,
-        Class<VO> voClass
+        Class<VO> voClass,
+        ESResponseParser parser
     ) {
         this.client = client;
         this.requestFactory = requestFactory;
 		this.voClass = voClass;
+        this.parser = parser;
 		documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(voClass);
-		if (documentMetadata.getIdField() == null) {
+        if (documentMetadata.getIdField() == null) {
 			throw new RuntimeException("Could not identify an identifier field on document "+ voClass.getSimpleName());
 		}
 	}
@@ -61,7 +65,7 @@ public class ESGenericGetByIdRepository<VO> implements ESGetByIdRepository<VO> {
             SearchResponse result = client.search(request, RequestOptions.DEFAULT);
 
 			// Parse result list
-			List<? extends VO> resultList = ESResponseParser.parseHits(result, voClass);
+			List<? extends VO> resultList = parser.parseHits(result, voClass);
 
 			if (resultList != null && !resultList.isEmpty()) {
 				if (resultList.size() > 1) {

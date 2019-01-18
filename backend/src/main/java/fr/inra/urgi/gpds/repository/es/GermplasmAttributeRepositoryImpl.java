@@ -4,6 +4,7 @@ import fr.inra.urgi.gpds.domain.criteria.GermplasmAttributeCriteria;
 import fr.inra.urgi.gpds.domain.data.impl.germplasm.GermplasmAttributeValueListVO;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.elasticsearch.ESRequestFactory;
+import fr.inra.urgi.gpds.elasticsearch.ESResponseParser;
 import fr.inra.urgi.gpds.elasticsearch.repository.ESFindRepository;
 import fr.inra.urgi.gpds.elasticsearch.repository.impl.ESGenericFindRepository;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -19,14 +20,19 @@ import org.springframework.stereotype.Repository;
 public class GermplasmAttributeRepositoryImpl
 		implements GermplasmAttributeRepository {
 
-	private ESFindRepository<GermplasmAttributeCriteria, GermplasmAttributeValueListVO> findAttributeRepository;
+    private final ESResponseParser parser;
+
+    private ESFindRepository<GermplasmAttributeCriteria, GermplasmAttributeValueListVO> findAttributeRepository;
 
 	@Autowired
 	public GermplasmAttributeRepositoryImpl(
-        RestHighLevelClient client, ESRequestFactory requestFactory
+        ESResponseParser parser,
+        RestHighLevelClient client,
+        ESRequestFactory requestFactory
     ) {
-		Class<GermplasmAttributeValueListVO> voClass = GermplasmAttributeValueListVO.class;
-		findAttributeRepository = new ESGenericFindRepository<>(client, requestFactory, voClass);
+        this.parser = parser;
+        Class<GermplasmAttributeValueListVO> voClass = GermplasmAttributeValueListVO.class;
+		findAttributeRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, this.parser);
 	}
 
 	@Override

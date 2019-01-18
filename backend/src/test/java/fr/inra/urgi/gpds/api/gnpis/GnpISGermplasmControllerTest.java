@@ -1,8 +1,6 @@
-/**
- * Created on 2016/04/26.
- */
 package fr.inra.urgi.gpds.api.gnpis;
 
+import fr.inra.urgi.gpds.api.gnpis.v1.GnpISGermplasmController;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmGETSearchCriteria;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmSearchCriteria;
 import fr.inra.urgi.gpds.domain.data.impl.germplasm.CollPopVO;
@@ -26,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.hasProperty;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  */
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = GnpISGermplasmControllerTest.class)
+@WebMvcTest(controllers = GnpISGermplasmController.class)
 class GnpISGermplasmControllerTest {
 
 	@Autowired

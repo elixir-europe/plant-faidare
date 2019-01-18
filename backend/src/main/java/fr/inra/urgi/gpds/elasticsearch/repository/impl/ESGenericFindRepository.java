@@ -36,25 +36,29 @@ public class ESGenericFindRepository<C extends PaginationCriteria, VO> implement
     private final ESRequestFactory requestFactory;
 	private final ESQueryFactory<C> queryFactory;
 	private final DocumentMetadata<VO> documentMetadata;
+    private final ESResponseParser parser;
 
-	public ESGenericFindRepository(
+    public ESGenericFindRepository(
         RestHighLevelClient client,
         ESRequestFactory requestFactory,
         Class<VO> voClass,
-        ESQueryFactory<C> queryFactory
+        ESQueryFactory<C> queryFactory,
+        ESResponseParser parser
     ) {
         this.client = client;
         this.requestFactory = requestFactory;
 		this.queryFactory = queryFactory;
 		this.documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(voClass);
-	}
+        this.parser = parser;
+    }
 
 	public ESGenericFindRepository(
-	    RestHighLevelClient client,
+        RestHighLevelClient client,
         ESRequestFactory requestFactory,
-        Class<VO> voClass
+        Class<VO> voClass,
+        ESResponseParser parser
     ) {
-		this(client, requestFactory, voClass, new ESGenericQueryFactory<>());
+		this(client, requestFactory, voClass, new ESGenericQueryFactory<>(), parser);
 	}
 
 	public static <C extends PaginationCriteria, D> SearchRequest prepareSearchRequest(
@@ -114,10 +118,10 @@ public class ESGenericFindRepository<C extends PaginationCriteria, VO> implement
 			SearchResponse result = client.search(request, RequestOptions.DEFAULT);
 
 			// Prepare pagination info
-			Pagination pagination = PaginationImpl.create(criteria, ESResponseParser.parseTotalHits(result));
+			Pagination pagination = PaginationImpl.create(criteria, parser.parseTotalHits(result));
 
 			// Parse result list
-			List<VO> resultList = ESResponseParser.parseHits(result, documentMetadata.getDocumentClass());
+			List<VO> resultList = parser.parseHits(result, documentMetadata.getDocumentClass());
 
 			// Return paginated list
 			return new PaginatedList<>(pagination, resultList);

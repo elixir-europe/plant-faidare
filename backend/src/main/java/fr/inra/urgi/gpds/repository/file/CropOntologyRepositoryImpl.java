@@ -1,6 +1,5 @@
 package fr.inra.urgi.gpds.repository.file;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -9,11 +8,10 @@ import fr.inra.urgi.gpds.config.GPDSProperties;
 import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiTrait;
 import fr.inra.urgi.gpds.domain.data.impl.variable.ObservationVariableVO;
 import fr.inra.urgi.gpds.domain.data.impl.variable.OntologyVO;
-import fr.inra.urgi.gpds.utils.JacksonFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Resource;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,16 +36,20 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
 	private static final Integer  CACHE_EXPIRATION_TIME = 1;
 	private static final TimeUnit CACHE_EXPIRATION_TIME_UNIT = TimeUnit.HOURS;
 
-	@Resource
-	private GPDSProperties properties;
-
-	private final ObjectMapper mapper;
+	private final GPDSProperties properties;
+	private final RestTemplate client;
 
 	private final LoadingCache<String, OntologyVO[]> ontologyCache;
 	private final LoadingCache<String, ObservationVariableVO[]> variablesByOntology;
 
-	private CropOntologyRepositoryImpl() {
-		// Cache configuration: will refresh if CACHE_EXPIRATION_TIME has passed
+    public CropOntologyRepositoryImpl(
+        GPDSProperties properties,
+        RestTemplate client
+    ) {
+        this.client = client;
+        this.properties = properties;
+
+        // Cache configuration: will refresh if CACHE_EXPIRATION_TIME has passed
 		// since last cache write.
 		// see: https://github.com/google/guava/wiki/CachesExplained
 		CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder()
@@ -58,8 +60,6 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
 
 		// Variable list by ontology cache
 		variablesByOntology = cacheBuilder.build(new VariableCacheLoader());
-
-		mapper = JacksonFactory.createPermissiveMapper();
 	}
 
 	@Override
@@ -166,8 +166,10 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
 	class OntologyCacheLoader extends CacheLoader<String, OntologyVO[]> {
 
 		@Override
-		public OntologyVO[] load(String repositoryUrl) throws Exception {
-			return mapper.readValue(new URL(repositoryUrl), OntologyVO[].class);
+		public OntologyVO[] load(String repositoryJsonUrl) {
+            ResponseEntity<OntologyVO[]> response =
+                client.getForEntity(repositoryJsonUrl, OntologyVO[].class);
+            return response.getBody();
 		}
 
 	}
@@ -178,13 +180,12 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
 	class VariableCacheLoader extends CacheLoader<String, ObservationVariableVO[]> {
 
 		@Override
-		public ObservationVariableVO[] load(String ontologyKey) throws Exception {
-			String path = ontologyKey + ".json";
+		public ObservationVariableVO[] load(String ontologyKey) {
+            String ontologyJsonUrl = getOntologyBaseUrl() + ontologyKey + ".json";
 
-			URL url = new URL(getOntologyBaseUrl() + path);
-
-			// Read from URL
-			return mapper.readValue(url, ObservationVariableVO[].class);
+            ResponseEntity<ObservationVariableVO[]> response =
+                client.getForEntity(ontologyJsonUrl, ObservationVariableVO[].class);
+            return response.getBody();
 		}
 
 	}

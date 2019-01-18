@@ -12,8 +12,11 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.beans.IntrospectionException;
 import java.io.ByteArrayOutputStream;
@@ -30,16 +33,17 @@ import static org.mockito.Mockito.*;
 /**
  * @author gcornut
  */
+@ExtendWith(SpringExtension.class)
+@Import({ESResponseParser.class, ObjectMapper.class})
 class ESResponseParserTest {
 
-	static ObjectMapper mapper;
+    @Autowired
+    ESResponseParser parser;
 
-	@BeforeAll
-    static void beforeClass() {
-		mapper = new ObjectMapper();
-	}
+    @Autowired
+    ObjectMapper mapper;
 
-	@Test
+    @Test
     void should_Parse_Total_Hits() {
 		Long expectedTotalHits = 11L;
 		SearchHit[] hitsArray = {};
@@ -51,7 +55,7 @@ class ESResponseParserTest {
 		SearchResponse response = mock(SearchResponse.class);
 		when(response.getHits()).thenReturn(hits);
 
-		Long actualTotalHits = ESResponseParser.parseTotalHits(response);
+		Long actualTotalHits = parser.parseTotalHits(response);
 
 		assertThat(actualTotalHits).isEqualTo(expectedTotalHits);
 	}
@@ -63,7 +67,7 @@ class ESResponseParserTest {
 		SearchResponse response = mock(SearchResponse.class);
 		when(response.getHits()).thenReturn(null);
 
-		Long actualTotalHits = ESResponseParser.parseTotalHits(response);
+		Long actualTotalHits = parser.parseTotalHits(response);
 
 		assertThat(actualTotalHits).isEqualTo(expectedTotalHits);
 	}
@@ -99,7 +103,7 @@ class ESResponseParserTest {
 		SearchResponse response = mock(SearchResponse.class);
 		when(response.getHits()).thenReturn(hits);
 
-		List<DocumentObject> actualDocumentObject = ESResponseParser.parseHits(response, DocumentObject.class);
+		List<DocumentObject> actualDocumentObject = parser.parseHits(response, DocumentObject.class);
 
 		assertThat(actualDocumentObject)
 				.isNotNull().isNotEmpty()
@@ -124,14 +128,14 @@ class ESResponseParserTest {
 		SearchResponse response = mock(SearchResponse.class);
 		when(response.getHits()).thenReturn(null);
 
-		List<DocumentObject> result = ESResponseParser.parseHits(response, DocumentObject.class);
+		List<DocumentObject> result = parser.parseHits(response, DocumentObject.class);
 		assertThat(result).isNull();
 
 		// Return null if no hits in hits
 		SearchHits hits = new SearchHits(null, 0, 100);
 		when(response.getHits()).thenReturn(hits);
 
-		List<DocumentObject> result2 = ESResponseParser.parseHits(response, DocumentObject.class);
+		List<DocumentObject> result2 = parser.parseHits(response, DocumentObject.class);
 		assertThat(result2).isNull();
 	}
 
@@ -144,7 +148,7 @@ class ESResponseParserTest {
 		List<Long> expectedCounts = Arrays.asList(300L, 200L, 100L);
 		SearchResponse response = mockFilterTermAggResponse(filterAggName, termAggName, expectedKeys, expectedCounts);
 
-		List<String> actualKeys = ESResponseParser.parseTermAggKeys(response, aggregationPath);
+		List<String> actualKeys = parser.parseTermAggKeys(response, aggregationPath);
 
 		assertThat(actualKeys).isNotNull().isNotEmpty().containsExactlyElementsOf(expectedKeys);
 	}

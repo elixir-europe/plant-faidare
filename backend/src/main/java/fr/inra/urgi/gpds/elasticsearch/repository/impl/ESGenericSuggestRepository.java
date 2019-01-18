@@ -2,6 +2,7 @@ package fr.inra.urgi.gpds.elasticsearch.repository.impl;
 
 import fr.inra.urgi.gpds.domain.criteria.base.PaginationCriteria;
 import fr.inra.urgi.gpds.elasticsearch.ESRequestFactory;
+import fr.inra.urgi.gpds.elasticsearch.ESResponseParser;
 import fr.inra.urgi.gpds.elasticsearch.criteria.AnnotatedCriteriaMapper;
 import fr.inra.urgi.gpds.elasticsearch.criteria.mapping.CriteriaMapping;
 import fr.inra.urgi.gpds.elasticsearch.criteria.mapping.CriteriaMappingCriterion;
@@ -26,7 +27,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-import static fr.inra.urgi.gpds.elasticsearch.ESResponseParser.parseTermAggKeys;
 import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.filter;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
@@ -44,25 +44,28 @@ public class ESGenericSuggestRepository<C extends PaginationCriteria, VO> implem
     private final ESRequestFactory requestFactory;
     private final ESQueryFactory<C> queryFactory;
     private final DocumentMetadata<VO> documentMetadata;
+    private final ESResponseParser parser;
 
     public ESGenericSuggestRepository(
         RestHighLevelClient client,
         ESRequestFactory requestFactory,
         Class<VO> voClass,
-        ESQueryFactory<C> queryFactory
+        ESQueryFactory<C> queryFactory,
+        ESResponseParser parser
     ) {
         this.client = client;
         this.requestFactory = requestFactory;
         this.queryFactory = queryFactory;
         this.documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(voClass);
+        this.parser = parser;
     }
 
     public ESGenericSuggestRepository(
         RestHighLevelClient client,
         ESRequestFactory requestFactory,
-        Class<VO> voClass
-    ) {
-        this(client, requestFactory, voClass, new ESGenericQueryFactory<C>());
+        Class<VO> voClass,
+        ESResponseParser parser) {
+        this(client, requestFactory, voClass, new ESGenericQueryFactory<C>(), parser);
     }
 
     @Override
@@ -110,7 +113,7 @@ public class ESGenericSuggestRepository<C extends PaginationCriteria, VO> implem
             throw new RuntimeException(e);
         }
 
-        List<String> terms = parseTermAggKeys(searchResponse, aggregationPath);
+        List<String> terms = parser.parseTermAggKeys(searchResponse, aggregationPath);
         if (terms == null)
             return null;
         return new LinkedHashSet<>(sortShortestMatch(terms, searchText));

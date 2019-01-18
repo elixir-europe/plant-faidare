@@ -3,6 +3,7 @@ package fr.inra.urgi.gpds.elasticsearch.repository.impl;
 import fr.inra.urgi.gpds.domain.criteria.base.PaginationCriteria;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.elasticsearch.ESRequestFactory;
+import fr.inra.urgi.gpds.elasticsearch.ESResponseParser;
 import fr.inra.urgi.gpds.elasticsearch.repository.ESFindRepository;
 import fr.inra.urgi.gpds.elasticsearch.repository.ESGetByIdRepository;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -20,13 +21,14 @@ public class BaseESRepository<C extends PaginationCriteria, VO>
 	private final ESGetByIdRepository<VO> getByIdRepository;
 	private final ESFindRepository<C, VO> findRepository;
 
-	public BaseESRepository(
-	    RestHighLevelClient client,
+    public BaseESRepository(
+        RestHighLevelClient client,
         ESRequestFactory requestFactory,
-        Class<VO> voClass
+        Class<VO> voClass,
+        ESResponseParser parser
     ) {
-        getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, voClass);
-		findRepository = new ESGenericFindRepository<>(client, requestFactory, voClass);
+        getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, voClass, parser);
+		findRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, parser);
 	}
 
 	@Override

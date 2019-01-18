@@ -1,6 +1,3 @@
-/**
- * Created on 2014/03/07.
- */
 package fr.inra.urgi.gpds.service.es;
 
 import com.opencsv.CSVWriter;

@@ -6,8 +6,6 @@ import fr.inra.urgi.gpds.repository.http.UserGroupsResourceClient;
  * Store user authentication (later use in {@link UserGroupsResourceClient})
  *
  * @author gcornut
- *
- *
  */
 public final class AuthenticationStore {
 
@@ -21,6 +19,10 @@ public final class AuthenticationStore {
         User user = new User(name, authCode);
         store.set(user);
 	}
+
+	public static void reset() {
+	    store.set(null);
+    }
 
 	public static class User {
 	    private final String name;

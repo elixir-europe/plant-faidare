@@ -7,52 +7,51 @@ import fr.inra.urgi.gpds.config.GPDSProperties;
 import fr.inra.urgi.gpds.elasticsearch.document.DocumentAnnotationUtil;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequestBuilder;
-import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
+import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshResponse;
-import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
-import org.elasticsearch.client.Client;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.io.*;
 import java.util.Iterator;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author gcornut
  */
-@Service
+@Component
 public class ESSetUp {
 
-	@Resource
-	Client client;
+	private final RestHighLevelClient client;
+    private final GPDSProperties properties;
 
-	@Autowired
-    GPDSProperties properties;
+    public ESSetUp(RestHighLevelClient client, GPDSProperties properties) {
+        this.client = client;
+        this.properties = properties;
+    }
 
-	/**
+    /**
 	 * Delete index/alias if it exists
 	 */
-	private void deleteIndex(String indexName) {
-		boolean exists = client.admin().indices().exists(new IndicesExistsRequest(indexName)).actionGet().isExists();
+	private void deleteIndex(String indexName) throws IOException {
+        GetIndexRequest existsRequest = new GetIndexRequest();
+        existsRequest.indices(indexName);
+        boolean exists = client.indices().exists(existsRequest, RequestOptions.DEFAULT);
 		if (!exists) {
 			// Do not delete non existing index
 			return;
 		}
 
-		DeleteIndexRequestBuilder request = client.admin().indices().prepareDelete(indexName);
-		AcknowledgedResponse response;
-		try {
-			response = request.execute().get();
-		} catch (InterruptedException | ExecutionException e) {
-			throw new RuntimeException(e);
-		}
+        DeleteIndexRequest deleteRequest = new DeleteIndexRequest(indexName);
+        AcknowledgedResponse response = client.indices().delete(deleteRequest, RequestOptions.DEFAULT);
 
 		if (!response.isAcknowledged()) {
 			throw new RuntimeException("Index deletion not acknowledged (index name: '" + indexName + "'");
@@ -62,7 +61,7 @@ public class ESSetUp {
 	/**
 	 * Create index with data
 	 */
-	protected void addIndex(String indexName, String jsonPath, String documentType) throws IOException {
+    private void addIndex(String indexName, String jsonPath, String documentType) throws IOException {
 		// Create index
 		CreateIndexRequest createIndex = new CreateIndexRequest(indexName);
 
@@ -74,7 +73,7 @@ public class ESSetUp {
 		String mapping = readResource("./index/" + documentType + "_mapping.json");
 		createIndex.mapping(documentType, toXContentBuilder(mapping));
 
-		CreateIndexResponse createResponse = client.admin().indices().create(createIndex).actionGet();
+		CreateIndexResponse createResponse = client.indices().create(createIndex, RequestOptions.DEFAULT);
 		if (!createResponse.isAcknowledged()) {
 			throw new RuntimeException("Could not create index '" + indexName + "': " + createResponse.toString());
 		}
@@ -83,21 +82,19 @@ public class ESSetUp {
 		InputStream jsonStream = getClass().getResourceAsStream(jsonPath);
 		JsonNode jsonNode = new ObjectMapper().readTree(jsonStream);
 
-		BulkRequestBuilder request = client.prepareBulk();
+        BulkRequest bulkRequest = new BulkRequest();
 
 		Iterator<JsonNode> elements = jsonNode.elements();
 		while (elements.hasNext()) {
 			JsonNode document = elements.next();
 
-			request.add(client.prepareIndex(indexName, documentType).setSource(toXContentBuilder(document.toString())));
+            IndexRequest indexRequest = new IndexRequest(indexName, documentType);
+            indexRequest.source(toXContentBuilder(document.toString()));
+            bulkRequest.add(indexRequest);
 		}
 
 		BulkResponse response;
-		try {
-			response = request.execute().get();
-		} catch (InterruptedException | ExecutionException e) {
-			throw new RuntimeException(e);
-		}
+		response = client.bulk(bulkRequest, RequestOptions.DEFAULT);
 
 		if (response.hasFailures()) {
 			System.err.println(response.buildFailureMessage());
@@ -131,8 +128,9 @@ public class ESSetUp {
 	/**
 	 * Refresh indices to make sure the new documents are correctly indexed
 	 */
-	private void refreshIndex() {
-		RefreshResponse refreshResponse = client.admin().indices().prepareRefresh().execute().actionGet();
+	private void refreshIndex() throws IOException {
+        RefreshRequest refreshRequest = new RefreshRequest();
+        RefreshResponse refreshResponse = client.indices().refresh(refreshRequest, RequestOptions.DEFAULT);
 		if (refreshResponse.getFailedShards() > 0) {
 			throw new RuntimeException("Could not refresh Elasticsearch indices.");
 		}

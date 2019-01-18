@@ -1,13 +1,18 @@
 package fr.inra.urgi.gpds.repository.es;
 
+import fr.inra.urgi.gpds.Application;
 import fr.inra.urgi.gpds.domain.criteria.TrialCriteria;
 import fr.inra.urgi.gpds.domain.data.impl.TrialVO;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.repository.es.setup.ESSetUp;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Comparator;
@@ -15,18 +20,18 @@ import java.util.Comparator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
+@Import({ESSetUp.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestPropertySource("/test.properties")
+@SpringBootTest(classes = Application.class)
 public class TrialRepositoryTest {
-
-	private static boolean dbInitialized = false;
 
 	@Autowired
 	ESSetUp esSetUp;
 
 	@BeforeAll
 	public void before() {
-		if (!dbInitialized) {
-			dbInitialized = esSetUp.initialize(TrialVO.class, 0);
-		}
+	    esSetUp.initialize(TrialVO.class, 0);
 	}
 
     @Autowired

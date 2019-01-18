@@ -51,24 +51,30 @@ public class StudyRepositoryImpl
 	private final ESGetByIdRepository<StudyDetailVO> getByIdRepository;
 	private final ESFindRepository<StudyCriteria, StudySummaryVO> findRepository;
 	private final DocumentMetadata<StudySummaryVO> studySummaryMetadata;
-
-	@Autowired
-	LocationRepository locationRepository;
+    private final ESResponseParser parser;
+	private final LocationRepository locationRepository;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Autowired
-	public StudyRepositoryImpl(RestHighLevelClient client, ESRequestFactory requestFactory) {
+    @Autowired
+	public StudyRepositoryImpl(
+        RestHighLevelClient client,
+        ESRequestFactory requestFactory,
+        ESResponseParser parser,
+        LocationRepository locationRepository
+    ) {
         this.client = client;
         this.requestFactory = requestFactory;
+        this.parser = parser;
+        this.locationRepository = locationRepository;
 
-		this.getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, StudyDetailVO.class);
+        this.getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, StudyDetailVO.class, this.parser);
 
 		Class<StudySummaryVO> voClass = StudySummaryVO.class;
 		this.studySummaryMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(voClass);
 
 		ESGenericQueryFactory<StudyCriteria> queryFactory = new ESGenericQueryFactory<>();
-		this.findRepository = new ESGenericFindRepository<>(this.client, requestFactory, voClass, queryFactory);
+		this.findRepository = new ESGenericFindRepository<>(this.client, requestFactory, voClass, queryFactory, this.parser);
 
 	}
 
@@ -118,7 +124,7 @@ public class StudyRepositoryImpl
         }
 
         List<String> aggregationPath = Arrays.asList(filterAggName, termAggName);
-		List<String> ids = ESResponseParser.parseTermAggKeys(searchResponse, aggregationPath);
+		List<String> ids = parser.parseTermAggKeys(searchResponse, aggregationPath);
 		if (ids == null) {
 			return null;
 		}

@@ -7,13 +7,13 @@ import fr.inra.urgi.gpds.domain.data.impl.germplasm.PedigreeVO;
 import fr.inra.urgi.gpds.domain.data.impl.germplasm.ProgenyVO;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.elasticsearch.ESRequestFactory;
+import fr.inra.urgi.gpds.elasticsearch.ESResponseParser;
 import fr.inra.urgi.gpds.elasticsearch.ESScrollIterator;
 import fr.inra.urgi.gpds.elasticsearch.query.impl.ESGenericQueryFactory;
 import fr.inra.urgi.gpds.elasticsearch.repository.ESFindRepository;
 import fr.inra.urgi.gpds.elasticsearch.repository.ESGetByIdRepository;
 import fr.inra.urgi.gpds.elasticsearch.repository.impl.ESGenericFindRepository;
 import fr.inra.urgi.gpds.elasticsearch.repository.impl.ESGenericGetByIdRepository;
-import fr.inra.urgi.gpds.utils.JacksonFactory;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -36,29 +36,36 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GermplasmRepositoryImpl.class);
 
     private final RestHighLevelClient client;
+    private final ObjectMapper mapper;
 	private final ESRequestFactory requestFactory;
+    private final ESResponseParser parser;
 
-	private final ESFindRepository<GermplasmSearchCriteria, GermplasmVO> findRepository;
+    private final ESFindRepository<GermplasmSearchCriteria, GermplasmVO> findRepository;
 	private final ESGetByIdRepository<GermplasmVO> getByIdRepository;
 	private final ESGenericQueryFactory<Object> queryFactory;
-	private final ObjectMapper mapper;
 
 	@Autowired
-	public GermplasmRepositoryImpl(RestHighLevelClient client, ESRequestFactory requestFactory) {
+	public GermplasmRepositoryImpl(
+        RestHighLevelClient client,
+        ObjectMapper mapper,
+        ESRequestFactory requestFactory,
+        ESResponseParser parser
+    ) {
         this.client = client;
         this.requestFactory = requestFactory;
-		this.mapper = JacksonFactory.createPermissiveMapper();
-		Class<GermplasmVO> voClass = GermplasmVO.class;
+        this.mapper = mapper;
+        this.parser = parser;
+        Class<GermplasmVO> voClass = GermplasmVO.class;
 		this.queryFactory = new ESGenericQueryFactory<>();
-		this.findRepository = new ESGenericFindRepository<>(client, requestFactory, voClass);
-		this.getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, voClass);
+		this.findRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, this.parser);
+		this.getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, voClass, this.parser);
 	}
 
 	@Override
 	public Iterator<GermplasmVO> scrollAll(GermplasmSearchCriteria criteria) {
 		QueryBuilder query = queryFactory.createQuery(criteria);
 		int fetchSize = criteria.getPageSize().intValue();
-		return new ESScrollIterator<>(client, requestFactory, GermplasmVO.class, query, fetchSize);
+		return new ESScrollIterator<>(client, requestFactory, parser, GermplasmVO.class, query, fetchSize);
 	}
 
 	@Override

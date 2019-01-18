@@ -40,22 +40,24 @@ public class ESScrollIterator<T> implements Iterator<T> {
 	private final Class<T> documentClass;
     private final RestHighLevelClient client;
     private final ESRequestFactory requestFactory;
+    private final ESResponseParser parser;
 	private final long totalHits;
 
 	private long hitIndex;
 	private String scrollId;
 	private Iterator<T> currentIterator;
 
-	public ESScrollIterator(
+    public ESScrollIterator(
         RestHighLevelClient client,
-	    ESRequestFactory requestFactory,
-        Class<T> documentClass,
+        ESRequestFactory requestFactory,
+        ESResponseParser parser, Class<T> documentClass,
         QueryBuilder query,
         int fetchSize
     ) {
         this.client = client;
         this.requestFactory = requestFactory;
-		this.documentClass = documentClass;
+        this.parser = parser;
+        this.documentClass = documentClass;
 
 		DocumentMetadata<T> documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(documentClass);
 
@@ -82,7 +84,7 @@ public class ESScrollIterator<T> implements Iterator<T> {
 
 	private Iterator<T> parseIterator(SearchResponse pageResponse) {
 		try {
-			List<T> hits = ESResponseParser.parseHits(pageResponse, documentClass);
+			List<T> hits = parser.parseHits(pageResponse, documentClass);
 			if (hits != null) {
 				return hits.iterator();
 			}

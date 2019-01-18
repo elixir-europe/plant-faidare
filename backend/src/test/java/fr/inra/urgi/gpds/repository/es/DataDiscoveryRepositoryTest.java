@@ -1,15 +1,20 @@
 package fr.inra.urgi.gpds.repository.es;
 
+import fr.inra.urgi.gpds.Application;
 import fr.inra.urgi.gpds.domain.criteria.DataDiscoveryCriteriaImpl;
 import fr.inra.urgi.gpds.domain.data.Facet;
 import fr.inra.urgi.gpds.domain.data.FacetTerm;
 import fr.inra.urgi.gpds.domain.data.impl.DataDiscoveryDocument;
 import fr.inra.urgi.gpds.domain.response.DataDiscoveryResponse;
 import fr.inra.urgi.gpds.repository.es.setup.ESSetUp;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
@@ -22,6 +27,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author gcornut
  */
 @ExtendWith(SpringExtension.class)
+@Import({ESSetUp.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestPropertySource("/test.properties")
+@SpringBootTest(classes = Application.class)
 class DataDiscoveryRepositoryTest {
 
 	@Autowired
@@ -30,13 +39,9 @@ class DataDiscoveryRepositoryTest {
 	@Autowired
     ESSetUp esSetUp;
 
-	private static boolean dbInitialized = false;
-
-	@BeforeEach
+	@BeforeAll
 	void before() {
-		if (!dbInitialized) {
-			dbInitialized = esSetUp.initialize(DataDiscoveryDocument.class, 0);
-		}
+		esSetUp.initialize(DataDiscoveryDocument.class, 0);
 	}
 
 	@Test

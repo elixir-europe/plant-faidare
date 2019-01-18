@@ -1,6 +1,7 @@
 package fr.inra.urgi.gpds.repository.es;
 
 import com.google.common.collect.Sets;
+import fr.inra.urgi.gpds.Application;
 import fr.inra.urgi.gpds.domain.criteria.ObservationUnitCriteria;
 import fr.inra.urgi.gpds.domain.data.impl.ObservationUnitVO;
 import fr.inra.urgi.gpds.domain.data.impl.ObservationVO;
@@ -10,8 +11,12 @@ import org.assertj.core.api.Condition;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
@@ -23,6 +28,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
+@Import({ESSetUp.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestPropertySource("/test.properties")
+@SpringBootTest(classes = Application.class)
 class ObservationUnitRepositoryTest {
 
 	@Autowired

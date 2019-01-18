@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.inra.urgi.gpds.domain.data.DataSource;
 import fr.inra.urgi.gpds.domain.data.impl.DataSourceDocument;
 import fr.inra.urgi.gpds.domain.jsonld.data.HasGraph;
-import fr.inra.urgi.gpds.utils.JacksonFactory;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Repository;
 
@@ -24,9 +23,11 @@ import java.util.Map;
 public class DataSourceRepositoryImpl implements DataSourceRepository {
 
 	private final Map<String, DataSource> dataSourceByUri;
+    private final ObjectMapper objectMapper;
 
-	public DataSourceRepositoryImpl() {
-		this.dataSourceByUri = new HashMap<>();
+    public DataSourceRepositoryImpl(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+        this.dataSourceByUri = new HashMap<>();
 		loadFromResources();
 	}
 
@@ -36,7 +37,6 @@ public class DataSourceRepositoryImpl implements DataSourceRepository {
 	}
 
 	private void loadFromResources() {
-		ObjectMapper objectMapper = JacksonFactory.createPermissiveMapper();
 		try {
 			InputStream dataSourceInputStream = getClass().getResourceAsStream("./datasources.jsonld");
 			DataSourceList dataSourceList = objectMapper.readValue(dataSourceInputStream, DataSourceList.class);

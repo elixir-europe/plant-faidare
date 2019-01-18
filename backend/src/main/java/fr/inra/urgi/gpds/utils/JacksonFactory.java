@@ -1,8 +1,5 @@
 package fr.inra.urgi.gpds.utils;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.reflect.ClassPath;
 
@@ -28,20 +25,6 @@ public class JacksonFactory {
 			module.addAbstractTypeMapping(type, typeMap.get(type));
 		}
 		return module;
-	}
-
-	/**
-	 * Create a Jackson ObjectMapper with very permissive configuration
-	 */
-	public static ObjectMapper createPermissiveMapper() {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		mapper.disable(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE);
-		mapper.disable(DeserializationFeature.FAIL_ON_UNRESOLVED_OBJECT_IDS);
-		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-		mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES);
-		return mapper;
 	}
 
 	/**

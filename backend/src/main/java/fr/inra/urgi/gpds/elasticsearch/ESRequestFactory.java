@@ -1,6 +1,3 @@
-/**
- * Created on 2016/09/19.
- */
 package fr.inra.urgi.gpds.elasticsearch;
 
 import com.google.common.base.Joiner;

@@ -14,7 +14,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @TestPropertySource("/test.properties")
-public class ApplicationTest {
+class ApplicationTest {
+
     @Test
-    public void shouldLoadContext() {}
+    void shouldLoadContext() {}
+
 }

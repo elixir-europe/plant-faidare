@@ -27,6 +27,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +59,16 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
 	private final ESRequestFactory requestFactory;
 	private final ESSuggestRepository<DataDiscoveryCriteria> suggestRepository;
 	private final ESGenericQueryFactory<DataDiscoveryCriteria> queryFactory;
+    private final ESResponseParser parser;
 
-	@Autowired
-	public DataDiscoveryRepositoryImpl(RestHighLevelClient client, ESRequestFactory requestFactory) {
+    @Autowired
+	public DataDiscoveryRepositoryImpl(
+	    RestHighLevelClient client,
+        ESRequestFactory requestFactory,
+        ESResponseParser parser
+    ) {
         this.client = client;
+        this.parser = parser;
         Class<DataDiscoveryDocument> documentClass = DataDiscoveryDocument.class;
 		Class<DataDiscoveryCriteriaImpl> criteriaClass = DataDiscoveryCriteriaImpl.class;
 
@@ -70,7 +77,7 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
 
 		this.criteriaMapping = AnnotatedCriteriaMapper.getMapping(criteriaClass);
 		this.queryFactory = new ESGenericQueryFactory<>();
-		this.suggestRepository = new ESGenericSuggestRepository<>(client, requestFactory, documentClass, queryFactory);
+		this.suggestRepository = new ESGenericSuggestRepository<>(client, requestFactory, documentClass, queryFactory, parser);
 	}
 
 	@Override
@@ -111,8 +118,10 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
 		// Prepare search request with query
 		SearchRequest request = ESGenericFindRepository.prepareSearchRequest(
 				query, criteria, documentMetadata, requestFactory);
+        request.source(new SearchSourceBuilder());
+        request.source().query(query);
 
-		// Build facet aggregations
+        // Build facet aggregations
 		if (facetFields != null) {
 			for (String facetField : facetFields) {
 				String documentPath = criteriaMapping.getDocumentPath(facetField, true);
@@ -130,9 +139,8 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
 					facetFilter = QueryBuilders.matchAllQuery();
 				}
 
-				request.source().aggregations().addAggregator(
-						filter(filterAggName, facetFilter)
-								.subAggregation(termAgg)
+				request.source().aggregation(
+						filter(filterAggName, facetFilter).subAggregation(termAgg)
 				);
 			}
 		}
@@ -151,10 +159,10 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
 			DataDiscoveryCriteria criteria, SearchResponse response
 	) throws IOException, ReflectiveOperationException {
 		// Parse pagination
-		Pagination pagination = PaginationImpl.create(criteria, ESResponseParser.parseTotalHits(response));
+		Pagination pagination = PaginationImpl.create(criteria, parser.parseTotalHits(response));
 
 		// Parse result list
-		List<DataDiscoveryDocument> resultList = ESResponseParser.parseHits(response,
+		List<DataDiscoveryDocument> resultList = parser.parseHits(response,
 				documentMetadata.getDocumentClass());
 
 		// Parse facet terms
@@ -164,7 +172,7 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
 			facets = new ArrayList<>();
 			for (String facetField : facetFields) {
 				String filterAggName = facetField + "Filter";
-				List<FacetTermImpl> terms = ESResponseParser.parseFacetTerms(
+				List<FacetTermImpl> terms = parser.parseFacetTerms(
 						response, filterAggName, facetField
 				);
 				facets.add(new FacetImpl(facetField, terms));

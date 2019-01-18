@@ -4,6 +4,7 @@ import fr.inra.urgi.gpds.domain.data.impl.germplasm.CollPopVO;
 import fr.inra.urgi.gpds.domain.data.impl.germplasm.DonorVO;
 import fr.inra.urgi.gpds.domain.data.impl.germplasm.GermplasmVO;
 import fr.inra.urgi.gpds.domain.data.impl.germplasm.ProgenyVO;
+import fr.inra.urgi.gpds.repository.es.GermplasmAttributeRepository;
 import fr.inra.urgi.gpds.service.es.GermplasmService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +19,7 @@ import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,6 +37,9 @@ class GermplasmControllerTest {
 
     @MockBean
 	private GermplasmService service;
+
+    @MockBean
+	private GermplasmAttributeRepository germplasmAttributeRepository;
 
 	@Test
 	void should_Load_Germplasm_progeny_From_PUID() throws Exception {
