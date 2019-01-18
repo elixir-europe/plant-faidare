@@ -1,4 +1,4 @@
-import { GermplasmRef } from './gnpis.model';
+import { GermplasmRef } from './gnpis.germplasm.model';
 
 export interface BrapiSite {
     latitude: number;

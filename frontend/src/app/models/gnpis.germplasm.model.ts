@@ -1,4 +1,4 @@
-import { BrapiDescriptor, BrapiDonor, BrapiInstitute, BrapiOrigin, BrapiSet, BrapiSite } from './brapi.model';
+import { BrapiDescriptor, BrapiDonor, BrapiInstitute, BrapiOrigin, BrapiSet, BrapiSite } from './brapi.germplasm.model';
 
 export interface GermplasmData<T> {
     data: T;

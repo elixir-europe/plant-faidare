@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDiscoverySource } from './models/data-discovery.model';
 import { BrapiResults } from './models/brapi.model';
 import { map } from 'rxjs/operators';
-import { GermplasmResult } from './model/gnpis.model';
+import { GermplasmResult } from './models/gnpis.germplasm.model';
 
 
 export const BASE_URL = 'gnpis/v1/datadiscovery';

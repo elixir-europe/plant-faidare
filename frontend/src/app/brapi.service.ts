@@ -12,8 +12,8 @@ import {
 } from './models/brapi.model';
 import {
     GermplasmResult
-} from './model/gnpis.model';
-import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from './model/brapi.model';
+} from './models/gnpis.germplasm.model';
+import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from './models/brapi.germplasm.model';
 
 export const BASE_URL = 'brapi/v1';
 

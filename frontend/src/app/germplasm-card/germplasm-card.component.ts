@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
 import { GermplasmResult
-} from '../model/gnpis.model';
-import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from '../model/brapi.model';
+} from '../models/gnpis.germplasm.model';
+import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from '../models/brapi.germplasm.model';
 
 @Component({
     selector: 'gpds-germplasm-card',
