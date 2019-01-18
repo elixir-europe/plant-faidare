@@ -2,285 +2,245 @@
   Study {{ study.result.studyType }}: {{ study.result.name }}
 </h3>
 
-<div class="row" *ngIf="study.result.name">
-  <div class="col">
-    Name
-  </div>
-  <div class="col">
-    {{ study.result.name }}
-  </div>
+<!-- Loading (see CSS for animation)-->
+<div *ngIf="loading" class="lds-spinner mx-auto">
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
 
-<div class="row" *ngIf="study.result.studyDbId && puiFilter(study.result.studyDbId)">
-  <div class="col">
-    Permanent Unique Identifier
-  </div>
-  <div class="col">
-    {{ study.result.studyDbId }}
-  </div>
-</div>
+<!-- Display the map -->
+<gpds-map *ngIf="checkLocation(site)" [sites]="site"></gpds-map>
 
-<div class="row" *ngIf="studySource">
-  <div class="col">
-    Data source
+<!-- Display the study's info -->
+<div class="card" *ngIf="study || study != {}">
+  <div class="card-header">
+    Identification
   </div>
-  <div class="col">
-    <a target="_blank" [href]="studySource['@id']"><img [src]="studySource['schema:image']" alt="Study source image"/></a>
-  </div>
-</div>
+  <div class="card-body">
+    <div class="row" *ngIf="study.result.name">
+      <div class="col field">
+        Name
+      </div>
+      <div class="col">
+        {{ study.result.name }}
+      </div>
+    </div>
 
-<div class="row" *ngIf="studySource">
-  <div class="col">
-    Source
-  </div>
-  <div class="col">
-    <a target="_blank" [href]="studySource['@id']">{{ studySource["schema:name"] }}</a>
-  </div>
-</div>
+    <div class="row"
+         *ngIf="study.result.studyDbId && puiFilter(study.result.studyDbId)">
+      <div class="col field">
+        Permanent Unique Identifier
+      </div>
+      <div class="col">
+        {{ study.result.studyDbId }}
+      </div>
+    </div>
 
-<div class="row" *ngIf="observationUnits != []">
-  <div class="col">
-    Project name
-  </div>
-  <div class="col">
-    {{ observationUnits[0].programName }}
-  </div>
-</div>
+    <div class="row" *ngIf="studySource">
+      <div class="col field">
+        Source
+      </div>
+      <div class="col">
+        <a target="_blank"
+           [href]="studySource['@id']">
+          <img [src]="studySource['schema:image']" alt="Study source image"/>
+        </a>
+      </div>
+    </div>
 
-<div class="row" *ngIf="study.result.studyDescription">
-  <div class="col">
-    Description
-  </div>
-  <div class="col">
-    {{ study.result.studyDescription }}
-  </div>
-</div>
+    <div class="row" *ngIf="studySource">
+      <div class="col field">
+        Data source
+      </div>
+      <div class="col">
+        <a target="_blank" [href]="studySource['@id']">
+          {{ studySource["schema:name"] }}
+        </a>
+      </div>
+    </div>
 
-<div class="row" *ngIf="study.result.active != null">
-  <div class="col">
-    Active
-  </div>
-  <div class="col" *ngIf="study.result.active">
-    Yes
-  </div>
-  <div class="col" *ngIf="!study.result.active">
-    No
-  </div>
-</div>
+    <div class="row" *ngIf="observationUnits != []">
+      <div class="col field">
+        Project name
+      </div>
+      <div class="col">
+        {{ observationUnits[0].programName }}
+      </div>
+    </div>
 
-<div class="row">
-  <div class="col-6">
-    Seasons
-  </div>
-  <div class="col">
-    <div>
-      {{ study.result.seasons }}
+    <div class="row" *ngIf="study.result.studyDescription">
+      <div class="col field">
+        Description
+      </div>
+      <div class="col">
+        {{ study.result.studyDescription }}
+      </div>
+    </div>
+
+    <div class="row" *ngIf="study.result.active != null">
+      <div class="col field">
+        Active
+      </div>
+      <div class="col" *ngIf="study.result.active">
+        Yes
+      </div>
+      <div class="col" *ngIf="!study.result.active">
+        No
+      </div>
+    </div>
+
+    <div class="row" *ngIf="study.result.seasons != []">
+      <div class="col-6 field">
+        Seasons
+      </div>
+      <div class="col">
+        <div>
+          {{ study.result.seasons }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="study.result.startDate">
+      <div class="col field">
+        Date
+      </div>
+      <div class="col" *ngIf="study.result.endDate">
+        From {{ study.result.startDate }} to {{ study.result.endDate }}
+      </div>
+      <div class="col" *ngIf="!study.result.endDate">
+        Started on {{ study.result.startDate }}
+      </div>
+    </div>
+
+    <div class="row" *ngIf="study.result.location">
+      <div class="col field">
+        Location name
+      </div>
+      <div class="col">
+        <a routerLink="/sites/{{ study.result.location.locationDbId }}">
+          {{ study.result.location.name }}
+        </a>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="row" *ngIf="study.result.startDate">
-  <div class="col">
-    Date
-  </div>
-  <div class="col" *ngIf="study.result.endDate">
-    From {{ study.result.startDate }} to {{ study.result.endDate }}
-  </div>
-  <div class="col" *ngIf="!study.result.endDate">
-    Started on {{ study.result.startDate }}
-  </div>
-</div>
-
-<div class="row">
-  <div class="col">
-    Location name
-  </div>
-  <div class="col">
-    <a routerLink="/sites/{{ study.result.location.locationDbId }}">{{ study.result.location.name }}</a>
-  </div>
-</div>
-
-<div class="row" *ngIf="checkEmptyArray(studyGermplasms)">
-  <div class="col-2">
+<div class="card" *ngIf="checkEmptyArray(studyGermplasms)">
+  <div class="card-header">
     Genotype
   </div>
-  <div class="col-10 contact-list">
-    <div class="row contact-header">
-      <div class="col">
-        Name
-      </div>
-      <div class="col">
-        Accession number
-      </div>
-      <div class="col">
-        Taxon
-      </div>
-    </div>
-    <div *ngFor="let germplasm of studyGermplasms">
-      <div class="row display-contacts-info">
-        <div class="col">
-          {{ germplasm.germplasmName }}
-        </div>
-        <div class="col">
-          {{ germplasm.accessionNumber}}
-        </div>
-        <div class="col">
-          {{ getTaxon( germplasm.genus, germplasm.species) }}
-        </div>
-      </div>
-    </div>
-
+  <div class="table-responsive scroll-table germplasm-table">
+    <table class="table table-sm table-striped">
+      <thead>
+      <th scope="col">Accession number</th>
+      <th scope="col">Name</th>
+      <th scope="col">Taxon</th>
+      </thead>
+      <tbody>
+      <tr *ngFor="let germplasm of studyGermplasms">
+        <td><a routerLink="/germplasm/{{ germplasm.germplasmDbId }}">{{ germplasm.accessionNumber }}</a></td>
+        <td>{{ germplasm.germplasmName }}</td>
+        <td>{{ getTaxon(germplasm.genus, germplasm.species, germplasm.subtaxa) }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
-<div class="row" *ngIf="checkEmptyArray(studyObservationVariables)">
-  <div class="col-2">
+<div class="card" *ngIf="checkEmptyArray(studyObservationVariables)">
+  <div class="card-header">
     Variables
   </div>
-  <div class="col-10 contact-list">
-    <div class="row contact-header">
-
-      <div class="col">
-        Variable name
-      </div>
-      <div class="col">
-        Synonyms
-      </div>
-      <div class="col">
-        Ontology name
-      </div>
-      <div class="col">
-        Comments
-      </div>
-    </div>
-    <div *ngFor="let variable of studyObservationVariables">
-      <div class="row display-contacts-info">
-
-        <div class="col">
-          <a [href]=getVariableLink(variable)> {{ variable.name }} </a>
-        </div>
-        <div class="col">
-          {{ variable.synonyms[0]}}
-        </div>
-        <div class="col">
-          {{ variable.ontologyName }}
-        </div>
-        <div class="col">
-          {{ variable.trait.description }}
-        </div>
-      </div>
-    </div>
+  <div class="table-responsive scroll-table variables-table">
+    <table class="table table-sm table-striped">
+      <thead>
+      <th scope="col">Variable id</th>
+      <th scope="col">Variable short name</th>
+      <th scope="col">Variable long name</th>
+      <th scope="col">Ontology name</th>
+      <th scope="col">Trait description</th>
+      </thead>
+      <tbody>
+      <tr *ngFor="let variable of studyObservationVariables">
+        <td><a [href]=getVariableLink(variable)> {{ variable.observationVariableDbId }}</a></td>
+        <td>{{ variable.name }}</td>
+        <td>{{ variable.synonyms[0] }}</td>
+        <td>{{ variable.ontologyName }}</td>
+        <td>{{ variable.trait.description }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
-<div class="row" *ngIf="checkEmptyArray(study.result.contacts)">
-  <div class="col-2">
+<div class="card" *ngIf="checkEmptyArray(studyDataset)">
+  <div class="card-header">
+    Data Set
+  </div>
+  <div class="table-responsive scroll-table table-sm dataset-table">
+    <table class="table table-sm table-striped">
+      <thead>
+      <th scope="col">Name</th>
+      <th scope="col">Type</th>
+      <th scope="col">Studies (permanent Unique Identifier)</th>
+      </thead>
+      <tbody>
+      <tr *ngFor="let trial of studyDataset">
+        <td>{{ trial.result.trialName }}</td>
+        <td>{{ trial.result.trialType }}</td>
+        <td>{{ getTrialStudies(trial.result.studies) }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card" *ngIf="checkEmptyArray(study.result.contacts)">
+  <div class="card-header">
     Contact
   </div>
-  <div class="col-10 contact-list">
-    <div class="row contact-header">
-      <div class="col">
-        Role
-      </div>
-      <div class="col">
-        Name
-      </div>
-      <div class="col">
-        Email
-      </div>
-      <div class="col">
-        Institution
-      </div>
-    </div>
-    <div *ngFor="let contact of study.result.contacts">
-      <div class="row display-contacts-info">
-        <div class="col">
-          {{ contact.type }}
-        </div>
-        <div class="col">
-          {{ contact.name }}
-        </div>
-        <div class="col">
-          {{ contact.email }}
-        </div>
-        <div class="col">
-          {{ contact.institutionName }}
-        </div>
-      </div>
-    </div>
-
+  <div class="table-responsive scroll-table contact-table">
+    <table class="table table-sm table-striped">
+      <thead>
+      <th scope="col">Role</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Institution</th>
+      </thead>
+      <tbody>
+      <tr *ngFor="let contact of study.result.contacts">
+        <td>{{ contact.type }}</td>
+        <td>{{ contact.name }}</td>
+        <td>{{ contact.email }}</td>
+        <td>{{ contact.institutionName }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-<!--
-<div class="row">
-  <table class="table table-sm">
-    <tr>
-      <td><b>Data source</b></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><b>Name</b></td>
-      <td>{{ study.result.name }}</td>
-    </tr>
-    <tr>
-      <td><b>Program name</b></td>
-      <td>{{ study.result.programName }}</td>
-    </tr>
-    <tr>
-      <td><b>Description</b></td>
-      <td>{{ study.result.studyDescription }}</td>
-    </tr>
-    <tr>
-      <td><b>Permanent Unique Identifier</b></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><b>Active</b></td>
-      <td>{{ study.result.active }}</td>
-    </tr>
-    <tr>
-      <td><b>Seasons</b></td>
-      <td *ngFor="let season of study.result.seasons">
-        <div>{{ season }}</div>
-      </td>
-    </tr>
-    <tr *ngIf="study.result.startDate != null">
-      <td><b>Date</b></td>
-      <td *ngIf="study.result.endDate != null; else withoutEnd">From {{ study.result.startDate }}
-        to {{ study.result.endDate }}</td>
-      <ng-template>
-        <td>{{ study.result.startDate }}</td>
-      </ng-template>
-    </tr>
-    <tr>
-      <td><b>Location name</b></td>
-      <td>{{ study.result.locationName }}</td>
-    </tr>
-    <tr>
-      <td><b>Source</b></td>
-      <td>{{ study.result.dataLinks.name }} {{ study.result.dataLinks.documentationURL }}</td>
-    </tr>
-    &lt;!&ndash; <ng-container *ngFor="let info of objectKeys(study.result.additionalInfo)">
-       <tr>
-         <td><b>{{ info }}</b></td><td>{{ study.result.additionalInfo[info] }}</td>
-       </tr>
-     </ng-container>&ndash;&gt;
-    &lt;!&ndash;<tr>
-      <td>Additional information</td>
-      <td>{{ study.result.additionalInfo }}</td>
-    </tr>&ndash;&gt;
-  </table>
+<div class="card" *ngIf="checkEmptyArray(additionalInfoKeys)">
+  <div class="card-header">
+    Additional info
+  </div>
+  <div class="table-responsive scroll-table additional-info-table">
+    <table class="table table-sm table-striped">
+      <tbody>
+      <tr *ngFor="let key of additionalInfoKeys">
+        <td>{{ key }}</td>
+        <td>{{ study.result.additionalInfo[key] }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
--->

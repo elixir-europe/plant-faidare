@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { delay } from 'rxjs/operators';
 import { SiteModel, SiteResultModel } from './models/site.model';
-import { BrapiGermplasmeData, BrapiObservationUnitsData, BrapiObservationVariablesData, BrapiResults } from './model/brapi.model';
+import { BrapiGermplasmeData, BrapiObservationUnitsData, BrapiObservationVariablesData, BrapiResults, BrapiTrialsResult } from './model/brapi.model';
 
 
 @Injectable({
@@ -44,6 +44,10 @@ export class BrapiService {
 
     location(locationId: number): Observable<SiteModel> {
         return this.http.get<SiteModel>(`brapi/v1/locations/${locationId}`);
+    }
+
+    studyTrials(trialsId: string): Observable<BrapiTrialsResult> {
+        return this.http.get<BrapiTrialsResult>(`brapi/v1/trials/${trialsId}`);
     }
 
 }

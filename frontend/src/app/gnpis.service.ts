@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, zip } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDiscoverySource } from './model/data-discovery.model';
-import { BrapiResults } from './model/brapi.model';
+import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDiscoverySource } from './models/data-discovery.model';
+import { BrapiResults } from './models/brapi.model';
 import { map } from 'rxjs/operators';
 
 @Injectable({
