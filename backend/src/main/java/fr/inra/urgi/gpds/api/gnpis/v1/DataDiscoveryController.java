@@ -12,8 +12,6 @@ import fr.inra.urgi.gpds.repository.file.DataSourceRepository;
 import fr.inra.urgi.gpds.utils.StringFunctions;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,15 +21,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Api(tags = {"GnpIS API", "Data discovery"})
 @RestController
 @RequestMapping(value= "/gnpis/v1/datadiscovery")
 public class DataDiscoveryController {
-
-	private final static Logger LOGGER = LoggerFactory.getLogger(DataDiscoveryController.class);
 
 	private final DataDiscoveryRepository dataDiscoveryRepository;
 	private final DataSourceRepository dataSourceRepository;
@@ -43,7 +37,7 @@ public class DataDiscoveryController {
     }
 
     @ApiOperation("Suggest data discovery document field values")
-	@RequestMapping(value = "/suggest", method = POST, produces = APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/suggest", produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Collection<String> suggest(
 			@RequestParam String field,
@@ -55,7 +49,7 @@ public class DataDiscoveryController {
 	}
 
 	@ApiOperation("Search for data discovery documents")
-	@RequestMapping(value = "/search", method = POST, produces = APPLICATION_JSON_VALUE, consumes= APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/search", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	@JsonView(JSONView.GnpISAPI.class)
 	public DataDiscoveryResponse search(
@@ -65,7 +59,7 @@ public class DataDiscoveryController {
 	}
 
 	@ApiOperation("Get list of data sources")
-	@RequestMapping(value = "/sources", method = GET, produces = APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/sources", produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	@JsonView(JSONView.GnpISAPI.class)
 	public BrapiListResponse<? extends DataSource> sources() {

@@ -46,7 +46,7 @@ gpds:
       token:
 
 server:
-  port: 8081
+  port: 8080
   servlet:
     context-path: /gnpis-core
 
