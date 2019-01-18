@@ -1,7 +1,7 @@
-package fr.inra.urgi.gpds;
+package fr.inra.urgi.gpds.filter;
 
 import fr.inra.urgi.gpds.api.gnpis.v1.DataDiscoveryController;
-import fr.inra.urgi.gpds.filter.IndexFilter;
+import fr.inra.urgi.gpds.config.SecurityConfig;
 import fr.inra.urgi.gpds.repository.es.DataDiscoveryRepository;
 import fr.inra.urgi.gpds.repository.file.DataSourceRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = DataDiscoveryController.class)
-//@Import(SecurityConfig.class)
+@Import(SecurityConfig.class)
 class IndexFilterTest {
 
     @MockBean
