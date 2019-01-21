@@ -8,7 +8,7 @@
     Site: {{ site.result.name }}
   </h1>
 </div>
-<gpds-map [sites]="sites" *ngIf="site"></gpds-map>
+<gpds-map [sites]="sites" *ngIf="site && site.result.latitude && site.result.longitude"></gpds-map>
 <div *ngIf="site">
   <br/>
   <h4>Details:</h4>
