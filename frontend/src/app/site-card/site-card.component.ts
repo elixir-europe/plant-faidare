@@ -14,6 +14,8 @@ export class SiteCardComponent implements OnInit {
 
     sites: Array<SiteModel> = new Array<SiteModel>();
 
+    additionalInfoKeys: string[] = [];
+
     loadingError = false;
 
     constructor(private brapiService: BrapiService, private route: ActivatedRoute) {
@@ -23,16 +25,13 @@ export class SiteCardComponent implements OnInit {
         // initialize site from location index
         const locationId = +this.route.snapshot.paramMap.get('id');
         this.brapiService.location(locationId).subscribe(
-          site => { this.site = site; this.sites.push(site); /* this.sites.push(this.getRandomSite(site)); */ },
+          site => {
+              this.site = site; this.sites.push(site);
+              if (site.result.additionalInfo) {
+                  this.additionalInfoKeys = Object.keys(site.result.additionalInfo);
+              }
+          },
           () => { console.log('Unable to load site...'); this.loadingError = true; }
         );
     }
-
-    getRandomSite(site: SiteModel): SiteModel {
-        const newSite = site;
-        newSite.result.latitude = site.result.latitude - 1;
-        newSite.result.longitude = site.result.longitude - 1;
-        return newSite;
-    }
-
 }

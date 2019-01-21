@@ -1,5 +1,7 @@
 <div id="error" class="alert alert-danger" *ngIf="loadingError">
   Error: this site cannot be loaded.
+  <br/>
+  Please contact urgi-support@inra.fr.
 </div>
 <div *ngIf="site">
   <h1>
@@ -59,47 +61,13 @@
     <br/>
     <div class="container-fluid">
       <div class="row">
-        <table class="table float-right w-75 p-2 table-sm">
-          <tr *ngIf="site.result.additionalInfo['Site status']">
-            <td><b>Site status</b></td>
-            <td>{{ site.result.additionalInfo['Site status'] }}</td>
+        <table class="table table-sm table-striped">
+          <tbody>
+          <tr *ngFor="let key of additionalInfoKeys">
+            <td><b>{{ key }}</b></td>
+            <td>{{ site.result.additionalInfo[key] }}</td>
           </tr>
-          <tr *ngIf="site.result.additionalInfo.Exposure">
-            <td><b>Exposure</b></td>
-            <td>{{ site.result.additionalInfo.Exposure }}</td>
-          </tr>
-          <tr *ngIf="site.result.additionalInfo['Distance to city']">
-            <td><b>Distance to city</b></td>
-            <td>{{ site.result.additionalInfo['Distance to city'] }}</td>
-          </tr>
-          <tr *ngIf="site.result.additionalInfo['Direction from city']">
-            <td><b>Direction from city</b></td>
-            <td>{{ site.result.additionalInfo['Direction from city'] }}</td>
-          </tr>
-          <tr *ngIf="site.result.additionalInfo['Environment type']">
-            <td><b>Environment type</b></td>
-            <td>{{ site.result.additionalInfo['Environment type'] }}</td>
-          </tr>
-          <tr *ngIf="site.result.additionalInfo.Topography">
-            <td><b>Topography</b></td>
-            <td>{{ site.result.additionalInfo.Topography }}</td>
-          </tr>
-          <tr *ngIf="site.result.additionalInfo['Geographical location']">
-            <td><b>Geographical location</b></td>
-            <td>{{ site.result.additionalInfo['Geographical location'] }}</td>
-          </tr>
-          <tr *ngIf="site.result.additionalInfo.Slope">
-            <td><b>Slope</b></td>
-            <td>{{ site.result.additionalInfo.Slope }}</td>
-          </tr>
-          <tr *ngIf="site.result.additionalInfo['Coordinates precision']">
-            <td><b>Coordinates precision</b></td>
-            <td>{{ site.result.additionalInfo['Coordinates precision'] }}</td>
-          </tr>
-          <tr *ngIf="site.result.additionalInfo.Comment">
-            <td><b>Comment</b></td>
-            <td>{{ site.result.additionalInfo.Comment }}</td>
-          </tr>
+          </tbody>
         </table>
       </div>
     </div>
