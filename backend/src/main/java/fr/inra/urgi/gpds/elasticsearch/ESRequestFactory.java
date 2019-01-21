@@ -110,7 +110,7 @@ public class ESRequestFactory {
 			sourceIds = new ArrayList<>();
 			sourceIds.add("*");
 		}
-		List<Integer> groupIds = userGroupsResourceClient.fetchUserGroups();
+		List<Integer> groupIds = userGroupsResourceClient.getUserGroups();
 		List<String> aliases = new ArrayList<>();
 		for (Integer groupId : groupIds) {
 			for (String sourceId : sourceIds) {

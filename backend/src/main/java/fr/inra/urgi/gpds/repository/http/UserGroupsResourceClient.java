@@ -3,12 +3,12 @@ package fr.inra.urgi.gpds.repository.http;
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Lists;
 import fr.inra.urgi.gpds.config.GPDSProperties;
 import fr.inra.urgi.gpds.filter.AuthenticationStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,16 +21,11 @@ import java.util.concurrent.TimeUnit;
  * User group client used to list the group ids for a user
  *
  * @author gcornut
- *
- *
  */
 @Component
 public class UserGroupsResourceClient {
 
     private static final Logger logger = LoggerFactory.getLogger(UserGroupsResourceClient.class);
-
-    private final GPDSProperties properties;
-    private final RestTemplate client;
 
     /**
      * 1 hour cache of user group ids
@@ -39,6 +34,12 @@ public class UserGroupsResourceClient {
         CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS).build();
 
+    private static final List<Integer> PUBLIC_GROUPS = Collections.singletonList(0);
+
+    private final GPDSProperties properties;
+    private final RestTemplate client;
+
+    @Autowired
     public UserGroupsResourceClient(
         GPDSProperties properties,
         RestTemplate client
@@ -47,38 +48,48 @@ public class UserGroupsResourceClient {
         this.properties = properties;
     }
 
-    public List<Integer> fetchUserGroups() {
-        List<Integer> groups = Lists.newArrayList(0);
-
-        AuthenticationStore.User user = AuthenticationStore.get();
-        if (user != null) {
-            String userName = user.getName();
-
-            String token = properties.getSecurityUserGroupWsToken();
-            String baseUrl = properties.getSecurityUserGroupWsUrl();
-
-            groups = CACHE_GROUPS_FOR_USER.getIfPresent(user);
-            if (groups == null && !Strings.isNullOrEmpty(baseUrl)) {
-                String url = baseUrl + "?token=" + token + "&userName=" + userName;
-                logger.trace("Using web services URL: " + baseUrl);
-
-                HttpHeaders headers = new HttpHeaders();
-                headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                headers.set("Authorization", "Basic " + user.getAuthCode());
-
-                HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-
-                ResponseEntity<Integer[]> response = this.client.exchange(url, HttpMethod.GET, entity, Integer[].class);
-
-                Integer[] groupsArray = response.getBody();
-
-                if (groupsArray != null) {
-                    groups = Arrays.asList(groupsArray);
-                    CACHE_GROUPS_FOR_USER.put(userName, groups);
-                }
-            }
+    public List<Integer> getUserGroups() {
+        String userName = AuthenticationStore.get();
+        if (userName == null) {
+            return PUBLIC_GROUPS;
         }
-        return groups;
+
+        // From cache
+        List<Integer> groups = CACHE_GROUPS_FOR_USER.getIfPresent(userName);
+        if (groups != null) {
+            return groups;
+        }
+
+        // From user group WS
+        groups = fetchUserGroups(userName);
+        if (groups != null) {
+            // Add to cache
+            CACHE_GROUPS_FOR_USER.put(userName, groups);
+            return groups;
+        }
+
+        // Default to public groups
+        return PUBLIC_GROUPS;
+    }
+
+    private List<Integer> fetchUserGroups(String userName) {
+        String token = properties.getSecurityUserGroupWsToken();
+        String baseUrl = properties.getSecurityUserGroupWsUrl();
+        if (Strings.isNullOrEmpty(baseUrl) || Strings.isNullOrEmpty(token)) {
+            logger.warn("No configured security group WS in application properties. Only public data will be shown.");
+            return PUBLIC_GROUPS;
+        }
+
+        String url = baseUrl + "?token=" + token + "&userName=" + userName;
+        logger.info("Fetching user groups from: " + baseUrl);
+
+        ResponseEntity<Integer[]> response = this.client.getForEntity(url, Integer[].class);
+
+        Integer[] groupsArray = response.getBody();
+        if (groupsArray != null) {
+            return  Arrays.asList(groupsArray);
+        }
+        return null;
     }
 
 }

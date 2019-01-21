@@ -39,7 +39,7 @@ public class ESRequestFactoryTest {
 
 		when(properties.getIndexName("*", documentType, 0)).thenReturn(index0);
 
-		when(userGroupsResourceClient.fetchUserGroups()).thenReturn(groups);
+		when(userGroupsResourceClient.getUserGroups()).thenReturn(groups);
 
 		String[] aliases = requestFactory.getAliases(documentType);
 		assertThat(aliases).containsExactly(index0);
@@ -72,7 +72,7 @@ public class ESRequestFactoryTest {
 		when(properties.getIndexName("c", documentType, 1)).thenReturn(indices[7]);
 		when(properties.getIndexName("c", documentType, 2)).thenReturn(indices[8]);
 
-		when(userGroupsResourceClient.fetchUserGroups()).thenReturn(groups);
+		when(userGroupsResourceClient.getUserGroups()).thenReturn(groups);
 
 		String[] aliases = requestFactory.getAliases(documentType, sources);
 		assertThat(aliases).containsOnlyElementsOf(new ArrayIterator<>(indices));

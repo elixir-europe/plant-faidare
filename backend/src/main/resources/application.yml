@@ -40,10 +40,8 @@ gpds:
   cropOntology-repository-url:
     https://urgi.versailles.inra.fr/files/ephesis/trait-ontology/data_16.3/ontology-repository.json
 
-  security:
-    user-group-ws:
-      url:
-      token:
+  security-user-group-ws-url:
+  security-user-group-ws-token:
 
 server:
   port: 8080

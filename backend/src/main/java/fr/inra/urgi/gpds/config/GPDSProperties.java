@@ -19,7 +19,6 @@ public class GPDSProperties {
     private String cropOntologyRepositoryUrl;
 
     private String securityUserGroupWsUrl;
-
     private String securityUserGroupWsToken;
 
     public String getElasticsearchAliasTemplate() {

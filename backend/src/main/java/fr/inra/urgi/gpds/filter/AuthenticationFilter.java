@@ -16,57 +16,55 @@ import java.io.IOException;
  * Intercept HTTP request to store the HTTP Basic Authorization for later re-use
  *
  * @author gcornut
- *
- *
  */
 @Component
 @WebFilter("/*")
 public class AuthenticationFilter implements Filter {
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
 
-	/**
+    /**
      * Logs the initialization process of the filter.
      */
-	@Override
+    @Override
     public void init(FilterConfig filterConfig) {
-		if (logger.isInfoEnabled()) {
+        if (logger.isInfoEnabled()) {
             logger.info("Initializing filter '" + filterConfig.getFilterName() + "'");
         }
-	}
+    }
 
-	/**
+    /**
      * Intercept HTTP Basic Authorization
      */
-	@Override
+    @Override
     public void doFilter(
         ServletRequest req, ServletResponse resp, FilterChain chain
     ) throws IOException, ServletException {
-		// get web login
-		String webUserLogin = ((HttpServletRequest) req).getRemoteUser();
-		if (logger.isDebugEnabled()){
-            logger.debug(
-                "\n*********************************************\n" +
+        // get web login
+        String webUserLogin = ((HttpServletRequest) req).getRemoteUser();
+        logger.debug(
+            "\n" +
+                "*********************************************\n" +
                 " Applying user credentials for " + webUserLogin + "\n" +
                 "*********************************************"
-            );
+        );
+
+        final String authorization = ((HttpServletRequest) req).getHeader("Authorization");
+
+        if (authorization != null && authorization.startsWith("Basic")) {
+            // Parse to extract the user name
+            String base64Credentials = authorization.substring("Basic".length()).trim();
+            String authCode = new String(BaseEncoding.base64().decode(base64Credentials), Charsets.UTF_8);
+            final String userName = authCode.split(":", 2)[0];
+
+            AuthenticationStore.set(userName);
         }
 
-		final String authorization = ((HttpServletRequest) req).getHeader("Authorization");
+        chain.doFilter(req, resp);
+    }
 
-		if (authorization != null && authorization.startsWith("Basic")) {
-		    // Parse to extract the user name
-			String base64Credentials = authorization.substring("Basic".length()).trim();
-			String authCode = new String(BaseEncoding.base64().decode(base64Credentials), Charsets.UTF_8);
-			final String userName = authCode.split(":", 2)[0];
-
-			AuthenticationStore.setUser(userName, authCode);
-		}
-
-		chain.doFilter(req, resp);
-	}
-
-	@Override
-    public void destroy() {}
+    @Override
+    public void destroy() {
+    }
 
 }
