@@ -9,13 +9,11 @@ import fr.inra.urgi.gpds.elasticsearch.repository.ESFindRepository;
  * Breeding API observation unit
  *
  * @author gcornut
- *
- *
  */
 public interface ObservationUnitRepository
-		extends ESFindRepository<ObservationUnitCriteria, ObservationUnitVO> {
+    extends ESFindRepository<ObservationUnitCriteria, ObservationUnitVO> {
 
-	@Override
-	PaginatedList<ObservationUnitVO> find(ObservationUnitCriteria criteria);
+    @Override
+    PaginatedList<ObservationUnitVO> find(ObservationUnitCriteria criteria);
 
 }

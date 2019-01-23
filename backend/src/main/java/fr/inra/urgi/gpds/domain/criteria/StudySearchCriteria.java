@@ -12,47 +12,45 @@ import java.util.Set;
 
 /**
  * @author gcornut
- *
- *
  */
 @CriteriaForDocument(StudySummaryVO.class)
 public class StudySearchCriteria extends StudySummaryCriteria
-		implements SortCriteria, BrapiPaginationCriteria, BrapiSortCriteria, BrapiStudySearchCriteria {
+    implements SortCriteria, BrapiPaginationCriteria, BrapiSortCriteria, BrapiStudySearchCriteria {
 
-	@DocumentPath("name")
-	private Set<String> studyNames;
+    @DocumentPath("name")
+    private Set<String> studyNames;
 
-	@DocumentPath("programName")
-	private Set<String> programNames;
+    @DocumentPath("programName")
+    private Set<String> programNames;
 
-	@DocumentPath("locationName")
-	private Set<String> studyLocations;
+    @DocumentPath("locationName")
+    private Set<String> studyLocations;
 
-	@Override
-	public Set<String> getStudyLocations() {
-		return studyLocations;
-	}
+    @Override
+    public Set<String> getStudyLocations() {
+        return studyLocations;
+    }
 
-	public void setStudyLocations(Set<String> studyLocations) {
-		this.studyLocations = studyLocations;
-	}
+    public void setStudyLocations(Set<String> studyLocations) {
+        this.studyLocations = studyLocations;
+    }
 
-	@Override
-	public Set<String> getProgramNames() {
-		return programNames;
-	}
+    @Override
+    public Set<String> getProgramNames() {
+        return programNames;
+    }
 
-	public void setProgramNames(Set<String> programNames) {
-		this.programNames = programNames;
-	}
+    public void setProgramNames(Set<String> programNames) {
+        this.programNames = programNames;
+    }
 
-	@Override
-	public Set<String> getStudyNames() {
-		return studyNames;
-	}
+    @Override
+    public Set<String> getStudyNames() {
+        return studyNames;
+    }
 
-	public void setStudyNames(Set<String> studyNames) {
-		this.studyNames = studyNames;
-	}
+    public void setStudyNames(Set<String> studyNames) {
+        this.studyNames = studyNames;
+    }
 
 }

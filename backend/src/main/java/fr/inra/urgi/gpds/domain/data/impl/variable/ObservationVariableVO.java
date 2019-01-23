@@ -10,186 +10,204 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public class ObservationVariableVO implements BrapiObservationVariable {
 
-	private String observationVariableDbId;
-	private String name;
-	private String ontologyDbId;
-	private String ontologyName;
-	private List<String> synonyms;
-	private List<String> contextOfUse;
-	private String growthStage;
-	private String status;
-	private String xref;
-	private String institution;
-	private String scientist;
-	private String date;
-	private String language;
-	private String crop;
+    private String observationVariableDbId;
+    private String name;
+    private String ontologyDbId;
+    private String ontologyName;
+    private List<String> synonyms;
+    private List<String> contextOfUse;
+    private String growthStage;
+    private String status;
+    private String xref;
+    private String institution;
+    private String scientist;
+    private String date;
+    private String language;
+    private String crop;
+    private String defaultValue;
 
-	@JsonDeserialize(as = TraitVO.class)
-	private BrapiTrait trait;
+    @JsonDeserialize(as = TraitVO.class)
+    private BrapiTrait trait;
 
-	@JsonDeserialize(as = MethodVO.class)
-	private BrapiMethod method;
+    @JsonDeserialize(as = MethodVO.class)
+    private BrapiMethod method;
 
-	@JsonDeserialize(as = ScaleVO.class)
-	private BrapiScale scale;
+    @JsonDeserialize(as = ScaleVO.class)
+    private BrapiScale scale;
 
-	@Override
-	public String getObservationVariableDbId() {
-		return observationVariableDbId;
-	}
+    private String documentationURL;
 
-	public void setObservationVariableDbId(String observationVariableDbId) {
-		this.observationVariableDbId = observationVariableDbId;
-	}
+    @Override
+    public String getDocumentationURL() {
+        return documentationURL;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    public void setDocumentationURL(String documentationURL) {
+        this.documentationURL = documentationURL;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public String getObservationVariableDbId() {
+        return observationVariableDbId;
+    }
 
-	@Override
-	public String getOntologyDbId() {
-		return ontologyDbId;
-	}
+    public void setObservationVariableDbId(String observationVariableDbId) {
+        this.observationVariableDbId = observationVariableDbId;
+    }
 
-	public void setOntologyDbId(String ontologyDbId) {
-		this.ontologyDbId = ontologyDbId;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String getOntologyName() {
-		return ontologyName;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setOntologyName(String ontologyName) {
-		this.ontologyName = ontologyName;
-	}
+    @Override
+    public String getOntologyDbId() {
+        return ontologyDbId;
+    }
 
-	@Override
-	public List<String> getSynonyms() {
-		return synonyms;
-	}
+    public void setOntologyDbId(String ontologyDbId) {
+        this.ontologyDbId = ontologyDbId;
+    }
 
-	public void setSynonyms(List<String> synonyms) {
-		this.synonyms = synonyms;
-	}
+    @Override
+    public String getOntologyName() {
+        return ontologyName;
+    }
 
-	@Override
-	public List<String> getContextOfUse() {
-		return contextOfUse;
-	}
+    public void setOntologyName(String ontologyName) {
+        this.ontologyName = ontologyName;
+    }
 
-	public void setContextOfUse(List<String> contextOfUse) {
-		this.contextOfUse = contextOfUse;
-	}
+    @Override
+    public List<String> getSynonyms() {
+        return synonyms;
+    }
 
-	@Override
-	public String getGrowthStage() {
-		return growthStage;
-	}
+    public void setSynonyms(List<String> synonyms) {
+        this.synonyms = synonyms;
+    }
 
-	public void setGrowthStage(String growthStage) {
-		this.growthStage = growthStage;
-	}
+    @Override
+    public List<String> getContextOfUse() {
+        return contextOfUse;
+    }
 
-	@Override
-	public String getStatus() {
-		return status;
-	}
+    public void setContextOfUse(List<String> contextOfUse) {
+        this.contextOfUse = contextOfUse;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    @Override
+    public String getGrowthStage() {
+        return growthStage;
+    }
 
-	@Override
-	public String getXref() {
-		return xref;
-	}
+    public void setGrowthStage(String growthStage) {
+        this.growthStage = growthStage;
+    }
 
-	public void setXref(String xref) {
-		this.xref = xref;
-	}
+    @Override
+    public String getStatus() {
+        return status;
+    }
 
-	@Override
-	public String getInstitution() {
-		return institution;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setInstitution(String institution) {
-		this.institution = institution;
-	}
+    @Override
+    public String getXref() {
+        return xref;
+    }
 
-	@Override
-	public String getScientist() {
-		return scientist;
-	}
+    public void setXref(String xref) {
+        this.xref = xref;
+    }
 
-	public void setScientist(String scientist) {
-		this.scientist = scientist;
-	}
+    @Override
+    public String getInstitution() {
+        return institution;
+    }
 
-	@Override
-	public String getDate() {
-		return date;
-	}
+    public void setInstitution(String institution) {
+        this.institution = institution;
+    }
 
-	public void setDate(String date) {
-		this.date = date;
-	}
+    @Override
+    public String getScientist() {
+        return scientist;
+    }
 
-	@Override
-	public String getLanguage() {
-		return language;
-	}
+    public void setScientist(String scientist) {
+        this.scientist = scientist;
+    }
 
-	public void setLanguage(String language) {
-		this.language = language;
-	}
+    @Override
+    public String getDate() {
+        return date;
+    }
 
-	@Override
-	public String getCrop() {
-		return crop;
-	}
+    public void setDate(String date) {
+        this.date = date;
+    }
 
-	public void setCrop(String crop) {
-		this.crop = crop;
-	}
+    @Override
+    public String getLanguage() {
+        return language;
+    }
 
-	@Override
-	public BrapiTrait getTrait() {
-		return trait;
-	}
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
-	public void setTrait(BrapiTrait trait) {
-		this.trait = trait;
-	}
+    @Override
+    public String getCrop() {
+        return crop;
+    }
 
-	@Override
-	public BrapiMethod getMethod() {
-		return method;
-	}
+    public void setCrop(String crop) {
+        this.crop = crop;
+    }
 
-	public void setMethod(BrapiMethod method) {
-		this.method = method;
-	}
+    @Override
+    public BrapiTrait getTrait() {
+        return trait;
+    }
 
-	@Override
-	public BrapiScale getScale() {
-		return scale;
-	}
+    public void setTrait(BrapiTrait trait) {
+        this.trait = trait;
+    }
 
-	public void setScale(BrapiScale scale) {
-		this.scale = scale;
-	}
+    @Override
+    public BrapiMethod getMethod() {
+        return method;
+    }
 
+    public void setMethod(BrapiMethod method) {
+        this.method = method;
+    }
+
+    @Override
+    public BrapiScale getScale() {
+        return scale;
+    }
+
+    public void setScale(BrapiScale scale) {
+        this.scale = scale;
+    }
+
+    @Override
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
 }

@@ -5,19 +5,17 @@ import fr.inra.urgi.gpds.domain.JSONView;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiPagination {
-	@JsonView(JSONView.BrapiFields.class)
-	long getPageSize();
+    @JsonView(JSONView.BrapiFields.class)
+    long getPageSize();
 
-	@JsonView(JSONView.BrapiFields.class)
-	long getCurrentPage();
+    @JsonView(JSONView.BrapiFields.class)
+    long getCurrentPage();
 
-	@JsonView(JSONView.BrapiFields.class)
-	long getTotalCount();
+    @JsonView(JSONView.BrapiFields.class)
+    long getTotalCount();
 
-	@JsonView(JSONView.BrapiFields.class)
-	long getTotalPages();
+    @JsonView(JSONView.BrapiFields.class)
+    long getTotalPages();
 }

@@ -9,48 +9,47 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
-* Model taken from the breeding API Germplasm MCPD call
-*
-*@author mbuy
-*
-*/
+ * Model taken from the breeding API Germplasm MCPD call
+ *
+ * @author mbuy
+ */
 
 @Document(type = "germplasmProgeny")
 public class ProgenyVO implements Serializable, BrapiProgeny {
 
-	private static final long serialVersionUID = -8748938185286594606L;
-	private String germplasmDbId;
-	private String defaultDisplayName;
+    private static final long serialVersionUID = -8748938185286594606L;
+    private String germplasmDbId;
+    private String defaultDisplayName;
 
-	@JsonDeserialize(contentAs = ParentProgenyVO.class)
-	private List<BrapiParentProgeny> progeny;
+    @JsonDeserialize(contentAs = ParentProgenyVO.class)
+    private List<BrapiParentProgeny> progeny;
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
 
-	public String getGermplasmDbId() {
-		return germplasmDbId;
-	}
+    public String getGermplasmDbId() {
+        return germplasmDbId;
+    }
 
-	public void setGermplasmDbId(String germplasmDbId) {
-		this.germplasmDbId = germplasmDbId;
-	}
+    public void setGermplasmDbId(String germplasmDbId) {
+        this.germplasmDbId = germplasmDbId;
+    }
 
-	public String getDefaultDisplayName() {
-		return defaultDisplayName;
-	}
+    public String getDefaultDisplayName() {
+        return defaultDisplayName;
+    }
 
-	public void setDefaultDisplayName(String defaultDisplayName) {
-		this.defaultDisplayName = defaultDisplayName;
-	}
+    public void setDefaultDisplayName(String defaultDisplayName) {
+        this.defaultDisplayName = defaultDisplayName;
+    }
 
-	public void setProgeny(List<BrapiParentProgeny> progeny) {
-		this.progeny = progeny;
-	}
+    public void setProgeny(List<BrapiParentProgeny> progeny) {
+        this.progeny = progeny;
+    }
 
-	@Override
-	public List<BrapiParentProgeny> getProgeny() {
-		return progeny;
-	}
+    @Override
+    public List<BrapiParentProgeny> getProgeny() {
+        return progeny;
+    }
 }

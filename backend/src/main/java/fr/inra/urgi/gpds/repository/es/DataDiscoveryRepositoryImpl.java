@@ -42,161 +42,158 @@ import static org.elasticsearch.search.aggregations.AggregationBuilders.filter;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 
 /**
- *
  * @author gcornut
- *
- *
  */
 @Repository
 public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(DataDiscoveryController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(DataDiscoveryController.class);
 
-	private final DocumentMetadata<DataDiscoveryDocument> documentMetadata;
-	private final CriteriaMapping criteriaMapping;
+    private final DocumentMetadata<DataDiscoveryDocument> documentMetadata;
+    private final CriteriaMapping criteriaMapping;
 
     private final RestHighLevelClient client;
-	private final ESRequestFactory requestFactory;
-	private final ESSuggestRepository<DataDiscoveryCriteria> suggestRepository;
-	private final ESGenericQueryFactory<DataDiscoveryCriteria> queryFactory;
+    private final ESRequestFactory requestFactory;
+    private final ESSuggestRepository<DataDiscoveryCriteria> suggestRepository;
+    private final ESGenericQueryFactory<DataDiscoveryCriteria> queryFactory;
     private final ESResponseParser parser;
 
     @Autowired
-	public DataDiscoveryRepositoryImpl(
-	    RestHighLevelClient client,
+    public DataDiscoveryRepositoryImpl(
+        RestHighLevelClient client,
         ESRequestFactory requestFactory,
         ESResponseParser parser
     ) {
         this.client = client;
         this.parser = parser;
         Class<DataDiscoveryDocument> documentClass = DataDiscoveryDocument.class;
-		Class<DataDiscoveryCriteriaImpl> criteriaClass = DataDiscoveryCriteriaImpl.class;
+        Class<DataDiscoveryCriteriaImpl> criteriaClass = DataDiscoveryCriteriaImpl.class;
 
-		this.requestFactory = requestFactory;
-		this.documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(documentClass);
+        this.requestFactory = requestFactory;
+        this.documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(documentClass);
 
-		this.criteriaMapping = AnnotatedCriteriaMapper.getMapping(criteriaClass);
-		this.queryFactory = new ESGenericQueryFactory<>();
-		this.suggestRepository = new ESGenericSuggestRepository<>(client, requestFactory, documentClass, queryFactory, parser);
-	}
+        this.criteriaMapping = AnnotatedCriteriaMapper.getMapping(criteriaClass);
+        this.queryFactory = new ESGenericQueryFactory<>();
+        this.suggestRepository = new ESGenericSuggestRepository<>(client, requestFactory, documentClass, queryFactory, parser);
+    }
 
-	@Override
-	public LinkedHashSet<String> suggest(
-			String criteriaField, String searchText, Long fetchSize, DataDiscoveryCriteria criteria
-	) {
-		String documentFieldPath = criteriaMapping.getDocumentPath(criteriaField, true);
-		return suggestRepository.suggest(documentFieldPath, searchText, fetchSize, criteria);
-	}
+    @Override
+    public LinkedHashSet<String> suggest(
+        String criteriaField, String searchText, Long fetchSize, DataDiscoveryCriteria criteria
+    ) {
+        String documentFieldPath = criteriaMapping.getDocumentPath(criteriaField, true);
+        return suggestRepository.suggest(documentFieldPath, searchText, fetchSize, criteria);
+    }
 
-	@Override
-	public DataDiscoveryResponse find(DataDiscoveryCriteria criteria) {
-		try {
-			// Prepare search request
-			SearchRequest request = prepareSearchRequest(criteria);
+    @Override
+    public DataDiscoveryResponse find(DataDiscoveryCriteria criteria) {
+        try {
+            // Prepare search request
+            SearchRequest request = prepareSearchRequest(criteria);
 
-			// Execute request
-			LOGGER.debug(request.toString());
-			SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+            // Execute request
+            LOGGER.debug(request.toString());
+            SearchResponse response = client.search(request, RequestOptions.DEFAULT);
 
-			// Parse request result
-			return parseResponse(criteria, response);
-		} catch (Exception e) {
-			throw new DataDiscoveryRepositoryException(e);
-		}
-	}
+            // Parse request result
+            return parseResponse(criteria, response);
+        } catch (Exception e) {
+            throw new DataDiscoveryRepositoryException(e);
+        }
+    }
 
-	/**
-	 * Generate Elasticsearch search request based on the data discovery criteria
-	 */
-	private SearchRequest prepareSearchRequest(DataDiscoveryCriteria criteria) {
-		List<String> facetFields = criteria.getFacetFields();
-		String[] documentFieldsInFacets = criteriaFieldsToDocumentFields(facetFields);
+    /**
+     * Generate Elasticsearch search request based on the data discovery criteria
+     */
+    private SearchRequest prepareSearchRequest(DataDiscoveryCriteria criteria) {
+        List<String> facetFields = criteria.getFacetFields();
+        String[] documentFieldsInFacets = criteriaFieldsToDocumentFields(facetFields);
 
-		// Build search query (excluding document fields used in facets)
-		QueryBuilder query = queryFactory.createQueryExcludingFields(criteria, documentFieldsInFacets);
+        // Build search query (excluding document fields used in facets)
+        QueryBuilder query = queryFactory.createQueryExcludingFields(criteria, documentFieldsInFacets);
 
-		// Prepare search request with query
-		SearchRequest request = ESGenericFindRepository.prepareSearchRequest(
-				query, criteria, documentMetadata, requestFactory);
+        // Prepare search request with query
+        SearchRequest request = ESGenericFindRepository.prepareSearchRequest(
+            query, criteria, documentMetadata, requestFactory);
         request.source(new SearchSourceBuilder());
         request.source().query(query);
 
         // Build facet aggregations
-		if (facetFields != null) {
-			for (String facetField : facetFields) {
-				String documentPath = criteriaMapping.getDocumentPath(facetField, true);
+        if (facetFields != null) {
+            for (String facetField : facetFields) {
+                String documentPath = criteriaMapping.getDocumentPath(facetField, true);
 
-				String filterAggName = facetField + "Filter";
+                String filterAggName = facetField + "Filter";
 
-				// Create facet term agg
-				TermsAggregationBuilder termAgg = terms(facetField)
-						.field(documentPath)
-						.size(ESRequestFactory.MAX_TERM_AGG_SIZE);
+                // Create facet term agg
+                TermsAggregationBuilder termAgg = terms(facetField)
+                    .field(documentPath)
+                    .size(ESRequestFactory.MAX_TERM_AGG_SIZE);
 
-				// Create filter agg for this facet excluding it self
-				QueryBuilder facetFilter = queryFactory.createQueryExcludingFields(criteria, documentPath);
-				if (facetFilter == null) {
-					facetFilter = QueryBuilders.matchAllQuery();
-				}
+                // Create filter agg for this facet excluding it self
+                QueryBuilder facetFilter = queryFactory.createQueryExcludingFields(criteria, documentPath);
+                if (facetFilter == null) {
+                    facetFilter = QueryBuilders.matchAllQuery();
+                }
 
-				request.source().aggregation(
-						filter(filterAggName, facetFilter).subAggregation(termAgg)
-				);
-			}
-		}
+                request.source().aggregation(
+                    filter(filterAggName, facetFilter).subAggregation(termAgg)
+                );
+            }
+        }
 
-		// Build post filter (including document fields used in facets)
-		QueryBuilder postFilter = queryFactory.createQueryIncludingFields(criteria, documentFieldsInFacets);
-		request.source().postFilter(postFilter);
+        // Build post filter (including document fields used in facets)
+        QueryBuilder postFilter = queryFactory.createQueryIncludingFields(criteria, documentFieldsInFacets);
+        request.source().postFilter(postFilter);
 
-		return request;
-	}
+        return request;
+    }
 
-	/**
-	 * Parse Elasticsearch search response into data discovery response
-	 */
-	private DataDiscoveryResponse parseResponse(
-			DataDiscoveryCriteria criteria, SearchResponse response
-	) throws IOException, ReflectiveOperationException {
-		// Parse pagination
-		Pagination pagination = PaginationImpl.create(criteria, parser.parseTotalHits(response));
+    /**
+     * Parse Elasticsearch search response into data discovery response
+     */
+    private DataDiscoveryResponse parseResponse(
+        DataDiscoveryCriteria criteria, SearchResponse response
+    ) throws IOException, ReflectiveOperationException {
+        // Parse pagination
+        Pagination pagination = PaginationImpl.create(criteria, parser.parseTotalHits(response));
 
-		// Parse result list
-		List<DataDiscoveryDocument> resultList = parser.parseHits(response,
-				documentMetadata.getDocumentClass());
+        // Parse result list
+        List<DataDiscoveryDocument> resultList = parser.parseHits(response,
+            documentMetadata.getDocumentClass());
 
-		// Parse facet terms
-		List<String> facetFields = criteria.getFacetFields();
-		List<FacetImpl> facets = null;
-		if (facetFields != null) {
-			facets = new ArrayList<>();
-			for (String facetField : facetFields) {
-				String filterAggName = facetField + "Filter";
-				List<FacetTermImpl> terms = parser.parseFacetTerms(
-						response, filterAggName, facetField
-				);
-				facets.add(new FacetImpl(facetField, terms));
-			}
-		}
+        // Parse facet terms
+        List<String> facetFields = criteria.getFacetFields();
+        List<FacetImpl> facets = null;
+        if (facetFields != null) {
+            facets = new ArrayList<>();
+            for (String facetField : facetFields) {
+                String filterAggName = facetField + "Filter";
+                List<FacetTermImpl> terms = parser.parseFacetTerms(
+                    response, filterAggName, facetField
+                );
+                facets.add(new FacetImpl(facetField, terms));
+            }
+        }
 
-		// Return paginated list
-		return DataDiscoveryResponseFactory.create(pagination, resultList, facets);
-	}
+        // Return paginated list
+        return DataDiscoveryResponseFactory.create(pagination, resultList, facets);
+    }
 
-	private String[] criteriaFieldsToDocumentFields(List<String> criteriaFields) {
-		List<String> fields = new ArrayList<>();
-		if (criteriaFields != null) {
-			for (String facetField : criteriaFields) {
-				fields.add(criteriaMapping.getDocumentPath(facetField, true));
-			}
-		}
-		return fields.toArray(new String[]{});
-	}
+    private String[] criteriaFieldsToDocumentFields(List<String> criteriaFields) {
+        List<String> fields = new ArrayList<>();
+        if (criteriaFields != null) {
+            for (String facetField : criteriaFields) {
+                fields.add(criteriaMapping.getDocumentPath(facetField, true));
+            }
+        }
+        return fields.toArray(new String[]{});
+    }
 
-	public static class DataDiscoveryRepositoryException extends RuntimeException {
+    public static class DataDiscoveryRepositoryException extends RuntimeException {
 
-		DataDiscoveryRepositoryException(Throwable t) {
-			super(t);
-		}
-	}
+        DataDiscoveryRepositoryException(Throwable t) {
+            super(t);
+        }
+    }
 }

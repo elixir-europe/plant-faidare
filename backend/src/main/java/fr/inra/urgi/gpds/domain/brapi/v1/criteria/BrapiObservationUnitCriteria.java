@@ -5,23 +5,21 @@ import java.util.Set;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiObservationUnitCriteria extends BrapiPaginationCriteria {
-	List<String> getObservationTimeStampRange();
+    List<String> getObservationTimeStampRange();
 
-	Set<String> getGermplasmDbIds();
+    Set<String> getGermplasmDbIds();
 
-	Set<String> getObservationVariableDbIds();
+    Set<String> getObservationVariableDbIds();
 
-	Set<String> getStudyDbIds();
+    Set<String> getStudyDbIds();
 
-	Set<String> getLocationDbIds();
+    Set<String> getLocationDbIds();
 
-	Set<String> getProgramDbIds();
+    Set<String> getProgramDbIds();
 
-	Set<String> getSeasonDbIds();
+    Set<String> getSeasonDbIds();
 
-	String getObservationLevel();
+    String getObservationLevel();
 }

@@ -9,13 +9,11 @@ import fr.inra.urgi.gpds.elasticsearch.repository.ESFindRepository;
  * Breeding API germplasm attribute
  *
  * @author gcornut
- *
- *
  */
 public interface GermplasmAttributeRepository
-		extends ESFindRepository<GermplasmAttributeCriteria, GermplasmAttributeValueListVO> {
+    extends ESFindRepository<GermplasmAttributeCriteria, GermplasmAttributeValueListVO> {
 
-	@Override
-	PaginatedList<GermplasmAttributeValueListVO> find(GermplasmAttributeCriteria criteria);
+    @Override
+    PaginatedList<GermplasmAttributeValueListVO> find(GermplasmAttributeCriteria criteria);
 
 }

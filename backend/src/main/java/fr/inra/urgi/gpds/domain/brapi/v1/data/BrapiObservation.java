@@ -8,29 +8,27 @@ import java.util.Date;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiObservation {
-	@JsonView(JSONView.BrapiFields.class)
-	String getObservationDbId();
+    @JsonView(JSONView.BrapiFields.class)
+    String getObservationDbId();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getObservationVariableDbId();
+    @JsonView(JSONView.BrapiFields.class)
+    String getObservationVariableDbId();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getObservationVariableName();
+    @JsonView(JSONView.BrapiFields.class)
+    String getObservationVariableName();
 
-	@JsonView(JSONView.BrapiFields.class)
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
-	Date getObservationTimeStamp();
+    @JsonView(JSONView.BrapiFields.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+    Date getObservationTimeStamp();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getSeason();
+    @JsonView(JSONView.BrapiFields.class)
+    String getSeason();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getCollector();
+    @JsonView(JSONView.BrapiFields.class)
+    String getCollector();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getValue();
+    @JsonView(JSONView.BrapiFields.class)
+    String getValue();
 }

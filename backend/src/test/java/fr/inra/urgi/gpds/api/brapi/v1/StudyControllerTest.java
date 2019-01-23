@@ -36,60 +36,59 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = StudyController.class)
 class StudyControllerTest {
 
-	@Autowired
+    @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-	private ObservationUnitRepository observationUnitRepository;
+    private ObservationUnitRepository observationUnitRepository;
 
     @MockBean
-	private GermplasmRepository germplasmRepository;
+    private GermplasmRepository germplasmRepository;
 
     @MockBean
-	private CropOntologyRepository cropOntologyRepository;
+    private CropOntologyRepository cropOntologyRepository;
 
     @MockBean
-	private StudyRepository repository;
+    private StudyRepository repository;
 
-	@Test
-	void should_Get_By_Id() throws Exception {
-		String identifier = "identifier";
+    @Test
+    void should_Get_By_Id() throws Exception {
+        String identifier = "identifier";
 
-		StudyDetailVO study = new StudyDetailVO();
-		when(repository.getById(identifier)).thenReturn(study);
+        StudyDetailVO study = new StudyDetailVO();
+        when(repository.getById(identifier)).thenReturn(study);
 
-		mockMvc.perform(get("/brapi/v1/studies/" + identifier)
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isOk());
-	}
+        mockMvc.perform(get("/brapi/v1/studies/" + identifier)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+    }
 
-	@Test
-	void should_Return_Not_Found() throws Exception {
-		when(repository.getById("foo")).thenReturn(null);
+    @Test
+    void should_Return_Not_Found() throws Exception {
+        when(repository.getById("foo")).thenReturn(null);
 
-		mockMvc.perform(get("/brapi/v1/studies/foo")
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.metadata.status", hasSize(1)))
-				.andExpect(jsonPath("$.metadata.status[0].code", is("404")));
-	}
+        mockMvc.perform(get("/brapi/v1/studies/foo")
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.metadata.status", hasSize(1)))
+            .andExpect(jsonPath("$.metadata.status[0].code", is("404")));
+    }
 
-	@Test
-	void should_Paginate_ObservationUnits_By_Study() throws Exception {
-		String studyDbId = "foo";
-		int page = 2;
-		int pageSize = 12;
+    @Test
+    void should_Paginate_ObservationUnits_By_Study() throws Exception {
+        String studyDbId = "foo";
+        int page = 2;
+        int pageSize = 12;
 
         Pagination pagination = PaginationImpl.create(pageSize, page, 1000);
         PaginatedList<ObservationUnitVO> observationUnits = new PaginatedList<>(pagination, new ArrayList<>());
         when(observationUnitRepository.find(any())).thenReturn(observationUnits);
 
-		mockMvc.perform(get("/brapi/v1/studies/{id}/observationUnits?page={page}&pageSize={pageSize}", studyDbId, page, pageSize)
-			.contentType(MediaType.APPLICATION_JSON_UTF8))
-			.andExpect(jsonPath("$.metadata.pagination.currentPage", is(page)))
-			.andExpect(jsonPath("$.metadata.pagination.pageSize", is(pageSize)));
-	}
-
+        mockMvc.perform(get("/brapi/v1/studies/{id}/observationUnits?page={page}&pageSize={pageSize}", studyDbId, page, pageSize)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.metadata.pagination.currentPage", is(page)))
+            .andExpect(jsonPath("$.metadata.pagination.pageSize", is(pageSize)));
+    }
 
 
 }

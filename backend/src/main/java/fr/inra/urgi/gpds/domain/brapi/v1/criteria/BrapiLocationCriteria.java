@@ -4,11 +4,9 @@ import java.util.Set;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiLocationCriteria extends BrapiPaginationCriteria {
 
-	Set<String> getLocationTypes();
+    Set<String> getLocationTypes();
 
 }

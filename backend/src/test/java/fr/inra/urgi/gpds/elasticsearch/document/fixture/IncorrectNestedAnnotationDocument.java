@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Incorrectly annotated document object missing annotation on the type of
  * object in the nestedObjects field.
- *
+ * <p>
  * This should be remedied using the {@link JsonDeserialize} annotation with the
  * "contentAs" attribute.
  *
@@ -17,6 +17,6 @@ import java.util.List;
  */
 @Document(type = "dataObject1")
 public class IncorrectNestedAnnotationDocument {
-	@Nested
-	List<Object> nestedObjects;
+    @Nested
+    List<Object> nestedObjects;
 }

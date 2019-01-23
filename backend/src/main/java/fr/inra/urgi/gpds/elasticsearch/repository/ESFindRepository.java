@@ -8,14 +8,12 @@ import fr.inra.urgi.gpds.domain.response.PaginatedList;
  * document search based on a criteria.
  *
  * @author gcornut
- *
- *
  */
 public interface ESFindRepository<C extends PaginationCriteria, VO> {
 
-	/**
-	 * Find ES documents using criteria
-	 */
-	PaginatedList<VO> find(C criteria);
+    /**
+     * Find ES documents using criteria
+     */
+    PaginatedList<VO> find(C criteria);
 
 }

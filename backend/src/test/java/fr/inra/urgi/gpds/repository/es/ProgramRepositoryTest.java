@@ -25,61 +25,61 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProgramRepositoryTest {
 
     @Autowired
-	ProgramRepository repository;
+    ProgramRepository repository;
 
-	@Autowired
+    @Autowired
     ESSetUp esSetUp;
 
-	@BeforeAll
-	public void before() {
-	    esSetUp.initialize(ProgramVO.class, 0);
-	}
+    @BeforeAll
+    public void before() {
+        esSetUp.initialize(ProgramVO.class, 0);
+    }
 
     @Test
     void should_Get_By_Id() {
-		String expectedId = "P1";
-		ProgramVO result = repository.getById(expectedId);
-		assertThat(result).isNotNull();
-		assertThat(result).extracting("programDbId").containsOnly(expectedId);
-	}
+        String expectedId = "P1";
+        ProgramVO result = repository.getById(expectedId);
+        assertThat(result).isNotNull();
+        assertThat(result).extracting("programDbId").containsOnly(expectedId);
+    }
 
-	@Test
+    @Test
     void should_Find_Paginated() {
-		int pageSize = 3;
-		int page = 1;
-		ProgramCriteria criteria = new ProgramCriteria();
-		criteria.setPageSize((long) pageSize);
-		criteria.setPage((long) page);
+        int pageSize = 3;
+        int page = 1;
+        ProgramCriteria criteria = new ProgramCriteria();
+        criteria.setPageSize((long) pageSize);
+        criteria.setPage((long) page);
 
-		PaginatedList<ProgramVO> result = repository.find(criteria);
-		assertThat(result).isNotNull().isNotEmpty().hasSize(pageSize);
+        PaginatedList<ProgramVO> result = repository.find(criteria);
+        assertThat(result).isNotNull().isNotEmpty().hasSize(pageSize);
 
-		assertThat(result.getPagination()).isNotNull();
-		assertThat(result.getPagination().getPageSize()).isEqualTo(pageSize);
-		assertThat(result.getPagination().getCurrentPage()).isEqualTo(page);
-	}
+        assertThat(result.getPagination()).isNotNull();
+        assertThat(result.getPagination().getPageSize()).isEqualTo(pageSize);
+        assertThat(result.getPagination().getCurrentPage()).isEqualTo(page);
+    }
 
-	@Test
+    @Test
     void should_Find_By_Name() {
-		String expectedName = "Amaizing";
-		ProgramCriteria criteria = new ProgramCriteria();
-		criteria.setName(expectedName);
+        String expectedName = "Amaizing";
+        ProgramCriteria criteria = new ProgramCriteria();
+        criteria.setName(expectedName);
 
-		PaginatedList<ProgramVO> result = repository.find(criteria);
+        PaginatedList<ProgramVO> result = repository.find(criteria);
 
-		assertThat(result).isNotNull().isNotEmpty().hasSize(1);
-		assertThat(result).extracting("name").containsOnly(expectedName);
-	}
+        assertThat(result).isNotNull().isNotEmpty().hasSize(1);
+        assertThat(result).extracting("name").containsOnly(expectedName);
+    }
 
-	@Test
+    @Test
     void should_Find_By_Abbreviation() {
-		String expectedAbbreviation = "ANR-12-ADAP-0009";
-		ProgramCriteria criteria = new ProgramCriteria();
-		criteria.setAbbreviation(expectedAbbreviation);
+        String expectedAbbreviation = "ANR-12-ADAP-0009";
+        ProgramCriteria criteria = new ProgramCriteria();
+        criteria.setAbbreviation(expectedAbbreviation);
 
-		PaginatedList<ProgramVO> result = repository.find(criteria);
+        PaginatedList<ProgramVO> result = repository.find(criteria);
 
-		assertThat(result).isNotNull().isNotEmpty().hasSize(1);
-		assertThat(result).extracting("abbreviation").containsOnly(expectedAbbreviation);
-	}
+        assertThat(result).isNotNull().isNotEmpty().hasSize(1);
+        assertThat(result).extracting("abbreviation").containsOnly(expectedAbbreviation);
+    }
 }

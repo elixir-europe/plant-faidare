@@ -18,6 +18,9 @@ public class GPDSProperties {
     @NotBlank
     private String cropOntologyRepositoryUrl;
 
+    @NotBlank
+    private String cropOntologyPortalLink;
+
     private String securityUserGroupWsUrl;
     private String securityUserGroupWsToken;
 
@@ -51,6 +54,14 @@ public class GPDSProperties {
 
     public void setSecurityUserGroupWsToken(String securityUserGroupWsToken) {
         this.securityUserGroupWsToken = securityUserGroupWsToken;
+    }
+
+    public String getCropOntologyPortalLink() {
+        return cropOntologyPortalLink;
+    }
+
+    public void setCropOntologyPortalLink(String cropOntologyPortalLink) {
+        this.cropOntologyPortalLink = cropOntologyPortalLink;
     }
 
     /**

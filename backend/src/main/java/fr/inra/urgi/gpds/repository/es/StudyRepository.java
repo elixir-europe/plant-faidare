@@ -13,22 +13,20 @@ import java.util.Set;
  * Breeding API study
  *
  * @author gcornut
- *
- *
  */
 public interface StudyRepository
-		extends ESGetByIdRepository<StudyDetailVO>,
+    extends ESGetByIdRepository<StudyDetailVO>,
     ESFindRepository<StudyCriteria, StudySummaryVO> {
 
-	@Override
-	StudyDetailVO getById(String id);
+    @Override
+    StudyDetailVO getById(String id);
 
-	@Override
-	PaginatedList<StudySummaryVO> find(StudyCriteria criteria);
+    @Override
+    PaginatedList<StudySummaryVO> find(StudyCriteria criteria);
 
-	/**
-	 * List study observation variable ids
-	 */
-	Set<String> getVariableIds(String studyDbId);
+    /**
+     * List study observation variable ids
+     */
+    Set<String> getVariableIds(String studyDbId);
 
 }

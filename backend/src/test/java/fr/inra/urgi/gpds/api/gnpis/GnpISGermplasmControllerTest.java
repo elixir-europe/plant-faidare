@@ -31,108 +31,106 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- *
  * @author C. Michotey, E. Kimmel, gcornut
- *
  */
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = GnpISGermplasmController.class)
 class GnpISGermplasmControllerTest {
 
-	@Autowired
+    @Autowired
     private MockMvc mockMvc;
 
-	@MockBean
-	private GermplasmService service;
-
-	@Test
-	void should_Return_Not_Found_With_Id() throws Exception {
-		String id = "foo";
-		when(service.getById(id)).thenReturn(null);
-
-		mockMvc.perform(get("/brapi/v1/germplasm?id=" + id)
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isNotFound());
-	}
-
-	@Test
-	void should_Return_Not_Found_With_PUI() throws Exception {
-		when(service.find(any(GermplasmSearchCriteria.class))).thenReturn(null);
-
-		String pui = "foo";
-		mockMvc.perform(get("/brapi/v1/germplasm?pui=" + pui)
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isNotFound());
-	}
+    @MockBean
+    private GermplasmService service;
 
     @Test
-	void should_Load_Germplasm_From_DOI() throws Exception {
-		GermplasmVO germplasm = new GermplasmVO();
-		PaginatedList<GermplasmVO> germplasmPage = new PaginatedList<>(null, Collections.singletonList(germplasm));
+    void should_Return_Not_Found_With_Id() throws Exception {
+        String id = "foo";
+        when(service.getById(id)).thenReturn(null);
 
-		ArgumentCaptor<GermplasmSearchCriteria> criteriaCaptor = ArgumentCaptor.forClass(GermplasmSearchCriteria.class);
-		when(service.find(criteriaCaptor.capture())).thenReturn(germplasmPage);
-
-		String pui = "doi:10.15454/1.4921786234137117E12";
-		mockMvc.perform(get("/gnpis/v1/germplasm?pui=" + pui)
-                .contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isOk());
-
-		GermplasmSearchCriteria value = criteriaCaptor.getValue();
-		assertThat(value).isInstanceOf(GermplasmGETSearchCriteria.class);
-
-		// Check the generated criteria contains only the PUI given in REST query param
-		GermplasmGETSearchCriteria criteria = (GermplasmGETSearchCriteria) value;
-		assertThat(criteria.getGermplasmPUI()).isNotNull().hasSize(1).containsOnly(pui);
-	}
+        mockMvc.perform(get("/brapi/v1/germplasm?id=" + id)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNotFound());
+    }
 
     @Test
-	void should_Return_Bad_Request_With_No_Param() throws Exception {
-		mockMvc.perform(get("/gnpis/v1/germplasm")
-                .contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isBadRequest());
-	}
+    void should_Return_Not_Found_With_PUI() throws Exception {
+        when(service.find(any(GermplasmSearchCriteria.class))).thenReturn(null);
 
-	@Test
-	void should_Serialize_Fields_Correctly() throws Exception {
-		GermplasmVO germplasm = new GermplasmVO();
+        String pui = "foo";
+        mockMvc.perform(get("/brapi/v1/germplasm?pui=" + pui)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNotFound());
+    }
 
-		germplasm.setGroupId(0L);
-		germplasm.setSpeciesGroup(Collections.singletonList(1L));
+    @Test
+    void should_Load_Germplasm_From_DOI() throws Exception {
+        GermplasmVO germplasm = new GermplasmVO();
+        PaginatedList<GermplasmVO> germplasmPage = new PaginatedList<>(null, Collections.singletonList(germplasm));
 
-		germplasm.setGermplasmDbId("germplasmDbId");
-		germplasm.setDefaultDisplayName("defaultDisplayName");
+        ArgumentCaptor<GermplasmSearchCriteria> criteriaCaptor = ArgumentCaptor.forClass(GermplasmSearchCriteria.class);
+        when(service.find(criteriaCaptor.capture())).thenReturn(germplasmPage);
 
-		// Add GnpIS specific field
-		CollPopVO collection = new CollPopVO();
-		collection.setName("name");
-		germplasm.setCollection(Collections.singletonList(collection));
+        String pui = "doi:10.15454/1.4921786234137117E12";
+        mockMvc.perform(get("/gnpis/v1/germplasm?pui=" + pui)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
 
-		DonorVO donor = new DonorVO();
-		donor.setDonorGermplasmPUI("pui");
-		donor.setDonationDate(1);
-		germplasm.setDonors(Collections.singletonList(donor));
+        GermplasmSearchCriteria value = criteriaCaptor.getValue();
+        assertThat(value).isInstanceOf(GermplasmGETSearchCriteria.class);
 
-		PaginatedList<GermplasmVO> germplasmPage = new PaginatedList<>(null, Collections.singletonList(germplasm));
+        // Check the generated criteria contains only the PUI given in REST query param
+        GermplasmGETSearchCriteria criteria = (GermplasmGETSearchCriteria) value;
+        assertThat(criteria.getGermplasmPUI()).isNotNull().hasSize(1).containsOnly(pui);
+    }
 
-		when(service.find(any(GermplasmSearchCriteria.class))).thenReturn(germplasmPage);
+    @Test
+    void should_Return_Bad_Request_With_No_Param() throws Exception {
+        mockMvc.perform(get("/gnpis/v1/germplasm")
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isBadRequest());
+    }
 
-		mockMvc.perform(get("/gnpis/v1/germplasm?pui=foo")
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
+    @Test
+    void should_Serialize_Fields_Correctly() throws Exception {
+        GermplasmVO germplasm = new GermplasmVO();
 
-				// Should not have private fields
-				.andExpect(jsonPath("$", not(hasProperty("groupId"))))
-				.andExpect(jsonPath("$", not(hasProperty("speciesGroup"))))
+        germplasm.setGroupId(0L);
+        germplasm.setSpeciesGroup(Collections.singletonList(1L));
 
-				// BrAPI fields should appear
-				.andExpect(jsonPath("$.germplasmDbId", is(germplasm.getGermplasmDbId())))
-				.andExpect(jsonPath("$.defaultDisplayName", is(germplasm.getDefaultDisplayName())))
-				.andExpect(jsonPath("$.donors[0].donorGermplasmPUI", is(donor.getDonorGermplasmPUI())))
+        germplasm.setGermplasmDbId("germplasmDbId");
+        germplasm.setDefaultDisplayName("defaultDisplayName");
 
-				// GnpIS specific fields should appear
-				.andExpect(jsonPath("$.donors[0].donationDate", is(donor.getDonationDate())))
-				.andExpect(jsonPath("$.collection[0].name", is(collection.getName())));
+        // Add GnpIS specific field
+        CollPopVO collection = new CollPopVO();
+        collection.setName("name");
+        germplasm.setCollection(Collections.singletonList(collection));
 
-	}
+        DonorVO donor = new DonorVO();
+        donor.setDonorGermplasmPUI("pui");
+        donor.setDonationDate(1);
+        germplasm.setDonors(Collections.singletonList(donor));
+
+        PaginatedList<GermplasmVO> germplasmPage = new PaginatedList<>(null, Collections.singletonList(germplasm));
+
+        when(service.find(any(GermplasmSearchCriteria.class))).thenReturn(germplasmPage);
+
+        mockMvc.perform(get("/gnpis/v1/germplasm?pui=foo")
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+
+            // Should not have private fields
+            .andExpect(jsonPath("$", not(hasProperty("groupId"))))
+            .andExpect(jsonPath("$", not(hasProperty("speciesGroup"))))
+
+            // BrAPI fields should appear
+            .andExpect(jsonPath("$.germplasmDbId", is(germplasm.getGermplasmDbId())))
+            .andExpect(jsonPath("$.defaultDisplayName", is(germplasm.getDefaultDisplayName())))
+            .andExpect(jsonPath("$.donors[0].donorGermplasmPUI", is(donor.getDonorGermplasmPUI())))
+
+            // GnpIS specific fields should appear
+            .andExpect(jsonPath("$.donors[0].donationDate", is(donor.getDonationDate())))
+            .andExpect(jsonPath("$.collection[0].name", is(collection.getName())));
+
+    }
 
 }

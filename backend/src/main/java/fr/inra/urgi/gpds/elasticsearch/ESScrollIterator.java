@@ -29,23 +29,22 @@ import java.util.concurrent.TimeUnit;
  * keep alive time {@link #DEFAULT_KEEP_ALIVE_TIME}</b>
  *
  * @author gcornut
- *
  */
 public class ESScrollIterator<T> implements Iterator<T> {
 
-	public static final TimeValue DEFAULT_KEEP_ALIVE_TIME = new TimeValue(60, TimeUnit.SECONDS);
+    public static final TimeValue DEFAULT_KEEP_ALIVE_TIME = new TimeValue(60, TimeUnit.SECONDS);
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ESScrollIterator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ESScrollIterator.class);
 
-	private final Class<T> documentClass;
+    private final Class<T> documentClass;
     private final RestHighLevelClient client;
     private final ESRequestFactory requestFactory;
     private final ESResponseParser parser;
-	private final long totalHits;
+    private final long totalHits;
 
-	private long hitIndex;
-	private String scrollId;
-	private Iterator<T> currentIterator;
+    private long hitIndex;
+    private String scrollId;
+    private Iterator<T> currentIterator;
 
     public ESScrollIterator(
         RestHighLevelClient client,
@@ -59,13 +58,13 @@ public class ESScrollIterator<T> implements Iterator<T> {
         this.parser = parser;
         this.documentClass = documentClass;
 
-		DocumentMetadata<T> documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(documentClass);
+        DocumentMetadata<T> documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(documentClass);
 
-		SearchRequest request = requestFactory
-				.prepareSearch(documentMetadata.getDocumentType(), query)
-                .scroll(DEFAULT_KEEP_ALIVE_TIME);
+        SearchRequest request = requestFactory
+            .prepareSearch(documentMetadata.getDocumentType(), query)
+            .scroll(DEFAULT_KEEP_ALIVE_TIME);
 
-		request.source()
+        request.source()
             .size(fetchSize)
             .sort(FieldSortBuilder.DOC_FIELD_NAME, SortOrder.ASC);
 
@@ -77,34 +76,34 @@ public class ESScrollIterator<T> implements Iterator<T> {
         }
 
         this.scrollId = response.getScrollId();
-		this.totalHits = response.getHits().getTotalHits();
-		this.hitIndex = 0;
-		this.currentIterator = parseIterator(response);
-	}
+        this.totalHits = response.getHits().getTotalHits();
+        this.hitIndex = 0;
+        this.currentIterator = parseIterator(response);
+    }
 
-	private Iterator<T> parseIterator(SearchResponse pageResponse) {
-		try {
-			List<T> hits = parser.parseHits(pageResponse, documentClass);
-			if (hits != null) {
-				return hits.iterator();
-			}
-			throw new RuntimeException("Could not parse Elasticsearch hits");
-		} catch (IOException | ReflectiveOperationException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    private Iterator<T> parseIterator(SearchResponse pageResponse) {
+        try {
+            List<T> hits = parser.parseHits(pageResponse, documentClass);
+            if (hits != null) {
+                return hits.iterator();
+            }
+            throw new RuntimeException("Could not parse Elasticsearch hits");
+        } catch (IOException | ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	@Override
-	public boolean hasNext() {
-		if (currentIterator != null && currentIterator.hasNext()) {
-			return true;
-		} else if (totalHits > hitIndex) {
+    @Override
+    public boolean hasNext() {
+        if (currentIterator != null && currentIterator.hasNext()) {
+            return true;
+        } else if (totalHits > hitIndex) {
 
-			SearchScrollRequest request = requestFactory
-					.getSearchScroll(scrollId)
-					.scroll(DEFAULT_KEEP_ALIVE_TIME);
+            SearchScrollRequest request = requestFactory
+                .getSearchScroll(scrollId)
+                .scroll(DEFAULT_KEEP_ALIVE_TIME);
 
-			LOGGER.debug("Scroll new page: " + scrollId);
+            LOGGER.debug("Scroll new page: " + scrollId);
 
             SearchResponse response = null;
             try {
@@ -113,23 +112,23 @@ public class ESScrollIterator<T> implements Iterator<T> {
                 throw new RuntimeException(e);
             }
             this.scrollId = response.getScrollId();
-			this.currentIterator = parseIterator(response);
-			return true;
-		}
-		return false;
-	}
+            this.currentIterator = parseIterator(response);
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public T next() {
-		if (hasNext()) {
-			hitIndex++;
-			return currentIterator.next();
-		}
-		throw new NoSuchElementException();
-	}
+    @Override
+    public T next() {
+        if (hasNext()) {
+            hitIndex++;
+            return currentIterator.next();
+        }
+        throw new NoSuchElementException();
+    }
 
-	@Override
-	public void remove() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 }

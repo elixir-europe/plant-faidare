@@ -16,288 +16,285 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 @Document(type = "observationUnit")
 public class ObservationUnitVO implements BrapiObservationUnit, GnpISInternal {
 
-	@Id
-	private String observationUnitDbId;
-	private String observationUnitName;
+    @Id
+    private String observationUnitDbId;
+    private String observationUnitName;
 
-	// Layout
-	private String observationLevel;
-	private String observationLevels;
-	private String plotNumber;
-	private String plantNumber;
-	private String blockNumber;
-	private String replicate;
-	// Transiet solution, it would be better to apply this configuraiton to all
-	// string fields globaly rather than doing it field by field.
-	@JsonSetter(nulls = Nulls.AS_EMPTY)
-	private String entryType;
-	// Transiet solution, it would be better to apply this configuraiton to all
-	// string fields globaly rather than doing it field by field.
-	@JsonSetter(nulls = Nulls.AS_EMPTY)
-	private String entryNumber;
-	private String X;
-	private String Y;
+    // Layout
+    private String observationLevel;
+    private String observationLevels;
+    private String plotNumber;
+    private String plantNumber;
+    private String blockNumber;
+    private String replicate;
 
-	// XRef
-	@JsonDeserialize(contentAs = ObservationUnitXRefVO.class)
-	private List<BrapiObservationUnitXRef> observationUnitXref;
+    @JsonSetter(nulls = Nulls.AS_EMPTY)
+    private String entryType = "";
 
-	// Germplasm
-	private String germplasmDbId;
-	private String germplasmName;
+    @JsonSetter(nulls = Nulls.AS_EMPTY)
+    private String entryNumber = "";
 
-	// Study
-	private String studyDbId;
-	private String studyName;
+    private String X;
+    private String Y;
 
-	// Study location
-	private String studyLocationDbId;
-	private String studyLocation;
+    // XRef
+    @JsonDeserialize(contentAs = ObservationUnitXRefVO.class)
+    private List<BrapiObservationUnitXRef> observationUnitXref;
 
-	// Program
-	private String programDbId;
-	private String programName;
+    // Germplasm
+    private String germplasmDbId;
+    private String germplasmName;
 
-	@JsonDeserialize(contentAs = TreatmentVO.class)
-	private List<BrapiObservationUnitTreatment> treatments;
+    // Study
+    private String studyDbId;
+    private String studyName;
 
-	@Nested
-	@JsonDeserialize(contentAs = ObservationVO.class)
-	private List<BrapiObservation> observations;
+    // Study location
+    private String studyLocationDbId;
+    private String studyLocation;
 
-	// GnpIS specific fields
-	private Long groupId;
-	private List<Long> speciesGroup;
+    // Program
+    private String programDbId;
+    private String programName;
 
-	@Override
-	public List<BrapiObservationUnitXRef> getObservationUnitXref() {
-		return observationUnitXref;
-	}
+    @JsonDeserialize(contentAs = TreatmentVO.class)
+    private List<BrapiObservationUnitTreatment> treatments;
 
-	public void setObservationUnitXref(List<BrapiObservationUnitXRef> observationUnitXref) {
-		this.observationUnitXref = observationUnitXref;
-	}
+    @Nested
+    @JsonDeserialize(contentAs = ObservationVO.class)
+    private List<BrapiObservation> observations;
 
-	@Override
-	public String getProgramDbId() {
-		return programDbId;
-	}
+    // GnpIS specific fields
+    private Long groupId;
+    private List<Long> speciesGroup;
 
-	public void setProgramDbId(String programDbId) {
-		this.programDbId = programDbId;
-	}
+    @Override
+    public List<BrapiObservationUnitXRef> getObservationUnitXref() {
+        return observationUnitXref;
+    }
 
-	@Override
-	public String getObservationUnitDbId() {
-		return observationUnitDbId;
-	}
+    public void setObservationUnitXref(List<BrapiObservationUnitXRef> observationUnitXref) {
+        this.observationUnitXref = observationUnitXref;
+    }
 
-	public void setObservationUnitDbId(String observationUnitDbId) {
-		this.observationUnitDbId = observationUnitDbId;
-	}
+    @Override
+    public String getProgramDbId() {
+        return programDbId;
+    }
 
-	@Override
-	public String getObservationUnitName() {
-		return observationUnitName;
-	}
+    public void setProgramDbId(String programDbId) {
+        this.programDbId = programDbId;
+    }
 
-	public void setObservationUnitName(String observationUnitName) {
-		this.observationUnitName = observationUnitName;
-	}
+    @Override
+    public String getObservationUnitDbId() {
+        return observationUnitDbId;
+    }
 
-	@Override
-	public String getObservationLevel() {
-		return observationLevel;
-	}
+    public void setObservationUnitDbId(String observationUnitDbId) {
+        this.observationUnitDbId = observationUnitDbId;
+    }
 
-	public void setObservationLevel(String observationLevel) {
-		this.observationLevel = observationLevel;
-	}
+    @Override
+    public String getObservationUnitName() {
+        return observationUnitName;
+    }
 
-	@Override
-	public String getObservationLevels() {
-		return observationLevels;
-	}
+    public void setObservationUnitName(String observationUnitName) {
+        this.observationUnitName = observationUnitName;
+    }
 
-	public void setObservationLevels(String observationLevels) {
-		this.observationLevels = observationLevels;
-	}
+    @Override
+    public String getObservationLevel() {
+        return observationLevel;
+    }
 
-	@Override
-	public String getPlotNumber() {
-		return plotNumber;
-	}
+    public void setObservationLevel(String observationLevel) {
+        this.observationLevel = observationLevel;
+    }
 
-	public void setPlotNumber(String plotNumber) {
-		this.plotNumber = plotNumber;
-	}
+    @Override
+    public String getObservationLevels() {
+        return observationLevels;
+    }
 
-	@Override
-	public String getPlantNumber() {
-		return plantNumber;
-	}
+    public void setObservationLevels(String observationLevels) {
+        this.observationLevels = observationLevels;
+    }
 
-	public void setPlantNumber(String plantNumber) {
-		this.plantNumber = plantNumber;
-	}
+    @Override
+    public String getPlotNumber() {
+        return plotNumber;
+    }
 
-	@Override
-	public String getBlockNumber() {
-		return blockNumber;
-	}
+    public void setPlotNumber(String plotNumber) {
+        this.plotNumber = plotNumber;
+    }
 
-	public void setBlockNumber(String blockNumber) {
-		this.blockNumber = blockNumber;
-	}
+    @Override
+    public String getPlantNumber() {
+        return plantNumber;
+    }
 
-	@Override
-	public String getReplicate() {
-		return replicate;
-	}
+    public void setPlantNumber(String plantNumber) {
+        this.plantNumber = plantNumber;
+    }
 
-	public void setReplicate(String replicate) {
-		this.replicate = replicate;
-	}
+    @Override
+    public String getBlockNumber() {
+        return blockNumber;
+    }
 
-	@Override
-	public String getEntryType() {
-		return entryType;
-	}
+    public void setBlockNumber(String blockNumber) {
+        this.blockNumber = blockNumber;
+    }
 
-	public void setEntryType(String entryType) {
-		this.entryType = entryType;
-	}
+    @Override
+    public String getReplicate() {
+        return replicate;
+    }
 
-	@Override
-	public String getEntryNumber() {
-		return entryNumber;
-	}
+    public void setReplicate(String replicate) {
+        this.replicate = replicate;
+    }
 
-	public void setEntryNumber(String entryNumber) {
-		this.entryNumber = entryNumber;
-	}
+    @Override
+    public String getEntryType() {
+        return entryType;
+    }
 
-	@Override
-	public String getGermplasmDbId() {
-		return germplasmDbId;
-	}
+    public void setEntryType(String entryType) {
+        this.entryType = entryType;
+    }
 
-	public void setGermplasmDbId(String germplasmDbId) {
-		this.germplasmDbId = germplasmDbId;
-	}
+    @Override
+    public String getEntryNumber() {
+        return entryNumber;
+    }
 
-	@Override
-	public String getGermplasmName() {
-		return germplasmName;
-	}
+    public void setEntryNumber(String entryNumber) {
+        this.entryNumber = entryNumber;
+    }
 
-	public void setGermplasmName(String germplasmName) {
-		this.germplasmName = germplasmName;
-	}
+    @Override
+    public String getGermplasmDbId() {
+        return germplasmDbId;
+    }
 
-	@Override
-	public String getStudyDbId() {
-		return studyDbId;
-	}
+    public void setGermplasmDbId(String germplasmDbId) {
+        this.germplasmDbId = germplasmDbId;
+    }
 
-	public void setStudyDbId(String studyDbId) {
-		this.studyDbId = studyDbId;
-	}
+    @Override
+    public String getGermplasmName() {
+        return germplasmName;
+    }
 
-	@Override
-	public String getStudyName() {
-		return studyName;
-	}
+    public void setGermplasmName(String germplasmName) {
+        this.germplasmName = germplasmName;
+    }
 
-	public void setStudyName(String studyName) {
-		this.studyName = studyName;
-	}
+    @Override
+    public String getStudyDbId() {
+        return studyDbId;
+    }
 
-	@Override
-	public String getStudyLocationDbId() {
-		return studyLocationDbId;
-	}
+    public void setStudyDbId(String studyDbId) {
+        this.studyDbId = studyDbId;
+    }
 
-	public void setStudyLocationDbId(String studyLocationDbId) {
-		this.studyLocationDbId = studyLocationDbId;
-	}
+    @Override
+    public String getStudyName() {
+        return studyName;
+    }
 
-	@Override
-	public String getStudyLocation() {
-		return studyLocation;
-	}
+    public void setStudyName(String studyName) {
+        this.studyName = studyName;
+    }
 
-	public void setStudyLocation(String studyLocation) {
-		this.studyLocation = studyLocation;
-	}
+    @Override
+    public String getStudyLocationDbId() {
+        return studyLocationDbId;
+    }
 
-	@Override
-	public String getProgramName() {
-		return programName;
-	}
+    public void setStudyLocationDbId(String studyLocationDbId) {
+        this.studyLocationDbId = studyLocationDbId;
+    }
 
-	public void setProgramName(String programName) {
-		this.programName = programName;
-	}
+    @Override
+    public String getStudyLocation() {
+        return studyLocation;
+    }
 
-	@Override
-	public String getX() {
-		return X;
-	}
+    public void setStudyLocation(String studyLocation) {
+        this.studyLocation = studyLocation;
+    }
 
-	public void setX(String x) {
-		X = x;
-	}
+    @Override
+    public String getProgramName() {
+        return programName;
+    }
 
-	@Override
-	public String getY() {
-		return Y;
-	}
+    public void setProgramName(String programName) {
+        this.programName = programName;
+    }
 
-	public void setY(String y) {
-		Y = y;
-	}
+    @Override
+    public String getX() {
+        return X;
+    }
 
-	@Override
-	public List<BrapiObservationUnitTreatment> getTreatments() {
-		return treatments;
-	}
+    public void setX(String x) {
+        X = x;
+    }
 
-	public void setTreatments(List<BrapiObservationUnitTreatment> treatments) {
-		this.treatments = treatments;
-	}
+    @Override
+    public String getY() {
+        return Y;
+    }
 
-	@Override
-	public List<BrapiObservation> getObservations() {
-		return observations;
-	}
+    public void setY(String y) {
+        Y = y;
+    }
 
-	public void setObservations(List<BrapiObservation> observations) {
-		this.observations = observations;
-	}
+    @Override
+    public List<BrapiObservationUnitTreatment> getTreatments() {
+        return treatments;
+    }
 
-	@Override
-	public Long getGroupId() {
-		return groupId;
-	}
+    public void setTreatments(List<BrapiObservationUnitTreatment> treatments) {
+        this.treatments = treatments;
+    }
 
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
+    @Override
+    public List<BrapiObservation> getObservations() {
+        return observations;
+    }
 
-	@Override
-	public List<Long> getSpeciesGroup() {
-		return speciesGroup;
-	}
+    public void setObservations(List<BrapiObservation> observations) {
+        this.observations = observations;
+    }
 
-	public void setSpeciesGroup(List<Long> speciesGroup) {
-		this.speciesGroup = speciesGroup;
-	}
+    @Override
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    @Override
+    public List<Long> getSpeciesGroup() {
+        return speciesGroup;
+    }
+
+    public void setSpeciesGroup(List<Long> speciesGroup) {
+        this.speciesGroup = speciesGroup;
+    }
 
 }

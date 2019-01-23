@@ -3,55 +3,64 @@ package fr.inra.urgi.gpds.domain.brapi.v1.data;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.inra.urgi.gpds.domain.JSONView;
 
-import java.io.Serializable;
-
 /**
+ * @author gornut
  * @link https://github.com/plantbreeding/API/blob/master/Specification/Locations/ListLocations.md
  * @link https://github.com/plantbreeding/API/blob/master/Specification/Locations/LocationDetails.md
- *
- * @author gornut
  */
-public interface BrapiLocation extends Serializable {
+public interface BrapiLocation extends HasBrapiDocumentationURL {
 
-	// Location
-	@JsonView(JSONView.BrapiFields.class)
-	String getLocationDbId();
+    // Location
+    @JsonView(JSONView.BrapiFields.class)
+    String getLocationDbId();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getLocationType();
+    @JsonView(JSONView.BrapiFields.class)
+    String getLocationType();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getName();
+    @JsonView(JSONView.BrapiFields.class)
+    String getName();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getAbbreviation();
+    @JsonView(JSONView.BrapiFields.class)
+    String getAbbreviation();
 
-	// Geo
-	@JsonView(JSONView.BrapiFields.class)
-	Double getLatitude();
+    @Deprecated
+    @JsonView(JSONView.BrapiFields.class)
+    String getAbreviation();
 
-	@JsonView(JSONView.BrapiFields.class)
-	Double getLongitude();
+    // Geo
+    @JsonView(JSONView.BrapiFields.class)
+    Double getLatitude();
 
-	@JsonView(JSONView.BrapiFields.class)
-	Double getAltitude();
+    @JsonView(JSONView.BrapiFields.class)
+    Double getLongitude();
 
-	// Country
-	@JsonView(JSONView.BrapiFields.class)
-	String getCountryCode();
+    @JsonView(JSONView.BrapiFields.class)
+    Double getAltitude();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getCountryName();
+    // Country
+    @JsonView(JSONView.BrapiFields.class)
+    String getCountryCode();
 
-	// Institution
-	@JsonView(JSONView.BrapiFields.class)
-	String getInstitutionAdress();// TODO: correct typo Adress => Address (pull request API specs)
+    @JsonView(JSONView.BrapiFields.class)
+    String getCountryName();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getInstitutionName();
+    // Institution
 
-	// Additional info
-	@JsonView(JSONView.BrapiFields.class)
-	BrapiAdditionalInfo getAdditionalInfo();
+    @JsonView(JSONView.BrapiFields.class)
+    String getInstitutionAddress();
 
+    // For backward compatibility with brapi v1
+    @JsonView(JSONView.BrapiFields.class)
+    @Deprecated
+    String getInstitutionAdress();
+
+    @JsonView(JSONView.BrapiFields.class)
+    String getInstitutionName();
+
+    // Additional info
+    @JsonView(JSONView.BrapiFields.class)
+    BrapiAdditionalInfo getAdditionalInfo();
+
+    @Override
+    String getDocumentationURL();
 }

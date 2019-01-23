@@ -10,23 +10,21 @@ import java.util.List;
  * Base JSON-LD properties
  *
  * @author gcornut
- *
- *
  */
 public interface JSONLD {
 
-	/**
-	 * rdf:type
-	 */
-	@JsonView(JSONView.JSONLDView.class)
-	@JsonProperty("@type")
-	List<String> getType();
+    /**
+     * rdf:type
+     */
+    @JsonView(JSONView.JSONLDView.class)
+    @JsonProperty("@type")
+    List<String> getType();
 
-	/**
-	 * URI
-	 */
-	@JsonView(JSONView.JSONLDView.class)
-	@JsonProperty("@id")
-	String getUri();
+    /**
+     * URI
+     */
+    @JsonView(JSONView.JSONLDView.class)
+    @JsonProperty("@id")
+    String getUri();
 
 }

@@ -12,14 +12,12 @@ import org.elasticsearch.client.RestHighLevelClient;
  * Generic ElasticSearch repository of document providing a search and a get by id.
  *
  * @author gcornut
- *
- *
  */
 public class BaseESRepository<C extends PaginationCriteria, VO>
-		implements ESGetByIdRepository<VO>, ESFindRepository<C, VO> {
+    implements ESGetByIdRepository<VO>, ESFindRepository<C, VO> {
 
-	private final ESGetByIdRepository<VO> getByIdRepository;
-	private final ESFindRepository<C, VO> findRepository;
+    private final ESGetByIdRepository<VO> getByIdRepository;
+    private final ESFindRepository<C, VO> findRepository;
 
     public BaseESRepository(
         RestHighLevelClient client,
@@ -28,17 +26,17 @@ public class BaseESRepository<C extends PaginationCriteria, VO>
         ESResponseParser parser
     ) {
         getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, voClass, parser);
-		findRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, parser);
-	}
+        findRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, parser);
+    }
 
-	@Override
-	public VO getById(String id) {
-		return getByIdRepository.getById(id);
-	}
+    @Override
+    public VO getById(String id) {
+        return getByIdRepository.getById(id);
+    }
 
-	@Override
-	public PaginatedList<VO> find(C criteria) {
-		return findRepository.find(criteria);
-	}
+    @Override
+    public PaginatedList<VO> find(C criteria) {
+        return findRepository.find(criteria);
+    }
 
 }

@@ -39,62 +39,62 @@ import static org.assertj.core.api.Assertions.fail;
 @SpringBootTest(classes = Application.class)
 class GermplasmRepositoryTest {
 
-	@Autowired
-	ESSetUp esSetUp;
+    @Autowired
+    ESSetUp esSetUp;
 
-	@BeforeAll
-	void before() {
-		esSetUp.initialize(GermplasmVO.class, 0);
-		esSetUp.initialize(ProgenyVO.class, 0);
-		esSetUp.initialize(PedigreeVO.class, 0);
-	}
+    @BeforeAll
+    void before() {
+        esSetUp.initialize(GermplasmVO.class, 0);
+        esSetUp.initialize(ProgenyVO.class, 0);
+        esSetUp.initialize(PedigreeVO.class, 0);
+    }
 
     @Autowired
-	GermplasmRepository repository;
+    GermplasmRepository repository;
 
-	@Test
-	void should_Get_By_Id() {
-		String germplasmDbId = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjM4NDcyNjA1MkUxMg==";
-		GermplasmVO germplasm = repository.getById(germplasmDbId);
-		assertThat(germplasm).isNotNull();
-		assertThat(germplasm.getGermplasmDbId()).isEqualTo(germplasmDbId);
-	}
+    @Test
+    void should_Get_By_Id() {
+        String germplasmDbId = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjM4NDcyNjA1MkUxMg==";
+        GermplasmVO germplasm = repository.getById(germplasmDbId);
+        assertThat(germplasm).isNotNull();
+        assertThat(germplasm.getGermplasmDbId()).isEqualTo(germplasmDbId);
+    }
 
-	@Test
-	void should_Find_By_PUI() {
-		String germplasmPUI = "doi:10.15454/1.4921786381783696E12";
-		GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
-		criteria.setGermplasmPUIs(Collections.singletonList(germplasmPUI));
+    @Test
+    void should_Find_By_PUI() {
+        String germplasmPUI = "doi:10.15454/1.4921786381783696E12";
+        GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
+        criteria.setGermplasmPUIs(Collections.singletonList(germplasmPUI));
 
-		PaginatedList<GermplasmVO> germplasm = repository.find(criteria);
-		assertThat(germplasm).isNotNull().hasSize(1);
-		assertThat(germplasm.get(0).getGermplasmPUI()).isEqualTo(germplasmPUI);
-	}
+        PaginatedList<GermplasmVO> germplasm = repository.find(criteria);
+        assertThat(germplasm).isNotNull().hasSize(1);
+        assertThat(germplasm.get(0).getGermplasmPUI()).isEqualTo(germplasmPUI);
+    }
 
-	@Test
-	void should_Not_Get_By_Incorrect_Id() {
-		String germplasmDbId = "FOOO";
-		GermplasmVO germplasm = repository.getById(germplasmDbId);
-		assertThat(germplasm).isNull();
-	}
+    @Test
+    void should_Not_Get_By_Incorrect_Id() {
+        String germplasmDbId = "FOOO";
+        GermplasmVO germplasm = repository.getById(germplasmDbId);
+        assertThat(germplasm).isNull();
+    }
 
-	@Test
-	void should_Scroll_All() {
-		GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
-		Iterator<GermplasmVO> list = repository.scrollAll(criteria);
-		assertThat(list).isNotNull().hasSize(14);
-	}
+    @Test
+    void should_Scroll_All() {
+        GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
+        Iterator<GermplasmVO> list = repository.scrollAll(criteria);
+        assertThat(list).isNotNull().hasSize(14);
+    }
 
-	@Test
-	void should_Scroll_Nothing() {
-		GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
-		criteria.setAccessionNumbers(Collections.singletonList("FOOOO"));
-		Iterator<GermplasmVO> list = repository.scrollAll(criteria);
-		assertThat(list).isNotNull().hasSize(0);
-	}
+    @Test
+    void should_Scroll_Nothing() {
+        GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
+        criteria.setAccessionNumbers(Collections.singletonList("FOOOO"));
+        Iterator<GermplasmVO> list = repository.scrollAll(criteria);
+        assertThat(list).isNotNull().hasSize(0);
+    }
 
 
-	@Test
+    @Test
     void should_Scroll_By_accessionNumber() {
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
         String accessionNumber = "1801Mtp3";
@@ -103,17 +103,17 @@ class GermplasmRepositoryTest {
 
         Iterator<GermplasmVO> list = repository.scrollAll(criteria);
         assertThat(list).isNotNull().hasSize(1)
-				.extracting("accessionNumber").containsOnly(accessionNumber);
+            .extracting("accessionNumber").containsOnly(accessionNumber);
     }
 
     @Test
     void should_Scroll_Germplasm_By_accessionNumber_Numeric() {
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
         String accessionNumber = "2360";
-		criteria.setAccessionNumbers(Collections.singletonList(accessionNumber));
+        criteria.setAccessionNumbers(Collections.singletonList(accessionNumber));
         Iterator<GermplasmVO> list = repository.scrollAll(criteria);
         assertThat(list).isNotNull().hasSize(1)
-				.extracting("accessionNumber").containsOnly(accessionNumber);
+            .extracting("accessionNumber").containsOnly(accessionNumber);
     }
 
     @Test
@@ -128,31 +128,31 @@ class GermplasmRepositoryTest {
     @Test
     void should_Scroll_Germplasm_By_genus() {
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
-		String genus = "Solanum";
+        String genus = "Solanum";
         criteria.setGermplasmGenus(Lists.newArrayList(genus));
         Iterator<GermplasmVO> g = repository.scrollAll(criteria);
         assertThat(g).isNotNull().hasSize(2)
-				.extracting("genus").containsOnly(genus);
+            .extracting("genus").containsOnly(genus);
     }
 
     @Test
-	void should_Find_Paginated_Germplasm_By_Genus_Triticum() {
+    void should_Find_Paginated_Germplasm_By_Genus_Triticum() {
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
-		String genus = "Triticum";
+        String genus = "Triticum";
         criteria.setGermplasmGenus(Lists.newArrayList(genus));
         PaginatedList<GermplasmVO> pager = repository.find(criteria);
         assertThat(pager).isNotNull().hasSize(3)
-				.extracting("genus").containsOnly(genus);
+            .extracting("genus").containsOnly(genus);
     }
 
     @Test
     void should_Find_Paginated_Germplasm_By_Species_TriticumAestivum() {
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
-		String species = "aestivum";
+        String species = "aestivum";
         criteria.setGermplasmSpecies(Lists.newArrayList(species));
         PaginatedList<GermplasmVO> pager = repository.find(criteria);
         assertThat(pager).isNotNull().hasSize(3)
-				.extracting("species").containsOnly(species);
+            .extracting("species").containsOnly(species);
     }
 
     @Test
@@ -164,7 +164,7 @@ class GermplasmRepositoryTest {
         assertThat(pager).isNotNull().hasSize(1).extracting("germplasmName").containsOnly(name);
     }
 
-	@Test
+    @Test
     void should_Find_Paginated_Germplasm_By_Names_CHARGER_AND_Number13431() {
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
         String name = "CHARGER";
@@ -194,9 +194,9 @@ class GermplasmRepositoryTest {
     @Test
     void should_Find_Germplasm_With_Pages_1() {
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
-		Long pageSize = 5L;
+        Long pageSize = 5L;
         criteria.setPage(0L); //Need to test page 0 to check we are 0 based
-		criteria.setPageSize(pageSize);
+        criteria.setPageSize(pageSize);
         PaginatedList<GermplasmVO> pager = repository.find(criteria);
         assertThat(pager).isNotNull().isNotEmpty();
         assertThat(pager.size()).isLessThanOrEqualTo(pageSize.intValue());
@@ -205,9 +205,9 @@ class GermplasmRepositoryTest {
     @Test
     void should_Find_Germplasm_With_Pages_2() {
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
-		Long pageSize = 5L;
+        Long pageSize = 5L;
         criteria.setPage(0L);
-		criteria.setPageSize(pageSize);
+        criteria.setPageSize(pageSize);
         PaginatedList<GermplasmVO> pager = repository.find(criteria);
         assertThat(pager).isNotNull().isNotEmpty();
         assertThat(pager.size()).isLessThanOrEqualTo(pageSize.intValue());
@@ -229,7 +229,7 @@ class GermplasmRepositoryTest {
         criteria.setPageSize(3L);
         PaginatedList<GermplasmVO> g = repository.find(criteria);
         assertThat(g).isNotNull();
-        String json=null;
+        String json = null;
 
         ObjectMapper jacksonMapper = new ObjectMapper();
         try {
@@ -240,7 +240,7 @@ class GermplasmRepositoryTest {
         assertThat(json).isNotNull().isNotEmpty();
     }
 
-	@Test
+    @Test
     void should_Not_Have_Identical_Germplasm_On_Several_Pages() {
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
         criteria.setPage(0L);
@@ -257,8 +257,8 @@ class GermplasmRepositoryTest {
 
     @Test
     void should_Find_As_Much_Germplasm_Via_Scroll_And_Pager() {
-		final String species = "aestivum";
-		int numberOfAestivum = 3;
+        final String species = "aestivum";
+        int numberOfAestivum = 3;
 
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
         criteria.setGermplasmSpecies(Lists.newArrayList(species));
@@ -272,89 +272,89 @@ class GermplasmRepositoryTest {
         Pagination pagination = pager.getPagination();
         assertThat(pagination).isNotNull();
         Long totalCount = pagination.getTotalCount();
-		assertThat(totalCount).isNotNull().isEqualTo(numberOfAestivum);
+        assertThat(totalCount).isNotNull().isEqualTo(numberOfAestivum);
     }
 
     @Test
-	void should_Succeed_Empty_BrAPI_GET_Search_Criteria() {
-		GermplasmSearchCriteria criteria = new GermplasmGETSearchCriteria();
-		PaginatedList<GermplasmVO> vos = repository.find(criteria);
-		assertThat(vos).isNotNull().isNotEmpty();
-		assertThat(vos.size()).isGreaterThan(1);
-	}
+    void should_Succeed_Empty_BrAPI_GET_Search_Criteria() {
+        GermplasmSearchCriteria criteria = new GermplasmGETSearchCriteria();
+        PaginatedList<GermplasmVO> vos = repository.find(criteria);
+        assertThat(vos).isNotNull().isNotEmpty();
+        assertThat(vos.size()).isGreaterThan(1);
+    }
 
-	@Test
-	void should_Succeed_Full_BrAPI_POST_Search_Criteria() {
-		List<String> accessionNumbers = Arrays.asList(
-				"301Ang6", "P3725", "TX235");
-		List<String> germplasmDbIds = Arrays.asList(
-				"ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTg2MTk3NTU3OUUxMg==", "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTcxMTA0NzIwNUUxMg==", "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjY5NTQ2NjIzM0UxMg==");
-		List<String> germplasmNames = Arrays.asList(
-				"Sauvignon gris", "Grosse Bleue", "05-HD357.80.");
-		List<String> germplasmGenus = Arrays.asList(
-				"Vitis", "Prunus", "Triticum");
-		List<String> germplasmSpecies = Arrays.asList(
-				"vinifera", "domestica", "aestivum");
+    @Test
+    void should_Succeed_Full_BrAPI_POST_Search_Criteria() {
+        List<String> accessionNumbers = Arrays.asList(
+            "301Ang6", "P3725", "TX235");
+        List<String> germplasmDbIds = Arrays.asList(
+            "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTg2MTk3NTU3OUUxMg==", "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTcxMTA0NzIwNUUxMg==", "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjY5NTQ2NjIzM0UxMg==");
+        List<String> germplasmNames = Arrays.asList(
+            "Sauvignon gris", "Grosse Bleue", "05-HD357.80.");
+        List<String> germplasmGenus = Arrays.asList(
+            "Vitis", "Prunus", "Triticum");
+        List<String> germplasmSpecies = Arrays.asList(
+            "vinifera", "domestica", "aestivum");
 
-		GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
-		criteria.setAccessionNumbers(accessionNumbers);
-		criteria.setGermplasmDbIds(germplasmDbIds);
-		criteria.setGermplasmNames(germplasmNames);
-		criteria.setGermplasmGenus(germplasmGenus);
-		criteria.setGermplasmSpecies(germplasmSpecies);
+        GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
+        criteria.setAccessionNumbers(accessionNumbers);
+        criteria.setGermplasmDbIds(germplasmDbIds);
+        criteria.setGermplasmNames(germplasmNames);
+        criteria.setGermplasmGenus(germplasmGenus);
+        criteria.setGermplasmSpecies(germplasmSpecies);
 
-		PaginatedList<GermplasmVO> vos = repository.find(criteria);
-		assertThat(vos).isNotNull().isNotEmpty();
+        PaginatedList<GermplasmVO> vos = repository.find(criteria);
+        assertThat(vos).isNotNull().isNotEmpty();
 
-		assertThat(vos).extracting("accessionNumber").containsOnlyElementsOf(accessionNumbers);
-		assertThat(vos).extracting("germplasmDbId").containsOnlyElementsOf(germplasmDbIds);
-		assertThat(vos).extracting("germplasmName").containsOnlyElementsOf(germplasmNames);
-		assertThat(vos).extracting("genus").containsOnlyElementsOf(germplasmGenus);
-		assertThat(vos).extracting("species").containsOnlyElementsOf(germplasmSpecies);
-	}
+        assertThat(vos).extracting("accessionNumber").containsOnlyElementsOf(accessionNumbers);
+        assertThat(vos).extracting("germplasmDbId").containsOnlyElementsOf(germplasmDbIds);
+        assertThat(vos).extracting("germplasmName").containsOnlyElementsOf(germplasmNames);
+        assertThat(vos).extracting("genus").containsOnlyElementsOf(germplasmGenus);
+        assertThat(vos).extracting("species").containsOnlyElementsOf(germplasmSpecies);
+    }
 
-	@Test
-	void should_Succeed_Full_BrAPI_GET_Search_Criteria() {
-		List<String> germplasmDbIds = Arrays.asList(
-				"ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTg2MTk3NTU3OUUxMg==", "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTcxMTA0NzIwNUUxMg==", "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjY5NTQ2NjIzM0UxMg==");
-		List<String> germplasmNames = Arrays.asList(
-				"Sauvignon gris", "Grosse Bleue", "05-HD357.80.");
+    @Test
+    void should_Succeed_Full_BrAPI_GET_Search_Criteria() {
+        List<String> germplasmDbIds = Arrays.asList(
+            "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTg2MTk3NTU3OUUxMg==", "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTcxMTA0NzIwNUUxMg==", "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjY5NTQ2NjIzM0UxMg==");
+        List<String> germplasmNames = Arrays.asList(
+            "Sauvignon gris", "Grosse Bleue", "05-HD357.80.");
 
-		GermplasmGETSearchCriteria criteria = new GermplasmGETSearchCriteria();
-		criteria.setGermplasmDbId(germplasmDbIds);
-		criteria.setGermplasmName(germplasmNames);
+        GermplasmGETSearchCriteria criteria = new GermplasmGETSearchCriteria();
+        criteria.setGermplasmDbId(germplasmDbIds);
+        criteria.setGermplasmName(germplasmNames);
 
-		PaginatedList<GermplasmVO> vos = repository.find(criteria);
-		assertThat(vos).isNotNull().isNotEmpty();
+        PaginatedList<GermplasmVO> vos = repository.find(criteria);
+        assertThat(vos).isNotNull().isNotEmpty();
 
-		assertThat(vos).extracting("germplasmDbId").containsOnlyElementsOf(germplasmDbIds);
-		assertThat(vos).extracting("germplasmName").containsOnlyElementsOf(germplasmNames);
-	}
+        assertThat(vos).extracting("germplasmDbId").containsOnlyElementsOf(germplasmDbIds);
+        assertThat(vos).extracting("germplasmName").containsOnlyElementsOf(germplasmNames);
+    }
 
-	@Test
-	void should_get_empty_progeny_by_id(){
-		String germplasmDbId = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4Njg4NjAyMzEwNUUxMg==";
-		ProgenyVO progeny = repository.findProgeny(germplasmDbId);
-		assertThat(progeny).isNotNull();
-		assertThat(progeny.getGermplasmDbId()).isEqualTo(germplasmDbId);
-		assertThat(progeny.getProgeny()).isNotNull().isEmpty();
-	}
+    @Test
+    void should_get_empty_progeny_by_id() {
+        String germplasmDbId = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4Njg4NjAyMzEwNUUxMg==";
+        ProgenyVO progeny = repository.findProgeny(germplasmDbId);
+        assertThat(progeny).isNotNull();
+        assertThat(progeny.getGermplasmDbId()).isEqualTo(germplasmDbId);
+        assertThat(progeny.getProgeny()).isNotNull().isEmpty();
+    }
 
-	@Test
-	void should_get_progeny_by_id(){
-		String germplasmDbId = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwMjc4NDQ4MkUxMg==";
-		ProgenyVO progeny = repository.findProgeny(germplasmDbId);
-		assertThat(progeny).isNotNull();
-		assertThat(progeny.getGermplasmDbId()).isEqualTo(germplasmDbId);
-		assertThat(progeny.getProgeny()).isNotNull().hasSize(1);
-	}
+    @Test
+    void should_get_progeny_by_id() {
+        String germplasmDbId = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NTMwMjc4NDQ4MkUxMg==";
+        ProgenyVO progeny = repository.findProgeny(germplasmDbId);
+        assertThat(progeny).isNotNull();
+        assertThat(progeny.getGermplasmDbId()).isEqualTo(germplasmDbId);
+        assertThat(progeny.getProgeny()).isNotNull().hasSize(1);
+    }
 
-	@Test
-	void should_get_pedigree_by_id(){
-		String germplasmDbId = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4Njc4MjQwNzQ2OEUxMg==";
-		PedigreeVO pedigree = repository.findPedigree(germplasmDbId);
-		assertThat(pedigree).isNotNull();
-		assertThat(pedigree.getGermplasmDbId()).isEqualTo(germplasmDbId);
-		assertThat(pedigree.getSiblings()).isNotNull().hasSize(9);
-	}
+    @Test
+    void should_get_pedigree_by_id() {
+        String germplasmDbId = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4Njc4MjQwNzQ2OEUxMg==";
+        PedigreeVO pedigree = repository.findPedigree(germplasmDbId);
+        assertThat(pedigree).isNotNull();
+        assertThat(pedigree.getGermplasmDbId()).isEqualTo(germplasmDbId);
+        assertThat(pedigree.getSiblings()).isNotNull().hasSize(9);
+    }
 }

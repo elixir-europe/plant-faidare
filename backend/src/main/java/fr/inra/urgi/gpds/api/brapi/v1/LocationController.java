@@ -25,14 +25,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * @author gcornut
- *
- *
  */
-@Api(tags={"Breeding API"}, description = "BrAPI endpoints")
+@Api(tags = {"Breeding API"}, description = "BrAPI endpoint")
 @RestController
 public class LocationController {
 
-	private final LocationRepository repository;
+    private final LocationRepository repository;
 
     @Autowired
     public LocationController(LocationRepository repository) {
@@ -40,31 +38,31 @@ public class LocationController {
     }
 
     /**
-	 * @link https://github.com/plantbreeding/API/blob/master/Specification/Locations/LocationDetails.md
-	 */
-	@ApiOperation("Get location")
-	@RequestMapping(value = "/brapi/v1/locations/{locationDbId}", method = GET, produces= APPLICATION_JSON_VALUE)
-	@ResponseBody
-	@JsonView(JSONView.BrapiFields.class)
-	public BrapiResponse<LocationVO> getLocation(@PathVariable String locationDbId) {
-		LocationVO location = repository.getById(locationDbId);
-		if (location == null) {
-			throw new NotFoundException("Location not found for id '" + locationDbId + "'");
-		}
-		return BrapiResponseFactory.createSingleObjectResponse(location, null);
-	}
+     * @link https://github.com/plantbreeding/API/blob/master/Specification/Locations/LocationDetails.md
+     */
+    @ApiOperation("Get location")
+    @RequestMapping(value = "/brapi/v1/locations/{locationDbId}", method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(JSONView.BrapiFields.class)
+    public BrapiResponse<LocationVO> getLocation(@PathVariable String locationDbId) {
+        LocationVO location = repository.getById(locationDbId);
+        if (location == null) {
+            throw new NotFoundException("Location not found for id '" + locationDbId + "'");
+        }
+        return BrapiResponseFactory.createSingleObjectResponse(location, null);
+    }
 
-	/**
-	 * @link https://github.com/plantbreeding/API/blob/master/Specification/Locations/ListLocations.md
-	 */
-	@ApiOperation("List locations")
-	@RequestMapping(value = "/brapi/v1/locations", method = GET, produces= APPLICATION_JSON_VALUE)
-	@ResponseBody
-	@JsonView(JSONView.BrapiFields.class)
-	public BrapiListResponse<LocationVO> listLocations(
-			@Valid LocationCriteria criteria
-	) {
-		PaginatedList<LocationVO> result = repository.find(criteria);
-		return BrapiResponseFactory.createListResponse(result.getPagination(), null, result);
-	}
+    /**
+     * @link https://github.com/plantbreeding/API/blob/master/Specification/Locations/ListLocations.md
+     */
+    @ApiOperation("List locations")
+    @RequestMapping(value = "/brapi/v1/locations", method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(JSONView.BrapiFields.class)
+    public BrapiListResponse<LocationVO> listLocations(
+        @Valid LocationCriteria criteria
+    ) {
+        PaginatedList<LocationVO> result = repository.find(criteria);
+        return BrapiResponseFactory.createListResponse(result.getPagination(), null, result);
+    }
 }

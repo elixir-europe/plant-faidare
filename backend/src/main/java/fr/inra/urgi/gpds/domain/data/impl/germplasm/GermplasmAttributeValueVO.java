@@ -6,60 +6,58 @@ import java.util.Date;
 
 /**
  * @author gcornut
- *
- *
  */
 public class GermplasmAttributeValueVO implements BrapiGermplasmAttributeValue {
 
-	private String attributeDbId;
+    private String attributeDbId;
     private String attributeName;
     private String attributeCode;
     private String value;
     private Date determinedDate;
 
-	@Override
-	public String getAttributeDbId() {
-		return attributeDbId;
-	}
+    @Override
+    public String getAttributeDbId() {
+        return attributeDbId;
+    }
 
-	public void setAttributeDbId(String attributeDbId) {
-		this.attributeDbId = attributeDbId;
-	}
+    public void setAttributeDbId(String attributeDbId) {
+        this.attributeDbId = attributeDbId;
+    }
 
-	@Override
-	public String getAttributeName() {
-		return attributeName;
-	}
+    @Override
+    public String getAttributeName() {
+        return attributeName;
+    }
 
-	public void setAttributeName(String attributeName) {
-		this.attributeName = attributeName;
-	}
+    public void setAttributeName(String attributeName) {
+        this.attributeName = attributeName;
+    }
 
-	@Override
-	public String getAttributeCode() {
-		return attributeCode;
-	}
+    @Override
+    public String getAttributeCode() {
+        return attributeCode;
+    }
 
-	public void setAttributeCode(String attributeCode) {
-		this.attributeCode = attributeCode;
-	}
+    public void setAttributeCode(String attributeCode) {
+        this.attributeCode = attributeCode;
+    }
 
-	@Override
-	public String getValue() {
-		return value;
-	}
+    @Override
+    public String getValue() {
+        return value;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	@Override
-	public Date getDeterminedDate() {
-		return determinedDate;
-	}
+    @Override
+    public Date getDeterminedDate() {
+        return determinedDate;
+    }
 
-	public void setDeterminedDate(Date determinedDate) {
-		this.determinedDate = determinedDate;
-	}
+    public void setDeterminedDate(Date determinedDate) {
+        this.determinedDate = determinedDate;
+    }
 
 }

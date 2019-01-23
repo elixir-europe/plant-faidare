@@ -7,16 +7,14 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiMetadata {
-	@JsonView(JSONView.BrapiFields.class)
-	BrapiPagination getPagination();
+    @JsonView(JSONView.BrapiFields.class)
+    BrapiPagination getPagination();
 
-	@JsonView(JSONView.BrapiFields.class)
-	List<BrapiStatus> getStatus();
+    @JsonView(JSONView.BrapiFields.class)
+    List<BrapiStatus> getStatus();
 
-	@JsonView(JSONView.BrapiFields.class)
-	List<String> getDatafiles();
+    @JsonView(JSONView.BrapiFields.class)
+    List<String> getDatafiles();
 }

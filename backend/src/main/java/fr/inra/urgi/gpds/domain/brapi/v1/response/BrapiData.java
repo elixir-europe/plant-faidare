@@ -7,12 +7,10 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiData<T> {
 
-	@JsonView(JSONView.BrapiFields.class)
-	List<T> getData();
+    @JsonView(JSONView.BrapiFields.class)
+    List<T> getData();
 
 }

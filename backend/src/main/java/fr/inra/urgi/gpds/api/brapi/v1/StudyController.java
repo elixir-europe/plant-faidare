@@ -39,7 +39,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 /**
  * @author gcornut
  */
-@Api(tags = {"Breeding API"}, description = "BrAPI endpoints")
+@Api(tags = {"Breeding API"}, description = "BrAPI endpoint")
 @RestController
 public class StudyController {
 
@@ -85,6 +85,9 @@ public class StudyController {
     @ResponseBody
     @JsonView(JSONView.BrapiFields.class)
     public BrapiListResponse<StudySummaryVO> listStudies(@Valid StudySummaryCriteria criteria) {
+        if (criteria == null) {
+            criteria = new StudySummaryCriteria();
+        }
         PaginatedList<StudySummaryVO> result = repository.find(criteria);
         return BrapiResponseFactory.createListResponse(result.getPagination(), null, result);
     }
@@ -93,10 +96,10 @@ public class StudyController {
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Studies/SearchStudies.md
      */
     @ApiOperation("Search studies")
-    @RequestMapping(value = "/brapi/v1/studies-search", method = POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/brapi/v1/studies-search", method = {GET, POST}, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
     @JsonView(JSONView.BrapiFields.class)
-    public BrapiListResponse<StudySummaryVO> searchStudies(@RequestBody(required = false) StudySearchCriteria criteria) {
+    public BrapiListResponse<StudySummaryVO> searchStudies(@RequestBody(required = false) @Valid StudySearchCriteria criteria) {
         return listStudies(criteria);
     }
 
@@ -154,6 +157,7 @@ public class StudyController {
     public BrapiListResponse<GermplasmVO> listStudyGermplasm(
         @PathVariable String studyDbId, @Valid PaginationCriteriaImpl criteria
     ) throws Exception {
+        studyDbId = StringFunctions.asUTF8(studyDbId);
         StudyDetailVO study = this.getStudy(studyDbId).getResult();
 
         PaginatedList<GermplasmVO> pager;

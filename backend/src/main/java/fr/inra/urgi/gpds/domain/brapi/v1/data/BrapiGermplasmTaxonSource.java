@@ -5,13 +5,11 @@ import fr.inra.urgi.gpds.domain.JSONView;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiGermplasmTaxonSource {
-	@JsonView(JSONView.BrapiFields.class)
-	String getTaxonId();
+    @JsonView(JSONView.BrapiFields.class)
+    String getTaxonId();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getSourceName();
+    @JsonView(JSONView.BrapiFields.class)
+    String getSourceName();
 }

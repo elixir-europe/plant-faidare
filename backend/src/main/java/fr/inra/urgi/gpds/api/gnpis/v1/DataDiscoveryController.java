@@ -22,13 +22,13 @@ import java.util.Collection;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Api(tags = {"GnpIS API"})
+@Api(tags = {"GnpIS API"}, description = "Extended GnpIS API")
 @RestController
-@RequestMapping(value= "/gnpis/v1/datadiscovery")
+@RequestMapping(value = "/gnpis/v1/datadiscovery")
 public class DataDiscoveryController {
 
-	private final DataDiscoveryRepository dataDiscoveryRepository;
-	private final DataSourceRepository dataSourceRepository;
+    private final DataDiscoveryRepository dataDiscoveryRepository;
+    private final DataSourceRepository dataSourceRepository;
 
     @Autowired
     public DataDiscoveryController(DataDiscoveryRepository dataDiscoveryRepository, DataSourceRepository dataSourceRepository) {
@@ -37,34 +37,34 @@ public class DataDiscoveryController {
     }
 
     @ApiOperation("Suggest data discovery document field values")
-	@PostMapping(value = "/suggest", produces = APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public Collection<String> suggest(
-			@RequestParam String field,
-			@RequestParam(required = false) String text,
-			@RequestParam(required = false) Long fetchSize,
-			@RequestBody(required = false) @Valid DataDiscoveryCriteriaImpl criteria
-	) throws UnsupportedEncodingException {
-		return dataDiscoveryRepository.suggest(field, StringFunctions.asUTF8(text), fetchSize, criteria);
-	}
+    @PostMapping(value = "/suggest", produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Collection<String> suggest(
+        @RequestParam String field,
+        @RequestParam(required = false) String text,
+        @RequestParam(required = false) Long fetchSize,
+        @RequestBody(required = false) @Valid DataDiscoveryCriteriaImpl criteria
+    ) throws UnsupportedEncodingException {
+        return dataDiscoveryRepository.suggest(field, StringFunctions.asUTF8(text), fetchSize, criteria);
+    }
 
-	@ApiOperation("Search for data discovery documents")
-	@PostMapping(value = "/search", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-	@ResponseBody
-	@JsonView(JSONView.GnpISAPI.class)
-	public DataDiscoveryResponse search(
-			@RequestBody @Valid DataDiscoveryCriteriaImpl criteria
-	) {
-		return dataDiscoveryRepository.find(criteria);
-	}
+    @ApiOperation("Search for data discovery documents")
+    @PostMapping(value = "/search", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(JSONView.GnpISAPI.class)
+    public DataDiscoveryResponse search(
+        @RequestBody @Valid DataDiscoveryCriteriaImpl criteria
+    ) {
+        return dataDiscoveryRepository.find(criteria);
+    }
 
-	@ApiOperation("Get list of data sources")
-	@GetMapping(value = "/sources", produces = APPLICATION_JSON_VALUE)
-	@ResponseBody
-	@JsonView(JSONView.GnpISAPI.class)
-	public BrapiListResponse<? extends DataSource> sources() {
-		Collection<DataSource> dataSources = dataSourceRepository.listAll();
-		return BrapiResponseFactory.createSubListResponse(dataSources.size(), 0, new ArrayList<>(dataSources));
-	}
+    @ApiOperation("Get list of data sources")
+    @GetMapping(value = "/sources", produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(JSONView.GnpISAPI.class)
+    public BrapiListResponse<? extends DataSource> sources() {
+        Collection<DataSource> dataSources = dataSourceRepository.listAll();
+        return BrapiResponseFactory.createSubListResponse(dataSources.size(), 0, new ArrayList<>(dataSources));
+    }
 
 }

@@ -7,35 +7,33 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface DataDiscoveryCriteria extends PaginationCriteria, SortCriteria {
 
-	List<String> getCrops();
+    List<String> getCrops();
 
-	List<String> getGermplasmLists();
+    List<String> getGermplasmLists();
 
-	List<String> getAccessions();
+    List<String> getAccessions();
 
-	List<String> getObservationVariableIds();
+    List<String> getObservationVariableIds();
 
-	List<String> getSources();
+    List<String> getSources();
 
-	List<String> getTypes();
+    List<String> getTypes();
 
-	List<String> getFacetFields();
+    List<String> getFacetFields();
 
-	@Override
-	Long getPage();
+    @Override
+    Long getPage();
 
-	@Override
-	Long getPageSize();
+    @Override
+    Long getPageSize();
 
-	@Override
-	String getSortBy();
+    @Override
+    String getSortBy();
 
-	@Override
-	String getSortOrder();
+    @Override
+    String getSortOrder();
 
 }

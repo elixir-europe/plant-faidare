@@ -4,20 +4,18 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 class BrapiDataImpl<T> implements BrapiData<T> {
 
-	private final List<T> data;
+    private final List<T> data;
 
-	BrapiDataImpl(List<T> data) {
-		this.data = data;
-	}
+    BrapiDataImpl(List<T> data) {
+        this.data = data;
+    }
 
-	@Override
-	public List<T> getData() {
-		return data;
-	}
+    @Override
+    public List<T> getData() {
+        return data;
+    }
 
 }

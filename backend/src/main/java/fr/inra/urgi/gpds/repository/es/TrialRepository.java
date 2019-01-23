@@ -10,17 +10,15 @@ import fr.inra.urgi.gpds.elasticsearch.repository.ESGetByIdRepository;
  * Breeding API trial
  *
  * @author gcornut
- *
- *
  */
 public interface TrialRepository
-		extends ESFindRepository<TrialCriteria, TrialVO>,
+    extends ESFindRepository<TrialCriteria, TrialVO>,
     ESGetByIdRepository<TrialVO> {
 
-	@Override
-	TrialVO getById(String id);
+    @Override
+    TrialVO getById(String id);
 
-	@Override
-	PaginatedList<TrialVO> find(TrialCriteria criteria);
+    @Override
+    PaginatedList<TrialVO> find(TrialCriteria criteria);
 
 }

@@ -25,14 +25,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * @author gcornut
- *
- *
  */
-@Api(tags={"Breeding API"}, description = "BrAPI endpoints")
+@Api(tags = {"Breeding API"}, description = "BrAPI endpoint")
 @RestController
 public class TrialController {
 
-	private final TrialRepository repository;
+    private final TrialRepository repository;
 
     @Autowired
     public TrialController(TrialRepository repository) {
@@ -40,30 +38,30 @@ public class TrialController {
     }
 
     /**
-	 * @link https://github.com/plantbreeding/API/blob/master/Specification/Trials/GetTrialById.md
-	 */
-	@ApiOperation("Get trial")
-	@RequestMapping(value = "/brapi/v1/trials/{trialDbId}", method = GET, produces= APPLICATION_JSON_VALUE)
-	@ResponseBody
-	@JsonView(JSONView.BrapiFields.class)
-	public BrapiResponse<TrialVO> getTrial(@PathVariable String trialDbId) {
-		TrialVO program = repository.getById(trialDbId);
-		if (program == null) {
-			throw new NotFoundException("Trial not found for id '" + trialDbId + "'");
-		}
-		return BrapiResponseFactory.createSingleObjectResponse(program, null);
-	}
+     * @link https://github.com/plantbreeding/API/blob/master/Specification/Trials/GetTrialById.md
+     */
+    @ApiOperation("Get trial")
+    @RequestMapping(value = "/brapi/v1/trials/{trialDbId}", method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(JSONView.BrapiFields.class)
+    public BrapiResponse<TrialVO> getTrial(@PathVariable String trialDbId) {
+        TrialVO program = repository.getById(trialDbId);
+        if (program == null) {
+            throw new NotFoundException("Trial not found for id '" + trialDbId + "'");
+        }
+        return BrapiResponseFactory.createSingleObjectResponse(program, null);
+    }
 
-	/**
-	 * @link https://github.com/plantbreeding/API/blob/master/Specification/Trials/ListTrialSummaries.md
-	 */
-	@ApiOperation("List trials")
-	@RequestMapping(value = "/brapi/v1/trials", method = GET, produces= APPLICATION_JSON_VALUE)
-	@ResponseBody
-	@JsonView(JSONView.BrapiFields.class)
-	public BrapiListResponse<TrialVO> listTrials(@Valid TrialCriteria criteria) {
-		PaginatedList<TrialVO> result = repository.find(criteria);
-		return BrapiResponseFactory.createListResponse(result.getPagination(), null, result);
-	}
+    /**
+     * @link https://github.com/plantbreeding/API/blob/master/Specification/Trials/ListTrialSummaries.md
+     */
+    @ApiOperation("List trials")
+    @RequestMapping(value = "/brapi/v1/trials", method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(JSONView.BrapiFields.class)
+    public BrapiListResponse<TrialVO> listTrials(@Valid TrialCriteria criteria) {
+        PaginatedList<TrialVO> result = repository.find(criteria);
+        return BrapiResponseFactory.createListResponse(result.getPagination(), null, result);
+    }
 
 }

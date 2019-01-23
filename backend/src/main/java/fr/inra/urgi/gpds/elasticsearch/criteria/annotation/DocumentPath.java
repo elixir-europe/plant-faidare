@@ -9,21 +9,19 @@ import java.lang.annotation.Target;
  * Maps a criteria property to a value object property
  *
  * @author gcornut
- *
- *
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DocumentPath {
 
-	/**
-	 * Path into the document to the desired field
-	 */
-	String[] value();
+    /**
+     * Path into the document to the desired field
+     */
+    String[] value();
 
-	/**
-	 * Extra field path leading to elasticsearch virtual field
-	 */
-	String virtualField() default "";
+    /**
+     * Extra field path leading to elasticsearch virtual field
+     */
+    String virtualField() default "";
 
 }

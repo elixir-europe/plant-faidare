@@ -12,20 +12,18 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface DataDiscoveryResponse extends BrapiListResponse<DataDiscoveryDocument> {
 
-	@Override
-	@JsonView(JSONView.GnpISFields.class)
-	BrapiMetadata getMetadata();
+    @Override
+    @JsonView(JSONView.GnpISFields.class)
+    BrapiMetadata getMetadata();
 
-	@Override
-	@JsonView(JSONView.GnpISFields.class)
-	BrapiData<DataDiscoveryDocument> getResult();
+    @Override
+    @JsonView(JSONView.GnpISFields.class)
+    BrapiData<DataDiscoveryDocument> getResult();
 
-	@JsonView(JSONView.GnpISFields.class)
-	List<? extends Facet> getFacets();
+    @JsonView(JSONView.GnpISFields.class)
+    List<? extends Facet> getFacets();
 
 }

@@ -6,35 +6,32 @@ import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiTrialDatasetAuthorship;
 
 /**
  * @author gcornut
- *
- *
  */
 public class TrialDatasetAuthorshipVO implements BrapiTrialDatasetAuthorship {
 
-	// Transiet solution, it would be better to apply this configuraiton to all
-	// string fields globaly rather than doing it field by field.
-	@JsonSetter(nulls = Nulls.AS_EMPTY)
-	private String license;
-	// Transiet solution, it would be better to apply this configuraiton to all
-	// string fields globaly rather than doing it field by field.
-	@JsonSetter(nulls = Nulls.AS_EMPTY)
-	private String datasetPUI;
+    public static final TrialDatasetAuthorshipVO EMPTY = new TrialDatasetAuthorshipVO();
 
-	@Override
-	public String getLicense() {
-		return license;
-	}
+    @JsonSetter(nulls = Nulls.AS_EMPTY)
+    private String license = "";
 
-	@Override
-	public String getDatasetPUI() {
-		return datasetPUI;
-	}
+    @JsonSetter(nulls = Nulls.AS_EMPTY)
+    private String datasetPUI = "";
 
-	public void setLicense(String license) {
-		this.license = license;
-	}
+    @Override
+    public String getLicense() {
+        return license;
+    }
 
-	public void setDatasetPUI(String datasetPUI) {
-		this.datasetPUI = datasetPUI;
-	}
+    @Override
+    public String getDatasetPUI() {
+        return datasetPUI;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public void setDatasetPUI(String datasetPUI) {
+        this.datasetPUI = datasetPUI;
+    }
 }

@@ -10,83 +10,81 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 @CriteriaForDocument(GermplasmVO.class)
 public class GermplasmPOSTSearchCriteria
-		extends PaginationCriteriaImpl
-		implements GermplasmSearchCriteria, BrapiGermplasmPOSTSearchCriteria {
+    extends PaginationCriteriaImpl
+    implements GermplasmSearchCriteria, BrapiGermplasmPOSTSearchCriteria {
 
-	@DocumentPath("germplasmDbId")
-	private List<String> germplasmDbIds;
+    @DocumentPath("germplasmDbId")
+    private List<String> germplasmDbIds;
 
-	@DocumentPath("germplasmPUI")
-	private List<String> germplasmPUIs;
+    @DocumentPath("germplasmPUI")
+    private List<String> germplasmPUIs;
 
-	@DocumentPath("species")
-	private List<String> germplasmSpecies;
+    @DocumentPath("species")
+    private List<String> germplasmSpecies;
 
-	@DocumentPath("genus")
-	private List<String> germplasmGenus;
+    @DocumentPath("genus")
+    private List<String> germplasmGenus;
 
-	@DocumentPath("germplasmName")
-	private List<String> germplasmNames;
+    @DocumentPath("germplasmName")
+    private List<String> germplasmNames;
 
-	@DocumentPath("accessionNumber")
-	private List<String> accessionNumbers;
+    @DocumentPath("accessionNumber")
+    private List<String> accessionNumbers;
 
-	@Override
-	public List<String> getGermplasmPUIs() {
-		return germplasmPUIs;
-	}
+    @Override
+    public List<String> getGermplasmPUIs() {
+        return germplasmPUIs;
+    }
 
-	public void setGermplasmPUIs(List<String> germplasmPUIs) {
-		this.germplasmPUIs = germplasmPUIs;
-	}
+    public void setGermplasmPUIs(List<String> germplasmPUIs) {
+        this.germplasmPUIs = germplasmPUIs;
+    }
 
-	@Override
-	public List<String> getGermplasmDbIds() {
-		return germplasmDbIds;
-	}
+    @Override
+    public List<String> getGermplasmDbIds() {
+        return germplasmDbIds;
+    }
 
-	public void setGermplasmDbIds(List<String> germplasmDbIds) {
-		this.germplasmDbIds = germplasmDbIds;
-	}
+    public void setGermplasmDbIds(List<String> germplasmDbIds) {
+        this.germplasmDbIds = germplasmDbIds;
+    }
 
-	@Override
-	public List<String> getGermplasmSpecies() {
-		return germplasmSpecies;
-	}
+    @Override
+    public List<String> getGermplasmSpecies() {
+        return germplasmSpecies;
+    }
 
-	public void setGermplasmSpecies(List<String> germplasmSpecies) {
-		this.germplasmSpecies = germplasmSpecies;
-	}
+    public void setGermplasmSpecies(List<String> germplasmSpecies) {
+        this.germplasmSpecies = germplasmSpecies;
+    }
 
-	@Override
-	public List<String> getGermplasmGenus() {
-		return germplasmGenus;
-	}
+    @Override
+    public List<String> getGermplasmGenus() {
+        return germplasmGenus;
+    }
 
-	public void setGermplasmGenus(List<String> germplasmGenus) {
-		this.germplasmGenus = germplasmGenus;
-	}
+    public void setGermplasmGenus(List<String> germplasmGenus) {
+        this.germplasmGenus = germplasmGenus;
+    }
 
-	@Override
-	public List<String> getGermplasmNames() {
-		return germplasmNames;
-	}
+    @Override
+    public List<String> getGermplasmNames() {
+        return germplasmNames;
+    }
 
-	public void setGermplasmNames(List<String> germplasmNames) {
-		this.germplasmNames = germplasmNames;
-	}
+    public void setGermplasmNames(List<String> germplasmNames) {
+        this.germplasmNames = germplasmNames;
+    }
 
-	@Override
-	public List<String> getAccessionNumbers() {
-		return accessionNumbers;
-	}
+    @Override
+    public List<String> getAccessionNumbers() {
+        return accessionNumbers;
+    }
 
-	public void setAccessionNumbers(List<String> accessionNumbers) {
-		this.accessionNumbers = accessionNumbers;
-	}
+    public void setAccessionNumbers(List<String> accessionNumbers) {
+        this.accessionNumbers = accessionNumbers;
+    }
 }

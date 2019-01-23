@@ -3,29 +3,23 @@ package fr.inra.urgi.gpds.domain.brapi.v1.data;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.inra.urgi.gpds.domain.JSONView;
 
-import java.util.List;
+import java.util.Set;
 
 /**
- * @link https://github.com/plantbreeding/API/blob/master/Specification/Calls/Calls.md
- *
  * @author gcornut
- *
- *
+ * @link https://github.com/plantbreeding/API/blob/master/Specification/Calls/Calls.md
  */
 public interface BrapiCall {
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getCall();
+    @JsonView(JSONView.BrapiFields.class)
+    String getCall();
 
-	@JsonView(JSONView.BrapiFields.class)
-	List<String> getDatatypes();
+    @JsonView(JSONView.BrapiFields.class)
+    Set<String> getDatatypes();
 
-	@JsonView(JSONView.BrapiFields.class)
-	List<String> getDataTypes();
+    @JsonView(JSONView.BrapiFields.class)
+    Set<String> getMethods();
 
-	@JsonView(JSONView.BrapiFields.class)
-	List<String> getMethods();
-
-	@JsonView(JSONView.BrapiFields.class)
-	List<String> getVersions();
+    @JsonView(JSONView.BrapiFields.class)
+    Set<String> getVersions();
 }

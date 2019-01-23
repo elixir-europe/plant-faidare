@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -30,7 +27,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 /**
  * @author gcornut
  */
-@Api(tags = {"Breeding API"}, description = "BrAPI endpoints")
+@Api(tags = {"Breeding API"}, description = "BrAPI endpoint")
 @RestController
 public class CallsController {
 
@@ -39,6 +36,12 @@ public class CallsController {
         "1.1",
         "1.2"
     );
+
+    private final List<BrapiCall> implementedCalls;
+
+    public CallsController() {
+        this.implementedCalls = listImplementedCalls();
+    }
 
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Calls/Calls.md
@@ -49,7 +52,7 @@ public class CallsController {
     @JsonView(JSONView.BrapiFields.class)
     public BrapiListResponse<BrapiCall> calls(@Valid PaginationCriteriaImpl criteria) {
         return BrapiResponseFactory.createSubListResponse(
-            criteria.getPageSize(), criteria.getPage(), listImplementedCalls()
+            criteria.getPageSize(), criteria.getPage(), implementedCalls
         );
     }
 
@@ -58,7 +61,7 @@ public class CallsController {
      * annotations
      */
     private List<BrapiCall> listImplementedCalls() {
-        List<BrapiCall> calls = new ArrayList<>();
+        Map<String, BrapiCall> calls = new HashMap<>();
 
         Class<?> aClass = getClass();
         ClassLoader classLoader = aClass.getClassLoader();
@@ -88,7 +91,7 @@ public class CallsController {
                 }
 
                 String callName = annotation.value()[0];
-                callName = callName.split("/brapi/v[0-9]/")[1];
+                callName = callName.split("/brapi/v1/")[1];
 
                 RequestMethod[] httpMethods = annotation.method();
                 List<String> httpMethodNames = Lists.newArrayList();
@@ -101,16 +104,18 @@ public class CallsController {
                     datatypes.add(produces.replace("application/", ""));
                 }
 
-                CallVO call = new CallVO();
-                call.setCall(callName);
-                call.setMethods(httpMethodNames);
-                call.setDataTypes(datatypes);
-                call.setVersions(BRAPI_VERSIONS);
-                calls.add(call);
+                BrapiCall call = calls.get(callName);
+                if (call == null) {
+                    call = new CallVO(callName);
+                    calls.put(callName, call);
+                }
+                call.getMethods().addAll(httpMethodNames);
+                call.getDatatypes().addAll(datatypes);
+                call.getVersions().addAll(BRAPI_VERSIONS);
             }
         }
 
-        return calls;
+        return new ArrayList<>(calls.values());
     }
 
 }

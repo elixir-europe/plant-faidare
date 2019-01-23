@@ -7,19 +7,17 @@ import java.util.List;
  * object)
  *
  * @author gcornut
- *
- *
  */
 public interface CriteriaMappingTree {
 
-	/**
-	 * Get the full JSON path for the document field this criterion maps to
-	 */
-	List<String> getDocumentFieldPath();
+    /**
+     * Get the full JSON path for the document field this criterion maps to
+     */
+    List<String> getDocumentFieldPath();
 
-	/**
-	 * Get the document field name
-	 */
-	String getDocumentFieldName();
+    /**
+     * Get the document field name
+     */
+    String getDocumentFieldName();
 
 }

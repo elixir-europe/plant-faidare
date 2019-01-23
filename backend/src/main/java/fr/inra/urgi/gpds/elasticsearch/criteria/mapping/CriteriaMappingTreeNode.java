@@ -9,19 +9,19 @@ import java.util.Map;
  */
 public interface CriteriaMappingTreeNode extends CriteriaMappingTree {
 
-	@Override
-	List<String> getDocumentFieldPath();
+    @Override
+    List<String> getDocumentFieldPath();
 
-	@Override
-	String getDocumentFieldName();
+    @Override
+    String getDocumentFieldName();
 
-	/**
-	 * List children criteria
-	 */
-	Map<List<String>, CriteriaMappingTree> getMappingTree();
+    /**
+     * List children criteria
+     */
+    Map<List<String>, CriteriaMappingTree> getMappingTree();
 
-	/**
-	 * Get criterion from document field path
-	 */
-	<N extends CriteriaMappingTree> N getMapping(Class<N> clazz, List<String> documentFieldPath);
+    /**
+     * Get criterion from document field path
+     */
+    <N extends CriteriaMappingTree> N getMapping(Class<N> clazz, List<String> documentFieldPath);
 }

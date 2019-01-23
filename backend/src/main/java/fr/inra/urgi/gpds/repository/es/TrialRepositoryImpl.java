@@ -11,21 +11,19 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author gcornut
- *
- *
  */
 @Repository
 public class TrialRepositoryImpl
-		extends BaseESRepository<TrialCriteria, TrialVO>
-		implements TrialRepository {
+    extends BaseESRepository<TrialCriteria, TrialVO>
+    implements TrialRepository {
 
-	@Autowired
-	public TrialRepositoryImpl(
+    @Autowired
+    public TrialRepositoryImpl(
         RestHighLevelClient client,
         ESRequestFactory requestFactory,
         ESResponseParser parser
     ) {
-		super(client, requestFactory, TrialVO.class, parser);
-	}
+        super(client, requestFactory, TrialVO.class, parser);
+    }
 
 }

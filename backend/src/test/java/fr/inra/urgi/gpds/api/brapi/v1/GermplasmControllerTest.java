@@ -32,83 +32,83 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = GermplasmController.class)
 class GermplasmControllerTest {
 
-	@Autowired
+    @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-	private GermplasmService service;
+    private GermplasmService service;
 
     @MockBean
-	private GermplasmAttributeRepository germplasmAttributeRepository;
+    private GermplasmAttributeRepository germplasmAttributeRepository;
 
-	@Test
-	void should_Load_Germplasm_progeny_From_PUID() throws Exception {
-		ProgenyVO progeny = new ProgenyVO();
-		when(service.getProgeny(anyString())).thenReturn(progeny);
+    @Test
+    void should_Load_Germplasm_progeny_From_PUID() throws Exception {
+        ProgenyVO progeny = new ProgenyVO();
+        when(service.getProgeny(anyString())).thenReturn(progeny);
 
-		mockMvc.perform(get("/brapi/v1/germplasm/Z25waXNfcHVpOnVua25vd246UmljZToxNjc4MzEw/progeny")
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isOk());
-	}
+        mockMvc.perform(get("/brapi/v1/germplasm/Z25waXNfcHVpOnVua25vd246UmljZToxNjc4MzEw/progeny")
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+    }
 
-	@Test
-	void should_Load_Germplasm_Encoded_DOI() throws Exception {
-		GermplasmVO germplasm = new GermplasmVO();
-		when(service.getById(anyString())).thenReturn(germplasm);
+    @Test
+    void should_Load_Germplasm_Encoded_DOI() throws Exception {
+        GermplasmVO germplasm = new GermplasmVO();
+        when(service.getById(anyString())).thenReturn(germplasm);
 
-		mockMvc.perform(get("/brapi/v1/germplasm/Z25waXNfcHVpOnVua25vd246UmljZToxNjc4MzEw")
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isOk());
-	}
+        mockMvc.perform(get("/brapi/v1/germplasm/Z25waXNfcHVpOnVua25vd246UmljZToxNjc4MzEw")
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+    }
 
-	@Test
-	void should_Return_Not_Found() throws Exception {
-		when(service.getById(anyString())).thenReturn(null);
+    @Test
+    void should_Return_Not_Found() throws Exception {
+        when(service.getById(anyString())).thenReturn(null);
 
-		mockMvc.perform(get("/brapi/v1/germplasm/foo")
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.metadata.status", hasSize(1)))
-				.andExpect(jsonPath("$.metadata.status[0].code", is("404")));
-	}
+        mockMvc.perform(get("/brapi/v1/germplasm/foo")
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.metadata.status", hasSize(1)))
+            .andExpect(jsonPath("$.metadata.status[0].code", is("404")));
+    }
 
 
-	@Test
-	void should_Serialize_Fields_Correctly() throws Exception {
-		GermplasmVO germplasm = new GermplasmVO();
+    @Test
+    void should_Serialize_Fields_Correctly() throws Exception {
+        GermplasmVO germplasm = new GermplasmVO();
 
-		germplasm.setGroupId(0L);
-		germplasm.setSpeciesGroup(Collections.singletonList(1L));
+        germplasm.setGroupId(0L);
+        germplasm.setSpeciesGroup(Collections.singletonList(1L));
 
-		germplasm.setGermplasmDbId("germplasmDbId");
-		germplasm.setDefaultDisplayName("defaultDisplayName");
+        germplasm.setGermplasmDbId("germplasmDbId");
+        germplasm.setDefaultDisplayName("defaultDisplayName");
 
-		CollPopVO collection = new CollPopVO();
-		collection.setName("name");
-		germplasm.setCollection(Collections.singletonList(collection));
+        CollPopVO collection = new CollPopVO();
+        collection.setName("name");
+        germplasm.setCollection(Collections.singletonList(collection));
 
-		DonorVO donor = new DonorVO();
-		donor.setDonorGermplasmPUI("pui");
-		donor.setDonationDate(1);
-		germplasm.setDonors(Collections.singletonList(donor));
+        DonorVO donor = new DonorVO();
+        donor.setDonorGermplasmPUI("pui");
+        donor.setDonationDate(1);
+        germplasm.setDonors(Collections.singletonList(donor));
 
-		when(service.getById(anyString())).thenReturn(germplasm);
+        when(service.getById(anyString())).thenReturn(germplasm);
 
-		mockMvc.perform(get("/brapi/v1/germplasm/foo")
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/germplasm/foo")
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
 
-				// Should not have private fields
-				.andExpect(jsonPath("$.result", not(hasProperty("groupId"))))
-				.andExpect(jsonPath("$.result", not(hasProperty("speciesGroup"))))
+            // Should not have private fields
+            .andExpect(jsonPath("$.result", not(hasProperty("groupId"))))
+            .andExpect(jsonPath("$.result", not(hasProperty("speciesGroup"))))
 
-				// BrAPI fields should appear
-				.andExpect(jsonPath("$.result.germplasmDbId", is(germplasm.getGermplasmDbId())))
-				.andExpect(jsonPath("$.result.defaultDisplayName", is(germplasm.getDefaultDisplayName())))
-				.andExpect(jsonPath("$.result.donors[0].donorGermplasmPUI", is(donor.getDonorGermplasmPUI())))
+            // BrAPI fields should appear
+            .andExpect(jsonPath("$.result.germplasmDbId", is(germplasm.getGermplasmDbId())))
+            .andExpect(jsonPath("$.result.defaultDisplayName", is(germplasm.getDefaultDisplayName())))
+            .andExpect(jsonPath("$.result.donors[0].donorGermplasmPUI", is(donor.getDonorGermplasmPUI())))
 
-				// GnpIS specific fields should not appear
-				.andExpect(jsonPath("$.result.donors[0]", not(hasProperty("donationDate"))))
-				.andExpect(jsonPath("$.result", not(hasProperty("collection"))));
-	}
+            // GnpIS specific fields should not appear
+            .andExpect(jsonPath("$.result.donors[0]", not(hasProperty("donationDate"))))
+            .andExpect(jsonPath("$.result", not(hasProperty("collection"))));
+    }
 
 }

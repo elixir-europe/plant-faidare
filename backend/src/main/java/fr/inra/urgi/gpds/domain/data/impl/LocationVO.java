@@ -12,159 +12,187 @@ import java.util.List;
  * LocationVO extending the official BreedingAPI specs with specific fields
  *
  * @author gcornut
- *
- *
  */
 @Document(type = "location")
 public class LocationVO implements GnpISInternal, BrapiLocation {
 
-	@Id
-	private String locationDbId;
+    @Id
+    private String locationDbId;
 
-	private String name;
-	private String locationType;
-	private String abbreviation;
+    private String name;
+    private String locationType;
+    private String abbreviation;
 
-	private String countryCode;
-	private String countryName;
+    private String countryCode;
+    private String countryName;
 
-	private String institutionAdress;
-	private String institutionName;
+    private String institutionAddress;
+    private String institutionName;
 
-	private Double altitude;
-	private Double latitude;
-	private Double longitude;
+    private Double altitude;
+    private Double latitude;
+    private Double longitude;
 
-	private BrapiAdditionalInfo additionalInfo;
+    private BrapiAdditionalInfo additionalInfo;
 
-	// GnpIS specific fields
-	private List<Long> speciesGroup;
-	private Long groupId;
+    // GnpIS specific fields
+    private List<Long> speciesGroup;
+    private Long groupId;
 
-	@Override
-	public String getAbbreviation() {
-		return abbreviation;
-	}
+    private String documentationURL;
 
-	@Override
-	public Double getAltitude() {
-		return altitude;
-	}
+    @Override
+    public String getAbbreviation() {
+        return abbreviation;
+    }
 
-	@Override
-	public String getCountryCode() {
-		return countryCode;
-	}
+    @Deprecated
+    @Override
+    public String getAbreviation() {
+        return abbreviation;
+    }
 
-	@Override
-	public String getCountryName() {
-		return countryName;
-	}
+    @Override
+    public Double getAltitude() {
+        return altitude;
+    }
 
-	@Override
-	public String getInstitutionAdress() {
-		return institutionAdress;
-	}
+    @Override
+    public String getCountryCode() {
+        return countryCode;
+    }
 
-	@Override
-	public String getInstitutionName() {
-		return institutionName;
-	}
+    @Override
+    public String getCountryName() {
+        return countryName;
+    }
 
-	@Override
-	public Double getLatitude() {
-		return latitude;
-	}
+    @Override
+    public String getInstitutionAddress() {
+        return institutionAddress;
+    }
 
-	@Override
-	public String getLocationDbId() {
-		return locationDbId;
-	}
+    @Deprecated
+    @Override
+    public String getInstitutionAdress() {
+        return institutionAddress;
+    }
 
-	@Override
-	public String getLocationType() {
-		return locationType;
-	}
+    @Override
+    public String getInstitutionName() {
+        return institutionName;
+    }
 
-	@Override
-	public Double getLongitude() {
-		return longitude;
-	}
+    @Override
+    public Double getLatitude() {
+        return latitude;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    @Override
+    public String getLocationDbId() {
+        return locationDbId;
+    }
 
-	@Override
-	public BrapiAdditionalInfo getAdditionalInfo() {
-		return additionalInfo;
-	}
+    @Override
+    public String getLocationType() {
+        return locationType;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public Double getLongitude() {
+        return longitude;
+    }
 
-	public void setLocationDbId(String locationDbId) {
-		this.locationDbId = locationDbId;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	public void setLocationType(String locationType) {
-		this.locationType = locationType;
-	}
+    @Override
+    public BrapiAdditionalInfo getAdditionalInfo() {
+        return additionalInfo;
+    }
 
-	public void setAbbreviation(String abbreviation) {
-		this.abbreviation = abbreviation;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setCountryCode(String countryCode) {
-		this.countryCode = countryCode;
-	}
+    public void setLocationDbId(String locationDbId) {
+        this.locationDbId = locationDbId;
+    }
 
-	public void setCountryName(String countryName) {
-		this.countryName = countryName;
-	}
+    public void setLocationType(String locationType) {
+        this.locationType = locationType;
+    }
 
-	public void setInstitutionAdress(String institutionAdress) {
-		this.institutionAdress = institutionAdress;
-	}
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
+    }
 
-	public void setInstitutionName(String institutionName) {
-		this.institutionName = institutionName;
-	}
+    public void setAbreviation(String abreviation) {
+        this.abbreviation = abreviation;
+    }
 
-	public void setAltitude(Double altitude) {
-		this.altitude = altitude;
-	}
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
 
-	public void setLatitude(Double latitude) {
-		this.latitude = latitude;
-	}
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
 
-	public void setLongitude(Double longitude) {
-		this.longitude = longitude;
-	}
+    public void setInstitutionAddress(String institutionAddress) {
+        this.institutionAddress = institutionAddress;
+    }
 
-	public void setAdditionalInfo(BrapiAdditionalInfo additionalInfo) {
-		this.additionalInfo = additionalInfo;
-	}
+    public void setInstitutionAdress(String institutionAdress) {
+        this.institutionAddress = institutionAdress;
+    }
 
-	@Override
-	public List<Long> getSpeciesGroup() {
-		return speciesGroup;
-	}
+    public void setInstitutionName(String institutionName) {
+        this.institutionName = institutionName;
+    }
 
-	public void setSpeciesGroup(List<Long> speciesGroup) {
-		this.speciesGroup = speciesGroup;
-	}
+    public void setAltitude(Double altitude) {
+        this.altitude = altitude;
+    }
 
-	@Override
-	public Long getGroupId() {
-		return groupId;
-	}
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
 
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
 
+    public void setAdditionalInfo(BrapiAdditionalInfo additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
+    @Override
+    public List<Long> getSpeciesGroup() {
+        return speciesGroup;
+    }
+
+    public void setSpeciesGroup(List<Long> speciesGroup) {
+        this.speciesGroup = speciesGroup;
+    }
+
+    @Override
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    @Override
+    public String getDocumentationURL() {
+        return documentationURL;
+    }
+
+    public void setDocumentationURL(String documentationURL) {
+        this.documentationURL = documentationURL;
+    }
 }

@@ -9,71 +9,69 @@ import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.DocumentPath;
 
 /**
  * @author gcornut
- *
- *
  */
 @CriteriaForDocument(ProgramVO.class)
 public class ProgramCriteria extends PaginationCriteriaImpl
-		implements BrapiPaginationCriteria, BrapiProgramCriteria {
+    implements BrapiPaginationCriteria, BrapiProgramCriteria {
 
-	@DocumentPath("programDbId")
-	private String programDbId;
+    @DocumentPath("programDbId")
+    private String programDbId;
 
-	@DocumentPath("name")
-	private String name;
+    @DocumentPath("name")
+    private String name;
 
-	@DocumentPath("abbreviation")
-	private String abbreviation;
+    @DocumentPath("abbreviation")
+    private String abbreviation;
 
-	@DocumentPath("objective")
-	private String objective;
+    @DocumentPath("objective")
+    private String objective;
 
-	@DocumentPath("leadPerson")
-	private String leadPerson;
+    @DocumentPath("leadPerson")
+    private String leadPerson;
 
-	@Override
-	public String getProgramDbId() {
-		return programDbId;
-	}
+    @Override
+    public String getProgramDbId() {
+        return programDbId;
+    }
 
-	public void setProgramDbId(String programDbId) {
-		this.programDbId = programDbId;
-	}
+    public void setProgramDbId(String programDbId) {
+        this.programDbId = programDbId;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public String getAbbreviation() {
-		return abbreviation;
-	}
+    @Override
+    public String getAbbreviation() {
+        return abbreviation;
+    }
 
-	public void setAbbreviation(String abbreviation) {
-		this.abbreviation = abbreviation;
-	}
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
+    }
 
-	@Override
-	public String getObjective() {
-		return objective;
-	}
+    @Override
+    public String getObjective() {
+        return objective;
+    }
 
-	public void setObjective(String objective) {
-		this.objective = objective;
-	}
+    public void setObjective(String objective) {
+        this.objective = objective;
+    }
 
-	@Override
-	public String getLeadPerson() {
-		return leadPerson;
-	}
+    @Override
+    public String getLeadPerson() {
+        return leadPerson;
+    }
 
-	public void setLeadPerson(String leadPerson) {
-		this.leadPerson = leadPerson;
-	}
+    public void setLeadPerson(String leadPerson) {
+        this.leadPerson = leadPerson;
+    }
 
 }

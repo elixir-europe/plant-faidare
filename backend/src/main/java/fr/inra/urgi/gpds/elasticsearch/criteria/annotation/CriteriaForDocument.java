@@ -7,11 +7,9 @@ import java.lang.annotation.Target;
 
 /**
  * @author gcornut
- *
- *
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CriteriaForDocument {
-	Class<?> value();
+    Class<?> value();
 }

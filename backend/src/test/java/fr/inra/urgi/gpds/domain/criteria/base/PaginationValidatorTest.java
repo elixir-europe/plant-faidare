@@ -17,79 +17,79 @@ import java.util.Set;
 public class PaginationValidatorTest {
 
 
-	private static Validator validator;
+    private static Validator validator;
 
-	@BeforeAll
-	public static void setUp() {
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		validator = factory.getValidator();
-	}
+    @BeforeAll
+    public static void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
 
-	@Test
-	public void should_Control_Nulls() {
-		PaginationCriteriaImpl criteria = new PaginationCriteriaImpl();
-		criteria.setPageSize(null);
-		criteria.setPage(null);
+    @Test
+    public void should_Control_Nulls() {
+        PaginationCriteriaImpl criteria = new PaginationCriteriaImpl();
+        criteria.setPageSize(null);
+        criteria.setPage(null);
 
-		Set<ConstraintViolation<PaginationCriteria>> violations =
-				validator.validate(((PaginationCriteria) criteria));
-		Assertions.assertThat(violations).isNotNull().hasSize(2);
-		Assertions.assertThat(violations)
-				.extracting("message")
-				.containsOnly(PaginationCriteriaImpl.ERROR_PAGE_NULL, PaginationCriteriaImpl.ERROR_PAGE_SIZE_NULL);
-	}
+        Set<ConstraintViolation<PaginationCriteria>> violations =
+            validator.validate(((PaginationCriteria) criteria));
+        Assertions.assertThat(violations).isNotNull().hasSize(2);
+        Assertions.assertThat(violations)
+            .extracting("message")
+            .containsOnly(PaginationCriteriaImpl.ERROR_PAGE_NULL, PaginationCriteriaImpl.ERROR_PAGE_SIZE_NULL);
+    }
 
-	@Test
-	public void should_Control_Min() {
-		PaginationCriteriaImpl criteria = new PaginationCriteriaImpl();
-		criteria.setPageSize(PaginationCriteriaImpl.MIN_PAGE_SIZE-1);
-		criteria.setPage(PaginationCriteriaImpl.MIN_PAGE-1);
+    @Test
+    public void should_Control_Min() {
+        PaginationCriteriaImpl criteria = new PaginationCriteriaImpl();
+        criteria.setPageSize(PaginationCriteriaImpl.MIN_PAGE_SIZE - 1);
+        criteria.setPage(PaginationCriteriaImpl.MIN_PAGE - 1);
 
-		Set<ConstraintViolation<PaginationCriteria>> violations =
-				validator.validate(((PaginationCriteria) criteria));
-		Assertions.assertThat(violations).isNotNull().hasSize(2);
-		Assertions.assertThat(violations)
-				.extracting("message")
-				.containsOnly(PaginationCriteriaImpl.ERROR_PAGE_MIN, PaginationCriteriaImpl.ERROR_PAGE_SIZE_MIN);
-	}
+        Set<ConstraintViolation<PaginationCriteria>> violations =
+            validator.validate(((PaginationCriteria) criteria));
+        Assertions.assertThat(violations).isNotNull().hasSize(2);
+        Assertions.assertThat(violations)
+            .extracting("message")
+            .containsOnly(PaginationCriteriaImpl.ERROR_PAGE_MIN, PaginationCriteriaImpl.ERROR_PAGE_SIZE_MIN);
+    }
 
-	@Test
-	public void should_Control_Max_Size() {
-		PaginationCriteriaImpl criteria = new PaginationCriteriaImpl();
-		criteria.setPageSize(PaginationCriteriaImpl.MAX_PAGE_SIZE+1);
+    @Test
+    public void should_Control_Max_Size() {
+        PaginationCriteriaImpl criteria = new PaginationCriteriaImpl();
+        criteria.setPageSize(PaginationCriteriaImpl.MAX_PAGE_SIZE + 1);
 
-		Set<ConstraintViolation<PaginationCriteria>> violations =
-				validator.validate(((PaginationCriteria) criteria));
-		Assertions.assertThat(violations).isNotNull().hasSize(1);
-		Assertions.assertThat(violations)
-				.extracting("message")
-				.containsOnly(PaginationCriteriaImpl.ERROR_PAGE_SIZE_MAX);
-	}
+        Set<ConstraintViolation<PaginationCriteria>> violations =
+            validator.validate(((PaginationCriteria) criteria));
+        Assertions.assertThat(violations).isNotNull().hasSize(1);
+        Assertions.assertThat(violations)
+            .extracting("message")
+            .containsOnly(PaginationCriteriaImpl.ERROR_PAGE_SIZE_MAX);
+    }
 
-	@Test
-	public void should_Control_Max_Result_Window() {
-		PaginationCriteriaImpl criteria = new PaginationCriteriaImpl();
+    @Test
+    public void should_Control_Max_Result_Window() {
+        PaginationCriteriaImpl criteria = new PaginationCriteriaImpl();
 
-		criteria.setPageSize(101L);
-		criteria.setPage(100L);
+        criteria.setPageSize(101L);
+        criteria.setPage(100L);
 
-		Set<ConstraintViolation<PaginationCriteria>> violations;
-		violations = validator.validate(((PaginationCriteria) criteria));
-		Assertions.assertThat(violations).isNotNull().hasSize(1);
-		Assertions.assertThat(violations)
-				.extracting("message")
-				.containsOnly(PaginationMaxResultValidator.ERROR_MAX_RESULT_WINDOW);
-	}
+        Set<ConstraintViolation<PaginationCriteria>> violations;
+        violations = validator.validate(((PaginationCriteria) criteria));
+        Assertions.assertThat(violations).isNotNull().hasSize(1);
+        Assertions.assertThat(violations)
+            .extracting("message")
+            .containsOnly(PaginationMaxResultValidator.ERROR_MAX_RESULT_WINDOW);
+    }
 
-	@Test
-	public void should_Succeed_On_Valid_Pagination() {
-		PaginationCriteriaImpl criteria = new PaginationCriteriaImpl();
+    @Test
+    public void should_Succeed_On_Valid_Pagination() {
+        PaginationCriteriaImpl criteria = new PaginationCriteriaImpl();
 
-		criteria.setPageSize(13L);
-		criteria.setPage(11L);
+        criteria.setPageSize(13L);
+        criteria.setPage(11L);
 
-		Set<ConstraintViolation<PaginationCriteria>> violations;
-		violations = validator.validate(((PaginationCriteria) criteria));
-		Assertions.assertThat(violations).isNotNull().isEmpty();
-	}
+        Set<ConstraintViolation<PaginationCriteria>> violations;
+        violations = validator.validate(((PaginationCriteria) criteria));
+        Assertions.assertThat(violations).isNotNull().isEmpty();
+    }
 }

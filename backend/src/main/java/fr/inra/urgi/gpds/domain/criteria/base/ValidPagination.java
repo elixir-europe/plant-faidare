@@ -12,19 +12,17 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author gcornut
- *
- *
  */
 
-@Target({ TYPE, ANNOTATION_TYPE })
+@Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = PaginationMaxResultValidator.class)
 @Documented
 public @interface ValidPagination {
 
-	String message() default "";
+    String message() default "";
 
-	Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default { };
+    Class<? extends Payload>[] payload() default {};
 }

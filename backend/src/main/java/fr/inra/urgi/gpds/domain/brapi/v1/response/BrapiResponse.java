@@ -10,20 +10,18 @@ import fr.inra.urgi.gpds.domain.JSONView;
  * @author cpommier, gcornut
  *
  *
-<code>
-{
-"metadata": {},
-"result" : {}
-}
-</code>
- *
- *
+ * <code>
+ * {
+ * "metadata": {},
+ * "result" : {}
+ * }
+ * </code>
  */
 
 public interface BrapiResponse<T> {
-	@JsonView(JSONView.BrapiFields.class)
-	T getResult();
+    @JsonView(JSONView.BrapiFields.class)
+    T getResult();
 
-	@JsonView(JSONView.BrapiFields.class)
-	BrapiMetadata getMetadata();
+    @JsonView(JSONView.BrapiFields.class)
+    BrapiMetadata getMetadata();
 }

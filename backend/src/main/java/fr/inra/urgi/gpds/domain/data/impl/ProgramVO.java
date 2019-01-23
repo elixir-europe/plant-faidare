@@ -1,5 +1,7 @@
 package fr.inra.urgi.gpds.domain.data.impl;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiProgram;
 import fr.inra.urgi.gpds.domain.data.GnpISInternal;
 import fr.inra.urgi.gpds.elasticsearch.document.annotation.Document;
@@ -11,86 +13,89 @@ import java.util.List;
  * ProgramVO extending the official BreedingAPI specs with specific fields
  *
  * @author gcornut
- *
- *
  */
 @Document(type = "program")
 public class ProgramVO implements GnpISInternal, BrapiProgram {
 
-	@Id
-	private String programDbId;
+    @Id
+    private String programDbId;
 
-	private String name;
-	private String abbreviation;
+    private String name;
+    private String abbreviation;
 
-	private String leadPerson;
-	private String objective;
+    // This field is required to be non null in BRAVA
+    @JsonSetter(nulls = Nulls.AS_EMPTY)
+    private String leadPerson = "";
 
-	// GnpIS specific fields
-	private Long groupId;
-	private List<Long> speciesGroup;
+    // This field is required to be non null in BRAVA
+    @JsonSetter(nulls = Nulls.AS_EMPTY)
+    private String objective = "";
 
-	@Override
-	public String getAbbreviation() {
-		return abbreviation;
-	}
+    // GnpIS specific fields
+    private Long groupId;
+    private List<Long> speciesGroup;
 
-	public void setAbbreviation(String abbreviation) {
-		this.abbreviation = abbreviation;
-	}
+    @Override
+    public String getAbbreviation() {
+        return abbreviation;
+    }
 
-	@Override
-	public String getLeadPerson() {
-		return leadPerson;
-	}
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
+    }
 
-	public void setLeadPerson(String leadPerson) {
-		this.leadPerson = leadPerson;
-	}
+    @Override
+    public String getLeadPerson() {
+        return leadPerson;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    public void setLeadPerson(String leadPerson) {
+        this.leadPerson = leadPerson;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String getObjective() {
-		return objective;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setObjective(String objective) {
-		this.objective = objective;
-	}
+    @Override
+    public String getObjective() {
+        return objective;
+    }
 
-	@Override
-	public String getProgramDbId() {
-		return programDbId;
-	}
+    public void setObjective(String objective) {
+        this.objective = objective;
+    }
 
-	public void setProgramDbId(String programDbId) {
-		this.programDbId = programDbId;
-	}
+    @Override
+    public String getProgramDbId() {
+        return programDbId;
+    }
 
-	@Override
-	public List<Long> getSpeciesGroup() {
-		return speciesGroup;
-	}
+    public void setProgramDbId(String programDbId) {
+        this.programDbId = programDbId;
+    }
 
-	public void setSpeciesGroup(List<Long> speciesGroup) {
-		this.speciesGroup = speciesGroup;
-	}
+    @Override
+    public List<Long> getSpeciesGroup() {
+        return speciesGroup;
+    }
 
-	@Override
-	public Long getGroupId() {
-		return groupId;
-	}
+    public void setSpeciesGroup(List<Long> speciesGroup) {
+        this.speciesGroup = speciesGroup;
+    }
 
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
+    @Override
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
 
 }

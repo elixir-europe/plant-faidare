@@ -11,55 +11,53 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 @Document(type = "germplasmAttribute")
 public class GermplasmAttributeValueListVO implements BrapiGermplasmAttributeValueList, GnpISInternal {
 
-	private String germplasmDbId;
+    private String germplasmDbId;
 
-	@Nested
-	@JsonDeserialize(contentAs = GermplasmAttributeValueVO.class)
-	private List<BrapiGermplasmAttributeValue> data;
+    @Nested
+    @JsonDeserialize(contentAs = GermplasmAttributeValueVO.class)
+    private List<BrapiGermplasmAttributeValue> data;
 
-	// GnpIS specific fields
-	private List<Long> speciesGroup;
-	private Long groupId;
+    // GnpIS specific fields
+    private List<Long> speciesGroup;
+    private Long groupId;
 
-	@Override
-	public String getGermplasmDbId() {
-		return germplasmDbId;
-	}
+    @Override
+    public String getGermplasmDbId() {
+        return germplasmDbId;
+    }
 
-	public void setGermplasmDbId(String germplasmDbId) {
-		this.germplasmDbId = germplasmDbId;
-	}
+    public void setGermplasmDbId(String germplasmDbId) {
+        this.germplasmDbId = germplasmDbId;
+    }
 
-	@Override
-	public List<BrapiGermplasmAttributeValue> getData() {
-		return data;
-	}
+    @Override
+    public List<BrapiGermplasmAttributeValue> getData() {
+        return data;
+    }
 
-	public void setData(List<BrapiGermplasmAttributeValue> data) {
-		this.data = data;
-	}
+    public void setData(List<BrapiGermplasmAttributeValue> data) {
+        this.data = data;
+    }
 
-	@Override
-	public List<Long> getSpeciesGroup() {
-		return speciesGroup;
-	}
+    @Override
+    public List<Long> getSpeciesGroup() {
+        return speciesGroup;
+    }
 
-	public void setSpeciesGroup(List<Long> speciesGroup) {
-		this.speciesGroup = speciesGroup;
-	}
+    public void setSpeciesGroup(List<Long> speciesGroup) {
+        this.speciesGroup = speciesGroup;
+    }
 
-	@Override
-	public Long getGroupId() {
-		return groupId;
-	}
+    @Override
+    public Long getGroupId() {
+        return groupId;
+    }
 
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
 }

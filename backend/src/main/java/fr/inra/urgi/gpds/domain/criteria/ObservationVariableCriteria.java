@@ -8,31 +8,29 @@ import java.util.Set;
 
 /**
  * @author gcornut
- *
- *
  */
 public class ObservationVariableCriteria extends PaginationCriteriaImpl
-		implements BrapiPaginationCriteria, BrapiObservationVariableCriteria {
+    implements BrapiPaginationCriteria, BrapiObservationVariableCriteria {
 
-	private String traitClass;
-	private Set<String> observationVariableDbIds;
+    private String traitClass;
+    private Set<String> observationVariableDbIds;
 
-	@Override
-	public String getTraitClass() {
-		return traitClass;
-	}
+    @Override
+    public String getTraitClass() {
+        return traitClass;
+    }
 
-	public void setTraitClass(String traitClass) {
-		this.traitClass = traitClass;
-	}
+    public void setTraitClass(String traitClass) {
+        this.traitClass = traitClass;
+    }
 
-	@Override
-	public Set<String> getObservationVariableDbIds() {
-		return observationVariableDbIds;
-	}
+    @Override
+    public Set<String> getObservationVariableDbIds() {
+        return observationVariableDbIds;
+    }
 
-	public void setObservationVariableDbIds(Set<String> observationVariableDbIds) {
-		this.observationVariableDbIds = observationVariableDbIds;
-	}
+    public void setObservationVariableDbIds(Set<String> observationVariableDbIds) {
+        this.observationVariableDbIds = observationVariableDbIds;
+    }
 
 }

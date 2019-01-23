@@ -26,73 +26,73 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = Application.class)
 public class TrialRepositoryTest {
 
-	@Autowired
-	ESSetUp esSetUp;
+    @Autowired
+    ESSetUp esSetUp;
 
-	@BeforeAll
-	public void before() {
-	    esSetUp.initialize(TrialVO.class, 0);
-	}
+    @BeforeAll
+    public void before() {
+        esSetUp.initialize(TrialVO.class, 0);
+    }
 
     @Autowired
-	TrialRepository repository;
+    TrialRepository repository;
 
     @Test
     void should_Get_By_Id() {
-		String expectedId = "T1";
-		TrialVO result = repository.getById(expectedId);
-		assertThat(result).isNotNull();
-		assertThat(result).extracting("trialDbId").containsOnly(expectedId);
-	}
+        String expectedId = "T1";
+        TrialVO result = repository.getById(expectedId);
+        assertThat(result).isNotNull();
+        assertThat(result).extracting("trialDbId").containsOnly(expectedId);
+    }
 
-	@Test
+    @Test
     void should_Find_Paginated() {
-		int pageSize = 3;
-		int page = 1;
-		TrialCriteria criteria = new TrialCriteria();
-		criteria.setPageSize((long) pageSize);
-		criteria.setPage((long) page);
+        int pageSize = 3;
+        int page = 1;
+        TrialCriteria criteria = new TrialCriteria();
+        criteria.setPageSize((long) pageSize);
+        criteria.setPage((long) page);
 
-		PaginatedList<TrialVO> result = repository.find(criteria);
-		assertThat(result).isNotNull().isNotEmpty().hasSize(pageSize);
+        PaginatedList<TrialVO> result = repository.find(criteria);
+        assertThat(result).isNotNull().isNotEmpty().hasSize(pageSize);
 
-		assertThat(result.getPagination()).isNotNull();
-		assertThat(result.getPagination().getPageSize()).isEqualTo(pageSize);
-		assertThat(result.getPagination().getCurrentPage()).isEqualTo(page);
-	}
+        assertThat(result.getPagination()).isNotNull();
+        assertThat(result.getPagination().getPageSize()).isEqualTo(pageSize);
+        assertThat(result.getPagination().getCurrentPage()).isEqualTo(page);
+    }
 
-	@Test
+    @Test
     void should_Find_By_Location() {
-		String expectedLocationDbId = "37497";
-		TrialCriteria criteria = new TrialCriteria();
-		criteria.setLocationDbId(expectedLocationDbId);
+        String expectedLocationDbId = "37497";
+        TrialCriteria criteria = new TrialCriteria();
+        criteria.setLocationDbId(expectedLocationDbId);
 
-		PaginatedList<TrialVO> result = repository.find(criteria);
+        PaginatedList<TrialVO> result = repository.find(criteria);
 
-		assertThat(result).isNotNull().isNotEmpty();
-		TrialVO trialVO = result.get(0);
-		assertThat(trialVO.getStudies()).extracting("locationDbId")
-				.contains(expectedLocationDbId);
-	}
+        assertThat(result).isNotNull().isNotEmpty();
+        TrialVO trialVO = result.get(0);
+        assertThat(trialVO.getStudies()).extracting("locationDbId")
+            .contains(expectedLocationDbId);
+    }
 
-	@Test
+    @Test
     void should_Find_Sorted() {
-		String sortField = "trialName";
+        String sortField = "trialName";
 
-		TrialCriteria criteria = new TrialCriteria();
-		criteria.setSortBy(sortField);
-		criteria.setSortOrder("desc");
+        TrialCriteria criteria = new TrialCriteria();
+        criteria.setSortBy(sortField);
+        criteria.setSortOrder("desc");
 
-		PaginatedList<TrialVO> result = repository.find(criteria);
+        PaginatedList<TrialVO> result = repository.find(criteria);
 
-		assertThat(result).isNotNull().isNotEmpty();
-		assertThat(result).extracting(sortField).isSortedAccordingTo(new DescendingOrder());
-	}
+        assertThat(result).isNotNull().isNotEmpty();
+        assertThat(result).extracting(sortField).isSortedAccordingTo(new DescendingOrder());
+    }
 
-	private class DescendingOrder implements Comparator<Object> {
-		@Override
-		public int compare(Object o1, Object o2) {
-			return ((String) o2).compareTo(((String) o1));
-		}
-	}
+    private class DescendingOrder implements Comparator<Object> {
+        @Override
+        public int compare(Object o1, Object o2) {
+            return ((String) o2).compareTo(((String) o1));
+        }
+    }
 }

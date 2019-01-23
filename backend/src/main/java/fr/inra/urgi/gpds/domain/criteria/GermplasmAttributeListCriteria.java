@@ -10,23 +10,21 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 @CriteriaForDocument(GermplasmAttributeValueListVO.class)
 public class GermplasmAttributeListCriteria
-	extends PaginationCriteriaImpl
-	implements BrapiGermplasmAttributeListCriteria {
+    extends PaginationCriteriaImpl
+    implements BrapiGermplasmAttributeListCriteria {
 
-	@DocumentPath("attributeCategoryDbId")
-	private List<String> attributeCategoryDbId;
+    @DocumentPath("attributeCategoryDbId")
+    private List<String> attributeCategoryDbId;
 
-	@Override
-	public List<String> getAttributeCategoryDbId() {
-		return attributeCategoryDbId;
-	}
+    @Override
+    public List<String> getAttributeCategoryDbId() {
+        return attributeCategoryDbId;
+    }
 
-	public void setAttributeCategoryDbId(List<String> attributeCategoryDbId) {
-		this.attributeCategoryDbId = attributeCategoryDbId;
-	}
+    public void setAttributeCategoryDbId(List<String> attributeCategoryDbId) {
+        this.attributeCategoryDbId = attributeCategoryDbId;
+    }
 }

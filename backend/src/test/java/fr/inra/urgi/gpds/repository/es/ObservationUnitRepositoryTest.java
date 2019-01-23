@@ -34,240 +34,240 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest(classes = Application.class)
 class ObservationUnitRepositoryTest {
 
-	@Autowired
+    @Autowired
     ESSetUp esSetUp;
 
-	@BeforeAll
-	void before() {
-	    esSetUp.initialize(ObservationUnitVO.class, 0);
-	}
+    @BeforeAll
+    void before() {
+        esSetUp.initialize(ObservationUnitVO.class, 0);
+    }
 
     @Autowired
-	ObservationUnitRepository repository;
+    ObservationUnitRepository repository;
 
-	@Test
+    @Test
     void should_Find_Paginated() {
-		int pageSize = 3;
-		int page = 1;
-		ObservationUnitCriteria criteria = new ObservationUnitCriteria();
-		criteria.setPageSize((long) pageSize);
-		criteria.setPage((long) page);
+        int pageSize = 3;
+        int page = 1;
+        ObservationUnitCriteria criteria = new ObservationUnitCriteria();
+        criteria.setPageSize((long) pageSize);
+        criteria.setPage((long) page);
 
-		PaginatedList<ObservationUnitVO> result = repository.find(criteria);
-		assertThat(result).isNotNull().isNotEmpty().hasSize(pageSize);
+        PaginatedList<ObservationUnitVO> result = repository.find(criteria);
+        assertThat(result).isNotNull().isNotEmpty().hasSize(pageSize);
 
-		assertThat(result.getPagination()).isNotNull();
-		assertThat(result.getPagination().getPageSize()).isEqualTo(pageSize);
-		assertThat(result.getPagination().getCurrentPage()).isEqualTo(page);
-	}
+        assertThat(result.getPagination()).isNotNull();
+        assertThat(result.getPagination().getPageSize()).isEqualTo(pageSize);
+        assertThat(result.getPagination().getCurrentPage()).isEqualTo(page);
+    }
 
-	@Test
+    @Test
     void should_Find_By_Level() {
-		String expectedLevel = "BLOCK";
-		ObservationUnitCriteria criteria = new ObservationUnitCriteria();
-		criteria.setObservationLevel(expectedLevel);
+        String expectedLevel = "BLOCK";
+        ObservationUnitCriteria criteria = new ObservationUnitCriteria();
+        criteria.setObservationLevel(expectedLevel);
 
-		PaginatedList<ObservationUnitVO> result = repository.find(criteria);
+        PaginatedList<ObservationUnitVO> result = repository.find(criteria);
 
-		assertThat(result).isNotNull().hasSize(5);
-		assertThat(result).extracting("observationLevel").containsOnly(expectedLevel);
-	}
+        assertThat(result).isNotNull().hasSize(5);
+        assertThat(result).extracting("observationLevel").containsOnly(expectedLevel);
+    }
 
-	@Test
+    @Test
     void should_Find_By_Timestamp_Range() {
-		ObservationUnitCriteria criteria = new ObservationUnitCriteria();
+        ObservationUnitCriteria criteria = new ObservationUnitCriteria();
 
-		String from = "2001-12-31T00:00:00Z";
-		String to = "2005-12-31T01:00:00Z";
-		final Date fromDate = DateTime.parse(from).toDate();
-		final Date toDate = DateTime.parse(to).toDate();
-		List<String> timestampRange = Arrays.asList(from, to);
-		criteria.setObservationTimeStampRange(timestampRange);
+        String from = "2001-12-31T00:00:00Z";
+        String to = "2005-12-31T01:00:00Z";
+        final Date fromDate = DateTime.parse(from).toDate();
+        final Date toDate = DateTime.parse(to).toDate();
+        List<String> timestampRange = Arrays.asList(from, to);
+        criteria.setObservationTimeStampRange(timestampRange);
 
-		PaginatedList<ObservationUnitVO> result = repository.find(criteria);
+        PaginatedList<ObservationUnitVO> result = repository.find(criteria);
 
-		assertThat(result).isNotNull().hasSize(4);
-		assertThat(result)
-				.flatExtracting("observations")
-				.are(new Condition<Object>() {
-					@Override
-                    public boolean matches(Object data) {
-						if (data instanceof ObservationVO) {
-							ObservationVO observation = (ObservationVO) data;
-							Date timeStamp = observation.getObservationTimeStamp();
-							assertThat(timeStamp).isAfter(fromDate);
-							assertThat(timeStamp).isBefore(toDate);
-							return true;
-						}
-						return false;
-					}
-				});
-	}
+        assertThat(result).isNotNull().hasSize(4);
+        assertThat(result)
+            .flatExtracting("observations")
+            .are(new Condition<Object>() {
+                @Override
+                public boolean matches(Object data) {
+                    if (data instanceof ObservationVO) {
+                        ObservationVO observation = (ObservationVO) data;
+                        Date timeStamp = observation.getObservationTimeStamp();
+                        assertThat(timeStamp).isAfter(fromDate);
+                        assertThat(timeStamp).isBefore(toDate);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+    }
 
-	@Test
-	void should_Fail_Find_Invalid_Timestamp_Range() {
-		ObservationUnitCriteria criteria = new ObservationUnitCriteria();
+    @Test
+    void should_Fail_Find_Invalid_Timestamp_Range() {
+        ObservationUnitCriteria criteria = new ObservationUnitCriteria();
 
-		List<String> timestampRange = Arrays.asList("foo", "bar", "baz");
-		criteria.setObservationTimeStampRange(timestampRange);
+        List<String> timestampRange = Arrays.asList("foo", "bar", "baz");
+        criteria.setObservationTimeStampRange(timestampRange);
 
-		assertThrows(
-		    RuntimeException.class,
+        assertThrows(
+            RuntimeException.class,
             () -> repository.find(criteria)
         );
-	}
+    }
 
-	@Test
-	void should_Find_By_Variables() {
-		ObservationUnitCriteria criteria = new ObservationUnitCriteria();
+    @Test
+    void should_Find_By_Variables() {
+        ObservationUnitCriteria criteria = new ObservationUnitCriteria();
 
-		String variableId1 = "CO_357:0000088";
-		String variableId2 = "CO_357:0000089";
-		Set<String> variableIds = Sets.newHashSet(variableId1, variableId2);
-		criteria.setObservationVariableDbIds(variableIds);
+        String variableId1 = "CO_357:0000088";
+        String variableId2 = "CO_357:0000089";
+        Set<String> variableIds = Sets.newHashSet(variableId1, variableId2);
+        criteria.setObservationVariableDbIds(variableIds);
 
-		PaginatedList<ObservationUnitVO> result = repository.find(criteria);
+        PaginatedList<ObservationUnitVO> result = repository.find(criteria);
 
-		assertThat(result).isNotNull().isNotEmpty();
-		assertThat(result)
-				.flatExtracting("observations")
-				.extracting("observationVariableDbId")
-				.containsOnlyElementsOf(variableIds);
-	}
+        assertThat(result).isNotNull().isNotEmpty();
+        assertThat(result)
+            .flatExtracting("observations")
+            .extracting("observationVariableDbId")
+            .containsOnlyElementsOf(variableIds);
+    }
 
-	@Test
-	void should_Find_By_Variables_And_Timestamp() {
-		ObservationUnitCriteria criteria = new ObservationUnitCriteria();
+    @Test
+    void should_Find_By_Variables_And_Timestamp() {
+        ObservationUnitCriteria criteria = new ObservationUnitCriteria();
 
-		String variableId1 = "CO_357:0000088";
-		String variableId2 = "CO_357:0000089";
-		Set<String> variableIds = Sets.newHashSet(variableId1, variableId2);
-		criteria.setObservationVariableDbIds(variableIds);
+        String variableId1 = "CO_357:0000088";
+        String variableId2 = "CO_357:0000089";
+        Set<String> variableIds = Sets.newHashSet(variableId1, variableId2);
+        criteria.setObservationVariableDbIds(variableIds);
 
-		String from = "2002-07-03T00:00:00Z";
-		String to = "2005-11-14T00:00:00Z";
-		final Date fromDate = DateTime.parse(from).toDate();
-		final Date toDate = DateTime.parse(to).toDate();
-		List<String> timestampRange = Arrays.asList(from, to);
-		criteria.setObservationTimeStampRange(timestampRange);
+        String from = "2002-07-03T00:00:00Z";
+        String to = "2005-11-14T00:00:00Z";
+        final Date fromDate = DateTime.parse(from).toDate();
+        final Date toDate = DateTime.parse(to).toDate();
+        List<String> timestampRange = Arrays.asList(from, to);
+        criteria.setObservationTimeStampRange(timestampRange);
 
-		PaginatedList<ObservationUnitVO> result = repository.find(criteria);
+        PaginatedList<ObservationUnitVO> result = repository.find(criteria);
 
-		assertThat(result).isNotNull().isNotEmpty();
+        assertThat(result).isNotNull().isNotEmpty();
 
-		assertThat(result)
-				.flatExtracting("observations")
-				.extracting("observationVariableDbId")
-				.containsOnlyElementsOf(variableIds);
+        assertThat(result)
+            .flatExtracting("observations")
+            .extracting("observationVariableDbId")
+            .containsOnlyElementsOf(variableIds);
 
-		assertThat(result)
-				.flatExtracting("observations")
-				.are(new ObservationsInTimeRange(fromDate, toDate));
-	}
-
-
-	@Test
-	void should_Find_By_Invalid_Variables() {
-		ObservationUnitCriteria criteria = new ObservationUnitCriteria();
-
-		String variableId1 = "FOO:BAR";
-		Set<String> variableIds = Sets.newHashSet(variableId1);
-		criteria.setObservationVariableDbIds(variableIds);
-
-		PaginatedList<ObservationUnitVO> result = repository.find(criteria);
-
-		assertThat(result).isNotNull().isEmpty();
-	}
+        assertThat(result)
+            .flatExtracting("observations")
+            .are(new ObservationsInTimeRange(fromDate, toDate));
+    }
 
 
-	@Test
-	void should_Find_By_All_Criteria() {
-		ObservationUnitCriteria criteria = new ObservationUnitCriteria();
+    @Test
+    void should_Find_By_Invalid_Variables() {
+        ObservationUnitCriteria criteria = new ObservationUnitCriteria();
 
-		String variableId1 = "CO_357:0000088";
-		String variableId2 = "CO_357:0000089";
-		Set<String> variableIds = Sets.newHashSet(variableId1, variableId2);
-		criteria.setObservationVariableDbIds(variableIds);
+        String variableId1 = "FOO:BAR";
+        Set<String> variableIds = Sets.newHashSet(variableId1);
+        criteria.setObservationVariableDbIds(variableIds);
 
-		String from = "2002-07-03T00:00:00Z";
-		String to = "2005-11-14T00:00:00Z";
-		final Date fromDate = DateTime.parse(from).toDate();
-		final Date toDate = DateTime.parse(to).toDate();
-		List<String> timestampRange = Arrays.asList(from, to);
-		criteria.setObservationTimeStampRange(timestampRange);
+        PaginatedList<ObservationUnitVO> result = repository.find(criteria);
 
-		Set<String> programIds = Sets.newHashSet("P1", "P2");
-		criteria.setProgramDbIds(programIds);
+        assertThat(result).isNotNull().isEmpty();
+    }
 
-		Set<String> germplasmIds = Sets.newHashSet("G1", "G2");
-		criteria.setGermplasmDbIds(germplasmIds);
 
-		Set<String> locationIds = Sets.newHashSet("34069");
-		criteria.setLocationDbIds(locationIds);
+    @Test
+    void should_Find_By_All_Criteria() {
+        ObservationUnitCriteria criteria = new ObservationUnitCriteria();
 
-		Set<String> seasons = Sets.newHashSet("2002");
-		criteria.setSeasonDbIds(seasons);
+        String variableId1 = "CO_357:0000088";
+        String variableId2 = "CO_357:0000089";
+        Set<String> variableIds = Sets.newHashSet(variableId1, variableId2);
+        criteria.setObservationVariableDbIds(variableIds);
 
-		String observationLevel = "BLOCK";
-		criteria.setObservationLevel(observationLevel);
+        String from = "2002-07-03T00:00:00Z";
+        String to = "2005-11-14T00:00:00Z";
+        final Date fromDate = DateTime.parse(from).toDate();
+        final Date toDate = DateTime.parse(to).toDate();
+        List<String> timestampRange = Arrays.asList(from, to);
+        criteria.setObservationTimeStampRange(timestampRange);
 
-		Set<String> studyIds = Sets.newHashSet("POP2-Orleans-chancre");
-		criteria.setStudyDbIds(studyIds);
+        Set<String> programIds = Sets.newHashSet("P1", "P2");
+        criteria.setProgramDbIds(programIds);
 
-		PaginatedList<ObservationUnitVO> result = repository.find(criteria);
+        Set<String> germplasmIds = Sets.newHashSet("G1", "G2");
+        criteria.setGermplasmDbIds(germplasmIds);
 
-		assertThat(result).isNotNull().isNotEmpty();
+        Set<String> locationIds = Sets.newHashSet("34069");
+        criteria.setLocationDbIds(locationIds);
 
-		assertThat(result)
-				.extracting("studyDbId")
-				.containsOnlyElementsOf(studyIds);
+        Set<String> seasons = Sets.newHashSet("2002");
+        criteria.setSeasonDbIds(seasons);
 
-		assertThat(result)
-				.extracting("observationLevel")
-				.containsOnly(observationLevel);
+        String observationLevel = "BLOCK";
+        criteria.setObservationLevel(observationLevel);
 
-		assertThat(result)
-				.extracting("studyLocationDbId")
-				.containsOnlyElementsOf(locationIds);
+        Set<String> studyIds = Sets.newHashSet("POP2-Orleans-chancre");
+        criteria.setStudyDbIds(studyIds);
 
-		assertThat(result)
-				.extracting("germplasmDbId")
-				.containsOnlyElementsOf(germplasmIds);
+        PaginatedList<ObservationUnitVO> result = repository.find(criteria);
 
-		assertThat(result)
-				.flatExtracting("observations")
-				.extracting("season")
-				.containsOnlyElementsOf(seasons);
+        assertThat(result).isNotNull().isNotEmpty();
 
-		assertThat(result)
-				.flatExtracting("observations")
-				.extracting("observationVariableDbId")
-				.containsOnlyElementsOf(variableIds);
+        assertThat(result)
+            .extracting("studyDbId")
+            .containsOnlyElementsOf(studyIds);
 
-		assertThat(result)
-				.flatExtracting("observations")
-				.are(new ObservationsInTimeRange(fromDate, toDate));
-	}
+        assertThat(result)
+            .extracting("observationLevel")
+            .containsOnly(observationLevel);
 
-	private static class ObservationsInTimeRange extends Condition<Object> {
-		private final Date fromDate;
-		private final Date toDate;
+        assertThat(result)
+            .extracting("studyLocationDbId")
+            .containsOnlyElementsOf(locationIds);
 
-		ObservationsInTimeRange(Date fromDate, Date toDate) {
-			this.fromDate = fromDate;
-			this.toDate = toDate;
-		}
+        assertThat(result)
+            .extracting("germplasmDbId")
+            .containsOnlyElementsOf(germplasmIds);
 
-		@Override
+        assertThat(result)
+            .flatExtracting("observations")
+            .extracting("season")
+            .containsOnlyElementsOf(seasons);
+
+        assertThat(result)
+            .flatExtracting("observations")
+            .extracting("observationVariableDbId")
+            .containsOnlyElementsOf(variableIds);
+
+        assertThat(result)
+            .flatExtracting("observations")
+            .are(new ObservationsInTimeRange(fromDate, toDate));
+    }
+
+    private static class ObservationsInTimeRange extends Condition<Object> {
+        private final Date fromDate;
+        private final Date toDate;
+
+        ObservationsInTimeRange(Date fromDate, Date toDate) {
+            this.fromDate = fromDate;
+            this.toDate = toDate;
+        }
+
+        @Override
         public boolean matches(Object data) {
-			if (data instanceof ObservationVO) {
-				ObservationVO observation = (ObservationVO) data;
-				Date timeStamp = observation.getObservationTimeStamp();
-				assertThat(timeStamp).isAfter(fromDate);
-				assertThat(timeStamp).isBefore(toDate);
-				return true;
-			}
-			return false;
-		}
-	}
+            if (data instanceof ObservationVO) {
+                ObservationVO observation = (ObservationVO) data;
+                Date timeStamp = observation.getObservationTimeStamp();
+                assertThat(timeStamp).isAfter(fromDate);
+                assertThat(timeStamp).isBefore(toDate);
+                return true;
+            }
+            return false;
+        }
+    }
 }

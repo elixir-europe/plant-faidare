@@ -11,23 +11,21 @@ import java.util.Set;
 
 /**
  * @author gcornut
- *
- *
  */
 @CriteriaForDocument(LocationVO.class)
 public class LocationCriteria extends PaginationCriteriaImpl
-		implements BrapiPaginationCriteria, BrapiLocationCriteria {
+    implements BrapiPaginationCriteria, BrapiLocationCriteria {
 
-	@DocumentPath("locationType")
-	private Set<String> locationTypes;
+    @DocumentPath("locationType")
+    private Set<String> locationTypes;
 
-	@Override
-	public Set<String> getLocationTypes() {
-		return locationTypes;
-	}
+    @Override
+    public Set<String> getLocationTypes() {
+        return locationTypes;
+    }
 
-	public void setLocationTypes(Set<String> locationTypes) {
-		this.locationTypes = locationTypes;
-	}
+    public void setLocationTypes(Set<String> locationTypes) {
+        this.locationTypes = locationTypes;
+    }
 
 }

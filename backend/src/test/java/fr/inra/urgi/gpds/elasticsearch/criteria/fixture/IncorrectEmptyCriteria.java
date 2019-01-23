@@ -9,7 +9,7 @@ import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.NoDocumentMapping;
 @CriteriaForDocument(DocumentObject.class)
 public class IncorrectEmptyCriteria {
 
-	@NoDocumentMapping
-	String hiddenCriteria;
+    @NoDocumentMapping
+    String hiddenCriteria;
 
 }

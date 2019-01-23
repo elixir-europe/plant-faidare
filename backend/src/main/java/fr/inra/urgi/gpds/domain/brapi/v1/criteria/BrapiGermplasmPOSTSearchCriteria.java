@@ -4,19 +4,17 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiGermplasmPOSTSearchCriteria extends BrapiPaginationCriteria {
-	List<String> getGermplasmPUIs();
+    List<String> getGermplasmPUIs();
 
-	List<String> getGermplasmDbIds();
+    List<String> getGermplasmDbIds();
 
-	List<String> getGermplasmSpecies();
+    List<String> getGermplasmSpecies();
 
-	List<String> getGermplasmGenus();
+    List<String> getGermplasmGenus();
 
-	List<String> getGermplasmNames();
+    List<String> getGermplasmNames();
 
-	List<String> getAccessionNumbers();
+    List<String> getAccessionNumbers();
 }

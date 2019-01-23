@@ -10,48 +10,46 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 @CriteriaForDocument(GermplasmVO.class)
 public class GermplasmGETSearchCriteria
-		extends PaginationCriteriaImpl
-		implements GermplasmSearchCriteria, BrapiGermplasmGETSearchCriteria {
+    extends PaginationCriteriaImpl
+    implements GermplasmSearchCriteria, BrapiGermplasmGETSearchCriteria {
 
-	@DocumentPath("germplasmDbId")
-	private List<String> germplasmDbId;
+    @DocumentPath("germplasmDbId")
+    private List<String> germplasmDbId;
 
-	@DocumentPath("germplasmPUI")
-	private List<String> germplasmPUI;
+    @DocumentPath("germplasmPUI")
+    private List<String> germplasmPUI;
 
-	@DocumentPath("germplasmName")
-	private List<String> germplasmName;
+    @DocumentPath("germplasmName")
+    private List<String> germplasmName;
 
-	@Override
-	public List<String> getGermplasmPUI() {
-		return germplasmPUI;
-	}
+    @Override
+    public List<String> getGermplasmPUI() {
+        return germplasmPUI;
+    }
 
-	public void setGermplasmPUI(List<String> germplasmPUI) {
-		this.germplasmPUI = germplasmPUI;
-	}
+    public void setGermplasmPUI(List<String> germplasmPUI) {
+        this.germplasmPUI = germplasmPUI;
+    }
 
-	@Override
-	public List<String> getGermplasmDbId() {
-		return germplasmDbId;
-	}
+    @Override
+    public List<String> getGermplasmDbId() {
+        return germplasmDbId;
+    }
 
-	public void setGermplasmDbId(List<String> germplasmDbId) {
-		this.germplasmDbId = germplasmDbId;
-	}
+    public void setGermplasmDbId(List<String> germplasmDbId) {
+        this.germplasmDbId = germplasmDbId;
+    }
 
-	@Override
-	public List<String> getGermplasmName() {
-		return germplasmName;
-	}
+    @Override
+    public List<String> getGermplasmName() {
+        return germplasmName;
+    }
 
-	public void setGermplasmName(List<String> germplasmName) {
-		this.germplasmName = germplasmName;
-	}
+    public void setGermplasmName(List<String> germplasmName) {
+        this.germplasmName = germplasmName;
+    }
 
 }

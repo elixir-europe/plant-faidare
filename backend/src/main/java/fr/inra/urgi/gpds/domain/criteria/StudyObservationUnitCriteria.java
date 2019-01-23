@@ -5,41 +5,39 @@ import fr.inra.urgi.gpds.domain.criteria.base.PaginationCriteriaImpl;
 
 /**
  * @author gcornut
- *
- *
  */
 public class StudyObservationUnitCriteria
-		extends PaginationCriteriaImpl
-		implements BrapiStudyObservationUnitCriteria {
+    extends PaginationCriteriaImpl
+    implements BrapiStudyObservationUnitCriteria {
 
-	private String observationLevel;
+    private String observationLevel;
 
-	@Override
-	public String getObservationLevel() {
-		return observationLevel;
-	}
+    @Override
+    public String getObservationLevel() {
+        return observationLevel;
+    }
 
-	public void setObservationLevel(String observationLevel) {
-		this.observationLevel = observationLevel;
-	}
+    public void setObservationLevel(String observationLevel) {
+        this.observationLevel = observationLevel;
+    }
 
-	@Override
-	public Long getPage() {
-		return super.getPage();
-	}
+    @Override
+    public Long getPage() {
+        return super.getPage();
+    }
 
-	@Override
-	public void setPage(Long page) {
-		super.setPage(page);
-	}
+    @Override
+    public void setPage(Long page) {
+        super.setPage(page);
+    }
 
-	@Override
-	public Long getPageSize() {
-		return super.getPageSize();
-	}
+    @Override
+    public Long getPageSize() {
+        return super.getPageSize();
+    }
 
-	@Override
-	public void setPageSize(Long pageSize) {
-		super.setPageSize(pageSize);
-	}
+    @Override
+    public void setPageSize(Long pageSize) {
+        super.setPageSize(pageSize);
+    }
 }

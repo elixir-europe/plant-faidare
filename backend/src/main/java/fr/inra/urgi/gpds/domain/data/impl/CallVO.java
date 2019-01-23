@@ -2,58 +2,44 @@ package fr.inra.urgi.gpds.domain.data.impl;
 
 import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiCall;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author gcornut
- *
- *
  */
 public class CallVO implements BrapiCall {
 
-	private String call;
-	private List<String> dataTypes;
-	private List<String> methods;
-	private List<String> versions;
+    private String call;
+    private Set<String> datatypes;
+    private Set<String> methods;
+    private Set<String> versions;
 
-	@Override
-	public String getCall() {
-		return call;
-	}
-
-	public void setCall(String call) {
-		this.call = call;
-	}
-
-	@Override
-	public List<String> getDatatypes() {
-		return dataTypes;
-	}
-
-    @Override
-    public List<String> getDataTypes() {
-        return dataTypes;
-    }
-
-    public void setDataTypes(List<String> datatypes) {
-        this.dataTypes = datatypes;
+    public CallVO(String call) {
+        this.call = call;
+        this.datatypes = new HashSet<>();
+        this.methods = new HashSet<>();
+        this.versions = new HashSet<>();
     }
 
     @Override
-	public List<String> getMethods() {
-		return methods;
-	}
-
-	public void setMethods(List<String> methods) {
-		this.methods = methods;
-	}
+    public String getCall() {
+        return call;
+    }
 
     @Override
-    public List<String> getVersions() {
+    public Set<String> getDatatypes() {
+        return datatypes;
+    }
+
+    @Override
+    public Set<String> getMethods() {
+        return methods;
+    }
+
+    @Override
+    public Set<String> getVersions() {
         return versions;
     }
 
-    public void setVersions(List<String> versions) {
-        this.versions = versions;
-    }
 }

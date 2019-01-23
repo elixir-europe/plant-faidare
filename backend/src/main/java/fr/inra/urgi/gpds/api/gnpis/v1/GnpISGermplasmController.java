@@ -26,12 +26,12 @@ import java.util.Collections;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-@Api(tags = {"GnpIS API"}, description = "GnpIS Germplasm APIs")
+@Api(tags = {"GnpIS API"}, description = "Extended GnpIS API")
 @RestController
 @RequestMapping(value = "/gnpis/v1/germplasm")
 public class GnpISGermplasmController {
 
-	private final GermplasmService germplasmService;
+    private final GermplasmService germplasmService;
 
     @Autowired
     public GnpISGermplasmController(GermplasmService germplasmService) {
@@ -39,72 +39,72 @@ public class GnpISGermplasmController {
     }
 
     @ApiOperation(value = "Search germplasm by ID or PUI")
-	@RequestMapping(method = GET, produces = APPLICATION_JSON_VALUE)
-	@ResponseBody
-	@JsonView(JSONView.GnpISAPI.class)
-	public GermplasmVO get(
-			@RequestParam(required = false) String id,
-			@RequestParam(required = false) String pui
-	) {
-		GermplasmVO germplasm = null;
-		boolean hasId = !Strings.isNullOrEmpty(id);
-		boolean hasPui = !Strings.isNullOrEmpty(pui);
+    @RequestMapping(method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(JSONView.GnpISAPI.class)
+    public GermplasmVO get(
+        @RequestParam(required = false) String id,
+        @RequestParam(required = false) String pui
+    ) {
+        GermplasmVO germplasm = null;
+        boolean hasId = !Strings.isNullOrEmpty(id);
+        boolean hasPui = !Strings.isNullOrEmpty(pui);
 
-		if (!hasId && !hasPui) {
-			throw new BadRequestException("You must provide at least one identifier (PUI or ID) in the query params.");
-		}
+        if (!hasId && !hasPui) {
+            throw new BadRequestException("You must provide at least one identifier (PUI or ID) in the query params.");
+        }
 
-		if (hasId && !hasPui) {
-			germplasm = germplasmService.getById(id);
-		} else {
-			GermplasmGETSearchCriteria criteria = new GermplasmGETSearchCriteria();
-			criteria.setGermplasmPUI(Collections.singletonList(pui));
-			if (hasId) {
-				criteria.setGermplasmDbId(Collections.singletonList(id));
-			}
-			PaginatedList<GermplasmVO> pager = germplasmService.find(criteria);
-			if (pager != null && pager.size() == 1) {
-				germplasm = pager.get(0);
-			}
-		}
+        if (hasId && !hasPui) {
+            germplasm = germplasmService.getById(id);
+        } else {
+            GermplasmGETSearchCriteria criteria = new GermplasmGETSearchCriteria();
+            criteria.setGermplasmPUI(Collections.singletonList(pui));
+            if (hasId) {
+                criteria.setGermplasmDbId(Collections.singletonList(id));
+            }
+            PaginatedList<GermplasmVO> pager = germplasmService.find(criteria);
+            if (pager != null && pager.size() == 1) {
+                germplasm = pager.get(0);
+            }
+        }
 
-		if (germplasm == null) {
-			String message = "Germplasm not found";
-			if (hasId) {
-				message += " for id: '" + id + "'";
-			}
-			if (hasPui) {
-				if (hasId) message += " and";
-				message += " for pui: '" + pui + "'";
-			}
+        if (germplasm == null) {
+            String message = "Germplasm not found";
+            if (hasId) {
+                message += " for id: '" + id + "'";
+            }
+            if (hasPui) {
+                if (hasId) message += " and";
+                message += " for pui: '" + pui + "'";
+            }
 
-			throw new NotFoundException(message);
-		}
-		return germplasm;
-	}
+            throw new NotFoundException(message);
+        }
+        return germplasm;
+    }
 
-	/**
-	 * Webservice for exporting germplasm by criteria into a CSV.
-	 *
-	 * See http://stackoverflow.com/questions/5673260/downloading-a-file-from-
-	 * spring-controllers resp.setContentType("application/csv");
-	 *
-	 * <pre>
-	 * resp.setContentType("application/vnd.ms-excel");
-	 * resp.setContentType("application/zip");
-	 * </pre>
-	 */
-	@RequestMapping(value = "/csv", method = GET, produces = "application/csv")
-	@ResponseBody
-	public FileSystemResource export(GermplasmPOSTSearchCriteria criteria, HttpServletResponse response) {
-		try {
-			File exportFile = germplasmService.exportCSV(criteria);
-			response.setHeader("Content-Disposition", "attachment; filename=germplasm.gnpis.csv");
-			return new FileSystemResource(exportFile);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("An error occurred when exporting germplasm: " + e.getMessage() + ".", e);
-		}
-	}
+    /**
+     * Webservice for exporting germplasm by criteria into a CSV.
+     * <p>
+     * See http://stackoverflow.com/questions/5673260/downloading-a-file-from-
+     * spring-controllers resp.setContentType("application/csv");
+     *
+     * <pre>
+     * resp.setContentType("application/vnd.ms-excel");
+     * resp.setContentType("application/zip");
+     * </pre>
+     */
+    @RequestMapping(value = "/csv", method = GET, produces = "application/csv")
+    @ResponseBody
+    public FileSystemResource export(GermplasmPOSTSearchCriteria criteria, HttpServletResponse response) {
+        try {
+            File exportFile = germplasmService.exportCSV(criteria);
+            response.setHeader("Content-Disposition", "attachment; filename=germplasm.gnpis.csv");
+            return new FileSystemResource(exportFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("An error occurred when exporting germplasm: " + e.getMessage() + ".", e);
+        }
+    }
 
 }

@@ -25,33 +25,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = ObservationVariableController.class)
 class ObservationVariableControllerTest {
 
-	@Autowired
+    @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-	private CropOntologyRepository repository;
+    private CropOntologyRepository repository;
 
-	@Test
-	void should_Get_By_Id() throws Exception {
-		String identifier = "identifier";
+    @Test
+    void should_Get_By_Id() throws Exception {
+        String identifier = "identifier";
 
-		ObservationVariableVO variable = new ObservationVariableVO();
-		when(repository.getVariableById(identifier)).thenReturn(variable);
+        ObservationVariableVO variable = new ObservationVariableVO();
+        when(repository.getVariableById(identifier)).thenReturn(variable);
 
-		mockMvc.perform(get("/brapi/v1/variables/" + identifier)
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isOk());
-	}
+        mockMvc.perform(get("/brapi/v1/variables/" + identifier)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+    }
 
-	@Test
-	void should_Return_Not_Found() throws Exception {
-		when(repository.getVariableById("foo")).thenReturn(null);
+    @Test
+    void should_Return_Not_Found() throws Exception {
+        when(repository.getVariableById("foo")).thenReturn(null);
 
-		mockMvc.perform(get("/brapi/v1/variables/foo")
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.metadata.status", hasSize(1)))
-				.andExpect(jsonPath("$.metadata.status[0].code", is("404")));
-	}
+        mockMvc.perform(get("/brapi/v1/variables/foo")
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.metadata.status", hasSize(1)))
+            .andExpect(jsonPath("$.metadata.status[0].code", is("404")));
+    }
 
 }

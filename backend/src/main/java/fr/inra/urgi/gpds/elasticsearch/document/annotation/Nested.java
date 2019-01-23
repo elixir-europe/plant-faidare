@@ -7,9 +7,8 @@ import java.lang.annotation.Target;
 
 /**
  * @author gcornut
- *
- *
  */
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Nested {}
+public @interface Nested {
+}

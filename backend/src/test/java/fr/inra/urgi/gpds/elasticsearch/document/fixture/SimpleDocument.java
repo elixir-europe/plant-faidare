@@ -8,6 +8,6 @@ import fr.inra.urgi.gpds.elasticsearch.document.annotation.Id;
  */
 @Document(type = "dataObject3")
 public class SimpleDocument {
-	@Id
-	String id;
+    @Id
+    String id;
 }

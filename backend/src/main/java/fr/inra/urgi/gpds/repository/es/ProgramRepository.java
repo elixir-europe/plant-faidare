@@ -10,17 +10,15 @@ import fr.inra.urgi.gpds.elasticsearch.repository.ESGetByIdRepository;
  * Breeding API programs
  *
  * @author gcornut
- *
- *
  */
 public interface ProgramRepository
-		extends ESFindRepository<ProgramCriteria, ProgramVO>,
+    extends ESFindRepository<ProgramCriteria, ProgramVO>,
     ESGetByIdRepository<ProgramVO> {
 
-	@Override
-	ProgramVO getById(String id);
+    @Override
+    ProgramVO getById(String id);
 
-	@Override
-	PaginatedList<ProgramVO> find(ProgramCriteria criteria);
+    @Override
+    PaginatedList<ProgramVO> find(ProgramCriteria criteria);
 
 }

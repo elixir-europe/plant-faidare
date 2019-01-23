@@ -5,21 +5,19 @@ package fr.inra.urgi.gpds.domain.brapi.v1.response;
  *
  * @author gcornut
  *
- <code>
- {
-   "metadata": {
-     "data": []
-	},
-   "result" : {}
- }
- </code>
- *
- *
+ * <code>
+ * {
+ * "metadata": {
+ * "data": []
+ * },
+ * "result" : {}
+ * }
+ * </code>
  */
 class BrapiListResponseImpl<T> extends BrapiResponseImpl<BrapiData<T>> implements BrapiListResponse<T> {
 
-	BrapiListResponseImpl(BrapiMetadata metadata, BrapiData<T> result) {
-		super(metadata, result);
-	}
+    BrapiListResponseImpl(BrapiMetadata metadata, BrapiData<T> result) {
+        super(metadata, result);
+    }
 
 }

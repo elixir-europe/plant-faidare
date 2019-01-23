@@ -87,7 +87,7 @@ public class UserGroupsResourceClient {
 
         Integer[] groupsArray = response.getBody();
         if (groupsArray != null) {
-            return  Arrays.asList(groupsArray);
+            return Arrays.asList(groupsArray);
         }
         return null;
     }

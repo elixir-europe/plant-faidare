@@ -7,13 +7,11 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiGermplasmAttributeValueList {
-	@JsonView(JSONView.BrapiFields.class)
-	String getGermplasmDbId();
+    @JsonView(JSONView.BrapiFields.class)
+    String getGermplasmDbId();
 
-	@JsonView(JSONView.BrapiFields.class)
-	List<BrapiGermplasmAttributeValue> getData();
+    @JsonView(JSONView.BrapiFields.class)
+    List<BrapiGermplasmAttributeValue> getData();
 }

@@ -4,7 +4,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
     container_name: elasticsearch
     environment:
-      - cluster.name=es-gpds
+      - cluster.name=es-dev
       - discovery.type=single-node
     ports:
       - 9200:9200

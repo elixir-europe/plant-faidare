@@ -9,8 +9,6 @@ import java.lang.annotation.Target;
  * Declares a criteria property not to be mapped to any value object property
  *
  * @author gcornut
- *
- *
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)

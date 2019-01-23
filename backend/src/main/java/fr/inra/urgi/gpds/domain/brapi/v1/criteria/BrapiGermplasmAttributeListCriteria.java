@@ -4,11 +4,9 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiGermplasmAttributeListCriteria {
 
-	List<String> getAttributeCategoryDbId();
+    List<String> getAttributeCategoryDbId();
 
 }

@@ -6,119 +6,120 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public class TraitVO implements BrapiTrait {
-	private String traitDbId;
-	private String name;
-	private String traitClass;
-	private String description;
-	private List<String> synonyms;
-	private String mainAbbreviation;
-	private List<String> alternativeAbbreviations;
-	private String entity;
-	private String attribute;
-	private String status;
-	private String xref;
 
-	@Override
-	public String getTraitDbId() {
-		return traitDbId;
-	}
+    private String traitDbId;
+    private String name;
 
-	public void setTraitDbId(String traitDbId) {
-		this.traitDbId = traitDbId;
-	}
+    private String traitClass;
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    private String description;
+    private List<String> synonyms;
+    private String mainAbbreviation;
+    private List<String> alternativeAbbreviations;
+    private String entity;
+    private String attribute;
+    private String status;
+    private String xref;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public String getTraitDbId() {
+        return traitDbId;
+    }
 
-	@Override
-	public String getTraitClass() {
-		return traitClass;
-	}
+    public void setTraitDbId(String traitDbId) {
+        this.traitDbId = traitDbId;
+    }
 
-	public void setTraitClass(String traitClass) {
-		this.traitClass = traitClass;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String getDescription() {
-		return description;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    @Override
+    public String getTraitClass() {
+        return traitClass;
+    }
 
-	@Override
-	public List<String> getSynonyms() {
-		return synonyms;
-	}
+    public void setTraitClass(String traitClass) {
+        this.traitClass = traitClass;
+    }
 
-	public void setSynonyms(List<String> synonyms) {
-		this.synonyms = synonyms;
-	}
+    @Override
+    public String getDescription() {
+        return description;
+    }
 
-	@Override
-	public String getMainAbbreviation() {
-		return mainAbbreviation;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setMainAbbreviation(String mainAbbreviation) {
-		this.mainAbbreviation = mainAbbreviation;
-	}
+    @Override
+    public List<String> getSynonyms() {
+        return synonyms;
+    }
 
-	@Override
-	public List<String> getAlternativeAbbreviations() {
-		return alternativeAbbreviations;
-	}
+    public void setSynonyms(List<String> synonyms) {
+        this.synonyms = synonyms;
+    }
 
-	public void setAlternativeAbbreviations(List<String> alternativeAbbreviations) {
-		this.alternativeAbbreviations = alternativeAbbreviations;
-	}
+    @Override
+    public String getMainAbbreviation() {
+        return mainAbbreviation;
+    }
 
-	@Override
-	public String getEntity() {
-		return entity;
-	}
+    public void setMainAbbreviation(String mainAbbreviation) {
+        this.mainAbbreviation = mainAbbreviation;
+    }
 
-	public void setEntity(String entity) {
-		this.entity = entity;
-	}
+    @Override
+    public List<String> getAlternativeAbbreviations() {
+        return alternativeAbbreviations;
+    }
 
-	@Override
-	public String getAttribute() {
-		return attribute;
-	}
+    public void setAlternativeAbbreviations(List<String> alternativeAbbreviations) {
+        this.alternativeAbbreviations = alternativeAbbreviations;
+    }
 
-	public void setAttribute(String attribute) {
-		this.attribute = attribute;
-	}
+    @Override
+    public String getEntity() {
+        return entity;
+    }
 
-	@Override
-	public String getStatus() {
-		return status;
-	}
+    public void setEntity(String entity) {
+        this.entity = entity;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    @Override
+    public String getAttribute() {
+        return attribute;
+    }
 
-	@Override
-	public String getXref() {
-		return xref;
-	}
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
+    }
 
-	public void setXref(String xref) {
-		this.xref = xref;
-	}
+    @Override
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Override
+    public String getXref() {
+        return xref;
+    }
+
+    public void setXref(String xref) {
+        this.xref = xref;
+    }
 
 }

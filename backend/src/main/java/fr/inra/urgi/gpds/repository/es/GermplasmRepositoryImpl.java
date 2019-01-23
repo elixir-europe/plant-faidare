@@ -33,19 +33,19 @@ import java.util.Iterator;
 @Repository
 public class GermplasmRepositoryImpl implements GermplasmRepository {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(GermplasmRepositoryImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GermplasmRepositoryImpl.class);
 
     private final RestHighLevelClient client;
     private final ObjectMapper mapper;
-	private final ESRequestFactory requestFactory;
+    private final ESRequestFactory requestFactory;
     private final ESResponseParser parser;
 
     private final ESFindRepository<GermplasmSearchCriteria, GermplasmVO> findRepository;
-	private final ESGetByIdRepository<GermplasmVO> getByIdRepository;
-	private final ESGenericQueryFactory<Object> queryFactory;
+    private final ESGetByIdRepository<GermplasmVO> getByIdRepository;
+    private final ESGenericQueryFactory<Object> queryFactory;
 
-	@Autowired
-	public GermplasmRepositoryImpl(
+    @Autowired
+    public GermplasmRepositoryImpl(
         RestHighLevelClient client,
         ObjectMapper mapper,
         ESRequestFactory requestFactory,
@@ -56,31 +56,31 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
         this.mapper = mapper;
         this.parser = parser;
         Class<GermplasmVO> voClass = GermplasmVO.class;
-		this.queryFactory = new ESGenericQueryFactory<>();
-		this.findRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, this.parser);
-		this.getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, voClass, this.parser);
-	}
+        this.queryFactory = new ESGenericQueryFactory<>();
+        this.findRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, this.parser);
+        this.getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, voClass, this.parser);
+    }
 
-	@Override
-	public Iterator<GermplasmVO> scrollAll(GermplasmSearchCriteria criteria) {
-		QueryBuilder query = queryFactory.createQuery(criteria);
-		int fetchSize = criteria.getPageSize().intValue();
-		return new ESScrollIterator<>(client, requestFactory, parser, GermplasmVO.class, query, fetchSize);
-	}
+    @Override
+    public Iterator<GermplasmVO> scrollAll(GermplasmSearchCriteria criteria) {
+        QueryBuilder query = queryFactory.createQuery(criteria);
+        int fetchSize = criteria.getPageSize().intValue();
+        return new ESScrollIterator<>(client, requestFactory, parser, GermplasmVO.class, query, fetchSize);
+    }
 
-	@Override
-	public GermplasmVO getById(String germplasmDbId) {
-		return getByIdRepository.getById(germplasmDbId);
-	}
+    @Override
+    public GermplasmVO getById(String germplasmDbId) {
+        return getByIdRepository.getById(germplasmDbId);
+    }
 
-	@Override
-	public PaginatedList<GermplasmVO> find(GermplasmSearchCriteria criteria) {
-		return findRepository.find(criteria);
-	}
+    @Override
+    public PaginatedList<GermplasmVO> find(GermplasmSearchCriteria criteria) {
+        return findRepository.find(criteria);
+    }
 
-	@Override
-	public PedigreeVO findPedigree(String germplasmDbId) {
-		QueryBuilder termQuery = QueryBuilders.termQuery("germplasmDbId", germplasmDbId);
+    @Override
+    public PedigreeVO findPedigree(String germplasmDbId) {
+        QueryBuilder termQuery = QueryBuilders.termQuery("germplasmDbId", germplasmDbId);
         SearchRequest request = requestFactory.prepareSearch("germplasmPedigree", termQuery);
         SearchResponse response = null;
         try {
@@ -89,28 +89,28 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
             throw new RuntimeException(e);
         }
         PedigreeVO pedigreeVO = null;
-		final SearchHits hits = response.getHits();
+        final SearchHits hits = response.getHits();
 
-		LOGGER.debug("\n\nQuery from findPedigree :\n" + termQuery.toString() + "\n\n");
+        LOGGER.debug("\n\nQuery from findPedigree :\n" + termQuery.toString() + "\n\n");
 
-		if (hits.totalHits == 1) {
-			// result found! \o/
-			SearchHit hit = hits.getAt(0);
-			String source = hit.getSourceAsString();
-			try {
-				pedigreeVO = mapper.readValue(source, PedigreeVO.class);
-			} catch (IOException e) {
-				LOGGER.error("Error occured when converting ES response to PedigreeVO: " + e.getMessage(), e);
-			}
-		} else if (hits.totalHits > 1){
-			throw new IllegalStateException("Expected only 1 result for pedigree with germplasmDbId: " + germplasmDbId);
-		}
-		return pedigreeVO;
-	}
+        if (hits.totalHits == 1) {
+            // result found! \o/
+            SearchHit hit = hits.getAt(0);
+            String source = hit.getSourceAsString();
+            try {
+                pedigreeVO = mapper.readValue(source, PedigreeVO.class);
+            } catch (IOException e) {
+                LOGGER.error("Error occured when converting ES response to PedigreeVO: " + e.getMessage(), e);
+            }
+        } else if (hits.totalHits > 1) {
+            throw new IllegalStateException("Expected only 1 result for pedigree with germplasmDbId: " + germplasmDbId);
+        }
+        return pedigreeVO;
+    }
 
-	@Override
-	public ProgenyVO findProgeny(String germplasmDbId) {
-		QueryBuilder termQuery = QueryBuilders.termQuery("germplasmDbId", germplasmDbId);
+    @Override
+    public ProgenyVO findProgeny(String germplasmDbId) {
+        QueryBuilder termQuery = QueryBuilders.termQuery("germplasmDbId", germplasmDbId);
         SearchRequest request = requestFactory.prepareSearch("germplasmProgeny", termQuery);
         SearchResponse response = null;
         try {
@@ -118,21 +118,21 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-		ProgenyVO progenyVO = null;
-		final SearchHits hits = response.getHits();
-		LOGGER.debug("\n\nQuery from findProgeny :\n" + termQuery.toString() + "\n\n");
+        ProgenyVO progenyVO = null;
+        final SearchHits hits = response.getHits();
+        LOGGER.debug("\n\nQuery from findProgeny :\n" + termQuery.toString() + "\n\n");
 
-		if (hits.totalHits == 1) {
-			SearchHit hit = hits.getAt(0);
-			String source = hit.getSourceAsString();
-			try {
-				progenyVO = mapper.readValue(source, ProgenyVO.class);
-			} catch (IOException e) {
-				LOGGER.error("Error occured when converting ES response to ProgenyVO: " + e.getMessage(), e);
-			}
-		} else if (hits.totalHits > 1){
-			throw new IllegalStateException("Expected only 1 result for progeny with germplasmDbId: " + germplasmDbId);
-		}
-		return progenyVO;
-	}
+        if (hits.totalHits == 1) {
+            SearchHit hit = hits.getAt(0);
+            String source = hit.getSourceAsString();
+            try {
+                progenyVO = mapper.readValue(source, ProgenyVO.class);
+            } catch (IOException e) {
+                LOGGER.error("Error occured when converting ES response to ProgenyVO: " + e.getMessage(), e);
+            }
+        } else if (hits.totalHits > 1) {
+            throw new IllegalStateException("Expected only 1 result for progeny with germplasmDbId: " + germplasmDbId);
+        }
+        return progenyVO;
+    }
 }

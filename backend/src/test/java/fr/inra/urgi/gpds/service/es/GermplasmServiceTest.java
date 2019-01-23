@@ -26,33 +26,33 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 public class GermplasmServiceTest {
 
-	@InjectMocks
+    @InjectMocks
     GermplasmServiceImpl germplasmService;
 
-	@Mock
+    @Mock
     GermplasmRepository repository;
 
-	@Test
+    @Test
     void exportCSV() throws FileNotFoundException {
-		GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
-		Iterator<GermplasmVO> germplasmIterator = mockGermplasms();
+        GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
+        Iterator<GermplasmVO> germplasmIterator = mockGermplasms();
 
-		when(repository.scrollAll(criteria)).thenReturn(germplasmIterator);
+        when(repository.scrollAll(criteria)).thenReturn(germplasmIterator);
 
-		File csvFile = germplasmService.exportCSV(criteria);
+        File csvFile = germplasmService.exportCSV(criteria);
 
-		CSVReader strings = new CSVReader(new FileReader(csvFile));
-		assertThat(strings.iterator()).hasSize(4);
-		//TODO: Add more validation with mock data
-	}
+        CSVReader strings = new CSVReader(new FileReader(csvFile));
+        assertThat(strings.iterator()).hasSize(4);
+        //TODO: Add more validation with mock data
+    }
 
-	private Iterator<GermplasmVO> mockGermplasms() {
-		GermplasmVO g1 = new GermplasmVO();
-		GermplasmVO g2 = new GermplasmVO();
-		GermplasmVO g3 = new GermplasmVO();
+    private Iterator<GermplasmVO> mockGermplasms() {
+        GermplasmVO g1 = new GermplasmVO();
+        GermplasmVO g2 = new GermplasmVO();
+        GermplasmVO g3 = new GermplasmVO();
 
-		return Lists.newArrayList(g1, g2, g3).iterator();
-	}
+        return Lists.newArrayList(g1, g2, g3).iterator();
+    }
 
 
 }

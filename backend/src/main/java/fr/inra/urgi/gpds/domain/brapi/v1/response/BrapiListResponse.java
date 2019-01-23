@@ -5,15 +5,14 @@ package fr.inra.urgi.gpds.domain.brapi.v1.response;
  *
  * @author gcornut
  *
- <code>
- {
-   "metadata": {
-     "data": []
-	},
-   "result" : {}
- }
- </code>
- *
- *
+ * <code>
+ * {
+ * "metadata": {
+ * "data": []
+ * },
+ * "result" : {}
+ * }
+ * </code>
  */
-public interface BrapiListResponse<T> extends BrapiResponse<BrapiData<T>> {}
+public interface BrapiListResponse<T> extends BrapiResponse<BrapiData<T>> {
+}

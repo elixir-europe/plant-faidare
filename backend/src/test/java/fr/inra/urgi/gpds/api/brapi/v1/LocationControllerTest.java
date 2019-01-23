@@ -26,33 +26,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = LocationController.class)
 class LocationControllerTest {
 
-	@Autowired
+    @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-	private LocationRepository repository;
+    private LocationRepository repository;
 
-	@Test
-	void should_Get_By_Id() throws Exception {
-		String identifier = "identifier";
+    @Test
+    void should_Get_By_Id() throws Exception {
+        String identifier = "identifier";
 
-		LocationVO location = new LocationVO();
-		when(repository.getById(identifier)).thenReturn(location);
+        LocationVO location = new LocationVO();
+        when(repository.getById(identifier)).thenReturn(location);
 
-		mockMvc.perform(get("/brapi/v1/locations/" + identifier)
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isOk());
-	}
+        mockMvc.perform(get("/brapi/v1/locations/" + identifier)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+    }
 
-	@Test
-	void should_Return_Not_Found() throws Exception {
-		when(repository.getById("foo")).thenReturn(null);
+    @Test
+    void should_Return_Not_Found() throws Exception {
+        when(repository.getById("foo")).thenReturn(null);
 
-		mockMvc.perform(get("/brapi/v1/locations/foo")
-				.contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.metadata.status", hasSize(1)))
-				.andExpect(jsonPath("$.metadata.status[0].code", is("404")));
-	}
+        mockMvc.perform(get("/brapi/v1/locations/foo")
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.metadata.status", hasSize(1)))
+            .andExpect(jsonPath("$.metadata.status[0].code", is("404")));
+    }
 
 }

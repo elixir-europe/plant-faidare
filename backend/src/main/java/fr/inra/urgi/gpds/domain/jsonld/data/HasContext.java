@@ -6,13 +6,11 @@ import fr.inra.urgi.gpds.domain.JSONView;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface HasContext {
 
-	@JsonView(JSONView.JSONLDView.class)
-	@JsonProperty("@context")
-	Context getContext();
+    @JsonView(JSONView.JSONLDView.class)
+    @JsonProperty("@context")
+    Context getContext();
 
 }

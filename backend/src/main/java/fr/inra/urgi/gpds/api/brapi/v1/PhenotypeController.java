@@ -23,14 +23,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author gcornut
- *
- *
  */
-@Api(tags={"Breeding API"}, description = "BrAPI endpoints")
+@Api(tags = {"Breeding API"}, description = "BrAPI endpoint")
 @RestController
 public class PhenotypeController {
 
-	private final ObservationUnitRepository repository;
+    private final ObservationUnitRepository repository;
 
     @Autowired
     public PhenotypeController(ObservationUnitRepository repository) {
@@ -38,15 +36,15 @@ public class PhenotypeController {
     }
 
     /**
-	 * @link https://github.com/plantbreeding/API/blob/master/Specification/Phenotypes/PhenotypeSearch.md
-	 */
-	@ApiOperation("Search phenotypes")
-	@RequestMapping(value = "/brapi/v1/phenotypes-search", method = POST, produces= APPLICATION_JSON_VALUE, consumes= APPLICATION_JSON_VALUE)
-	@ResponseBody
-	@JsonView(JSONView.BrapiFields.class)
-	public BrapiListResponse<ObservationUnitVO> searchPhenotypes(@Valid @RequestBody(required = false) ObservationUnitCriteria criteria) {
-		PaginatedList<ObservationUnitVO> result = repository.find(criteria);
-		return BrapiResponseFactory.createListResponse(result.getPagination(), null, result);
-	}
+     * @link https://github.com/plantbreeding/API/blob/master/Specification/Phenotypes/PhenotypeSearch.md
+     */
+    @ApiOperation("Search phenotypes")
+    @RequestMapping(value = "/brapi/v1/phenotypes-search", method = POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(JSONView.BrapiFields.class)
+    public BrapiListResponse<ObservationUnitVO> searchPhenotypes(@Valid @RequestBody(required = false) ObservationUnitCriteria criteria) {
+        PaginatedList<ObservationUnitVO> result = repository.find(criteria);
+        return BrapiResponseFactory.createListResponse(result.getPagination(), null, result);
+    }
 
 }

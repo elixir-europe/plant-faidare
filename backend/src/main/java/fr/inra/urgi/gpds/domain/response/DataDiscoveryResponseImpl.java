@@ -9,34 +9,32 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 class DataDiscoveryResponseImpl implements DataDiscoveryResponse {
 
-	private final BrapiMetadata metadata;
-	private final BrapiData<DataDiscoveryDocument> result;
-	private final List<FacetImpl> facets;
+    private final BrapiMetadata metadata;
+    private final BrapiData<DataDiscoveryDocument> result;
+    private final List<FacetImpl> facets;
 
-	DataDiscoveryResponseImpl(BrapiMetadata metadata, BrapiData<DataDiscoveryDocument> result, List<FacetImpl> facets) {
-		this.metadata = metadata;
-		this.result = result;
-		this.facets = facets;
-	}
+    DataDiscoveryResponseImpl(BrapiMetadata metadata, BrapiData<DataDiscoveryDocument> result, List<FacetImpl> facets) {
+        this.metadata = metadata;
+        this.result = result;
+        this.facets = facets;
+    }
 
-	@Override
-	public BrapiMetadata getMetadata() {
-		return metadata;
-	}
+    @Override
+    public BrapiMetadata getMetadata() {
+        return metadata;
+    }
 
-	@Override
-	public BrapiData<DataDiscoveryDocument> getResult() {
-		return result;
-	}
+    @Override
+    public BrapiData<DataDiscoveryDocument> getResult() {
+        return result;
+    }
 
-	@Override
-	public List<FacetImpl> getFacets() {
-		return facets;
-	}
+    @Override
+    public List<FacetImpl> getFacets() {
+        return facets;
+    }
 
 }

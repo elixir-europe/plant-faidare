@@ -20,62 +20,62 @@ import static org.mockito.Mockito.when;
  * @author gcornut
  */
 @ExtendWith(SpringExtension.class)
-public class ESRequestFactoryTest {
+class ESRequestFactoryTest {
 
-	@InjectMocks
+    @InjectMocks
     ESRequestFactory requestFactory;
 
-	@Mock
+    @Mock
     GPDSProperties properties;
 
-	@Mock
+    @Mock
     UserGroupsResourceClient userGroupsResourceClient;
 
-	@Test
-	public void should_Generate_Aliases_Single_Group_No_Source() {
-		String documentType = "doc1";
-		List<Integer> groups = Collections.singletonList(0);
-		String index0 = "index_group0";
+    @Test
+    void should_Generate_Aliases_Single_Group_No_Source() {
+        String documentType = "doc1";
+        List<Integer> groups = Collections.singletonList(0);
+        String index0 = "index_group0";
 
-		when(properties.getIndexName("*", documentType, 0)).thenReturn(index0);
+        when(properties.getIndexName("*", documentType, 0)).thenReturn(index0);
 
-		when(userGroupsResourceClient.getUserGroups()).thenReturn(groups);
+        when(userGroupsResourceClient.getUserGroups()).thenReturn(groups);
 
-		String[] aliases = requestFactory.getAliases(documentType);
-		assertThat(aliases).containsExactly(index0);
-	}
+        String[] aliases = requestFactory.getAliases(documentType);
+        assertThat(aliases).containsExactly(index0);
+    }
 
-	@Test
-	public void should_Generate_Aliases_Multiple_Groups_Multiple_Sources() {
-		String documentType = "doc1";
-		List<Integer> groups = Arrays.asList(0, 1, 2);
-		List<String> sources = Arrays.asList("a", "b", "c");
-		String[] indices = {
-				"index_sourcea_group1",
-				"index_sourcea_group2",
-				"index_sourcea_group0",
-				"index_sourceb_group0",
-				"index_sourceb_group1",
-				"index_sourceb_group2",
-				"index_sourcec_group0",
-				"index_sourcec_group1",
-				"index_sourcec_group2",
-		};
+    @Test
+    void should_Generate_Aliases_Multiple_Groups_Multiple_Sources() {
+        String documentType = "doc1";
+        List<Integer> groups = Arrays.asList(0, 1, 2);
+        List<String> sources = Arrays.asList("a", "b", "c");
+        String[] indices = {
+            "index_sourcea_group1",
+            "index_sourcea_group2",
+            "index_sourcea_group0",
+            "index_sourceb_group0",
+            "index_sourceb_group1",
+            "index_sourceb_group2",
+            "index_sourcec_group0",
+            "index_sourcec_group1",
+            "index_sourcec_group2",
+        };
 
-		when(properties.getIndexName("a", documentType, 1)).thenReturn(indices[0]);
-		when(properties.getIndexName("a", documentType, 2)).thenReturn(indices[1]);
-		when(properties.getIndexName("a", documentType, 0)).thenReturn(indices[2]);
-		when(properties.getIndexName("b", documentType, 0)).thenReturn(indices[3]);
-		when(properties.getIndexName("b", documentType, 1)).thenReturn(indices[4]);
-		when(properties.getIndexName("b", documentType, 2)).thenReturn(indices[5]);
-		when(properties.getIndexName("c", documentType, 0)).thenReturn(indices[6]);
-		when(properties.getIndexName("c", documentType, 1)).thenReturn(indices[7]);
-		when(properties.getIndexName("c", documentType, 2)).thenReturn(indices[8]);
+        when(properties.getIndexName("a", documentType, 1)).thenReturn(indices[0]);
+        when(properties.getIndexName("a", documentType, 2)).thenReturn(indices[1]);
+        when(properties.getIndexName("a", documentType, 0)).thenReturn(indices[2]);
+        when(properties.getIndexName("b", documentType, 0)).thenReturn(indices[3]);
+        when(properties.getIndexName("b", documentType, 1)).thenReturn(indices[4]);
+        when(properties.getIndexName("b", documentType, 2)).thenReturn(indices[5]);
+        when(properties.getIndexName("c", documentType, 0)).thenReturn(indices[6]);
+        when(properties.getIndexName("c", documentType, 1)).thenReturn(indices[7]);
+        when(properties.getIndexName("c", documentType, 2)).thenReturn(indices[8]);
 
-		when(userGroupsResourceClient.getUserGroups()).thenReturn(groups);
+        when(userGroupsResourceClient.getUserGroups()).thenReturn(groups);
 
-		String[] aliases = requestFactory.getAliases(documentType, sources);
-		assertThat(aliases).containsOnlyElementsOf(new ArrayIterator<>(indices));
-	}
+        String[] aliases = requestFactory.getAliases(documentType, sources);
+        assertThat(aliases).containsOnlyElementsOf(new ArrayIterator<>(indices));
+    }
 
 }

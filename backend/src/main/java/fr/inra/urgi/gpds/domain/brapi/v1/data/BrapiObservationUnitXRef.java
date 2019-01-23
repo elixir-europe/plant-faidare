@@ -5,13 +5,11 @@ import fr.inra.urgi.gpds.domain.JSONView;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiObservationUnitXRef {
-	@JsonView(JSONView.BrapiFields.class)
-	String getSource();
+    @JsonView(JSONView.BrapiFields.class)
+    String getSource();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getId();
+    @JsonView(JSONView.BrapiFields.class)
+    String getId();
 }

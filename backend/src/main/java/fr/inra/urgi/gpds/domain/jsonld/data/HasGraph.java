@@ -8,13 +8,11 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface HasGraph {
 
-	@JsonView(JSONView.JSONLDView.class)
-	@JsonProperty("@graph")
-	List<? extends JSONLD> getGraph();
+    @JsonView(JSONView.JSONLDView.class)
+    @JsonProperty("@graph")
+    List<? extends JSONLD> getGraph();
 
 }

@@ -11,14 +11,14 @@ import java.io.File;
 
 public interface GermplasmService {
 
-	GermplasmVO getById(String germplasmDbId);
+    GermplasmVO getById(String germplasmDbId);
 
     PaginatedList<GermplasmVO> find(GermplasmSearchCriteria criteria);
 
     File exportCSV(GermplasmSearchCriteria criteria);
 
-	PedigreeVO getPedigree(String germplasmDbId);
+    PedigreeVO getPedigree(String germplasmDbId);
 
-	ProgenyVO getProgeny(String germplasmDbId);
+    ProgenyVO getProgeny(String germplasmDbId);
 
 }

@@ -7,15 +7,13 @@ import java.lang.annotation.Target;
 
 /**
  * @author gcornut
- *
- *
  */
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Id {
 
-	/**
-	 * Override the id field name
-	 */
-	String jsonName() default "";
+    /**
+     * Override the id field name
+     */
+    String jsonName() default "";
 }

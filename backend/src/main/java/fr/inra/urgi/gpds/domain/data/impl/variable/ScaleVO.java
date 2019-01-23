@@ -6,71 +6,70 @@ import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiScaleValidValue;
 
 /**
  * @author gcornut
- *
- *
  */
 public class ScaleVO implements BrapiScale {
-	private String scaleDbId;
-	private String name;
-	private String dataType;
-	private String decimalPlaces;
-	private String xref;
 
-	@JsonDeserialize(as = ScaleValidValueVO.class)
-	private BrapiScaleValidValue validValues;
+    private String scaleDbId;
+    private String name;
+    private String dataType;
+    private String decimalPlaces;
+    private String xref;
 
-	@Override
-	public String getScaleDbId() {
-		return scaleDbId;
-	}
+    @JsonDeserialize(as = ScaleValidValueVO.class)
+    private BrapiScaleValidValue validValues;
 
-	public void setScaleDbId(String scaleDbId) {
-		this.scaleDbId = scaleDbId;
-	}
+    @Override
+    public String getScaleDbId() {
+        return scaleDbId;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    public void setScaleDbId(String scaleDbId) {
+        this.scaleDbId = scaleDbId;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String getDataType() {
-		return dataType;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setDataType(String dataType) {
-		this.dataType = dataType;
-	}
+    @Override
+    public String getDataType() {
+        return dataType;
+    }
 
-	@Override
-	public String getDecimalPlaces() {
-		return decimalPlaces;
-	}
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
 
-	public void setDecimalPlaces(String decimalPlaces) {
-		this.decimalPlaces = decimalPlaces;
-	}
+    @Override
+    public String getDecimalPlaces() {
+        return decimalPlaces;
+    }
 
-	@Override
-	public String getXref() {
-		return xref;
-	}
+    public void setDecimalPlaces(String decimalPlaces) {
+        this.decimalPlaces = decimalPlaces;
+    }
 
-	public void setXref(String xref) {
-		this.xref = xref;
-	}
+    @Override
+    public String getXref() {
+        return xref;
+    }
 
-	@Override
-	public BrapiScaleValidValue getValidValues() {
-		return validValues;
-	}
+    public void setXref(String xref) {
+        this.xref = xref;
+    }
 
-	public void setValidValues(BrapiScaleValidValue validValues) {
-		this.validValues = ((ScaleValidValueVO) validValues);
-	}
+    @Override
+    public BrapiScaleValidValue getValidValues() {
+        return validValues;
+    }
+
+    public void setValidValues(BrapiScaleValidValue validValues) {
+        this.validValues = ((ScaleValidValueVO) validValues);
+    }
 
 }

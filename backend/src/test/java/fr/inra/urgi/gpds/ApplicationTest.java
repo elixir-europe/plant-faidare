@@ -17,6 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class ApplicationTest {
 
     @Test
-    void shouldLoadContext() {}
+    void shouldLoadContext() {
+    }
 
 }

@@ -10,15 +10,13 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public class DataDiscoveryResponseFactory {
 
-	public static DataDiscoveryResponse create(Pagination pagination, List<DataDiscoveryDocument> results, List<FacetImpl> facets) {
-		BrapiMetadata metadata = BrapiResponseFactory.createMetadata(pagination, null);
-		BrapiData<DataDiscoveryDocument> data = BrapiResponseFactory.createData(results);
-		return new DataDiscoveryResponseImpl(metadata, data, facets);
-	}
+    public static DataDiscoveryResponse create(Pagination pagination, List<DataDiscoveryDocument> results, List<FacetImpl> facets) {
+        BrapiMetadata metadata = BrapiResponseFactory.createMetadata(pagination, null);
+        BrapiData<DataDiscoveryDocument> data = BrapiResponseFactory.createData(results);
+        return new DataDiscoveryResponseImpl(metadata, data, facets);
+    }
 
 }

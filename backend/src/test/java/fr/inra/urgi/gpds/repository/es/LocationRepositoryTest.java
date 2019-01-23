@@ -27,50 +27,50 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = Application.class)
 class LocationRepositoryTest {
 
-	@Autowired
-	ESSetUp esSetUp;
+    @Autowired
+    ESSetUp esSetUp;
 
-	@BeforeAll
-	void before() {
-	    esSetUp.initialize(LocationVO.class, 0);
-	}
+    @BeforeAll
+    void before() {
+        esSetUp.initialize(LocationVO.class, 0);
+    }
 
     @Autowired
-	LocationRepository repository;
+    LocationRepository repository;
 
     @Test
     void should_Get_By_Id() {
-		String expectedId = "805";
-		LocationVO result = repository.getById(expectedId);
-		assertThat(result).isNotNull();
-		assertThat(result).extracting("locationDbId").containsOnly(expectedId);
-	}
+        String expectedId = "805";
+        LocationVO result = repository.getById(expectedId);
+        assertThat(result).isNotNull();
+        assertThat(result).extracting("locationDbId").containsOnly(expectedId);
+    }
 
-	@Test
+    @Test
     void should_Find() {
-		int pageSize = 3;
-		int page = 1;
-		LocationCriteria criteria = new LocationCriteria();
-		criteria.setPageSize((long) pageSize);
-		criteria.setPage((long) page);
+        int pageSize = 3;
+        int page = 1;
+        LocationCriteria criteria = new LocationCriteria();
+        criteria.setPageSize((long) pageSize);
+        criteria.setPage((long) page);
 
-		PaginatedList<LocationVO> result = repository.find(criteria);
-		assertThat(result).isNotNull().hasSize(pageSize);
+        PaginatedList<LocationVO> result = repository.find(criteria);
+        assertThat(result).isNotNull().hasSize(pageSize);
 
-		assertThat(result.getPagination()).isNotNull();
-		assertThat(result.getPagination().getPageSize()).isEqualTo(pageSize);
-		assertThat(result.getPagination().getCurrentPage()).isEqualTo(page);
-	}
+        assertThat(result.getPagination()).isNotNull();
+        assertThat(result.getPagination().getPageSize()).isEqualTo(pageSize);
+        assertThat(result.getPagination().getCurrentPage()).isEqualTo(page);
+    }
 
-	@Test
+    @Test
     void should_Find_By_Types() {
-		Set<String> expectedTypes = Sets.newHashSet("Breeding and Evaluation site", "Origin and Breeding site");
-		LocationCriteria criteria = new LocationCriteria();
-		criteria.setLocationTypes(expectedTypes);
+        Set<String> expectedTypes = Sets.newHashSet("Breeding and Evaluation site", "Origin and Breeding site");
+        LocationCriteria criteria = new LocationCriteria();
+        criteria.setLocationTypes(expectedTypes);
 
-		PaginatedList<LocationVO> locations = repository.find(criteria);
+        PaginatedList<LocationVO> locations = repository.find(criteria);
 
-		assertThat(locations).isNotNull().hasSize(3);
-		assertThat(locations).extracting("locationType").containsOnlyElementsOf(expectedTypes);
-	}
+        assertThat(locations).isNotNull().hasSize(3);
+        assertThat(locations).extracting("locationType").containsOnlyElementsOf(expectedTypes);
+    }
 }

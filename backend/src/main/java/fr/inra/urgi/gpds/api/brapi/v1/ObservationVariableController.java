@@ -29,14 +29,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * @author gcornut
- *
- *
  */
-@Api(tags={"Breeding API"}, description = "BrAPI endpoints")
+@Api(tags = {"Breeding API"}, description = "BrAPI endpoint")
 @RestController
 public class ObservationVariableController {
 
-	private final CropOntologyRepository repository;
+    private final CropOntologyRepository repository;
 
     @Autowired
     public ObservationVariableController(CropOntologyRepository repository) {
@@ -44,60 +42,60 @@ public class ObservationVariableController {
     }
 
     /**
-	 * @link https://github.com/plantbreeding/API/blob/master/Specification/ObservationVariables/VariableDetails.md
-	 */
-	@ApiOperation("Get variable")
-	@RequestMapping(value = "/brapi/v1/variables/{observationVariableDbId}", method = GET, produces= APPLICATION_JSON_VALUE)
-	@ResponseBody
-	@JsonView(JSONView.BrapiFields.class)
-	public BrapiResponse<ObservationVariableVO> getVariable(@PathVariable String observationVariableDbId) {
-		ObservationVariableVO variable = repository.getVariableById(observationVariableDbId);
-		if (variable == null) {
-			throw new NotFoundException("Variable not found for id '" + observationVariableDbId + "'");
-		}
-		return BrapiResponseFactory.createSingleObjectResponse(variable, null);
-	}
+     * @link https://github.com/plantbreeding/API/blob/master/Specification/ObservationVariables/VariableDetails.md
+     */
+    @ApiOperation("Get variable")
+    @RequestMapping(value = "/brapi/v1/variables/{observationVariableDbId}", method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(JSONView.BrapiFields.class)
+    public BrapiResponse<ObservationVariableVO> getVariable(@PathVariable String observationVariableDbId) {
+        ObservationVariableVO variable = repository.getVariableById(observationVariableDbId);
+        if (variable == null) {
+            throw new NotFoundException("Variable not found for id '" + observationVariableDbId + "'");
+        }
+        return BrapiResponseFactory.createSingleObjectResponse(variable, null);
+    }
 
-	/**
-	 * @link https://github.com/plantbreeding/API/blob/master/Specification/ObservationVariables/VariableOntologyList.md
-	 */
-	@ApiOperation("List ontologies")
-	@RequestMapping(value = "/brapi/v1/ontologies", method = GET, produces= APPLICATION_JSON_VALUE)
-	@ResponseBody
-	@JsonView(JSONView.BrapiFields.class)
-	public BrapiListResponse<OntologyVO> listOntologies(
-			@Valid @ApiParam PaginationCriteriaImpl criteria
-	) {
-		List<OntologyVO> ontologies = repository.getOntologies();
+    /**
+     * @link https://github.com/plantbreeding/API/blob/master/Specification/ObservationVariables/VariableOntologyList.md
+     */
+    @ApiOperation("List ontologies")
+    @RequestMapping(value = "/brapi/v1/ontologies", method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(JSONView.BrapiFields.class)
+    public BrapiListResponse<OntologyVO> listOntologies(
+        @Valid @ApiParam PaginationCriteriaImpl criteria
+    ) {
+        List<OntologyVO> ontologies = repository.getOntologies();
 
-		return BrapiResponseFactory.createSubListResponse(
-				criteria.getPageSize(), criteria.getPage(),
-				ontologies
-		);
-	}
+        return BrapiResponseFactory.createSubListResponse(
+            criteria.getPageSize(), criteria.getPage(),
+            ontologies
+        );
+    }
 
-	/**
-	 * @link https://github.com/plantbreeding/API/blob/master/Specification/ObservationVariables/VariableList.md
-	 */
-	@ApiOperation("List variables")
-	@RequestMapping(value = "/brapi/v1/variables", method = GET, produces= APPLICATION_JSON_VALUE)
-	@ResponseBody
-	@JsonView(JSONView.BrapiFields.class)
-	public BrapiListResponse<ObservationVariableVO> listVariables(
-			@Valid @ApiParam ObservationVariableCriteria criteria
-	) {
-		// Get variables by trait class or get all variables
-		List<ObservationVariableVO> variables;
-		if (StringUtils.isNotBlank(criteria.getTraitClass())) {
-			variables = repository.getVariablesByTraitClass(criteria.getTraitClass());
-		} else {
-			variables = repository.getVariables();
-		}
+    /**
+     * @link https://github.com/plantbreeding/API/blob/master/Specification/ObservationVariables/VariableList.md
+     */
+    @ApiOperation("List variables")
+    @RequestMapping(value = "/brapi/v1/variables", method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(JSONView.BrapiFields.class)
+    public BrapiListResponse<ObservationVariableVO> listVariables(
+        @Valid @ApiParam ObservationVariableCriteria criteria
+    ) {
+        // Get variables by trait class or get all variables
+        List<ObservationVariableVO> variables;
+        if (StringUtils.isNotBlank(criteria.getTraitClass())) {
+            variables = repository.getVariablesByTraitClass(criteria.getTraitClass());
+        } else {
+            variables = repository.getVariables();
+        }
 
-		return BrapiResponseFactory.createSubListResponse(
-				criteria.getPageSize(), criteria.getPage(),
-				variables
-		);
-	}
+        return BrapiResponseFactory.createSubListResponse(
+            criteria.getPageSize(), criteria.getPage(),
+            variables
+        );
+    }
 
 }

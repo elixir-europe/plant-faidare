@@ -6,19 +6,20 @@ import fr.inra.urgi.gpds.domain.JSONView;
 import java.util.List;
 
 /**
-+ * @author mbuy
-+ *
-+ *
-+ */
+ * + * @author mbuy
+ * + *
+ * + *
+ * +
+ */
 
 public interface BrapiProgeny {
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getGermplasmDbId();
+    @JsonView(JSONView.BrapiFields.class)
+    String getGermplasmDbId();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getDefaultDisplayName();
+    @JsonView(JSONView.BrapiFields.class)
+    String getDefaultDisplayName();
 
-	@JsonView(JSONView.BrapiFields.class)
-	List<BrapiParentProgeny> getProgeny();
+    @JsonView(JSONView.BrapiFields.class)
+    List<BrapiParentProgeny> getProgeny();
 }

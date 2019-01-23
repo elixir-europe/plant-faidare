@@ -13,11 +13,9 @@ import java.lang.annotation.Target;
  * Annotated a criteria field to specify which kind of ES query it maps to
  *
  * @author gcornut
- *
- *
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface QueryType {
-	Class<? extends QueryBuilder> value() default TermQueryBuilder.class;
+    Class<? extends QueryBuilder> value() default TermQueryBuilder.class;
 }

@@ -7,15 +7,13 @@ import java.util.List;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface Facet {
 
-	@JsonView(JSONView.GnpISFields.class)
-	String getField();
+    @JsonView(JSONView.GnpISFields.class)
+    String getField();
 
-	@JsonView(JSONView.GnpISFields.class)
-	List<? extends FacetTerm> getTerms();
+    @JsonView(JSONView.GnpISFields.class)
+    List<? extends FacetTerm> getTerms();
 
 }

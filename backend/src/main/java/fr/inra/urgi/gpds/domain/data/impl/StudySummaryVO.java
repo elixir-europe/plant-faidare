@@ -15,213 +15,233 @@ import java.util.Set;
  * StudyVO extending the official BreedingAPI specs with specific fields
  *
  * @author gcornut
- *
- *
  */
 @Document(type = "study",
-		// Fields for query and not display
-		excludedFields = {"dataLinks", "contacts", "observationVariableDbIds", "germplasmDbIds"})
+    // Fields for query and not display
+    excludedFields = {"dataLinks", "contacts", "observationVariableDbIds", "germplasmDbIds"})
 public class StudySummaryVO implements GnpISInternal, BrapiStudySummary {
 
-	@Id
-	private String studyDbId;
+    @Id
+    private String studyDbId;
 
-	private String studyType;
-	private String name;
-	private Boolean active;
-	private List<String> seasons;
-	private Date endDate;
-	private Date startDate;
+    private String studyName;
+    private String studyType;
+    private Boolean active;
+    private List<String> seasons;
+    private Date endDate;
+    private Date startDate;
 
-	private String trialDbId;
-	private String trialName;
-	private Set<String> trialDbIds;
-	private BrapiAdditionalInfo additionalInfo;
+    private String programDbId;
+    private String programName;
 
-	// Study summary only properties
-	private String locationDbId;
-	private String locationName;
+    private String trialDbId;
+    private String trialName;
+    private Set<String> trialDbIds;
 
-	private String programDbId;
-	private String programName;
+    private BrapiAdditionalInfo additionalInfo;
 
-	// Field only used to check mapping of criteria to this VO
-	@JsonIgnore
-	private List<String> observationVariableDbIds;
+    // Study summary only properties
+    private String locationDbId;
+    private String locationName;
 
-	@JsonIgnore
-	private List<String> germplasmDbIds;
 
-	// GnpIS specific fields
-	private List<Long> speciesGroup;
-	private Long groupId;
+    // Field only used to check mapping of criteria to this VO
+    @JsonIgnore
+    private List<String> observationVariableDbIds;
 
-	@Override
-	public String getLocationDbId() {
-		return locationDbId;
-	}
+    @JsonIgnore
+    private List<String> germplasmDbIds;
 
-	public void setLocationDbId(String locationDbId) {
-		this.locationDbId = locationDbId;
-	}
+    // GnpIS specific fields
+    private List<Long> speciesGroup;
+    private Long groupId;
 
-	@Override
-	public String getLocationName() {
-		return locationName;
-	}
+    private String documentationURL;
 
-	public void setLocationName(String locationName) {
-		this.locationName = locationName;
-	}
+    @Override
+    public String getStudyName() {
+        return studyName;
+    }
 
-	@Override
-	public String getProgramDbId() {
-		return programDbId;
-	}
+    public void setStudyName(String studyName) {
+        this.studyName = studyName;
+    }
 
-	public void setProgramDbId(String programDbId) {
-		this.programDbId = programDbId;
-	}
+    @Override
+    public String getDocumentationURL() {
+        return documentationURL;
+    }
 
-	@Override
-	public String getProgramName() {
-		return programName;
-	}
+    public void setDocumentationURL(String documentationURL) {
+        this.documentationURL = documentationURL;
+    }
 
-	public void setProgramName(String programName) {
-		this.programName = programName;
-	}
+    @Override
+    public String getLocationDbId() {
+        return locationDbId;
+    }
 
-	@Override
-	public String getStudyDbId() {
-		return studyDbId;
-	}
+    public void setLocationDbId(String locationDbId) {
+        this.locationDbId = locationDbId;
+    }
 
-	public void setStudyDbId(String studyDbId) {
-		this.studyDbId = studyDbId;
-	}
+    @Override
+    public String getLocationName() {
+        return locationName;
+    }
 
-	@Override
-	public String getStudyType() {
-		return studyType;
-	}
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
 
-	public void setStudyType(String studyType) {
-		this.studyType = studyType;
-	}
+    @Override
+    public String getProgramDbId() {
+        return programDbId;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    public void setProgramDbId(String programDbId) {
+        this.programDbId = programDbId;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public String getProgramName() {
+        return programName;
+    }
 
-	@Override
-	public Boolean getActive() {
-		return active;
-	}
+    public void setProgramName(String programName) {
+        this.programName = programName;
+    }
 
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
+    @Override
+    public String getStudyDbId() {
+        return studyDbId;
+    }
 
-	@Override
-	public Date getEndDate() {
-		return endDate;
-	}
+    public void setStudyDbId(String studyDbId) {
+        this.studyDbId = studyDbId;
+    }
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+    @Override
+    public String getStudyType() {
+        return studyType;
+    }
 
-	@Override
-	public Date getStartDate() {
-		return startDate;
-	}
+    public void setStudyType(String studyType) {
+        this.studyType = studyType;
+    }
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+    @Override
+    public String getName() {
+        return studyName;
+    }
 
-	@Override
-	public String getTrialName() {
-		return trialName;
-	}
+    public void setName(String name) {
+        this.studyName = name;
+    }
 
-	public void setTrialName(String trialName) {
-		this.trialName = trialName;
-	}
+    @Override
+    public Boolean getActive() {
+        return active;
+    }
 
-	@Override
-	public String getTrialDbId() {
-		return trialDbId;
-	}
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
-	public void setTrialDbId(String trialDbId) {
-		this.trialDbId = trialDbId;
-	}
+    @Override
+    public Date getEndDate() {
+        return endDate;
+    }
 
-	@Override
-	public Set<String> getTrialDbIds() {
-		return trialDbIds;
-	}
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
-	public void setTrialDbIds(Set<String> trialDbIds) {
-		this.trialDbIds = trialDbIds;
-	}
+    @Override
+    public Date getStartDate() {
+        return startDate;
+    }
 
-	@Override
-	public BrapiAdditionalInfo getAdditionalInfo() {
-		return additionalInfo;
-	}
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-	public void setAdditionalInfo(BrapiAdditionalInfo additionalInfo) {
-		this.additionalInfo = additionalInfo;
-	}
+    @Override
+    public String getTrialName() {
+        return trialName;
+    }
 
-	@Override
-	public List<String> getSeasons() {
-		return seasons;
-	}
+    public void setTrialName(String trialName) {
+        this.trialName = trialName;
+    }
 
-	public void setSeasons(List<String> seasons) {
-		this.seasons = seasons;
-	}
+    @Override
+    public String getTrialDbId() {
+        return trialDbId;
+    }
 
-	@Override
-	public List<Long> getSpeciesGroup() {
-		return speciesGroup;
-	}
+    public void setTrialDbId(String trialDbId) {
+        this.trialDbId = trialDbId;
+    }
 
-	public void setSpeciesGroup(List<Long> speciesGroup) {
-		this.speciesGroup = speciesGroup;
-	}
+    @Override
+    public Set<String> getTrialDbIds() {
+        return trialDbIds;
+    }
 
-	@Override
-	public Long getGroupId() {
-		return groupId;
-	}
+    public void setTrialDbIds(Set<String> trialDbIds) {
+        this.trialDbIds = trialDbIds;
+    }
 
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
+    @Override
+    public BrapiAdditionalInfo getAdditionalInfo() {
+        return additionalInfo;
+    }
 
-	public List<String> getObservationVariableDbIds() {
-		return observationVariableDbIds;
-	}
+    public void setAdditionalInfo(BrapiAdditionalInfo additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
 
-	public void setObservationVariableDbIds(List<String> observationVariableDbIds) {
-		this.observationVariableDbIds = observationVariableDbIds;
-	}
+    @Override
+    public List<String> getSeasons() {
+        return seasons;
+    }
 
-	public List<String> getGermplasmDbIds() {
-		return germplasmDbIds;
-	}
+    public void setSeasons(List<String> seasons) {
+        this.seasons = seasons;
+    }
 
-	public void setGermplasmDbIds(List<String> germplasmDbIds) {
-		this.germplasmDbIds = germplasmDbIds;
-	}
+    @Override
+    public List<Long> getSpeciesGroup() {
+        return speciesGroup;
+    }
+
+    public void setSpeciesGroup(List<Long> speciesGroup) {
+        this.speciesGroup = speciesGroup;
+    }
+
+    @Override
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    public List<String> getObservationVariableDbIds() {
+        return observationVariableDbIds;
+    }
+
+    public void setObservationVariableDbIds(List<String> observationVariableDbIds) {
+        this.observationVariableDbIds = observationVariableDbIds;
+    }
+
+    public List<String> getGermplasmDbIds() {
+        return germplasmDbIds;
+    }
+
+    public void setGermplasmDbIds(List<String> germplasmDbIds) {
+        this.germplasmDbIds = germplasmDbIds;
+    }
 }

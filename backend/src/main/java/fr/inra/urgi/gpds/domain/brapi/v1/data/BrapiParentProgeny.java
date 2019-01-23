@@ -5,12 +5,12 @@ import fr.inra.urgi.gpds.domain.JSONView;
 
 public interface BrapiParentProgeny {
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getGermplasmDbId();
+    @JsonView(JSONView.BrapiFields.class)
+    String getGermplasmDbId();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getDefaultDisplayName();
+    @JsonView(JSONView.BrapiFields.class)
+    String getDefaultDisplayName();
 
-	@JsonView(JSONView.BrapiFields.class)
-	String getParentType();
+    @JsonView(JSONView.BrapiFields.class)
+    String getParentType();
 }

@@ -11,21 +11,19 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author gcornut
- *
- *
  */
 @Repository
 public class ObservationUnitRepositoryImpl
-		extends BaseESRepository<ObservationUnitCriteria, ObservationUnitVO>
-		implements ObservationUnitRepository {
+    extends BaseESRepository<ObservationUnitCriteria, ObservationUnitVO>
+    implements ObservationUnitRepository {
 
-	@Autowired
-	public ObservationUnitRepositoryImpl(
+    @Autowired
+    public ObservationUnitRepositoryImpl(
         RestHighLevelClient client,
         ESRequestFactory requestFactory,
         ESResponseParser parser
     ) {
-		super(client, requestFactory, ObservationUnitVO.class, parser);
-	}
+        super(client, requestFactory, ObservationUnitVO.class, parser);
+    }
 
 }

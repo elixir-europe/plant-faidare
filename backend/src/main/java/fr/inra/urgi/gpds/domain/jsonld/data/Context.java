@@ -11,22 +11,20 @@ import java.util.Map;
 
 /**
  * @author gcornut
- *
- *
  */
 public class Context implements Serializable {
 
-	private Map<String, Object> properties = new HashMap<>();
+    private Map<String, Object> properties = new HashMap<>();
 
-	@JsonView(JSONView.JSONLDView.class)
-	@JsonAnyGetter
-	public Map<String, Object> getProperties() {
-		return properties;
-	}
+    @JsonView(JSONView.JSONLDView.class)
+    @JsonAnyGetter
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
 
-	@JsonAnySetter
-	public void addProperty(String key, Object value) {
-		this.properties.put(key, value);
-	}
+    @JsonAnySetter
+    public void addProperty(String key, Object value) {
+        this.properties.put(key, value);
+    }
 
 }

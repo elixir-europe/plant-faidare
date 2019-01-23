@@ -11,20 +11,20 @@ import java.util.List;
  */
 @Document(type = "dataObject")
 public class DocumentObject {
-	@Id
-	public Long id;
-	public String name;
+    @Id
+    public Long id;
+    public String name;
 
-	@JsonDeserialize(contentAs = Nested.class)
-	public List<Nested> nested;
+    @JsonDeserialize(contentAs = Nested.class)
+    public List<Nested> nested;
 
-	@Override
-	public boolean equals(Object obj) {
-		DocumentObject obj1 = (DocumentObject) obj;
-		return obj1.id.equals(id) && obj1.name.equals(name);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        DocumentObject obj1 = (DocumentObject) obj;
+        return obj1.id.equals(id) && obj1.name.equals(name);
+    }
 
-	public static class Nested {
-		public String id;
-	}
+    public static class Nested {
+        public String id;
+    }
 }

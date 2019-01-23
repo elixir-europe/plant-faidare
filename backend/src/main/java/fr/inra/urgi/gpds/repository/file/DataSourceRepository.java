@@ -6,13 +6,11 @@ import java.util.Collection;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface DataSourceRepository {
 
-	DataSource getByUri(String uri);
+    DataSource getByUri(String uri);
 
-	Collection<DataSource> listAll();
+    Collection<DataSource> listAll();
 
 }

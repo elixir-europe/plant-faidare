@@ -31,11 +31,11 @@ public interface GermplasmRepository
     /**
      * Find pedigree for germplasm by id.
      */
-	PedigreeVO findPedigree(String germplasmDbId) ;
+    PedigreeVO findPedigree(String germplasmDbId);
 
     /**
      * Find progeny for germplasm by id.
      */
-    ProgenyVO findProgeny(String germplasmDbId) ;
+    ProgenyVO findProgeny(String germplasmDbId);
 
 }

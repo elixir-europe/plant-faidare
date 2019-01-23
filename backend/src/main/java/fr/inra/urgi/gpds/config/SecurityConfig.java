@@ -19,13 +19,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/actuator**").authenticated()
+            .antMatchers("/actuator**").authenticated()
             .and()
-                .httpBasic()
+            .httpBasic()
             .and()
-                .csrf().disable()
+            .csrf().disable()
             .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override

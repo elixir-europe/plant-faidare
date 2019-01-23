@@ -11,38 +11,36 @@ import java.util.List;
  * Properties used for data discovery
  *
  * @author gcornut
- *
- *
  */
 @Document(type = "datadiscovery")
 public interface DataDiscovery extends Dataset {
 
-	@Override
-	@JsonView(JSONView.GnpISFields.class)
-	String getIdentifier();
+    @Override
+    @JsonView(JSONView.GnpISFields.class)
+    String getIdentifier();
 
-	@Override
-	@JsonView(JSONView.GnpISFields.class)
-	String getUri();
+    @Override
+    @JsonView(JSONView.GnpISFields.class)
+    String getUri();
 
-	@Override
-	@JsonView(JSONView.GnpISFields.class)
-	String getName();
+    @Override
+    @JsonView(JSONView.GnpISFields.class)
+    String getName();
 
-	@Override
-	@JsonView(JSONView.GnpISFields.class)
-	String getSourceUri();
+    @Override
+    @JsonView(JSONView.GnpISFields.class)
+    String getSourceUri();
 
-	@Override
-	@JsonView(JSONView.GnpISFields.class)
-	List<String> getType();
+    @Override
+    @JsonView(JSONView.GnpISFields.class)
+    List<String> getType();
 
-	@Override
-	@JsonView(JSONView.GnpISFields.class)
-	String getDescription();
+    @Override
+    @JsonView(JSONView.GnpISFields.class)
+    String getDescription();
 
-	@Override
-	@JsonView(JSONView.GnpISFields.class)
-	String getUrl();
+    @Override
+    @JsonView(JSONView.GnpISFields.class)
+    String getUrl();
 
 }

@@ -10,35 +10,34 @@ import java.util.Map;
  * object)
  *
  * @author gcornut
- *
- *
  */
 public interface CriteriaMapping extends CriteriaMappingTreeNode {
 
-	/**
-	 * Get document field path using a criteria name
-	 * @param criterionName name of the criterion in the criteria class
-	 * @param noVirtualField whether or not you want the path to the virtual field or the parent concrete field
-	 */
-	String getDocumentPath(String criterionName, boolean noVirtualField);
+    /**
+     * Get document field path using a criteria name
+     *
+     * @param criterionName  name of the criterion in the criteria class
+     * @param noVirtualField whether or not you want the path to the virtual field or the parent concrete field
+     */
+    String getDocumentPath(String criterionName, boolean noVirtualField);
 
-	/**
-	 * Criteria class mapped in this mapping
-	 */
-	Class<?> getCriteriaClass();
+    /**
+     * Criteria class mapped in this mapping
+     */
+    Class<?> getCriteriaClass();
 
-	@Override
-	String getDocumentFieldName();
+    @Override
+    String getDocumentFieldName();
 
-	@Override
-	List<String> getDocumentFieldPath();
+    @Override
+    List<String> getDocumentFieldPath();
 
-	@Override
-	Map<List<String>, CriteriaMappingTree> getMappingTree();
+    @Override
+    Map<List<String>, CriteriaMappingTree> getMappingTree();
 
-	@Override
-	<N extends CriteriaMappingTree> N getMapping(Class<N> clazz, List<String> documentFieldPath);
+    @Override
+    <N extends CriteriaMappingTree> N getMapping(Class<N> clazz, List<String> documentFieldPath);
 
-	DocumentMetadata<?> getDocumentMetadata();
+    DocumentMetadata<?> getDocumentMetadata();
 
 }

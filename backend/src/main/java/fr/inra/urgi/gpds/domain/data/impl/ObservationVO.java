@@ -6,81 +6,78 @@ import java.util.Date;
 
 /**
  * @author gcornut
- *
- *
- *
  */
 public class ObservationVO implements BrapiObservation {
 
-	private String observationDbId;
-	private String observationVariableDbId;
-	private String observationVariableName;
-	private Date observationTimeStamp;
-	private String season;
-	private String collector;
-	private String value;
+    private String observationDbId;
+    private String observationVariableDbId;
+    private String observationVariableName;
+    private Date observationTimeStamp;
+    private String season;
+    private String collector;
+    private String value;
 
-	@Override
-	public String getObservationDbId() {
-		return observationDbId;
-	}
+    @Override
+    public String getObservationDbId() {
+        return observationDbId;
+    }
 
-	public void setObservationDbId(String observationDbId) {
-		this.observationDbId = observationDbId;
-	}
+    public void setObservationDbId(String observationDbId) {
+        this.observationDbId = observationDbId;
+    }
 
-	@Override
-	public String getObservationVariableDbId() {
-		return observationVariableDbId;
-	}
+    @Override
+    public String getObservationVariableDbId() {
+        return observationVariableDbId;
+    }
 
-	public void setObservationVariableDbId(String observationVariableDbId) {
-		this.observationVariableDbId = observationVariableDbId;
-	}
+    public void setObservationVariableDbId(String observationVariableDbId) {
+        this.observationVariableDbId = observationVariableDbId;
+    }
 
-	@Override
-	public String getObservationVariableName() {
-		return observationVariableName;
-	}
+    @Override
+    public String getObservationVariableName() {
+        return observationVariableName;
+    }
 
-	public void setObservationVariableName(String observationVariableName) {
-		this.observationVariableName = observationVariableName;
-	}
+    public void setObservationVariableName(String observationVariableName) {
+        this.observationVariableName = observationVariableName;
+    }
 
-	@Override
-	public Date getObservationTimeStamp() {
-		return observationTimeStamp;
-	}
+    @Override
+    public Date getObservationTimeStamp() {
+        return observationTimeStamp;
+    }
 
-	public void setObservationTimeStamp(Date observationTimeStamp) {
-		this.observationTimeStamp = observationTimeStamp;
-	}
+    public void setObservationTimeStamp(Date observationTimeStamp) {
+        this.observationTimeStamp = observationTimeStamp;
+    }
 
-	@Override
-	public String getSeason() {
-		return season;
-	}
+    @Override
+    public String getSeason() {
+        return season;
+    }
 
-	public void setSeason(String season) {
-		this.season = season;
-	}
+    public void setSeason(String season) {
+        this.season = season;
+    }
 
-	@Override
-	public String getCollector() {
-		return collector;
-	}
+    @Override
+    public String getCollector() {
+        return collector;
+    }
 
-	public void setCollector(String collector) {
-		this.collector = collector;
-	}
+    public void setCollector(String collector) {
+        this.collector = collector;
+    }
 
-	@Override
-	public String getValue() {
-		return value;
-	}
+    @Override
+    public String getValue() {
+        return value;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 
 }

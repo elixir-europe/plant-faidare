@@ -11,21 +11,19 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author gcornut
- *
- *
  */
 @Repository
 public class LocationRepositoryImpl
-		extends BaseESRepository<LocationCriteria, LocationVO>
-		implements LocationRepository {
+    extends BaseESRepository<LocationCriteria, LocationVO>
+    implements LocationRepository {
 
-	@Autowired
-	public LocationRepositoryImpl(
+    @Autowired
+    public LocationRepositoryImpl(
         RestHighLevelClient client,
         ESRequestFactory requestFactory,
         ESResponseParser parser
     ) {
-		super(client, requestFactory, LocationVO.class, parser);
-	}
+        super(client, requestFactory, LocationVO.class, parser);
+    }
 
 }

@@ -7,12 +7,11 @@ import java.lang.annotation.Target;
 
 /**
  * @author gcornut
- *
- *
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Document {
-	String type();
-	String[] excludedFields() default {};
+    String type();
+
+    String[] excludedFields() default {};
 }

@@ -20,19 +20,17 @@ import java.util.List;
  * Generic implementation of an ElasticSearch query for document by its identifier
  *
  * @author gcornut
- *
- *
  */
 public class ESGenericGetByIdRepository<VO> implements ESGetByIdRepository<VO> {
 
-	private final RestHighLevelClient client;
-	private final ESRequestFactory requestFactory;
-	private final Class<VO> voClass;
+    private final RestHighLevelClient client;
+    private final ESRequestFactory requestFactory;
+    private final Class<VO> voClass;
     private final ESResponseParser parser;
 
-	private DocumentMetadata<VO> documentMetadata;
+    private DocumentMetadata<VO> documentMetadata;
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     public ESGenericGetByIdRepository(
         RestHighLevelClient client,
@@ -42,43 +40,43 @@ public class ESGenericGetByIdRepository<VO> implements ESGetByIdRepository<VO> {
     ) {
         this.client = client;
         this.requestFactory = requestFactory;
-		this.voClass = voClass;
+        this.voClass = voClass;
         this.parser = parser;
-		documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(voClass);
+        documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(voClass);
         if (documentMetadata.getIdField() == null) {
-			throw new RuntimeException("Could not identify an identifier field on document "+ voClass.getSimpleName());
-		}
-	}
+            throw new RuntimeException("Could not identify an identifier field on document " + voClass.getSimpleName());
+        }
+    }
 
-	@Override
-	public VO getById(String id) {
-		try {
-			String documentType = documentMetadata.getDocumentType();
+    @Override
+    public VO getById(String id) {
+        try {
+            String documentType = documentMetadata.getDocumentType();
 
-			// Build term id query
-			QueryBuilder query = QueryBuilders.termQuery(documentMetadata.getIdField(), id);
+            // Build term id query
+            QueryBuilder query = QueryBuilders.termQuery(documentMetadata.getIdField(), id);
 
-			// Build request
-			SearchRequest request = requestFactory.prepareSearch(documentType, query);
+            // Build request
+            SearchRequest request = requestFactory.prepareSearch(documentType, query);
 
-			// Execute request
+            // Execute request
             SearchResponse result = client.search(request, RequestOptions.DEFAULT);
 
-			// Parse result list
-			List<? extends VO> resultList = parser.parseHits(result, voClass);
+            // Parse result list
+            List<? extends VO> resultList = parser.parseHits(result, voClass);
 
-			if (resultList != null && !resultList.isEmpty()) {
-				if (resultList.size() > 1) {
-					// Should never happen
-					throw new RuntimeException("More than one document " + documentType + " for identifier '" + id + "'");
-				}
+            if (resultList != null && !resultList.isEmpty()) {
+                if (resultList.size() > 1) {
+                    // Should never happen
+                    throw new RuntimeException("More than one document " + documentType + " for identifier '" + id + "'");
+                }
 
-				return resultList.get(0);
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return null;
-	}
+                return resultList.get(0);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 
 }

@@ -60,8 +60,9 @@ class CropOntologyRepositoryTest {
 
         List<ObservationVariableVO> actualVariables = repository.getVariables();
         assertThat(actualVariables).isEqualTo(expectedVariables);
-    }
 
+        assertThat(actualVariables).extracting("documentationURL").doesNotContainNull();
+    }
 
     @Test
     void should_Return_Phenology_Variables() {
@@ -85,6 +86,7 @@ class CropOntologyRepositoryTest {
 
         assertThat(actualVariable).isNotNull();
         assertThat(actualVariable.getObservationVariableDbId()).isEqualTo(identifier);
+        assertThat(actualVariable.getDocumentationURL()).isEqualTo("http://repo.com/ontology#termIdentifier="+identifier);
     }
 
     @Test
@@ -136,6 +138,7 @@ class CropOntologyRepositoryTest {
     }
 
     private List<ObservationVariableVO> mockVariables() {
+        when(properties.getCropOntologyPortalLink()).thenReturn("http://repo.com/ontology#termIdentifier=");
         List<OntologyVO> ontologies = mockOntologies();
 
         // Response for ontology 1

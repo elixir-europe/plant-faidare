@@ -13,31 +13,29 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author gcornut
- *
- *
  */
 @Repository
 public class GermplasmAttributeRepositoryImpl
-		implements GermplasmAttributeRepository {
+    implements GermplasmAttributeRepository {
 
     private final ESResponseParser parser;
 
     private ESFindRepository<GermplasmAttributeCriteria, GermplasmAttributeValueListVO> findAttributeRepository;
 
-	@Autowired
-	public GermplasmAttributeRepositoryImpl(
+    @Autowired
+    public GermplasmAttributeRepositoryImpl(
         ESResponseParser parser,
         RestHighLevelClient client,
         ESRequestFactory requestFactory
     ) {
         this.parser = parser;
         Class<GermplasmAttributeValueListVO> voClass = GermplasmAttributeValueListVO.class;
-		findAttributeRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, this.parser);
-	}
+        findAttributeRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, this.parser);
+    }
 
-	@Override
-	public PaginatedList<GermplasmAttributeValueListVO> find(GermplasmAttributeCriteria criteria) {
-		return findAttributeRepository.find(criteria);
-	}
+    @Override
+    public PaginatedList<GermplasmAttributeValueListVO> find(GermplasmAttributeCriteria criteria) {
+        return findAttributeRepository.find(criteria);
+    }
 
 }

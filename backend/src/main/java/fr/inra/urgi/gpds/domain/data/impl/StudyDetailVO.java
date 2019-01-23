@@ -16,216 +16,256 @@ import java.util.Set;
  * StudyVO extending the official BreedingAPI specs with specific fields
  *
  * @author gcornut
- *
- *
  */
 @Document(type = "study",
-		  // Fields for query and not display
-		  excludedFields = {"observationVariableDbIds"})
+    // Fields for query and not display
+    excludedFields = {"observationVariableDbIds"})
 public class StudyDetailVO implements GnpISInternal, BrapiStudyDetail {
 
-	@Id
-	private String studyDbId;
+    @Id
+    private String studyDbId;
 
-	private String studyType;
-	private String name;
-	private String studyDescription;
-	private Boolean active;
-	private List<String> seasons;
-	private Date endDate;
-	private Date startDate;
+    private String studyName;
+    private String studyType;
+    private String studyDescription;
+    private Boolean active;
+    private List<String> seasons;
+    private Date endDate;
+    private Date startDate;
 
-	private String trialDbId;
-	private String trialName;
-	private Set<String> trialDbIds;
-	private BrapiAdditionalInfo additionalInfo;
+    private String programDbId;
+    private String programName;
 
-	@JsonDeserialize(as = StudyLastUpdateVO.class)
-	private BrapiStudyLastUpdate lastUpdate;
+    private String trialDbId;
+    private String trialName;
+    private Set<String> trialDbIds;
 
-	@JsonDeserialize(contentAs = ContactVO.class)
-	private List<BrapiContact> contacts;
+    private BrapiAdditionalInfo additionalInfo;
 
-	@JsonDeserialize(as = LocationVO.class)
-	private BrapiLocation location;
+    @JsonDeserialize(as = StudyLastUpdateVO.class)
+    private BrapiStudyLastUpdate lastUpdate;
 
-	@JsonDeserialize(contentAs = StudyDataLinkVO.class)
-	private List<BrapiStudyDataLink> dataLinks;
+    @JsonDeserialize(contentAs = ContactVO.class)
+    private List<BrapiContact> contacts;
 
-	// GnpIS specific fields
-	private List<Long> speciesGroup;
-	private Long groupId;
+    @JsonDeserialize(as = LocationVO.class)
+    private BrapiLocation location;
 
-	@JsonView(JSONView.Internal.class)
-	private Set<String> germplasmDbIds;
+    @JsonDeserialize(contentAs = StudyDataLinkVO.class)
+    private List<BrapiStudyDataLink> dataLinks;
 
-	@Override
-	public String getStudyDbId() {
-		return studyDbId;
-	}
+    // GnpIS specific fields
+    private List<Long> speciesGroup;
+    private Long groupId;
 
-	public void setStudyDbId(String studyDbId) {
-		this.studyDbId = studyDbId;
-	}
+    @JsonView(JSONView.Internal.class)
+    private Set<String> germplasmDbIds;
 
-	@Override
-	public String getStudyType() {
-		return studyType;
-	}
+    private String documentationURL;
 
-	public void setStudyType(String studyType) {
-		this.studyType = studyType;
-	}
+    @Override
+    public String getStudyName() {
+        return studyName;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    public void setStudyName(String studyName) {
+        this.studyName = studyName;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public String getProgramDbId() {
+        return programDbId;
+    }
 
-	@Override
-	public Boolean getActive() {
-		return active;
-	}
+    public void setProgramDbId(String programDbId) {
+        this.programDbId = programDbId;
+    }
 
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
+    @Override
+    public String getProgramName() {
+        return programName;
+    }
 
-	@Override
-	public List<String> getSeasons() {
-		return seasons;
-	}
+    public void setProgramName(String programName) {
+        this.programName = programName;
+    }
 
-	public void setSeasons(List<String> seasons) {
-		this.seasons = seasons;
-	}
+    @Override
+    public String getDocumentationURL() {
+        return documentationURL;
+    }
 
-	@Override
-	public Date getEndDate() {
-		return endDate;
-	}
+    public void setDocumentationURL(String documentationURL) {
+        this.documentationURL = documentationURL;
+    }
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+    @Override
+    public String getStudyDbId() {
+        return studyDbId;
+    }
 
-	@Override
-	public Date getStartDate() {
-		return startDate;
-	}
+    public void setStudyDbId(String studyDbId) {
+        this.studyDbId = studyDbId;
+    }
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+    @Override
+    public String getStudyType() {
+        return studyType;
+    }
 
-	@Override
-	public String getTrialName() {
-		return trialName;
-	}
+    public void setStudyType(String studyType) {
+        this.studyType = studyType;
+    }
 
-	public void setTrialName(String trialName) {
-		this.trialName = trialName;
-	}
+    @Override
+    public String getName() {
+        return studyName;
+    }
 
-	@Override
-	public String getTrialDbId() {
-		return trialDbId;
-	}
+    public void setName(String name) {
+        this.studyName = name;
+    }
 
-	public void setTrialDbId(String trialDbId) {
-		this.trialDbId = trialDbId;
-	}
+    @Override
+    public Boolean getActive() {
+        return active;
+    }
 
-	@Override
-	public Set<String> getTrialDbIds() {
-		return trialDbIds;
-	}
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
-	public void setTrialDbIds(Set<String> trialDbIds) {
-		this.trialDbIds = trialDbIds;
-	}
+    @Override
+    public List<String> getSeasons() {
+        return seasons;
+    }
 
-	@Override
-	public BrapiAdditionalInfo getAdditionalInfo() {
-		return additionalInfo;
-	}
+    public void setSeasons(List<String> seasons) {
+        this.seasons = seasons;
+    }
 
-	public void setAdditionalInfo(BrapiAdditionalInfo additionalInfo) {
-		this.additionalInfo = additionalInfo;
-	}
+    @Override
+    public Date getEndDate() {
+        return endDate;
+    }
 
-	@Override
-	public List<Long> getSpeciesGroup() {
-		return speciesGroup;
-	}
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
-	public void setSpeciesGroup(List<Long> speciesGroup) {
-		this.speciesGroup = speciesGroup;
-	}
+    @Override
+    public Date getStartDate() {
+        return startDate;
+    }
 
-	@Override
-	public Long getGroupId() {
-		return groupId;
-	}
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
+    @Override
+    public String getTrialName() {
+        return trialName;
+    }
 
-	@Override
-	public String getStudyDescription() {
-		return studyDescription;
-	}
+    public void setTrialName(String trialName) {
+        this.trialName = trialName;
+    }
 
-	public void setStudyDescription(String studyDescription) {
-		this.studyDescription = studyDescription;
-	}
+    @Override
+    public String getTrialDbId() {
+        return trialDbId;
+    }
 
-	@Override
-	public BrapiStudyLastUpdate getLastUpdate() {
-		return lastUpdate;
-	}
+    public void setTrialDbId(String trialDbId) {
+        this.trialDbId = trialDbId;
+    }
 
-	public void setLastUpdate(BrapiStudyLastUpdate lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
+    @Override
+    public Set<String> getTrialDbIds() {
+        return trialDbIds;
+    }
 
-	@Override
-	public List<BrapiContact> getContacts() {
-		return contacts;
-	}
+    public void setTrialDbIds(Set<String> trialDbIds) {
+        this.trialDbIds = trialDbIds;
+    }
 
-	public void setContacts(List<BrapiContact> contacts) {
-		this.contacts = contacts;
-	}
+    @Override
+    public BrapiAdditionalInfo getAdditionalInfo() {
+        return additionalInfo;
+    }
 
-	@Override
-	public BrapiLocation getLocation() {
-		return location;
-	}
+    public void setAdditionalInfo(BrapiAdditionalInfo additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
 
-	public void setLocation(BrapiLocation location) {
-		this.location = location;
-	}
+    @Override
+    public List<Long> getSpeciesGroup() {
+        return speciesGroup;
+    }
 
-	@Override
-	public List<BrapiStudyDataLink> getDataLinks() {
-		return dataLinks;
-	}
+    public void setSpeciesGroup(List<Long> speciesGroup) {
+        this.speciesGroup = speciesGroup;
+    }
 
-	public void setDataLinks(List<BrapiStudyDataLink> dataLinks) {
-		this.dataLinks = dataLinks;
-	}
+    @Override
+    public Long getGroupId() {
+        return groupId;
+    }
 
-	public Set<String> getGermplasmDbIds() {
-		return germplasmDbIds;
-	}
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
 
-	public void setGermplasmDbIds(Set<String> germplasmDbIds) {
-		this.germplasmDbIds = germplasmDbIds;
-	}
+    @Override
+    public String getStudyDescription() {
+        return studyDescription;
+    }
+
+    public void setStudyDescription(String studyDescription) {
+        this.studyDescription = studyDescription;
+    }
+
+    @Override
+    public BrapiStudyLastUpdate getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(BrapiStudyLastUpdate lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    @Override
+    public List<BrapiContact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<BrapiContact> contacts) {
+        this.contacts = contacts;
+    }
+
+    @Override
+    public BrapiLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(BrapiLocation location) {
+        this.location = location;
+    }
+
+    @Override
+    public List<BrapiStudyDataLink> getDataLinks() {
+        return dataLinks;
+    }
+
+    public void setDataLinks(List<BrapiStudyDataLink> dataLinks) {
+        this.dataLinks = dataLinks;
+    }
+
+    public Set<String> getGermplasmDbIds() {
+        return germplasmDbIds;
+    }
+
+    public void setGermplasmDbIds(Set<String> germplasmDbIds) {
+        this.germplasmDbIds = germplasmDbIds;
+    }
 }

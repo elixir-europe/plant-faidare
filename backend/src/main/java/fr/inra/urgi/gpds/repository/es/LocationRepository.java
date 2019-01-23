@@ -10,17 +10,15 @@ import fr.inra.urgi.gpds.elasticsearch.repository.ESGetByIdRepository;
  * Breeding API location
  *
  * @author gcornut
- *
- *
  */
 public interface LocationRepository
-		extends ESFindRepository<LocationCriteria, LocationVO>,
+    extends ESFindRepository<LocationCriteria, LocationVO>,
     ESGetByIdRepository<LocationVO> {
 
-	@Override
-	LocationVO getById(String id);
+    @Override
+    LocationVO getById(String id);
 
-	@Override
-	PaginatedList<LocationVO> find(LocationCriteria criteria);
+    @Override
+    PaginatedList<LocationVO> find(LocationCriteria criteria);
 
 }

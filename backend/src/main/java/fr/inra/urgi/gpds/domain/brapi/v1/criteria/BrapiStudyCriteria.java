@@ -4,22 +4,20 @@ import java.util.Set;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiStudyCriteria extends BrapiPaginationCriteria, BrapiSortCriteria {
 
-	String getStudyType();
+    String getStudyType();
 
-	String getProgramDbId();
+    String getProgramDbId();
 
-	String getLocationDbId();
+    String getLocationDbId();
 
-	String getSeasonDbId();
+    String getSeasonDbId();
 
-	Set<String> getGermplasmDbIds();
+    Set<String> getGermplasmDbIds();
 
-	Set<String> getObservationVariableDbIds();
+    Set<String> getObservationVariableDbIds();
 
-	Boolean getActive();
+    Boolean getActive();
 }

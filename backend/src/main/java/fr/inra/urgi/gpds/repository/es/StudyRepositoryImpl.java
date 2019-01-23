@@ -38,26 +38,24 @@ import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 
 /**
  * @author gcornut
- *
- *
  */
 @Repository
 public class StudyRepositoryImpl
-		implements StudyRepository {
+    implements StudyRepository {
 
     private final RestHighLevelClient client;
-	private final ESRequestFactory requestFactory;
+    private final ESRequestFactory requestFactory;
 
-	private final ESGetByIdRepository<StudyDetailVO> getByIdRepository;
-	private final ESFindRepository<StudyCriteria, StudySummaryVO> findRepository;
-	private final DocumentMetadata<StudySummaryVO> studySummaryMetadata;
+    private final ESGetByIdRepository<StudyDetailVO> getByIdRepository;
+    private final ESFindRepository<StudyCriteria, StudySummaryVO> findRepository;
+    private final DocumentMetadata<StudySummaryVO> studySummaryMetadata;
     private final ESResponseParser parser;
-	private final LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-	public StudyRepositoryImpl(
+    public StudyRepositoryImpl(
         RestHighLevelClient client,
         ESRequestFactory requestFactory,
         ESResponseParser parser,
@@ -70,51 +68,51 @@ public class StudyRepositoryImpl
 
         this.getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, StudyDetailVO.class, this.parser);
 
-		Class<StudySummaryVO> voClass = StudySummaryVO.class;
-		this.studySummaryMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(voClass);
+        Class<StudySummaryVO> voClass = StudySummaryVO.class;
+        this.studySummaryMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(voClass);
 
-		ESGenericQueryFactory<StudyCriteria> queryFactory = new ESGenericQueryFactory<>();
-		this.findRepository = new ESGenericFindRepository<>(this.client, requestFactory, voClass, queryFactory, this.parser);
+        ESGenericQueryFactory<StudyCriteria> queryFactory = new ESGenericQueryFactory<>();
+        this.findRepository = new ESGenericFindRepository<>(this.client, requestFactory, voClass, queryFactory, this.parser);
 
-	}
+    }
 
-	@Override
-	public StudyDetailVO getById(String id) {
-		StudyDetailVO study = getByIdRepository.getById(id);
-		if (study != null) {
-			BrapiLocation location = study.getLocation();
-			if (location != null) {
-				// Replace location with complete detail
-				LocationVO locationDetail = locationRepository.getById(location.getLocationDbId());
-				study.setLocation(locationDetail);
-			}
-		}
-		return study;
-	}
+    @Override
+    public StudyDetailVO getById(String id) {
+        StudyDetailVO study = getByIdRepository.getById(id);
+        if (study != null) {
+            BrapiLocation location = study.getLocation();
+            if (location != null) {
+                // Replace location with complete detail
+                LocationVO locationDetail = locationRepository.getById(location.getLocationDbId());
+                study.setLocation(locationDetail);
+            }
+        }
+        return study;
+    }
 
-	@Override
-	public PaginatedList<StudySummaryVO> find(StudyCriteria criteria) {
-		return findRepository.find(criteria);
-	}
+    @Override
+    public PaginatedList<StudySummaryVO> find(StudyCriteria criteria) {
+        return findRepository.find(criteria);
+    }
 
-	@Override
-	public Set<String> getVariableIds(String studyDbId) {
-		String documentType = studySummaryMetadata.getDocumentType();
+    @Override
+    public Set<String> getVariableIds(String studyDbId) {
+        String documentType = studySummaryMetadata.getDocumentType();
 
-		String termAggName = "termAgg";
-		TermsAggregationBuilder termAgg = terms(termAggName)
-				.field("observationVariableDbIds")
-				.size(ESRequestFactory.MAX_TERM_AGG_SIZE);
+        String termAggName = "termAgg";
+        TermsAggregationBuilder termAgg = terms(termAggName)
+            .field("observationVariableDbIds")
+            .size(ESRequestFactory.MAX_TERM_AGG_SIZE);
 
-		String filterAggName = "filterAgg";
-		FilterAggregationBuilder filterAgg = filter(filterAggName, termQuery(studySummaryMetadata.getIdField(), studyDbId))
-				.subAggregation(termAgg);
+        String filterAggName = "filterAgg";
+        FilterAggregationBuilder filterAgg = filter(filterAggName, termQuery(studySummaryMetadata.getIdField(), studyDbId))
+            .subAggregation(termAgg);
 
         SearchRequest request = requestFactory
             .prepareSearch(documentType);
         request.source().size(0).aggregation(filterAgg);
 
-		logger.debug(request.toString());
+        logger.debug(request.toString());
 
         SearchResponse searchResponse;
         try {
@@ -124,11 +122,11 @@ public class StudyRepositoryImpl
         }
 
         List<String> aggregationPath = Arrays.asList(filterAggName, termAggName);
-		List<String> ids = parser.parseTermAggKeys(searchResponse, aggregationPath);
-		if (ids == null) {
-			return null;
-		}
-		return new LinkedHashSet<>(ids);
-	}
+        List<String> ids = parser.parseTermAggKeys(searchResponse, aggregationPath);
+        if (ids == null) {
+            return null;
+        }
+        return new LinkedHashSet<>(ids);
+    }
 
 }

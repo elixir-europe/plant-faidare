@@ -6,57 +6,57 @@ import java.io.Serializable;
 
 public class PhotoVO implements Serializable, Photo {
 
-	private static final long serialVersionUID = -4993890419772211643L;
+    private static final long serialVersionUID = -4993890419772211643L;
 
-	private String fileName;
-	private String thumbnailFileName;
-	private String photoName;
-	private String description;
-	private String copyright;
+    private String fileName;
+    private String thumbnailFileName;
+    private String photoName;
+    private String description;
+    private String copyright;
 
-	@Override
-	public String getFileName() {
-		return fileName;
-	}
+    @Override
+    public String getFileName() {
+        return fileName;
+    }
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	@Override
-	public String getThumbnailFileName() {
-		return thumbnailFileName;
-	}
+    @Override
+    public String getThumbnailFileName() {
+        return thumbnailFileName;
+    }
 
-	public void setThumbnailFileName(String thumbnailFileName) {
-		this.thumbnailFileName = thumbnailFileName;
-	}
+    public void setThumbnailFileName(String thumbnailFileName) {
+        this.thumbnailFileName = thumbnailFileName;
+    }
 
-	@Override
-	public String getPhotoName() {
-		return photoName;
-	}
+    @Override
+    public String getPhotoName() {
+        return photoName;
+    }
 
-	public void setPhotoName(String photoName) {
-		this.photoName = photoName;
-	}
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
+    }
 
-	@Override
-	public String getDescription() {
-		return description;
-	}
+    @Override
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@Override
-	public String getCopyright() {
-		return copyright;
-	}
+    @Override
+    public String getCopyright() {
+        return copyright;
+    }
 
-	public void setCopyright(String copyright) {
-		this.copyright = copyright;
-	}
+    public void setCopyright(String copyright) {
+        this.copyright = copyright;
+    }
 
 }

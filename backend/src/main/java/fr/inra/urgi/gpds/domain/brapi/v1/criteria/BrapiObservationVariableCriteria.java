@@ -4,13 +4,11 @@ import java.util.Set;
 
 /**
  * @author gcornut
- *
- *
  */
 public interface BrapiObservationVariableCriteria extends BrapiPaginationCriteria {
 
-	String getTraitClass();
+    String getTraitClass();
 
-	Set<String> getObservationVariableDbIds();
+    Set<String> getObservationVariableDbIds();
 
 }
