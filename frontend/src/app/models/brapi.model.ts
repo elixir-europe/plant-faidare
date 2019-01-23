@@ -18,8 +18,7 @@ export interface BrapiMetaData {
 
 }
 
-interface BrapiStudyData<T> {
-    data: T[];
+interface BrapiStudyData {
     studyDbId: string;
     studyType: string;
     name: string;
@@ -31,15 +30,25 @@ interface BrapiStudyData<T> {
     trialDbIds: string[];
     location: BrapiLocation;
     contacts: BrapiContacts[];
-    additionalInfo: {
-        [key: string]: string;
-    };
+    additionalInfo: AdditionalInfo;
+    dataLinks: {
+        name: string;
+        type: string;
+        url: string;
+    }[];
 }
 
 
 export interface BrapiResults<T> {
     metadata: BrapiMetaData;
-    result: BrapiStudyData<T>;
+    result: {
+        data: T[];
+    };
+}
+
+export interface BrapiResult<T> {
+    metadata: BrapiMetaData;
+    result: T;
 }
 
 export interface BrapiMetaData {
@@ -70,18 +79,8 @@ export interface BrapiLocation {
 }
 
 export interface AdditionalInfo {
-    'Site status': string;
-    Exposure: string;
-    'Distance to city': string;
-    'Direction from city': string;
-    'Environment type': string;
-    Topography: string;
-    'Geographical location': string;
-    Slope: string;
-    'Coordinates precision': string;
-    Comment: string;
+    [key: string]: string;
 }
-
 
 export interface BrapiContacts {
     contactDbId: string;
@@ -107,6 +106,7 @@ export interface BrapiObservationVariablesData {
         name: string;
         description: string;
     };
+    documentationURL: string;
 
 }
 
@@ -131,15 +131,11 @@ export interface BrapiGermplasmeData {
     subtaxa: string;
 }
 
-export interface BrapiTrialsResult {
-    metadata: {};
-    result: {
-        trialDbId: string;
-        trialName: string;
-        trialType: string;
-        active: boolean;
-        studies: [
-            { studyDbId: string; }
-            ];
-    };
+export interface BrapiTrial {
+    trialDbId: string;
+    trialName: string;
+    trialType: string;
+    active: boolean;
+    studies:
+        { studyDbId: string; }[];
 }

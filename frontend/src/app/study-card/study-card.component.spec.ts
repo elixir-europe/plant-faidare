@@ -1,45 +1,215 @@
 import { async, TestBed } from '@angular/core/testing';
 
 import { StudyCardComponent } from './study-card.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentTester } from 'ngx-speculoos';
+import { ComponentTester, fakeRoute, speculoosMatchers } from 'ngx-speculoos';
+import { ActivatedRoute, ActivatedRouteSnapshot, ParamMap, Params } from '@angular/router';
+import { of } from 'rxjs';
+import {
+    BrapiContacts,
+    BrapiGermplasmeData,
+    BrapiLocation,
+    BrapiObservationVariablesData,
+    BrapiResult,
+    BrapiResults,
+    BrapiStudyData,
+    BrapiTrial
+} from '../models/brapi.model';
+import { BrapiService } from '../brapi.service';
+import { GnpisService } from '../gnpis.service';
+import { DataDiscoverySource } from '../models/data-discovery.model';
+import { MapComponent } from '../map/map.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('StudyCardComponent', () => {
-    /*let component: StudyCardComponent;
-    let fixture: ComponentFixture<StudyCardComponent>;*/
+    beforeEach(() => jasmine.addMatchers(speculoosMatchers));
 
     class StudyCardComponentTester extends ComponentTester<StudyCardComponent> {
         constructor() {
             super(StudyCardComponent);
         }
+
+        get title() {
+            return this.element('h3');
+        }
     }
 
+    const brapiService = jasmine.createSpyObj(
+        'BrapiService', [
+            'getStudy',
+            'getTrials',
+            'getStudyObservationVariables',
+            'getStudyGermplasms'
+        ]
+    );
+
+    const gnpisService = jasmine.createSpyObj(
+        'GnpisService', ['getSource']
+    );
+
+    const params = {
+        source: 'source1'
+    } as Params;
+
+
+    const activatedRoute = fakeRoute({
+        queryParams: of(params),
+        snapshot: {
+            queryParams: params,
+            paramMap: {
+                get(key: string) {
+                    return 's1';
+                }
+            } as ParamMap
+        } as ActivatedRouteSnapshot
+    });
+
+    const location: BrapiLocation = {
+        locationDbId: 1,
+        name: 'loc1',
+        locationType: 'Collecting site',
+        abbreviation: null,
+        countryCode: 'Fr',
+        countryName: 'France',
+        institutionAdress: null,
+        institutionName: 'Insti',
+        altitude: null,
+        latitude: null,
+        longitude: null,
+    };
+
+    const contacts: BrapiContacts = {
+        contactDbId: 'c1',
+        name: 'contact1',
+        email: 'contact1@email.com',
+        type: 'contact',
+        institutionName: 'Inst',
+    };
+
+    const searchStudy: BrapiResult<BrapiStudyData> = {
+        metadata: null,
+        result: {
+            studyDbId: 's1',
+            studyType: 'phenotype',
+            name: 'study1',
+            studyDescription: null,
+            seasons: ['winter', '2019'],
+            startDate: '2018',
+            endDate: null,
+            active: true,
+            trialDbIds: ['10', '20'],
+            location: location,
+            contacts: [contacts],
+            additionalInfo: null,
+            dataLinks: []
+        }
+    };
+
+    const trial1: BrapiResult<BrapiTrial> = {
+        metadata: null,
+        result: {
+            trialDbId: '10',
+            trialName: 'trial_10',
+            trialType: 'project',
+            active: true,
+            studies: [
+                { studyDbId: 's1' },
+                { studyDbId: 's2' }
+            ]
+
+        }
+    };
+    const trial2: BrapiResult<BrapiTrial> = {
+        metadata: null,
+        result: {
+            trialDbId: '20',
+            trialName: 'trial_20',
+            trialType: 'project',
+            active: true,
+            studies: [
+                { studyDbId: 's3' },
+                { studyDbId: 's4' }
+            ]
+
+        }
+    };
+    const osbVariable: BrapiResults<BrapiObservationVariablesData> = {
+        metadata: null,
+        result: {
+            data: [{
+                observationVariableDbId: 'var1',
+                contextOfUse: null,
+                institution: 'Insti',
+                crop: 'WoodyPlant',
+                name: 'varaiable1',
+                ontologyDbId: 'WPO',
+                ontologyName: 'Woody Plant Ontology',
+                synonyms: ['First synonym'],
+                language: 'EN',
+                trait: {
+                    traitDbId: 't1',
+                    name: 'trait1',
+                    description: null,
+                },
+                documentationURL: null,
+            }]
+        }
+    };
+
+    const germplasm: BrapiResults<BrapiGermplasmeData> = {
+        metadata: null,
+        result: {
+            data: [{
+                germplasmDbId: 'g1',
+                accessionNumber: 'G_10',
+                germplasmName: 'germplam1',
+                genus: 'Triticum',
+                species: 'aestivum',
+                subtaxa: 'subsp'
+            }],
+        }
+    };
+
+    const source: DataDiscoverySource = {
+        '@id': 'src1',
+        '@type': ['schema:DataCatalog'],
+        'schema:identifier': 'srcId',
+        'schema:name': 'sourc1',
+        'schema:url': 'srcUrl',
+        'schema:image': null
+    };
+
+    brapiService.getStudy.and.returnValue(of(searchStudy));
+    brapiService.getTrials.withArgs('10').and.returnValue(of(trial1));
+    brapiService.getTrials.withArgs('20').and.returnValue(of(trial2));
+    brapiService.getStudyObservationVariables.and.returnValue(of(osbVariable));
+    brapiService.getStudyGermplasms.and.returnValue(of(germplasm));
+    gnpisService.getSource.and.returnValue(of(source));
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [StudyCardComponent],
-
-            schemas: [NO_ERRORS_SCHEMA]
-        })
-            .compileComponents();
+            imports: [HttpClientTestingModule, RouterTestingModule],
+            declarations: [
+                StudyCardComponent, MapComponent
+            ],
+            providers: [
+                { provide: ActivatedRoute, useValue: activatedRoute },
+                { provide: BrapiService, useValue: brapiService },
+                { provide: GnpisService, useValue: gnpisService }
+            ]
+        });
     }));
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
-            providers: [HttpClientTestingModule]
-        });
 
-        /*fixture = TestBed.createComponent(StudyCardComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();*/
-    });
-
-    it('should create', () => {
+    it('should fetch the study', async(() => {
         const tester = new StudyCardComponentTester();
         const component = tester.componentInstance;
+        tester.detectChanges();
 
-        expect(component).toBeTruthy();
-    });
+        component.loaded.then(() => {
+            expect(component.study).toBeTruthy();
+            tester.detectChanges();
+            expect(tester.title).toContainText('Study phenotype: study1');
+        });
+    }));
 });

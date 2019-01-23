@@ -91,7 +91,7 @@ export class GnpisService {
     getSource(sourceId: string): Observable<DataDiscoverySource> {
         return this.sourceByURI$.pipe(map(src => {
             for (const key of Object.keys(src)) {
-                if ( key === sourceId) {
+                if (key === sourceId) {
                     return src[sourceId];
                 }
             }
