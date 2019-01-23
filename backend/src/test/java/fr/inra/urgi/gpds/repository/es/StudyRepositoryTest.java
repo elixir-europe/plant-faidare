@@ -144,7 +144,7 @@ class StudyRepositoryTest {
 
     @Test
     void should_Find_Sorted() {
-        String sortField = "name";
+        String sortField = "studyName";
 
         StudySearchCriteria criteria = new StudySearchCriteria();
         criteria.setSortBy(sortField);

@@ -1,11 +1,11 @@
 [
   {
     "programDbId": "P1",
-    "name": "Amaizing"
+    "programName": "Amaizing"
   },
   {
     "programDbId": "P2",
-    "programName": "ANR-12",
+    "name": "ANR-12",
     "abbreviation": "ANR-12-ADAP-0009"
   },
   {

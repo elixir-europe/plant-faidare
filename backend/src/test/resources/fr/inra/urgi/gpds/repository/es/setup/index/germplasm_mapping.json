@@ -8,7 +8,7 @@
       "source": {
         "type": "keyword"
       },
-      "url": {
+      "documentationURL": {
         "type": "keyword"
       },
       "germplasmDbId": {

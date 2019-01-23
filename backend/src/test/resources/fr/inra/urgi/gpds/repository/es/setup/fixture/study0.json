@@ -1,6 +1,7 @@
 [
   {
     "studyDbId": "BTH_Orgeval_2008_SetA2",
+    "studyName": "BTH_Orgeval_2008_SetA2",
     "name": "BTH_Orgeval_2008_SetA2",
     "location": {
       "locationDbId": "805"
@@ -13,30 +14,29 @@
   },
   {
     "studyDbId": "S3",
-    "name": "Study 3",
+    "studyName": "Study 3",
     "locationName": "Cavallermaggiore"
   },
   {
     "studyDbId": "S4",
-    "name": "Study 4",
+    "studyName": "Study 4",
     "locationName": "Bordeaux"
   },
   {
     "studyDbId": "S5",
-    "name": "BTH_Lusignan_2015_SetB1"
+    "studyName": "BTH_Lusignan_2015_SetB1"
   },
   {
     "studyDbId": "S6",
-    "name": "BTH_Le_Moulon_2006_SetA2"
+    "studyName": "BTH_Le_Moulon_2006_SetA2"
   },
   {
     "studyDbId": "S7",
-    "name": "Study 7"
+    "studyName": "Study 7"
   },
   {
     "studyDbId": "181000402",
     "studyName": "Test de comparaison de provenances de chene sessile - 181000402",
-    "name": "Test de comparaison de provenances de chene sessile - 181000402",
     "startDate": "1993-03-01",
     "active": true,
     "studyType": "Provenance trial",
@@ -73,7 +73,6 @@
   {
     "studyDbId": "181000102",
     "studyName": "Test de comparaison de provenances de chene sessile - 181000102",
-    "name": "Test de comparaison de provenances de chene sessile - 181000102",
     "startDate": "1990-03-01",
     "active": true,
     "studyType": "Provenance trial",

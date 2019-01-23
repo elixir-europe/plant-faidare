@@ -2,6 +2,15 @@
   "location": {
     "dynamic": false,
     "properties": {
+      "locationDbId": {
+        "type": "keyword"
+      },
+      "locationName": {
+        "type": "keyword"
+      },
+      "locationType": {
+        "type": "keyword"
+      },
       "abbreviation": {
         "type": "keyword"
       },
@@ -10,7 +19,7 @@
         "properties": {}
       },
       "altitude": {
-        "type": "keyword"
+        "type": "double"
       },
       "countryCode": {
         "type": "keyword"
@@ -30,17 +39,8 @@
       "latitude": {
         "type": "double"
       },
-      "locationDbId": {
-        "type": "keyword"
-      },
-      "locationType": {
-        "type": "keyword"
-      },
       "longitude": {
         "type": "double"
-      },
-      "name": {
-        "type": "keyword"
       },
       "source": {
         "type": "keyword"
@@ -48,7 +48,7 @@
       "speciesGroup": {
         "type": "long"
       },
-      "url": {
+      "documentationURL": {
         "type": "keyword"
       }
     }

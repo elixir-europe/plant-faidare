@@ -17,7 +17,7 @@ public class ProgramCriteria extends PaginationCriteriaImpl
     @DocumentPath("programDbId")
     private String programDbId;
 
-    @DocumentPath("name")
+    @DocumentPath("programName")
     private String name;
 
     @DocumentPath("abbreviation")

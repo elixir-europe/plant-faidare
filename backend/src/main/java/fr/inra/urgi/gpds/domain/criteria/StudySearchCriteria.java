@@ -17,7 +17,7 @@ import java.util.Set;
 public class StudySearchCriteria extends StudySummaryCriteria
     implements SortCriteria, BrapiPaginationCriteria, BrapiSortCriteria, BrapiStudySearchCriteria {
 
-    @DocumentPath("name")
+    @DocumentPath("studyName")
     private Set<String> studyNames;
 
     @DocumentPath("programName")

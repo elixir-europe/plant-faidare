@@ -2,6 +2,15 @@
   "study": {
     "dynamic": false,
     "properties": {
+      "studyName": {
+        "type": "keyword"
+      },
+      "studyDbId": {
+        "type": "keyword"
+      },
+      "studyType": {
+        "type": "keyword"
+      },
       "active": {
         "type": "boolean"
       },
@@ -79,9 +88,6 @@
           }
         }
       },
-      "name": {
-        "type": "keyword"
-      },
       "observationVariableDbIds": {
         "type": "keyword"
       },
@@ -104,12 +110,6 @@
         "type": "date",
         "format": "YYYY-MM-dd"
       },
-      "studyDbId": {
-        "type": "keyword"
-      },
-      "studyType": {
-        "type": "keyword"
-      },
       "trialName": {
         "type": "keyword"
       },
@@ -119,7 +119,7 @@
       "trialDbIds": {
         "type": "keyword"
       },
-      "url": {
+      "documentationURL": {
         "type": "keyword"
       }
     }

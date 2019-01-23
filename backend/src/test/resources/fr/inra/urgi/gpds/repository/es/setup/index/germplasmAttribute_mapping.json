@@ -11,9 +11,6 @@
       "speciesGroup": {
         "type": "long"
       },
-      "url": {
-        "type": "keyword"
-      },
       "germplasmDbId": {
         "type": "keyword"
       },

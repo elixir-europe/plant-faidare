@@ -86,7 +86,7 @@
       "trialType": {
         "type": "keyword"
       },
-      "url": {
+      "documentationURL": {
         "type": "keyword"
       }
     }
