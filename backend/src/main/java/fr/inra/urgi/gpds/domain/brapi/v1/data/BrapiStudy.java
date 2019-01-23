@@ -27,6 +27,7 @@ public interface BrapiStudy extends HasBrapiDocumentationURL {
     @JsonView(JSONView.BrapiFields.class)
     String getStudyName();
 
+    @Deprecated
     @JsonView(JSONView.BrapiFields.class)
     String getName();
 

@@ -44,6 +44,19 @@ class ProgramRepositoryTest {
     }
 
     @Test
+    void should_Have_Same_Name_And_ProgramName() {
+        // P1
+        ProgramVO result = repository.getById("P1");
+        assertThat(result).isNotNull();
+        assertThat(result.getProgramName()).isNotBlank().isEqualTo(result.getName());
+
+        // P2
+        result = repository.getById("P2");
+        assertThat(result).isNotNull();
+        assertThat(result.getProgramName()).isNotBlank().isEqualTo(result.getName());
+    }
+
+    @Test
     void should_Find_Paginated() {
         int pageSize = 3;
         int page = 1;

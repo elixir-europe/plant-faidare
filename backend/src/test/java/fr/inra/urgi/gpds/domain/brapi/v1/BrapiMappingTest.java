@@ -1,7 +1,6 @@
 package fr.inra.urgi.gpds.domain.brapi.v1;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiAdditionalInfo;
@@ -71,14 +70,14 @@ class BrapiMappingTest {
     }
 
     @Test
-    void should_Serialize_Additional_Info() throws JsonProcessingException {
+    void should_Serialize_Additional_Info() throws IOException {
         BrapiAdditionalInfo info = new BrapiAdditionalInfo();
         info.addProperty("prop1", "value1");
         info.addProperty("prop2", Arrays.asList("value2", "value3"));
 
         String expectedJson = additionalInfoExample;
         String actualJson = mapper.writeValueAsString(info);
-        assertThat(actualJson).isEqualTo(expectedJson);
+        ESGenericQueryFactoryTest.assertJsonEquals(actualJson, expectedJson);
     }
 
     @Test
@@ -101,7 +100,7 @@ class BrapiMappingTest {
      * trial.studies).
      */
     @Test
-    void should_Serialize_Complex_Brapi_Object() throws JsonProcessingException {
+    void should_Serialize_Complex_Brapi_Object() throws IOException {
         TrialDatasetAuthorshipVO authorship = new TrialDatasetAuthorshipVO();
         authorship.setLicense("license");
         authorship.setDatasetPUI("datasetPUI");
@@ -131,7 +130,7 @@ class BrapiMappingTest {
 
         String expectedJson = trialExample;
         String actualJson = mapper.writeValueAsString(trial);
-        assertThat(actualJson).isEqualTo(expectedJson);
+        ESGenericQueryFactoryTest.assertJsonEquals(actualJson, expectedJson);
     }
 
     @Test

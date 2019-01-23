@@ -18,6 +18,10 @@ public interface BrapiLocation extends HasBrapiDocumentationURL {
     String getLocationType();
 
     @JsonView(JSONView.BrapiFields.class)
+    String getLocationName();
+
+    @Deprecated
+    @JsonView(JSONView.BrapiFields.class)
     String getName();
 
     @JsonView(JSONView.BrapiFields.class)

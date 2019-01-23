@@ -13,6 +13,9 @@ public interface BrapiProgram {
     @JsonView(JSONView.BrapiFields.class)
     String getProgramDbId();
 
+    @JsonView(JSONView.BrapiFields.class)
+    String getProgramName();
+
     @Deprecated
     @JsonView(JSONView.BrapiFields.class)
     String getName();

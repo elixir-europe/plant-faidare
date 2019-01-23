@@ -19,7 +19,8 @@ public class LocationVO implements GnpISInternal, BrapiLocation {
     @Id
     private String locationDbId;
 
-    private String name;
+    private String locationName;
+
     private String locationType;
     private String abbreviation;
 
@@ -40,6 +41,15 @@ public class LocationVO implements GnpISInternal, BrapiLocation {
     private Long groupId;
 
     private String documentationURL;
+
+    @Override
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
 
     @Override
     public String getAbbreviation() {
@@ -105,7 +115,7 @@ public class LocationVO implements GnpISInternal, BrapiLocation {
 
     @Override
     public String getName() {
-        return name;
+        return locationName;
     }
 
     @Override
@@ -114,7 +124,7 @@ public class LocationVO implements GnpISInternal, BrapiLocation {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.locationName = name;
     }
 
     public void setLocationDbId(String locationDbId) {

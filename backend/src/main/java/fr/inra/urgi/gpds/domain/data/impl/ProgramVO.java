@@ -19,8 +19,8 @@ public class ProgramVO implements GnpISInternal, BrapiProgram {
 
     @Id
     private String programDbId;
+    private String programName;
 
-    private String name;
     private String abbreviation;
 
     // This field is required to be non null in BRAVA
@@ -34,6 +34,15 @@ public class ProgramVO implements GnpISInternal, BrapiProgram {
     // GnpIS specific fields
     private Long groupId;
     private List<Long> speciesGroup;
+
+    @Override
+    public String getProgramName() {
+        return programName;
+    }
+
+    public void setProgramName(String programName) {
+        this.programName = programName;
+    }
 
     @Override
     public String getAbbreviation() {
@@ -55,11 +64,11 @@ public class ProgramVO implements GnpISInternal, BrapiProgram {
 
     @Override
     public String getName() {
-        return name;
+        return programName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.programName = name;
     }
 
     @Override

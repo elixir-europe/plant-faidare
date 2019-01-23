@@ -1,11 +1,17 @@
 [
   {
     "locationDbId": "805",
-    "locationType": "Breeding and Evaluation site"
+    "name": "L805",
+    "locationType": "Breeding and Evaluation site",
+    "institutionAdress": "Add 805",
+    "abbreviation": "AL805"
   },
   {
     "locationDbId": "806",
-    "locationType": "Breeding and Evaluation site"
+    "locationName": "L806",
+    "locationType": "Breeding and Evaluation site",
+    "institutionAddress": "Add 806",
+    "abreviation": "AL806"
   },
   {
     "locationDbId": "807",

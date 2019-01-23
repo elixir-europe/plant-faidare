@@ -8,6 +8,7 @@ import fr.inra.urgi.gpds.domain.data.impl.StudyDetailVO;
 import fr.inra.urgi.gpds.domain.data.impl.StudySummaryVO;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.repository.es.setup.ESSetUp;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -50,6 +51,20 @@ class StudyRepositoryTest {
         assertThat(result).isNotNull();
         assertThat(result).extracting("studyDbId").containsOnly(expectedId);
         assertThat(result).extracting("location").isNotEmpty();
+    }
+
+
+    @Test
+    void should_Have_Same_Name_And_StudyName() {
+        // BTH_Orgeval_2008_SetA2
+        StudyDetailVO result = repository.getById("BTH_Orgeval_2008_SetA2");
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.getStudyName()).isNotBlank().isEqualTo(result.getName());
+
+        // S2
+        result = repository.getById("S2");
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.getStudyName()).isNotBlank().isEqualTo(result.getName());
     }
 
     @Test

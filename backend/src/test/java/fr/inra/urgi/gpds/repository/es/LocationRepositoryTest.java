@@ -47,6 +47,45 @@ class LocationRepositoryTest {
     }
 
     @Test
+    void should_Have_Same_Name_And_LocationName() {
+        // 805
+        LocationVO result = repository.getById("805");
+        assertThat(result).isNotNull();
+        assertThat(result.getLocationName()).isNotBlank().isEqualTo(result.getName());
+
+        // 806
+        result = repository.getById("806");
+        assertThat(result).isNotNull();
+        assertThat(result.getLocationName()).isNotBlank().isEqualTo(result.getName());
+    }
+
+    @Test
+    void should_Have_Same_Abbreviation_And_Abreviation() {
+        // 805
+        LocationVO result = repository.getById("805");
+        assertThat(result).isNotNull();
+        assertThat(result.getAbbreviation()).isNotBlank().isEqualTo(result.getAbreviation());
+
+        // 806
+        result = repository.getById("806");
+        assertThat(result).isNotNull();
+        assertThat(result.getAbbreviation()).isNotBlank().isEqualTo(result.getAbreviation());
+    }
+
+    @Test
+    void should_Have_Same_InstitutionAddress_And_InstitutionAdress() {
+        // 805
+        LocationVO result = repository.getById("805");
+        assertThat(result).isNotNull();
+        assertThat(result.getInstitutionAddress()).isNotBlank().isEqualTo(result.getInstitutionAdress());
+
+        // 806
+        result = repository.getById("806");
+        assertThat(result).isNotNull();
+        assertThat(result.getInstitutionAddress()).isNotBlank().isEqualTo(result.getInstitutionAdress());
+    }
+
+    @Test
     void should_Find() {
         int pageSize = 3;
         int page = 1;
