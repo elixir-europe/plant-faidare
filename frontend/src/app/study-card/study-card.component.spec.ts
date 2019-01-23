@@ -32,6 +32,22 @@ describe('StudyCardComponent', () => {
         get title() {
             return this.element('h3');
         }
+
+        get cardHeader() {
+            return this.elements('div.card-header');
+        }
+
+        get studyField() {
+            return this.elements('div.field');
+        }
+
+        get studyInfo() {
+            return this.elements('div.identification-info');
+        }
+
+        get map() {
+            return this.element('gpds-map');
+        }
     }
 
     const brapiService = jasmine.createSpyObj(
@@ -163,6 +179,13 @@ describe('StudyCardComponent', () => {
                 germplasmDbId: 'g1',
                 accessionNumber: 'G_10',
                 germplasmName: 'germplam1',
+                genus: 'Populus',
+                species: 'x generosa',
+                subtaxa: ''
+            }, {
+                germplasmDbId: 'g2',
+                accessionNumber: 'G_20',
+                germplasmName: 'germplam2',
                 genus: 'Triticum',
                 species: 'aestivum',
                 subtaxa: 'subsp'
@@ -174,7 +197,7 @@ describe('StudyCardComponent', () => {
         '@id': 'src1',
         '@type': ['schema:DataCatalog'],
         'schema:identifier': 'srcId',
-        'schema:name': 'sourc1',
+        'schema:name': 'source1',
         'schema:url': 'srcUrl',
         'schema:image': null
     };
@@ -201,7 +224,7 @@ describe('StudyCardComponent', () => {
     }));
 
 
-    it('should fetch the study', async(() => {
+    it('should fetch the study data information', async(() => {
         const tester = new StudyCardComponentTester();
         const component = tester.componentInstance;
         tester.detectChanges();
@@ -209,7 +232,41 @@ describe('StudyCardComponent', () => {
         component.loaded.then(() => {
             expect(component.study).toBeTruthy();
             tester.detectChanges();
+
+            expect(tester.map).toBeFalsy();
             expect(tester.title).toContainText('Study phenotype: study1');
+
+            expect(tester.cardHeader[0]).toContainText('Identification');
+
+            expect(tester.studyField[2]).toContainText('Source');
+            expect(tester.studyInfo[1]).toContainText('Link to this study on srcId');
+
+            expect(tester.cardHeader[1]).toContainText('Genotype');
+            expect(component.studyGermplasms.length).toEqual(2);
+
+            expect(tester.cardHeader[2]).toContainText('Variable');
+            expect(component.studyObservationVariables.length).toEqual(1);
+
+            expect(tester.cardHeader[3]).toContainText(' Data Set ');
+            expect(component.trialsIds.length).toEqual(2);
+            expect(component.studyDataset.length).toEqual(2);
+
+            expect(tester.cardHeader[4]).toContainText('Contact');
+        });
+    }));
+
+    it('should display map', async(() => {
+        const tester = new StudyCardComponentTester();
+        const component = tester.componentInstance;
+        tester.detectChanges();
+
+        component.loaded.then(() => {
+            expect(component.study).toBeTruthy();
+            component.study.location.latitude = 48.8534;
+            component.study.location.longitude = 2.3488;
+            tester.detectChanges();
+
+            expect(tester.map).toBeTruthy();
         });
     }));
 });

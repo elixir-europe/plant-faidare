@@ -13,6 +13,7 @@
       "gpds",
       "kebab-case"
     ],
-    "template-cyclomatic-complexity": [true, 15]
+    "template-cyclomatic-complexity": [true, 26]
+
   }
 }

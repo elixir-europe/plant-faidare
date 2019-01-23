@@ -89,6 +89,7 @@ export class StudyCardComponent implements OnInit {
         return !(pui.substring(0, 3) === 'urn');
     }
 
+    /* Function will be remove when DocumentationUrl will be added to the ObservationVariable result */
     getVariableLink(variable: BrapiObservationVariablesData) {
         return `https://urgi.versailles.inra.fr/ontologyportal.do#termIdentifier=${variable.observationVariableDbId}`;
     }
