@@ -1,12 +1,12 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
 import fr.inra.urgi.gpds.api.NotFoundException;
+import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiObservationVariable;
+import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiOntology;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiResponse;
 import fr.inra.urgi.gpds.domain.criteria.ObservationVariableCriteria;
 import fr.inra.urgi.gpds.domain.criteria.base.PaginationCriteriaImpl;
-import fr.inra.urgi.gpds.domain.data.variable.ObservationVariableVO;
-import fr.inra.urgi.gpds.domain.data.variable.OntologyVO;
 import fr.inra.urgi.gpds.domain.response.ApiResponseFactory;
 import fr.inra.urgi.gpds.repository.file.CropOntologyRepository;
 import io.swagger.annotations.Api;
@@ -40,8 +40,8 @@ public class ObservationVariableController {
      */
     @ApiOperation("Get variable")
     @GetMapping("/brapi/v1/variables/{observationVariableDbId}")
-    public BrapiResponse<ObservationVariableVO> getVariable(@PathVariable String observationVariableDbId) {
-        ObservationVariableVO variable = repository.getVariableById(observationVariableDbId);
+    public BrapiResponse<BrapiObservationVariable> getVariable(@PathVariable String observationVariableDbId) {
+        BrapiObservationVariable variable = repository.getVariableById(observationVariableDbId);
         if (variable == null) {
             throw new NotFoundException("Variable not found for id '" + observationVariableDbId + "'");
         }
@@ -53,10 +53,10 @@ public class ObservationVariableController {
      */
     @ApiOperation("List ontologies")
     @GetMapping("/brapi/v1/ontologies")
-    public BrapiListResponse<OntologyVO> listOntologies(
+    public BrapiListResponse<? extends BrapiOntology> listOntologies(
         @Valid @ApiParam PaginationCriteriaImpl criteria
     ) {
-        List<OntologyVO> ontologies = repository.getOntologies();
+        List<? extends BrapiOntology> ontologies = repository.getOntologies();
 
         return ApiResponseFactory.createSubListResponse(
             criteria.getPageSize(), criteria.getPage(),
@@ -69,11 +69,11 @@ public class ObservationVariableController {
      */
     @ApiOperation("List variables")
     @GetMapping("/brapi/v1/variables")
-    public BrapiListResponse<ObservationVariableVO> listVariables(
+    public BrapiListResponse<? extends BrapiObservationVariable> listVariables(
         @Valid @ApiParam ObservationVariableCriteria criteria
     ) {
         // Get variables by trait class or get all variables
-        List<ObservationVariableVO> variables;
+        List<? extends BrapiObservationVariable> variables;
         if (StringUtils.isNotBlank(criteria.getTraitClass())) {
             variables = repository.getVariablesByTraitClass(criteria.getTraitClass());
         } else {

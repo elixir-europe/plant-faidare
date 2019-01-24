@@ -46,7 +46,7 @@ public class CallsController {
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Calls/Calls.md
      */
     @ApiOperation("List implemented Breeding API calls")
-    @GetMapping("/brapi/v1/calls")
+    @GetMapping(value = {"/brapi/v1/calls", "/brapi/v1/"})
     public BrapiListResponse<BrapiCall> calls(@Valid PaginationCriteriaImpl criteria) {
         return ApiResponseFactory.createSubListResponse(
             criteria.getPageSize(), criteria.getPage(), implementedCalls
@@ -91,7 +91,11 @@ public class CallsController {
                     continue;
                 }
                 for (String path : paths) {
-                    path = path.split("/brapi/v1/")[1];
+                    String[] pathSplit = path.split("/brapi/v1/");
+                    if (pathSplit.length != 2) {
+                        continue;
+                    }
+                    path = pathSplit[1];
 
                     RequestMethod[] httpMethods = getCallMethods(method);
                     List<String> httpMethodNames = Lists.newArrayList();
@@ -111,7 +115,10 @@ public class CallsController {
             }
         }
 
-        return new ArrayList<>(calls.values());
+        ArrayList<BrapiCall> allCalls = new ArrayList<>(calls.values());
+        // Sort by call name
+        Collections.sort(allCalls, Comparator.comparing(BrapiCall::getCall));
+        return allCalls;
     }
 
     private String[] getCallPath(Method method) {

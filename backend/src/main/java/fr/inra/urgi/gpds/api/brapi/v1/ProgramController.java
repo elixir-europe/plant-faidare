@@ -1,6 +1,7 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
 import fr.inra.urgi.gpds.api.NotFoundException;
+import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiProgram;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiResponse;
 import fr.inra.urgi.gpds.domain.criteria.ProgramCriteria;
@@ -37,7 +38,7 @@ public class ProgramController {
      */
     @ApiOperation("Get program")
     @GetMapping("/brapi/v1/programs/{programDbId}")
-    public BrapiResponse<ProgramVO> getProgram(@PathVariable String programDbId) {
+    public BrapiResponse<BrapiProgram> getProgram(@PathVariable String programDbId) {
         ProgramVO program = repository.getById(programDbId);
         if (program == null) {
             throw new NotFoundException("Program not found for id '" + programDbId + "'");
@@ -50,7 +51,7 @@ public class ProgramController {
      */
     @ApiOperation("List programs")
     @GetMapping("/brapi/v1/programs")
-    public BrapiListResponse<ProgramVO> listPrograms(@Valid @ApiParam ProgramCriteria criteria) {
+    public BrapiListResponse<? extends BrapiProgram> listPrograms(@Valid @ApiParam ProgramCriteria criteria) {
         PaginatedList<ProgramVO> result = repository.find(criteria);
         return ApiResponseFactory.createListResponse(result.getPagination(), null, result);
     }
@@ -60,7 +61,7 @@ public class ProgramController {
      */
     @ApiOperation("Search programs")
     @PostMapping(value = "/brapi/v1/programs-search", consumes = APPLICATION_JSON_VALUE)
-    public BrapiListResponse<ProgramVO> searchPrograms(@Valid @RequestBody(required = false) ProgramCriteria criteria) {
+    public BrapiListResponse<? extends BrapiProgram> searchPrograms(@Valid @RequestBody(required = false) ProgramCriteria criteria) {
         return listPrograms(criteria);
     }
 

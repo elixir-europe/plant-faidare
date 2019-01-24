@@ -1,8 +1,8 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
+import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiObservationUnit;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.gpds.domain.criteria.ObservationUnitCriteria;
-import fr.inra.urgi.gpds.domain.data.phenotype.ObservationUnitVO;
 import fr.inra.urgi.gpds.domain.response.ApiResponseFactory;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.repository.es.ObservationUnitRepository;
@@ -36,8 +36,8 @@ public class PhenotypeController {
      */
     @ApiOperation("Search phenotypes")
     @PostMapping(value = "/brapi/v1/phenotypes-search", consumes = APPLICATION_JSON_VALUE)
-    public BrapiListResponse<ObservationUnitVO> searchPhenotypes(@Valid @RequestBody(required = false) ObservationUnitCriteria criteria) {
-        PaginatedList<ObservationUnitVO> result = repository.find(criteria);
+    public BrapiListResponse<? extends BrapiObservationUnit> searchPhenotypes(@Valid @RequestBody(required = false) ObservationUnitCriteria criteria) {
+        PaginatedList<? extends BrapiObservationUnit> result = repository.find(criteria);
         return ApiResponseFactory.createListResponse(result.getPagination(), null, result);
     }
 

@@ -6,33 +6,38 @@ import fr.inra.urgi.gpds.api.brapi.v1.exception.BrapiPaginationException;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiPagination;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiStatus;
 import fr.inra.urgi.gpds.domain.response.ApiResponseFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Brapi exception handling
+ * Brapi exception handling intercepting every spring web Exception and generate a correct BrAPI response out of it.
  *
  * @author gcornut
  */
 @ControllerAdvice(basePackages = "fr.inra.urgi.gpds.api.brapi.v1")
-public class BrapiExceptionHandler extends ResponseEntityExceptionHandler {
+public class BrapiExceptionHandler {
 
     private static ResponseEntity<Object> createErrorResponse(
         HttpStatus httpStatus, List<BrapiStatus> statuses, BrapiPagination pagination
     ) {
-        Object body = ApiResponseFactory.createListResponse(pagination, statuses, null, false);
+        Object body;
+        if (pagination != null) {
+            body = ApiResponseFactory.createListResponse(pagination, statuses, null, false);
+        } else {
+            body = ApiResponseFactory.createSingleObjectResponse(null, statuses);
+        }
         return ResponseEntity.status(httpStatus).body(body);
     }
 
@@ -87,40 +92,30 @@ public class BrapiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Handle {@link BindException} resulting from Spring's parsing of params
-     * (query params, path params, etc.)
-     */
-    @Override
-    protected ResponseEntity<Object> handleBindException(BindException exception, HttpHeaders headers,
-                                                         HttpStatus status, WebRequest request) {
-        return handleBadRequest(exception);
-    }
-
-    /**
-     * Handle exception resulting from Spring's validation of request body params
-     */
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return handleBadRequest(exception);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return handleOtherException(ex);
-    }
-
-    /**
      * Generates Brapi not found response
      */
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<Object> handleNotFound(Exception exception) {
         return createErrorResponse(exception, HttpStatus.NOT_FOUND);
     }
 
     /**
      * Generates Brapi bad request response
+     *
+     * Handles {@link BindException} resulting from Spring's parsing of params
+     *     (query params, path params, etc.)
+     *
+     * Handle {@link MethodArgumentNotValidException} resulting from Spring's validation of request body params
+     *
      */
-    @ExceptionHandler(BadRequestException.class)
+    @ExceptionHandler({
+        BadRequestException.class,
+        BindException.class,
+        MethodArgumentNotValidException.class,
+        HttpMediaTypeNotSupportedException.class,
+        HttpMediaTypeNotAcceptableException.class,
+        HttpRequestMethodNotSupportedException.class
+    })
     public ResponseEntity<Object> handleBadRequest(Exception exception) {
         return createErrorResponse(exception, HttpStatus.BAD_REQUEST);
     }

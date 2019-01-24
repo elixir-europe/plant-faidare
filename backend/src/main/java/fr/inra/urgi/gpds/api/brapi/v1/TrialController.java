@@ -1,6 +1,7 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
 import fr.inra.urgi.gpds.api.NotFoundException;
+import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiTrial;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiResponse;
 import fr.inra.urgi.gpds.domain.criteria.TrialCriteria;
@@ -36,7 +37,7 @@ public class TrialController {
      */
     @ApiOperation("Get trial")
     @GetMapping("/brapi/v1/trials/{trialDbId}")
-    public BrapiResponse<TrialVO> getTrial(@PathVariable String trialDbId) {
+    public BrapiResponse<BrapiTrial> getTrial(@PathVariable String trialDbId) {
         TrialVO program = repository.getById(trialDbId);
         if (program == null) {
             throw new NotFoundException("Trial not found for id '" + trialDbId + "'");
@@ -49,8 +50,8 @@ public class TrialController {
      */
     @ApiOperation("List trials")
     @GetMapping("/brapi/v1/trials")
-    public BrapiListResponse<TrialVO> listTrials(@Valid TrialCriteria criteria) {
-        PaginatedList<TrialVO> result = repository.find(criteria);
+    public BrapiListResponse<? extends BrapiTrial> listTrials(@Valid TrialCriteria criteria) {
+        PaginatedList<? extends BrapiTrial> result = repository.find(criteria);
         return ApiResponseFactory.createListResponse(result.getPagination(), null, result);
     }
 

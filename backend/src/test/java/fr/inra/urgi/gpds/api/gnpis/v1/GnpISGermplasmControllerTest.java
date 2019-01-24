@@ -1,6 +1,5 @@
-package fr.inra.urgi.gpds.api.gnpis;
+package fr.inra.urgi.gpds.api.gnpis.v1;
 
-import fr.inra.urgi.gpds.api.gnpis.v1.GnpISGermplasmController;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmGETSearchCriteria;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmSearchCriteria;
 import fr.inra.urgi.gpds.domain.data.germplasm.CollPopVO;

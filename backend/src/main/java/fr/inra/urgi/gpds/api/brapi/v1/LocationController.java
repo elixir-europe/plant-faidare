@@ -1,10 +1,10 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
 import fr.inra.urgi.gpds.api.NotFoundException;
+import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiLocation;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiResponse;
 import fr.inra.urgi.gpds.domain.criteria.LocationCriteria;
-import fr.inra.urgi.gpds.domain.data.LocationVO;
 import fr.inra.urgi.gpds.domain.response.ApiResponseFactory;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.repository.es.LocationRepository;
@@ -36,8 +36,8 @@ public class LocationController {
      */
     @ApiOperation("Get location")
     @GetMapping("/brapi/v1/locations/{locationDbId}")
-    public BrapiResponse<LocationVO> getLocation(@PathVariable String locationDbId) {
-        LocationVO location = repository.getById(locationDbId);
+    public BrapiResponse<BrapiLocation> getLocation(@PathVariable String locationDbId) {
+        BrapiLocation location = repository.getById(locationDbId);
         if (location == null) {
             throw new NotFoundException("Location not found for id '" + locationDbId + "'");
         }
@@ -49,10 +49,10 @@ public class LocationController {
      */
     @ApiOperation("List locations")
     @GetMapping("/brapi/v1/locations")
-    public BrapiListResponse<LocationVO> listLocations(
+    public BrapiListResponse<? extends BrapiLocation> listLocations(
         @Valid LocationCriteria criteria
     ) {
-        PaginatedList<LocationVO> result = repository.find(criteria);
+        PaginatedList<? extends BrapiLocation> result = repository.find(criteria);
         return ApiResponseFactory.createListResponse(result.getPagination(), null, result);
     }
 }

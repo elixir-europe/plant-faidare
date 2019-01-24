@@ -2,6 +2,8 @@ package fr.inra.urgi.gpds.api.brapi.v1;
 
 import fr.inra.urgi.gpds.domain.JSONView;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.http.server.ServerHttpRequest;
@@ -19,6 +21,7 @@ import java.util.List;
  * @author gcornut
  */
 @ControllerAdvice(basePackages = "fr.inra.urgi.gpds.api.brapi.v1")
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class BrapiJSONViewHandler extends AbstractMappingJacksonResponseBodyAdvice {
 
     public static final MediaType APPLICATION_LD_JSON = new MediaType("application","ld+json");
