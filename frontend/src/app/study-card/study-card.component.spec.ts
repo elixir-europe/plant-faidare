@@ -3,7 +3,7 @@ import { async, TestBed } from '@angular/core/testing';
 import { StudyCardComponent } from './study-card.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentTester, fakeRoute, speculoosMatchers } from 'ngx-speculoos';
-import { ActivatedRoute, ActivatedRouteSnapshot, ParamMap, Params } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { of } from 'rxjs';
 import {
     BrapiContacts,
@@ -72,11 +72,7 @@ describe('StudyCardComponent', () => {
         queryParams: of(params),
         snapshot: {
             queryParams: params,
-            paramMap: {
-                get(key: string) {
-                    return 's1';
-                }
-            } as ParamMap
+            paramMap: convertToParamMap({ id: 's1' })
         } as ActivatedRouteSnapshot
     });
 
@@ -224,13 +220,15 @@ describe('StudyCardComponent', () => {
     }));
 
 
-    it('should fetch the study data information', async(() => {
+    it('should fetch the study data information but not display map', async(() => {
         const tester = new StudyCardComponentTester();
         const component = tester.componentInstance;
         tester.detectChanges();
 
         component.loaded.then(() => {
             expect(component.study).toBeTruthy();
+            component.study.location.longitude = null;
+            component.study.location.latitude = null;
             tester.detectChanges();
 
             expect(tester.map).toBeFalsy();

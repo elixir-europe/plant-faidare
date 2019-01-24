@@ -18,7 +18,7 @@ export class StudyCardComponent implements OnInit {
     studySource: DataDiscoverySource;
     studyGermplasms: BrapiGermplasmeData[] = [];
     studyObservationVariables: BrapiObservationVariablesData[] = [];
-    site: BrapiLocation[] = [];
+    sites: BrapiLocation[] = [];
     additionalInfoKeys: string[] = [];
     studyDataset: BrapiTrial[] = [];
     trialsIds: string[] = [];
@@ -37,7 +37,7 @@ export class StudyCardComponent implements OnInit {
             .then(response => {
                 this.study = response.result;
                 this.study.seasons = [arrayToString(response.result.seasons, ', ')];
-                this.site = [response.result.location];
+                this.sites = [response.result.location];
                 if (response.result.additionalInfo) {
                     this.additionalInfoKeys = Object.keys(response.result.additionalInfo);
                 }

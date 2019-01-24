@@ -19,7 +19,7 @@
 </div>
 
 <!-- Display the map -->
-<gpds-map *ngIf="checkLocation(site)" [sites]="site"></gpds-map>
+<gpds-map *ngIf="checkLocation(sites)" [sites]="sites"></gpds-map>
 
 <!-- Display the study's info -->
 <div class="card" *ngIf="study">
@@ -140,7 +140,7 @@
 
     <div class="row row-sep" *ngIf="study.dataLinks && study.dataLinks.length != 0">
       <div class="col-4 field">
-        Data link
+        Data links
       </div>
       <div class="col identification-info">
         <div class="row" *ngFor="let dataLink of study.dataLinks">

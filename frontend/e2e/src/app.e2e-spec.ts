@@ -12,9 +12,9 @@ describe('workspace-project App', () => {
         expect(page.getLabel('crops')).toContain('Crops');
     });
 
-    it('should display site card message', () => {
+    it('should display sites card message', () => {
         page.navigateTo('/sites/FOO');
-        expect(page.getTitleText()).toEqual('site-card works!');
+        expect(page.getTitleText()).toEqual('sites-card works!');
     });
 
     it('should display study card message', () => {
