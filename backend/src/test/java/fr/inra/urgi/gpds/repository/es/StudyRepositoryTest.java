@@ -37,8 +37,8 @@ class StudyRepositoryTest {
 
     @BeforeAll
     void before() {
-        esSetUp.initialize(StudyDetailVO.class, 0);
-        esSetUp.initialize(LocationVO.class, 0);
+        esSetUp.initialize(StudyDetailVO.class, 0L);
+        esSetUp.initialize(LocationVO.class, 0L);
     }
 
     @Autowired

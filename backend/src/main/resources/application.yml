@@ -37,6 +37,9 @@ gpds:
   elasticsearch-alias-template:
     gnpis_{source}_{documentType}_5432_scratchy-group{groupId}
 
+  elasticsearch-xref-index-name:
+    urgi_xref
+
   cropOntology-repository-url:
     https://urgi.versailles.inra.fr/files/ephesis/trait-ontology/data_16.3/ontology-repository.json
 

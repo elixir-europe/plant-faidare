@@ -37,14 +37,14 @@ public interface JSONView {
     /**
      * JSON view for GnpIS public API (combine fields from BrAPI and GnpIS)
      */
-    interface GnpISAPI extends GnpISFields, BrapiFields {
+    interface GnpISAPI extends JSONLDFields, GnpISFields, BrapiFields {
     }
 
     /**
      * Jackson json view used for internal properties that should not be exposed.
      * Used in {@link ESResponseParser} to deserialize internal properties from Elasticsearch.
      */
-    interface Internal extends GnpISAPI, BrapiWithJSONLD {
+    interface Internal extends GnpISAPI {
     }
 
 }

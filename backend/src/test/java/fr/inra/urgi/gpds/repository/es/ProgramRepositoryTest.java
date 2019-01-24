@@ -31,8 +31,8 @@ class ProgramRepositoryTest {
     ESSetUp esSetUp;
 
     @BeforeAll
-    public void before() {
-        esSetUp.initialize(ProgramVO.class, 0);
+    void before() {
+        esSetUp.initialize(ProgramVO.class, 0L);
     }
 
     @Test

@@ -24,14 +24,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestPropertySource("/test.properties")
 @SpringBootTest(classes = Application.class)
-public class TrialRepositoryTest {
+class TrialRepositoryTest {
 
     @Autowired
     ESSetUp esSetUp;
 
     @BeforeAll
-    public void before() {
-        esSetUp.initialize(TrialVO.class, 0);
+    void before() {
+        esSetUp.initialize(TrialVO.class, 0L);
     }
 
     @Autowired

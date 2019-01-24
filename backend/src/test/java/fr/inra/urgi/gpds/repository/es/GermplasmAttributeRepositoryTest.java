@@ -33,7 +33,7 @@ class GermplasmAttributeRepositoryTest {
 
     @BeforeAll
     void before() {
-        esSetUp.initialize(GermplasmAttributeValueListVO.class, 0);
+        esSetUp.initialize(GermplasmAttributeValueListVO.class, 0L);
     }
 
     @Autowired

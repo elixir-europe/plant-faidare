@@ -44,9 +44,9 @@ class GermplasmRepositoryTest {
 
     @BeforeAll
     void before() {
-        esSetUp.initialize(GermplasmVO.class, 0);
-        esSetUp.initialize(ProgenyVO.class, 0);
-        esSetUp.initialize(PedigreeVO.class, 0);
+        esSetUp.initialize(GermplasmVO.class, 0L);
+        esSetUp.initialize(ProgenyVO.class, 0L);
+        esSetUp.initialize(PedigreeVO.class, 0L);
     }
 
     @Autowired

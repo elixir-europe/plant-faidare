@@ -41,7 +41,7 @@ class DataDiscoveryRepositoryTest {
 
     @BeforeAll
     void before() {
-        esSetUp.initialize(DataDiscoveryDocument.class, 0);
+        esSetUp.initialize(DataDiscoveryDocument.class, 0L);
     }
 
     @Test

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.CharStreams;
 import fr.inra.urgi.gpds.config.GPDSProperties;
+import fr.inra.urgi.gpds.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.gpds.elasticsearch.document.DocumentAnnotationUtil;
+import fr.inra.urgi.gpds.repository.es.XRefDocumentRepositoryImpl;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
@@ -19,9 +21,11 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -33,6 +37,7 @@ public class ESSetUp {
     private final RestHighLevelClient client;
     private final GPDSProperties properties;
 
+    @Autowired
     public ESSetUp(RestHighLevelClient client, GPDSProperties properties) {
         this.client = client;
         this.properties = properties;
@@ -105,7 +110,7 @@ public class ESSetUp {
     /**
      * Initialize fixture indices for a document and a list of group IDs
      */
-    public boolean initialize(Class<?> documentClass, long... groupIds) {
+    public void initialize(Class<?> documentClass, Long... groupIds) {
         String documentType = DocumentAnnotationUtil.getDocumentObjectMetadata(documentClass).getDocumentType();
         try {
             for (long groupId : groupIds) {
@@ -119,7 +124,30 @@ public class ESSetUp {
                 addIndex(indexName, jsonPath, documentType);
             }
             refreshIndex();
-            return true;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Initialize fixture indices for a document and a list of group IDs
+     */
+    public void initializeXref(Long... groupIds) {
+        Class<?> documentClass = XRefDocumentVO.class;
+        String documentType = DocumentAnnotationUtil.getDocumentObjectMetadata(documentClass).getDocumentType();
+        try {
+            String baseIndex = properties.getElasticsearchXrefIndexName();
+            String[] indexNames = XRefDocumentRepositoryImpl.getGroupAliases(baseIndex, Arrays.asList(groupIds));
+            for (String indexName : indexNames) {
+
+                // Delete fixture index if exists
+                deleteIndex(indexName);
+
+                // Add fixture index (with data)
+                String jsonPath = "./fixture/" + indexName + ".json";
+                addIndex(indexName, jsonPath, documentType);
+            }
+            refreshIndex();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -146,7 +174,6 @@ public class ESSetUp {
             throw new RuntimeException(e);
         }
     }
-
 
     private XContentBuilder toXContentBuilder(String json) throws IOException {
         OutputStream out = new ByteArrayOutputStream();

@@ -32,7 +32,7 @@ class LocationRepositoryTest {
 
     @BeforeAll
     void before() {
-        esSetUp.initialize(LocationVO.class, 0);
+        esSetUp.initialize(LocationVO.class, 0L);
     }
 
     @Autowired

@@ -16,6 +16,9 @@ public class GPDSProperties {
     private String elasticsearchAliasTemplate;
 
     @NotBlank
+    private String elasticsearchXrefIndexName;
+
+    @NotBlank
     private String cropOntologyRepositoryUrl;
 
     @NotBlank
@@ -30,6 +33,14 @@ public class GPDSProperties {
 
     public void setElasticsearchAliasTemplate(String elasticsearchAliasTemplate) {
         this.elasticsearchAliasTemplate = elasticsearchAliasTemplate;
+    }
+
+    public String getElasticsearchXrefIndexName() {
+        return elasticsearchXrefIndexName;
+    }
+
+    public void setElasticsearchXrefIndexName(String elasticsearchXrefIndexName) {
+        this.elasticsearchXrefIndexName = elasticsearchXrefIndexName;
     }
 
     public String getCropOntologyRepositoryUrl() {

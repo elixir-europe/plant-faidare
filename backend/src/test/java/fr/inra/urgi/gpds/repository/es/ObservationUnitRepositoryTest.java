@@ -39,7 +39,7 @@ class ObservationUnitRepositoryTest {
 
     @BeforeAll
     void before() {
-        esSetUp.initialize(ObservationUnitVO.class, 0);
+        esSetUp.initialize(ObservationUnitVO.class, 0L);
     }
 
     @Autowired
