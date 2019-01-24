@@ -14,9 +14,17 @@ import java.util.Map;
  */
 public class Context implements Serializable {
 
-    private Map<String, Object> properties = new HashMap<>();
+    private Map<String, Object> properties;
 
-    @JsonView(JSONView.JSONLDView.class)
+    public Context(Map<String, Object> properties) {
+        this.properties = properties;
+    }
+
+    public Context() {
+        this.properties = new HashMap<>();
+    }
+
+    @JsonView(JSONView.JSONLDFields.class)
     @JsonAnyGetter
     public Map<String, Object> getProperties() {
         return properties;

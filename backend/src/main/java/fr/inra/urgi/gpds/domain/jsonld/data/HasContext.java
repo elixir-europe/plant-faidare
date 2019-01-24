@@ -9,7 +9,7 @@ import fr.inra.urgi.gpds.domain.JSONView;
  */
 public interface HasContext {
 
-    @JsonView(JSONView.JSONLDView.class)
+    @JsonView(JSONView.JSONLDFields.class)
     @JsonProperty("@context")
     Context getContext();
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.google.common.base.Joiner;
 import fr.inra.urgi.gpds.domain.JSONView;
-import fr.inra.urgi.gpds.domain.data.impl.FacetTermImpl;
+import fr.inra.urgi.gpds.domain.datadiscovery.data.FacetTermImpl;
 import fr.inra.urgi.gpds.elasticsearch.document.DocumentAnnotationUtil;
 import fr.inra.urgi.gpds.elasticsearch.document.DocumentMetadata;
 import org.elasticsearch.action.search.SearchResponse;

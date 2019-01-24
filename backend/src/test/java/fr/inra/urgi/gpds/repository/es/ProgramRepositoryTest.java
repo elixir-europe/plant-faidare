@@ -2,7 +2,7 @@ package fr.inra.urgi.gpds.repository.es;
 
 import fr.inra.urgi.gpds.Application;
 import fr.inra.urgi.gpds.domain.criteria.ProgramCriteria;
-import fr.inra.urgi.gpds.domain.data.impl.ProgramVO;
+import fr.inra.urgi.gpds.domain.data.ProgramVO;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.repository.es.setup.ESSetUp;
 import org.junit.jupiter.api.BeforeAll;

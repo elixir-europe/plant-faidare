@@ -1,8 +1,8 @@
 package fr.inra.urgi.gpds.repository.file;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.inra.urgi.gpds.domain.data.DataSource;
-import fr.inra.urgi.gpds.domain.data.impl.DataSourceDocument;
+import fr.inra.urgi.gpds.domain.datadiscovery.data.DataSource;
+import fr.inra.urgi.gpds.domain.datadiscovery.data.DataSourceImpl;
 import fr.inra.urgi.gpds.domain.jsonld.data.HasGraph;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Repository;
@@ -38,7 +38,7 @@ public class DataSourceRepositoryImpl implements DataSourceRepository {
         try {
             InputStream dataSourceInputStream = getClass().getResourceAsStream("./datasources.jsonld");
             DataSourceList dataSourceList = objectMapper.readValue(dataSourceInputStream, DataSourceList.class);
-            for (DataSourceDocument dataSource : dataSourceList.getGraph()) {
+            for (DataSourceImpl dataSource : dataSourceList.getGraph()) {
 
                 String imageUrl = dataSource.getImageUrl();
                 if (imageUrl != null && imageUrl.startsWith("./")) {
@@ -67,17 +67,17 @@ public class DataSourceRepositoryImpl implements DataSourceRepository {
      * JSON-LD wrapper around a list of DataSourceDocument
      */
     public static class DataSourceList implements HasGraph {
-        private List<DataSourceDocument> graph;
+        private List<DataSourceImpl> graph;
 
         public DataSourceList() {
         }
 
         @Override
-        public List<DataSourceDocument> getGraph() {
+        public List<DataSourceImpl> getGraph() {
             return graph;
         }
 
-        public void setGraph(List<DataSourceDocument> graph) {
+        public void setGraph(List<DataSourceImpl> graph) {
             this.graph = graph;
         }
 

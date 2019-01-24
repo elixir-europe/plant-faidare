@@ -2,7 +2,7 @@ package fr.inra.urgi.gpds.service.es;
 
 import com.opencsv.CSVReader;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmPOSTSearchCriteria;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.GermplasmVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.gpds.repository.es.GermplasmRepository;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;

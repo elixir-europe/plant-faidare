@@ -1,20 +1,18 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import fr.inra.urgi.gpds.api.NotFoundException;
-import fr.inra.urgi.gpds.domain.JSONView;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiResponse;
-import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiResponseFactory;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmAttributeCriteria;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmGETSearchCriteria;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmPOSTSearchCriteria;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmSearchCriteria;
 import fr.inra.urgi.gpds.domain.criteria.base.PaginationCriteriaImpl;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.GermplasmAttributeValueListVO;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.GermplasmVO;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.PedigreeVO;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.ProgenyVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.GermplasmAttributeValueListVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.GermplasmVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.PedigreeVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.ProgenyVO;
+import fr.inra.urgi.gpds.domain.response.ApiResponseFactory;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.domain.response.Pagination;
 import fr.inra.urgi.gpds.repository.es.GermplasmAttributeRepository;
@@ -30,8 +28,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Api(tags = {"Breeding API"}, description = "BrAPI endpoint")
 @RestController
@@ -51,28 +47,33 @@ public class GermplasmController {
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Germplasm/GermplasmDetailsByGermplasmDbId.md
      */
-    @ApiOperation(
-        value = "Get germplasm by id",
-        notes = "Warning: Please do not URL encode DOI identifiers when trying to access germplasm details (will not work on swagger).")
-    @RequestMapping(value = "/brapi/v1/germplasm/{germplasmDbId}", method = GET, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
+    @ApiOperation("Get germplasm by id")
+    @GetMapping("/brapi/v1/germplasm/{germplasmDbId}")
     public BrapiResponse<GermplasmVO> getGermplasm(@PathVariable String germplasmDbId) {
         LOGGER.debug("germplasmDbId = " + germplasmDbId);
         GermplasmVO germplasm = germplasmService.getById(germplasmDbId);
         if (germplasm == null) {
             throw new NotFoundException("Germplasm not found for id '" + germplasmDbId + "'");
         }
-        return BrapiResponseFactory.createSingleObjectResponse(germplasm, null);
+        return ApiResponseFactory.createSingleObjectResponse(germplasm, null);
+    }
+
+    @ApiOperation("List germplasm")
+    @GetMapping("/brapi/v1/germplasm")
+    public BrapiListResponse<GermplasmVO> listGermplasm(
+        @Valid PaginationCriteriaImpl paginationCriteria
+    ) {
+        GermplasmGETSearchCriteria criteria = new GermplasmGETSearchCriteria();
+        criteria.setPageSize(paginationCriteria.getPageSize());
+        criteria.setPage(paginationCriteria.getPage());
+        return searchGermplasmService(criteria);
     }
 
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Germplasm/GermplasmSearchGET.md
      */
     @ApiOperation("Search germplasm")
-    @RequestMapping(value = "/brapi/v1/germplasm-search", method = GET, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
+    @GetMapping(value = "/brapi/v1/germplasm-search")
     public BrapiListResponse<GermplasmVO> searchGermplasm(
         @Valid GermplasmGETSearchCriteria criteria
     ) {
@@ -83,9 +84,7 @@ public class GermplasmController {
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Germplasm/GermplasmSearchPOST.md
      */
     @ApiOperation("Search germplasm")
-    @RequestMapping(value = "/brapi/v1/germplasm-search", method = POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
+    @PostMapping(value = "/brapi/v1/germplasm-search", consumes = APPLICATION_JSON_VALUE)
     public BrapiListResponse<GermplasmVO> searchGermplasm(
         @Valid @RequestBody(required = false) GermplasmPOSTSearchCriteria criteria
     ) {
@@ -95,16 +94,14 @@ public class GermplasmController {
     private BrapiListResponse<GermplasmVO> searchGermplasmService(GermplasmSearchCriteria searchCriteria) {
         PaginatedList<GermplasmVO> pager = germplasmService.find(searchCriteria);
         Pagination pagination = pager.getPagination();
-        return BrapiResponseFactory.createListResponse(pagination, null, pager);
+        return ApiResponseFactory.createListResponse(pagination, null, pager);
     }
 
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/GermplasmAttributes/GermplasmAttributeValuesByGermplasmDbId.md
      */
     @ApiOperation("List germplasm attributes")
-    @RequestMapping(value = "/brapi/v1/germplasm/{germplasmDbId}/attributes", method = GET, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
+    @GetMapping("/brapi/v1/germplasm/{germplasmDbId}/attributes")
     public BrapiResponse<GermplasmAttributeValueListVO> listGermplasmAttributes(
         @PathVariable String germplasmDbId,
         @RequestParam(required = false) List<String> attributeList,
@@ -120,36 +117,32 @@ public class GermplasmController {
         if (pager.size() == 1) {
             attributes = pager.get(0);
         }
-        return BrapiResponseFactory.createSingleObjectResponse(attributes, null);
+        return ApiResponseFactory.createSingleObjectResponse(attributes, null);
     }
 
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/GermplasmAttributes/GermplasmAttributeValuesByGermplasmDbId.md
      */
     @ApiOperation("Get germplasm pedigree")
-    @RequestMapping(value = "/brapi/v1/germplasm/{germplasmDbId}/pedigree", method = GET, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
+    @GetMapping("/brapi/v1/germplasm/{germplasmDbId}/pedigree")
     public BrapiResponse<PedigreeVO> getPedigree(
         @PathVariable String germplasmDbId
     ) {
 
         PedigreeVO pedigree = germplasmService.getPedigree(germplasmDbId);
-        return BrapiResponseFactory.createSingleObjectResponse(pedigree, null);
+        return ApiResponseFactory.createSingleObjectResponse(pedigree, null);
     }
 
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Germplasm/Germplasm_GermplasmDbId_Progeny_GET.yaml
      */
     @ApiOperation("Get germplasm progeny")
-    @RequestMapping(value = "/brapi/v1/germplasm/{germplasmDbId}/progeny", method = GET, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
+    @GetMapping("/brapi/v1/germplasm/{germplasmDbId}/progeny")
     public BrapiResponse<ProgenyVO> getProgeny(
         @PathVariable String germplasmDbId
     ) {
 
         ProgenyVO progeny = germplasmService.getProgeny(germplasmDbId);
-        return BrapiResponseFactory.createSingleObjectResponse(progeny, null);
+        return ApiResponseFactory.createSingleObjectResponse(progeny, null);
     }
 }

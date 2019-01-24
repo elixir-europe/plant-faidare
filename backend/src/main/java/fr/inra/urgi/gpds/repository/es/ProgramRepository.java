@@ -1,7 +1,7 @@
 package fr.inra.urgi.gpds.repository.es;
 
 import fr.inra.urgi.gpds.domain.criteria.ProgramCriteria;
-import fr.inra.urgi.gpds.domain.data.impl.ProgramVO;
+import fr.inra.urgi.gpds.domain.data.ProgramVO;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.elasticsearch.repository.ESFindRepository;
 import fr.inra.urgi.gpds.elasticsearch.repository.ESGetByIdRepository;

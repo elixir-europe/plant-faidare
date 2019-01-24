@@ -1,7 +1,7 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
-import fr.inra.urgi.gpds.domain.data.impl.ObservationUnitVO;
-import fr.inra.urgi.gpds.domain.data.impl.StudyDetailVO;
+import fr.inra.urgi.gpds.domain.data.phenotype.ObservationUnitVO;
+import fr.inra.urgi.gpds.domain.data.study.StudyDetailVO;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.domain.response.Pagination;
 import fr.inra.urgi.gpds.domain.response.PaginationImpl;
@@ -50,6 +50,35 @@ class StudyControllerTest {
 
     @MockBean
     private StudyRepository repository;
+
+    private static StudyDetailVO STUDY;
+    static {
+        String id = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjM4MTc4MzY5NkUxMg==";
+        String uri = "http://doi.org/foo/bar";
+        STUDY = new StudyDetailVO();
+        STUDY.setUri(uri);
+        STUDY.setStudyDbId(id);
+    }
+
+    @Test
+    void should_Not_Show_JSON_LD_Fields_By_Default() throws Exception {
+        when(repository.getById(STUDY.getStudyDbId())).thenReturn(STUDY);
+        mockMvc.perform(get("/brapi/v1/studies/" + STUDY.getStudyDbId())
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result.@id").doesNotExist());
+    }
+
+    @Test
+    void should_Show_JSON_LD_Fields_When_Asked() throws Exception {
+        when(repository.getById(STUDY.getStudyDbId())).thenReturn(STUDY);
+
+        mockMvc.perform(get("/brapi/v1/studies/"+ STUDY.getStudyDbId())
+            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result.@id", is(STUDY.getUri())));
+    }
 
     @Test
     void should_Get_By_Id() throws Exception {

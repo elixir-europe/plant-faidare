@@ -1,6 +1,6 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
-import fr.inra.urgi.gpds.domain.data.impl.ProgramVO;
+import fr.inra.urgi.gpds.domain.data.ProgramVO;
 import fr.inra.urgi.gpds.repository.es.ProgramRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +30,35 @@ class ProgramControllerTest {
 
     @MockBean
     private ProgramRepository repository;
+
+    private static ProgramVO PROGRAM;
+    static {
+        String id = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjM4MTc4MzY5NkUxMg==";
+        String uri = "http://doi.org/foo/bar";
+        PROGRAM = new ProgramVO();
+        PROGRAM.setUri(uri);
+        PROGRAM.setProgramDbId(id);
+    }
+
+    @Test
+    void should_Not_Show_JSON_LD_Fields_By_Default() throws Exception {
+        when(repository.getById(PROGRAM.getProgramDbId())).thenReturn(PROGRAM);
+        mockMvc.perform(get("/brapi/v1/programs/" + PROGRAM.getProgramDbId())
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result.@id").doesNotExist());
+    }
+
+    @Test
+    void should_Show_JSON_LD_Fields_When_Asked() throws Exception {
+        when(repository.getById(PROGRAM.getProgramDbId())).thenReturn(PROGRAM);
+
+        mockMvc.perform(get("/brapi/v1/programs/"+ PROGRAM.getProgramDbId())
+            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result.@id", is(PROGRAM.getUri())));
+    }
 
     @Test
     void should_Get_By_Id() throws Exception {

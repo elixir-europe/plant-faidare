@@ -2,9 +2,9 @@ package fr.inra.urgi.gpds.repository.ontology;
 
 import com.google.common.collect.Sets;
 import fr.inra.urgi.gpds.config.GPDSProperties;
-import fr.inra.urgi.gpds.domain.data.impl.variable.ObservationVariableVO;
-import fr.inra.urgi.gpds.domain.data.impl.variable.OntologyVO;
-import fr.inra.urgi.gpds.domain.data.impl.variable.TraitVO;
+import fr.inra.urgi.gpds.domain.data.variable.ObservationVariableVO;
+import fr.inra.urgi.gpds.domain.data.variable.OntologyVO;
+import fr.inra.urgi.gpds.domain.data.variable.TraitVO;
 import fr.inra.urgi.gpds.repository.file.CropOntologyRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

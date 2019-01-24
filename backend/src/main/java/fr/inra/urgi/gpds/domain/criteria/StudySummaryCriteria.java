@@ -5,7 +5,7 @@ import fr.inra.urgi.gpds.domain.brapi.v1.criteria.BrapiSortCriteria;
 import fr.inra.urgi.gpds.domain.brapi.v1.criteria.BrapiStudyCriteria;
 import fr.inra.urgi.gpds.domain.criteria.base.PaginationCriteriaImpl;
 import fr.inra.urgi.gpds.domain.criteria.base.SortCriteria;
-import fr.inra.urgi.gpds.domain.data.impl.StudySummaryVO;
+import fr.inra.urgi.gpds.domain.data.study.StudySummaryVO;
 import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.CriteriaForDocument;
 import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.DocumentPath;
 import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.NoDocumentMapping;

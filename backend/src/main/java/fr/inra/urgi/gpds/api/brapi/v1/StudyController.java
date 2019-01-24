@@ -1,20 +1,18 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import fr.inra.urgi.gpds.api.NotFoundException;
-import fr.inra.urgi.gpds.domain.JSONView;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiResponse;
-import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiResponseFactory;
 import fr.inra.urgi.gpds.domain.criteria.*;
 import fr.inra.urgi.gpds.domain.criteria.base.PaginationCriteriaImpl;
-import fr.inra.urgi.gpds.domain.data.impl.ObservationUnitVO;
-import fr.inra.urgi.gpds.domain.data.impl.StudyDetailVO;
-import fr.inra.urgi.gpds.domain.data.impl.StudySummaryVO;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.GermplasmVO;
-import fr.inra.urgi.gpds.domain.data.impl.variable.ObservationVariableVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.GermplasmVO;
+import fr.inra.urgi.gpds.domain.data.phenotype.ObservationUnitVO;
+import fr.inra.urgi.gpds.domain.data.study.StudyDetailVO;
+import fr.inra.urgi.gpds.domain.data.study.StudySummaryVO;
+import fr.inra.urgi.gpds.domain.data.variable.ObservationVariableVO;
+import fr.inra.urgi.gpds.domain.response.ApiResponseFactory;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.domain.response.Pagination;
 import fr.inra.urgi.gpds.repository.es.GermplasmRepository;
@@ -33,8 +31,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author gcornut
@@ -65,41 +61,44 @@ public class StudyController {
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Studies/StudyDetails.md
      */
     @ApiOperation("Get study")
-    @RequestMapping(value = "/brapi/v1/studies/{studyDbId}", method = GET, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
+    @GetMapping("/brapi/v1/studies/{studyDbId}")
     public BrapiResponse<StudyDetailVO> getStudy(@PathVariable String studyDbId) throws Exception {
         studyDbId = StringFunctions.asUTF8(studyDbId);
         StudyDetailVO result = repository.getById(studyDbId);
         if (result == null) {
             throw new NotFoundException("Study not found for id '" + studyDbId + "'");
         }
-        return BrapiResponseFactory.createSingleObjectResponse(result, null);
+        return ApiResponseFactory.createSingleObjectResponse(result, null);
     }
 
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Studies/ListStudySummaries.md
      */
     @ApiOperation("List studies")
-    @RequestMapping(value = "/brapi/v1/studies", method = GET, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
+    @GetMapping("/brapi/v1/studies")
     public BrapiListResponse<StudySummaryVO> listStudies(@Valid StudySummaryCriteria criteria) {
         if (criteria == null) {
             criteria = new StudySummaryCriteria();
         }
         PaginatedList<StudySummaryVO> result = repository.find(criteria);
-        return BrapiResponseFactory.createListResponse(result.getPagination(), null, result);
+        return ApiResponseFactory.createListResponse(result.getPagination(), null, result);
     }
 
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Studies/SearchStudies.md
      */
     @ApiOperation("Search studies")
-    @RequestMapping(value = "/brapi/v1/studies-search", method = {GET, POST}, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
-    public BrapiListResponse<StudySummaryVO> searchStudies(@RequestBody(required = false) @Valid StudySearchCriteria criteria) {
+    @GetMapping(value = "/brapi/v1/studies-search")
+    public BrapiListResponse<StudySummaryVO> searchStudiesGet(@Valid StudySearchCriteria criteria) {
+        return listStudies(criteria);
+    }
+
+    /**
+     * @link https://github.com/plantbreeding/API/blob/master/Specification/Studies/SearchStudies.md
+     */
+    @ApiOperation("Search studies")
+    @PostMapping(value = "/brapi/v1/studies-search", consumes = APPLICATION_JSON_VALUE)
+    public BrapiListResponse<StudySummaryVO> searchStudiesPost(@RequestBody(required = false) @Valid StudySearchCriteria criteria) {
         return listStudies(criteria);
     }
 
@@ -107,9 +106,7 @@ public class StudyController {
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Studies/StudyObservationVariables.md
      */
     @ApiOperation("List study observation variables")
-    @RequestMapping(value = "/brapi/v1/studies/{studyDbId}/observationVariables", method = GET, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
+    @GetMapping("/brapi/v1/studies/{studyDbId}/observationVariables")
     public BrapiListResponse<ObservationVariableVO> listStudyVariables(
         @PathVariable String studyDbId, @Valid PaginationCriteriaImpl criteria
     ) throws Exception {
@@ -121,7 +118,7 @@ public class StudyController {
         Set<String> variableIds = repository.getVariableIds(studyDbId);
         List<ObservationVariableVO> result = cropOntologyRepository.getVariableByIds(variableIds);
 
-        return BrapiResponseFactory.createSubListResponse(
+        return ApiResponseFactory.createSubListResponse(
             criteria.getPageSize(), criteria.getPage(),
             result
         );
@@ -131,9 +128,7 @@ public class StudyController {
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Studies/ObservationUnitDetails.md
      */
     @ApiOperation("List study observation units")
-    @RequestMapping(value = "/brapi/v1/studies/{studyDbId}/observationUnits", method = GET, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
+    @GetMapping("/brapi/v1/studies/{studyDbId}/observationUnits")
     public BrapiListResponse<ObservationUnitVO> listStudyObservationUnits(
         @PathVariable String studyDbId, @Valid StudyObservationUnitCriteria criteria
     ) throws Exception {
@@ -144,16 +139,14 @@ public class StudyController {
         ouCriteria.setStudyDbIds(Sets.newHashSet(studyDbId));
         ouCriteria.setObservationLevel(criteria.getObservationLevel());
         PaginatedList<ObservationUnitVO> result = observationUnitRepository.find(ouCriteria);
-        return BrapiResponseFactory.createListResponse(result.getPagination(), null, result);
+        return ApiResponseFactory.createListResponse(result.getPagination(), null, result);
     }
 
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Studies/StudyGermplasmDetails.md
      */
     @ApiOperation("List study germplasm")
-    @RequestMapping(value = "/brapi/v1/studies/{studyDbId}/germplasm", method = GET, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.BrapiFields.class)
+    @GetMapping("/brapi/v1/studies/{studyDbId}/germplasm")
     public BrapiListResponse<GermplasmVO> listStudyGermplasm(
         @PathVariable String studyDbId, @Valid PaginationCriteriaImpl criteria
     ) throws Exception {
@@ -172,6 +165,6 @@ public class StudyController {
             pager = germplasmRepository.find(germplasmCriteria);
         }
         Pagination pagination = pager.getPagination();
-        return BrapiResponseFactory.createListResponse(pagination, null, pager);
+        return ApiResponseFactory.createListResponse(pagination, null, pager);
     }
 }

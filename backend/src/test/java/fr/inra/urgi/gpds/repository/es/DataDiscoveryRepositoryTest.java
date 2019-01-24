@@ -1,11 +1,11 @@
 package fr.inra.urgi.gpds.repository.es;
 
 import fr.inra.urgi.gpds.Application;
-import fr.inra.urgi.gpds.domain.criteria.DataDiscoveryCriteriaImpl;
-import fr.inra.urgi.gpds.domain.data.Facet;
-import fr.inra.urgi.gpds.domain.data.FacetTerm;
-import fr.inra.urgi.gpds.domain.data.impl.DataDiscoveryDocument;
-import fr.inra.urgi.gpds.domain.response.DataDiscoveryResponse;
+import fr.inra.urgi.gpds.domain.datadiscovery.criteria.DataDiscoveryCriteriaImpl;
+import fr.inra.urgi.gpds.domain.datadiscovery.data.DataDiscoveryDocument;
+import fr.inra.urgi.gpds.domain.datadiscovery.data.Facet;
+import fr.inra.urgi.gpds.domain.datadiscovery.data.FacetTerm;
+import fr.inra.urgi.gpds.domain.datadiscovery.response.DataDiscoveryResponse;
 import fr.inra.urgi.gpds.repository.es.setup.ESSetUp;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,7 @@ package fr.inra.urgi.gpds.domain.criteria;
 
 import fr.inra.urgi.gpds.domain.brapi.v1.criteria.BrapiGermplasmAttributeCriteria;
 import fr.inra.urgi.gpds.domain.criteria.base.PaginationCriteriaImpl;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.GermplasmAttributeValueListVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.GermplasmAttributeValueListVO;
 import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.CriteriaForDocument;
 import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.DocumentPath;
 

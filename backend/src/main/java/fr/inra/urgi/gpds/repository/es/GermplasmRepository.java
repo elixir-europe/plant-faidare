@@ -1,9 +1,9 @@
 package fr.inra.urgi.gpds.repository.es;
 
 import fr.inra.urgi.gpds.domain.criteria.GermplasmSearchCriteria;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.GermplasmVO;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.PedigreeVO;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.ProgenyVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.GermplasmVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.PedigreeVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.ProgenyVO;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.elasticsearch.repository.ESFindRepository;
 

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface HasGraph {
 
-    @JsonView(JSONView.JSONLDView.class)
+    @JsonView(JSONView.JSONLDFields.class)
     @JsonProperty("@graph")
     List<? extends JSONLD> getGraph();
 

@@ -1,13 +1,13 @@
 package fr.inra.urgi.gpds.repository.es;
 
 import fr.inra.urgi.gpds.api.gnpis.v1.DataDiscoveryController;
-import fr.inra.urgi.gpds.domain.criteria.DataDiscoveryCriteria;
-import fr.inra.urgi.gpds.domain.criteria.DataDiscoveryCriteriaImpl;
-import fr.inra.urgi.gpds.domain.data.impl.DataDiscoveryDocument;
-import fr.inra.urgi.gpds.domain.data.impl.FacetImpl;
-import fr.inra.urgi.gpds.domain.data.impl.FacetTermImpl;
-import fr.inra.urgi.gpds.domain.response.DataDiscoveryResponse;
-import fr.inra.urgi.gpds.domain.response.DataDiscoveryResponseFactory;
+import fr.inra.urgi.gpds.domain.datadiscovery.criteria.DataDiscoveryCriteria;
+import fr.inra.urgi.gpds.domain.datadiscovery.criteria.DataDiscoveryCriteriaImpl;
+import fr.inra.urgi.gpds.domain.datadiscovery.data.DataDiscoveryDocument;
+import fr.inra.urgi.gpds.domain.datadiscovery.data.FacetImpl;
+import fr.inra.urgi.gpds.domain.datadiscovery.data.FacetTermImpl;
+import fr.inra.urgi.gpds.domain.datadiscovery.response.DataDiscoveryResponse;
+import fr.inra.urgi.gpds.domain.response.ApiResponseFactory;
 import fr.inra.urgi.gpds.domain.response.Pagination;
 import fr.inra.urgi.gpds.domain.response.PaginationImpl;
 import fr.inra.urgi.gpds.elasticsearch.ESRequestFactory;
@@ -177,7 +177,7 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
         }
 
         // Return paginated list
-        return DataDiscoveryResponseFactory.create(pagination, resultList, facets);
+        return ApiResponseFactory.createListResponseWithFacets(pagination, resultList, facets);
     }
 
     private String[] criteriaFieldsToDocumentFields(List<String> criteriaFields) {

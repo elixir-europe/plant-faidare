@@ -1,29 +1,26 @@
 package fr.inra.urgi.gpds.api.gnpis.v1;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.Strings;
 import fr.inra.urgi.gpds.api.BadRequestException;
 import fr.inra.urgi.gpds.api.NotFoundException;
-import fr.inra.urgi.gpds.domain.JSONView;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmGETSearchCriteria;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmPOSTSearchCriteria;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.GermplasmVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.service.es.GermplasmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.Collections;
 
-import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Api(tags = {"GnpIS API"}, description = "Extended GnpIS API")
@@ -39,9 +36,7 @@ public class GnpISGermplasmController {
     }
 
     @ApiOperation(value = "Search germplasm by ID or PUI")
-    @RequestMapping(method = GET, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.GnpISAPI.class)
+    @GetMapping
     public GermplasmVO get(
         @RequestParam(required = false) String id,
         @RequestParam(required = false) String pui
@@ -94,8 +89,7 @@ public class GnpISGermplasmController {
      * resp.setContentType("application/zip");
      * </pre>
      */
-    @RequestMapping(value = "/csv", method = GET, produces = "application/csv")
-    @ResponseBody
+    @RequestMapping(value = "/csv", method = GET, produces = "text/csv")
     public FileSystemResource export(GermplasmPOSTSearchCriteria criteria, HttpServletResponse response) {
         try {
             File exportFile = germplasmService.exportCSV(criteria);

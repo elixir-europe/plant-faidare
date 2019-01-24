@@ -3,7 +3,7 @@ package fr.inra.urgi.gpds.repository.es;
 import fr.inra.urgi.gpds.Application;
 import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiGermplasmAttributeValue;
 import fr.inra.urgi.gpds.domain.criteria.GermplasmAttributeCriteria;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.GermplasmAttributeValueListVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.GermplasmAttributeValueListVO;
 import fr.inra.urgi.gpds.domain.response.PaginatedList;
 import fr.inra.urgi.gpds.repository.es.setup.ESSetUp;
 import org.junit.jupiter.api.BeforeAll;

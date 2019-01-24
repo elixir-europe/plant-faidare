@@ -1,6 +1,6 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
-import fr.inra.urgi.gpds.domain.data.impl.variable.ObservationVariableVO;
+import fr.inra.urgi.gpds.domain.data.variable.ObservationVariableVO;
 import fr.inra.urgi.gpds.repository.file.CropOntologyRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +30,35 @@ class ObservationVariableControllerTest {
 
     @MockBean
     private CropOntologyRepository repository;
+
+    private static ObservationVariableVO VARIABLE;
+    static {
+        String id = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjM4MTc4MzY5NkUxMg==";
+        String uri = "http://doi.org/foo/bar";
+        VARIABLE = new ObservationVariableVO();
+        VARIABLE.setUri(uri);
+        VARIABLE.setObservationVariableDbId(id);
+    }
+
+    @Test
+    void should_Not_Show_JSON_LD_Fields_By_Default() throws Exception {
+        when(repository.getVariableById(VARIABLE.getObservationVariableDbId())).thenReturn(VARIABLE);
+        mockMvc.perform(get("/brapi/v1/variables/" + VARIABLE.getObservationVariableDbId())
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result.@id").doesNotExist());
+    }
+
+    @Test
+    void should_Show_JSON_LD_Fields_When_Asked() throws Exception {
+        when(repository.getVariableById(VARIABLE.getObservationVariableDbId())).thenReturn(VARIABLE);
+
+        mockMvc.perform(get("/brapi/v1/variables/"+ VARIABLE.getObservationVariableDbId())
+            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result.@id", is(VARIABLE.getUri())));
+    }
 
     @Test
     void should_Get_By_Id() throws Exception {

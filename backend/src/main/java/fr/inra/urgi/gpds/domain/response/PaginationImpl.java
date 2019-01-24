@@ -41,6 +41,10 @@ public class PaginationImpl implements Pagination {
 
     public static Pagination create(long pageSize, long currentPage, long totalCount) {
         long totalPages = (long) Math.ceil((double) totalCount / (double) pageSize);
+        return create(pageSize, currentPage, totalCount, totalPages);
+    }
+
+    public static Pagination create(long pageSize, long currentPage, long totalCount, long totalPages) {
         return new PaginationImpl(pageSize, currentPage, totalCount, totalPages);
     }
 

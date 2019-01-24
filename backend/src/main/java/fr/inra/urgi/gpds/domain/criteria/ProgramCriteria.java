@@ -3,7 +3,7 @@ package fr.inra.urgi.gpds.domain.criteria;
 import fr.inra.urgi.gpds.domain.brapi.v1.criteria.BrapiPaginationCriteria;
 import fr.inra.urgi.gpds.domain.brapi.v1.criteria.BrapiProgramCriteria;
 import fr.inra.urgi.gpds.domain.criteria.base.PaginationCriteriaImpl;
-import fr.inra.urgi.gpds.domain.data.impl.ProgramVO;
+import fr.inra.urgi.gpds.domain.data.ProgramVO;
 import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.CriteriaForDocument;
 import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.DocumentPath;
 

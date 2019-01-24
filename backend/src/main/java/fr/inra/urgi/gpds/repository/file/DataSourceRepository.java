@@ -1,6 +1,6 @@
 package fr.inra.urgi.gpds.repository.file;
 
-import fr.inra.urgi.gpds.domain.data.DataSource;
+import fr.inra.urgi.gpds.domain.datadiscovery.data.DataSource;
 
 import java.util.Collection;
 

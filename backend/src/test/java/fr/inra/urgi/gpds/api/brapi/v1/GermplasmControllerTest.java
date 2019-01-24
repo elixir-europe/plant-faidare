@@ -1,9 +1,9 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.CollPopVO;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.DonorVO;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.GermplasmVO;
-import fr.inra.urgi.gpds.domain.data.impl.germplasm.ProgenyVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.CollPopVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.DonorVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.GermplasmVO;
+import fr.inra.urgi.gpds.domain.data.germplasm.ProgenyVO;
 import fr.inra.urgi.gpds.repository.es.GermplasmAttributeRepository;
 import fr.inra.urgi.gpds.service.es.GermplasmService;
 import org.junit.jupiter.api.Test;
@@ -40,6 +40,36 @@ class GermplasmControllerTest {
 
     @MockBean
     private GermplasmAttributeRepository germplasmAttributeRepository;
+
+    static GermplasmVO GERMPLASM;
+    static {
+        String id = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjM4MTc4MzY5NkUxMg==";
+        String uri = "http://doi.org/foo/bar";
+        GERMPLASM = new GermplasmVO();
+        GERMPLASM.setUri(uri);
+        GERMPLASM.setGermplasmDbId(id);
+    }
+
+    @Test
+    void should_Not_Show_JSON_LD_Fields_By_Default() throws Exception {
+        when(service.getById(anyString())).thenReturn(GERMPLASM);
+
+        mockMvc.perform(get("/brapi/v1/germplasm/" + GERMPLASM.getGermplasmDbId())
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result.@id").doesNotExist());
+    }
+
+    @Test
+    void should_Show_JSON_LD_Fields_When_Asked() throws Exception {
+        when(service.getById(anyString())).thenReturn(GERMPLASM);
+
+        mockMvc.perform(get("/brapi/v1/germplasm/"+GERMPLASM.getGermplasmDbId())
+            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result.@id", is(GERMPLASM.getUri())));
+    }
 
     @Test
     void should_Load_Germplasm_progeny_From_PUID() throws Exception {

@@ -9,41 +9,35 @@ import fr.inra.urgi.gpds.domain.JSONView;
  *
  * @author gcornut
  */
-public interface Dataset extends JSONLD {
+public interface Dataset extends JSONLD, IncludedInDataCatalog, HasURL {
 
     /**
      * Data catalog identifier (local unique identifier)
      */
-    @JsonView(JSONView.JSONLDView.class)
+    @JsonView(JSONView.JSONLDFields.class)
     @JsonProperty("schema:identifier")
     String getIdentifier();
 
     /**
      * Dataset display name
      */
-    @JsonView(JSONView.JSONLDView.class)
+    @JsonView(JSONView.JSONLDFields.class)
     @JsonProperty("schema:name")
     String getName();
 
     /**
      * Public website URL for this dataset
      */
-    @JsonView(JSONView.JSONLDView.class)
-    @JsonProperty("schema:url")
+    @Override
     String getUrl();
 
     /**
      * Description of the dataset
      */
-    @JsonView(JSONView.JSONLDView.class)
+    @JsonView(JSONView.JSONLDFields.class)
     @JsonProperty("schema:description")
     String getDescription();
 
-    /**
-     * URI of the data catalog this dataset is part of
-     */
-    @JsonView(JSONView.JSONLDView.class)
-    @JsonProperty("schema:includedInDataCatalog")
+    @Override
     String getSourceUri();
-
 }

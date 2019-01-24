@@ -1,7 +1,7 @@
 package fr.inra.urgi.gpds.repository.es;
 
 import fr.inra.urgi.gpds.domain.criteria.ObservationUnitCriteria;
-import fr.inra.urgi.gpds.domain.data.impl.ObservationUnitVO;
+import fr.inra.urgi.gpds.domain.data.phenotype.ObservationUnitVO;
 import fr.inra.urgi.gpds.elasticsearch.ESRequestFactory;
 import fr.inra.urgi.gpds.elasticsearch.ESResponseParser;
 import fr.inra.urgi.gpds.elasticsearch.repository.impl.BaseESRepository;

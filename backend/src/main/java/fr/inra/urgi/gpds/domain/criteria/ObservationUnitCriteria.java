@@ -2,7 +2,7 @@ package fr.inra.urgi.gpds.domain.criteria;
 
 import fr.inra.urgi.gpds.domain.brapi.v1.criteria.BrapiObservationUnitCriteria;
 import fr.inra.urgi.gpds.domain.criteria.base.PaginationCriteriaImpl;
-import fr.inra.urgi.gpds.domain.data.impl.ObservationUnitVO;
+import fr.inra.urgi.gpds.domain.data.phenotype.ObservationUnitVO;
 import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.CriteriaForDocument;
 import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.DocumentPath;
 import fr.inra.urgi.gpds.elasticsearch.criteria.annotation.QueryType;

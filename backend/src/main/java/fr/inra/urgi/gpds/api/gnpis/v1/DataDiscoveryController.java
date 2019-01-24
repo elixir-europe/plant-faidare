@@ -1,12 +1,10 @@
 package fr.inra.urgi.gpds.api.gnpis.v1;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import fr.inra.urgi.gpds.domain.JSONView;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiListResponse;
-import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiResponseFactory;
-import fr.inra.urgi.gpds.domain.criteria.DataDiscoveryCriteriaImpl;
-import fr.inra.urgi.gpds.domain.data.DataSource;
-import fr.inra.urgi.gpds.domain.response.DataDiscoveryResponse;
+import fr.inra.urgi.gpds.domain.datadiscovery.criteria.DataDiscoveryCriteriaImpl;
+import fr.inra.urgi.gpds.domain.datadiscovery.data.DataSource;
+import fr.inra.urgi.gpds.domain.datadiscovery.response.DataDiscoveryResponse;
+import fr.inra.urgi.gpds.domain.response.ApiResponseFactory;
 import fr.inra.urgi.gpds.repository.es.DataDiscoveryRepository;
 import fr.inra.urgi.gpds.repository.file.DataSourceRepository;
 import fr.inra.urgi.gpds.utils.StringFunctions;
@@ -37,8 +35,7 @@ public class DataDiscoveryController {
     }
 
     @ApiOperation("Suggest data discovery document field values")
-    @PostMapping(value = "/suggest", produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
+    @PostMapping("/suggest")
     public Collection<String> suggest(
         @RequestParam String field,
         @RequestParam(required = false) String text,
@@ -49,9 +46,7 @@ public class DataDiscoveryController {
     }
 
     @ApiOperation("Search for data discovery documents")
-    @PostMapping(value = "/search", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.GnpISAPI.class)
+    @PostMapping(value = "/search", consumes = APPLICATION_JSON_VALUE)
     public DataDiscoveryResponse search(
         @RequestBody @Valid DataDiscoveryCriteriaImpl criteria
     ) {
@@ -59,12 +54,10 @@ public class DataDiscoveryController {
     }
 
     @ApiOperation("Get list of data sources")
-    @GetMapping(value = "/sources", produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(JSONView.GnpISAPI.class)
+    @GetMapping("/sources")
     public BrapiListResponse<? extends DataSource> sources() {
         Collection<DataSource> dataSources = dataSourceRepository.listAll();
-        return BrapiResponseFactory.createSubListResponse(dataSources.size(), 0, new ArrayList<>(dataSources));
+        return ApiResponseFactory.createSubListResponse(dataSources.size(), 0, new ArrayList<>(dataSources));
     }
 
 }

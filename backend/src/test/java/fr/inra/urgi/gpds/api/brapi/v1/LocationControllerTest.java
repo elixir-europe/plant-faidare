@@ -1,6 +1,6 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
-import fr.inra.urgi.gpds.domain.data.impl.LocationVO;
+import fr.inra.urgi.gpds.domain.data.LocationVO;
 import fr.inra.urgi.gpds.repository.es.LocationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +31,36 @@ class LocationControllerTest {
 
     @MockBean
     private LocationRepository repository;
+
+    static LocationVO LOCATION;
+    static {
+        String id = "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjM4MTc4MzY5NkUxMg==";
+        String uri = "http://doi.org/foo/bar";
+        LOCATION = new LocationVO();
+        LOCATION.setUri(uri);
+        LOCATION.setLocationDbId(id);
+    }
+
+    @Test
+    void should_Not_Show_JSON_LD_Fields_By_Default() throws Exception {
+        when(repository.getById(LOCATION.getLocationDbId())).thenReturn(LOCATION);
+
+        mockMvc.perform(get("/brapi/v1/locations/" + LOCATION.getLocationDbId())
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result.@id").doesNotExist());
+    }
+
+    @Test
+    void should_Show_JSON_LD_Fields_When_Asked() throws Exception {
+        when(repository.getById(LOCATION.getLocationDbId())).thenReturn(LOCATION);
+
+        mockMvc.perform(get("/brapi/v1/locations/"+LOCATION.getLocationDbId())
+            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON)
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result.@id", is(LOCATION.getUri())));
+    }
 
     @Test
     void should_Get_By_Id() throws Exception {

@@ -4,8 +4,8 @@ import fr.inra.urgi.gpds.api.BadRequestException;
 import fr.inra.urgi.gpds.api.NotFoundException;
 import fr.inra.urgi.gpds.api.brapi.v1.exception.BrapiPaginationException;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiPagination;
-import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiResponseFactory;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiStatus;
+import fr.inra.urgi.gpds.domain.response.ApiResponseFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ public class BrapiExceptionHandler extends ResponseEntityExceptionHandler {
     private static ResponseEntity<Object> createErrorResponse(
         HttpStatus httpStatus, List<BrapiStatus> statuses, BrapiPagination pagination
     ) {
-        Object body = BrapiResponseFactory.createListResponse(pagination, statuses, null, false);
+        Object body = ApiResponseFactory.createListResponse(pagination, statuses, null, false);
         return ResponseEntity.status(httpStatus).body(body);
     }
 
@@ -56,7 +56,7 @@ public class BrapiExceptionHandler extends ResponseEntityExceptionHandler {
             ObjectError globalError = notValidException.getBindingResult().getGlobalError();
             if (globalError != null) {
                 Exception e = new Exception(globalError.getDefaultMessage());
-                statuses.add(BrapiResponseFactory.createStatus(e, httpStatus));
+                statuses.add(ApiResponseFactory.createStatus(e, httpStatus));
             }
             List<FieldError> fieldErrors = notValidException.getBindingResult().getFieldErrors();
             statusFromFieldError(httpStatus, statuses, fieldErrors);
@@ -68,7 +68,7 @@ public class BrapiExceptionHandler extends ResponseEntityExceptionHandler {
                 pagination = ((BrapiPaginationException) exception).getPagination();
             }
 
-            statuses.add(BrapiResponseFactory.createStatus(exception, httpStatus));
+            statuses.add(ApiResponseFactory.createStatus(exception, httpStatus));
         }
 
         return createErrorResponse(httpStatus, statuses, pagination);
@@ -81,7 +81,7 @@ public class BrapiExceptionHandler extends ResponseEntityExceptionHandler {
         if (fieldErrors != null) {
             for (FieldError error : fieldErrors) {
                 Exception e = new Exception(error.getDefaultMessage());
-                statuses.add(BrapiResponseFactory.createStatus(e, httpStatus));
+                statuses.add(ApiResponseFactory.createStatus(e, httpStatus));
             }
         }
     }

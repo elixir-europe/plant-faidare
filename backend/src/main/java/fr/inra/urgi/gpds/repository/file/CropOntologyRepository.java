@@ -1,7 +1,7 @@
 package fr.inra.urgi.gpds.repository.file;
 
-import fr.inra.urgi.gpds.domain.data.impl.variable.ObservationVariableVO;
-import fr.inra.urgi.gpds.domain.data.impl.variable.OntologyVO;
+import fr.inra.urgi.gpds.domain.data.variable.ObservationVariableVO;
+import fr.inra.urgi.gpds.domain.data.variable.OntologyVO;
 
 import java.util.List;
 import java.util.Set;

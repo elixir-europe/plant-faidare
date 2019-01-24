@@ -1,7 +1,7 @@
 package fr.inra.urgi.gpds.repository.es;
 
-import fr.inra.urgi.gpds.domain.criteria.DataDiscoveryCriteria;
-import fr.inra.urgi.gpds.domain.response.DataDiscoveryResponse;
+import fr.inra.urgi.gpds.domain.datadiscovery.criteria.DataDiscoveryCriteria;
+import fr.inra.urgi.gpds.domain.datadiscovery.response.DataDiscoveryResponse;
 import fr.inra.urgi.gpds.elasticsearch.repository.ESSuggestRepository;
 
 import java.util.LinkedHashSet;
