@@ -47,7 +47,7 @@
           ( Link to this study on {{ studySource["schema:identifier"] }} )
         </a>
         <!--Will be use when documentationUrl will be set up for source result
-        <a target="_blank" [href]="studySource['@shcema:documentationURL']">
+        <a target="_blank" [href]="studySource['@schema:documentationURL']">
           ( Link to this study on {{ studySource["schema:identifier"] }} )
         </a>-->
       </div>
@@ -65,18 +65,16 @@
       </div>
     </div>
 
-
-    <!--Replace by the link the identifier section-->
-    <!--    <div class="row row-sep" *ngIf="studySource">
-          <div class="col field">
-            Data source
-          </div>
-          <div class="col">
-            <a target="_blank" [href]="studySource['@id']">
-              {{ studySource["schema:name"] }}
-            </a>
-          </div>
-        </div>-->
+    <div class="row row-sep" *ngIf="studySource">
+      <div class="col-4 field">
+        Data source
+      </div>
+      <div class="col">
+        <a target="_blank" [href]="studySource['@id']">
+          Link to this study on {{ studySource["schema:identifier"] }}
+        </a>
+      </div>
+        </div>
 
     <div class="row row-sep" *ngIf="studyDataset && studyDataset[0] && studyDataset[0].programName">
       <div class="col-4 field">
@@ -140,7 +138,7 @@
 
     <div class="row row-sep" *ngIf="study.dataLinks && study.dataLinks.length != 0">
       <div class="col-4 field">
-        Data links
+        Data files
       </div>
       <div class="col identification-info">
         <div class="row" *ngFor="let dataLink of study.dataLinks">

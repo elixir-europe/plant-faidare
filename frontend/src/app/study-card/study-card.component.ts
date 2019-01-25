@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
-import { BrapiGermplasmeData, BrapiLocation, BrapiObservationVariablesData, BrapiStudyData, BrapiTrial } from '../models/brapi.model';
+import { BrapiGermplasme, BrapiLocation, BrapiObservationVariables, BrapiStudy, BrapiTrial } from '../models/brapi.model';
 
 import { GnpisService } from '../gnpis.service';
 import { DataDiscoverySource } from '../models/data-discovery.model';
@@ -14,10 +14,10 @@ import { arrayToString } from '../utils';
 })
 export class StudyCardComponent implements OnInit {
 
-    study: BrapiStudyData;
+    study: BrapiStudy;
     studySource: DataDiscoverySource;
-    studyGermplasms: BrapiGermplasmeData[] = [];
-    studyObservationVariables: BrapiObservationVariablesData[] = [];
+    studyGermplasms: BrapiGermplasme[] = [];
+    studyObservationVariables: BrapiObservationVariables[] = [];
     sites: BrapiLocation[] = [];
     additionalInfoKeys: string[] = [];
     studyDataset: BrapiTrial[] = [];
@@ -90,7 +90,7 @@ export class StudyCardComponent implements OnInit {
     }
 
     /* Function will be remove when DocumentationUrl will be added to the ObservationVariable result */
-    getVariableLink(variable: BrapiObservationVariablesData) {
+    getVariableLink(variable: BrapiObservationVariables) {
         return `https://urgi.versailles.inra.fr/ontologyportal.do#termIdentifier=${variable.observationVariableDbId}`;
     }
 

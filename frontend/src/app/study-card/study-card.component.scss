@@ -29,6 +29,11 @@ a {
 .card {
   margin-top: 25px;
   margin-bottom: 10px;
+  border-color: rgba(15, 97, 145, 0.2);
+}
+
+.card:last-child{
+  margin-bottom: 50px;
 }
 
 .card-header {
@@ -36,6 +41,7 @@ a {
   font-weight: bold;
   color: #0f6191;
   background-color : #eaeaea;
+  border-color: rgba(15, 97, 145, 0.25);
 }
 
 .scroll-table {
@@ -47,7 +53,7 @@ a {
 
 // Loading spinner
 .lds-spinner {
-  $scale: 1;
+  $scale: 1.5;
 
   color: black;
   display: block;

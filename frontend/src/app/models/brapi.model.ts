@@ -18,7 +18,7 @@ export interface BrapiMetaData {
 
 }
 
-interface BrapiStudyData {
+export interface BrapiStudy {
     studyDbId: string;
     studyType: string;
     name: string;
@@ -91,7 +91,7 @@ export interface BrapiContacts {
 
 }
 
-export interface BrapiObservationVariablesData {
+export interface BrapiObservationVariables {
     observationVariableDbId: string;
     contextOfUse: string[];
     institution: string;
@@ -110,7 +110,7 @@ export interface BrapiObservationVariablesData {
 
 }
 
-export interface BrapiObservationUnitsData {
+export interface BrapiObservationUnits {
     observationUnitDbId: string;
     observationUnitName: string;
     germplasmDbId: string;
@@ -122,7 +122,7 @@ export interface BrapiObservationUnitsData {
 
 }
 
-export interface BrapiGermplasmeData {
+export interface BrapiGermplasme {
     germplasmDbId: string;
     accessionNumber: string;
     germplasmName: string;

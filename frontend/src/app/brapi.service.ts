@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { delay } from 'rxjs/operators';
+import { BrapiGermplasme, BrapiObservationVariables, BrapiResult, BrapiResults, BrapiStudy, BrapiTrial } from './models/brapi.model';
 import { SiteModel, SiteResultModel } from './models/site.model';
-import { BrapiGermplasmeData, BrapiObservationUnitsData, BrapiObservationVariablesData, BrapiResults, BrapiResult, BrapiTrial } from './model/brapi.model';
-
 
 @Injectable({
     providedIn: 'root'
@@ -30,16 +28,16 @@ export class BrapiService {
         return this.http.get<object>(`brapi/v1/germplasm/${germplasmDbId}/attributes`);
     }
 
-    study(studyDbId: string): Observable<BrapiResult<BrapiStudyData>> {
-        return this.http.get<BrapiResult<BrapiStudyData>>(`brapi/v1/studies/${studyDbId}`);
+    study(studyDbId: string): Observable<BrapiResult<BrapiStudy>> {
+        return this.http.get<BrapiResult<BrapiStudy>>(`brapi/v1/studies/${studyDbId}`);
     }
 
-    studyGermplasms(studyDbId: string): Observable<BrapiResults<BrapiGermplasmeData>> {
-        return this.http.get<BrapiResults<BrapiGermplasmeData>>(`brapi/v1/studies/${studyDbId}/germplasm`);
+    studyGermplasms(studyDbId: string): Observable<BrapiResults<BrapiGermplasme>> {
+        return this.http.get<BrapiResults<BrapiGermplasme>>(`brapi/v1/studies/${studyDbId}/germplasm`);
     }
 
-    studyObservationVariables(studyDbId: string): Observable<BrapiResults<BrapiObservationVariablesData>> {
-        return this.http.get<BrapiResults<BrapiObservationVariablesData>>(`brapi/v1/studies/${studyDbId}/observationVariables`);
+    studyObservationVariables(studyDbId: string): Observable<BrapiResults<BrapiObservationVariables>> {
+        return this.http.get<BrapiResults<BrapiObservationVariables>>(`brapi/v1/studies/${studyDbId}/observationVariables`);
     }
 
     location(locationId: number): Observable<SiteModel> {

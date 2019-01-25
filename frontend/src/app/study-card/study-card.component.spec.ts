@@ -1,18 +1,17 @@
 import { async, TestBed } from '@angular/core/testing';
 
 import { StudyCardComponent } from './study-card.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentTester, fakeRoute, speculoosMatchers } from 'ngx-speculoos';
 import { ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { of } from 'rxjs';
 import {
     BrapiContacts,
-    BrapiGermplasmeData,
+    BrapiGermplasme,
     BrapiLocation,
-    BrapiObservationVariablesData,
+    BrapiObservationVariables,
     BrapiResult,
     BrapiResults,
-    BrapiStudyData,
+    BrapiStudy,
     BrapiTrial
 } from '../models/brapi.model';
 import { BrapiService } from '../brapi.service';
@@ -98,7 +97,7 @@ describe('StudyCardComponent', () => {
         institutionName: 'Inst',
     };
 
-    const searchStudy: BrapiResult<BrapiStudyData> = {
+    const searchStudy: BrapiResult<BrapiStudy> = {
         metadata: null,
         result: {
             studyDbId: 's1',
@@ -145,7 +144,7 @@ describe('StudyCardComponent', () => {
 
         }
     };
-    const osbVariable: BrapiResults<BrapiObservationVariablesData> = {
+    const osbVariable: BrapiResults<BrapiObservationVariables> = {
         metadata: null,
         result: {
             data: [{
@@ -168,7 +167,7 @@ describe('StudyCardComponent', () => {
         }
     };
 
-    const germplasm: BrapiResults<BrapiGermplasmeData> = {
+    const germplasm: BrapiResults<BrapiGermplasme> = {
         metadata: null,
         result: {
             data: [{
@@ -207,7 +206,7 @@ describe('StudyCardComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule, RouterTestingModule],
+            imports: [RouterTestingModule],
             declarations: [
                 StudyCardComponent, MapComponent
             ],
