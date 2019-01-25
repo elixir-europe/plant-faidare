@@ -1,3 +1,409 @@
-<p>
-  germplasm-card works!
-</p>
+<!--
+<h3>
+  Germplasm: {{ germplasm.result.defaultDisplayName }}
+</h3>
+
+<h4>Identification</h4>
+<div class="container-fluid">
+  <div class="row">
+    <img src="" class="img-fluid float-left w-25 p-2 table-sm" alt="" >
+
+    <table class="table float-right w-75 p-2 table-sm">
+      <tr>
+        <td><b>Accession number</b></td>
+        <td>{{ germplasm.result.accessionNumber }}</td>
+      </tr>
+      <tr *ngIf="germplasm.result.acquisitionDate!=null">
+        <td><b>Acquisition date</b></td>
+        <td>{{ germplasm.result.acquisitionDate }}</td>
+      </tr>
+      <tr>
+        <td><b>Accession name</b></td>
+        <td>{{ germplasm.result.defaultDisplayName }}</td>
+      </tr>
+      <tr>
+        <td><b>Permanent Unique Identifier</b></td>
+        <td> https://{{ germplasm.result.germplasmPUI }}</td>
+      </tr>
+      <tr *ngIf="germplasm.result.seedSource != null">
+        <td><b>Seed source</b></td>
+        <td><a *ngFor="let syn of germplasm.result.seedSource"> {{ syn }}</a></td>
+      </tr>
+      <tr>
+      <tr *ngIf="germplasm.result.geneticNature != null">
+        <td><b>Genetic nature</b></td>
+        <td><a *ngFor="let syn of germplasm.result.geneticNature"> {{ syn }}</a></td>
+      </tr>
+      <tr *ngIf="germplasm.result.synonyms != null">
+        <td><b>Accession synonyms</b></td>
+        <td><a *ngFor="let syn of germplasm.result.synonyms"> {{ syn }}</a></td>
+      </tr>
+      <tr>
+        <td><b>Taxon name</b></td>
+        <td>{{ germplasm.result.genus }} {{ germplasm.result.species}} {{ germplasm.result.speciesAuthority}} {{ germplasm.result.subtaxa}}</td>
+      </tr>
+      <tr>
+        <td><b>Taxon common names</b></td>
+        <td>{{ germplasm.result.commonCropName }}</td>
+      </tr>
+      <tr>
+        <td><b>Taxon synonyms</b></td>
+        <td>{{ germplasm.result.species }}</td>
+      </tr>
+      <tr *ngIf="germplasm.result.pedigree!=null">
+        <td><b>Pedigree</b></td>
+        <td>{{ germplasm.result.pedigree }}</td>
+      </tr>
+      <tr>
+        <td><b>Biological status</b></td>
+        <td>{{ germplasm.result.biologicalStatusOfAccessionCode }}</td>
+      </tr>
+      <tr>
+        <td><b>Source</b></td>
+        <td>{{ germplasm.result.source }}</td>
+      </tr>
+      <tr *ngIf="!germplasm.result.source.equals('URGI')">
+        <td><b>External link</b></td>
+        <td><a>{{ germplasm.result.url }}</a></td>
+      </tr>
+      <tr>
+        <td><b>Comments</b></td>
+        <td>{{ germplasm.result.comment }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="row">
+    <h4>Holding</h4>
+    <table class="table table-sm">
+      <tr>
+        <td><b>Institution name</b></td>
+        <td>{{ germplasm.result.holdingInstitute.instituteName }} {{ germplasm.result.holdingInstitute.organisation }}</td>
+      </tr>
+      <tr>
+        <td><b>Link</b></td>
+        <td>{{ germplasm.result.holdingInstitute.webSite }}</td>
+      </tr>
+      <tr>
+        <td><b>Adresse</b></td>
+        <td>{{ germplasm.result.holdingInstitute.address }}</td>
+      </tr>
+      <tr>
+        <td><b>Logo</b></td>
+        <td>{{ germplasm.result.holdingInstitute.logo }}</td>
+      </tr>
+    </table>
+
+    <h4>Holding gene bank</h4>
+    <table class="table table-sm">
+      <tr>
+        <td><b>Institution name</b></td>
+        <td>{{ germplasm.result.holdingGenbank }} {{ germplasm.result.organisation }}</td>
+      </tr>
+      <tr>
+        <td><b>Link</b></td>
+        <td>{{ germplasm.result.webSite }}</td>
+      </tr>
+      <tr>
+        <td><b>Adresse</b></td>
+        <td>{{ germplasm.result.address }}</td>
+      </tr>
+      <tr>
+        <td><b>Logo</b></td>
+        <td>{{ germplasm.result.logo }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <ng-container *ngIf="germplasm.result.breeder != null">
+    <h4>Breeder</h4>
+    <div class="row">
+      <table class="table table-sm">
+        <tr>
+          <td><b>accessionCreationDate</b></td>
+          <td>{{ germplasm.result.breeder.accessionCreationDate }}</td>
+        </tr>
+        <tr>
+          <td><b>accessionNumber</b></td>
+          <td>{{ germplasm.result.breeder.accessionNumber }}</td>
+        </tr>
+        <tr>
+          <td><b>collectors</b></td>
+          <td>{{ germplasm.result.breeder.collectors }}</td>
+        </tr>
+        <tr>
+          <td><b>deregistrationYear</b></td>
+          <td>{{ germplasm.result.breeder.deregistrationYear }}</td>
+        </tr>
+        <tr>
+          <td><b>distributionStatus</b></td>
+          <td>{{ germplasm.result.breeder.distributionStatus }}</td>
+        </tr>
+        <tr>
+          <td><b>germplasmPUI</b></td>
+          <td>{{ germplasm.result.breeder.germplasmPUI }}</td>
+        </tr>
+        <ng-container>
+          <tr>
+            <table>
+              <tr>
+                <td><b>institute name</b></td>
+                <td>{{ germplasm.result.breeder.instituteName }}</td>
+              </tr>
+              <tr>
+                <td><b>institute name</b></td>
+                <td>{{ germplasm.result.breeder.instituteName }}</td>
+              </tr>
+              <tr>
+                <td><b>institute name</b></td>
+                <td>{{ germplasm.result.breeder.instituteName }}</td>
+              </tr>
+              <tr>
+                <td><b>institute name</b></td>
+                <td>{{ germplasm.result.breeder.instituteName }}</td>
+              </tr>
+              <tr>
+                <td><b>institute name</b></td>
+                <td>{{ germplasm.result.breeder.instituteName }}</td>
+              </tr>
+              <tr>
+                <td><b>institute name</b></td>
+                <td>{{ germplasm.result.breeder.instituteName }}</td>
+              </tr>
+              <tr>
+                <td><b>institute name</b></td>
+                <td>{{ germplasm.result.breeder.instituteName }}</td>
+              </tr>
+            </table>
+          </tr>
+        </ng-container>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="germplasm.result.taxonIds != null">
+    <div class="row">
+      <h4>Collecting site</h4>
+      <table class="table table-sm">
+        <tr>
+          <td><b>Ids</b></td>
+          <td>{{ germplasm.result.taxonIds.sourcename }}</td>
+        </tr>
+        <tr>
+          <td><b></b></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="germplasm.result.donors != null">
+    <div class="row">
+      <h4>Donors</h4>
+      <ng-container *ngFor="let donor of germplasm.result.donors">
+        <table class="table table-sm">
+          <tr>
+            <td><b>Donation accession number</b></td>
+            <td>{{ donor.donorAccessionNumber }}</td>
+          </tr>
+          <tr>
+            <td><b>Donation germplasm PUI</b></td>
+            <td>{{ donor.donorGermplasmPUI }}</td>
+          </tr>
+          <tr>
+            <td><b>Institute code</b></td>
+            <td>{{ donor.donorInstituteCode }}</td>
+          </tr>
+        </table>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <div class="row">
+    <h4>Origin</h4>
+    <table class="table table-sm">
+      <tr>
+        <td><b>Geographical origin</b></td>
+        <td>{{ germplasm.result.countryOfOriginCode }}</td>
+      </tr>
+      <tr>
+        <td><b>Collecting</b></td>
+        <td>{{ germplasm.result.siteName }}</td>
+      </tr>
+      <tr>
+        <td><b>Donation</b></td>
+        <td>{{ germplasm.result.instituteName }}</td>
+      </tr>
+      <tr>
+        <td><b>Date</b>
+        <td>{{ germplasm.result.instituteName }}</td>
+      </tr>
+      <tr>
+        <td><b>Institution name</b></td>
+        <td>{{ germplasm.result.instituteName }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <ng-container *ngIf="germplasmPedigree != null">
+    <div class="row">
+      <h4>Genealogy</h4>
+      <h5>Ascendants</h5>
+      <table class="table table-sm">
+        <tr>
+          <td><b>Crossing plan</b></td>
+          <td>{{ germplasmPedigree.result.crossingPlan }}</td>
+        </tr>
+        <tr>
+          <td><b>Crossing year</b></td>
+          <td>{{ germplasmPedigree.result.crossingYear }}</td>
+        </tr>
+        <tr>
+          <td><b>Affiliation</b></td>
+          <td>{{ germplasm.result.instituteName }}</td>
+        </tr>
+        <tr>
+          <td><b>Parent accessions</b></td>
+          <td><table class="table">
+            <ng-container [ngSwitch]="germplasmPedigree.result.parent1Type">
+              <tr *ngSwitchCase="'FEMALE'">
+                <td>Mother</td>
+                <td>{{ germplasmPedigree.result.parent1Name }}</td>
+              </tr>
+              <tr *ngSwitchCase="'MALE'">
+                <td>Father</td>
+                <td>{{ germplasmPedigree.result.parent1Name }}</td>
+              </tr>
+            </ng-container>
+            <ng-container [ngSwitch]="germplasmPedigree.result.parent2Type">
+              <tr *ngSwitchCase="'FEMALE'">
+                <td>Mother</td>
+                <td>{{ germplasmPedigree.result.parent2Name }}</td>
+              </tr>
+              <tr *ngSwitchCase="'MALE'">
+                <td>Father</td>
+                <td>{{ germplasmPedigree.result.parent2Name }}</td>
+              </tr>
+            </ng-container>
+          </table></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="row">
+      <h5>Siblings</h5>
+      <table class="table table-sm">
+        <tr>
+          <td><b>Siblings accessions</b></td>
+          <td><a *ngFor="let sibling of germplasmPedigree.result.siblings"> {{ sibling.defaultDisplayName }}</a></td>
+        </tr>
+        <tr>
+          <td><b>Geographical origin</b></td>
+          <td>{{ germplasm.result.countryOfOriginCode }}</td>
+        </tr>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="germplasm.result.distributors != null">
+    <div class="row">
+      <h4>Distribution</h4>
+      <table class="table table-sm">
+        <ng-container *ngFor="let distributor of germplasm.result.distributors">
+          <tr><b>Institution name</b> {{ distributor.institute.instituteName }}</tr>
+          <tr><b>Distribution status</b> {{ distributor.institute.instituteName }}</tr>
+        </ng-container>
+      </table>
+    </div>
+  </ng-container>
+
+
+
+  <ng-container *ngIf="germplasm.result.collector != null">
+    <div class="row">
+      <h4>Collector</h4>
+      <table class="table table-sm">
+        <tr>
+          <td><b>accessionNumber</b></td>
+          <td>{{ germplasm.result.collector.accessionNumber }}</td>
+        </tr>
+        <tr>
+          <td><b>collectors</b></td>
+          <td>{{ germplasm.result.collector.collectors }}</td>
+        </tr>
+        <tr>
+          <td><b>deregistrationYear</b></td>
+          <td>{{ germplasm.result.collector.deregistrationYear }}</td>
+        </tr>
+        <tr>
+          <td><b>distributionStatus</b></td>
+          <td>{{ germplasm.result.collector.distributionStatus }}</td>
+        </tr>
+        <tr>
+          <td><b>germplasmPUI</b></td>
+          <td>{{ germplasm.result.collector.germplasmPUI }}</td>
+        </tr>
+        <tr>
+          <td><b>institute</b></td>
+          <td>{{ germplasm.result.collector.instituteName }}</td>
+        </tr>
+        <tr>
+          <td><b>institute</b></td>
+          <td>{{ germplasm.result.collector.materialType }}</td>
+        </tr>
+        <tr>
+          <td><b>institute</b></td>
+          <td>{{ germplasm.result.collector.registrationYear }}</td>
+        </tr>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="germplasm.result.collection != null">
+    <div class="row">
+      <h4>Collection</h4>
+      <table class="table table-sm">
+        <ng-container *ngFor="let co of germplasm.result.collection">
+          <tr><b>Institution name</b> {{ co.germplasmCount }}</tr>
+          <tr><b>Distribution status</b> {{ co.germplasmRef }}</tr>
+          <tr><b>Institution name</b> {{ co.id }}</tr>
+          <tr><b>Institution name</b> {{ co.name }}</tr>
+          <tr><b>Institution name</b> {{ co.type }}</tr>
+        </ng-container>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="germplasm.result.panel != null">
+    <div class="row">
+      <h4>Panel</h4>
+      <table class="table table-sm">
+        <ng-container *ngFor="let co of germplasm.result.panel">
+          <tr><b>Institution name</b> {{ co.germplasmCount }}</tr>
+          <tr><b>Distribution status</b> {{ co.germplasmRef }}</tr>
+          <tr><b>Institution name</b> {{ co.id }}</tr>
+          <tr><b>Institution name</b> {{ co.name }}</tr>
+          <tr><b>Institution name</b> {{ co.type }}</tr>
+        </ng-container>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="germplasmAttributes.result.data != null">
+    <h4>Evaluation Data</h4>
+    <div class="row">
+      <table class="table table-sm">
+        <ng-container *ngFor="let descriptor of germplasmAttributes.result.data">
+          <tr><td><b>{{ descriptor.attributeName }}</b></td> <td>{{ descriptor.value }}</td></tr>
+        </ng-container>
+      </table>
+    </div>
+  </ng-container>
+
+  <div class="row">
+    <h4>Cross-reference</h4>
+    <table class="container-fluid">
+    </table>
+  </div>
+</div>
+-->

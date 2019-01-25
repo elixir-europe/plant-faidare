@@ -1,3 +1,75 @@
-<p>
-  site-card works!
-</p>
+<div id="error" class="alert alert-danger" *ngIf="loadingError">
+  Error: this site cannot be loaded.
+  <br/>
+  Please contact urgi-support@inra.fr.
+</div>
+<div *ngIf="site">
+  <h1>
+    Site: {{ site.result.name }}
+  </h1>
+</div>
+<gpds-map [sites]="sites" *ngIf="site && site.result.latitude && site.result.longitude"></gpds-map>
+<div *ngIf="site">
+  <br/>
+  <h4>Details:</h4>
+  <br/>
+  <div class="container-fluid">
+    <div class="row">
+      <table class="table float-right w-75 p-2 table-sm">
+        <tr *ngIf="site.result.locationType">
+          <td><b>Site type</b></td>
+          <td>{{ site.result.locationType }}</td>
+        </tr>
+        <tr *ngIf="site.result.abbreviation">
+          <td><b>Abbreviation</b></td>
+          <td>{{ site.result.abbreviation }}</td>
+        </tr>
+        <tr *ngIf="site.result.countryCode">
+          <td><b>Country code</b></td>
+          <td>{{ site.result.countryCode }}</td>
+        </tr>
+        <tr *ngIf="site.result.countryName && !site.result.additionalInfo['Geographical location']">
+          <td><b>Country name</b></td>
+          <td>{{ site.result.countryName }}</td>
+        </tr>
+        <tr *ngIf="site.result.institutionAdress">
+          <td><b>Institution address</b></td>
+          <td>{{ site.result.institutionAdress }}</td>
+        </tr>
+        <tr *ngIf="site.result.institutionName">
+          <td><b>Institution name</b></td>
+          <td>{{ site.result.institutionName }}</td>
+        </tr>
+        <tr *ngIf="site.result.altitude">
+          <td><b>Altitude</b></td>
+          <td>{{ site.result.altitude }}</td>
+        </tr>
+        <tr *ngIf="site.result.latitude">
+          <td><b>Latitude</b></td>
+          <td>{{ site.result.latitude }}</td>
+        </tr>
+        <tr *ngIf="site.result.longitude">
+          <td><b>Longitude</b></td>
+          <td>{{ site.result.longitude }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div *ngIf="site.result.additionalInfo">
+    <br/>
+    <h4>Additional informations:</h4>
+    <br/>
+    <div class="container-fluid">
+      <div class="row">
+        <table class="table table-sm table-striped">
+          <tbody>
+          <tr *ngFor="let key of additionalInfoKeys">
+            <td><b>{{ key }}</b></td>
+            <td>{{ site.result.additionalInfo[key] }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
