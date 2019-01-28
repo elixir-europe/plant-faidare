@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SiteModel } from '../models/site.model';
 import * as L from 'leaflet';
 import { MarkerClusterGroup } from 'leaflet.markercluster/src';
 import { BrapiLocation } from '../models/brapi.model';
