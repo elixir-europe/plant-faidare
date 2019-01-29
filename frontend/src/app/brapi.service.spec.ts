@@ -13,6 +13,17 @@ import {
     BrapiTrial
 } from './models/brapi.model';
 import { DataDiscoverySource } from './models/data-discovery.model';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+    BrapiDescriptor, BrapiDonor,
+    BrapiGermplasmPedigree,
+    BrapiGermplasmProgeny,
+    BrapiInstitute, BrapiOrigin, BrapiSet,
+    BrapiSibling,
+    BrapiSite
+} from './models/brapi.germplasm.model';
+import { GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
+import { GnpisService } from './gnpis.service';
 
 describe('BrapiService', () => {
 
@@ -209,6 +220,169 @@ describe('BrapiService', () => {
             .flush(mockResponse);
 
         expect(actualLocation).toEqual(location);
+    });
+
+
+    afterAll(() => http.verify());
+
+    const brapiSite: BrapiSite = {
+        latitude: null,
+        longitude: null,
+        siteId: null,
+        siteName: null,
+        siteType:  null
+    };
+
+    const brapiSibling: BrapiSibling = {
+        germplasmDbId: 'frere1',
+        defaultDisplayName: 'frere1'
+    };
+
+    const brapiDescriptor: BrapiDescriptor = {
+        name: 'caracteristique1',
+        pui: '12',
+        value: '32'
+    };
+
+    const brapiGermplasmPedigree: BrapiGermplasmPedigree = {
+        germplasmDbId: '12',
+        defaultDisplayName: '12',
+        pedigree: null,
+        crossingPlan: null,
+        crossingYear: null,
+        familyCode: null,
+        parent1DbId: '11',
+        parent1Name: 'parent',
+        parent1Type: 'SELF',
+        parent2DbId: null,
+        parent2Name: null,
+        parent2Type: null,
+        siblings: [brapiSibling]
+    };
+
+    const brapiGermplasmProgeny: BrapiGermplasmProgeny = {
+        germplasmDbId: '11',
+        defaultDisplayName: '11',
+        progeny: [brapiSibling]
+    };
+
+    const brapiInstitute: BrapiInstitute = {
+        instituteName: 'urgi',
+        instituteCode: 'inra',
+        acronym: 'urgi',
+        organisation: 'inra',
+        instituteType: 'labo',
+        webSite: 'www.labo.fr',
+        address: '12',
+        logo: null
+    };
+
+    const brapiOrigin: BrapiOrigin = {
+        institute: brapiInstitute,
+        germplasmPUI: '12',
+        accessionNumber: '12',
+        accessionCreationDate: '1993',
+        materialType: 'feuille',
+        collectors: null,
+        registrationYear: '1996',
+        deregistrationYear: '1912',
+        distributionStatus: null
+    };
+
+    const brapiDonor: BrapiDonor = {
+        donorInstitute: brapiInstitute,
+        germplasmPUI: '12',
+        accessionNumber: '12',
+        donorInstituteCode: 'urgi'
+    };
+
+    const brapiSet: BrapiSet = {
+        germplasmCount: 12,
+        germplasmRef: null,
+        id: 12,
+        name: 'truc',
+        type: 'plan'
+    };
+
+    const germplasmTest: GermplasmData<GermplasmData<null>> = {
+        data: null,
+        url:  'www.cirad.fr',
+        source: 'cirad',
+        germplasmDbId:  'test',
+        defaultDisplayName:  'test',
+        accessionNumber:  'test',
+        germplasmName:  'test',
+        germplasmPUI:  'doi:1256',
+        pedigree:  'tree',
+        seedSource:  'inra',
+        synonyms: null,
+        commonCropName:  null,
+        instituteCode:  'grc12',
+        instituteName:  'institut',
+        biologicalStatusOfAccessionCode:  null,
+        countryOfOriginCode:  null,
+        typeOfGermplasmStorageCode:  null,
+        taxonIds:  null,
+        genus:  'genre',
+        species:  'esp',
+        speciesAuthority:  'L',
+        subtaxa:  null,
+        subtaxaAuthority:  null,
+        donors: [brapiDonor],
+        acquisitionDate:  null,
+        genusSpecies:  null,
+        genusSpeciesSubtaxa:  null,
+        taxonSynonyms: ['pomme', 'api'],
+        taxonCommonNames: ['pomme', 'api'],
+        geneticNature:  null,
+        comment:  null,
+        photo:  null,
+        holdingInstitute: brapiInstitute,
+        holdingGenbank: brapiInstitute,
+        presenceStatus:  null,
+        children:  null,
+        descriptors: [brapiDescriptor],
+        originSite:  null,
+        collectingSite:  null,
+        evaluationSites:  null,
+        collector: brapiOrigin,
+        breeder: brapiOrigin,
+        distributors: [brapiOrigin],
+        panel: [brapiSet],
+        collection: [brapiSet],
+        population: [brapiSet]
+    };
+
+    it('should fetch the pedigree', () => {
+
+        let fetchedGermplasmPedigree: GermplasmResult<BrapiGermplasmPedigree>;
+        const germplasmDbId: string = brapiGermplasmPedigree.germplasmDbId;
+        brapiService.germplasmPedigree(germplasmDbId).subscribe(response => {
+            fetchedGermplasmPedigree = response;
+        });
+
+
+        http.expectOne(`/gnpis/v1/germplasm/pedigree/${germplasmDbId}`)
+            .flush(germplasmTest);
+
+        expect(fetchedGermplasmPedigree).toEqual(brapiGermplasmPedigree);
+
+    });
+
+    it('should fetch the progeny', () => {
+
+        let fetchedGermplasmProgeny: GermplasmResult<BrapiGermplasmProgeny>;
+        const germplasmDbId: string = brapiGermplasmProgeny.germplasmDbId;
+        brapiService.germplasmProgeny(germplasmDbId).subscribe(response => {
+            fetchedGermplasmProgeny = response;
+        });
+
+
+        http.expectOne(`/gnpis/v1/germplasm/progeny/{germplasmDbId}`)
+            .flush(germplasmTest);
+
+        expect(fetchedGermplasmProgeny).toEqual(brapiGermplasmProgeny);
+
     });
 
 });

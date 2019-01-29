@@ -79,7 +79,7 @@ export interface BrapiDonor {
 
 export interface BrapiSet {
     germplasmCount: number;
-    germplasmRef: GermplasmRef;
+    germplasmRef: string;
     id: number;
     name: string;
     type: string;

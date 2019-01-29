@@ -4,6 +4,148 @@ import { BASE_URL, GnpisService } from './gnpis.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { BrapiMetaData, BrapiResults } from './models/brapi.model';
 import { DataDiscoveryCriteria, DataDiscoverySource } from './models/data-discovery.model';
+import { GnpisService } from './gnpis.service';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
+import {
+    BrapiDescriptor, BrapiDonor,
+    BrapiGermplasmPedigree,
+    BrapiGermplasmProgeny,
+    BrapiInstitute, BrapiOrigin, BrapiSet,
+    BrapiSibling,
+    BrapiSite
+} from './models/brapi.germplasm.model';
+
+let gnpisService: GnpisService;
+let http: HttpTestingController;
+
+const brapiSite: BrapiSite = {
+    latitude: null,
+    longitude: null,
+    siteId: null,
+    siteName: null,
+    siteType:  null
+};
+
+const brapiSibling: BrapiSibling = {
+    germplasmDbId: 'frere1',
+    defaultDisplayName: 'frere1'
+};
+
+const brapiDescriptor: BrapiDescriptor = {
+    name: 'caracteristique1',
+    pui: '12',
+    value: '32'
+};
+
+const brapiGermplasmPedigree: BrapiGermplasmPedigree = {
+    germplasmDbId: '12',
+    defaultDisplayName: '12',
+    pedigree: null,
+    crossingPlan: null,
+    crossingYear: null,
+    familyCode: null,
+    parent1DbId: '11',
+    parent1Name: 'parent',
+    parent1Type: 'SELF',
+    parent2DbId: null,
+    parent2Name: null,
+    parent2Type: null,
+    siblings: [brapiSibling]
+};
+
+const brapiGermplasmProgeny: BrapiGermplasmProgeny = {
+    germplasmDbId: '11',
+    defaultDisplayName: '11',
+    progeny: [brapiSibling]
+};
+
+const brapiInstitute: BrapiInstitute = {
+    instituteName: 'urgi',
+    instituteCode: 'inra',
+    acronym: 'urgi',
+    organisation: 'inra',
+    instituteType: 'labo',
+    webSite: 'www.labo.fr',
+    address: '12',
+    logo: null
+};
+
+const brapiOrigin: BrapiOrigin = {
+    institute: brapiInstitute,
+    germplasmPUI: '12',
+    accessionNumber: '12',
+    accessionCreationDate: '1993',
+    materialType: 'feuille',
+    collectors: null,
+    registrationYear: '1996',
+    deregistrationYear: '1912',
+    distributionStatus: null
+};
+
+const brapiDonor: BrapiDonor = {
+    donorInstitute: brapiInstitute,
+    germplasmPUI: '12',
+    accessionNumber: '12',
+    donorInstituteCode: 'urgi'
+};
+
+const brapiSet: BrapiSet = {
+    germplasmCount: 12,
+    germplasmRef: null,
+    id: 12,
+    name: 'truc',
+    type: 'plan'
+};
+
+const germplasmTest: GermplasmData<GermplasmData<null>> = {
+    data: null,
+    url:  'www.cirad.fr',
+    source: 'cirad',
+    germplasmDbId:  'test',
+    defaultDisplayName:  'test',
+    accessionNumber:  'test',
+    germplasmName:  'test',
+    germplasmPUI:  'doi:1256',
+    pedigree:  'tree',
+    seedSource:  'inra',
+    synonyms: null,
+    commonCropName:  null,
+    instituteCode:  'grc12',
+    instituteName:  'institut',
+    biologicalStatusOfAccessionCode:  null,
+    countryOfOriginCode:  null,
+    typeOfGermplasmStorageCode:  null,
+    taxonIds:  null,
+    genus:  'genre',
+    species:  'esp',
+    speciesAuthority:  'L',
+    subtaxa:  null,
+    subtaxaAuthority:  null,
+    donors: [brapiDonor],
+    acquisitionDate:  null,
+    genusSpecies:  null,
+    genusSpeciesSubtaxa:  null,
+    taxonSynonyms: ['pomme', 'api'],
+    taxonCommonNames: ['pomme', 'api'],
+    geneticNature:  null,
+    comment:  null,
+    photo:  null,
+    holdingInstitute: brapiInstitute,
+    holdingGenbank: brapiInstitute,
+    presenceStatus:  null,
+    children:  null,
+    descriptors: [brapiDescriptor],
+    originSite:  null,
+    collectingSite:  null,
+    evaluationSites:  null,
+    collector: brapiOrigin,
+    breeder: brapiOrigin,
+    distributors: [brapiOrigin],
+    panel: [brapiSet],
+    collection: [brapiSet],
+    population: [brapiSet]
+};
 
 describe('GnpisService', () => {
     let service: GnpisService;
@@ -76,6 +218,22 @@ describe('GnpisService', () => {
                 'id2': source2
             });
         });
+    });
+
+    it('should fetch the GNPIS Germplasm', () => {
+
+        let fetchedGermplasm: GermplasmResult<GermplasmData<null>>;
+        const germplasmDbId: string = germplasmTest.germplasmDbId;
+        gnpisService.germplasm(germplasmDbId).subscribe(response => {
+            fetchedGermplasm = response;
+        });
+
+
+        http.expectOne(`/gnpis/v1/germplasm?id=${germplasmDbId}`)
+            .flush(germplasmTest);
+
+        expect(fetchedGermplasm).toEqual(germplasmTest);
+
     });
 
     it('should search documents with criteria', () => {

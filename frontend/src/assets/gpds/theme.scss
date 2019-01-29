@@ -13,11 +13,6 @@ $link-hover-color: $_theme-black;
 // override default shadows behavior
 $enable-shadows: true;
 
-a.btn.popovers {
-  text-decoration: underline;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
@@ -39,22 +34,35 @@ a.btn.popovers {
 
 }
 
+a.btn.popovers {
+  text-decoration: underline;
+  //overflow: hidden;
+  //text-overflow: ellipsis;
+}
+
+.popover {
+  max-width: 50%;
+}
+
 /*table th, table td { overflow: hidden; }*/
 
-.scroll{
+.imagePopover {
+  max-width: fit-content;
+}
+
+.scroll {
   display: block;
   max-height: 200px;
   overflow-y: auto;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-h4{
+h4 {
   color: #0f6191;
 }
 
 .table thead {
   background-color: #0f6191;
-
 }
 
 .ellipsis {
@@ -62,6 +70,17 @@ h4{
   text-overflow: ellipsis;
 }
 
+.field {
+
+}
+
+.fieldName {
+
+}
+
+.headerTitle {
+
+}
 
 // custom button
 $theme-btn-color: $white;

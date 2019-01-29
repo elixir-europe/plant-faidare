@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
-import { GermplasmResult
+import {
+    GermplasmResult
 } from '../models/gnpis.germplasm.model';
 import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from '../models/brapi.germplasm.model';
 
@@ -51,6 +52,12 @@ export class GermplasmCardComponent implements OnInit {
             .subscribe(germplasmGnpis => {
                 this.germplasmGnpis = germplasmGnpis;
             });
+
+
     }
 
+    /*greyBackground(){
+
+    }*/
 }
+
