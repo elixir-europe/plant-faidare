@@ -14,8 +14,6 @@ export class CardRowComponent implements OnInit {
     }
 
     ngOnInit() {
-        /*console.log(this.label);
-        console.log(this.test);*/
     }
 
 }

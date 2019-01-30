@@ -20,6 +20,7 @@ import { ErrorInterceptorService } from './error-interceptor.service';
 import { TraitOntologyWidgetComponent } from './form/trait-ontology-widget/trait-ontology-widget.component';
 import { FacetsComponent } from './result-page/facets/facets.component';
 import { CardRowComponent } from './card-row/card-row.component';
+import { CardSectionComponent } from './card-section/card-section.component';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { CardRowComponent } from './card-row/card-row.component';
         ErrorComponent,
         TraitOntologyWidgetComponent,
         FacetsComponent,
-        CardRowComponent
+        CardRowComponent,
+        CardSectionComponent,
     ],
     imports: [
         BrowserModule,

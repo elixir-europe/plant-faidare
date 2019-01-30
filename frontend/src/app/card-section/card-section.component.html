@@ -1,0 +1,19 @@
+<div class="card" *ngIf="test">
+  <div class="card-header">
+    {{ header }}
+  </div>
+  <ng-container
+  *ngIf="!!table; then displayTable; else notTable" >
+  </ng-container>
+
+  <ng-template #notTable>
+    <div class="card-body">
+      <ng-content></ng-content>
+    </div>
+  </ng-template>
+
+  <ng-template #displayTable>
+    <ng-content></ng-content>
+  </ng-template>
+
+</div>
