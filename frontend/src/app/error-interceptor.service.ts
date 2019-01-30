@@ -33,7 +33,7 @@ export class ErrorInterceptorService implements HttpInterceptor {
             // The backend returned an unsuccessful response code.
             let message = errorResponse.message;
             if (errorBody && errorBody.metadata && errorBody.metadata.status) {
-                message = errorBody.metadata.status[0].name;
+                message = errorBody.metadata.status.map(status => status.name).join('; ');
             }
             return {
                 status: errorResponse.status,

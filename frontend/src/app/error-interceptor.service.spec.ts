@@ -54,8 +54,7 @@ describe('ErrorInterceptorService', () => {
         expect(error.message).toBe('Http failure response for /test: 500 Server Error');
     });
 
-
-    it('should emit error when error is an HTTP response', () => {
+    it('should emit error when error is a BrAPI error response', () => {
         let error: HttpError;
         service.getErrors().subscribe(err => {
             error = err;
@@ -74,5 +73,28 @@ describe('ErrorInterceptorService', () => {
 
         expect(error.status).toBe(500);
         expect(error.message).toBe(result.metadata.status[0].name);
+    });
+
+    it('should emit error when error is a BrAPI error response with multiple errors', () => {
+        let error: HttpError;
+        service.getErrors().subscribe(err => {
+            error = err;
+        });
+
+        const result = {
+            metadata: {
+                status: [{
+                    name: 'error 1'
+                }, {
+                    name: 'error 2'
+                }]
+            }
+        };
+
+        httpClient.get('/test').subscribe(null, noop);
+        http.expectOne('/test').flush(result, { status: 500, statusText: 'Server Error' });
+
+        expect(error.status).toBe(500);
+        expect(error.message).toBe('error 1; error 2');
     });
 });
