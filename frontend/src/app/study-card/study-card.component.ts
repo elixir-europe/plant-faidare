@@ -14,7 +14,7 @@ import { arrayToString } from '../utils';
 })
 export class StudyCardComponent implements OnInit {
 
-    study: BrapiStudy = {} as BrapiStudy;
+    study: BrapiStudy;
     studySource: DataDiscoverySource;
     studyGermplasms: BrapiGermplasm[] = [];
     studyObservationVariables: BrapiObservationVariables[] = [];

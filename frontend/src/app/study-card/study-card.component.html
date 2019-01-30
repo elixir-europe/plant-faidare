@@ -1,4 +1,5 @@
-<h3 *ngIf="study">
+<ng-container *ngIf="study">
+<h3>
   Study {{ study.studyType }}: {{ study.name }}
 </h3>
 
@@ -254,4 +255,6 @@
     </table>
   </div>
 </gpds-card-section>
+
+</ng-container>
 
