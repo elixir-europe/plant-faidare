@@ -122,7 +122,7 @@ export interface BrapiObservationUnits {
 
 }
 
-export interface BrapiGermplasme {
+export interface BrapiGermplasm {
     germplasmDbId: string;
     accessionNumber: string;
     germplasmName: string;

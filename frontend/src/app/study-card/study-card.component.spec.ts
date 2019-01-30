@@ -6,7 +6,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap, Params } fro
 import { of } from 'rxjs';
 import {
     BrapiContacts,
-    BrapiGermplasme,
+    BrapiGermplasm,
     BrapiLocation,
     BrapiObservationVariables,
     BrapiResult,
@@ -19,6 +19,7 @@ import { GnpisService } from '../gnpis.service';
 import { DataDiscoverySource } from '../models/data-discovery.model';
 import { MapComponent } from '../map/map.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StudyCardComponent', () => {
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
@@ -37,7 +38,7 @@ describe('StudyCardComponent', () => {
         }
 
         get studyField() {
-            return this.elements('div.field');
+            return this.elements('gpds-card-row div.field');
         }
 
         get studyInfo() {
@@ -167,7 +168,7 @@ describe('StudyCardComponent', () => {
         }
     };
 
-    const germplasm: BrapiResults<BrapiGermplasme> = {
+    const germplasm: BrapiResults<BrapiGermplasm> = {
         metadata: null,
         result: {
             data: [{
@@ -214,7 +215,8 @@ describe('StudyCardComponent', () => {
                 { provide: ActivatedRoute, useValue: activatedRoute },
                 { provide: BrapiService, useValue: brapiService },
                 { provide: GnpisService, useValue: gnpisService }
-            ]
+            ],
+            schemas: [NO_ERRORS_SCHEMA]
         });
     }));
 
@@ -235,7 +237,6 @@ describe('StudyCardComponent', () => {
 
             expect(tester.cardHeader[0]).toContainText('Identification');
 
-            expect(tester.studyField[2]).toContainText('Source');
             expect(tester.studyInfo[1]).toContainText('Link to this study on srcId');
 
             expect(tester.cardHeader[1]).toContainText('Genotype');

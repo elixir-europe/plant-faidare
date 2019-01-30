@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
-import { BrapiGermplasme, BrapiLocation, BrapiObservationVariables, BrapiStudy, BrapiTrial } from '../models/brapi.model';
+import { BrapiGermplasm, BrapiLocation, BrapiObservationVariables, BrapiStudy, BrapiTrial } from '../models/brapi.model';
 
 import { GnpisService } from '../gnpis.service';
 import { DataDiscoverySource } from '../models/data-discovery.model';
@@ -16,7 +16,7 @@ export class StudyCardComponent implements OnInit {
 
     study: BrapiStudy;
     studySource: DataDiscoverySource;
-    studyGermplasms: BrapiGermplasme[] = [];
+    studyGermplasms: BrapiGermplasm[] = [];
     studyObservationVariables: BrapiObservationVariables[] = [];
     sites: BrapiLocation[] = [];
     additionalInfoKeys: string[] = [];

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { BrapiGermplasme, BrapiObservationVariables, BrapiResult, BrapiResults, BrapiStudy, BrapiTrial } from './models/brapi.model';
+import { BrapiGermplasm, BrapiObservationVariables, BrapiResult, BrapiResults, BrapiStudy, BrapiTrial } from './models/brapi.model';
 import { SiteModel, SiteResultModel } from './models/site.model';
 
 @Injectable({
@@ -32,8 +32,8 @@ export class BrapiService {
         return this.http.get<BrapiResult<BrapiStudy>>(`brapi/v1/studies/${studyDbId}`);
     }
 
-    studyGermplasms(studyDbId: string): Observable<BrapiResults<BrapiGermplasme>> {
-        return this.http.get<BrapiResults<BrapiGermplasme>>(`brapi/v1/studies/${studyDbId}/germplasm`);
+    studyGermplasms(studyDbId: string): Observable<BrapiResults<BrapiGermplasm>> {
+        return this.http.get<BrapiResults<BrapiGermplasm>>(`brapi/v1/studies/${studyDbId}/germplasm`);
     }
 
     studyObservationVariables(studyDbId: string): Observable<BrapiResults<BrapiObservationVariables>> {

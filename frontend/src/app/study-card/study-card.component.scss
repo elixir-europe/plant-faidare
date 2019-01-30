@@ -1,16 +1,3 @@
-.row-sep {
-  border-top:  0.01px solid #f0f0f0;
-}
-
-.row-sep:first-child {
-  border-top: none;
-}
-
-.field{
-  font-weight: bold;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
 
 .identification-info {
   margin-top: 5px;
@@ -33,7 +20,7 @@ a {
   border-width: 1.5px;
 }
 
-.card:last-child{
+.card:last-child {
   margin-bottom: 50px;
 }
 
@@ -41,7 +28,7 @@ a {
   font-size: large;
   font-weight: bold;
   color: #0f6191;
-  background-color : #eaeaea;
+  background-color: #eaeaea;
   border-color: rgba(29, 29, 29, 0.16);
   border-width: 2.5px;
 }
@@ -50,7 +37,6 @@ a {
   max-height: 200px;
   overflow-y: auto;
 }
-
 
 
 // Loading spinner
@@ -67,6 +53,7 @@ a {
     transform-origin: 32px * $scale 32px * $scale;
     animation: lds-spinner 1.2s linear infinite;
   }
+
   div:after {
     content: " ";
     display: block;
@@ -78,50 +65,62 @@ a {
     border-radius: 20%;
     background: black;
   }
+
   div:nth-child(1) {
     transform: rotate(0deg);
     animation-delay: -1.1s;
   }
+
   div:nth-child(2) {
     transform: rotate(30deg);
     animation-delay: -1s;
   }
+
   div:nth-child(3) {
     transform: rotate(60deg);
     animation-delay: -0.9s;
   }
+
   div:nth-child(4) {
     transform: rotate(90deg);
     animation-delay: -0.8s;
   }
+
   div:nth-child(5) {
     transform: rotate(120deg);
     animation-delay: -0.7s;
   }
+
   div:nth-child(6) {
     transform: rotate(150deg);
     animation-delay: -0.6s;
   }
+
   div:nth-child(7) {
     transform: rotate(180deg);
     animation-delay: -0.5s;
   }
+
   div:nth-child(8) {
     transform: rotate(210deg);
     animation-delay: -0.4s;
   }
+
   div:nth-child(9) {
     transform: rotate(240deg);
     animation-delay: -0.3s;
   }
+
   div:nth-child(10) {
     transform: rotate(270deg);
     animation-delay: -0.2s;
   }
+
   div:nth-child(11) {
     transform: rotate(300deg);
     animation-delay: -0.1s;
   }
+
   div:nth-child(12) {
     transform: rotate(330deg);
     animation-delay: 0s;

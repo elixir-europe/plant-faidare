@@ -4,7 +4,7 @@ import { BrapiService } from '.brapi.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import {
     BrapiContacts,
-    BrapiGermplasme,
+    BrapiGermplasm,
     BrapiLocation,
     BrapiObservationVariables,
     BrapiResult,
@@ -110,7 +110,7 @@ describe('BrapiService', () => {
         }
     };
 
-    const germplasm: BrapiResults<BrapiGermplasme> = {
+    const germplasm: BrapiResults<BrapiGermplasm> = {
         metadata: null,
         result: {
             data: [{
@@ -155,7 +155,7 @@ describe('BrapiService', () => {
 
     it('should fetch the germplasm', () => {
 
-        let fetchedGermplasm: BrapiResults<BrapiGermplasme>;
+        let fetchedGermplasm: BrapiResults<BrapiGermplasm>;
         const studyDbId: string = searchStudy.result.studyDbId;
         brapiService.getStudyGermplasms(searchStudy.result.studyDbId).subscribe(response => {
             fetchedGermplasm = response;
