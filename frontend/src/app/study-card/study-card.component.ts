@@ -14,7 +14,7 @@ import { arrayToString } from '../utils';
 })
 export class StudyCardComponent implements OnInit {
 
-    study: BrapiStudy;
+    study: BrapiStudy = {} as BrapiStudy;
     studySource: DataDiscoverySource;
     studyGermplasms: BrapiGermplasm[] = [];
     studyObservationVariables: BrapiObservationVariables[] = [];
@@ -94,7 +94,11 @@ export class StudyCardComponent implements OnInit {
         return `https://urgi.versailles.inra.fr/ontologyportal.do#termIdentifier=${variable.observationVariableDbId}`;
     }
 
+    getTrialLink(trial: BrapiTrial) {
+        return `https://urgi.versailles.inra.fr/ephesis/ephesis/viewer.do#dataResults/trialSetIds=${trial.trialDbId}`;
+    }
+
     getTrialStudies(studies: Array<{ studyDbId: string }>): string {
-        return studies.map(study => study.studyDbId).join(',');
+        return studies.map(study => study.studyDbId).join(', ');
     }
 }

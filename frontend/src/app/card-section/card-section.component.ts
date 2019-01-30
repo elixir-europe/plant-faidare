@@ -9,13 +9,11 @@ export class CardSectionComponent implements OnInit {
 
     @Input() header: string;
     @Input() test: any;
-    @Input() table: any;
 
     constructor() {
     }
 
     ngOnInit() {
-        console.log(this.table);
     }
 
 }

@@ -19,7 +19,8 @@ import { GnpisService } from '../gnpis.service';
 import { DataDiscoverySource } from '../models/data-discovery.model';
 import { MapComponent } from '../map/map.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CardSectionComponent } from '../card-section/card-section.component';
+import { CardRowComponent } from '../card-row/card-row.component';
 
 describe('StudyCardComponent', () => {
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
@@ -209,14 +210,13 @@ describe('StudyCardComponent', () => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule],
             declarations: [
-                StudyCardComponent, MapComponent
+                StudyCardComponent, MapComponent, CardSectionComponent, CardRowComponent
             ],
             providers: [
                 { provide: ActivatedRoute, useValue: activatedRoute },
                 { provide: BrapiService, useValue: brapiService },
                 { provide: GnpisService, useValue: gnpisService }
-            ],
-            schemas: [NO_ERRORS_SCHEMA]
+            ]
         });
     }));
 
