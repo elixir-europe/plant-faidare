@@ -53,6 +53,15 @@ public class TrialVO implements GnpISInternal, BrapiTrial, HasURI, HasURL, Inclu
     private String sourceUri;
 
     @Override
+    public String getDocumentationURL() {
+        return url;
+    }
+
+    public void setDocumentationURL(String documentationURL) {
+        this.url = documentationURL;
+    }
+
+    @Override
     public String getUri() {
         return uri;
     }

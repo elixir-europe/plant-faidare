@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DataDiscoveryDocument, DataDiscoveryType } from '../../model/data-discovery.model';
+import { DataDiscoveryDocument, DataDiscoveryType } from '../../models/data-discovery.model';
 
 @Component({
     selector: 'gpds-document',

@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
-import { BrapiGermplasm, BrapiLocation, BrapiObservationVariables, BrapiStudy, BrapiTrial } from '../models/brapi.model';
+import { BrapiGermplasm, BrapiLocation, BrapiObservationVariable, BrapiStudy, BrapiTrial } from '../models/brapi.model';
 
 import { GnpisService } from '../gnpis.service';
 import { DataDiscoverySource } from '../models/data-discovery.model';
-import { arrayToString } from '../utils';
 
 @Component({
     selector: 'gpds-study-card',
@@ -17,8 +16,7 @@ export class StudyCardComponent implements OnInit {
     study: BrapiStudy;
     studySource: DataDiscoverySource;
     studyGermplasms: BrapiGermplasm[] = [];
-    studyObservationVariables: BrapiObservationVariables[] = [];
-    sites: BrapiLocation[] = [];
+    studyObservationVariables: BrapiObservationVariable[] = [];
     additionalInfoKeys: string[] = [];
     studyDataset: BrapiTrial[] = [];
     trialsIds: string[] = [];
@@ -30,44 +28,47 @@ export class StudyCardComponent implements OnInit {
 
     ngOnInit() {
         const studyDbId = this.route.snapshot.paramMap.get('id');
-        const sourceId = this.route.snapshot.queryParams.source;
 
-        const study$ = this.brapiService.getStudy(studyDbId).toPromise();
+        const study$ = this.brapiService.study(studyDbId).toPromise();
         study$
             .then(response => {
                 this.study = response.result;
-                this.study.seasons = [arrayToString(response.result.seasons, ', ')];
-                this.sites = [response.result.location];
                 if (response.result.additionalInfo) {
                     this.additionalInfoKeys = Object.keys(response.result.additionalInfo);
                 }
+
+                // Get study trials
                 this.trialsIds = response.result.trialDbIds;
                 if (this.trialsIds && this.trialsIds !== []) {
                     for (const trialsId of this.trialsIds) {
-                        this.brapiService.getTrials(trialsId)
+                        this.brapiService.studyTrials(trialsId)
                             .subscribe(trial => {
                                 this.studyDataset.push(trial.result);
                             });
                     }
                 }
+
+                // Get study source
+                const sourceURI = this.study['schema:includedInDataCatalog'];
+                if (sourceURI) {
+                    const source$ = this.gnpisService.getSource(sourceURI);
+                    source$
+                        .subscribe(src => {
+                            this.studySource = src;
+                        });
+                }
             });
 
-        const variable$ = this.brapiService.getStudyObservationVariables(studyDbId).toPromise();
+        const variable$ = this.brapiService.studyObservationVariables(studyDbId).toPromise();
         variable$
             .then(studyObsVar => {
                 this.studyObservationVariables = studyObsVar.result.data;
             });
 
-        const germplasm$ = this.brapiService.getStudyGermplasms(studyDbId).toPromise();
+        const germplasm$ = this.brapiService.studyGermplasms(studyDbId).toPromise();
         germplasm$
             .then(studyGermplasm => {
                 this.studyGermplasms = studyGermplasm.result.data;
-            });
-
-        const source$ = this.gnpisService.getSource(sourceId);
-        source$
-            .subscribe(src => {
-                this.studySource = src;
             });
 
         this.loaded = Promise.all([study$, variable$, germplasm$]);
@@ -76,26 +77,12 @@ export class StudyCardComponent implements OnInit {
         });
     }
 
-    checkLocation(locations: BrapiLocation[]) {
-        for (const location of locations) {
-            if (location.longitude && location.latitude) {
-                return true;
-            }
-        }
-        return false;
+    checkLocation(location: BrapiLocation) {
+        return location && location.longitude && location.latitude;
     }
 
-    puiFilter(pui: string) {
+    isNotURN(pui: string) {
         return !(pui.substring(0, 3) === 'urn');
-    }
-
-    /* Function will be remove when DocumentationUrl will be added to the ObservationVariable result */
-    getVariableLink(variable: BrapiObservationVariables) {
-        return `https://urgi.versailles.inra.fr/ontologyportal.do#termIdentifier=${variable.observationVariableDbId}`;
-    }
-
-    getTrialLink(trial: BrapiTrial) {
-        return `https://urgi.versailles.inra.fr/ephesis/ephesis/viewer.do#dataResults/trialSetIds=${trial.trialDbId}`;
     }
 
     getTrialStudies(studies: Array<{ studyDbId: string }>): string {

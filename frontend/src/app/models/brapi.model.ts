@@ -1,32 +1,44 @@
-interface BrapiData<T> {
-    data: T[];
-}
-
-export interface BrapiResults<T> {
-    metadata: BrapiMetaData;
-    result: BrapiData<T>;
-}
-
 export interface BrapiMetaData {
-
     pagination: {
         pageSize: number;
         currentPage: number;
         totalCount: number;
         totalPages: number;
     };
-
 }
 
-export interface BrapiStudy {
+
+export interface BrapiResult<T> {
+    metadata: BrapiMetaData;
+    result: T;
+}
+
+
+interface BrapiData<T> {
+    data: T[];
+}
+
+
+export interface BrapiResults<T> extends BrapiResult<BrapiData<T>> {
+}
+
+
+interface BrapiHasDocumentationURL {
+    documentationURL?: string;
+}
+
+
+export interface BrapiStudy extends BrapiHasDocumentationURL {
     studyDbId: string;
     studyType: string;
-    name: string;
+    studyName: string;
     studyDescription: string;
     seasons: string[];
     startDate: string;
     endDate: string;
     active: boolean;
+    programDbId: string;
+    programName: string;
     trialDbIds: string[];
     location: BrapiLocation;
     contacts: BrapiContacts[];
@@ -39,48 +51,26 @@ export interface BrapiStudy {
 }
 
 
-export interface BrapiResults<T> {
-    metadata: BrapiMetaData;
-    result: {
-        data: T[];
-    };
-}
-
-export interface BrapiResult<T> {
-    metadata: BrapiMetaData;
-    result: T;
-}
-
-export interface BrapiMetaData {
-
-    pagination: {
-        pageSize: number;
-        currentPage: number;
-        totalCount: number;
-        totalPages: number;
-    };
-
-}
-
-export interface BrapiLocation {
+export interface BrapiLocation extends BrapiHasDocumentationURL  {
     locationDbId: number;
     name: string;
     locationType: string;
     abbreviation: string;
     countryCode: string;
     countryName: string;
-    institutionAdress: string;
+    institutionAddress: string;
     institutionName: string;
     altitude: number;
     latitude: number;
     longitude: number;
     additionalInfo?: AdditionalInfo;
-
 }
+
 
 export interface AdditionalInfo {
     [key: string]: string;
 }
+
 
 export interface BrapiContacts {
     contactDbId: string;
@@ -88,10 +78,10 @@ export interface BrapiContacts {
     email: string;
     type: string;
     institutionName: string;
-
 }
 
-export interface BrapiObservationVariables {
+
+export interface BrapiObservationVariable extends BrapiHasDocumentationURL  {
     observationVariableDbId: string;
     contextOfUse: string[];
     institution: string;
@@ -106,23 +96,10 @@ export interface BrapiObservationVariables {
         name: string;
         description: string;
     };
-    documentationURL: string;
-
 }
 
-export interface BrapiObservationUnits {
-    observationUnitDbId: string;
-    observationUnitName: string;
-    germplasmDbId: string;
-    germplasmName: string;
-    studyDbId: string;
-    studyName: string;
-    programDbId: string;
-    programName: string;
 
-}
-
-export interface BrapiGermplasm {
+export interface BrapiGermplasm extends BrapiHasDocumentationURL {
     germplasmDbId: string;
     accessionNumber: string;
     germplasmName: string;
@@ -131,11 +108,13 @@ export interface BrapiGermplasm {
     subtaxa: string;
 }
 
-export interface BrapiTrial {
+
+export interface BrapiTrial extends BrapiHasDocumentationURL {
     trialDbId: string;
     trialName: string;
     trialType: string;
     active: boolean;
-    studies:
-        { studyDbId: string; }[];
+    studies: {
+        studyDbId: string;
+    }[];
 }

@@ -7,7 +7,7 @@ import {
     DataDiscoveryFacet,
     DEFAULT_PAGE_SIZE,
     MAX_RESULTS
-} from '../model/data-discovery.model';
+} from '../models/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
 import { GnpisService } from '../gnpis.service';
 import { filter } from 'rxjs/operators';

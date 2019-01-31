@@ -1,19 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BrapiService } from '.brapi.service';
+import { BrapiService } from './brapi.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import {
     BrapiContacts,
     BrapiGermplasm,
     BrapiLocation,
-    BrapiObservationVariables,
+    BrapiObservationVariable,
     BrapiResult,
     BrapiResults,
     BrapiStudy,
     BrapiTrial
-} from './modelsbrapi.model';
+} from './models/brapi.model';
 import { DataDiscoverySource } from './models/data-discovery.model';
-import { SiteModel } from './models/site.model';
 
 describe('BrapiService', () => {
 
@@ -38,7 +37,7 @@ describe('BrapiService', () => {
         abbreviation: null,
         countryCode: 'Fr',
         countryName: 'France',
-        institutionAdress: null,
+        institutionAddress: null,
         institutionName: 'Insti',
         altitude: null,
         latitude: null,
@@ -58,12 +57,14 @@ describe('BrapiService', () => {
         result: {
             studyDbId: 's1',
             studyType: 'phenotype',
-            name: 'study1',
+            studyName: 'study1',
             studyDescription: null,
             seasons: ['winter', '2019'],
             startDate: '2018',
             endDate: null,
             active: true,
+            programDbId: 'p1',
+            programName: 'program1',
             trialDbIds: ['10', '20'],
             location: location,
             contacts: [contacts],
@@ -87,7 +88,7 @@ describe('BrapiService', () => {
         }
     };
 
-    const osbVariable: BrapiResults<BrapiObservationVariables> = {
+    const osbVariable: BrapiResults<BrapiObservationVariable> = {
         metadata: null,
         result: {
             data: [{
@@ -143,7 +144,7 @@ describe('BrapiService', () => {
     it('should fetch the study', () => {
         let fetchedStudy: BrapiResult<BrapiStudy>;
         const studyDbId: string = searchStudy.result.studyDbId;
-        brapiService.getStudy(searchStudy.result.studyDbId).subscribe(response => {
+        brapiService.study(searchStudy.result.studyDbId).subscribe(response => {
             fetchedStudy = response;
         });
         http.expectOne(`brapi/v1/studies/${studyDbId}`)
@@ -157,7 +158,7 @@ describe('BrapiService', () => {
 
         let fetchedGermplasm: BrapiResults<BrapiGermplasm>;
         const studyDbId: string = searchStudy.result.studyDbId;
-        brapiService.getStudyGermplasms(searchStudy.result.studyDbId).subscribe(response => {
+        brapiService.studyGermplasms(searchStudy.result.studyDbId).subscribe(response => {
             fetchedGermplasm = response;
         });
         http.expectOne(`brapi/v1/studies/${studyDbId}/germplasm`)
@@ -169,9 +170,9 @@ describe('BrapiService', () => {
 
     it('should fetch the variables', () => {
 
-        let fetchedVariables: BrapiResults<BrapiObservationVariables>;
+        let fetchedVariables: BrapiResults<BrapiObservationVariable>;
         const studyDbId: string = searchStudy.result.studyDbId;
-        brapiService.getStudyObservationVariables(searchStudy.result.studyDbId).subscribe(response => {
+        brapiService.studyObservationVariables(searchStudy.result.studyDbId).subscribe(response => {
             fetchedVariables = response;
         });
         http.expectOne(`brapi/v1/studies/${studyDbId}/observationVariables`)
@@ -185,7 +186,7 @@ describe('BrapiService', () => {
 
         let fetchedTrials: BrapiResult<BrapiTrial>;
         const trialDbId: string = trial1.result.trialDbId;
-        brapiService.getTrials(trialDbId).subscribe(response => {
+        brapiService.studyTrials(trialDbId).subscribe(response => {
             fetchedTrials = response;
         });
         http.expectOne(`brapi/v1/trials/${trialDbId}`)
@@ -194,32 +195,34 @@ describe('BrapiService', () => {
         expect(fetchedTrials).toEqual(trial1);
 
     });
-    
-    it('should return an Observable of 1 SiteModel', () => {
-        const hardCodedSite: SiteModel = {
-            result: {
-                locationDbId: 1,
-                latitude: 1,
-                longitude: 1,
-                altitude: 1,
-                institutionName: '',
-                institutionAdress: '',
-                countryName: '',
-                countryCode: '',
-                locationType: '',
-                abbreviation: '',
-                name: 'site1',
-                additionalInfo: {}
-            }
+
+    it('should fetch 1 location', () => {
+        const expectedLocation = {
+            locationDbId: 1,
+            latitude: 1,
+            longitude: 1,
+            altitude: 1,
+            institutionName: '',
+            institutionAddress: '',
+            countryName: '',
+            countryCode: '',
+            locationType: '',
+            abbreviation: '',
+            name: 'site1',
+            additionalInfo: {}
         };
-        let actualSite: SiteModel;
-        const locationId = hardCodedSite.result.locationDbId;
-        brapiService.location(hardCodedSite.result.locationDbId).subscribe(site => actualSite = site);
+        const mockResponse: BrapiResult<BrapiLocation> = {
+            metadata: null,
+            result: expectedLocation
+        };
+        let actualLocation: BrapiLocation;
+        const locationId = mockResponse.result.locationDbId;
+        brapiService.location(mockResponse.result.locationDbId).subscribe(response => actualLocation = response.result);
 
         http.expectOne(`brapi/v1/locations/${locationId}`)
-            .flush(hardCodedSite);
+            .flush(mockResponse);
 
-        expect(actualSite).toEqual(hardCodedSite);
+        expect(actualLocation).toEqual(expectedLocation);
     });
 
 });

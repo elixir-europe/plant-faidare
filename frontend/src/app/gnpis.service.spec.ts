@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GnpisService } from './gnpis.service';
+import { BASE_URL, GnpisService } from './gnpis.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { BrapiMetaData, BrapiResults } from './model/brapi.model';
-import { DataDiscoveryCriteria, DataDiscoveryResults, DataDiscoverySource } from './model/data-discovery.model';
+import { BrapiMetaData, BrapiResults } from './models/brapi.model';
+import { DataDiscoveryCriteria, DataDiscoverySource } from './models/data-discovery.model';
 
 describe('GnpisService', () => {
     let service: GnpisService;
@@ -43,7 +43,7 @@ describe('GnpisService', () => {
         service = TestBed.get(GnpisService);
         const req = httpMock.expectOne({
             method: 'GET',
-            url: `${GnpisService.BASE_URL}/sources`
+            url: `${BASE_URL}/sources`
         });
         req.flush(sources);
 
@@ -62,7 +62,7 @@ describe('GnpisService', () => {
         });
 
         const req = httpMock.expectOne({
-            url: `${GnpisService.BASE_URL}/suggest?field=${field}&text=${text}&fetchSize=${fetchSize}`,
+            url: `${BASE_URL}/suggest?field=${field}&text=${text}&fetchSize=${fetchSize}`,
             method: 'POST'
         });
         req.flush(expectedSuggestions);
@@ -112,7 +112,7 @@ describe('GnpisService', () => {
         });
 
         const req = httpMock.expectOne({
-            url: `${GnpisService.BASE_URL}/search`,
+            url: `${BASE_URL}/search`,
             method: 'POST'
         });
         req.flush(rawResult);

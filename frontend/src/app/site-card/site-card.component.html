@@ -5,10 +5,10 @@
 </div>
 <div *ngIf="site">
   <h1>
-    Site: {{ site.result.name }}
+    Site: {{ site.name }}
   </h1>
 </div>
-<gpds-map [sites]="sites" *ngIf="site && site.result.latitude && site.result.longitude"></gpds-map>
+<gpds-map [locations]="[site]" *ngIf="site && site.latitude && site.longitude"></gpds-map>
 <div *ngIf="site">
   <br/>
   <h4>Details:</h4>
@@ -16,46 +16,46 @@
   <div class="container-fluid">
     <div class="row">
       <table class="table float-right w-75 p-2 table-sm">
-        <tr *ngIf="site.result.locationType">
+        <tr *ngIf="site.locationType">
           <td><b>Site type</b></td>
-          <td>{{ site.result.locationType }}</td>
+          <td>{{ site.locationType }}</td>
         </tr>
-        <tr *ngIf="site.result.abbreviation">
+        <tr *ngIf="site.abbreviation">
           <td><b>Abbreviation</b></td>
-          <td>{{ site.result.abbreviation }}</td>
+          <td>{{ site.abbreviation }}</td>
         </tr>
-        <tr *ngIf="site.result.countryCode">
+        <tr *ngIf="site.countryCode">
           <td><b>Country code</b></td>
-          <td>{{ site.result.countryCode }}</td>
+          <td>{{ site.countryCode }}</td>
         </tr>
-        <tr *ngIf="site.result.countryName && !site.result.additionalInfo['Geographical location']">
+        <tr *ngIf="site.countryName && !site.additionalInfo['Geographical location']">
           <td><b>Country name</b></td>
-          <td>{{ site.result.countryName }}</td>
+          <td>{{ site.countryName }}</td>
         </tr>
-        <tr *ngIf="site.result.institutionAdress">
+        <tr *ngIf="site.institutionAddress">
           <td><b>Institution address</b></td>
-          <td>{{ site.result.institutionAdress }}</td>
+          <td>{{ site.institutionAddress }}</td>
         </tr>
-        <tr *ngIf="site.result.institutionName">
+        <tr *ngIf="site.institutionName">
           <td><b>Institution name</b></td>
-          <td>{{ site.result.institutionName }}</td>
+          <td>{{ site.institutionName }}</td>
         </tr>
-        <tr *ngIf="site.result.altitude">
+        <tr *ngIf="site.altitude">
           <td><b>Altitude</b></td>
-          <td>{{ site.result.altitude }}</td>
+          <td>{{ site.altitude }}</td>
         </tr>
-        <tr *ngIf="site.result.latitude">
+        <tr *ngIf="site.latitude">
           <td><b>Latitude</b></td>
-          <td>{{ site.result.latitude }}</td>
+          <td>{{ site.latitude }}</td>
         </tr>
-        <tr *ngIf="site.result.longitude">
+        <tr *ngIf="site.longitude">
           <td><b>Longitude</b></td>
-          <td>{{ site.result.longitude }}</td>
+          <td>{{ site.longitude }}</td>
         </tr>
       </table>
     </div>
   </div>
-  <div *ngIf="site.result.additionalInfo">
+  <div *ngIf="site.additionalInfo">
     <br/>
     <h4>Additional informations:</h4>
     <br/>
@@ -65,7 +65,7 @@
           <tbody>
           <tr *ngFor="let key of additionalInfoKeys">
             <td><b>{{ key }}</b></td>
-            <td>{{ site.result.additionalInfo[key] }}</td>
+            <td>{{ site.additionalInfo[key] }}</td>
           </tr>
           </tbody>
         </table>

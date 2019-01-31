@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DataDiscoveryCriteria } from '../model/data-discovery.model';
+import { DataDiscoveryCriteria } from '../models/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({

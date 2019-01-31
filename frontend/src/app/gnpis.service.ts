@@ -5,11 +5,12 @@ import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDi
 import { BrapiResults } from './models/brapi.model';
 import { map } from 'rxjs/operators';
 
+export const BASE_URL = 'gnpis/v1/datadiscovery';
+
 @Injectable({
     providedIn: 'root'
 })
 export class GnpisService {
-    static BASE_URL = 'gnpis/v1/datadiscovery';
     sourceByURI$ = new ReplaySubject<{ [key: string]: DataDiscoverySource }>(1);
 
     constructor(private http: HttpClient) {
@@ -17,7 +18,7 @@ export class GnpisService {
     }
 
     private fetchSources(): void {
-        this.http.get(`${GnpisService.BASE_URL}/sources`).subscribe(
+        this.http.get(`${BASE_URL}/sources`).subscribe(
             (response: BrapiResults<DataDiscoverySource>) => {
                 const sourceByURI = {};
                 for (const source of response.result.data) {
@@ -44,7 +45,7 @@ export class GnpisService {
     ): Observable<string[]> {
         const params = { field, text, fetchSize: fetchSize.toString() };
         return this.http.post<string[]>(
-            `${GnpisService.BASE_URL}/suggest`, criteria, { params }
+            `${BASE_URL}/suggest`, criteria, { params }
         );
     }
 
@@ -60,7 +61,7 @@ export class GnpisService {
             // Get source by URI
             this.sourceByURI$,
             // Get documents by criteria
-            this.http.post<any>(`${GnpisService.BASE_URL}/search`, criteria)
+            this.http.post<any>(`${BASE_URL}/search`, criteria)
         ).pipe(map(([sourceByURI, response]) => {
             // Extract BrAPI documents from result
             const documents = response.result.data;
@@ -88,15 +89,11 @@ export class GnpisService {
         }));
     }
 
-    getSource(sourceId: string): Observable<DataDiscoverySource> {
-        return this.sourceByURI$.pipe(map(src => {
-            for (const key of Object.keys(src)) {
-                if (key === sourceId) {
-                    return src[sourceId];
-                }
-            }
-            return null;
-        }));
+    /**
+     * Get data source by URI
+     */
+    getSource(sourceURI: string): Observable<DataDiscoverySource> {
+        return this.sourceByURI$.pipe(map(sourceByURI => sourceByURI[sourceURI]));
     }
 
 }

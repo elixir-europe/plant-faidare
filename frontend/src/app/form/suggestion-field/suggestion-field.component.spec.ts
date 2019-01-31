@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { GnpisService } from '../../gnpis.service';
 import { BehaviorSubject, of } from 'rxjs';
-import { DataDiscoveryCriteriaUtils } from '../../model/data-discovery.model';
+import { DataDiscoveryCriteriaUtils } from '../../models/data-discovery.model';
 import { ComponentTester } from 'ngx-speculoos';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 

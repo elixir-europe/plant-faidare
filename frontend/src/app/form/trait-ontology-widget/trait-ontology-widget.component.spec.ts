@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { CropOntologyWidgetFactory, TraitOntologyWidgetComponent } from './trait-ontology-widget.component';
 import { GnpisService } from '../../gnpis.service';
 import { BehaviorSubject, of } from 'rxjs';
-import { DataDiscoveryCriteriaUtils } from '../../model/data-discovery.model';
+import { DataDiscoveryCriteriaUtils } from '../../models/data-discovery.model';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 

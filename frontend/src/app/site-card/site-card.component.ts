@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
-import { SiteModel } from '../models/site.model';
+import { BrapiLocation } from '../models/brapi.model';
 
 @Component({
     selector: 'gpds-site-card',
@@ -10,9 +10,7 @@ import { SiteModel } from '../models/site.model';
 })
 export class SiteCardComponent implements OnInit {
 
-    site: SiteModel;
-
-    sites: Array<SiteModel> = new Array<SiteModel>();
+    site: BrapiLocation;
 
     additionalInfoKeys: string[] = [];
 
@@ -25,11 +23,8 @@ export class SiteCardComponent implements OnInit {
         // initialize site from location index
         const locationId = +this.route.snapshot.paramMap.get('id');
         this.brapiService.location(locationId).subscribe(
-          site => {
-              this.site = site; this.sites.push(site);
-              if (site.result.additionalInfo) {
-                  this.additionalInfoKeys = Object.keys(site.result.additionalInfo);
-              }
+          response => {
+              this.site = response.result;
           },
           () => { console.log('Unable to load site...'); this.loadingError = true; }
         );

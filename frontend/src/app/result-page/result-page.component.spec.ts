@@ -12,9 +12,9 @@ import {
     DataDiscoveryCriteriaUtils,
     DataDiscoveryDocument,
     DataDiscoverySource
-} from '../model/data-discovery.model';
+} from '../models/data-discovery.model';
 import { GnpisService } from '../gnpis.service';
-import { BrapiResults } from '../model/brapi.model';
+import { BrapiResults } from '../models/brapi.model';
 
 
 class ResultPageComponentTester extends ComponentTester<ResultPageComponent> {

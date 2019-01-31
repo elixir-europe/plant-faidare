@@ -2,13 +2,13 @@ import { async, TestBed } from '@angular/core/testing';
 
 import { StudyCardComponent } from './study-card.component';
 import { ComponentTester, fakeRoute, speculoosMatchers } from 'ngx-speculoos';
-import { ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 import {
     BrapiContacts,
     BrapiGermplasm,
     BrapiLocation,
-    BrapiObservationVariables,
+    BrapiObservationVariable,
     BrapiResult,
     BrapiResults,
     BrapiStudy,
@@ -39,10 +39,6 @@ describe('StudyCardComponent', () => {
             return this.elements('div.card-header');
         }
 
-        get studyField() {
-            return this.elements('gpds-card-row div.field');
-        }
-
         get studyInfo() {
             return this.elements('div.identification-info');
         }
@@ -54,10 +50,10 @@ describe('StudyCardComponent', () => {
 
     const brapiService = jasmine.createSpyObj(
         'BrapiService', [
-            'getStudy',
-            'getTrials',
-            'getStudyObservationVariables',
-            'getStudyGermplasms'
+            'study',
+            'studyTrials',
+            'studyObservationVariables',
+            'studyGermplasms'
         ]
     );
 
@@ -65,15 +61,8 @@ describe('StudyCardComponent', () => {
         'GnpisService', ['getSource']
     );
 
-    const params = {
-        source: 'source1'
-    } as Params;
-
-
     const activatedRoute = fakeRoute({
-        queryParams: of(params),
         snapshot: {
-            queryParams: params,
             paramMap: convertToParamMap({ id: 's1' })
         } as ActivatedRouteSnapshot
     });
@@ -85,7 +74,7 @@ describe('StudyCardComponent', () => {
         abbreviation: null,
         countryCode: 'Fr',
         countryName: 'France',
-        institutionAdress: null,
+        institutionAddress: null,
         institutionName: 'Insti',
         altitude: null,
         latitude: null,
@@ -105,18 +94,22 @@ describe('StudyCardComponent', () => {
         result: {
             studyDbId: 's1',
             studyType: 'phenotype',
-            name: 'study1',
+            studyName: 'study1',
             studyDescription: null,
             seasons: ['winter', '2019'],
             startDate: '2018',
             endDate: null,
             active: true,
+            programDbId: 'p1',
+            programName: 'program1',
             trialDbIds: ['10', '20'],
             location: location,
             contacts: [contacts],
             additionalInfo: null,
-            dataLinks: []
-        }
+            documentationURL: 'http://example.com/Study/s1',
+            dataLinks: [],
+            'schema:includedInDataCatalog': 'src1'
+        } as BrapiStudy
     };
 
     const trial1: BrapiResult<BrapiTrial> = {
@@ -147,7 +140,7 @@ describe('StudyCardComponent', () => {
 
         }
     };
-    const osbVariable: BrapiResults<BrapiObservationVariables> = {
+    const osbVariable: BrapiResults<BrapiObservationVariable> = {
         metadata: null,
         result: {
             data: [{
@@ -200,11 +193,11 @@ describe('StudyCardComponent', () => {
         'schema:image': null
     };
 
-    brapiService.getStudy.and.returnValue(of(searchStudy));
-    brapiService.getTrials.withArgs('10').and.returnValue(of(trial1));
-    brapiService.getTrials.withArgs('20').and.returnValue(of(trial2));
-    brapiService.getStudyObservationVariables.and.returnValue(of(osbVariable));
-    brapiService.getStudyGermplasms.and.returnValue(of(germplasm));
+    brapiService.study.and.returnValue(of(searchStudy));
+    brapiService.studyTrials.withArgs('10').and.returnValue(of(trial1));
+    brapiService.studyTrials.withArgs('20').and.returnValue(of(trial2));
+    brapiService.studyObservationVariables.and.returnValue(of(osbVariable));
+    brapiService.studyGermplasms.and.returnValue(of(germplasm));
     gnpisService.getSource.and.returnValue(of(source));
 
     beforeEach(async(() => {
