@@ -3,3 +3,9 @@ $fa-font-path: '~font-awesome/fonts';
 @import '~font-awesome/scss/font-awesome';
 @import 'theme';
 @import 'custom-bootstrap';
+
+.dropdown-item.active {
+  .text-muted {
+    color: $white !important;
+  }
+}

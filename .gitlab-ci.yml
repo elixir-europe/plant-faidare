@@ -16,6 +16,12 @@ cache:
   - "frontend/.gradle/"
   - "frontend/node_modules/"
 
+# TESTS
+
+lint:
+  stage: test
+  script: "./gradlew lint"
+
 test:
   stage: test
   script: "./gradlew test --parallel"
@@ -23,5 +29,3 @@ test:
     reports:
       junit:
       - "./frontend/karma-junit-tests-report/TEST*.xml"
-
-

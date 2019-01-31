@@ -32,17 +32,16 @@ tasks {
         } else {
             dependsOn("npm_run_test")
         }
-        dependsOn(lint)
     }
 
     // E2E tests
     val clientIntegrationTest by creating {
         dependsOn("npm_run_e2e")
-        dependsOn(lint)
     }
 
     val check by getting {
         dependsOn(test)
+        dependsOn(lint)
     }
 
     // Build assemble

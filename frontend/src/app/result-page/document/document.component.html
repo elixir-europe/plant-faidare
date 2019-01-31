@@ -1,0 +1,37 @@
+<div class="mt-3 mb-3">
+  <h5>
+    <span *ngFor="let type of document['@type']"
+          class="badge {{ getBadgeType(type) }} mr-2">
+      {{ type }}
+    </span>
+    <a class="badge badge-source mr-2" [href]="getSourceURL()" target="_blank">
+      {{ getSource() }}
+    </a>
+    <a class="title" *ngIf="getURL()" [href]="getURL()">
+      {{ document["schema:name"] }}
+    </a>
+    <a class="title" *ngIf="getRouterLink()" [routerLink]="getRouterLink()">
+      {{ document["schema:name"] }}
+    </a>
+  </h5>
+  <span class="text-justify description">
+    <ng-container *ngIf="!needTruncation || opened">
+      {{ document["schema:description"] }}
+
+      <button *ngIf="needTruncation"
+              class="btn btn-link btn-inline"
+              (click)="toggleDescription()">
+        Reduce
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="needTruncation && !opened">
+      {{ getTruncatedDescription() }}
+
+      <button class="btn btn-link btn-inline"
+              (click)="toggleDescription()">
+        ...(Show More)
+      </button>
+    </ng-container>
+  </span>
+</div>

@@ -1,0 +1,18 @@
+<div class="card mb-1">
+  <div class="card-body">
+    <h3 class="card-title">{{ facet.field | titlecase }}</h3>
+
+    <form [formGroup]="checkBoxes" class="card-text">
+      <div class="form-check" *ngFor="let term of facet.terms">
+        <input class="form-check-input"
+               type="checkbox"
+               id="{{ term.term }}"
+               [formControlName]="term.term"
+        />
+        <label class="form-check-label" for="{{ term.term }}">
+          {{ term.label }} ({{ term.count | number }})
+        </label>
+      </div>
+    </form>
+  </div>
+</div>
