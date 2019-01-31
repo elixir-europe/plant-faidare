@@ -5,9 +5,7 @@
     <content url="file://$MODULE_DIR$/../../../frontend">
       <excludeFolder url="file://$MODULE_DIR$/../../../frontend/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../frontend/build" />
-      <excludeFolder url="file://$MODULE_DIR$/../../../frontend/coverage" />
       <excludeFolder url="file://$MODULE_DIR$/../../../frontend/dist" />
-      <excludeFolder url="file://$MODULE_DIR$/../../../frontend/karma-junit-tests-report" />
       <excludeFolder url="file://$MODULE_DIR$/../../../frontend/tmp" />
     </content>
     <orderEntry type="inheritedJdk" />
