@@ -342,7 +342,7 @@
                                       [ngbPopover]="DonorInstituteTemplate"
                                       [popoverTitle]="donor.donorInstitute.instituteName">
                 {{ donor.donorInstitute.instituteName }}</a></td>
-              <td class="field" *ngIf="donor.donationDate!=null">{{ donor.donationDate | date:"medium" }}</td>
+              <td class="field" *ngIf="donor.donationDate!=null">{{ donor.donationDate | amParse:'YYYYMMDD' | amDateFormat:'YYYY-MM-DD'}}</td>
 
               <ng-template #DonorInstituteTemplate>
                 <table>
@@ -384,7 +384,7 @@
 
       <div class="row">
         <div class="col">
-          <ng-container *ngIf="germplasmGnpis.distributors?.length > 0">
+          <ng-container *ngIf="germplasmGnpis.distributors.length > 0">
             <table class="table table-sm .table-responsive{-sm|-md|-lg|-xl}">
               <thead class="text-white">
               <tr>
@@ -467,7 +467,7 @@
       </ng-template>
 
 
-      <ng-container *ngIf="germplasmPedigree.result!=null || germplasmProgeny.result!=null">
+      <ng-container *ngIf="germplasmProgeny.result.progeny.length > 0 || (germplasmPedigree.result.parent1Name!=null || germplasmPedigree.result.parent2Name!=null)">
         <div class="row">
           <div class="col">
             <h4>Genealogy</h4>
@@ -534,7 +534,7 @@
           </div>
         </div>
 
-        <ng-container *ngIf="germplasmPedigree.result.siblings?.length > 0">
+        <ng-container *ngIf="germplasmPedigree.result.siblings.length > 0">
           <div class="row ">
             <div class="col">
               <table class="table table-sm .table-responsive{-sm|-md|-lg|-xl}">
@@ -559,7 +559,7 @@
         </ng-container>
       </ng-container>
 
-      <ng-container *ngIf="germplasmGnpis.collector?.length > 0">
+      <ng-container *ngIf="germplasmGnpis.collector.length > 0">
         <div class="row">
           <div class="col">
             <table class="table table-sm .table-responsive{-sm|-md|-lg|-xl}">

@@ -25,6 +25,7 @@ import { CardSectionComponent } from './card-section/card-section.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { CardTableComponent } from './card-table/card-table.component';
 import { NgbAlertModule, NgbDropdownModule, NgbPaginationModule, NgbTypeaheadModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { MomentModule, DateFormatPipe } from 'ngx-moment';
 
 @NgModule({
     declarations: [
@@ -56,10 +57,9 @@ import { NgbAlertModule, NgbDropdownModule, NgbPaginationModule, NgbTypeaheadMod
         NgbAlertModule,
         NgbDropdownModule,
         NgbPopoverModule,
-        NgbDropdownModule,
         FormsModule,
-        ReactiveFormsModule
-
+        ReactiveFormsModule,
+        MomentModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useExisting: ErrorInterceptorService, multi: true }

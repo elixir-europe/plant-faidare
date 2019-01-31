@@ -11,10 +11,12 @@ import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny
     selector: 'gpds-germplasm-card',
     templateUrl: './germplasm-card.component.html',
     styleUrls: ['./germplasm-card.component.scss']
-
-
 })
+
 export class GermplasmCardComponent implements OnInit {
+
+    loaded: Promise<any>;
+
 
     constructor(private brapiService: BrapiService, private gnpisService: GnpisService, private route: ActivatedRoute) {
     }
