@@ -21,6 +21,7 @@ import { MapComponent } from '../map/map.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CardSectionComponent } from '../card-section/card-section.component';
 import { CardRowComponent } from '../card-row/card-row.component';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 describe('StudyCardComponent', () => {
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
@@ -210,7 +211,7 @@ describe('StudyCardComponent', () => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule],
             declarations: [
-                StudyCardComponent, MapComponent, CardSectionComponent, CardRowComponent
+                StudyCardComponent, MapComponent, CardSectionComponent, CardRowComponent, LoadingSpinnerComponent
             ],
             providers: [
                 { provide: ActivatedRoute, useValue: activatedRoute },

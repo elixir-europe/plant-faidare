@@ -21,6 +21,7 @@ import { TraitOntologyWidgetComponent } from './form/trait-ontology-widget/trait
 import { FacetsComponent } from './result-page/facets/facets.component';
 import { CardRowComponent } from './card-row/card-row.component';
 import { CardSectionComponent } from './card-section/card-section.component';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 
 @NgModule({
     declarations: [
@@ -39,6 +40,7 @@ import { CardSectionComponent } from './card-section/card-section.component';
         FacetsComponent,
         CardRowComponent,
         CardSectionComponent,
+        LoadingSpinnerComponent,
     ],
     imports: [
         BrowserModule,

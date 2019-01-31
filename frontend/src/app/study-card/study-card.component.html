@@ -1,23 +1,11 @@
+
+<!-- Loading (see CSS for animation)-->
+<gpds-loading-spinner [loading]="loading"></gpds-loading-spinner>
+
 <ng-container *ngIf="study">
 <h3>
   Study {{ study.studyType }}: {{ study.name }}
 </h3>
-
-<!-- Loading (see CSS for animation)-->
-<div *ngIf="loading" class="lds-spinner mx-auto">
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-</div>
 
 <!-- Display the map -->
 <gpds-map *ngIf="checkLocation(sites)" [sites]="sites"></gpds-map>
@@ -77,7 +65,7 @@
     <gpds-card-row
       label="Project name"
       [test]="studyDataset && studyDataset[0] && studyDataset[0].programName">
-      <div class="col identification-info">
+      <div class="col identification-info" *ngIf="studyDataset.length != 0">
         <!--studyDataset[0].programName should  be replace by a programName field added in study-->
         {{ studyDataset[0].programName }}
       </div>
