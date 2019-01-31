@@ -42,7 +42,7 @@ export class TraitOntologyWidgetComponent implements OnInit {
     ngOnInit() {
         this.widget = this.widgetFactory.initialize(
             '#trait-ontology-widget', {
-                breedingAPIEndpoint: '/brapi/v1/',
+                breedingAPIEndpoint: 'brapi/v1/',
                 showCheckBoxes: true,
                 useSearchField: true
             }
