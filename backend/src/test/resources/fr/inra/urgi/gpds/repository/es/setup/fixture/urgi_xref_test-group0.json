@@ -1,0 +1,46 @@
+[
+  {
+    "linkedRessourcesID": [
+      "ID2"
+    ],
+    "group_id": "0",
+    "entry_type": "Accession",
+    "database_name": "GnpIS",
+    "db_id": "ID1",
+    "db_version": "ACCESSION_https://doi.org/10.15454/KFQTFL_1",
+    "name": "355",
+    "description": "Lorem ipsum....",
+    "url": "https://urgi.versailles.inra.fr/gnpis-core/#accessionCard/id=aHR0cHM6Ly9kb2kub3JnLzEwLjE1NDU0L0tGUVRGTA==",
+    "species": "Quercus petraea",
+    "xref": "",
+    "feature_type": "",
+    "sequence_id": "",
+    "sequence_version": "",
+    "start_position": "",
+    "end_position": "",
+    "map": "",
+    "map_position": "",
+    "authority": "INRA-UMR1202-BIOGECO (Biodiversité Gènes et Communauté)",
+    "trait": "",
+    "trait_id": "",
+    "environment": "",
+    "environment_id": "",
+    "statistic": "",
+    "unit": "",
+    "genotype": "",
+    "experiment_type": ""
+  },
+  {
+    "linkedRessourcesID": [
+      "ID3"
+    ],
+    "entry_type": "Site"
+  },
+  {
+    "linkedRessourcesID": [
+      "ID2",
+      "ID3"
+    ],
+    "entry_type": "Site"
+  }
+]

@@ -1,0 +1,40 @@
+{
+  "germplasmAttribute": {
+    "dynamic": false,
+    "properties": {
+      "groupId": {
+        "type": "long"
+      },
+      "source": {
+        "type": "keyword"
+      },
+      "speciesGroup": {
+        "type": "long"
+      },
+      "germplasmDbId": {
+        "type": "keyword"
+      },
+      "data": {
+        "type": "nested",
+        "properties": {
+          "attributeDbId": {
+            "type": "keyword"
+          },
+          "attributeName": {
+            "type": "keyword"
+          },
+          "attributeCode": {
+            "type": "keyword"
+          },
+          "value": {
+            "type": "keyword"
+          },
+          "determinedDate": {
+            "type": "date",
+            "format": "YYYY-MM-dd"
+          }
+        }
+      }
+    }
+  }
+}

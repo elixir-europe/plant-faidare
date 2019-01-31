@@ -1,0 +1,34 @@
+{
+  "program": {
+    "dynamic": false,
+    "properties": {
+      "programDbId": {
+        "type": "keyword"
+      },
+      "programName": {
+        "type": "keyword"
+      },
+      "abbreviation": {
+        "type": "keyword"
+      },
+      "groupId": {
+        "type": "long"
+      },
+      "leadPerson": {
+        "type": "keyword"
+      },
+      "objective": {
+        "type": "keyword"
+      },
+      "source": {
+        "type": "keyword"
+      },
+      "speciesGroup": {
+        "type": "integer"
+      },
+      "documentationURL": {
+        "type": "keyword"
+      }
+    }
+  }
+}

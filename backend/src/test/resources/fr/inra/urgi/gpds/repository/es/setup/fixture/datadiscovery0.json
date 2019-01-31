@@ -1,0 +1,70 @@
+[
+  {
+    "@id": "urn:foo_study",
+    "@type": [
+      "Study"
+    ],
+    "schema:identifier": "foo_study",
+    "schema:name": "Foo study",
+    "schema:description": "Foo study is a study",
+    "schema:url": null,
+    "schema:includedInDataCatalog": "http://example.com/catalog2",
+    "germplasm": {
+      "cropName": ["Triticum", "Triticum aestivum", "Triticum aestivum", "Blé", "Blé tendre"],
+      "accession": ["B1", "B2"]
+    }
+  },
+  {
+    "@id": "urn:foo_germplasm",
+    "@type": [
+      "Germplasm"
+    ],
+    "schema:identifier": "foo_germplasm",
+    "schema:name": "Foo germplasm",
+    "schema:description": "Foo germplasm is a germplasm",
+    "schema:url": null,
+    "schema:includedInDataCatalog": "http://example.com/catalog1",
+    "germplasm": {
+      "cropName": ["Vitis", "Grapevine"],
+      "accession": ["V1", "V2", "AUSTRO KOLBEN"]
+    }
+  },
+  {
+    "schema:name": "AUSTRO KOLBEN",
+    "germplasm": {
+      "accession": ["AUSTRO KOLBEN"]
+    }
+  },
+  {
+    "@id": "urn:foo2_germplasm",
+    "@type": [
+      "Germplasm"
+    ],
+    "schema:identifier": "foo2_germplasm",
+    "schema:name": "Foo2 germplasm",
+    "schema:description": "Foo2 germplasm is a germplasm",
+    "schema:url": "http://example.com/foo2_germplasm",
+    "schema:includedInDataCatalog": "http://example.com/catalog1",
+    "germplasm": {
+      "cropName": ["Rice"]
+    }
+  },
+  {
+    "schema:name": "FOO 5"
+  },
+  {
+    "schema:name": "FOO 6"
+  },
+  {
+    "schema:name": "FOO 7"
+  },
+  {
+    "schema:name": "FOO 8"
+  },
+  {
+    "schema:name": "FOO 9"
+  },
+  {
+    "schema:name": "FOO 10"
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "germplasmProgeny": {
+    "properties": {
+      "docId": {
+        "type": "keyword"
+      },
+      "groupId": {
+        "type": "long"
+      },
+      "germplasmDbId": {
+        "type": "keyword"
+      },
+      "defaultDisplayName": {
+        "type": "keyword"
+      },
+      "progeny": {
+        "properties": {
+          "defaultDisplayName": {
+            "type": "keyword"
+          },
+          "germplasmDbId": {
+            "type": "keyword"
+          },
+          "parentType": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}

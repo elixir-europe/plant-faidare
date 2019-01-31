@@ -14,35 +14,35 @@ export class BrapiService {
     }
 
     germplasm(germplasmDbId: string): Observable<object> {
-        return this.http.get<object>(`/brapi/v1/germplasm/${germplasmDbId}`);
+        return this.http.get<object>(`brapi/v1/germplasm/${germplasmDbId}`);
     }
 
     germplasmPedigree(germplasmDbId: string): Observable<object> {
-        return this.http.get<object>(`/brapi/v1/germplasm/${germplasmDbId}/pedigree`);
+        return this.http.get<object>(`brapi/v1/germplasm/${germplasmDbId}/pedigree`);
     }
 
     germplasmProgeny(germplasmDbId: string): Observable<object> {
-        return this.http.get<object>(`/brapi/v1/germplasm/${germplasmDbId}/progeny`);
+        return this.http.get<object>(`brapi/v1/germplasm/${germplasmDbId}/progeny`);
     }
 
     germplasmAttributes(germplasmDbId: string): Observable<object> {
-        return this.http.get<object>(`/brapi/v1/germplasm/${germplasmDbId}/attributes`);
+        return this.http.get<object>(`brapi/v1/germplasm/${germplasmDbId}/attributes`);
     }
 
     study(studyDbId: string): Observable<object> {
-        return this.http.get<object>(`/brapi/v1/studies/${studyDbId}`);
+        return this.http.get<object>(`brapi/v1/studies/${studyDbId}`);
     }
 
     studyGermplasms(studyDbId: string): Observable<string[]> {
-        return this.http.get<string[]>(`/brapi/v1/studies/${studyDbId}/germplasm`);
+        return this.http.get<string[]>(`brapi/v1/studies/${studyDbId}/germplasm`);
     }
 
     studyObservationVariables(studyDbId: string): Observable<string[]> {
-        return this.http.get<string[]>(`/brapi/v1/studies/${studyDbId}/observationVariables`);
+        return this.http.get<string[]>(`brapi/v1/studies/${studyDbId}/observationVariables`);
     }
 
     location(locationId: number): Observable<SiteModel> {
-        return this.http.get<SiteModel>(`/brapi/v1/locations/${locationId}`);
+        return this.http.get<SiteModel>(`brapi/v1/locations/${locationId}`);
     }
 
 }

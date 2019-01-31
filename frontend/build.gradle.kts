@@ -47,7 +47,6 @@ tasks {
     // Build assemble
     val assemble by getting {
         dependsOn("npm_run_build")
-        dependsOn(lint)
     }
 
 }

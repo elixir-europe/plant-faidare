@@ -1,0 +1,43 @@
+{
+  "bool" : {
+    "must" : [
+      {
+        "nested" : {
+          "query" : {
+            "term" : {
+              "field2.schema:name" : {
+                "value" : "6",
+                "boost" : 1.0
+              }
+            }
+          },
+          "path" : "field2",
+          "ignore_unmapped" : false,
+          "score_mode" : "none",
+          "boost" : 1.0,
+          "inner_hits" : {
+            "ignore_unmapped" : false,
+            "from" : 0,
+            "size" : 10000,
+            "version" : false,
+            "explain" : false,
+            "track_scores" : false
+          }
+        }
+      },
+      {
+        "range" : {
+          "field1" : {
+            "from" : "1",
+            "to" : "2",
+            "include_lower" : true,
+            "include_upper" : true,
+            "boost" : 1.0
+          }
+        }
+      }
+    ],
+    "adjust_pure_negative" : true,
+    "boost" : 1.0
+  }
+}

@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: gpds
+  cloud:
+    config:
+      uri: ${SPRING_CONFIG_URI:http://localhost:8888}
+  profiles:
+    active: gnpis

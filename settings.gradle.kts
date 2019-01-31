@@ -1,2 +1,2 @@
 rootProject.name = "gpds"
-include("frontend")
+include("backend", "frontend")

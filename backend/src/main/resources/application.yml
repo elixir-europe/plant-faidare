@@ -1,0 +1,58 @@
+data:
+  elasticsearch:
+      cluster-name: es-dev
+      host: 127.0.0.1
+      port: 9200
+
+management:
+  endpoint:
+    health:
+      show-details: 'always'
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+server:
+  compression:
+    enabled: true
+    mime-types:
+      - application/json
+      - application/javascript
+      - text/html
+      - text/css
+
+logging.level:
+  root: ERROR
+  org.springframework:
+    boot.web.embedded.tomcat.TomcatWebServer: INFO
+    web.client.RestTemplate: DEBUG
+
+---
+spring:
+  profiles: gnpis
+  cloud.config.name: gpds
+
+gpds:
+  elasticsearch-alias-template:
+    gnpis_{source}_{documentType}_5432_scratchy-group{groupId}
+
+  elasticsearch-xref-index-name:
+    urgi_xref
+
+  cropOntology-repository-url:
+    https://urgi.versailles.inra.fr/files/ephesis/trait-ontology/data_16.3/ontology-repository.json
+
+  # TODO: Remove this and store at document generation directly (in BrAPI `observationVariable.documentationURL` field)
+  cropOntology-portal-link:
+    https://urgi.versailles.inra.fr/ephesis/ephesis/ontologyportal.do#termIdentifier=
+
+  # Provides access to user group WS used to query private data ES aliases
+  security-user-group-ws-url:
+  security-user-group-ws-token:
+
+server:
+  port: 8080
+  servlet:
+    context-path: /gnpis-core
+

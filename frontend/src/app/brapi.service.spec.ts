@@ -41,7 +41,7 @@ describe('BrapiService', () => {
         const locationId = hardCodedSite.result.locationDbId;
         brapiService.location(hardCodedSite.result.locationDbId).subscribe(site => actualSite = site);
 
-        http.expectOne(`/brapi/v1/locations/${locationId}`)
+        http.expectOne(`brapi/v1/locations/${locationId}`)
             .flush(hardCodedSite);
 
         expect(actualSite).toEqual(hardCodedSite);
