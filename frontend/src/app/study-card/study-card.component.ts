@@ -15,66 +15,87 @@ export class StudyCardComponent implements OnInit {
 
     study: BrapiStudy;
     studySource: DataDiscoverySource;
-    studyGermplasms: BrapiGermplasm[] = [];
-    studyObservationVariables: BrapiObservationVariable[] = [];
-    additionalInfoKeys: string[] = [];
-    studyDataset: BrapiTrial[] = [];
+    studyGermplasms: BrapiGermplasm[];
+    studyObservationVariables: BrapiObservationVariable[];
+    additionalInfos: {
+        key: string,
+        value: string
+    }[];
+    studyDataset: BrapiTrial[];
     trialsIds: string[] = [];
-    loading = true;
+    loading: boolean;
     loaded: Promise<any>;
 
     constructor(private brapiService: BrapiService, private  gnpisService: GnpisService, private route: ActivatedRoute) {
     }
 
     ngOnInit() {
-        const studyDbId = this.route.snapshot.paramMap.get('id');
+        this.route.paramMap.subscribe(paramMap => {
+            this.loading = true;
+            const studyDbId = paramMap.get('id');
 
-        const study$ = this.brapiService.study(studyDbId).toPromise();
-        study$
-            .then(response => {
-                this.study = response.result;
-                if (response.result.additionalInfo) {
-                    this.additionalInfoKeys = Object.keys(response.result.additionalInfo);
-                }
+            const study$ = this.brapiService.study(studyDbId).toPromise();
+            study$
+                .then(response => {
+                    this.study = response.result;
 
-                // Get study trials
-                this.trialsIds = response.result.trialDbIds;
-                if (this.trialsIds && this.trialsIds !== []) {
-                    for (const trialsId of this.trialsIds) {
-                        this.brapiService.studyTrials(trialsId)
-                            .subscribe(trial => {
-                                this.studyDataset.push(trial.result);
+                    this.additionalInfos = [];
+                    if (response.result.additionalInfo) {
+                        this.additionalInfos = Object.entries(response.result.additionalInfo)
+                            .filter(([key, value]) => !!key && !! value)
+                            .map(([key, value]) => {
+                                return { key, value };
                             });
                     }
-                }
 
-                // Get study source
-                const sourceURI = this.study['schema:includedInDataCatalog'];
-                if (sourceURI) {
-                    const source$ = this.gnpisService.getSource(sourceURI);
-                    source$
-                        .subscribe(src => {
-                            this.studySource = src;
-                        });
-                }
+                    // Get study trials
+                    this.trialsIds = response.result.trialDbIds;
+                    this.studyDataset = [];
+                    if (this.trialsIds && this.trialsIds !== []) {
+                        for (const trialsId of this.trialsIds) {
+                            this.brapiService.studyTrials(trialsId)
+                                .subscribe(trialResponse => {
+                                    const trial = trialResponse.result;
+
+                                    // Remove current study from trial studies
+                                    trial.studies = trial.studies
+                                        .filter(study => study.studyDbId !== studyDbId);
+                                    this.studyDataset.push(trial);
+                                });
+                        }
+                    }
+
+                    // Get study source
+                    const sourceURI = this.study['schema:includedInDataCatalog'];
+                    if (sourceURI) {
+                        const source$ = this.gnpisService.getSource(sourceURI);
+                        source$
+                            .subscribe(src => {
+                                this.studySource = src;
+                            });
+                    }
+                });
+
+            this.studyObservationVariables = [];
+            const variable$ = this.brapiService.studyObservationVariables(studyDbId).toPromise();
+            variable$
+                .then(studyObsVar => {
+                    this.studyObservationVariables = studyObsVar.result.data;
+                });
+
+            this.studyGermplasms = [];
+            const germplasm$ = this.brapiService.studyGermplasms(studyDbId).toPromise();
+            germplasm$
+                .then(studyGermplasm => {
+                    this.studyGermplasms = studyGermplasm.result.data;
+                });
+
+            this.loaded = Promise.all([study$, variable$, germplasm$]);
+            this.loaded.then(() => {
+                this.loading = false;
             });
-
-        const variable$ = this.brapiService.studyObservationVariables(studyDbId).toPromise();
-        variable$
-            .then(studyObsVar => {
-                this.studyObservationVariables = studyObsVar.result.data;
-            });
-
-        const germplasm$ = this.brapiService.studyGermplasms(studyDbId).toPromise();
-        germplasm$
-            .then(studyGermplasm => {
-                this.studyGermplasms = studyGermplasm.result.data;
-            });
-
-        this.loaded = Promise.all([study$, variable$, germplasm$]);
-        this.loaded.then(() => {
-            this.loading = false;
         });
+
     }
 
     checkLocation(location: BrapiLocation) {
@@ -85,7 +106,4 @@ export class StudyCardComponent implements OnInit {
         return !(pui.substring(0, 3) === 'urn');
     }
 
-    getTrialStudies(studies: Array<{ studyDbId: string }>): string {
-        return studies.map(study => study.studyDbId).join(', ');
-    }
 }

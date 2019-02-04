@@ -2,6 +2,5 @@
   <div class="card-header">
     {{ header }}
   </div>
-  <ng-content></ng-content>
-
+  <ng-container [ngTemplateOutlet]="template"></ng-container>
 </div>

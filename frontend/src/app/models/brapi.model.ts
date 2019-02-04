@@ -116,5 +116,6 @@ export interface BrapiTrial extends BrapiHasDocumentationURL {
     active: boolean;
     studies: {
         studyDbId: string;
+        studyName: string;
     }[];
 }

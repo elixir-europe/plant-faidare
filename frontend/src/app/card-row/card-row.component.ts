@@ -1,19 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
 
 @Component({
     selector: 'gpds-card-row',
     templateUrl: './card-row.component.html',
     styleUrls: ['./card-row.component.scss']
 })
-export class CardRowComponent implements OnInit {
+export class CardRowComponent {
 
     @Input() label: string;
-    @Input() test: any;
+    @Input() test: any = true;
 
-    constructor() {
-    }
-
-    ngOnInit() {
-    }
+    @ContentChild(TemplateRef) template: TemplateRef<any>;
 
 }

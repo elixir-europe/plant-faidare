@@ -22,6 +22,7 @@ import { FacetsComponent } from './result-page/facets/facets.component';
 import { CardRowComponent } from './card-row/card-row.component';
 import { CardSectionComponent } from './card-section/card-section.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import { CardTableComponent } from './card-table/card-table.component';
 
 @NgModule({
     declarations: [
@@ -41,6 +42,7 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.compo
         CardRowComponent,
         CardSectionComponent,
         LoadingSpinnerComponent,
+        CardTableComponent,
     ],
     imports: [
         BrowserModule,

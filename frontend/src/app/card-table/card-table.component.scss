@@ -1,0 +1,11 @@
+
+.scroll-table {
+  max-height: 200px;
+  overflow-y: auto;
+
+  thead {
+    position: sticky;
+    top: 0;
+    background-color: white;
+  }
+}
