@@ -52,8 +52,8 @@ export interface BrapiStudy extends BrapiHasDocumentationURL {
 
 
 export interface BrapiLocation extends BrapiHasDocumentationURL  {
-    locationDbId: number;
-    name: string;
+    locationDbId: string;
+    locationName: string;
     locationType: string;
     abbreviation: string;
     countryCode: string;

@@ -31,8 +31,8 @@ describe('BrapiService', () => {
     afterAll(() => http.verify());
 
     const location: BrapiLocation = {
-        locationDbId: 1,
-        name: 'loc1',
+        locationDbId: '1',
+        locationName: 'loc1',
         locationType: 'Collecting site',
         abbreviation: null,
         countryCode: 'Fr',
@@ -81,8 +81,8 @@ describe('BrapiService', () => {
             trialType: 'project',
             active: true,
             studies: [
-                { studyDbId: 's1' },
-                { studyDbId: 's2' }
+                { studyDbId: 's1', studyName: 'study1' },
+                { studyDbId: 's2', studyName: 'study2' }
             ]
 
         }
@@ -197,23 +197,9 @@ describe('BrapiService', () => {
     });
 
     it('should fetch 1 location', () => {
-        const expectedLocation = {
-            locationDbId: 1,
-            latitude: 1,
-            longitude: 1,
-            altitude: 1,
-            institutionName: '',
-            institutionAddress: '',
-            countryName: '',
-            countryCode: '',
-            locationType: '',
-            abbreviation: '',
-            name: 'site1',
-            additionalInfo: {}
-        };
         const mockResponse: BrapiResult<BrapiLocation> = {
             metadata: null,
-            result: expectedLocation
+            result: location
         };
         let actualLocation: BrapiLocation;
         const locationId = mockResponse.result.locationDbId;
@@ -222,7 +208,7 @@ describe('BrapiService', () => {
         http.expectOne(`brapi/v1/locations/${locationId}`)
             .flush(mockResponse);
 
-        expect(actualLocation).toEqual(expectedLocation);
+        expect(actualLocation).toEqual(location);
     });
 
 });

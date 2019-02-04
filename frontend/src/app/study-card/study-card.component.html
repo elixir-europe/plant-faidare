@@ -1,4 +1,3 @@
-<!-- Loading (see CSS for animation)-->
 <gpds-loading-spinner [loading]="loading"></gpds-loading-spinner>
 
 <ng-container *ngIf="study">
@@ -17,47 +16,34 @@
 
         <gpds-card-row
           label="Name"
-          [test]="study.studyName">
-          <ng-template>
-            <div class="col identification-info">
-              {{ study.studyName }}
-            </div>
-          </ng-template>
+          [value]="study.studyName">
         </gpds-card-row>
 
         <gpds-card-row
           label="Identifier"
           [test]="study.studyDbId">
           <ng-template>
-            <div class="col identification-info">
-              {{ study.studyDbId }}
-              <a target="_blank" *ngIf="studySource && study.documentationURL" [href]="study.documentationURL">
-                ( Link to this study on {{ studySource["schema:identifier"] }} )
-              </a>
-            </div>
+            {{ study.studyDbId }}
+            <a target="_blank" *ngIf="studySource && study.documentationURL" [href]="study.documentationURL">
+              ( Link to this study on {{ studySource["schema:identifier"] }} )
+            </a>
           </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
           label="Permanent unique identifier"
-          [test]="study['@id'] && isNotURN(study['@id'])">
-          <ng-template>
-            <div class="col identification-info">
-              {{ study['@id'] }}
-            </div>
-          </ng-template>
+          [test]="study['@id'] && isNotURN(study['@id'])"
+          [value]="study['@id']">
         </gpds-card-row>
 
         <gpds-card-row
           label="Source"
           [test]="studySource">
           <ng-template>
-            <div class="col identification-info">
-              <a target="_blank"
-                 [href]="studySource['schema:url']">
-                <img [src]="studySource['schema:image']" alt="Study source image"/>
-              </a>
-            </div>
+            <a target="_blank"
+               [href]="studySource['schema:url']">
+              <img [src]="studySource['schema:image']" alt="Study source image"/>
+            </a>
           </ng-template>
         </gpds-card-row>
 
@@ -65,65 +51,43 @@
           label="Data source"
           [test]="studySource && study.documentationURL">
           <ng-template>
-            <div class="col">
-              <a target="_blank" *ngIf="study.documentationURL" [href]="study.documentationURL">
-                ( Link to this study on {{ studySource["schema:identifier"] }} )
-              </a>
-            </div>
+            <a target="_blank" *ngIf="study.documentationURL" [href]="study.documentationURL">
+              ( Link to this study on {{ studySource["schema:identifier"] }} )
+            </a>
           </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
           label="Project name"
-          [test]="study.programName">
-          <ng-template>
-            <div class="col identification-info">
-              {{ study.programName }}
-            </div>
-          </ng-template>
+          [value]="study.programName">
         </gpds-card-row>
 
         <gpds-card-row
           label="Description"
-          [test]="study.studyDescription">
-          <ng-template>
-            <div class="col identification-info">
-              {{ study.studyDescription }}
-            </div>
-          </ng-template>
+          [value]="study.studyDescription">
         </gpds-card-row>
 
         <gpds-card-row
           label="Active"
           [test]="study.active != null">
           <ng-template>
-            <div class="col identification-info">
-              {{ study.active ? "Yes" : "No" }}
-            </div>
+            {{ study.active ? "Yes" : "No" }}
           </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
           label="Seasons"
-          [test]="study.seasons && study.seasons.length != 0">
-          <ng-template>
-            <div class="col identification-info">
-              <div>
-                {{ study.seasons.join(', ') }}
-              </div>
-            </div>
-          </ng-template>
+          [test]="study.seasons && study.seasons.length != 0"
+          [value]="study.seasons.join(', ')">
         </gpds-card-row>
 
         <gpds-card-row
           label="Date"
           [test]="study.startDate">
           <ng-template>
-            <div class="col identification-info">
-              {{ study.endDate ?
-              'From ' + study.startDate + ' to ' + study.endDate :
-              'Started on ' + study.startDate }}
-            </div>
+            {{ study.endDate ?
+            'From ' + study.startDate + ' to ' + study.endDate :
+            'Started on ' + study.startDate }}
           </ng-template>
         </gpds-card-row>
 
@@ -131,11 +95,9 @@
           label="Location name"
           [test]="study.location && study.location.locationDbId">
           <ng-template>
-            <div class="col identification-info">
-              <a [routerLink]="['/sites', study.location.locationDbId]">
-                {{ study.location.name }}
-              </a>
-            </div>
+            <a [routerLink]="['/sites', study.location.locationDbId]">
+              {{ study.location.locationName }}
+            </a>
           </ng-template>
         </gpds-card-row>
 
@@ -143,12 +105,10 @@
           label="Data files"
           [test]="study.dataLinks && study.dataLinks.length != 0">
           <ng-template>
-            <div class="col identification-info">
-              <div *ngFor="let dataLink of study.dataLinks">
-                <a [href]="dataLink.url">
-                  {{ dataLink.name }}
-                </a>
-              </div>
+            <div *ngFor="let dataLink of study.dataLinks">
+              <a [href]="dataLink.url">
+                {{ dataLink.name }}
+              </a>
             </div>
           </ng-template>
         </gpds-card-row>
@@ -277,7 +237,7 @@
   </gpds-card-section>
 
   <gpds-card-section
-    header="Additional info"
+    header="Additional information"
     [test]="additionalInfos && additionalInfos.length != 0">
     <ng-template>
       <gpds-card-table

@@ -1,8 +1,14 @@
-<div *ngIf="test">
+<ng-container *ngIf="test && (value === undefined || value)">
   <div class="row row-sep">
-    <div class="col-4 field">
+    <div class="col-4 field my-2">
       {{ label }}
     </div>
-    <ng-container [ngTemplateOutlet]="template"></ng-container>
+    <div class="col my-2">
+      <ng-template #includeTemplate [ngTemplateOutlet]="template"></ng-template>
+      <ng-template #includeStringValue>
+        {{ value }}
+      </ng-template>
+      <ng-container *ngIf="value; then includeStringValue else includeTemplate"></ng-container>
+    </div>
   </div>
-</div>
+</ng-container>

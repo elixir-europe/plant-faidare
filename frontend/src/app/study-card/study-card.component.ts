@@ -5,6 +5,7 @@ import { BrapiGermplasm, BrapiLocation, BrapiObservationVariable, BrapiStudy, Br
 
 import { GnpisService } from '../gnpis.service';
 import { DataDiscoverySource } from '../models/data-discovery.model';
+import { KeyValueObject } from '../utils';
 
 @Component({
     selector: 'gpds-study-card',
@@ -17,10 +18,7 @@ export class StudyCardComponent implements OnInit {
     studySource: DataDiscoverySource;
     studyGermplasms: BrapiGermplasm[];
     studyObservationVariables: BrapiObservationVariable[];
-    additionalInfos: {
-        key: string,
-        value: string
-    }[];
+    additionalInfos: KeyValueObject[];
     studyDataset: BrapiTrial[];
     trialsIds: string[] = [];
     loading: boolean;
@@ -40,16 +38,12 @@ export class StudyCardComponent implements OnInit {
                     this.study = response.result;
 
                     this.additionalInfos = [];
-                    if (response.result.additionalInfo) {
-                        this.additionalInfos = Object.entries(response.result.additionalInfo)
-                            .filter(([key, value]) => !!key && !! value)
-                            .map(([key, value]) => {
-                                return { key, value };
-                            });
+                    if (this.study.additionalInfo) {
+                        this.additionalInfos = KeyValueObject.fromObject(this.study.additionalInfo);
                     }
 
                     // Get study trials
-                    this.trialsIds = response.result.trialDbIds;
+                    this.trialsIds = this.study.trialDbIds;
                     this.studyDataset = [];
                     if (this.trialsIds && this.trialsIds !== []) {
                         for (const trialsId of this.trialsIds) {

@@ -8,6 +8,19 @@ export function asArray(obj) {
     return [obj];
 }
 
-export function arrayToString(arr: string[], sep: string) {
-    return arr.join(sep);
+export class KeyValueObject {
+    public key: string;
+    public value: string;
+
+    constructor(key: string, value: string) {
+        this.key = key;
+        this.value = value;
+    }
+
+    static fromObject(o: object): KeyValueObject[] {
+        return Object.entries(o)
+            .filter(([key, value]) => !!key && !!value)
+            .map(([key, value]) => new KeyValueObject(key, value));
+    }
 }
+

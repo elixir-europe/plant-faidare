@@ -2,7 +2,7 @@ import { async, TestBed } from '@angular/core/testing';
 
 import { StudyCardComponent } from './study-card.component';
 import { ComponentTester, fakeRoute, speculoosMatchers } from 'ngx-speculoos';
-import { ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import {
     BrapiContacts,
@@ -22,6 +22,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CardSectionComponent } from '../card-section/card-section.component';
 import { CardRowComponent } from '../card-row/card-row.component';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { CardTableComponent } from '../card-table/card-table.component';
 
 describe('StudyCardComponent', () => {
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
@@ -40,7 +41,7 @@ describe('StudyCardComponent', () => {
         }
 
         get studyInfo() {
-            return this.elements('div.identification-info');
+            return this.elements('div.col');
         }
 
         get map() {
@@ -62,14 +63,12 @@ describe('StudyCardComponent', () => {
     );
 
     const activatedRoute = fakeRoute({
-        snapshot: {
-            paramMap: convertToParamMap({ id: 's1' })
-        } as ActivatedRouteSnapshot
+        params: of({ id: 's1' })
     });
 
     const location: BrapiLocation = {
-        locationDbId: 1,
-        name: 'loc1',
+        locationDbId: '1',
+        locationName: 'loc1',
         locationType: 'Collecting site',
         abbreviation: null,
         countryCode: 'Fr',
@@ -120,8 +119,8 @@ describe('StudyCardComponent', () => {
             trialType: 'project',
             active: true,
             studies: [
-                { studyDbId: 's1' },
-                { studyDbId: 's2' }
+                { studyDbId: 's1', studyName: 'study1' },
+                { studyDbId: 's2', studyName: 'study2' }
             ]
 
         }
@@ -134,8 +133,8 @@ describe('StudyCardComponent', () => {
             trialType: 'project',
             active: true,
             studies: [
-                { studyDbId: 's3' },
-                { studyDbId: 's4' }
+                { studyDbId: 's3', studyName: 'study3' },
+                { studyDbId: 's4', studyName: 'study4' }
             ]
 
         }
@@ -204,7 +203,8 @@ describe('StudyCardComponent', () => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule],
             declarations: [
-                StudyCardComponent, MapComponent, CardSectionComponent, CardRowComponent, LoadingSpinnerComponent
+                StudyCardComponent, MapComponent, CardSectionComponent,
+                CardRowComponent, LoadingSpinnerComponent, CardTableComponent
             ],
             providers: [
                 { provide: ActivatedRoute, useValue: activatedRoute },

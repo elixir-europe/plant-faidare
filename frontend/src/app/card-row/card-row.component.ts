@@ -9,6 +9,7 @@ export class CardRowComponent {
 
     @Input() label: string;
     @Input() test: any = true;
+    @Input() value: string;
 
     @ContentChild(TemplateRef) template: TemplateRef<any>;
 

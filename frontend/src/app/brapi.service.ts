@@ -50,7 +50,7 @@ export class BrapiService {
         return this.http.get<BrapiResults<BrapiObservationVariable>>(`${BASE_URL}/studies/${studyDbId}/observationVariables`);
     }
 
-    location(locationId: number): Observable<BrapiResult<BrapiLocation>> {
+    location(locationId: string): Observable<BrapiResult<BrapiLocation>> {
         return this.http.get<BrapiResult<BrapiLocation>>(`${BASE_URL}/locations/${locationId}`);
     }
 

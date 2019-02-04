@@ -7,7 +7,7 @@ describe('MapComponent', () => {
     let component: MapComponent;
     let fixture: ComponentFixture<MapComponent>;
     const location: BrapiLocation = {
-        locationDbId: 1,
+        locationDbId: '1',
         latitude: 1,
         longitude: 1,
         altitude: 1,
@@ -17,7 +17,7 @@ describe('MapComponent', () => {
         countryCode: '',
         locationType: '',
         abbreviation: '',
-        name: 'site1',
+        locationName: 'site1',
         additionalInfo: {
             Topography: '',
             Slope: '',

@@ -31,7 +31,7 @@ export class MapComponent implements OnInit {
                 const icon = L.icon({
                     iconUrl: this.getMarkerIconUrl(site)
                 });
-                let iconText: string = '<b>' + site.name + '</b><br/>';
+                let iconText: string = '<b>' + site.locationName + '</b><br/>';
                 iconText += site.locationType + '<br/>';
                 iconText += `<a href="sites/${site.locationDbId}">Details</a>`;
                 markers.addLayer(L.marker(

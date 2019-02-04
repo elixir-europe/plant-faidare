@@ -1,75 +1,78 @@
-<div id="error" class="alert alert-danger" *ngIf="loadingError">
-  Error: this site cannot be loaded.
-  <br/>
-  Please contact urgi-support@inra.fr.
-</div>
-<div *ngIf="site">
-  <h1>
-    Site: {{ site.name }}
-  </h1>
-</div>
-<gpds-map [locations]="[site]" *ngIf="site && site.latitude && site.longitude"></gpds-map>
-<div *ngIf="site">
-  <br/>
-  <h4>Details:</h4>
-  <br/>
-  <div class="container-fluid">
-    <div class="row">
-      <table class="table float-right w-75 p-2 table-sm">
-        <tr *ngIf="site.locationType">
-          <td><b>Site type</b></td>
-          <td>{{ site.locationType }}</td>
-        </tr>
-        <tr *ngIf="site.abbreviation">
-          <td><b>Abbreviation</b></td>
-          <td>{{ site.abbreviation }}</td>
-        </tr>
-        <tr *ngIf="site.countryCode">
-          <td><b>Country code</b></td>
-          <td>{{ site.countryCode }}</td>
-        </tr>
-        <tr *ngIf="site.countryName && !site.additionalInfo['Geographical location']">
-          <td><b>Country name</b></td>
-          <td>{{ site.countryName }}</td>
-        </tr>
-        <tr *ngIf="site.institutionAddress">
-          <td><b>Institution address</b></td>
-          <td>{{ site.institutionAddress }}</td>
-        </tr>
-        <tr *ngIf="site.institutionName">
-          <td><b>Institution name</b></td>
-          <td>{{ site.institutionName }}</td>
-        </tr>
-        <tr *ngIf="site.altitude">
-          <td><b>Altitude</b></td>
-          <td>{{ site.altitude }}</td>
-        </tr>
-        <tr *ngIf="site.latitude">
-          <td><b>Latitude</b></td>
-          <td>{{ site.latitude }}</td>
-        </tr>
-        <tr *ngIf="site.longitude">
-          <td><b>Longitude</b></td>
-          <td>{{ site.longitude }}</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <div *ngIf="site.additionalInfo">
-    <br/>
-    <h4>Additional informations:</h4>
-    <br/>
-    <div class="container-fluid">
-      <div class="row">
-        <table class="table table-sm table-striped">
-          <tbody>
-          <tr *ngFor="let key of additionalInfoKeys">
-            <td><b>{{ key }}</b></td>
-            <td>{{ site.additionalInfo[key] }}</td>
-          </tr>
-          </tbody>
-        </table>
+<gpds-loading-spinner [loading]="loading"></gpds-loading-spinner>
+
+<ng-container *ngIf="location">
+  <h3>
+    Site: {{ location.locationName }}
+  </h3>
+
+  <gpds-map [locations]="[location]" *ngIf="location && location.latitude && location.longitude"></gpds-map>
+
+  <gpds-card-section
+    header="Details">
+    <ng-template>
+      <div class="card-body">
+        <gpds-card-row
+          label="Site type"
+          [value]="location.locationType">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Abbreviation"
+          [value]="location.abbreviation">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Country code"
+          [value]="location.countryCode">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Country name"
+          [test]="location.countryName && !location.additionalInfo['Geographical location']"
+          [value]="location.countryName">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Institution address"
+          [value]="location.institutionAddress">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Institution name"
+          [value]="location.institutionAddress">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Altitude"
+          [value]="location.altitude">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Latitude"
+          [value]="location.latitude">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Longitude"
+          [value]="location.longitude">
+        </gpds-card-row>
       </div>
-    </div>
-  </div>
-</div>
+    </ng-template>
+  </gpds-card-section>
+
+  <gpds-card-section
+    header="Additional information"
+    [test]="additionalInfos && additionalInfos.length != 0">
+    <ng-template>
+      <gpds-card-table
+        [rows]="additionalInfos">
+        <ng-template let-row>
+          <tr>
+            <td width="50%">{{ row.key }}</td>
+            <td>{{ row.value }}</td>
+          </tr>
+        </ng-template>
+      </gpds-card-table>
+    </ng-template>
+  </gpds-card-section>
+</ng-container>
