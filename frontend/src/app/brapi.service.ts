@@ -10,9 +10,7 @@ import {
     BrapiStudy,
     BrapiTrial
 } from './models/brapi.model';
-import {
-    GermplasmResult
-} from './models/gnpis.germplasm.model';
+import { GermplasmResult } from './models/gnpis.germplasm.model';
 import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from './models/brapi.germplasm.model';
 
 export const BASE_URL = 'brapi/v1';
@@ -38,9 +36,7 @@ export class BrapiService {
     }
 
     germplasmAttributes(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmAttributes[]>> {
-        return this.http.get<GermplasmResult<BrapiGermplasmAttributes[]>>(`/brapi/v1/germplasm/${germplasmDbId}/attributes`);
-    germplasmAttributes(germplasmDbId: string): Observable<object> {
-        return this.http.get<object>(`${BASE_URL}/germplasm/${germplasmDbId}/attributes`);
+        return this.http.get<GermplasmResult<BrapiGermplasmAttributes[]>>(`${BASE_URL}/germplasm/${germplasmDbId}/attributes`);
     }
 
     study(studyDbId: string): Observable<BrapiResult<BrapiStudy>> {
