@@ -37,6 +37,10 @@ export class StudyCardComponent implements OnInit {
                 .then(response => {
                     this.study = response.result;
 
+                    if (this.study.seasons) {
+                        this.study.seasons = [this.study.seasons.join(', ')];
+                    }
+
                     this.additionalInfos = [];
                     if (this.study.additionalInfo) {
                         this.additionalInfos = KeyValueObject.fromObject(this.study.additionalInfo);
@@ -73,8 +77,8 @@ export class StudyCardComponent implements OnInit {
             this.studyObservationVariables = [];
             const variable$ = this.brapiService.studyObservationVariables(studyDbId).toPromise();
             variable$
-                .then(studyObsVar => {
-                    this.studyObservationVariables = studyObsVar.result.data;
+                .then(response => {
+                    this.studyObservationVariables = response.result.data;
                 });
 
             this.studyGermplasms = [];
@@ -99,5 +103,4 @@ export class StudyCardComponent implements OnInit {
     isNotURN(pui: string) {
         return !(pui.substring(0, 3) === 'urn');
     }
-
 }
