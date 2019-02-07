@@ -51,6 +51,7 @@ describe('GermplasmCardComponent', () => {
             return this.elements('.headerTitle');
         }
     }
+
     const brapiService = jasmine.createSpyObj(
         'BrapiService', [
             'germplasm',
