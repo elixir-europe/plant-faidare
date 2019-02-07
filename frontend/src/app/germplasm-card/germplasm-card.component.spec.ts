@@ -1,5 +1,4 @@
 import { async, TestBed } from '@angular/core/testing';
-
 import { GermplasmCardComponent } from './germplasm-card.component';
 import { ComponentTester, fakeRoute, speculoosMatchers } from 'ngx-speculoos';
 import { GnpisService } from '../gnpis.service';
@@ -24,8 +23,7 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'ngx-moment';
 
 describe('GermplasmCardComponent', () => {
-    /* let component: GermplasmCardComponent;
-     let fixture: ComponentFixture<GermplasmCardComponent>;*/
+
 
 
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
@@ -37,14 +35,6 @@ describe('GermplasmCardComponent', () => {
 
         get title() {
             return this.element('h3');
-        }
-
-        get germplasmFields() {
-            return this.elements('td.field');
-        }
-
-        get germplasmFieldsName() {
-            return this.elements('th.fieldName');
         }
 
         get headerTitle() {
@@ -115,7 +105,6 @@ describe('GermplasmCardComponent', () => {
             defaultDisplayName: '11',
             progeny: [brapiSibling]
         }
-
     };
 
     const brapiInstitute: BrapiInstitute = {

@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { BrapiService } from './brapi.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import {
@@ -30,15 +29,13 @@ import {
 import { Germplasm, GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
 
 describe('BrapiService', () => {
-
     let brapiService: BrapiService;
     let http: HttpTestingController;
 
-    beforeEach(() => TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule]
-    }));
-
     beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule]
+        });
         brapiService = TestBed.get(BrapiService);
         http = TestBed.get(HttpTestingController);
     });

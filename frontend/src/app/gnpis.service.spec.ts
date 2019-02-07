@@ -27,7 +27,6 @@ describe('GnpisService', () => {
     let http: HttpTestingController;
 
     beforeEach(() => {
-
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule]
         });
@@ -275,7 +274,6 @@ describe('GnpisService', () => {
             .flush(germplasmTest);
 
         expect(fetchedGermplasm).toEqual(germplasmTest);
-
     });
 });
 
