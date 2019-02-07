@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
-import {
-    GermplasmResult
-} from '../models/gnpis.germplasm.model';
+import { Germplasm, GermplasmResult } from '../models/gnpis.germplasm.model';
 import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from '../models/brapi.germplasm.model';
 
 @Component({
@@ -15,51 +13,61 @@ import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny
 
 export class GermplasmCardComponent implements OnInit {
 
-    loaded: Promise<any>;
-
-
     constructor(private brapiService: BrapiService, private gnpisService: GnpisService, private route: ActivatedRoute) {
     }
 
-    germplasm: GermplasmResult<null>;
-    germplasmGnpis: GermplasmResult<null>;
+    germplasmGnpis: Germplasm;
     germplasmPedigree: GermplasmResult<BrapiGermplasmPedigree>;
     germplasmProgeny: GermplasmResult<BrapiGermplasmProgeny>;
     germplasmAttributes: BrapiGermplasmAttributes[];
+    germplasmId: string;
+    germplasmPuid: string;
+
+    loaded: Promise<any>;
+    loading = true;
 
     ngOnInit() {
-        const germplasmId = this.route.snapshot.paramMap.get('id');
+        this.route.paramMap.subscribe(paramMap => {
+            this.germplasmId = paramMap.get('id');
+            this.germplasmPuid = paramMap.get('puid');
+        });
 
-        this.brapiService.germplasm(germplasmId)
-            .subscribe(germplasm => {
-                this.germplasm = germplasm;
-            });
-
-        this.brapiService.germplasmProgeny(germplasmId)
-            .subscribe(germplasmProgeny => {
+        const germplasmProgeny$ =  this.brapiService.germplasmProgeny(this.germplasmId).toPromise();
+        germplasmProgeny$
+            .then(germplasmProgeny => {
                 this.germplasmProgeny = germplasmProgeny;
             });
 
-        this.brapiService.germplasmPedigree(germplasmId)
-            .subscribe(germplasmPedigree => {
+        const germplasmPedigree$ = this.brapiService.germplasmPedigree(this.germplasmId).toPromise();
+        germplasmPedigree$
+            .then(germplasmPedigree => {
                 this.germplasmPedigree = germplasmPedigree;
             });
 
-        this.brapiService.germplasmAttributes(germplasmId)
-            .subscribe(germplasmAttributes => {
+        const germplasmAttributes$ = this.brapiService.germplasmAttributes(this.germplasmId).toPromise();
+        germplasmAttributes$
+            .then(germplasmAttributes => {
                 this.germplasmAttributes = germplasmAttributes.result.data;
             });
 
-        this.gnpisService.germplasm(germplasmId)
-            .subscribe(germplasmGnpis => {
+        const germplasm$ = this.gnpisService.germplasm(this.germplasmId).toPromise();
+        germplasm$
+            .then(germplasmGnpis => {
                 this.germplasmGnpis = germplasmGnpis;
             });
 
+        this.loaded = Promise.all([germplasmProgeny$, germplasmPedigree$, germplasmAttributes$, germplasm$]);
+        this.loaded.then(() => {
+            this.loading = false;
+        });
+
+
+        // this.gnpisService.germplasmByPuid(germplasmPuid)
+        //     .subscribe(germplasmGnpis => {
+        //         this.germplasmGnpis = germplasmGnpis;
+        //     });
+
 
     }
-
-    /*greyBackground(){
-
-    }*/
 }
 

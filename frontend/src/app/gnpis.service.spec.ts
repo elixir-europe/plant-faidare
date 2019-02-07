@@ -7,6 +7,7 @@ import { DataDiscoveryCriteria, DataDiscoverySource } from './models/data-discov
 import { GnpisService } from './gnpis.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
+import { Germplasm } from './models/gnpis.germplasm.model';
 import {
     BrapiDescriptor, BrapiDonor,
     BrapiGermplasmPedigree,
@@ -98,8 +99,7 @@ const brapiSet: BrapiSet = {
     type: 'plan'
 };
 
-const germplasmTest: GermplasmData<GermplasmData<null>> = {
-    data: null,
+const germplasmTest: Germplasm = {
     url:  'www.cirad.fr',
     source: 'cirad',
     germplasmDbId:  'test',
@@ -227,7 +227,6 @@ describe('GnpisService', () => {
         gnpisService.germplasm(germplasmDbId).subscribe(response => {
             fetchedGermplasm = response;
         });
-
 
         http.expectOne(`/gnpis/v1/germplasm?id=${germplasmDbId}`)
             .flush(germplasmTest);

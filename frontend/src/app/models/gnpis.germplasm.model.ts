@@ -1,7 +1,6 @@
 import { BrapiDescriptor, BrapiDonor, BrapiInstitute, BrapiOrigin, BrapiSet, BrapiSite } from './brapi.germplasm.model';
 
-export interface GermplasmData<T> {
-    data: T;
+export interface Germplasm {
     source: string;
     url: string;
     germplasmDbId: string;
@@ -49,15 +48,14 @@ export interface GermplasmData<T> {
     population: BrapiSet[];
 }
 
-export interface GermplasmResult<T> {
-    result: GermplasmData<T>;
+export interface GermplasmData<T> {
+    data: T;
 }
 
-export interface GermplasmRef {
-    name: string;
-    pui: string;
-    value: string;
+export interface GermplasmResult<T> {
+    result: T;
 }
+
 
 
 

@@ -8,6 +8,7 @@ import { SiteCardComponent } from './site-card/site-card.component';
 const routes: Routes = [
     { path: 'germplasm/:id', component: GermplasmCardComponent },
     { path: 'germplasm?id=:id', component: GermplasmCardComponent },
+    { path: 'germplasm?pui=:puid', component: GermplasmCardComponent },
     { path: 'studies/:id', component: StudyCardComponent },
     { path: 'sites/:id', component: SiteCardComponent },
     { path: '', component: ResultPageComponent },

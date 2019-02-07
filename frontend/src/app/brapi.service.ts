@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Germplasm, GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
 import {
     BrapiGermplasm,
     BrapiLocation,
@@ -10,7 +11,6 @@ import {
     BrapiStudy,
     BrapiTrial
 } from './models/brapi.model';
-import { GermplasmResult } from './models/gnpis.germplasm.model';
 import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from './models/brapi.germplasm.model';
 
 export const BASE_URL = 'brapi/v1';
@@ -23,8 +23,8 @@ export class BrapiService {
     constructor(private http: HttpClient) {
     }
 
-    germplasm(germplasmDbId: string): Observable<GermplasmResult<null>> {
-        return this.http.get<GermplasmResult<null>>(`/brapi/v1/germplasm/${germplasmDbId}`);
+    germplasm(germplasmDbId: string): Observable<Germplasm> {
+        return this.http.get<Germplasm>(`/brapi/v1/germplasm/${germplasmDbId}`);
     }
 
     germplasmPedigree(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmPedigree>> {
@@ -35,8 +35,8 @@ export class BrapiService {
         return this.http.get<GermplasmResult<BrapiGermplasmProgeny>>(`/brapi/v1/germplasm/${germplasmDbId}/progeny`);
     }
 
-    germplasmAttributes(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmAttributes[]>> {
-        return this.http.get<GermplasmResult<BrapiGermplasmAttributes[]>>(`${BASE_URL}/germplasm/${germplasmDbId}/attributes`);
+    germplasmAttributes(germplasmDbId: string): Observable<GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>>> {
+        return this.http.get<GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>>>(`/brapi/v1/germplasm/${germplasmDbId}/attributes`);
     }
 
     study(studyDbId: string): Observable<BrapiResult<BrapiStudy>> {
@@ -59,5 +59,4 @@ export class BrapiService {
     studyTrials(trialsId: string): Observable<BrapiResult<BrapiTrial>> {
         return this.http.get<BrapiResult<BrapiTrial>>(`${BASE_URL}/trials/${trialsId}`);
     }
-
 }

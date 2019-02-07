@@ -13,17 +13,17 @@ import {
     BrapiTrial
 } from './models/brapi.model';
 import { DataDiscoverySource } from './models/data-discovery.model';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import {
     BrapiDescriptor, BrapiDonor,
     BrapiGermplasmPedigree,
     BrapiGermplasmProgeny,
-    BrapiInstitute, BrapiOrigin, BrapiSet,
+    BrapiInstitute,
+    BrapiOrigin,
+    BrapiSet,
     BrapiSibling,
     BrapiSite
 } from './models/brapi.germplasm.model';
-import { GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
-import { GnpisService } from './gnpis.service';
+import { Germplasm } from './models/gnpis.germplasm.model';
 
 describe('BrapiService', () => {
 
@@ -304,8 +304,7 @@ describe('BrapiService', () => {
         type: 'plan'
     };
 
-    const germplasmTest: GermplasmData<GermplasmData<null>> = {
-        data: null,
+    const germplasmTest: Germplasm = {
         url:  'www.cirad.fr',
         source: 'cirad',
         germplasmDbId:  'test',
@@ -360,7 +359,6 @@ describe('BrapiService', () => {
         brapiService.germplasmPedigree(germplasmDbId).subscribe(response => {
             fetchedGermplasmPedigree = response;
         });
-
 
         http.expectOne(`/gnpis/v1/germplasm/pedigree/${germplasmDbId}`)
             .flush(germplasmTest);

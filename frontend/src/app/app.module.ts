@@ -24,7 +24,6 @@ import { CardRowComponent } from './card-row/card-row.component';
 import { CardSectionComponent } from './card-section/card-section.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { CardTableComponent } from './card-table/card-table.component';
-import { NgbAlertModule, NgbDropdownModule, NgbPaginationModule, NgbTypeaheadModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule, DateFormatPipe } from 'ngx-moment';
 
 @NgModule({

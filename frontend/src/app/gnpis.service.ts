@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, zip } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Germplasm } from './models/gnpis.germplasm.model';
 import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDiscoverySource } from './models/data-discovery.model';
 import { BrapiResults } from './models/brapi.model';
 import { map } from 'rxjs/operators';
@@ -98,7 +99,11 @@ export class GnpisService {
         return this.sourceByURI$.pipe(map(sourceByURI => sourceByURI[sourceURI]));
     }
 
-    germplasm(germplasmDbId: string): Observable<GermplasmResult<null>> {
-        return this.http.get<GermplasmResult<null>>(`/gnpis/v1/germplasm?id=${germplasmDbId}`);
+    germplasm(germplasmDbId: string): Observable<Germplasm> {
+        return this.http.get<Germplasm>(`/gnpis/v1/germplasm?id=${germplasmDbId}`);
+    }
+
+    germplasmByPuid(puid: string): Observable<Germplasm> {
+        return this.http.get<Germplasm>(`/gnpis/v1/germplasm?puid=${puid}`);
     }
 }

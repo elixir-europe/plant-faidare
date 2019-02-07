@@ -1,4 +1,3 @@
-import { GermplasmRef } from './gnpis.germplasm.model';
 
 export interface BrapiSite {
     latitude: number;
@@ -42,9 +41,8 @@ export interface BrapiGermplasmProgeny {
 }
 
 export interface BrapiGermplasmAttributes {
-    germplasmDbId: string;
-    groupId: 0;
-    speciesGroup: string;
+    attributeName: string;
+    value: string;
 }
 
 export interface BrapiInstitute {
