@@ -77,8 +77,10 @@
 
         <gpds-card-row
           label="Seasons"
-          [test]="study.seasons && study.seasons.length != 0"
-          [value]="study.seasons">
+          [test]="study.seasons && study.seasons.length != 0">
+          <ng-template>
+            {{ study.seasons.join(', ') }}
+          </ng-template>
         </gpds-card-row>
 
         <gpds-card-row

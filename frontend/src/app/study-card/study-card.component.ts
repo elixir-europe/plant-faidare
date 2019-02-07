@@ -37,10 +37,6 @@ export class StudyCardComponent implements OnInit {
                 .then(response => {
                     this.study = response.result;
 
-                    if (this.study.seasons) {
-                        this.study.seasons = [this.study.seasons.join(', ')];
-                    }
-
                     this.additionalInfos = [];
                     if (this.study.additionalInfo) {
                         this.additionalInfos = KeyValueObject.fromObject(this.study.additionalInfo);
