@@ -1,4 +1,5 @@
 import { Germplasm, GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
+import { Germplasm, GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
 import { TestBed } from '@angular/core/testing';
 
 import { BASE_URL, GnpisService } from './gnpis.service';
@@ -17,7 +18,23 @@ import {
     BrapiSibling,
     BrapiSite
 } from './models/brapi.germplasm.model';
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { GnpisService } from './gnpis.service';
 
+describe('GnpisService', () => {
+    let gnpisService: GnpisService;
+    let http: HttpTestingController;
+
+    beforeEach(() => {
+
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule]
+        });
+        gnpisService = TestBed.get(GnpisService);
+        http = TestBed.get(HttpTestingController);
+    });
+    afterAll(() => http.verify());
 describe('GnpisService', () => {
 
     let service: GnpisService;
@@ -250,20 +267,6 @@ describe('GnpisService', () => {
 
     it('should fetch the germplasm', () => {
         let fetchedGermplasm: Germplasm;
-    });
-
-    it('should fetch sources', () => {
-        service.sourceByURI$.subscribe(sourceByURI => {
-            expect(sourceByURI).toEqual({
-                'id1': source1,
-                'id2': source2
-            });
-        });
-    });
-
-    it('should fetch the GNPIS Germplasm', () => {
-
-        let fetchedGermplasm: GermplasmResult<GermplasmData<null>>;
         const germplasmDbId: string = germplasmTest.germplasmDbId;
         gnpisService.germplasm(germplasmDbId).subscribe(response => {
             fetchedGermplasm = response;
@@ -272,48 +275,59 @@ describe('GnpisService', () => {
             .flush(germplasmTest);
 
         expect(fetchedGermplasm).toEqual(germplasmTest);
+
+    });
+});
+
+it('should search documents with criteria', () => {
+    const rawResult = {
+        metadata: {} as BrapiMetaData,
+        result: {
+            data: [{
+                '@type': ['Germplasm'],
+                '@id': 'urn',
+                'schema:identifier': 'schema',
+                'schema:name': 'doc_name',
+                'schema:url': 'http://dco/url',
+                'schema:description': 'description',
+                'schema:includedInDataCatalog': source1['@id']
+            }, {
+                '@type': ['Phenotyping Study'],
+                '@id': 'urn',
+                'schema:identifier': 'schema',
+                'schema:name': 'doc_name',
+                'schema:url': 'http://dco/url',
+                'schema:description': 'description',
+                'schema:includedInDataCatalog': source2['@id']
+            }]
+        },
+        facets: []
+    };
+
+    const criteria = { crops: ['d'] } as DataDiscoveryCriteria;
+
+    service.search(criteria).subscribe(result => {
+        expect(result.result.data.length).toBe(2);
+        expect(result.result.data[0]['schema:includedInDataCatalog']).toEqual(source1);
+        expect(result.result.data[1]['schema:includedInDataCatalog']).toEqual(source2);
     });
 
-    it('should search documents with criteria', () => {
-        const rawResult = {
-            metadata: {} as BrapiMetaData,
-            result: {
-                data: [{
-                    '@type': ['Germplasm'],
-                    '@id': 'urn',
-                    'schema:identifier': 'schema',
-                    'schema:name': 'doc_name',
-                    'schema:url': 'http://dco/url',
-                    'schema:description': 'description',
-                    'schema:includedInDataCatalog': source1['@id']
-                }, {
-                    '@type': ['Phenotyping Study'],
-                    '@id': 'urn',
-                    'schema:identifier': 'schema',
-                    'schema:name': 'doc_name',
-                    'schema:url': 'http://dco/url',
-                    'schema:description': 'description',
-                    'schema:includedInDataCatalog': source2['@id']
-                }]
-            },
-            facets: []
-        };
-
-        const criteria = { crops: ['d'] } as DataDiscoveryCriteria;
-
-        service.search(criteria).subscribe(result => {
-            expect(result.result.data.length).toBe(2);
-            expect(result.result.data[0]['schema:includedInDataCatalog']).toEqual(source1);
-            expect(result.result.data[1]['schema:includedInDataCatalog']).toEqual(source2);
-        });
-
-        const req = httpMock.expectOne({
-            url: `${BASE_URL}/search`,
-            method: 'POST'
-        });
-        req.flush(rawResult);
-
-        expect(req.request.body).toBe(criteria);
+    const req = httpMock.expectOne({
+        url: `${BASE_URL}/search`,
+        method: 'POST'
     });
+    req.flush(rawResult);
+
+    expect(req.request.body).toBe(criteria);
+});
+
+it('should fetch sources', () => {
+    service.sourceByURI$.subscribe(sourceByURI => {
+        expect(sourceByURI).toEqual({
+            'id1': source1,
+            'id2': source2
+        });
+    });
+});
 })
 ;

@@ -6,6 +6,7 @@ import {
     BrapiDescriptor,
     BrapiDonor,
     BrapiGermplasmAttributes,
+    BrapiGermplasmAttributes,
     BrapiContacts,
     BrapiGermplasm,
     BrapiLocation,
@@ -369,6 +370,9 @@ describe('BrapiService', () => {
         population: [brapiSet]
     };
 
+    const germplasmResultTest = {
+        result: germplasmTest
+    };
     const germplasmResultTest = {
         result: germplasmTest
     };
