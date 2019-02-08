@@ -52,7 +52,7 @@ gpds:
   security-user-group-ws-token:
 
 server:
-  port: 8080
+  port: 8060
   servlet:
-    context-path: /gnpis-core
+    context-path: /gnpis/gpds
 

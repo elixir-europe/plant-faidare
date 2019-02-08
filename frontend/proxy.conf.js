@@ -1,10 +1,10 @@
 const PROXY_CONFIG = [
     {
         context: [
-            "/gnpis-core/brapi",
-            "/gnpis-core/gnpis",
+            "/gnpis/gpds/brapi",
+            "/gnpis/gpds/gnpis",
         ],
-        target: "http://localhost:8080",
+        target: "http://localhost:8060",
         secure: false
     }
 ];

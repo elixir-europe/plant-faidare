@@ -1,3 +1,10 @@
+---
+stages:
+  - test
+  - build
+  - staging
+  - production
+
 image: urgi/docker-browsers:latest
 
 # Disable the Gradle daemon for Continuous Integration servers as correctness
@@ -7,14 +14,16 @@ image: urgi/docker-browsers:latest
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
+  APP_NAME: gpds
+  JAR_PATH: "backend/build/libs/${APP_NAME}.jar"
 
 # Gradle cache for all jobs
 cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
-  - ".gradle"
-  - "frontend/.gradle/"
-  - "frontend/node_modules/"
+    - ".gradle"
+    - "frontend/.gradle/"
+    - "frontend/node_modules/"
 
 # TESTS
 
@@ -28,7 +37,7 @@ test-frontend:
   artifacts:
     reports:
       junit:
-      - "./frontend/karma-junit-tests-report/TEST*.xml"
+        - "./frontend/karma-junit-tests-report/TEST*.xml"
 
 test-backend:
   stage: test
@@ -52,3 +61,127 @@ test-backend:
       junit:
         - "./backend/build/test-results/test/TEST-*.xml"
 
+# BUILD
+
+build:
+  stage: build
+  script:
+    - ./gradlew assemble
+  artifacts:
+    paths:
+      - "$JAR_PATH"
+    expire_in: 1 week
+  only:
+    changes:
+      - backend/src/**/*
+      - frontend/**/*
+
+# DEPLOY
+
+.deploy-to-vm: &deploy_to_vm
+  # Hidden job which serves as template for executed jobs below.
+  # See https://docs.gitlab.com/ee/ci/yaml/#anchors
+  retry: 2
+  ## SSH initialization
+  before_script:
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "${SSH_PRIVATE_KEY}")
+    - ssh -o StrictHostKeyChecking=no root@${SERVER_IP} 'echo "Successfully connected on $(hostname)"'
+  script:
+    # Copy jar and data (cleaning them before) to the server
+    - "scp ./$JAR_PATH root@${SERVER_IP}:/opt/${APP_NAME}/${APP_NAME}-${ENV}.jar"
+    # Restarting service with the updated jar and the according Spring profiles enabled
+    - "ssh root@${SERVER_IP} \"systemctl restart ${APP_NAME}-${ENV}\""
+    - eval $(ssh-agent -k)
+    - "echo \"Deploy done. Application should be available at: http://${SERVER_IP}:${APP_PORT}/${CONTEXT_PATH} \""
+  only:
+    changes:
+      - backend/src/**/*
+      - frontend/**/*
+
+
+deploy-to-prod:
+  stage: production
+  variables:
+    ENV: prod
+    APP_PORT: ${PROD_GPDS_PORT}
+    CONTEXT_PATH: ${PROD_GPDS_CONTEXT_PATH}
+  <<: *deploy_to_vm
+  only:
+    refs:
+      - master
+  when: manual
+  allow_failure: false
+
+
+deploy-to-beta:
+  stage: staging
+  variables:
+    ENV: beta
+    APP_PORT: ${BETA_GPDS_PORT}
+    CONTEXT_PATH: ${BETA_GPDS_CONTEXT_PATH}
+  <<: *deploy_to_vm
+  only:
+    refs:
+      - branches
+  except:
+    refs:
+      - master
+  allow_failure: false
+
+
+deploy-to-staging:
+  stage: staging
+  variables:
+    ENV: staging
+    APP_PORT: ${STAGING_GPDS_PORT}
+    CONTEXT_PATH: ${STAGING_GPDS_CONTEXT_PATH}
+  <<: *deploy_to_vm
+  only:
+    refs:
+      - master
+
+
+deploy-to-private-prod:
+  stage: production
+  variables:
+    ENV: private-prod
+    APP_PORT: ${PRIVATE_PROD_GPDS_PORT}
+    CONTEXT_PATH: ${PRIVATE_PROD_GPDS_CONTEXT_PATH}
+  <<: *deploy_to_vm
+  only:
+    refs:
+      - master
+  when: manual
+  allow_failure: false
+
+
+deploy-to-private-int:
+  stage: production
+  variables:
+    ENV: private-int
+    APP_PORT: ${PRIVATE_INT_GPDS_PORT}
+    CONTEXT_PATH: ${PRIVATE_INT_GPDS_CONTEXT_PATH}
+  <<: *deploy_to_vm
+  only:
+    refs:
+      - master
+  when: manual
+  allow_failure: false
+
+
+deploy-to-private-beta:
+  stage: staging
+  variables:
+    ENV: private-beta
+    APP_PORT: ${PRIVATE_BETA_GPDS_PORT}
+    CONTEXT_PATH: ${PRIVATE_BETA_GPDS_CONTEXT_PATH}
+  <<: *deploy_to_vm
+  only:
+    refs:
+      - branches
+  except:
+    refs:
+      - master
+  when: manual
+  allow_failure: false
