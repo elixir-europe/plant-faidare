@@ -26,48 +26,57 @@ export class GermplasmCardComponent implements OnInit {
     loaded: Promise<any>;
     loading = true;
 
+
+
     ngOnInit() {
-        this.route.paramMap.subscribe(paramMap => {
-            this.germplasmId = paramMap.get('id');
-            this.germplasmPuid = paramMap.get('puid');
+
+        this.germplasmId = this.route.snapshot.queryParams.id;
+        this.germplasmPuid = this.route.snapshot.queryParams.pui;
+        const germplasm$ = this.getGermplasm(this.germplasmId, this.germplasmPuid);
+        germplasm$.then(result => {
+            const germplasmId = this.germplasmId ? this.germplasmId : result.germplasmDbId;
+            const germplasmProgeny$ =  this.brapiService.germplasmProgeny(germplasmId).toPromise();
+            germplasmProgeny$
+                .then(germplasmProgeny => {
+                    this.germplasmProgeny = germplasmProgeny;
+                });
+
+            const germplasmPedigree$ = this.brapiService.germplasmPedigree(germplasmId).toPromise();
+            germplasmPedigree$
+                .then(germplasmPedigree => {
+                    this.germplasmPedigree = germplasmPedigree;
+                });
+
+            const germplasmAttributes$ = this.brapiService.germplasmAttributes(germplasmId).toPromise();
+            germplasmAttributes$
+                .then(germplasmAttributes => {
+                    this.germplasmAttributes = germplasmAttributes.result.data;
+                });
         });
 
-        const germplasmProgeny$ =  this.brapiService.germplasmProgeny(this.germplasmId).toPromise();
-        germplasmProgeny$
-            .then(germplasmProgeny => {
-                this.germplasmProgeny = germplasmProgeny;
-            });
-
-        const germplasmPedigree$ = this.brapiService.germplasmPedigree(this.germplasmId).toPromise();
-        germplasmPedigree$
-            .then(germplasmPedigree => {
-                this.germplasmPedigree = germplasmPedigree;
-            });
-
-        const germplasmAttributes$ = this.brapiService.germplasmAttributes(this.germplasmId).toPromise();
-        germplasmAttributes$
-            .then(germplasmAttributes => {
-                this.germplasmAttributes = germplasmAttributes.result.data;
-            });
-
-        const germplasm$ = this.gnpisService.germplasm(this.germplasmId).toPromise();
-        germplasm$
-            .then(germplasmGnpis => {
-                this.germplasmGnpis = germplasmGnpis;
-            });
-
-        this.loaded = Promise.all([germplasmProgeny$, germplasmPedigree$, germplasmAttributes$, germplasm$]);
+        this.loaded = Promise.all([germplasm$]);
         this.loaded.then(() => {
             this.loading = false;
         });
 
+    }
 
-        // this.gnpisService.germplasmByPuid(germplasmPuid)
-        //     .subscribe(germplasmGnpis => {
-        //         this.germplasmGnpis = germplasmGnpis;
-        //     });
-
-
+    getGermplasm(id: string, pui: string): Promise<Germplasm> {
+        let germplasm$: Promise<Germplasm>;
+        if (id) {
+            germplasm$ = this.gnpisService.germplasm(id).toPromise();
+            germplasm$
+                .then(germplasmGnpis => {
+                    this.germplasmGnpis = germplasmGnpis;
+                });
+        } else {
+            germplasm$ = this.gnpisService.germplasmByPuid(pui).toPromise();
+            germplasm$
+                .then(germplasmGnpis => {
+                    this.germplasmGnpis = germplasmGnpis;
+                });
+        }
+        return germplasm$;
     }
 }
 

@@ -103,7 +103,7 @@ export class GnpisService {
         return this.http.get<Germplasm>(`/gnpis/v1/germplasm?id=${germplasmDbId}`);
     }
 
-    germplasmByPuid(puid: string): Observable<Germplasm> {
-        return this.http.get<Germplasm>(`/gnpis/v1/germplasm?puid=${puid}`);
+    germplasmByPuid(pui: string): Observable<Germplasm> {
+        return this.http.get<Germplasm>(`/gnpis/v1/germplasm?pui=${pui}`);
     }
 }
