@@ -6,6 +6,7 @@ import { BASE_URL, GnpisService } from './gnpis.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { BrapiMetaData } from './models/brapi.model';
 import { DataDiscoveryCriteria } from './models/data-discovery.model';
+import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin } from './models/gnpis.germplasm.model';
 import {
     BrapiDescriptor,
     BrapiDonor,
@@ -160,7 +161,7 @@ describe('GnpisService', () => {
 
     };
 
-    const brapiInstitute: BrapiInstitute = {
+    const brapiInstitute: Institute = {
         instituteName: 'urgi',
         instituteCode: 'inra',
         acronym: 'urgi',
@@ -171,7 +172,7 @@ describe('GnpisService', () => {
         logo: null
     };
 
-    const brapiOrigin: BrapiOrigin = {
+    const brapiOrigin: Origin = {
         institute: brapiInstitute,
         germplasmPUI: '12',
         accessionNumber: '12',

@@ -12,13 +12,11 @@ import {
     BrapiGermplasmAttributes,
     BrapiGermplasmPedigree,
     BrapiGermplasmProgeny,
-    BrapiInstitute,
-    BrapiOrigin,
     BrapiSet,
     BrapiSibling,
     BrapiSite
 } from '../models/brapi.germplasm.model';
-import { Germplasm, GermplasmData, GermplasmResult } from '../models/gnpis.germplasm.model';
+import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin } from '../models/gnpis.germplasm.model';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'ngx-moment';
 
@@ -107,7 +105,7 @@ describe('GermplasmCardComponent', () => {
         }
     };
 
-    const brapiInstitute: BrapiInstitute = {
+    const brapiInstitute: Institute = {
         instituteName: 'urgi',
         instituteCode: 'inra',
         acronym: 'urgi',
@@ -118,7 +116,7 @@ describe('GermplasmCardComponent', () => {
         logo: null
     };
 
-    const brapiOrigin: BrapiOrigin = {
+    const brapiOrigin: Origin = {
         institute: brapiInstitute,
         germplasmPUI: '12',
         accessionNumber: '12',

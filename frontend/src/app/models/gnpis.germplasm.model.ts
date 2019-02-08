@@ -1,4 +1,4 @@
-import { BrapiDescriptor, BrapiDonor, BrapiInstitute, BrapiOrigin, BrapiSet, BrapiSite } from './brapi.germplasm.model';
+import { BrapiDescriptor, BrapiDonor, BrapiSet, BrapiSite } from './brapi.germplasm.model';
 
 export interface Germplasm {
     source: string;
@@ -32,20 +32,43 @@ export interface Germplasm {
     geneticNature: string;
     comment: string;
     photo: string;
-    holdingInstitute: BrapiInstitute;
-    holdingGenbank: BrapiInstitute;
+    holdingInstitute: Institute;
+    holdingGenbank: Institute;
     presenceStatus: string;
     children: string;
     descriptors: BrapiDescriptor[];
     originSite: BrapiSite;
     collectingSite: BrapiSite;
     evaluationSites: BrapiSite[];
-    collector: BrapiOrigin;
-    breeder: BrapiOrigin;
-    distributors: BrapiOrigin[];
+    collector: Origin;
+    breeder: Origin;
+    distributors: Origin[];
     panel: BrapiSet[];
     collection: BrapiSet[];
     population: BrapiSet[];
+}
+
+export interface Origin {
+    institute: Institute;
+    germplasmPUI: string;
+    accessionNumber: string;
+    accessionCreationDate: string;
+    materialType: string;
+    collectors: string;
+    registrationYear: string;
+    deregistrationYear: string;
+    distributionStatus: string;
+}
+
+export interface Institute {
+    instituteName: string;
+    instituteCode: string;
+    acronym: string;
+    organisation: string;
+    instituteType: string;
+    webSite: string;
+    address: string;
+    logo: string;
 }
 
 export interface GermplasmData<T> {

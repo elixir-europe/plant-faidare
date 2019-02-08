@@ -80,7 +80,7 @@
             </tr>
             <tr *ngIf="germplasmGnpis.synonyms && germplasmGnpis.synonyms.length > 0">
               <th class="fieldName" scope="row">Accession synonyms</th>
-              <td class="field"><a *ngFor="let synonym of germplasmGnpis.synonyms"> {{ synonym }}</a></td>
+              <td class="field">{{ germplasmGnpis.synonyms.join(', ') }}</td>
             </tr>
 
             <ng-template *ngIf="germplasmGnpis.genus!=null; then withGenus; else withoutGenus"></ng-template>
@@ -88,29 +88,29 @@
               <tr>
                 <th class="fieldName" scope="row">Taxon</th>
                 <td class="field"
-                    *ngIf="germplasmGnpis.speciesAuthority">{{ germplasmGnpis.genus }} {{ germplasmGnpis.species }} {{ germplasmGnpis.subtaxa }}
+                    *ngIf="germplasmGnpis.speciesAuthority"><i>{{ germplasmGnpis.genus }} {{ germplasmGnpis.species }} {{ germplasmGnpis.subtaxa }}</i>
                   ({{ germplasmGnpis.speciesAuthority }})
                 </td>
                 <td class="field"
-                    *ngIf="germplasmGnpis.speciesAuthority==null">{{ germplasmGnpis.genus }} {{ germplasmGnpis.species }} {{ germplasmGnpis.subtaxa }} </td>
+                    *ngIf="germplasmGnpis.speciesAuthority==null"><i>{{ germplasmGnpis.genus }} {{ germplasmGnpis.species }} {{ germplasmGnpis.subtaxa }}</i></td>
               </tr>
             </ng-template>
             <ng-template #withoutGenus>
               <tr>
                 <th class="fieldName" scope="row">Taxon</th>
-                <td class="field">{{ germplasmGnpis.species }}</td>
+                <td class="field"><i>{{ germplasmGnpis.species }}</i></td>
               </tr>
             </ng-template>
 
             <tr *ngIf="germplasmGnpis.taxonCommonNames && germplasmGnpis.taxonCommonNames.length > 0">
               <th class="fieldName" scope="row">Taxon common names</th>
-              <td class="ellipsis field"><a *ngFor="let commonName of germplasmGnpis.taxonCommonNames"> {{ commonName }}</a>
+              <td class="ellipsis field"> {{ germplasmGnpis.taxonCommonNames.join(', ') }}
               </td>
             </tr>
             <tr *ngIf="germplasmGnpis.taxonSynonyms && germplasmGnpis.taxonSynonyms.length > 0">
               <th class="fieldName" scope="row">Taxon synonyms</th>
-              <td class="scroll field"><a *ngFor="let taxonSynonym of germplasmGnpis.taxonSynonyms"> {{ taxonSynonym }}</a>
-              </td>
+              <!--<td class="scroll field"><a *ngFor="let taxonSynonym of germplasmGnpis.taxonSynonyms"> {{ taxonSynonym }}</a>-->
+              <td class="scroll field"><i>{{ germplasmGnpis.taxonSynonyms.join(', ') }}</i></td>
             </tr>
             <tr *ngIf="germplasmGnpis.pedigree!=null">
               <th class="fieldName" scope="row">Pedigree</th>

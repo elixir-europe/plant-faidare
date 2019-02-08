@@ -20,13 +20,11 @@ import {
     BrapiDescriptor, BrapiDonor,
     BrapiGermplasmPedigree,
     BrapiGermplasmProgeny,
-    BrapiInstitute,
-    BrapiOrigin,
     BrapiSet,
     BrapiSibling,
     BrapiSite
 } from './models/brapi.germplasm.model';
-import { Germplasm, GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
+import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin } from './models/gnpis.germplasm.model';
 
 describe('BrapiService', () => {
     let brapiService: BrapiService;
@@ -272,7 +270,7 @@ describe('BrapiService', () => {
 
     };
 
-    const brapiInstitute: BrapiInstitute = {
+    const institute: Institute = {
         instituteName: 'urgi',
         instituteCode: 'inra',
         acronym: 'urgi',
@@ -282,9 +280,8 @@ describe('BrapiService', () => {
         address: '12',
         logo: null
     };
-
-    const brapiOrigin: BrapiOrigin = {
-        institute: brapiInstitute,
+    const origin: Origin = {
+        institute: institute,
         germplasmPUI: '12',
         accessionNumber: '12',
         accessionCreationDate: '1993',
@@ -296,7 +293,7 @@ describe('BrapiService', () => {
     };
 
     const brapiDonor: BrapiDonor = {
-        donorInstitute: brapiInstitute,
+        donorInstitute: institute,
         germplasmPUI: '12',
         accessionNumber: '12',
         donorInstituteCode: 'urgi'
@@ -351,17 +348,17 @@ describe('BrapiService', () => {
         geneticNature: null,
         comment: null,
         photo: null,
-        holdingInstitute: brapiInstitute,
-        holdingGenbank: brapiInstitute,
+        holdingInstitute: institute,
+        holdingGenbank: institute,
         presenceStatus: null,
         children: null,
         descriptors: [brapiDescriptor],
         originSite: null,
         collectingSite: null,
         evaluationSites: null,
-        collector: brapiOrigin,
-        breeder: brapiOrigin,
-        distributors: [brapiOrigin],
+        collector: origin,
+        breeder: origin,
+        distributors: [origin],
         panel: [brapiSet],
         collection: [brapiSet],
         population: [brapiSet]

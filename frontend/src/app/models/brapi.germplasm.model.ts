@@ -1,3 +1,4 @@
+import { Institute } from './gnpis.germplasm.model';
 
 export interface BrapiSite {
     latitude: number;
@@ -45,31 +46,8 @@ export interface BrapiGermplasmAttributes {
     value: string;
 }
 
-export interface BrapiInstitute {
-    instituteName: string;
-    instituteCode: string;
-    acronym: string;
-    organisation: string;
-    instituteType: string;
-    webSite: string;
-    address: string;
-    logo: string;
-}
-
-export interface BrapiOrigin {
-    institute: BrapiInstitute;
-    germplasmPUI: string;
-    accessionNumber: string;
-    accessionCreationDate: string;
-    materialType: string;
-    collectors: string;
-    registrationYear: string;
-    deregistrationYear: string;
-    distributionStatus: string;
-}
-
 export interface BrapiDonor {
-    donorInstitute: BrapiInstitute;
+    donorInstitute: Institute;
     germplasmPUI: string;
     accessionNumber: string;
     donorInstituteCode: string;
