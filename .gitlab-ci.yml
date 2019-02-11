@@ -56,7 +56,7 @@ test-backend:
       # so there will be no bootstrap checks that would fail on CI
       # especially the error regarding
       # `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
-      command: ["bin/elasticsearch", "-Ediscovery.type=single-node", "-Ecluster.name=es-gpds"]
+      command: ["bin/elasticsearch", "-Ediscovery.type=single-node"]
   artifacts:
     reports:
       junit:

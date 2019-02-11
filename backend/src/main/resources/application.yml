@@ -1,8 +1,7 @@
 data:
   elasticsearch:
-      cluster-name: es-dev
-      host: 127.0.0.1
-      port: 9200
+    host: 127.0.0.1
+    port: 9200
 
 management:
   endpoint:
@@ -27,6 +26,7 @@ logging.level:
   org.springframework:
     boot.web.embedded.tomcat.TomcatWebServer: INFO
     web.client.RestTemplate: DEBUG
+  fr.inra: DEBUG
 
 ---
 spring:
