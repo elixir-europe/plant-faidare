@@ -108,6 +108,8 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
     private SearchRequest prepareSearchRequest(DataDiscoveryCriteria criteria) {
         List<String> facetFields = criteria.getFacetFields();
         String[] documentFieldsInFacets = criteriaFieldsToDocumentFields(facetFields);
+        int size = criteria.getPageSize().intValue();
+        int from = criteria.getPage().intValue() * size;
 
         // Build search query (excluding document fields used in facets)
         QueryBuilder query = queryFactory.createQueryExcludingFields(criteria, documentFieldsInFacets);
@@ -116,6 +118,9 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
         SearchRequest request = ESGenericFindRepository.prepareSearchRequest(
             query, criteria, documentMetadata, requestFactory);
         request.source(new SearchSourceBuilder());
+        request.source()
+            .from(from)
+            .size(size);
         request.source().query(query);
 
         // Build facet aggregations
