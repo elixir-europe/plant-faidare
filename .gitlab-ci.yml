@@ -24,6 +24,7 @@ cache:
     - ".gradle"
     - "frontend/.gradle/"
     - "frontend/node_modules/"
+    - "$JAR_PATH"
 
 # TESTS
 
@@ -73,6 +74,7 @@ build:
     expire_in: 1 week
   only:
     changes:
+      - .gitlab-ci.yml
       - backend/src/**/*
       - frontend/**/*
 
@@ -96,6 +98,7 @@ build:
     - "echo \"Deploy done. Application should be available at: http://${SERVER_IP}:${APP_PORT}/${CONTEXT_PATH} \""
   only:
     changes:
+      - .gitlab-ci.yml
       - backend/src/**/*
       - frontend/**/*
 
