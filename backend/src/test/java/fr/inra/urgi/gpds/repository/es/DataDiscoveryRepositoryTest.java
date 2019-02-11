@@ -135,6 +135,23 @@ class DataDiscoveryRepositoryTest {
     }
 
     @Test
+    void should_Find_Documents_By_Page() {
+        DataDiscoveryCriteriaImpl criteria = new DataDiscoveryCriteriaImpl();
+        criteria.setPage(0L);
+        criteria.setPageSize(2L);
+        DataDiscoveryResponse result = repository.find(criteria);
+        assertThat(result.getResult().getData().size()).isEqualTo(2);
+        assertThat(result.getResult().getData().get(0).getIdentifier()).isEqualTo("foo_study");
+        assertThat(result.getResult().getData().get(1).getIdentifier()).isEqualTo("foo_germplasm");
+
+        criteria.setPage(1L);
+        criteria.setPageSize(3L);
+        result = repository.find(criteria);
+        assertThat(result.getResult().getData().size()).isEqualTo(3);
+        assertThat(result.getResult().getData().get(0).getIdentifier()).isEqualTo("foo2_germplasm");
+    }
+
+    @Test
     void should_Find_With_Facets() {
         DataDiscoveryCriteriaImpl criteria = new DataDiscoveryCriteriaImpl();
         String criterionName = "sources";
