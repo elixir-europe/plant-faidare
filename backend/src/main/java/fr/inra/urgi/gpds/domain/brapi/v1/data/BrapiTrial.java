@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.inra.urgi.gpds.domain.JSONView;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
  * @link https://github.com/plantbreeding/API/blob/master/Specification/Trials/GetTrialById.md
  * @link https://github.com/plantbreeding/API/blob/master/Specification/Trials/ListTrialSummaries.md
  */
-public interface BrapiTrial extends Serializable {
+public interface BrapiTrial extends HasBrapiDocumentationURL {
 
     // Trial
     @JsonView(JSONView.BrapiFields.class)
@@ -58,4 +57,6 @@ public interface BrapiTrial extends Serializable {
     @JsonView(JSONView.BrapiFields.class)
     BrapiAdditionalInfo getAdditionalInfo();
 
+    @Override
+    String getDocumentationURL();
 }

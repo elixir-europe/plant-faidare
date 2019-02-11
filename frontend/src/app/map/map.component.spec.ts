@@ -1,40 +1,38 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MapComponent } from './map.component';
-import { SiteModel } from '../models/site.model';
+import { BrapiLocation } from '../models/brapi.model';
 
 describe('MapComponent', () => {
     let component: MapComponent;
     let fixture: ComponentFixture<MapComponent>;
-    const site: SiteModel = {
-        result: {
-            locationDbId: 1,
-            latitude: 1,
-            longitude: 1,
-            altitude: 1,
-            institutionName: '',
-            institutionAdress: '',
-            countryName: '',
-            countryCode: '',
-            locationType: '',
-            abbreviation: '',
-            name: 'site1',
-            additionalInfo: {
-                Topography: '',
-                Slope: '',
-                Comment: '',
-                Exposure: '',
-                'Coordinates precision': '',
-                'Direction from city': '',
-                'Distance to city': '',
-                'Environment type': '',
-                'Geographical location': '',
-                'Site status': ''
-            }
+    const location: BrapiLocation = {
+        locationDbId: '1',
+        latitude: 1,
+        longitude: 1,
+        altitude: 1,
+        institutionName: '',
+        institutionAddress: '',
+        countryName: '',
+        countryCode: '',
+        locationType: '',
+        abbreviation: '',
+        locationName: 'site1',
+        additionalInfo: {
+            Topography: '',
+            Slope: '',
+            Comment: '',
+            Exposure: '',
+            'Coordinates precision': '',
+            'Direction from city': '',
+            'Distance to city': '',
+            'Environment type': '',
+            'Geographical location': '',
+            'Site status': ''
         }
     };
-    const sites: Array<SiteModel> = new Array<SiteModel>();
-    sites.push(site);
+    const locations: BrapiLocation[] = [];
+    locations.push(location);
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -49,20 +47,20 @@ describe('MapComponent', () => {
     });
 
     it('should create component', () => {
-        component.sites = sites;
+        component.locations = locations;
         fixture.detectChanges();
         expect(component).toBeTruthy();
     });
 
     it('should display map', () => {
-        component.sites = sites;
+        component.locations = locations;
         fixture.detectChanges();
         const element = fixture.nativeElement;
         expect(element.querySelector('#map')).toBeTruthy();
     });
 
     it('should display map legend', () => {
-        component.sites = sites;
+        component.locations = locations;
         fixture.detectChanges();
         const element = fixture.nativeElement;
         expect(element.querySelector('#maplegend')).toBeTruthy();

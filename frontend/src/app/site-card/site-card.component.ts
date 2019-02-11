@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
-import { SiteModel } from '../models/site.model';
+import { BrapiLocation } from '../models/brapi.model';
+import { KeyValueObject } from '../utils';
 
 @Component({
     selector: 'gpds-site-card',
@@ -10,28 +11,30 @@ import { SiteModel } from '../models/site.model';
 })
 export class SiteCardComponent implements OnInit {
 
-    site: SiteModel;
-
-    sites: Array<SiteModel> = new Array<SiteModel>();
-
-    additionalInfoKeys: string[] = [];
-
-    loadingError = false;
+    location: BrapiLocation;
+    additionalInfos: KeyValueObject[];
+    loading = true;
 
     constructor(private brapiService: BrapiService, private route: ActivatedRoute) {
     }
 
     ngOnInit() {
-        // initialize site from location index
-        const locationId = +this.route.snapshot.paramMap.get('id');
-        this.brapiService.location(locationId).subscribe(
-          site => {
-              this.site = site; this.sites.push(site);
-              if (site.result.additionalInfo) {
-                  this.additionalInfoKeys = Object.keys(site.result.additionalInfo);
-              }
-          },
-          () => { console.log('Unable to load site...'); this.loadingError = true; }
-        );
+        this.route.paramMap.subscribe(paramMap => {
+            // initialize site from location ID
+            const locationId = paramMap.get('id');
+
+            this.brapiService.location(locationId).subscribe(
+                response => {
+                    this.location = response.result;
+
+                    this.additionalInfos = [];
+                    if (this.location.additionalInfo) {
+                        this.additionalInfos = KeyValueObject.fromObject(this.location.additionalInfo);
+                    }
+                    this.loading = false;
+                }
+            );
+        });
+
     }
 }

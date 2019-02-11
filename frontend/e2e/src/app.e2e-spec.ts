@@ -14,7 +14,7 @@ describe('workspace-project App', () => {
 
     it('should display site card message', () => {
         page.navigateTo('/sites/FOO');
-        expect(page.getTitleText()).toEqual('site-card works!');
+        expect(page.getTitleText()).toEqual('sites-card works!');
     });
 
     it('should display study card message', () => {

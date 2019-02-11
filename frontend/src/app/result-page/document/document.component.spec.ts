@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { DocumentComponent } from './document.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { DataDiscoverySource } from '../../model/data-discovery.model';
+import { DataDiscoverySource } from '../../models/data-discovery.model';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 
 describe('DocumentComponent', () => {

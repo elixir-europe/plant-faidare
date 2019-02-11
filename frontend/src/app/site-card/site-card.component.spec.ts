@@ -3,27 +3,32 @@ import { async, TestBed } from '@angular/core/testing';
 import { SiteCardComponent } from './site-card.component';
 import { MapComponent } from '../map/map.component';
 import { BrapiService } from '../brapi.service';
-import { SiteModel } from '../models/site.model';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
+import { BrapiLocation, BrapiResult } from '../models/brapi.model';
+import { CardRowComponent } from '../card-row/card-row.component';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { CardTableComponent } from '../card-table/card-table.component';
+import { CardSectionComponent } from '../card-section/card-section.component';
 
 describe('SiteCardComponent', () => {
     const brapiService = jasmine.createSpyObj(
         'BrapiService', ['location']
     );
-    const site: SiteModel = {
+    const response: BrapiResult<BrapiLocation> = {
+        metadata: null,
         result: {
-            locationDbId: 1,
+            locationDbId: '1',
             latitude: 1,
             longitude: 1,
             altitude: 1,
             institutionName: '',
-            institutionAdress: '',
+            institutionAddress: '',
             countryName: '',
             countryCode: '',
             locationType: '',
             abbreviation: '',
-            name: 'site1',
+            locationName: 'site1',
             additionalInfo: {
                 Topography: '',
                 Slope: '',
@@ -41,15 +46,16 @@ describe('SiteCardComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SiteCardComponent, MapComponent],
+            declarations: [
+                SiteCardComponent, MapComponent, LoadingSpinnerComponent,
+                CardRowComponent, CardSectionComponent, CardTableComponent
+            ],
             providers: [
                 { provide: BrapiService, useValue: brapiService },
                 {
                     provide: ActivatedRoute,
                     useValue: {
-                        snapshot: {
-                            paramMap: convertToParamMap( { id: 1 } )
-                        }
+                        paramMap: of(convertToParamMap({ id: 1 }))
                     }
                 }
             ]
@@ -65,19 +71,9 @@ describe('SiteCardComponent', () => {
     it('should display site', () => {
         const fixture = TestBed.createComponent(SiteCardComponent);
         const component = fixture.componentInstance;
-        brapiService.location.and.returnValues(of(site));
+        brapiService.location.and.returnValues(of(response));
         fixture.detectChanges();
         const element = fixture.nativeElement;
-        expect(element.querySelector('h1').textContent).toBe(' Site: site1 ');
-    });
-
-    it('should display error message when site loading is in error', () => {
-        const fixture = TestBed.createComponent(SiteCardComponent);
-        const component = fixture.componentInstance;
-        brapiService.location.and.returnValues(of(site));
-        component.loadingError = true;
-        fixture.detectChanges();
-        const element = fixture.nativeElement;
-        expect(element.querySelector('#error')).toBeTruthy();
+        expect(element.querySelector('h3').textContent).toBe(' Site: site1 ');
     });
 });

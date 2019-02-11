@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DataDiscoveryCriteria, DataDiscoveryFacet } from '../../model/data-discovery.model';
+import { DataDiscoveryCriteria, DataDiscoveryFacet } from '../../models/data-discovery.model';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';

@@ -1,9 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { FacetsComponent } from './facets.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
-import { DataDiscoveryCriteria, DataDiscoveryCriteriaUtils, DataDiscoveryFacet } from '../../model/data-discovery.model';
+import { DataDiscoveryCriteria, DataDiscoveryCriteriaUtils, DataDiscoveryFacet } from '../../models/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 

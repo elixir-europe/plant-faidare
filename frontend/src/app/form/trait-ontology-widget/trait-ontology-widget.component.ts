@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Injectable, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { CropOntologyWidget } from 'trait-ontology-widget/dist/module/cropOntologyWidget.module';
-import { DataDiscoveryCriteria } from '../../model/data-discovery.model';
+import { DataDiscoveryCriteria } from '../../models/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
 import { GnpisService } from '../../gnpis.service';
 import { filter } from 'rxjs/operators';

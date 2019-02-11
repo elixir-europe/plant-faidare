@@ -19,7 +19,10 @@ import { ErrorComponent } from './error/error.component';
 import { ErrorInterceptorService } from './error-interceptor.service';
 import { TraitOntologyWidgetComponent } from './form/trait-ontology-widget/trait-ontology-widget.component';
 import { FacetsComponent } from './result-page/facets/facets.component';
-
+import { CardRowComponent } from './card-row/card-row.component';
+import { CardSectionComponent } from './card-section/card-section.component';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import { CardTableComponent } from './card-table/card-table.component';
 
 @NgModule({
     declarations: [
@@ -35,7 +38,11 @@ import { FacetsComponent } from './result-page/facets/facets.component';
         DocumentComponent,
         ErrorComponent,
         TraitOntologyWidgetComponent,
-        FacetsComponent
+        FacetsComponent,
+        CardRowComponent,
+        CardSectionComponent,
+        LoadingSpinnerComponent,
+        CardTableComponent,
     ],
     imports: [
         BrowserModule,

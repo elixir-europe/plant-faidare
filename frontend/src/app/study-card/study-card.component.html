@@ -1,59 +1,258 @@
-<h3>
-  Study: {{ study.result.name }}
-</h3>
+<gpds-loading-spinner [loading]="loading"></gpds-loading-spinner>
+
+<ng-container *ngIf="study">
+  <h3>
+    Study {{ study.studyType }}: {{ study.studyName }}
+  </h3>
+
+  <!-- Display the map -->
+  <gpds-map *ngIf="checkLocation(study.location)" [locations]="[study.location]"></gpds-map>
+
+  <!-- Display the study's info -->
+  <gpds-card-section
+    header="Identification">
+    <ng-template>
+      <div class="card-body">
+
+        <gpds-card-row
+          label="Name"
+          [value]="study.studyName">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Identifier"
+          [test]="study.studyDbId">
+          <ng-template>
+            {{ study.studyDbId }}
+            <a target="_blank" *ngIf="studySource && study.documentationURL" [href]="study.documentationURL">
+              ( Link to this study on {{ studySource["schema:identifier"] }} )
+            </a>
+          </ng-template>
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Permanent unique identifier"
+          [test]="study['@id'] && isNotURN(study['@id'])"
+          [value]="study['@id']">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Source"
+          [test]="studySource">
+          <ng-template>
+            <a target="_blank"
+               [href]="studySource['schema:url']">
+              <img [src]="studySource['schema:image']" alt="Study source image"/>
+            </a>
+          </ng-template>
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Data source"
+          [test]="studySource && study.documentationURL">
+          <ng-template>
+            <a target="_blank" *ngIf="study.documentationURL" [href]="study.documentationURL">
+              ( Link to this study on {{ studySource["schema:identifier"] }} )
+            </a>
+          </ng-template>
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Project name"
+          [value]="study.programName">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Description"
+          [value]="study.studyDescription">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Active"
+          [test]="study.active != null">
+          <ng-template>
+            {{ study.active ? "Yes" : "No" }}
+          </ng-template>
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Seasons"
+          [test]="study.seasons && study.seasons.length != 0">
+          <ng-template>
+            {{ study.seasons.join(', ') }}
+          </ng-template>
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Date"
+          [test]="study.startDate">
+          <ng-template>
+            {{ study.endDate ?
+            'From ' + study.startDate + ' to ' + study.endDate :
+            'Started on ' + study.startDate }}
+          </ng-template>
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Location name"
+          [test]="study.location && study.location.locationDbId">
+          <ng-template>
+            <a [routerLink]="['/sites', study.location.locationDbId]">
+              {{ study.location.locationName }}
+            </a>
+          </ng-template>
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Data files"
+          [test]="study.dataLinks && study.dataLinks.length != 0">
+          <ng-template>
+            <div *ngFor="let dataLink of study.dataLinks">
+              <a [href]="dataLink.url">
+                {{ dataLink.name }}
+              </a>
+            </div>
+          </ng-template>
+        </gpds-card-row>
+      </div>
+
+    </ng-template>
+  </gpds-card-section>
 
 
-<div class="row">
-  <table class="table table-sm">
-    <!--<tr>
-      <td><b>Data source</b></td>
-      <td>{{ }}</td>
-    </tr>-->
-    <tr>
-      <td><b>Name</b></td>
-      <td>{{ study.result.name }}</td>
-    </tr>
-    <tr>
-      <td><b>Program name</b></td>
-      <td>{{ study.result.programName }}</td>
-    </tr>
-    <tr>
-      <td><b>Description</b></td>
-      <td>{{ study.result.studyDescription }}</td>
-    </tr>
-    <tr>
-      <td><b>Permanent Unique Identifier</b></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><b>Active</b></td>
-      <td>{{ study.result.active }}</td>
-    </tr>
-    <tr>
-      <td><b>Seasons</b></td>
-      <td *ngFor="let season of study.result.seasons"><div>{{ season }}</div></td>
-    </tr>
-    <tr *ngIf="study.result.startDate != null">
-      <td><b>Date</b></td>
-      <td *ngIf="study.result.endDate != null; else withoutEnd">From {{ study.result.startDate }} to {{ study.result.endDate }}</td>
-      <ng-template><td>{{ study.result.startDate }}</td></ng-template>
-    </tr>
-    <tr>
-      <td><b>Location name</b></td>
-      <td>{{ study.result.locationName }}</td>
-    </tr>
-    <tr>
-      <td><b>Source</b></td>
-      <td>{{ study.result.dataLinks.name }} {{ study.result.dataLinks.documentationURL }}</td>
-    </tr>
-   <!-- <ng-container *ngFor="let info of objectKeys(study.result.additionalInfo)">
-      <tr>
-        <td><b>{{ info }}</b></td><td>{{ study.result.additionalInfo[info] }}</td>
-      </tr>
-    </ng-container>-->
-    <!--<tr>
-      <td>Additional information</td>
-      <td>{{ study.result.additionalInfo }}</td>
-    </tr>-->
-  </table>
-</div>
+  <gpds-card-section
+    header="Genotype"
+    [test]="studyGermplasms && studyGermplasms.length != 0">
+    <ng-template>
+      <gpds-card-table
+        [headers]="[
+          'Accession number',
+          'Name',
+          'Taxon'
+        ]"
+        [rows]="studyGermplasms">
+        <ng-template let-row>
+          <tr>
+            <td>
+              <a [routerLink]="['/germplasm', row.germplasmDbId]">
+                {{ row.accessionNumber }}
+              </a>
+            </td>
+            <td>{{ row.germplasmName }}</td>
+            <td>{{ row.genus }} {{ row.species }} {{ row.subtaxa }}</td>
+          </tr>
+        </ng-template>
+      </gpds-card-table>
+    </ng-template>
+  </gpds-card-section>
+
+
+  <gpds-card-section
+    header="Variables"
+    [test]="studyObservationVariables && studyObservationVariables.length != 0">
+    <ng-template>
+      <gpds-card-table
+        [headers]="[
+          'Variable id',
+          'Variable short name',
+          'Variable long name',
+          'Ontology name',
+          'Trait description'
+        ]"
+        [rows]="studyObservationVariables">
+        <ng-template let-row>
+          <tr>
+            <td>
+              <ng-template #name>{{ row.observationVariableDbId }}</ng-template>
+              <ng-template #link>
+                <a [href]=row.documentationURL>{{ row.observationVariableDbId }}</a>
+              </ng-template>
+              <ng-container *ngIf="row.documentationURL; then link else name"></ng-container>
+            </td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.synonyms[0] }}</td>
+            <td>{{ row.ontologyName }}</td>
+            <td>{{ row.trait.description }}</td>
+          </tr>
+        </ng-template>
+      </gpds-card-table>
+    </ng-template>
+  </gpds-card-section>
+
+  <gpds-card-section
+    header="Data Set"
+    [test]="studyDataset && studyDataset.length != 0">
+    <ng-template>
+      <gpds-card-table
+        [headers]="[
+          'Name',
+          'Type',
+          'Linked studies identifiers'
+        ]"
+        [rows]="studyDataset">
+        <ng-template let-row>
+          <tr>
+            <td>
+              <ng-template #name>{{ row.trialName }}</ng-template>
+              <ng-template #link>
+                <a [href]=row.documentationURL>{{ row.trialName }}</a>
+              </ng-template>
+              <ng-container *ngIf="row.documentationURL; then link else name"></ng-container>
+            </td>
+            <td>{{ row.trialType }}</td>
+            <td width="60%">
+              <ng-container *ngFor="let trialStudy of row.studies">
+                <a
+                  [routerLink]="['/studies', trialStudy.studyDbId]">
+                  {{ trialStudy.studyName.trim() }}
+                </a>;
+              </ng-container>
+            </td>
+          </tr>
+        </ng-template>
+      </gpds-card-table>
+    </ng-template>
+  </gpds-card-section>
+
+  <gpds-card-section
+    header="Contact"
+    [test]="study.contacts && study.contacts.length != 0">
+    <ng-template>
+      <gpds-card-table
+        [headers]="[
+          'Role',
+           'Name',
+           'Email',
+           'Institution'
+        ]"
+        [rows]="study.contacts">
+        <ng-template let-row>
+          <tr>
+            <td>{{ row.type }}</td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.email }}</td>
+            <td>{{ row.institutionName }}</td>
+          </tr>
+        </ng-template>
+      </gpds-card-table>
+    </ng-template>
+  </gpds-card-section>
+
+  <gpds-card-section
+    header="Additional information"
+    [test]="additionalInfos && additionalInfos.length != 0">
+    <ng-template>
+      <gpds-card-table
+        [rows]="additionalInfos">
+        <ng-template let-row>
+          <tr>
+            <td width="50%">{{ row.key }}</td>
+            <td>{{ row.value }}</td>
+          </tr>
+        </ng-template>
+      </gpds-card-table>
+    </ng-template>
+  </gpds-card-section>
+
+</ng-container>
+
