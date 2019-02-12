@@ -27,7 +27,6 @@ export class GermplasmCardComponent implements OnInit {
     loading = true;
 
 
-
     ngOnInit() {
 
         // console.log(this.route.snapshot);
@@ -37,7 +36,7 @@ export class GermplasmCardComponent implements OnInit {
         const germplasm$ = this.getGermplasm(this.germplasmId, this.germplasmPuid);
         germplasm$.then(result => {
             const germplasmId = this.germplasmId ? this.germplasmId : result.germplasmDbId;
-            const germplasmProgeny$ =  this.brapiService.germplasmProgeny(germplasmId).toPromise();
+            const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
             germplasmProgeny$
                 .then(germplasmProgeny => {
                     this.germplasmProgeny = germplasmProgeny;
