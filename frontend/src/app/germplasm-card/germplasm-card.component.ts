@@ -30,6 +30,8 @@ export class GermplasmCardComponent implements OnInit {
 
     ngOnInit() {
 
+        // console.log(this.route.snapshot);
+        // console.log(this.route);
         this.germplasmId = this.route.snapshot.queryParams.id;
         this.germplasmPuid = this.route.snapshot.queryParams.pui;
         const germplasm$ = this.getGermplasm(this.germplasmId, this.germplasmPuid);

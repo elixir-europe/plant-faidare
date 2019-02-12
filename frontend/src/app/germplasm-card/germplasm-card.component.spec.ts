@@ -1,9 +1,9 @@
 import { async, TestBed } from '@angular/core/testing';
 import { GermplasmCardComponent } from './germplasm-card.component';
-import { ComponentTester, fakeRoute, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { GnpisService } from '../gnpis.service';
 import { BrapiService } from '../brapi.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import {
@@ -21,8 +21,6 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'ngx-moment';
 
 describe('GermplasmCardComponent', () => {
-
-
 
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
 
@@ -55,10 +53,6 @@ describe('GermplasmCardComponent', () => {
             'germplasmByPuid'
         ]
     );
-
-    const activatedRoute = fakeRoute({
-        params: of({ id: 'test' })
-    });
 
     const brapiSite: BrapiSite = {
         latitude: null,
@@ -211,9 +205,18 @@ describe('GermplasmCardComponent', () => {
                 GermplasmCardComponent
             ],
             providers: [
-                { provide: ActivatedRoute, useValue: activatedRoute },
+                // { provide: ActivatedRoute, useValue: activatedRoute },
                 { provide: BrapiService, useValue: brapiService },
-                { provide: GnpisService, useValue: gnpisService }
+                { provide: GnpisService, useValue: gnpisService },
+                { provide: ActivatedRoute,
+                    useValue: {
+                        snapshot: {
+                            queryParams: convertToParamMap({
+                                id: 'test'
+                            })
+                        }
+                    }
+                }
             ]
         });
     }));
