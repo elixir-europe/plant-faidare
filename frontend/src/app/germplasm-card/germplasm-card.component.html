@@ -138,11 +138,6 @@
     </div>
 
     <div class="container">
-      <div class="row">
-        <div class="col">
-          <h4>Origin</h4>
-        </div>
-      </div>
       <div class="row" *ngIf="germplasmGnpis.holdingInstitute!=null">
         <div class="col">
           <table class="table table-sm .table-responsive{-sm|-md|-lg|-xl}">
@@ -662,7 +657,7 @@
               <ng-container *ngFor="let collection of germplasmGnpis.collection">
                 <tr>
                   <th class="fieldName" scope="row">{{ collection.name }}</th>
-                  <td class="ellipsis field"><a href="/form/germplasmLists={{ collection.name }}&types=Germplasm">
+                  <td class="ellipsis field"><a href="/gnpis-core/?germplasmLists={{ collection.name }}&types=Germplasm">
                     {{ collection.germplasmCount }} accessions</a>
                   </td>
                 </tr>
@@ -680,7 +675,7 @@
               <ng-container *ngFor="let panel of germplasmGnpis.panel">
                 <tr>
                   <th class="fieldName" scope="row">{{ panel.name }}</th>
-                  <td class="field"><a href="/form/germplasmLists={{ panel.name }}&types=Germplasm">
+                  <td class="field"><a href="/gnpis-core/?germplasmLists={{ panel.name }}&types=Germplasm">
                     {{ panel.germplasmCount }} accessions</a></td>
                 </tr>
               </ng-container>

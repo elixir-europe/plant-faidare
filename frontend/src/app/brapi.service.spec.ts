@@ -1,11 +1,5 @@
-import { TestBed } from '@angular/core/testing';
 import { BrapiService } from './brapi.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import {
-    BrapiDescriptor,
-    BrapiDonor,
-    BrapiGermplasmAttributes,
-    BrapiGermplasmAttributes,
     BrapiContacts,
     BrapiGermplasm,
     BrapiLocation,
@@ -17,28 +11,19 @@ import {
 } from './models/brapi.model';
 import { DataDiscoverySource } from './models/data-discovery.model';
 import {
-    BrapiDescriptor, BrapiDonor,
+    BrapiDescriptor,
+    BrapiDonor,
+    BrapiGermplasmAttributes,
     BrapiGermplasmPedigree,
     BrapiGermplasmProgeny,
     BrapiSet,
-    BrapiSibling,
-    BrapiSite
+    BrapiSibling
 } from './models/brapi.germplasm.model';
-import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin } from './models/gnpis.germplasm.model';
+import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin, Site } from './models/gnpis.germplasm.model';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 
 describe('BrapiService', () => {
-    let brapiService: BrapiService;
-    let http: HttpTestingController;
-
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule]
-        });
-        brapiService = TestBed.get(BrapiService);
-        http = TestBed.get(HttpTestingController);
-    });
-
-    afterAll(() => http.verify());
 
     const location: BrapiLocation = {
         locationDbId: '1',
@@ -151,80 +136,7 @@ describe('BrapiService', () => {
         'schema:image': null
     };
 
-    it('should fetch the study', () => {
-        let fetchedStudy: BrapiResult<BrapiStudy>;
-        const studyDbId: string = searchStudy.result.studyDbId;
-        brapiService.study(searchStudy.result.studyDbId).subscribe(response => {
-            fetchedStudy = response;
-        });
-        http.expectOne(`brapi/v1/studies/${studyDbId}`)
-            .flush(searchStudy);
-
-        expect(fetchedStudy).toEqual(searchStudy);
-
-    });
-
-    it('should fetch the germplasm', () => {
-
-        let fetchedGermplasm: BrapiResults<BrapiGermplasm>;
-        const studyDbId: string = searchStudy.result.studyDbId;
-        brapiService.studyGermplasms(searchStudy.result.studyDbId).subscribe(response => {
-            fetchedGermplasm = response;
-        });
-        http.expectOne(`brapi/v1/studies/${studyDbId}/germplasm`)
-            .flush(germplasm);
-
-        expect(fetchedGermplasm).toEqual(germplasm);
-
-    });
-
-    it('should fetch the variables', () => {
-
-        let fetchedVariables: BrapiResults<BrapiObservationVariable>;
-        const studyDbId: string = searchStudy.result.studyDbId;
-        brapiService.studyObservationVariables(searchStudy.result.studyDbId).subscribe(response => {
-            fetchedVariables = response;
-        });
-        http.expectOne(`brapi/v1/studies/${studyDbId}/observationVariables`)
-            .flush(osbVariable);
-
-        expect(fetchedVariables).toEqual(osbVariable);
-
-    });
-
-    it('should fetch the trials', () => {
-
-        let fetchedTrials: BrapiResult<BrapiTrial>;
-        const trialDbId: string = trial1.result.trialDbId;
-        brapiService.studyTrials(trialDbId).subscribe(response => {
-            fetchedTrials = response;
-        });
-        http.expectOne(`brapi/v1/trials/${trialDbId}`)
-            .flush(trial1);
-
-        expect(fetchedTrials).toEqual(trial1);
-
-    });
-
-    it('should fetch 1 location', () => {
-        const mockResponse: BrapiResult<BrapiLocation> = {
-            metadata: null,
-            result: location
-        };
-        let actualLocation: BrapiLocation;
-        const locationId = mockResponse.result.locationDbId;
-        brapiService.location(mockResponse.result.locationDbId).subscribe(response => actualLocation = response.result);
-
-        http.expectOne(`brapi/v1/locations/${locationId}`)
-            .flush(mockResponse);
-
-        expect(actualLocation).toEqual(location);
-    });
-
-
-    afterAll(() => http.verify());
-
-    const brapiSite: BrapiSite = {
+    const brapiSite: Site = {
         latitude: null,
         longitude: null,
         siteId: null,
@@ -244,8 +156,8 @@ describe('BrapiService', () => {
     };
 
     const brapiGermplasmPedigree: GermplasmResult<BrapiGermplasmPedigree> = {
-        result : {
-            germplasmDbId: '12',
+        result: {
+            germplasmDbId: 'test',
             defaultDisplayName: '12',
             pedigree: null,
             crossingPlan: null,
@@ -263,7 +175,7 @@ describe('BrapiService', () => {
 
     const brapiGermplasmProgeny: GermplasmResult<BrapiGermplasmProgeny> = {
         result: {
-            germplasmDbId: '11',
+            germplasmDbId: 'test',
             defaultDisplayName: '11',
             progeny: [brapiSibling]
         }
@@ -309,7 +221,7 @@ describe('BrapiService', () => {
 
     const brapiGermplasmAttributes: GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>> = {
         result: {
-            data: [ {
+            data: [{
                 attributeName: 'longueur',
                 value: '30'
             }]
@@ -367,58 +279,126 @@ describe('BrapiService', () => {
     const germplasmResultTest = {
         result: germplasmTest
     };
-    const germplasmResultTest = {
-        result: germplasmTest
-    };
+
+    let brapiService: BrapiService;
+    let http: HttpTestingController;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule]
+        });
+        brapiService = TestBed.get(BrapiService);
+        http = TestBed.get(HttpTestingController);
+    });
+
+    afterEach(() => http.verify());
+
+    it('should fetch the study', () => {
+        let fetchedStudy: BrapiResult<BrapiStudy>;
+        const studyDbId: string = searchStudy.result.studyDbId;
+        brapiService.study(searchStudy.result.studyDbId).subscribe(response => {
+            fetchedStudy = response;
+        });
+        http.expectOne(`brapi/v1/studies/${studyDbId}`)
+            .flush(searchStudy);
+
+        expect(fetchedStudy).toEqual(searchStudy);
+
+    });
+
+    it('should fetch the germplasm of studies call', () => {
+
+        let fetchedGermplasm: BrapiResults<BrapiGermplasm>;
+        const studyDbId: string = searchStudy.result.studyDbId;
+        brapiService.studyGermplasms(searchStudy.result.studyDbId).subscribe(response => {
+            fetchedGermplasm = response;
+        });
+        http.expectOne(`brapi/v1/studies/${studyDbId}/germplasm`)
+            .flush(germplasm);
+
+        expect(fetchedGermplasm).toEqual(germplasm);
+
+    });
+
+    it('should fetch the variables', () => {
+
+        let fetchedVariables: BrapiResults<BrapiObservationVariable>;
+        const studyDbId: string = searchStudy.result.studyDbId;
+        brapiService.studyObservationVariables(searchStudy.result.studyDbId).subscribe(response => {
+            fetchedVariables = response;
+        });
+        http.expectOne(`brapi/v1/studies/${studyDbId}/observationVariables`)
+            .flush(osbVariable);
+
+        expect(fetchedVariables).toEqual(osbVariable);
+
+    });
+
+    it('should fetch the trials', () => {
+
+        let fetchedTrials: BrapiResult<BrapiTrial>;
+        const trialDbId: string = trial1.result.trialDbId;
+        brapiService.studyTrials(trialDbId).subscribe(response => {
+            fetchedTrials = response;
+        });
+        http.expectOne(`brapi/v1/trials/${trialDbId}`)
+            .flush(trial1);
+
+        expect(fetchedTrials).toEqual(trial1);
+
+    });
+
+    it('should fetch 1 location', () => {
+        const mockResponse: BrapiResult<BrapiLocation> = {
+            metadata: null,
+            result: location
+        };
+        let actualLocation: BrapiLocation;
+        const locationId = mockResponse.result.locationDbId;
+        brapiService.location(mockResponse.result.locationDbId).subscribe(response => actualLocation = response.result);
+
+        http.expectOne(`brapi/v1/locations/${locationId}`)
+            .flush(mockResponse);
+
+        expect(actualLocation).toEqual(location);
+    });
+
     it('should fetch the pedigree', () => {
 
         let fetchedGermplasmPedigree: GermplasmResult<BrapiGermplasmPedigree>;
-        const germplasmDbId: string = brapiGermplasmPedigree.germplasmDbId;
+        const germplasmDbId: string = brapiGermplasmPedigree.result.germplasmDbId;
         brapiService.germplasmPedigree(germplasmDbId).subscribe(response => {
             fetchedGermplasmPedigree = response;
         });
-
-        http.expectOne(`/gnpis/v1/germplasm/pedigree/${germplasmDbId}`)
-            .flush(germplasmTest);
-
-        expect(fetchedGermplasmPedigree).toEqual(brapiGermplasmPedigree);
-
-    });
-
-    it('should fetch the progeny', () => {
-
-        let fetchedGermplasmProgeny: GermplasmResult<BrapiGermplasmProgeny>;
-        const germplasmDbId: string = brapiGermplasmProgeny.germplasmDbId;
-        brapiService.germplasmProgeny(germplasmDbId).subscribe(response => {
-            fetchedGermplasmProgeny = response;
-        });
-        http.expectOne(`/brapi/v1/germplasm/${germplasmDbId}/progeny`)
-            .flush(brapiGermplasmProgeny);
-
-        expect(fetchedGermplasmProgeny).toEqual(brapiGermplasmProgeny);
-
-    });
-
-    it('should fetch the germplasm', () => {
-        let fetchedGermplasmPedigree: GermplasmResult<BrapiGermplasmPedigree>;
-        const germplasmDbId: string = germplasmTest.germplasmDbId;
-        brapiService.germplasmPedigree(germplasmDbId).subscribe(response => {
-            fetchedGermplasmPedigree = response;
-        });
-        http.expectOne(`/brapi/v1/germplasm/${germplasmDbId}/pedigree`)
+        http.expectOne(`brapi/v1/germplasm/${germplasmDbId}/pedigree`)
             .flush(brapiGermplasmPedigree);
 
         expect(fetchedGermplasmPedigree).toEqual(brapiGermplasmPedigree);
 
     });
 
+    it('should fetch the germplasm progeny', () => {
+
+        let fetchedGermplasmProgeny: GermplasmResult<BrapiGermplasmProgeny>;
+        const germplasmDbId: string = brapiGermplasmProgeny.result.germplasmDbId;
+        brapiService.germplasmProgeny(germplasmDbId).subscribe(response => {
+            fetchedGermplasmProgeny = response;
+        });
+        http.expectOne(`brapi/v1/germplasm/${germplasmDbId}/progeny`)
+            .flush(brapiGermplasmProgeny);
+
+        expect(fetchedGermplasmProgeny).toEqual(brapiGermplasmProgeny);
+
+    });
+
     it('should fetch the germplasm attributes', () => {
+
         let fetchedGermplasmAttributes: GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>>;
         const germplasmDbId: string = germplasmTest.germplasmDbId;
         brapiService.germplasmAttributes(germplasmDbId).subscribe(response => {
             fetchedGermplasmAttributes = response;
         });
-        http.expectOne(`/brapi/v1/germplasm/${germplasmDbId}/attributes`)
+        http.expectOne(`brapi/v1/germplasm/${germplasmDbId}/attributes`)
             .flush(brapiGermplasmAttributes);
 
         expect(fetchedGermplasmAttributes).toEqual(brapiGermplasmAttributes);

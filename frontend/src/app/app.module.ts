@@ -1,9 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
 import { FormComponent } from './form/form.component';
 import { ResultPageComponent } from './result-page/result-page.component';
 import { GermplasmCardComponent } from './germplasm-card/germplasm-card.component';
@@ -12,7 +10,7 @@ import { SiteCardComponent } from './site-card/site-card.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
-import { NgbAlertModule, NgbDropdownModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbDropdownModule, NgbPaginationModule, NgbPopoverModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SuggestionFieldComponent } from './form/suggestion-field/suggestion-field.component';
 import { DocumentComponent } from './result-page/document/document.component';
@@ -24,12 +22,11 @@ import { CardRowComponent } from './card-row/card-row.component';
 import { CardSectionComponent } from './card-section/card-section.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { CardTableComponent } from './card-table/card-table.component';
-import { MomentModule, DateFormatPipe } from 'ngx-moment';
+import { MomentModule } from 'ngx-moment';
 
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent,
         FormComponent,
         ResultPageComponent,
         GermplasmCardComponent,

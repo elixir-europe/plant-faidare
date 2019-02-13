@@ -134,7 +134,7 @@
         <ng-template let-row>
           <tr>
             <td>
-              <a [routerLink]="['/germplasm', row.germplasmDbId]">
+              <a [routerLink]="'/germplasm'" [queryParams]="{id:row.germplasmDbId}">
                 {{ row.accessionNumber }}
               </a>
             </td>

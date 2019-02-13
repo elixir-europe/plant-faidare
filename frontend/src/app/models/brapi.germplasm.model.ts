@@ -1,12 +1,5 @@
 import { Institute } from './gnpis.germplasm.model';
 
-export interface BrapiSite {
-    latitude: number;
-    longitude: number;
-    siteId: number;
-    siteName: string;
-    siteType: string;
-}
 
 export interface BrapiSibling {
     germplasmDbId: string;

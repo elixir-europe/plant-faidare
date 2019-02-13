@@ -1,4 +1,12 @@
-import { BrapiDescriptor, BrapiDonor, BrapiSet, BrapiSite } from './brapi.germplasm.model';
+import { BrapiDescriptor, BrapiDonor, BrapiSet } from './brapi.germplasm.model';
+
+export interface Site {
+    latitude: number;
+    longitude: number;
+    siteId: number;
+    siteName: string;
+    siteType: string;
+}
 
 export interface Germplasm {
     source: string;
@@ -37,9 +45,9 @@ export interface Germplasm {
     presenceStatus: string;
     children: string;
     descriptors: BrapiDescriptor[];
-    originSite: BrapiSite;
-    collectingSite: BrapiSite;
-    evaluationSites: BrapiSite[];
+    originSite: Site;
+    collectingSite: Site;
+    evaluationSites: Site[];
     collector: Origin;
     breeder: Origin;
     distributors: Origin[];

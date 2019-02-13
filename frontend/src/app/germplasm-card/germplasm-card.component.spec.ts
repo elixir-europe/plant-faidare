@@ -13,10 +13,9 @@ import {
     BrapiGermplasmPedigree,
     BrapiGermplasmProgeny,
     BrapiSet,
-    BrapiSibling,
-    BrapiSite
+    BrapiSibling
 } from '../models/brapi.germplasm.model';
-import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin } from '../models/gnpis.germplasm.model';
+import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin, Site } from '../models/gnpis.germplasm.model';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'ngx-moment';
 
@@ -54,7 +53,7 @@ describe('GermplasmCardComponent', () => {
         ]
     );
 
-    const brapiSite: BrapiSite = {
+    const brapiSite: Site = {
         latitude: null,
         longitude: null,
         siteId: null,

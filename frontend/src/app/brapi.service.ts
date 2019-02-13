@@ -24,39 +24,47 @@ export class BrapiService {
     }
 
     germplasm(germplasmDbId: string): Observable<Germplasm> {
-        return this.http.get<Germplasm>(`/brapi/v1/germplasm/${germplasmDbId}`);
+        return this.http
+            .get<Germplasm>(`${BASE_URL}/germplasm/${germplasmDbId}`);
     }
 
     germplasmPedigree(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmPedigree>> {
-        return this.http.get<GermplasmResult<BrapiGermplasmPedigree>>(`/brapi/v1/germplasm/${germplasmDbId}/pedigree`);
+        return this.http
+            .get<GermplasmResult<BrapiGermplasmPedigree>>(`${BASE_URL}/germplasm/${germplasmDbId}/pedigree`);
     }
 
     germplasmProgeny(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmProgeny>> {
-        return this.http.get<GermplasmResult<BrapiGermplasmProgeny>>(`/brapi/v1/germplasm/${germplasmDbId}/progeny`);
+        return this.http.get<GermplasmResult<BrapiGermplasmProgeny>>(`${BASE_URL}/germplasm/${germplasmDbId}/progeny`);
     }
 
     germplasmAttributes(germplasmDbId: string): Observable<GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>>> {
-        return this.http.get<GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>>>(`/brapi/v1/germplasm/${germplasmDbId}/attributes`);
+        return this.http
+            .get<GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>>>(`${BASE_URL}/germplasm/${germplasmDbId}/attributes`);
     }
 
     study(studyDbId: string): Observable<BrapiResult<BrapiStudy>> {
         const options = { headers: { 'Accept': 'application/ld+json,application/json' } };
-        return this.http.get<BrapiResult<BrapiStudy>>(`${BASE_URL}/studies/${studyDbId}`, options);
+        return this.http
+            .get<BrapiResult<BrapiStudy>>(`${BASE_URL}/studies/${studyDbId}`, options);
     }
 
     studyGermplasms(studyDbId: string): Observable<BrapiResults<BrapiGermplasm>> {
-        return this.http.get<BrapiResults<BrapiGermplasm>>(`${BASE_URL}/studies/${studyDbId}/germplasm`);
+        return this.http
+            .get<BrapiResults<BrapiGermplasm>>(`${BASE_URL}/studies/${studyDbId}/germplasm`);
     }
 
     studyObservationVariables(studyDbId: string): Observable<BrapiResults<BrapiObservationVariable>> {
-        return this.http.get<BrapiResults<BrapiObservationVariable>>(`${BASE_URL}/studies/${studyDbId}/observationVariables`);
+        return this.http
+            .get<BrapiResults<BrapiObservationVariable>>(`${BASE_URL}/studies/${studyDbId}/observationVariables`);
     }
 
     location(locationId: string): Observable<BrapiResult<BrapiLocation>> {
-        return this.http.get<BrapiResult<BrapiLocation>>(`${BASE_URL}/locations/${locationId}`);
+        return this.http
+            .get<BrapiResult<BrapiLocation>>(`${BASE_URL}/locations/${locationId}`);
     }
 
     studyTrials(trialsId: string): Observable<BrapiResult<BrapiTrial>> {
-        return this.http.get<BrapiResult<BrapiTrial>>(`${BASE_URL}/trials/${trialsId}`);
+        return this.http
+            .get<BrapiResult<BrapiTrial>>(`${BASE_URL}/trials/${trialsId}`);
     }
 }

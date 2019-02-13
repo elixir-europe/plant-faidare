@@ -1,44 +1,13 @@
-import { Germplasm, GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
-import { Germplasm, GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
+import { Germplasm, Institute, Origin, Site } from './models/gnpis.germplasm.model';
+
+import { BASE_URL, BASE_URL_GERMPLASM, GnpisService } from './gnpis.service';
+import { BrapiMetaData, BrapiResults } from './models/brapi.model';
+import { DataDiscoveryCriteria, DataDiscoverySource } from './models/data-discovery.model';
+import { BrapiDescriptor, BrapiDonor, BrapiSet } from './models/brapi.germplasm.model';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { BASE_URL, GnpisService } from './gnpis.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { BrapiMetaData } from './models/brapi.model';
-import { DataDiscoveryCriteria } from './models/data-discovery.model';
-import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin } from './models/gnpis.germplasm.model';
-import {
-    BrapiDescriptor,
-    BrapiDonor,
-    BrapiGermplasmAttributes,
-    BrapiGermplasmPedigree,
-    BrapiGermplasmProgeny,
-    BrapiInstitute,
-    BrapiOrigin,
-    BrapiSet,
-    BrapiSibling,
-    BrapiSite
-} from './models/brapi.germplasm.model';
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { GnpisService } from './gnpis.service';
-
 describe('GnpisService', () => {
-    let gnpisService: GnpisService;
-    let http: HttpTestingController;
-
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule]
-        });
-        gnpisService = TestBed.get(GnpisService);
-        http = TestBed.get(HttpTestingController);
-    });
-    afterAll(() => http.verify());
-describe('GnpisService', () => {
-
-    let service: GnpisService;
-    let httpMock;
 
     const source1: DataDiscoverySource = {
         '@id': 'id1',
@@ -57,108 +26,18 @@ describe('GnpisService', () => {
         'schema:image': 'image2',
     };
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
-            providers: [HttpClientTestingModule]
-        });
-
-        httpMock = TestBed.get(HttpTestingController);
-
-        const sources: BrapiResults<DataDiscoverySource> = {
-            result: {
-                data: [source1, source2]
-            }, metadata: {} as BrapiMetaData
-        };
-
-        service = TestBed.get(GnpisService);
-        const req = httpMock.expectOne({
-            method: 'GET',
-            url: `${BASE_URL}/sources`
-        });
-        req.flush(sources);
-
-    });
-
-    it('should suggest with criteria', () => {
-        const expectedSuggestions = ['a', 'b', 'c'];
-        const field = 'foo';
-        const text = 'bar';
-        const criteria = { crops: ['d'] } as DataDiscoveryCriteria;
-        const fetchSize = 3;
-
-        service.suggest(field, fetchSize, text, criteria).subscribe(suggestions => {
-            expect(suggestions.length).toBe(3);
-            expect(suggestions).toBe(expectedSuggestions);
-        });
-
-        const req = httpMock.expectOne({
-            url: `${BASE_URL}/suggest?field=${field}&text=${text}&fetchSize=${fetchSize}`,
-            method: 'POST'
-        });
-        req.flush(expectedSuggestions);
-        expect(req.request.body).toBe(criteria);
-    });
-
-    let gnpisService: GnpisService;
-    let http: HttpTestingController;
-
-    let gnpisService: GnpisService;
-    let http: HttpTestingController;
-    beforeEach(() => {
-
-        TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule]
-        });
-        gnpisService = TestBed.get(GnpisService);
-        http = TestBed.get(HttpTestingController);
-    });
-    afterAll(() => http.verify());
-
-    const brapiSite: BrapiSite = {
+    const site: Site = {
         latitude: null,
         longitude: null,
-        siteId: null,
-        siteName: null,
+        siteId: 1,
+        siteName: 'Nantes',
         siteType: null
-    };
-
-    const brapiSibling: BrapiSibling = {
-        germplasmDbId: 'frere1',
-        defaultDisplayName: 'frere1'
     };
 
     const brapiDescriptor: BrapiDescriptor = {
         name: 'caracteristique1',
         pui: '12',
         value: '32'
-    };
-
-    const brapiGermplasmPedigree: GermplasmResult<BrapiGermplasmPedigree> = {
-        result: {
-            germplasmDbId: '12',
-            defaultDisplayName: '12',
-            pedigree: null,
-            crossingPlan: null,
-            crossingYear: null,
-            familyCode: null,
-            parent1DbId: '11',
-            parent1Name: 'parent',
-            parent1Type: 'SELF',
-            parent2DbId: null,
-            parent2Name: null,
-            parent2Type: null,
-            siblings: [brapiSibling]
-        }
-    };
-
-    const brapiGermplasmProgeny: GermplasmResult<BrapiGermplasmProgeny> = {
-        result: {
-            germplasmDbId: '11',
-            defaultDisplayName: '11',
-            progeny: [brapiSibling]
-        }
-
     };
 
     const brapiInstitute: Institute = {
@@ -199,15 +78,6 @@ describe('GnpisService', () => {
         type: 'plan'
     };
 
-    const brapiGermplasmAttributes: GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>> = {
-        result: {
-            data: [{
-                attributeName: 'longueur',
-                value: '30'
-            }]
-        }
-    };
-
     const germplasmTest: Germplasm = {
         url: 'www.cirad.fr',
         source: 'cirad',
@@ -245,7 +115,7 @@ describe('GnpisService', () => {
         presenceStatus: null,
         children: null,
         descriptors: [brapiDescriptor],
-        originSite: null,
+        originSite: site,
         collectingSite: null,
         evaluationSites: null,
         collector: brapiOrigin,
@@ -256,14 +126,56 @@ describe('GnpisService', () => {
         population: [brapiSet]
     };
 
-    const germplasmResultTest = {
-        result: germplasmTest
-    };
+    let gnpisService: GnpisService;
+    let http: HttpTestingController;
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+            providers: [HttpClientTestingModule]
+        });
+        gnpisService = TestBed.get(GnpisService);
+        http = TestBed.get(HttpTestingController);
 
-    it('should be created', () => {
-        const service: GnpisService = TestBed.get(GnpisService);
-        expect(service).toBeTruthy();
+        const sources: BrapiResults<DataDiscoverySource> = {
+            result: {
+                data: [source1, source2]
+            }, metadata: {} as BrapiMetaData
+        };
+
+        const req = http.expectOne({
+            method: 'GET',
+            url: `${BASE_URL}/sources`
+        });
+        req.flush(sources);
+
     });
+
+
+    afterEach(() => http.verify());
+
+
+    it('should suggest with criteria', () => {
+        const expectedSuggestions = ['a', 'b', 'c'];
+        const field = 'foo';
+        const text = 'bar';
+        const criteria = { crops: ['d'] } as DataDiscoveryCriteria;
+        const fetchSize = 3;
+
+        gnpisService.suggest(field, fetchSize, text, criteria).subscribe(suggestions => {
+            expect(suggestions.length).toBe(3);
+            expect(suggestions).toBe(expectedSuggestions);
+        });
+
+        const req = http.expectOne({
+            url: `${BASE_URL}/suggest?field=${field}&text=${text}&fetchSize=${fetchSize}`,
+            method: 'POST'
+        });
+        req.flush(expectedSuggestions);
+        expect(req.request.body).toBe(criteria);
+    });
+
+
+    afterAll(() => http.verify());
 
     it('should fetch the germplasm', () => {
         let fetchedGermplasm: Germplasm;
@@ -271,62 +183,61 @@ describe('GnpisService', () => {
         gnpisService.germplasm(germplasmDbId).subscribe(response => {
             fetchedGermplasm = response;
         });
-        http.expectOne(`/gnpis/v1/germplasm?id=${germplasmDbId}`)
+        http.expectOne(`${BASE_URL_GERMPLASM}/germplasm?id=${germplasmDbId}`)
             .flush(germplasmTest);
 
         expect(fetchedGermplasm).toEqual(germplasmTest);
     });
-});
 
-it('should search documents with criteria', () => {
-    const rawResult = {
-        metadata: {} as BrapiMetaData,
-        result: {
-            data: [{
-                '@type': ['Germplasm'],
-                '@id': 'urn',
-                'schema:identifier': 'schema',
-                'schema:name': 'doc_name',
-                'schema:url': 'http://dco/url',
-                'schema:description': 'description',
-                'schema:includedInDataCatalog': source1['@id']
-            }, {
-                '@type': ['Phenotyping Study'],
-                '@id': 'urn',
-                'schema:identifier': 'schema',
-                'schema:name': 'doc_name',
-                'schema:url': 'http://dco/url',
-                'schema:description': 'description',
-                'schema:includedInDataCatalog': source2['@id']
-            }]
-        },
-        facets: []
-    };
+    it('should search documents with criteria', () => {
+        const rawResult = {
+            metadata: {} as BrapiMetaData,
+            result: {
+                data: [{
+                    '@type': ['Germplasm'],
+                    '@id': 'urn',
+                    'schema:identifier': 'schema',
+                    'schema:name': 'doc_name',
+                    'schema:url': 'http://dco/url',
+                    'schema:description': 'description',
+                    'schema:includedInDataCatalog': source1['@id']
+                }, {
+                    '@type': ['Phenotyping Study'],
+                    '@id': 'urn',
+                    'schema:identifier': 'schema',
+                    'schema:name': 'doc_name',
+                    'schema:url': 'http://dco/url',
+                    'schema:description': 'description',
+                    'schema:includedInDataCatalog': source2['@id']
+                }]
+            },
+            facets: []
+        };
 
-    const criteria = { crops: ['d'] } as DataDiscoveryCriteria;
+        const criteria = { crops: ['d'] } as DataDiscoveryCriteria;
 
-    service.search(criteria).subscribe(result => {
-        expect(result.result.data.length).toBe(2);
-        expect(result.result.data[0]['schema:includedInDataCatalog']).toEqual(source1);
-        expect(result.result.data[1]['schema:includedInDataCatalog']).toEqual(source2);
+        gnpisService.search(criteria).subscribe(result => {
+            expect(result.result.data.length).toBe(2);
+            expect(result.result.data[0]['schema:includedInDataCatalog']).toEqual(source1);
+            expect(result.result.data[1]['schema:includedInDataCatalog']).toEqual(source2);
+        });
+
+        const req = http.expectOne({
+            url: `${BASE_URL}/search`,
+            method: 'POST'
+        });
+        req.flush(rawResult);
+
+        expect(req.request.body).toBe(criteria);
     });
 
-    const req = httpMock.expectOne({
-        url: `${BASE_URL}/search`,
-        method: 'POST'
-    });
-    req.flush(rawResult);
-
-    expect(req.request.body).toBe(criteria);
-});
-
-it('should fetch sources', () => {
-    service.sourceByURI$.subscribe(sourceByURI => {
-        expect(sourceByURI).toEqual({
-            'id1': source1,
-            'id2': source2
+    it('should fetch sources', () => {
+        gnpisService.sourceByURI$.subscribe(sourceByURI => {
+            expect(sourceByURI).toEqual({
+                'id1': source1,
+                'id2': source2
+            });
         });
     });
-});
 })
 ;

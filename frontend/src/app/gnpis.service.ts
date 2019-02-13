@@ -5,10 +5,10 @@ import { Germplasm } from './models/gnpis.germplasm.model';
 import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDiscoverySource } from './models/data-discovery.model';
 import { BrapiResults } from './models/brapi.model';
 import { map } from 'rxjs/operators';
-import { GermplasmResult } from './models/gnpis.germplasm.model';
 
 
 export const BASE_URL = 'gnpis/v1/datadiscovery';
+export const BASE_URL_GERMPLASM = 'gnpis/v1';
 
 @Injectable({
     providedIn: 'root'
@@ -92,18 +92,18 @@ export class GnpisService {
         }));
     }
 
+    germplasm(germplasmDbId: string): Observable<Germplasm> {
+        return this.http.get<Germplasm>(`${BASE_URL_GERMPLASM}/germplasm?id=${germplasmDbId}`);
+    }
+
+    germplasmByPuid(pui: string): Observable<Germplasm> {
+        return this.http.get<Germplasm>(`${BASE_URL_GERMPLASM}/germplasm?pui=${pui}`);
+    }
+
     /**
      * Get data source by URI
      */
     getSource(sourceURI: string): Observable<DataDiscoverySource> {
         return this.sourceByURI$.pipe(map(sourceByURI => sourceByURI[sourceURI]));
-    }
-
-    germplasm(germplasmDbId: string): Observable<Germplasm> {
-        return this.http.get<Germplasm>(`/gnpis/v1/germplasm?id=${germplasmDbId}`);
-    }
-
-    germplasmByPuid(pui: string): Observable<Germplasm> {
-        return this.http.get<Germplasm>(`/gnpis/v1/germplasm?pui=${pui}`);
     }
 }
