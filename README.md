@@ -105,7 +105,7 @@ The details of this remote server are filled in the `bootstrap.yml` file.
 By default, it tries to connect to the remote server on http://localhost:8888
 but it can of course be changed, or even configured via the `SPRING_CONFIG_URI` environment variable.
 
-It will try to fetch the configuration for the application name `rare`, and the default profile.
+It will try to fetch the configuration for the application name `gpds`, and the default profile.
 If such a configuration is not found, it will then fallback to the local `application.yml` properties.
 To avoid running the Spring Cloud config server every time when developing the application,
 all the properties are still available in `application.yml` even if they are configured on the remote Spring Cloud server as well.
@@ -114,7 +114,7 @@ If you want to use the Spring Cloud config app locally,
 see https://forgemia.inra.fr/urgi-is/data-discovery-config
 
 The configuration is currently only read on startup,
-meaning the application has to be reboot if the configuration is changed on the Spring Cloud server.
+meaning the application has to be rebooted if the configuration is changed on the Spring Cloud server.
 For a dynamic reload without restarting the application,
 see http://cloud.spring.io/spring-cloud-static/Finchley.SR1/single/spring-cloud.html#refresh-scope
 to check what has to be changed.
@@ -124,14 +124,4 @@ and append the `--spring.cloud.config.label=<branch name to test>` parameter whe
 More info on how pass a parameter to a Spring Boot app:
 https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config
 
-### Application port & context path
-
-|                | GPDS GnpIS               |
-| :------------: | :----------------------  |
-| dev            | :8060/gnpis/gpds         |
-| beta           | :8061/gnpis/gpds-beta    |
-| staging        | :8062/staging/gnpis/gpds |
-| prod           | :8063/gnpis/gpds         |
-| private prod   | :8064/private/gnpis/gpds |
-| private beta   | :8065/beta/gnpis/gpds    |
-| private int    | :8066/int/gnpis/gpds     |
+See the [`data-discovery-config` README.md file](https://forgemia.inra.fr/urgi-is/data-discovery-config/blob/master/README.md) for the list of application environments (server ports and context paths).
