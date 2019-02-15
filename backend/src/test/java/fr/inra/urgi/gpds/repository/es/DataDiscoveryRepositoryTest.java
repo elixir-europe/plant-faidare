@@ -139,6 +139,7 @@ class DataDiscoveryRepositoryTest {
         DataDiscoveryCriteriaImpl criteria = new DataDiscoveryCriteriaImpl();
         criteria.setPage(0L);
         criteria.setPageSize(2L);
+        criteria.setSortBy("@id");
         DataDiscoveryResponse result = repository.find(criteria);
         assertThat(result.getResult().getData().size()).isEqualTo(2);
         assertThat(result.getResult().getData().get(0).getIdentifier()).isEqualTo("foo_study");
@@ -146,6 +147,7 @@ class DataDiscoveryRepositoryTest {
 
         criteria.setPage(1L);
         criteria.setPageSize(3L);
+        criteria.setSortBy("@id");
         result = repository.find(criteria);
         assertThat(result.getResult().getData().size()).isEqualTo(3);
         assertThat(result.getResult().getData().get(0).getIdentifier()).isEqualTo("foo2_germplasm");
