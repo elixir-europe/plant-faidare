@@ -1,3 +1,4 @@
+<gpds-loading-spinner [loading]="loading" class="display-spinner-front rounded"></gpds-loading-spinner>
 
 <ng-container *ngIf="germplasmGnpis">
   <h3>
@@ -10,7 +11,7 @@
         <div class="col-md-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFileName != null">
           <figure class="figure">
             <img
-              src="https://urgi.versailles.inra.fr/files/siregal/images//accession/{{ germplasmGnpis.holdingGenbank.instituteCode }}/{{ germplasmGnpis.photo.thumbnailFileName }}"
+              src="{{ IMAGES_SIREGAL_URL }}/{{ germplasmGnpis.holdingGenbank.instituteCode }}/{{ germplasmGnpis.photo.thumbnailFileName }}"
               class="img-fluid">
             <figcaption class="figure-caption">
               <a class="btn popovers" data-boundary="window" placement="right" [ngbPopover]="imageTemplate"
@@ -23,7 +24,7 @@
           <ng-template #imageTemplate>
             <div class="card ngb-popover-window ">
               <img class="card-img-top"
-                   src="https://urgi.versailles.inra.fr/files/siregal/images//accession/{{ germplasmGnpis.holdingGenbank.instituteCode }}/{{ germplasmGnpis.photo.fileName }}"
+                   src="{{ IMAGES_SIREGAL_URL }}/{{ germplasmGnpis.holdingGenbank.instituteCode }}/{{ germplasmGnpis.photo.fileName }}"
                    alt="" width="500px">
               <div class="card-body">
                 <table class="table">
@@ -82,25 +83,12 @@
               <th class="fieldName" scope="row">Accession synonyms</th>
               <td class="field">{{ germplasmGnpis.synonyms.join(', ') }}</td>
             </tr>
-
-            <ng-template *ngIf="germplasmGnpis.genus!=null; then withGenus; else withoutGenus"></ng-template>
-            <ng-template #withGenus>
-              <tr>
-                <th class="fieldName" scope="row">Taxon</th>
-                <td class="field"
-                    *ngIf="germplasmGnpis.speciesAuthority"><i>{{ germplasmGnpis.genus }} {{ germplasmGnpis.species }} {{ germplasmGnpis.subtaxa }}</i>
-                  ({{ germplasmGnpis.speciesAuthority }})
-                </td>
-                <td class="field"
-                    *ngIf="germplasmGnpis.speciesAuthority==null"><i>{{ germplasmGnpis.genus }} {{ germplasmGnpis.species }} {{ germplasmGnpis.subtaxa }}</i></td>
-              </tr>
-            </ng-template>
-            <ng-template #withoutGenus>
-              <tr>
-                <th class="fieldName" scope="row">Taxon</th>
-                <td class="field"><i>{{ germplasmGnpis.species }}</i></td>
-              </tr>
-            </ng-template>
+            <tr>
+              <th class="fieldName" scope="row">Taxon</th>
+              <td class="field"><i>{{ germplasmGnpis.genus }} {{ germplasmGnpis.species }} {{ germplasmGnpis.subtaxa }}</i>
+                {{ germplasmGnpis.speciesAuthority ? '(' + germplasmGnpis.speciesAuthority + ')': '' }}
+              </td>
+            </tr>
 
             <tr *ngIf="germplasmGnpis.taxonCommonNames && germplasmGnpis.taxonCommonNames.length > 0">
               <th class="fieldName" scope="row">Taxon common names</th>
@@ -156,8 +144,16 @@
                 {{ germplasmGnpis.holdingInstitute.instituteName }}</a></td>
             </tr>
             <tr *ngIf="germplasmGnpis.holdingGenbank.instituteName">
-              <th class="fieldName" scope="row">Stock center name</th>
+            <th class="fieldName" scope="row">Stock center name</th>
+            <ng-container *ngIf="germplasmGnpis.holdingGenbank.webSite">
+              <td class="field">
+                <a href="germplasmGnpis.holdingGenbank.webSite">{{ germplasmGnpis.holdingGenbank.instituteName }}</a>
+              </td>
+            </ng-container>
+            <ng-container *ngIf="!germplasmGnpis.holdingGenbank.webSite">
               <td class="field">{{ germplasmGnpis.holdingGenbank.instituteName }}</td>
+            </ng-container>
+
             </tr>
             <tr *ngIf="germplasmGnpis.presenceStatus">
               <th class="fieldName" scope="row">Presence status</th>
@@ -201,7 +197,7 @@
 
       <div class="row" *ngIf="germplasmGnpis.collectingSite && germplasmGnpis.collectingSite.siteName">
         <div class="col">
-          <table>
+          <table class="table table-sm">
             <thead class="text-white">
             <tr>
               <th class="headerTitle" scope="col" colspan="2">
@@ -212,10 +208,6 @@
             <tr>
               <th class="fieldName" scope="row">Name</th>
               <td class="field">{{ germplasmGnpis.collectingSite.siteName }}</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
             </tr>
           </table>
         </div>

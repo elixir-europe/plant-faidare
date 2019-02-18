@@ -18,6 +18,7 @@ import {
 import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin, Site } from '../models/gnpis.germplasm.model';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'ngx-moment';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 describe('GermplasmCardComponent', () => {
 
@@ -201,7 +202,7 @@ describe('GermplasmCardComponent', () => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule, NgbPopoverModule, MomentModule],
             declarations: [
-                GermplasmCardComponent
+                GermplasmCardComponent, LoadingSpinnerComponent
             ],
             providers: [
                 // { provide: ActivatedRoute, useValue: activatedRoute },

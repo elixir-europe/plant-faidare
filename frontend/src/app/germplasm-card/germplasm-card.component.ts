@@ -13,6 +13,7 @@ import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny
 
 export class GermplasmCardComponent implements OnInit {
 
+
     constructor(private brapiService: BrapiService, private gnpisService: GnpisService, private route: ActivatedRoute) {
     }
 
@@ -22,6 +23,7 @@ export class GermplasmCardComponent implements OnInit {
     germplasmAttributes: BrapiGermplasmAttributes[];
     germplasmId: string;
     germplasmPuid: string;
+    IMAGES_SIREGAL_URL = 'https://urgi.versailles.inra.fr/files/siregal/images/accession';
 
     loaded: Promise<any>;
     loading = true;
