@@ -30,6 +30,7 @@
     }
   },
   {
+    "@id": "urn:germplasm/austro_kolben",
     "schema:name": "AUSTRO KOLBEN",
     "germplasm": {
       "accession": ["AUSTRO KOLBEN"]

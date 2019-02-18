@@ -7,6 +7,7 @@ import fr.inra.urgi.gpds.domain.datadiscovery.data.Facet;
 import fr.inra.urgi.gpds.domain.datadiscovery.data.FacetTerm;
 import fr.inra.urgi.gpds.domain.datadiscovery.response.DataDiscoveryResponse;
 import fr.inra.urgi.gpds.repository.es.setup.ESSetUp;
+import org.elasticsearch.search.sort.SortOrder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -140,17 +141,27 @@ class DataDiscoveryRepositoryTest {
         criteria.setPage(0L);
         criteria.setPageSize(2L);
         criteria.setSortBy("@id");
+        criteria.setSortOrder(SortOrder.DESC.toString());
         DataDiscoveryResponse result = repository.find(criteria);
         assertThat(result.getResult().getData().size()).isEqualTo(2);
-        assertThat(result.getResult().getData().get(0).getIdentifier()).isEqualTo("foo_study");
-        assertThat(result.getResult().getData().get(1).getIdentifier()).isEqualTo("foo_germplasm");
+        assertThat(result.getResult().getData().get(0).getUri()).isEqualTo("urn:germplasm/austro_kolben");
+        assertThat(result.getResult().getData().get(1).getUri()).isEqualTo("urn:foo_study");
+
+        assertThat(result.getMetadata().getPagination().getCurrentPage()).isEqualTo(0L);
+        assertThat(result.getMetadata().getPagination().getTotalPages()).isEqualTo(5L);
+        assertThat(result.getMetadata().getPagination().getPageSize()).isEqualTo(2L);
+        assertThat(result.getMetadata().getPagination().getTotalCount()).isEqualTo(10L);
 
         criteria.setPage(1L);
         criteria.setPageSize(3L);
-        criteria.setSortBy("@id");
         result = repository.find(criteria);
         assertThat(result.getResult().getData().size()).isEqualTo(3);
-        assertThat(result.getResult().getData().get(0).getIdentifier()).isEqualTo("foo2_germplasm");
+        assertThat(result.getResult().getData().get(0).getUri()).isEqualTo("urn:foo2_germplasm");
+
+        assertThat(result.getMetadata().getPagination().getCurrentPage()).isEqualTo(1L);
+        assertThat(result.getMetadata().getPagination().getTotalPages()).isEqualTo(4L);
+        assertThat(result.getMetadata().getPagination().getPageSize()).isEqualTo(3L);
+        assertThat(result.getMetadata().getPagination().getTotalCount()).isEqualTo(10L);
     }
 
     @Test
