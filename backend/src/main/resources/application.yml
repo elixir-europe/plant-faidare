@@ -12,26 +12,12 @@ management:
       exposure:
         include: '*'
 
-server:
-  compression:
-    enabled: true
-    mime-types:
-      - application/json
-      - application/javascript
-      - text/html
-      - text/css
-
 logging.level:
   root: ERROR
   org.springframework:
     boot.web.embedded.tomcat.TomcatWebServer: INFO
     web.client.RestTemplate: DEBUG
   fr.inra: DEBUG
-
----
-spring:
-  profiles: gnpis
-  cloud.config.name: gpds
 
 gpds:
   elasticsearch-alias-template:
@@ -52,7 +38,14 @@ gpds:
   security-user-group-ws-token:
 
 server:
-  port: 8060
+  compression:
+    enabled: true
+    mime-types:
+      - application/json
+      - application/javascript
+      - text/html
+      - text/css
+  port: 8380
   servlet:
-    context-path: /gnpis/gpds
+    context-path: /gnpis-dev/gpds
 

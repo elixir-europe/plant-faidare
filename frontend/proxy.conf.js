@@ -4,7 +4,7 @@ const PROXY_CONFIG = [
             "/gnpis/gpds/brapi",
             "/gnpis/gpds/gnpis",
         ],
-        target: "http://localhost:8060",
+        target: "http://localhost:8380",
         secure: false
     }
 ];
