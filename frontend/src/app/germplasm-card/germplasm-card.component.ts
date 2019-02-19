@@ -53,7 +53,10 @@ export class GermplasmCardComponent implements OnInit {
             const germplasmAttributes$ = this.brapiService.germplasmAttributes(germplasmId).toPromise();
             germplasmAttributes$
                 .then(germplasmAttributes => {
-                    this.germplasmAttributes = germplasmAttributes.result.data;
+                    if (germplasmAttributes.result) {
+                        this.germplasmAttributes = germplasmAttributes.result.data;
+                    }
+
                 });
         });
 
@@ -80,6 +83,17 @@ export class GermplasmCardComponent implements OnInit {
                 });
         }
         return germplasm$;
+    }
+
+    testGenealogy() {
+        return (this.germplasmProgeny
+            && this.germplasmProgeny.result
+            && this.germplasmProgeny.result.progeny
+            && this.germplasmProgeny.result.progeny.length > 0)
+            ||
+            (this.germplasmPedigree
+                && this.germplasmPedigree.result
+                && (this.germplasmPedigree.result.parent1Name || this.germplasmPedigree.result.parent2Name));
     }
 }
 

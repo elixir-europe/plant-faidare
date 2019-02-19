@@ -28,15 +28,15 @@
                    alt="" width="500px">
               <div class="card-body">
                 <table class="table">
-                  <tr *ngIf="germplasmGnpis.photo.photoName!=null">
+                  <tr *ngIf="germplasmGnpis.photo.photoName">
                     <th class="fieldName">Name</th>
                     <td class="field">{{ germplasmGnpis.photo.photoName }}</td>
                   </tr>
-                  <tr *ngIf="germplasmGnpis.photo.description!=null">
+                  <tr *ngIf="germplasmGnpis.photo.description">
                     <th class="fieldName">Description</th>
                     <td class="field">{{ germplasmGnpis.photo.description }}</td>
                   </tr>
-                  <tr *ngIf="germplasmGnpis.photo.copyright!=null">
+                  <tr *ngIf="germplasmGnpis.photo.copyright">
                     <th class="fieldName">Copyright</th>
                     <td class="field">{{ germplasmGnpis.photo.copyright }}</td>
                   </tr>
@@ -55,27 +55,27 @@
               </th>
             </tr>
             </thead>
-            <tr *ngIf="germplasmGnpis.accessionNumber!=null">
+            <tr *ngIf="germplasmGnpis.accessionNumber">
               <th class="fieldName" scope="row">Accession number</th>
               <td class="field">{{ germplasmGnpis.accessionNumber }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.acquisitionDate!=null">
+            <tr *ngIf="germplasmGnpis.acquisitionDate">
               <th class="fieldName" scope="row">Acquisition date</th>
               <td class="field">{{ germplasmGnpis.acquisitionDate | amParse:'YYYYMMDD' | amDateFormat:'YYYY-MM-DD' }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.germplasmName!=null">
+            <tr *ngIf="germplasmGnpis.germplasmName">
               <th class="fieldName" scope="row">Germplasm name</th>
               <td class="field">{{ germplasmGnpis.germplasmName }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.germplasmPUI!=null">
+            <tr *ngIf="germplasmGnpis.germplasmPUI">
               <th class="fieldName" scope="row">Permanent Unique Identifier</th>
               <td class="ellipsis field"> {{ germplasmGnpis.germplasmPUI }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.seedSource!=null">
+            <tr *ngIf="germplasmGnpis.seedSource">
               <th class="fieldName" scope="row">Seed source</th>
               <td class="field">{{ germplasmGnpis.seedSource }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.geneticNature!=null">
+            <tr *ngIf="germplasmGnpis.geneticNature">
               <th class="fieldName" scope="row">Genetic nature</th>
               <td class="field">{{ germplasmGnpis.geneticNature }}</td>
             </tr>
@@ -100,11 +100,11 @@
               <!--<td class="scroll field"><a *ngFor="let taxonSynonym of germplasmGnpis.taxonSynonyms"> {{ taxonSynonym }}</a>-->
               <td class="scroll field"><i>{{ germplasmGnpis.taxonSynonyms.join(', ') }}</i></td>
             </tr>
-            <tr *ngIf="germplasmGnpis.pedigree!=null">
+            <tr *ngIf="germplasmGnpis.pedigree">
               <th class="fieldName" scope="row">Pedigree</th>
               <td class="field">{{ germplasmGnpis.pedigree }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.biologicalStatusOfAccessionCode!=null">
+            <tr *ngIf="germplasmGnpis.biologicalStatusOfAccessionCode">
               <th class="fieldName" scope="row">Biological status</th>
               <td class="field">{{ germplasmGnpis.biologicalStatusOfAccessionCode }}</td>
             </tr>
@@ -116,7 +116,7 @@
               <td>Source link</td>
               <td><a>{{ germplasmGnpis.url }}</a></td>
             </tr>-->
-            <tr *ngIf="germplasmGnpis.comment!=null">
+            <tr *ngIf="germplasmGnpis.comment">
               <th class="fieldName" scope="row">Comments</th>
               <td class="field">{{ germplasmGnpis.comment }}</td>
             </tr>
@@ -126,7 +126,7 @@
     </div>
 
     <div class="container">
-      <div class="row" *ngIf="germplasmGnpis.holdingInstitute!=null">
+      <div class="row" *ngIf="germplasmGnpis.holdingInstitute">
         <div class="col">
           <table class="table table-sm .table-responsive{-sm|-md|-lg|-xl}">
             <thead class="text-white">
@@ -164,33 +164,33 @@
 
           <ng-template #holdingInstituteTemplate>
             <table class="popoverTable">
-              <tr *ngIf="germplasmGnpis.holdingInstitute.instituteCode!=null">
+              <tr *ngIf="germplasmGnpis.holdingInstitute.instituteCode">
                 <th class="fieldName" scope="row">FAO code</th>
                 <td class="field">{{ germplasmGnpis.holdingInstitute.instituteCode }}</td>
               </tr>
-              <tr *ngIf="germplasmGnpis.holdingInstitute.instituteName!=null">
+              <tr *ngIf="germplasmGnpis.holdingInstitute.instituteName">
                 <th class="fieldName" scope="row">Institute name</th>
                 <td class="field">{{ germplasmGnpis.holdingInstitute.instituteName }}</td>
               </tr>
-              <tr *ngIf="germplasmGnpis.holdingInstitute.acronym!=null">
+              <tr *ngIf="germplasmGnpis.holdingInstitute.acronym">
                 <th class="fieldName" scope="row">Acronym</th>
                 <td class="field">{{ germplasmGnpis.holdingInstitute.acronym }}</td>
               </tr>
-              <tr *ngIf="germplasmGnpis.holdingInstitute.organisation!=null">
+              <tr *ngIf="germplasmGnpis.holdingInstitute.organisation">
                 <th class="fieldName" scope="row">Organisation</th>
                 <td class="field">{{ germplasmGnpis.holdingInstitute.organisation }}</td>
               </tr>
-              <tr *ngIf="germplasmGnpis.holdingInstitute.instituteType!=null">
+              <tr *ngIf="germplasmGnpis.holdingInstitute.instituteType">
                 <th class="fieldName" scope="row">Institute type</th>
                 <td class="field">{{ germplasmGnpis.holdingInstitute.instituteType }}</td>
               </tr>
-              <tr class="ellipsis" *ngIf="germplasmGnpis.holdingInstitute.webSite!=null">
+              <tr class="ellipsis" *ngIf="germplasmGnpis.holdingInstitute.webSite">
                 <th class="fieldName" scope="row">Link</th>
                 <td class="ellipsis field"><a
                   href="{{ germplasmGnpis.holdingInstitute.webSite }}">{{ germplasmGnpis.holdingInstitute.webSite }}</a>
                 </td>
               </tr>
-              <tr *ngIf="germplasmGnpis.holdingInstitute.address!=null">
+              <tr *ngIf="germplasmGnpis.holdingInstitute.address">
                 <th class="fieldName" scope="row">Address</th>
                 <td class="field">{{ germplasmGnpis.holdingInstitute.address }}</td>
               </tr>
@@ -199,7 +199,7 @@
         </div>
       </div>
 
-      <div class="row" *ngIf="germplasmGnpis.breeder && germplasmGnpis.breeder.institute && germplasmGnpis.breeder.institute.instituteName!=null">
+      <div class="row" *ngIf="germplasmGnpis.breeder && germplasmGnpis.breeder.institute && germplasmGnpis.breeder.institute.instituteName">
         <div class="col">
           <table class="table table-sm">
             <thead class="text-white">
@@ -217,27 +217,27 @@
                   {{ germplasmGnpis.breeder.institute.instituteName }} {{ germplasmGnpis.breeder.institute.instituteCode }}</a>
               </td>
             </tr>
-            <tr *ngIf="germplasmGnpis.breeder.accessionCreationDate!=null">
+            <tr *ngIf="germplasmGnpis.breeder.accessionCreationDate">
               <th class="fieldName" scope="row">Accession Creation date</th>
               <td class="field">{{ germplasmGnpis.breeder.accessionCreationDate | amParse:'YYYYMMDD' | amDateFormat:'YYYY-MM-DD' }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.breeder.accessionNumber!=null">
+            <tr *ngIf="germplasmGnpis.breeder.accessionNumber">
               <th class="fieldName" scope="row">Accession number</th>
               <td class="field">{{ germplasmGnpis.breeder.accessionNumber }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.breeder.deregistrationYear!=null">
+            <tr *ngIf="germplasmGnpis.breeder.deregistrationYear">
               <th class="fieldName" scope="row">Deregistration year</th>
               <td class="field">{{ germplasmGnpis.breeder.deregistrationYear }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.breeder.registrationYear!=null">
+            <tr *ngIf="germplasmGnpis.breeder.registrationYear">
               <th class="fieldName" scope="row">Registration year</th>
               <td class="field">{{ germplasmGnpis.breeder.registrationYear }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.breeder.distributionStatus!=null">
+            <tr *ngIf="germplasmGnpis.breeder.distributionStatus">
               <th class="fieldName" scope="row">distributionStatus</th>
               <td class="field">{{ germplasmGnpis.breeder.distributionStatus }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.breeder.germplasmPUI!=null">
+            <tr *ngIf="germplasmGnpis.breeder.germplasmPUI">
               <th class="fieldName" scope="row">germplasmPUI</th>
               <td class="field">{{ germplasmGnpis.breeder.germplasmPUI }}</td>
             </tr>
@@ -256,33 +256,33 @@
               </th>
             </tr>
             </thead>
-            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.institute && germplasmGnpis.collector.institute.instituteName!=null">
+            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.institute && germplasmGnpis.collector.institute.instituteName">
               <th class="fieldName" scope="row">Institution</th>
               <td class="ellipsis field"><a class="btn popovers" placement="top" [ngbPopover]="CollectorInstituteTemplate"
                                             [popoverTitle]="germplasmGnpis.collector.institute.instituteName">
                 {{ germplasmGnpis.collector.institute.instituteName }}</a></td>
             </tr>
-            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.accessionCreationDate!=null">
+            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.accessionCreationDate">
               <th class="fieldName" scope="row">Accession Creation date</th>
               <td class="field">{{ germplasmGnpis.collector.accessionCreationDate | amParse:'YYYYMMDD' | amDateFormat:'YYYY-MM-DD' }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.accessionNumber!=null">
+            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.accessionNumber">
               <th class="fieldName" scope="row">Accession number</th>
               <td class="field">{{ germplasmGnpis.collector.accessionNumber }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.collectors!=null">
+            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.collectors">
               <th class="fieldName" scope="row">collectors</th>
               <td class="field">{{ germplasmGnpis.collector.collectors }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.distributionStatus!=null">
+            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.distributionStatus">
               <th class="fieldName" scope="row">distributionStatus</th>
               <td class="field">{{ germplasmGnpis.collector.distributionStatus }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.germplasmPUI!=null">
+            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.germplasmPUI">
               <th class="fieldName" scope="row">germplasmPUI</th>
               <td class="field">{{ germplasmGnpis.collector.germplasmPUI }}</td>
             </tr>
-            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.materialType!=null">
+            <tr *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.materialType">
               <th class="fieldName" scope="row">Material type</th>
               <td class="field">{{ germplasmGnpis.collector.materialType }}</td>
             </tr>
@@ -336,28 +336,28 @@
 
               <ng-template #DonorInstituteTemplate>
                 <table>
-                  <tr *ngIf="donor.donorInstitute.instituteCode!=null">
+                  <tr *ngIf="donor.donorInstitute.instituteCode">
                     <th class="fieldName" scope="row">Code</th>
                     <td class="field">{{ donor.donorInstitute.instituteCode }}</td>
                   </tr>
-                  <tr *ngIf="donor.donorInstitute.acronym!=null">
+                  <tr *ngIf="donor.donorInstitute.acronym">
                     <th class="fieldName" scope="row">Acronym</th>
                     <td class="field">{{ donor.donorInstitute.acronym }}</td>
                   </tr>
-                  <tr *ngIf="donor.donorInstitute.organisation!=null">
+                  <tr *ngIf="donor.donorInstitute.organisation">
                     <th class="fieldName" scope="row">Organisation</th>
                     <td class="field">{{ donor.donorInstitute.organisation }}</td>
                   </tr>
-                  <tr *ngIf="donor.donorInstitute.instituteType!=null">
+                  <tr *ngIf="donor.donorInstitute.instituteType">
                     <th class="fieldName" scope="row">Type</th>
                     <td class="field">{{ donor.donorInstitute.instituteType }}</td>
                   </tr>
-                  <tr *ngIf="donor.donorInstitute.webSite!=null">
+                  <tr *ngIf="donor.donorInstitute.webSite">
                     <th class="fieldName" scope="row">Link</th>
                     <td class="ellipsis field"><a
                       href="{{ donor.donorInstitute.webSite }}">{{ donor.donorInstitute.webSite }}</a></td>
                   </tr>
-                  <tr *ngIf="donor.donorInstitute.address!=null">
+                  <tr *ngIf="donor.donorInstitute.address">
                     <th class="fieldName" scope="row">Address</th>
                     <td class="field">{{ donor.donorInstitute.address }}</td>
                   </tr>
@@ -367,7 +367,7 @@
           </table>
         </div>
       </div>
-      <!--<tr *ngIf="germplasmGnpis.evaluationSites.siteName!=null">
+      <!--<tr *ngIf="germplasmGnpis.evaluationSites.siteName">
         <td>Evaluation sites</td>
         <td>{{ germplasmGnpis.evaluationSites.siteName }}</td>
       </tr>-->
@@ -396,29 +396,29 @@
 
       <ng-template #BreederInstituteTemplate>
         <table>
-          <tr *ngIf="germplasmGnpis.breeder.institute.instituteCode!=null">
+          <tr *ngIf="germplasmGnpis.breeder.institute.instituteCode">
             <th class="fieldName" scope="row">Code</th>
             <td class="field">{{ germplasmGnpis.breeder.institute.instituteCode }}</td>
           </tr>
-          <tr *ngIf="germplasmGnpis.breeder.institute.organisation!=null">
+          <tr *ngIf="germplasmGnpis.breeder.institute.organisation">
             <th class="fieldName" scope="row">Organisation</th>
             <td class="field">{{ germplasmGnpis.breeder.institute.organisation }}</td>
           </tr>
-          <tr *ngIf="germplasmGnpis.breeder.institute.acronym!=null">
+          <tr *ngIf="germplasmGnpis.breeder.institute.acronym">
             <th class="fieldName" scope="row">Acronym</th>
             <td class="field">{{ germplasmGnpis.breeder.institute.acronym }}</td>
           </tr>
-          <tr *ngIf="germplasmGnpis.breeder.institute.instituteType!=null">
+          <tr *ngIf="germplasmGnpis.breeder.institute.instituteType">
             <th class="fieldName" scope="row">Type</th>
             <td class="field">{{ germplasmGnpis.breeder.institute.instituteType }}</td>
           </tr>
-          <tr *ngIf="germplasmGnpis.breeder.institute.webSite!=null">
+          <tr *ngIf="germplasmGnpis.breeder.institute.webSite">
             <th class="fieldName" scope="row">Link</th>
             <td class="ellipsis field"><a
               href="{{ germplasmGnpis.breeder.institute.webSite }}">{{ germplasmGnpis.breeder.institute.webSite }}</a>
             </td>
           </tr>
-          <tr *ngIf="germplasmGnpis.breeder.institute.address!=null">
+          <tr *ngIf="germplasmGnpis.breeder.institute.address">
             <th class="fieldName" scope="row">Address</th>
             <td class="field">{{ germplasmGnpis.breeder.institute.address }}</td>
           </tr>
@@ -427,29 +427,29 @@
 
       <ng-template #CollectorInstituteTemplate>
         <table>
-          <tr *ngIf="germplasmGnpis.collector.instituteCode!=null">
+          <tr *ngIf="germplasmGnpis.collector.instituteCode">
             <th class="fieldName" scope="row">FAO code</th>
             <td class="field">{{ germplasmGnpis.collector.instituteCode }}</td>
           </tr>
-          <tr *ngIf="germplasmGnpis.collector.instituteName!=null">
+          <tr *ngIf="germplasmGnpis.collector.instituteName">
             <th class="fieldName" scope="row">Institute name</th>
             <td class="field">{{ germplasmGnpis.collector.instituteName }}</td>
           </tr>
-          <tr *ngIf="germplasmGnpis.collector.acronym!=null">
+          <tr *ngIf="germplasmGnpis.collector.acronym">
             <th class="fieldName" scope="row">Acronym</th>
             <td class="field">{{ germplasmGnpis.collector.acronym }}</td>
           </tr>
-          <tr *ngIf="germplasmGnpis.collector.organisation!=null">
+          <tr *ngIf="germplasmGnpis.collector.organisation">
             <th class="fieldName" scope="row">Organisation</th>
             <td class="field">{{ germplasmGnpis.collector.organisation }}</td>
           </tr>
-          <tr *ngIf="germplasmGnpis.collector.institute.webSite!=null">
+          <tr *ngIf="germplasmGnpis.collector.institute.webSite">
             <th class="fieldName" scope="row">Link</th>
             <td class="ellipsis field"><a
               href="{{ germplasmGnpis.collector.institute.webSite }}">{{ germplasmGnpis.collector.institute.webSite }}</a>
             </td>
           </tr>
-          <tr *ngIf="germplasmGnpis.collector.institute.address!=null">
+          <tr *ngIf="germplasmGnpis.collector.institute.address">
             <th class="fieldName" scope="row">Address</th>
             <td class="field">{{ germplasmGnpis.collector.institute.address }}</td>
           </tr>
@@ -457,15 +457,13 @@
       </ng-template>
 
 
-      <ng-container *ngIf="
-          (germplasmProgeny && germplasmProgeny.result && germplasmProgeny.result.progeny && germplasmProgeny.result.progeny.length > 0)
-          || (germplasmPedigree && germplasmPedigree.result && (germplasmPedigree.result.parent1Name || germplasmPedigree.result.parent2Name))">
+      <ng-container *ngIf="testGenealogy()">
         <div class="row">
           <div class="col">
             <h4>Genealogy</h4>
           </div>
         </div>
-        <div class="row" *ngIf="germplasmPedigree.result!=null">
+        <div class="row" *ngIf="germplasmPedigree.result">
           <div class="col">
             <table class="table table-sm .table-responsive{-sm|-md|-lg|-xl}">
               <thead class="text-white">
