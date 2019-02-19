@@ -85,15 +85,22 @@ export class GermplasmCardComponent implements OnInit {
         return germplasm$;
     }
 
-    testGenealogy() {
+    testProgeny() {
         return (this.germplasmProgeny
             && this.germplasmProgeny.result
             && this.germplasmProgeny.result.progeny
-            && this.germplasmProgeny.result.progeny.length > 0)
-            ||
-            (this.germplasmPedigree
-                && this.germplasmPedigree.result
-                && (this.germplasmPedigree.result.parent1Name || this.germplasmPedigree.result.parent2Name));
+            && this.germplasmProgeny.result.progeny.length > 0);
+    }
+
+    testPedigree() {
+        return (this.germplasmPedigree
+            && this.germplasmPedigree.result
+            && (this.germplasmPedigree.result.parent1Name
+                || this.germplasmPedigree.result.parent2Name
+                || this.germplasmPedigree.result.crossingPlan
+                || this.germplasmPedigree.result.crossingYear
+                || this.germplasmPedigree.result.familyCode)
+        );
     }
 }
 
