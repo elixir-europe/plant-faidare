@@ -13,12 +13,75 @@ $link-hover-color: $_theme-black;
 // override default shadows behavior
 $enable-shadows: true;
 
+
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/transitions";
+@import "~bootstrap/scss/tooltip";
+@import "~bootstrap/scss/popover";
+
 
 // public custom variables used in this theme, and in component styles
+
+
+//custom tables
+.table {
+  border-bottom: 2px solid #0f6191;
+  border-top: 2px solid #0f6191;
+  table-layout: fixed;
+
+}
+
+a.btn.popovers {
+  text-decoration: underline;
+  //overflow: hidden;
+  //text-overflow: ellipsis;
+}
+
+.popover {
+  max-width: 50%;
+}
+
+/*table th, table td { overflow: hidden; }*/
+
+.imagePopover {
+  max-width: fit-content;
+}
+
+.scroll {
+  display: block;
+  max-height: 200px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+h4 {
+  color: #0f6191;
+}
+
+.table thead {
+  background-color: #0f6191;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.field {
+
+}
+
+.fieldName {
+
+}
+
+.headerTitle {
+
+}
 
 // custom button
 $theme-btn-color: $white;

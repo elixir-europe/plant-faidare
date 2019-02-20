@@ -30,8 +30,11 @@ export class DocumentComponent implements OnInit {
         if (!this.getURL()) {
             for (const type of this.document['@type']) {
                 const cardUrl = DocumentComponent.CARD_TYPE[type];
-                if (cardUrl) {
+                if (cardUrl === 'studies') {
                     return `/${cardUrl}/${this.document['schema:identifier']}`;
+                }
+                if (cardUrl === 'germplasm') {
+                    return `/${cardUrl}`;
                 }
             }
         }
@@ -44,6 +47,18 @@ export class DocumentComponent implements OnInit {
 
     getSourceURL() {
         return this.document['schema:includedInDataCatalog']['schema:url'];
+    }
+
+    getQueryParam() {
+        if (this.document['schema:identifier']) {
+            return {
+                id: this.document['schema:identifier']
+            };
+        } else {
+            return {
+                pui: this.document['@id']
+            };
+        }
     }
 
     getBadgeType(type: DataDiscoveryType) {

@@ -95,7 +95,8 @@ describe('DocumentComponent', () => {
         expect(component).toBeTruthy();
 
         expect(tester.title).toContainText('doc_name');
-        expect(tester.title.nativeElement['routerLink']).toEqual('/germplasm/g1');
+        expect(tester.title.nativeElement['routerLink']).toEqual('/germplasm');
+        expect(component.getQueryParam().id).toEqual('g1');
 
     });
 

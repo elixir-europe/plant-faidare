@@ -10,7 +10,7 @@
     <a class="title" *ngIf="getURL()" [href]="getURL()">
       {{ document["schema:name"] }}
     </a>
-    <a class="title" *ngIf="getRouterLink()" [routerLink]="getRouterLink()">
+    <a class="title" *ngIf="getRouterLink()" [routerLink]="getRouterLink()" [queryParams]="getQueryParam()">
       {{ document["schema:name"] }}
     </a>
   </h5>
