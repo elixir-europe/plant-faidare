@@ -42,10 +42,18 @@ public class DataDiscoveryCriteriaImpl extends PaginationCriteriaImpl implements
     private List<String> facetFields;
 
     @NoDocumentMapping
-    private final String sortBy = null;// = "schema:name";
+    private String sortBy = null;// = "schema:name";
+
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
 
     @NoDocumentMapping
-    private final String sortOrder = null;// = SortOrder.ASC.name();
+    private String sortOrder = null;// = SortOrder.ASC.name();
+
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }
 
     @Override
     public List<String> getCrops() {

@@ -27,7 +27,6 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,8 +114,6 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
         // Prepare search request with query
         SearchRequest request = ESGenericFindRepository.prepareSearchRequest(
             query, criteria, documentMetadata, requestFactory);
-        request.source(new SearchSourceBuilder());
-        request.source().query(query);
 
         // Build facet aggregations
         if (facetFields != null) {
