@@ -99,7 +99,6 @@
             </tr>
             <tr *ngIf="germplasmGnpis.taxonSynonyms && germplasmGnpis.taxonSynonyms.length > 0">
               <th class="fieldName" scope="row">Taxon synonyms</th>
-              <!--<td class="scroll field"><a *ngFor="let taxonSynonym of germplasmGnpis.taxonSynonyms"> {{ taxonSynonym }}</a>-->
               <td class="scroll field"><i>{{ germplasmGnpis.taxonSynonyms.join(', ') }}</i></td>
             </tr>
             <tr *ngIf="germplasmGnpis.pedigree">
@@ -302,24 +301,6 @@
               </td>
             </tr>
           </table>
-
-          <!--<div class="row" >
-            <div class="col">
-              <table class="table table-sm">
-                <thead class="text-white">
-                <tr>
-                  <th class="headerTitle" scope="col" colspan="2">
-                    Collecting site
-                  </th>
-                </tr>
-                </thead>
-                <tr>
-                  <th class="fieldName" scope="row">Name</th>
-                  <td class="field">{{ germplasmGnpis.collectingSite.siteName }}</td>
-                </tr>
-              </table>
-            </div>
-          </div>-->
         </div>
       </div>
 
@@ -630,8 +611,7 @@
                   <th class="fieldName" scope="row">
                     {{ collection.type  ?  collection.name  + ' (' +  collection.type   + ')' :  collection.name }}
                   </th>
-                  <td class="ellipsis field"><a
-                    href="/gnpis-core/?germplasmLists={{ collection.name }}&types=Germplasm">
+                  <td class="ellipsis field"><a routerLink="" [queryParams]="{germplasmLists: collection.name, types: 'Germplasm'}">
                     {{ collection.germplasmCount }} accessions</a>
                   </td>
                 </tr>
@@ -648,9 +628,30 @@
             <table class="table table-sm .table-responsive{-sm|-md|-lg|-xl}">
               <ng-container *ngFor="let panel of germplasmGnpis.panel">
                 <tr>
-                  <th class="fieldName" scope="row">{{ panel.name }}</th>
-                  <td class="field"><a href="/gnpis-core/?germplasmLists={{ panel.name }}&types=Germplasm">
+                  <th class="fieldName" scope="row">
+                    {{ panel.type  ?  panel.name  + ' (' +  panel.type   + ')' :  panel.name }}
+                  </th>
+                  <td class="field"><a routerLink="" [queryParams]="{germplasmLists: panel.name, types: 'Germplasm'}">
                     {{ panel.germplasmCount }} accessions</a></td>
+                </tr>
+              </ng-container>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="germplasmGnpis.population && germplasmGnpis.population.length > 0">
+        <div class="row">
+          <div class="col">
+            <h4 class="headerTitle">Population</h4>
+            <table class="table table-sm .table-responsive{-sm|-md|-lg|-xl}">
+              <ng-container *ngFor="let population of germplasmGnpis.population">
+                <tr>
+                  <th class="fieldName" scope="row">
+                    {{ population.type  ?  population.name  + ' (' +  population.type   + ')' :  population.name }}
+                  </th>
+                  <td class="field"><a routerLink="" [queryParams]="{germplasmLists: population.name, types: 'Germplasm'}">
+                    {{ population.germplasmCount }} accessions</a></td>
                 </tr>
               </ng-container>
             </table>
