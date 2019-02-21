@@ -31,20 +31,9 @@
 
   <!-- Column for result -->
   <div class="col-lg-9">
-    <!-- Loading (see CSS for animation)-->
-    <div *ngIf="loading" class="lds-spinner mx-auto" >
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <!-- Loading spinner-->
+    <div class="text-center">
+      <gpds-loading-spinner [loading]="loading"></gpds-loading-spinner>
     </div>
 
     <!-- No criteria selected -->
