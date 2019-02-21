@@ -1,4 +1,4 @@
-export function asArray(obj) {
+export function asArray<T>(obj: T | T[]): T[] {
     if (!obj) {
         return null;
     }
@@ -17,7 +17,7 @@ export class KeyValueObject {
         this.value = value;
     }
 
-    static fromObject(o: object): KeyValueObject[] {
+    static fromObject(o: { [key: string]: string }): KeyValueObject[] {
         return Object.entries(o)
             .filter(([key, value]) => !!key && !!value)
             .map(([key, value]) => new KeyValueObject(key, value));
