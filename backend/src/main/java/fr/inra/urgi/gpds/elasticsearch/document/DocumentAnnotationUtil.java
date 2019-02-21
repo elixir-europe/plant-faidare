@@ -26,7 +26,7 @@ public class DocumentAnnotationUtil {
      * and {@link Nested} annotations
      */
     public static <VO> DocumentMetadata<VO> getDocumentObjectMetadata(Class<VO> valueObjectClass) {
-        DocumentMetadata<VO> metadata = metadataCache.get(valueObjectClass);
+        DocumentMetadata metadata = metadataCache.get(valueObjectClass);
         if (metadata == null) {
             Document document = valueObjectClass.getAnnotation(Document.class);
             String valueObjectName = valueObjectClass.getSimpleName();

@@ -59,6 +59,7 @@ class LocationRepositoryTest {
         assertThat(result.getLocationName()).isNotBlank().isEqualTo(result.getName());
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void should_Have_Same_Abbreviation_And_Abreviation() {
         // 805
@@ -72,6 +73,7 @@ class LocationRepositoryTest {
         assertThat(result.getAbbreviation()).isNotBlank().isEqualTo(result.getAbreviation());
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void should_Have_Same_InstitutionAddress_And_InstitutionAdress() {
         // 805

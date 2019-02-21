@@ -331,6 +331,7 @@ public class ESGenericQueryFactoryTest {
     /**
      * Read package resource in a String
      */
+    @SuppressWarnings("UnstableApiUsage")
     private String readResource(String path) {
         try {
             return CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream(path)));
