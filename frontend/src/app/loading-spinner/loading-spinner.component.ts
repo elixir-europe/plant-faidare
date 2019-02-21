@@ -4,13 +4,11 @@ import { ErrorInterceptorService } from '../error-interceptor.service';
 @Component({
     selector: 'gpds-loading-spinner',
     template: `
-        <i *ngIf="loading" class="fa fa-spin fa-spinner" title="Loading..."></i>
+        <div *ngIf="loading" class="loading">
+          <i class="fa fa-spin fa-spinner" title="Loading..."></i>
+        </div>
     `,
-    styles: [`
-        i {
-            font-size: 2.2em;
-        }
-    `]
+    styleUrls: ['./loading-spinner.component.scss']
 })
 export class LoadingSpinnerComponent implements OnInit {
 
