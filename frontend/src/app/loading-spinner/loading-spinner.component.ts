@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ErrorInterceptorService } from '../error-interceptor.service';
 
 @Component({
     selector: 'gpds-loading-spinner',
@@ -11,8 +12,17 @@ import { Component, Input } from '@angular/core';
         }
     `]
 })
-export class LoadingSpinnerComponent {
+export class LoadingSpinnerComponent implements OnInit {
 
     @Input() loading: boolean;
 
+    constructor(private errorService: ErrorInterceptorService) {
+    }
+
+    ngOnInit(): void {
+        // Force loading stop when an error is intercepted
+        this.errorService.getErrors().subscribe(() => {
+            this.loading = false;
+        });
+    }
 }
