@@ -1,4 +1,13 @@
+---
+stages:
+  - test
+  - build
+  - staging
+  - production
+
+
 image: urgi/docker-browsers:latest
+
 
 # Disable the Gradle daemon for Continuous Integration servers as correctness
 # is usually a priority over speed in CI environments. Using a fresh
@@ -7,20 +16,26 @@ image: urgi/docker-browsers:latest
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
+  APP_NAME: gpds
+  JAR_PATH: "backend/build/libs/${APP_NAME}.jar"
+
 
 # Gradle cache for all jobs
 cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
-  - ".gradle"
-  - "frontend/.gradle/"
-  - "frontend/node_modules/"
+    - ".gradle"
+    - "frontend/.gradle/"
+    - "frontend/node_modules/"
+
 
 # TESTS
+
 
 lint:
   stage: test
   script: "./gradlew lint"
+
 
 test-frontend:
   stage: test
@@ -28,7 +43,8 @@ test-frontend:
   artifacts:
     reports:
       junit:
-      - "./frontend/karma-junit-tests-report/TEST*.xml"
+        - "./frontend/karma-junit-tests-report/TEST*.xml"
+
 
 test-backend:
   stage: test
@@ -46,9 +62,135 @@ test-backend:
       # so there will be no bootstrap checks that would fail on CI
       # especially the error regarding
       # `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
-      command: ["bin/elasticsearch", "-Ediscovery.type=single-node", "-Ecluster.name=es-gpds"]
+      command: ["bin/elasticsearch", "-Ediscovery.type=single-node"]
   artifacts:
     reports:
       junit:
         - "./backend/build/test-results/test/TEST-*.xml"
 
+
+# BUILD
+
+
+build:
+  stage: build
+  script:
+    - ./gradlew assemble
+  artifacts:
+    paths:
+      - "$JAR_PATH"
+    expire_in: 1 week
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - backend/src/**/*
+      - frontend/**/*
+
+
+# DEPLOY
+
+
+.deploy-to-vm: &deploy_to_vm
+  # Hidden job which serves as template for executed jobs below.
+  # See https://docs.gitlab.com/ee/ci/yaml/#anchors
+  retry: 2
+  ## SSH initialization
+  before_script:
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "${SSH_PRIVATE_KEY}")
+    - ssh -o StrictHostKeyChecking=no root@${SERVER_IP} 'echo "Successfully connected on $(hostname)"'
+  script:
+    # Copy jar
+    - scp ./$JAR_PATH root@${SERVER_IP}:/opt/${APP_NAME}/${APP_NAME}-${ENV}.jar
+    # Restarting service with the updated jar and the according Spring profiles enabled
+    - ssh root@${SERVER_IP} "systemctl restart ${APP_NAME}@${ENV}"
+    - eval $(ssh-agent -k)
+    - echo "Deploy done. Application should be available at http://${SERVER_IP}:${APP_PORT}/${CONTEXT_PATH}"
+
+
+deploy-to-staging:
+  stage: staging
+  variables:
+    ENV: staging
+    APP_PORT: ${STAGING_GPDS_PORT}
+    CONTEXT_PATH: ${STAGING_GPDS_CONTEXT_PATH}
+  <<: *deploy_to_vm
+  only:
+    refs:
+      - master
+    changes:
+      - .gitlab-ci.yml
+      - backend/src/**/*
+      - frontend/**/*
+
+
+deploy-to-beta:
+  stage: staging
+  variables:
+    ENV: beta
+    APP_PORT: ${BETA_GPDS_PORT}
+    CONTEXT_PATH: ${BETA_GPDS_CONTEXT_PATH}
+  <<: *deploy_to_vm
+  only:
+    refs:
+      - branches
+    changes:
+      - .gitlab-ci.yml
+      - backend/src/**/*
+      - frontend/**/*
+  when: manual
+  allow_failure: false
+
+
+deploy-to-int:
+  stage: production
+  variables:
+    ENV: int
+    APP_PORT: ${INT_GPDS_PORT}
+    CONTEXT_PATH: ${INT_GPDS_CONTEXT_PATH}
+  <<: *deploy_to_vm
+  only:
+    refs:
+      - master
+    changes:
+      - .gitlab-ci.yml
+      - backend/src/**/*
+      - frontend/**/*
+  when: manual
+  allow_failure: false
+
+
+deploy-to-public-prod:
+  stage: production
+  variables:
+    ENV: public-prod
+    APP_PORT: ${PUBLIC_PROD_GPDS_PORT}
+    CONTEXT_PATH: ${PUBLIC_PROD_GPDS_CONTEXT_PATH}
+  <<: *deploy_to_vm
+  only:
+    refs:
+      - master
+    changes:
+      - .gitlab-ci.yml
+      - backend/src/**/*
+      - frontend/**/*
+  when: manual
+  allow_failure: false
+
+
+deploy-to-private-prod:
+  stage: production
+  variables:
+    ENV: private-prod
+    APP_PORT: ${PRIVATE_PROD_GPDS_PORT}
+    CONTEXT_PATH: ${PRIVATE_PROD_GPDS_CONTEXT_PATH}
+  <<: *deploy_to_vm
+  only:
+    refs:
+      - master
+    changes:
+      - .gitlab-ci.yml
+      - backend/src/**/*
+      - frontend/**/*
+  when: manual
+  allow_failure: false

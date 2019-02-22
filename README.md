@@ -68,7 +68,7 @@ Otherwise, for the complete server (backend APIs + frontend interface), you can 
 ./gradlew assemble && java -jar backend/build/libs/gpds.jar
 ```
 
-The server should then be accessible at http://localhost:8080/gnpis-core
+The server should then be accessible at http://localhost:8380/gnpis/gpds
 
 ## Run frontend development server
 
@@ -105,23 +105,17 @@ The details of this remote server are filled in the `bootstrap.yml` file.
 By default, it tries to connect to the remote server on http://localhost:8888
 but it can of course be changed, or even configured via the `SPRING_CONFIG_URI` environment variable.
 
-It will try to fetch the configuration for the application name `rare`, and the default profile.
+It will try to fetch the configuration for the application name `gpds`, and the default profile.
 If such a configuration is not found, it will then fallback to the local `application.yml` properties.
 To avoid running the Spring Cloud config server every time when developing the application,
 all the properties are still available in `application.yml` even if they are configured on the remote Spring Cloud server as well.
 
-> **TODO**: Create a sping cloud configuration git repository and update the following section:
-
-> If you want to use the Spring Cloud config app locally,
-see https://forgemia.inra.fr/urgi-is/data-discovery-config
-
-> The configuration is currently only read on startup,
-meaning the application has to be reboot if the configuration is changed on the Spring Cloud server.
+The configuration is currently only read on startup,
+meaning the application has to be rebooted if the configuration is changed on the Spring Cloud server.
 For a dynamic reload without restarting the application,
 see http://cloud.spring.io/spring-cloud-static/Finchley.SR1/single/spring-cloud.html#refresh-scope
 to check what has to be changed.
 
-> In case of testing configuration from the config server, one may use a dedicated branch on `data-discovery-config` project
-and append the `--spring.cloud.config.label=<branch name to test>` parameter when starting the application's executable jar.
-More info on how pass a parameter to a Spring Boot app:
-https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config
+If you want to use a Spring Cloud configuration server, please refer to
+https://spring.io/guides/gs/centralized-configuration/
+

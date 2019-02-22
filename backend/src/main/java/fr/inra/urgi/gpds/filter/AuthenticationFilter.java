@@ -40,15 +40,6 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(
         ServletRequest req, ServletResponse resp, FilterChain chain
     ) throws IOException, ServletException {
-        // get web login
-        String webUserLogin = ((HttpServletRequest) req).getRemoteUser();
-        logger.debug(
-            "\n" +
-                "*********************************************\n" +
-                " Applying user credentials for " + webUserLogin + "\n" +
-                "*********************************************"
-        );
-
         final String authorization = ((HttpServletRequest) req).getHeader("Authorization");
 
         if (authorization != null && authorization.startsWith("Basic")) {
@@ -56,6 +47,8 @@ public class AuthenticationFilter implements Filter {
             String base64Credentials = authorization.substring("Basic".length()).trim();
             String authCode = new String(BaseEncoding.base64().decode(base64Credentials), Charsets.UTF_8);
             final String userName = authCode.split(":", 2)[0];
+
+            logger.debug("Intercepting HTTP Authorization with user: " + userName);
 
             AuthenticationStore.set(userName);
         }

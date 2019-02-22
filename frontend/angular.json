@@ -42,7 +42,7 @@
               "node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css"
             ],
             "scripts": [],
-            "baseHref": "/gnpis-core/"
+            "baseHref": "/gnpis-dev/gpds/"
           },
           "configurations": {
             "production": {
@@ -64,15 +64,16 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1500kb",
-                  "maximumError": "2000kb"
+                  "maximumWarning": "2000kb",
+                  "maximumError": "3000kb"
                 }
               ],
               "stylePreprocessorOptions": {
                 "includePaths": [
                   "src/assets/gpds/"
                 ]
-              }
+              },
+            "baseHref": "./"
             }
           }
         },
