@@ -101,9 +101,9 @@ build:
     - ssh -o StrictHostKeyChecking=no root@${SERVER_IP} 'echo "Successfully connected on $(hostname)"'
   script:
     # Copy jar
-    - scp ./$JAR_PATH root@${SERVER_IP}:/opt/${APP_NAME}/${APP_NAME}-${ENV}.jar
+    - scp ./$JAR_PATH root@${SERVER_IP}:/opt/bootapp/${APP_NAME}-${ENV}.jar
     # Restarting service with the updated jar and the according Spring profiles enabled
-    - ssh root@${SERVER_IP} "systemctl restart ${APP_NAME}@${ENV}"
+    - ssh root@${SERVER_IP} "systemctl restart bootapp@${APP_NAME}-${ENV}"
     - eval $(ssh-agent -k)
     - echo "Deploy done. Application should be available at http://${SERVER_IP}:${APP_PORT}/${CONTEXT_PATH}"
 
