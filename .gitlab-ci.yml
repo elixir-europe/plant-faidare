@@ -131,6 +131,9 @@ deploy-to-beta:
     APP_PORT: ${BETA_GPDS_PORT}
     CONTEXT_PATH: ${BETA_GPDS_CONTEXT_PATH}
   <<: *deploy_to_vm
+  except:
+    refs:
+      - master
   only:
     refs:
       - branches
