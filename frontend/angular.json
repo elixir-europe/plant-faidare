@@ -42,7 +42,7 @@
               "node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css"
             ],
             "scripts": [],
-            "baseHref": "/gnpis-dev/gpds/"
+            "baseHref": "/gpds-dev/"
           },
           "configurations": {
             "production": {

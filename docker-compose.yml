@@ -7,7 +7,6 @@ services:
       - discovery.type=single-node
     ports:
       - 9200:9200
-      - 9300:9300
 
   kibana:
     image: docker.elastic.co/kibana/kibana:6.5.4
