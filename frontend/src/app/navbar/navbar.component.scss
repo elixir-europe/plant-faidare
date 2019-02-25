@@ -14,6 +14,7 @@
 .navbar .navbar-nav .nav-link, .navbar .navbar-brand {
   color: $theme-navbar-color;
   height: $theme-navbar-height;
+  text-decoration: none;
 
   &:hover {
     color: $theme-navbar-hover-color;
