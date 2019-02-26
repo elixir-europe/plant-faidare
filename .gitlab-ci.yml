@@ -163,12 +163,12 @@ deploy-to-int:
   allow_failure: false
 
 
-deploy-to-public-prod:
+deploy-to-prod-public:
   stage: production
   variables:
-    ENV: public-prod
-    APP_PORT: ${PUBLIC_PROD_GPDS_PORT}
-    CONTEXT_PATH: ${PUBLIC_PROD_GPDS_CONTEXT_PATH}
+    ENV: prod-public
+    APP_PORT: ${PROD_PUBLIC_GPDS_PORT}
+    CONTEXT_PATH: ${PROD_PUBLIC_GPDS_CONTEXT_PATH}
   <<: *deploy_to_vm
   only:
     refs:
@@ -181,12 +181,12 @@ deploy-to-public-prod:
   allow_failure: false
 
 
-deploy-to-private-prod:
+deploy-to-prod-private:
   stage: production
   variables:
-    ENV: private-prod
-    APP_PORT: ${PRIVATE_PROD_GPDS_PORT}
-    CONTEXT_PATH: ${PRIVATE_PROD_GPDS_CONTEXT_PATH}
+    ENV: prod-private
+    APP_PORT: ${PROD_PRIVATE_GPDS_PORT}
+    CONTEXT_PATH: ${PROD_PRIVATE_GPDS_CONTEXT_PATH}
   <<: *deploy_to_vm
   only:
     refs:
