@@ -47,5 +47,5 @@ server:
       - text/css
   port: 8380
   servlet:
-    context-path: /gnpis-dev/gpds
+    context-path: /gpds-dev
 

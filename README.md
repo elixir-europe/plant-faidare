@@ -51,7 +51,7 @@ If you want to run an Elasticsearch server on your development machine you can u
 docker-compose up
 ```
 
-> This will launch an Elasticsearch server (with port forwarding `9200` and `9300`) and a Kibana server (with port forwarding `5601`)
+> This will launch an Elasticsearch server (with port forwarding `9200`) and a Kibana server (with port forwarding `5601`)
 
 > **Warning**: This repository does not automatically index data into Elasticsearch, you need to prepare your indices beforehand.
 
@@ -68,7 +68,7 @@ Otherwise, for the complete server (backend APIs + frontend interface), you can 
 ./gradlew assemble && java -jar backend/build/libs/gpds.jar
 ```
 
-The server should then be accessible at http://localhost:8380/gnpis/gpds
+The server should then be accessible at http://localhost:8380/gpds-dev
 
 ## Run frontend development server
 
