@@ -19,6 +19,9 @@ import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin, Site } fr
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'ngx-moment';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { CardSectionComponent } from '../card-section/card-section.component';
+import { CardRowComponent } from '../card-row/card-row.component';
+import { CardTableComponent } from '../card-table/card-table.component';
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
 
@@ -36,8 +39,8 @@ describe('GermplasmCardComponent', () => {
             return this.element('h3');
         }
 
-        get headerTitle() {
-            return this.elements('.headerTitle');
+        get cardHeader() {
+            return this.elements('div.card-header');
         }
     }
 
@@ -113,7 +116,7 @@ describe('GermplasmCardComponent', () => {
         logo: null
     };
 
-    const brapiOrigin: Origin = {
+    const brapiOrigin: Origin = { ... brapiInstitute,
         institute: brapiInstitute,
         germplasmPUI: '12',
         accessionNumber: '12',
@@ -127,9 +130,10 @@ describe('GermplasmCardComponent', () => {
 
     const brapiDonor: BrapiDonor = {
         donorInstitute: brapiInstitute,
-        germplasmPUI: '12',
-        accessionNumber: '12',
-        donorInstituteCode: 'urgi'
+        donorGermplasmPUI: '12',
+        donorAccessionNumber: '12',
+        donorInstituteCode: 'urgi',
+        donationDate: null
     };
 
     const brapiSet: BrapiSet = {
@@ -197,22 +201,18 @@ describe('GermplasmCardComponent', () => {
         population: [brapiSet]
     };
 
-    const germplasmResultTest = {
-        result: germplasmTest
-    };
-
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule, NgbPopoverModule, MomentModule],
             declarations: [
                 GermplasmCardComponent, LoadingSpinnerComponent, MockComponent(XrefsComponent)
+                GermplasmCardComponent, CardSectionComponent,
+                CardRowComponent, LoadingSpinnerComponent, CardTableComponent
             ],
             providers: [
-                // { provide: ActivatedRoute, useValue: activatedRoute },
                 { provide: BrapiService, useValue: brapiService },
                 { provide: GnpisService, useValue: gnpisService },
-                {
-                    provide: ActivatedRoute,
+                { provide: ActivatedRoute,
                     useValue: {
                         snapshot: {
                             queryParams: convertToParamMap({
@@ -240,10 +240,12 @@ describe('GermplasmCardComponent', () => {
             expect(component.germplasmGnpis).toBeTruthy();
             tester.detectChanges();
             expect(tester.title).toContainText('Germplasm: test');
-            expect(tester.headerTitle[0]).toContainText('Identification');
-            expect(tester.headerTitle[1]).toContainText('Holding');
-            expect(tester.headerTitle[2]).toContainText('Breeder');
-            expect(tester.headerTitle[3]).toContainText('Collecting');
+            expect(tester.cardHeader[0]).toContainText('Identification');
+            expect(tester.cardHeader[1]).toContainText('Holding');
+            expect(tester.cardHeader[2]).toContainText('Origin');
+            expect(tester.cardHeader[3]).toContainText('Distribution');
+            expect(tester.cardHeader[4]).toContainText('Genealogy');
+            expect(tester.cardHeader[5]).toContainText('Evaluation Data');
         });
     }));
 });

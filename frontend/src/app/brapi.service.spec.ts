@@ -22,6 +22,7 @@ import {
 import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin, Site } from './models/gnpis.germplasm.model';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { Util } from 'leaflet';
 
 describe('BrapiService', () => {
 
@@ -192,7 +193,7 @@ describe('BrapiService', () => {
         address: '12',
         logo: null
     };
-    const origin: Origin = {
+    const origin: Origin = { ... institute,
         institute: institute,
         germplasmPUI: '12',
         accessionNumber: '12',
@@ -206,9 +207,10 @@ describe('BrapiService', () => {
 
     const brapiDonor: BrapiDonor = {
         donorInstitute: institute,
-        germplasmPUI: '12',
-        accessionNumber: '12',
-        donorInstituteCode: 'urgi'
+        donorGermplasmPUI: '12',
+        donorAccessionNumber: '12',
+        donorInstituteCode: 'urgi',
+        donationDate: null
     };
 
     const brapiSet: BrapiSet = {

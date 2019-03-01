@@ -40,10 +40,11 @@ export interface BrapiGermplasmAttributes {
 }
 
 export interface BrapiDonor {
-    donorInstitute: Institute;
-    germplasmPUI: string;
-    accessionNumber: string;
+    donorGermplasmPUI: string;
+    donorAccessionNumber: string;
     donorInstituteCode: string;
+    donationDate: number;
+    donorInstitute: Institute;
 }
 
 export interface BrapiSet {

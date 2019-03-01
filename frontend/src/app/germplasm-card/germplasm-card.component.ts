@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
-import { Germplasm, GermplasmResult } from '../models/gnpis.germplasm.model';
+import { Germplasm } from '../models/gnpis.germplasm.model';
 import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from '../models/brapi.germplasm.model';
 
 @Component({
@@ -18,8 +18,8 @@ export class GermplasmCardComponent implements OnInit {
     }
 
     germplasmGnpis: Germplasm;
-    germplasmPedigree: GermplasmResult<BrapiGermplasmPedigree>;
-    germplasmProgeny: GermplasmResult<BrapiGermplasmProgeny>;
+    germplasmPedigree: BrapiGermplasmPedigree;
+    germplasmProgeny: BrapiGermplasmProgeny;
     germplasmAttributes: BrapiGermplasmAttributes[];
     germplasmId: string;
     germplasmPuid: string;
@@ -35,19 +35,20 @@ export class GermplasmCardComponent implements OnInit {
         // console.log(this.route);
         this.germplasmId = this.route.snapshot.queryParams.id;
         this.germplasmPuid = this.route.snapshot.queryParams.pui;
+
         const germplasm$ = this.getGermplasm(this.germplasmId, this.germplasmPuid);
         germplasm$.then(result => {
             const germplasmId = this.germplasmId ? this.germplasmId : result.germplasmDbId;
             const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
             germplasmProgeny$
                 .then(germplasmProgeny => {
-                    this.germplasmProgeny = germplasmProgeny;
+                    this.germplasmProgeny = germplasmProgeny.result;
                 });
 
             const germplasmPedigree$ = this.brapiService.germplasmPedigree(germplasmId).toPromise();
             germplasmPedigree$
                 .then(germplasmPedigree => {
-                    this.germplasmPedigree = germplasmPedigree;
+                    this.germplasmPedigree = germplasmPedigree.result;
                 });
 
             const germplasmAttributes$ = this.brapiService.germplasmAttributes(germplasmId).toPromise();
@@ -85,22 +86,51 @@ export class GermplasmCardComponent implements OnInit {
         return germplasm$;
     }
 
+    // TODO: use a generic function to get path in object (or null if non-existent)
     testProgeny() {
         return (this.germplasmProgeny
-            && this.germplasmProgeny.result
-            && this.germplasmProgeny.result.progeny
-            && this.germplasmProgeny.result.progeny.length > 0);
+            && this.germplasmProgeny.progeny
+            && this.germplasmProgeny.progeny.length > 0);
     }
 
     testPedigree() {
         return (this.germplasmPedigree
-            && this.germplasmPedigree.result
-            && (this.germplasmPedigree.result.parent1Name
-                || this.germplasmPedigree.result.parent2Name
-                || this.germplasmPedigree.result.crossingPlan
-                || this.germplasmPedigree.result.crossingYear
-                || this.germplasmPedigree.result.familyCode)
+            && (this.germplasmPedigree.parent1Name
+                || this.germplasmPedigree.parent2Name
+                || this.germplasmPedigree.crossingPlan
+                || this.germplasmPedigree.crossingYear
+                || this.germplasmPedigree.familyCode)
         );
+    }
+
+
+    testCollectorInstituteObject() {
+        return (
+            this.germplasmGnpis.collector
+            && this.germplasmGnpis.collector.institute
+            && this.germplasmGnpis.collector.institute.instituteName);
+    }
+
+    testCollectorInstituteFields() {
+        return (
+            this.germplasmGnpis.collector.germplasmPUI
+            || this.germplasmGnpis.collector.accessionNumber
+            || this.germplasmGnpis.collector.accessionCreationDate
+            || this.germplasmGnpis.collector.materialType
+            || this.germplasmGnpis.collector.collectors
+            || this.germplasmGnpis.collector.registrationYear
+            || this.germplasmGnpis.collector.deregistrationYear
+            || this.germplasmGnpis.collector.distributionStatus
+        );
+    }
+
+    testOrigin() {
+
+        return (this.germplasmGnpis.originSite && this.germplasmGnpis.originSite.siteName)
+            || (this.germplasmGnpis.donors && this.germplasmGnpis.donors.length > 0)
+            || ((this.testCollectorInstituteObject() || this.testCollectorInstituteFields())
+                || (this.germplasmGnpis.collectingSite && this.germplasmGnpis.collectingSite.siteName))
+            || (this.germplasmGnpis.breeder);
     }
 }
 

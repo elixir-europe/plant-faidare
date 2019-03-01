@@ -51,7 +51,7 @@ describe('GnpisService', () => {
         logo: null
     };
 
-    const brapiOrigin: Origin = {
+    const brapiOrigin: Origin = { ...brapiInstitute,
         institute: brapiInstitute,
         germplasmPUI: '12',
         accessionNumber: '12',
@@ -65,9 +65,10 @@ describe('GnpisService', () => {
 
     const brapiDonor: BrapiDonor = {
         donorInstitute: brapiInstitute,
-        germplasmPUI: '12',
-        accessionNumber: '12',
-        donorInstituteCode: 'urgi'
+        donorGermplasmPUI: '12',
+        donorAccessionNumber: '12',
+        donorInstituteCode: 'urgi',
+        donationDate: null
     };
 
     const brapiSet: BrapiSet = {

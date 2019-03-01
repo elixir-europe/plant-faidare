@@ -15,7 +15,7 @@
     ],
     "template-cyclomatic-complexity": [
       true,
-      260
+      11
     ]
   }
 }

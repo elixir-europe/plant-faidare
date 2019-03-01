@@ -18,7 +18,7 @@ export interface Germplasm {
     germplasmPUI: string;
     pedigree: string;
     seedSource: string;
-    synonyms: string;
+    synonyms: string[];
     commonCropName: string;
     instituteCode: string;
     instituteName: string;
@@ -39,7 +39,7 @@ export interface Germplasm {
     taxonCommonNames: string[];
     geneticNature: string;
     comment: string;
-    photo: string;
+    photo: Photo;
     holdingInstitute: Institute;
     holdingGenbank: Institute;
     presenceStatus: string;
@@ -56,7 +56,18 @@ export interface Germplasm {
     population: BrapiSet[];
 }
 
-export interface Origin {
+export interface Institute {
+    instituteName: string;
+    instituteCode: string;
+    acronym: string;
+    organisation: string;
+    instituteType: string;
+    webSite: string;
+    address: string;
+    logo: string;
+}
+
+export interface Origin extends Institute {
     institute: Institute;
     germplasmPUI: string;
     accessionNumber: string;
@@ -68,15 +79,13 @@ export interface Origin {
     distributionStatus: string;
 }
 
-export interface Institute {
-    instituteName: string;
-    instituteCode: string;
-    acronym: string;
-    organisation: string;
-    instituteType: string;
-    webSite: string;
-    address: string;
-    logo: string;
+export interface Photo {
+    copyright: string;
+    description: string;
+    fileName: string;
+    photoName: string;
+    thumbnailFileName: string;
+
 }
 
 export interface GermplasmData<T> {
