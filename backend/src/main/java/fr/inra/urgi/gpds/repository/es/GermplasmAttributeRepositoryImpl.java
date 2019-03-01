@@ -18,8 +18,6 @@ import org.springframework.stereotype.Repository;
 public class GermplasmAttributeRepositoryImpl
     implements GermplasmAttributeRepository {
 
-    private final ESResponseParser parser;
-
     private ESFindRepository<GermplasmAttributeCriteria, GermplasmAttributeValueListVO> findAttributeRepository;
 
     @Autowired
@@ -28,9 +26,8 @@ public class GermplasmAttributeRepositoryImpl
         RestHighLevelClient client,
         ESRequestFactory requestFactory
     ) {
-        this.parser = parser;
         Class<GermplasmAttributeValueListVO> voClass = GermplasmAttributeValueListVO.class;
-        findAttributeRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, this.parser);
+        findAttributeRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, parser);
     }
 
     @Override

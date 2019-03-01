@@ -6,19 +6,24 @@
     <div>
       <p>
         An unexpected error occurred.<br/>
-        <a href="javascript:window.location.reload(true)">
-          Refresh the page
-        </a>
-        or try later.
-        <br/>
+        <a href="javascript:window.location.reload(true)">Refresh the page</a>
+        <ng-container *ngIf="canGoBack()">
+          , <a (click)="goBack();$event.preventDefault()" href="#">go back to the last page</a>
+        </ng-container>
+        or retry later.
+      </p>
+      <p>
         Please contact <a href="mailto:urgi-support@inra.fr">urgi-support@inra.fr</a> if the problem persists.
       </p>
-      <small *ngIf="error.status" id="error-status">
-        Status: {{ error.status }}
-      </small>
-      <small *ngIf="error.message" id="error-message">
-        Message: {{ error.message }}
-      </small>
+      <code *ngIf="error.status || error.message">
+        <span *ngIf="error.status" id="error-status">
+          Status: {{ error.status }}
+        </span>
+        <span *ngIf="error.message" id="error-message">
+          <br/>
+          Message: {{ error.message }}
+        </span>
+      </code>
     </div>
   </div>
 </div>

@@ -4,6 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Subject } from 'rxjs';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 
+import { Location } from '@angular/common';
 import { ErrorComponent } from './error.component';
 import { ErrorInterceptorService, HttpError } from '../error-interceptor.service';
 
@@ -38,7 +39,8 @@ describe('ErrorComponent', () => {
         TestBed.configureTestingModule({
             declarations: [ ErrorComponent ],
             providers: [
-                { provide: Router, useValue: { events: routerEvents } }
+                { provide: Router, useValue: { events: routerEvents } },
+                { provide: Location, useValue: { back: () => {} } }
             ],
             imports: [
                 HttpClientTestingModule

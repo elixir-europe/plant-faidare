@@ -85,6 +85,7 @@ class BrapiMappingTest {
         ESGenericQueryFactoryTest.assertJsonEquals(actualJson, expectedJson);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void should_Deserialize_Additional_Info() throws IOException {
         String json = additionalInfoExample;
@@ -138,6 +139,7 @@ class BrapiMappingTest {
         ESGenericQueryFactoryTest.assertJsonEquals(actualJson, expectedJson);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void should_Deserialize_Complex_Brapi_Object() throws IOException {
         BrapiTrial trial = mapper.readValue(trialExample, TrialVO.class);
