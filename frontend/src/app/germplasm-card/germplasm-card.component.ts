@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
-import { Germplasm } from '../models/gnpis.germplasm.model';
-import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny } from '../models/brapi.germplasm.model';
+import { Germplasm, GermplasmProgeny } from '../models/gnpis.germplasm.model';
+import { BrapiGermplasmAttributes, BrapiGermplasmPedigree } from '../models/brapi.germplasm.model';
 
 @Component({
     selector: 'gpds-germplasm-card',
@@ -19,7 +19,7 @@ export class GermplasmCardComponent implements OnInit {
 
     germplasmGnpis: Germplasm;
     germplasmPedigree: BrapiGermplasmPedigree;
-    germplasmProgeny: BrapiGermplasmProgeny;
+    germplasmProgeny: GermplasmProgeny[];
     germplasmAttributes: BrapiGermplasmAttributes[];
     germplasmId: string;
     germplasmPuid: string;
@@ -39,11 +39,12 @@ export class GermplasmCardComponent implements OnInit {
         const germplasm$ = this.getGermplasm(this.germplasmId, this.germplasmPuid);
         germplasm$.then(result => {
             const germplasmId = this.germplasmId ? this.germplasmId : result.germplasmDbId;
-            const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
+
+            /*const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
             germplasmProgeny$
                 .then(germplasmProgeny => {
                     this.germplasmProgeny = germplasmProgeny.result;
-                });
+                });*/
 
             const germplasmPedigree$ = this.brapiService.germplasmPedigree(germplasmId).toPromise();
             germplasmPedigree$
@@ -75,6 +76,7 @@ export class GermplasmCardComponent implements OnInit {
             germplasm$
                 .then(germplasmGnpis => {
                     this.germplasmGnpis = germplasmGnpis;
+                    this.germplasmProgeny = germplasmGnpis.children;
                 });
         } else {
             germplasm$ = this.gnpisService.germplasmByPuid(pui).toPromise();
@@ -89,8 +91,7 @@ export class GermplasmCardComponent implements OnInit {
     // TODO: use a generic function to get path in object (or null if non-existent)
     testProgeny() {
         return (this.germplasmProgeny
-            && this.germplasmProgeny.progeny
-            && this.germplasmProgeny.progeny.length > 0);
+            && this.germplasmProgeny.length > 0);
     }
 
     testPedigree() {

@@ -22,7 +22,6 @@ import {
 import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin, Site } from './models/gnpis.germplasm.model';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { Util } from 'leaflet';
 
 describe('BrapiService', () => {
 
@@ -379,7 +378,7 @@ describe('BrapiService', () => {
 
     });
 
-    it('should fetch the germplasm progeny', () => {
+    /*it('should fetch the germplasm progeny', () => {
 
         let fetchedGermplasmProgeny: GermplasmResult<BrapiGermplasmProgeny>;
         const germplasmDbId: string = brapiGermplasmProgeny.result.germplasmDbId;
@@ -391,7 +390,7 @@ describe('BrapiService', () => {
 
         expect(fetchedGermplasmProgeny).toEqual(brapiGermplasmProgeny);
 
-    });
+    });*/
 
     it('should fetch the germplasm attributes', () => {
 

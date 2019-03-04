@@ -733,20 +733,29 @@
           </gpds-card-row>
 
           <gpds-card-row
-            label="Descendant"
+            label="Descendant :"
             [test]="testProgeny()">
-            <ng-template>
-
-              <div class="content-overflow">
-                <ng-container *ngFor="let child of germplasmProgeny.progeny">
-                  <a [routerLink]="'/germplasm'" [queryParams]="{id:child.germplasmDbId }">
-                    {{ child.defaultDisplayName }}
-                  </a>,
-                </ng-container>
-              </div>
-
-            </ng-template>
           </gpds-card-row>
+
+          <div class="content-overflow-big">
+            <ng-container *ngFor="let child of germplasmProgeny">
+
+              <gpds-card-row
+                [label]="'Child of ' + child.firstParentName + ' and ' + child.secondParentName"
+                [test]="testProgeny()">
+                <ng-template>
+
+                  <ng-container *ngFor="let sibling of child.sibblings">
+                    <a [routerLink]="'/germplasm'" [queryParams]="{pui:sibling.pui}">
+                      {{ sibling.name }}
+                    </a>,
+                  </ng-container>
+
+
+                </ng-template>
+              </gpds-card-row>
+            </ng-container>
+          </div>
 
         </div>
       </ng-template>

@@ -27,6 +27,11 @@ h3 {
   overflow-y: auto;
 }
 
+.content-overflow-big {
+  max-height: 275px;
+  overflow-y: auto;
+}
+
 .display-spinner-front {
   position: absolute;
   top: 70px;

@@ -8,6 +8,57 @@ export interface Site {
     siteType: string;
 }
 
+export interface Institute {
+    instituteName: string;
+    instituteCode: string;
+    acronym: string;
+    organisation: string;
+    instituteType: string;
+    webSite: string;
+    address: string;
+    logo: string;
+}
+
+export interface Origin extends Institute {
+    institute: Institute;
+    germplasmPUI: string;
+    accessionNumber: string;
+    accessionCreationDate: string;
+    materialType: string;
+    collectors: string;
+    registrationYear: string;
+    deregistrationYear: string;
+    distributionStatus: string;
+}
+
+export interface Photo {
+    copyright: string;
+    description: string;
+    fileName: string;
+    photoName: string;
+    thumbnailFileName: string;
+
+}
+
+export interface GermplasmProgeny {
+
+    crossingPlan: string;
+    crossingYear: string;
+    familyCode: string;
+    firstParentName: string;
+    firstParentPUI: string;
+    firstParentType: string;
+    secondParentName: string;
+    secondParentPUI: string;
+    secondParentType: string;
+    sibblings: {
+        name: string;
+        pui: string;
+        value: string;
+    }[];
+
+}
+
 export interface Germplasm {
     source: string;
     url: string;
@@ -43,7 +94,7 @@ export interface Germplasm {
     holdingInstitute: Institute;
     holdingGenbank: Institute;
     presenceStatus: string;
-    children: string;
+    children: GermplasmProgeny[];
     descriptors: BrapiDescriptor[];
     originSite: Site;
     collectingSite: Site;
@@ -54,38 +105,6 @@ export interface Germplasm {
     panel: BrapiSet[];
     collection: BrapiSet[];
     population: BrapiSet[];
-}
-
-export interface Institute {
-    instituteName: string;
-    instituteCode: string;
-    acronym: string;
-    organisation: string;
-    instituteType: string;
-    webSite: string;
-    address: string;
-    logo: string;
-}
-
-export interface Origin extends Institute {
-    institute: Institute;
-    germplasmPUI: string;
-    accessionNumber: string;
-    accessionCreationDate: string;
-    materialType: string;
-    collectors: string;
-    registrationYear: string;
-    deregistrationYear: string;
-    distributionStatus: string;
-}
-
-export interface Photo {
-    copyright: string;
-    description: string;
-    fileName: string;
-    photoName: string;
-    thumbnailFileName: string;
-
 }
 
 export interface GermplasmData<T> {

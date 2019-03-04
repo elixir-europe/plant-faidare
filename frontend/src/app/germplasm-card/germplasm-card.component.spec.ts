@@ -11,7 +11,6 @@ import {
     BrapiDonor,
     BrapiGermplasmAttributes,
     BrapiGermplasmPedigree,
-    BrapiGermplasmProgeny,
     BrapiSet,
     BrapiSibling
 } from '../models/brapi.germplasm.model';
@@ -47,7 +46,7 @@ describe('GermplasmCardComponent', () => {
     const brapiService = jasmine.createSpyObj(
         'BrapiService', [
             'germplasm',
-            'germplasmProgeny',
+            /*'germplasmProgeny',*/
             'germplasmPedigree',
             'germplasmAttributes'
         ]
@@ -97,13 +96,13 @@ describe('GermplasmCardComponent', () => {
         }
     };
 
-    const brapiGermplasmProgeny: GermplasmResult<BrapiGermplasmProgeny> = {
+    /*const brapiGermplasmProgeny: GermplasmResult<BrapiGermplasmProgeny> = {
         result: {
             germplasmDbId: '11',
             defaultDisplayName: '11',
             progeny: [brapiSibling]
         }
-    };
+    };*/
 
     const brapiInstitute: Institute = {
         instituteName: 'urgi',
@@ -228,7 +227,7 @@ describe('GermplasmCardComponent', () => {
 
     gnpisService.germplasm.and.returnValue(of(germplasmTest));
     gnpisService.germplasmByPuid.and.returnValue(of(germplasmTest));
-    brapiService.germplasmProgeny.and.returnValue(of(brapiGermplasmProgeny));
+    /*brapiService.germplasmProgeny.and.returnValue(of(brapiGermplasmProgeny));*/
     brapiService.germplasmPedigree.and.returnValue(of(brapiGermplasmPedigree));
     brapiService.germplasmAttributes.and.returnValue(of(brapiGermplasmAttributes));
 
