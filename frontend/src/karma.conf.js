@@ -19,7 +19,7 @@ module.exports = function (config) {
         },
         coverageIstanbulReporter: {
             dir: require('path').join(__dirname, '../coverage'),
-            reports: ['html', 'lcovonly'],
+            reports: ['html', 'lcovonly', 'text-summary'],
             fixWebpackSourcePaths: true
         },
         reporters: ['progress', 'kjhtml', 'junit'],
@@ -44,6 +44,7 @@ module.exports = function (config) {
                 flags: ['--no-sandbox'] // required for Gitlab CI
             }
         },
-        singleRun: false
+        singleRun: false,
+        restartOnFileChange: true
     });
 };
