@@ -44,6 +44,7 @@ module.exports = function (config) {
                 flags: ['--no-sandbox'] // required for Gitlab CI
             }
         },
-        singleRun: false
+        singleRun: false,
+        restartOnFileChange: true
     });
 };
