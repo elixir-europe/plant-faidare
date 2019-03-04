@@ -640,7 +640,7 @@
                 label="Mother"
                 [test]="germplasmPedigree.parent1Type && germplasmPedigree.parent1Type == 'FEMALE'">
                 <ng-template>
-                  <a [routerLink]="'/germplasm'"
+                  <a [routerLink]="['/germplasm']"
                      [queryParams]="{id:germplasmPedigree.parent1DbId}">
                     {{ germplasmPedigree.parent1Name }}
                   </a>
@@ -651,7 +651,7 @@
                 label="Father"
                 [test]="germplasmPedigree.parent1Type && germplasmPedigree.parent1Type == 'MALE'">
                 <ng-template>
-                  <a [routerLink]="'/germplasm'"
+                  <a [routerLink]="['/germplasm']"
                      [queryParams]="{id:germplasmPedigree.parent1DbId}">
                     {{ germplasmPedigree.parent1Name }}
                   </a>
@@ -679,7 +679,7 @@
                 label="Mother"
                 [test]="germplasmPedigree.parent2Type && germplasmPedigree.parent2Type == 'FEMALE'">
                 <ng-template>
-                  <a [routerLink]="'/germplasm'"
+                  <a [routerLink]="['/germplasm']"
                      [queryParams]="{id:germplasmPedigree.parent2DbId}">
                     {{ germplasmPedigree.parent2Name }}
                   </a>
@@ -690,7 +690,7 @@
                 label="Father"
                 [test]="germplasmPedigree.parent2Type && germplasmPedigree.parent2Type == 'MALE'">
                 <ng-template>
-                  <a [routerLink]="'/germplasm'"
+                  <a [routerLink]="['/germplasm']"
                      [queryParams]="{id:germplasmPedigree.parent2DbId}">
                     {{ germplasmPedigree.parent2Name }}
                   </a>
@@ -723,7 +723,7 @@
 
               <div class="content-overflow">
                 <ng-container *ngFor="let sibling of germplasmPedigree.siblings">
-                  <a [routerLink]="'/germplasm'" [queryParams]="{id:sibling.germplasmDbId }">
+                  <a [routerLink]="['/germplasm']" [queryParams]="{id:sibling.germplasmDbId }">
                     {{ sibling.defaultDisplayName }}
                   </a>,
                 </ng-container>
@@ -746,7 +746,7 @@
                 <ng-template>
 
                   <ng-container *ngFor="let sibling of child.sibblings">
-                    <a [routerLink]="'/germplasm'" [queryParams]="{pui:sibling.pui}">
+                    <a [routerLink]="['/germplasm']" [queryParams]="{id:sibling.pui}">
                       {{ sibling.name }}
                     </a>,
                   </ng-container>
@@ -789,7 +789,7 @@
             <gpds-card-row
               [label]="collection.type ? collection.name + ' (' + collection.type + ')' : collection.name">
               <ng-template>
-                <a [routerLink]="'/'"
+                <a [routerLink]="['/']"
                    [queryParams]="{germplasmLists: collection.name, types: 'Germplasm'}">
                   {{ collection.germplasmCount }} accessions
                 </a>
@@ -811,7 +811,7 @@
           <ng-container *ngFor="let panel of germplasmGnpis.panel">
             <gpds-card-row
               [label]="panel.type ? panel.name + ' (' + panel.type + ')' : panel.name">
-              <a [routerLink]="'/'"
+              <a [routerLink]="['/']"
                  [queryParams]="{germplasmLists: panel.name, types: 'Germplasm'}">
                 {{ panel.germplasmCount }} accessions
               </a>
@@ -833,7 +833,7 @@
             <gpds-card-row
               [label]="population.type ? population.name + ' (' + population.type + ')' : population.name">
               <ng-template>
-                <a [routerLink]="'/'"
+                <a [routerLink]="['/']"
                    [queryParams]="{germplasmLists: population.name, types: 'Germplasm'}">
                   {{ population.germplasmCount }} accessions
                 </a>

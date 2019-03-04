@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
 import { Germplasm, GermplasmProgeny } from '../models/gnpis.germplasm.model';
@@ -14,7 +14,17 @@ import { BrapiGermplasmAttributes, BrapiGermplasmPedigree } from '../models/brap
 export class GermplasmCardComponent implements OnInit {
 
 
-    constructor(private brapiService: BrapiService, private gnpisService: GnpisService, private route: ActivatedRoute) {
+    constructor(private brapiService: BrapiService,
+                private gnpisService: GnpisService,
+                private route: ActivatedRoute,
+                private router: Router) {
+
+        this.router.events.subscribe((event: any) => {
+            // If it is a NavigationEnd event re-initalise the component
+            if (event instanceof NavigationEnd) {
+                this.ngOnInit();
+            }
+        });
     }
 
     germplasmGnpis: Germplasm;
