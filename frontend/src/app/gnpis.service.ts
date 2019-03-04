@@ -5,7 +5,7 @@ import { Germplasm } from './models/gnpis.germplasm.model';
 import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDiscoverySource } from './models/data-discovery.model';
 import { BrapiResults } from './models/brapi.model';
 import { map } from 'rxjs/operators';
-import { XrefModel, XrefResponse } from './models/xref.model';
+import { XrefResponse } from './models/xref.model';
 
 
 export const BASE_URL = 'gnpis/v1/datadiscovery';
@@ -108,7 +108,7 @@ export class GnpisService {
         return this.sourceByURI$.pipe(map(sourceByURI => sourceByURI[sourceURI]));
     }
 
-    xref(xrefId: number): Observable<XrefResponse> {
+    xref(xrefId: string): Observable<XrefResponse> {
         return this.http.get<XrefResponse>(`gnpis/v1/xref/documentbyfulltextid?linkedRessourcesID=${xrefId}`);
     }
 

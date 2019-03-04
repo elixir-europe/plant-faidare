@@ -11,10 +11,10 @@
       [rows]=xrefs>
       <ng-template let-crossRef>
         <tr>
-          <td><a href="{{crossRef.url}}">{{crossRef.db_version}}</a></td>
-          <td>{{ crossRef.database_name  }}</td>
-          <td>{{ crossRef.entry_type  }}</td>
-          <td>{{ crossRef.description | slice:0:120  }}...</td>
+          <td><a [href]="crossRef.url">{{ crossRef.db_version }}</a></td>
+          <td>{{ crossRef.database_name }}</td>
+          <td>{{ crossRef.entry_type }}</td>
+          <td>{{ crossRef.description | slice:0:120 }}...</td>
         </tr>
       </ng-template>
     </gpds-card-table>

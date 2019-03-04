@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import { GnpisService } from '../gnpis.service';
 import { XrefModel } from '../models/xref.model';
 
@@ -12,13 +11,13 @@ export class XrefsComponent implements OnInit {
 
 
     xrefs: Array<XrefModel> = new Array<XrefModel>();
-    @Input() id: number;
+    @Input() xrefId: string;
 
-    constructor(private gnpisService: GnpisService, private route: ActivatedRoute) {
+    constructor(private gnpisService: GnpisService) {
     }
 
     ngOnInit() {
-        this.gnpisService.xref(this.id).subscribe(
+        this.gnpisService.xref(this.xrefId).subscribe(
             xrefs => {
                 console.log(xrefs);
                 this.xrefs = xrefs;

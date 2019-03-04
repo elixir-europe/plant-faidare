@@ -10,6 +10,16 @@ import { CardRowComponent } from '../card-row/card-row.component';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { CardTableComponent } from '../card-table/card-table.component';
 import { CardSectionComponent } from '../card-section/card-section.component';
+import { Component, Input } from '@angular/core';
+
+@Component({
+    selector: 'gpds-xrefs',
+    template: '<br/>'
+})
+class MockXRefComponent {
+    @Input() xrefId: string;
+}
+
 
 describe('SiteCardComponent', () => {
     const brapiService = jasmine.createSpyObj(
@@ -48,7 +58,8 @@ describe('SiteCardComponent', () => {
         TestBed.configureTestingModule({
             declarations: [
                 SiteCardComponent, MapComponent, LoadingSpinnerComponent,
-                CardRowComponent, CardSectionComponent, CardTableComponent
+                CardRowComponent, CardSectionComponent, CardTableComponent,
+                MockXRefComponent
             ],
             providers: [
                 { provide: BrapiService, useValue: brapiService },

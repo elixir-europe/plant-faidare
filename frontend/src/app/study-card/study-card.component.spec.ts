@@ -23,6 +23,17 @@ import { CardSectionComponent } from '../card-section/card-section.component';
 import { CardRowComponent } from '../card-row/card-row.component';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { CardTableComponent } from '../card-table/card-table.component';
+import { Component, Input } from '@angular/core';
+
+
+@Component({
+    selector: 'gpds-xrefs',
+    template: '<br/>'
+})
+class MockXRefComponent {
+    @Input() xrefId: string;
+}
+
 
 describe('StudyCardComponent', () => {
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
@@ -204,7 +215,7 @@ describe('StudyCardComponent', () => {
             imports: [RouterTestingModule],
             declarations: [
                 StudyCardComponent, MapComponent, CardSectionComponent,
-                CardRowComponent, LoadingSpinnerComponent, CardTableComponent
+                CardRowComponent, LoadingSpinnerComponent, CardTableComponent, MockXRefComponent
             ],
             providers: [
                 { provide: ActivatedRoute, useValue: activatedRoute },

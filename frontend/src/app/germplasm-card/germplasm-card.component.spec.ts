@@ -19,6 +19,17 @@ import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin, Site } fr
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'ngx-moment';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { Component, Input } from '@angular/core';
+
+
+@Component({
+    selector: 'gpds-xrefs',
+    template: '<br/>'
+})
+class MockXRefComponent {
+    @Input() xrefId: string;
+}
+
 
 describe('GermplasmCardComponent', () => {
 
@@ -202,7 +213,7 @@ describe('GermplasmCardComponent', () => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule, NgbPopoverModule, MomentModule],
             declarations: [
-                GermplasmCardComponent, LoadingSpinnerComponent
+                GermplasmCardComponent, LoadingSpinnerComponent, MockXRefComponent
             ],
             providers: [
                 // { provide: ActivatedRoute, useValue: activatedRoute },
