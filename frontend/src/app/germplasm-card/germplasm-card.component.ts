@@ -13,6 +13,7 @@ import { BrapiGermplasmAttributes, BrapiGermplasmPedigree } from '../models/brap
 
 export class GermplasmCardComponent implements OnInit {
 
+    alreadyInitialize = false;
 
     constructor(private brapiService: BrapiService,
                 private gnpisService: GnpisService,
@@ -21,7 +22,7 @@ export class GermplasmCardComponent implements OnInit {
 
         this.router.events.subscribe((event: any) => {
             // If it is a NavigationEnd event re-initalise the component
-            if (event instanceof NavigationEnd) {
+            if (this.alreadyInitialize && event instanceof NavigationEnd) {
                 this.ngOnInit();
             }
         });
@@ -75,6 +76,7 @@ export class GermplasmCardComponent implements OnInit {
         this.loaded = Promise.all([germplasm$]);
         this.loaded.then(() => {
             this.loading = false;
+            this.alreadyInitialize = true;
         });
 
     }

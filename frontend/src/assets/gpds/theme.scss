@@ -29,6 +29,7 @@ $enable-shadows: true;
 //custom tables
 .table {
   table-layout: fixed;
+
   thead {
     background-color: #0f6191;
   }
@@ -43,7 +44,7 @@ a.btn.popovers {
 }
 
 .popover {
-  max-width: 50%;
+  max-width: 100%;
 }
 
 /*table th, table td { overflow: hidden; }*/

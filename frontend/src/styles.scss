@@ -18,8 +18,20 @@ h3 {
   font-weight: bold;
   color: #0f6191;
 }
+
+.card-section-body {
+  border: 2px solid rgb(195, 214, 226);
+  border-top-width: 0px;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
 .row-sep {
   border-top: 1px solid #f0f0f0;
+}
+
+.row-sep .row-sep:first-of-type {
+  border: none;
 }
 
 .content-overflow {
@@ -29,7 +41,7 @@ h3 {
 
 .content-overflow-big {
   max-height: 275px;
-  overflow-y: auto;
+  overflow: auto;
 }
 
 .display-spinner-front {

@@ -6,10 +6,10 @@
   </h3>
 
   <div class="container-fluid">
-    <div class="row">
+    <div class="row align-items-center">
 
       <!--Section for the image representing the germplasm and the details about this image-->
-      <div class="col-md-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFileName">
+      <div class="col-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFileName">
         <figure class="figure">
           <img
             [src]="IMAGES_SIREGAL_URL +'/' + germplasmGnpis.holdingGenbank.instituteCode + '/' + germplasmGnpis.photo.thumbnailFileName"
@@ -49,10 +49,10 @@
 
       <!--Section for the information about the identification of the germplasm-->
       <gpds-card-section
-        class="col"
+        class="col-12 col-lg"
         header="Identification">
         <ng-template>
-          <div class="card-body">
+          <div class="card-body card-section-body">
 
             <gpds-card-row
               label="Germplasm name"
@@ -270,13 +270,13 @@
       header="Holding"
       [test]="germplasmGnpis.holdingInstitute">
       <ng-template>
-        <div class="card-body">
+        <div class="card-body card-section-body">
 
 
           <gpds-card-row
             label="Institution">
             <ng-template>
-              <a class="btn popovers" data-boundary="window" placement="top"
+              <a class="popovers" data-boundary="window" placement="top"
                  [ngbPopover]="holdingInstituteTemplate"
                  [popoverTitle]="germplasmGnpis.holdingInstitute.instituteName"
                  container="body">
@@ -313,7 +313,7 @@
       header="Origin"
       [test]="testOrigin()">
       <ng-template>
-        <div class="card-body">
+        <div class="card-body card-section-body">
 
           <gpds-card-row
             label="Geographical origin"
@@ -334,7 +334,7 @@
                 label="Institution"
                 [test]="germplasmGnpis.collector.institute && germplasmGnpis.collector.institute.instituteName">
                 <ng-template>
-                  <a class="btn popovers" placement="top"
+                  <a class="popovers" placement="top"
                      [ngbPopover]="CollectorInstituteTemplate"
                      [popoverTitle]="germplasmGnpis.collector.institute.instituteName">
                     {{ germplasmGnpis.collector.institute.instituteName }}
@@ -399,7 +399,7 @@
                 [test]="germplasmGnpis.breeder.institute && germplasmGnpis.breeder.institute.instituteName">
                 <ng-template>
                   <!--TODO : Fix the issue with the overflow link (issue 13)-->
-                  <a class="btn popovers" placement="top"
+                  <a class="popovers" placement="top"
                      [ngbPopover]="BreederInstituteTemplate"
                      [popoverTitle]="germplasmGnpis.breeder.institute.instituteName">
                     {{ germplasmGnpis.breeder.institute.instituteName }} {{ germplasmGnpis.breeder.institute.instituteCode }}
@@ -496,7 +496,7 @@
                     label="Institute name"
                     [test]="donor.donorInstitute.instituteName">
                     <ng-template>
-                      <a class="btn popovers" placement="top"
+                      <a class="popovers" placement="top"
                          [ngbPopover]="DonorInstituteTemplate"
                          [popoverTitle]="donor.donorInstitute.instituteName">
                         {{ donor.donorInstitute.instituteName }}
@@ -591,7 +591,7 @@
               </ng-template>
 
               <td>
-                <a class="btn popovers" placement="top"
+                <a class="popovers" placement="top"
                    [ngbPopover]="InstituteTemplate"
                    [popoverTitle]="row.institute.instituteName">
                   {{ row.institute.instituteName }}
@@ -612,33 +612,42 @@
       header="Genealogy"
       [test]="testPedigree() || testProgeny()">
       <ng-template>
-        <div class="card-body">
+        <div class="card-body card-section-body">
 
           <gpds-card-row
             label="Crossing plan"
-            [value]="germplasmPedigree.crossingPlan">
+            [test]="germplasmPedigree && germplasmPedigree.crossingPlan">
+            <ng-template>
+              {{ germplasmPedigree.crossingPlan }}
+            </ng-template>
           </gpds-card-row>
 
           <gpds-card-row
             label="Crossing year"
-            [value]="germplasmPedigree.crossingYear">
+            [test]="germplasmPedigree && germplasmPedigree.crossingYear">
+            <ng-template>
+              {{ germplasmPedigree.crossingYear }}
+            </ng-template>
           </gpds-card-row>
 
           <gpds-card-row
             label="Family code"
-            [value]="germplasmPedigree.familyCode">
+            [test]="germplasmPedigree && germplasmPedigree.familyCode">
+            <ng-template>
+              {{ germplasmPedigree.familyCode }}
+            </ng-template>
           </gpds-card-row>
 
 
           <gpds-card-row
             label="Parent accessions"
-            [test]="germplasmPedigree.parent1Name || germplasmPedigree.parent2Name">
+            [test]="germplasmPedigree && (germplasmPedigree.parent1Name || germplasmPedigree.parent2Name)">
 
             <ng-template>
 
               <gpds-card-row
                 label="Mother"
-                [test]="germplasmPedigree.parent1Type && germplasmPedigree.parent1Type == 'FEMALE'">
+                [test]="germplasmPedigree && (germplasmPedigree.parent1Type && germplasmPedigree.parent1Type == 'FEMALE')">
                 <ng-template>
                   <a [routerLink]="['/germplasm']"
                      [queryParams]="{id:germplasmPedigree.parent1DbId}">
@@ -649,7 +658,7 @@
 
               <gpds-card-row
                 label="Father"
-                [test]="germplasmPedigree.parent1Type && germplasmPedigree.parent1Type == 'MALE'">
+                [test]="germplasmPedigree && (germplasmPedigree.parent1Type && germplasmPedigree.parent1Type == 'MALE')">
                 <ng-template>
                   <a [routerLink]="['/germplasm']"
                      [queryParams]="{id:germplasmPedigree.parent1DbId}">
@@ -660,7 +669,7 @@
 
               <gpds-card-row
                 label="Population"
-                [test]="germplasmPedigree.parent1Type && germplasmPedigree.parent1Type == 'POPULATION'">
+                [test]="germplasmPedigree && (germplasmPedigree.parent1Type && germplasmPedigree.parent1Type == 'POPULATION')">
                 <ng-template>
                   {{ germplasmPedigree.parent1Name }}
                 </ng-template>
@@ -668,7 +677,7 @@
 
               <gpds-card-row
                 label="SELF"
-                [test]="germplasmPedigree.parent1Type == 'SELF'">
+                [test]="germplasmPedigree && (germplasmPedigree.parent1Type == 'SELF')">
                 <ng-template>
                   Self
                 </ng-template>
@@ -677,7 +686,7 @@
 
               <gpds-card-row
                 label="Mother"
-                [test]="germplasmPedigree.parent2Type && germplasmPedigree.parent2Type == 'FEMALE'">
+                [test]="germplasmPedigree && (germplasmPedigree.parent2Type && germplasmPedigree.parent2Type == 'FEMALE')">
                 <ng-template>
                   <a [routerLink]="['/germplasm']"
                      [queryParams]="{id:germplasmPedigree.parent2DbId}">
@@ -688,7 +697,7 @@
 
               <gpds-card-row
                 label="Father"
-                [test]="germplasmPedigree.parent2Type && germplasmPedigree.parent2Type == 'MALE'">
+                [test]="germplasmPedigree && (germplasmPedigree.parent2Type && germplasmPedigree.parent2Type == 'MALE')">
                 <ng-template>
                   <a [routerLink]="['/germplasm']"
                      [queryParams]="{id:germplasmPedigree.parent2DbId}">
@@ -699,7 +708,7 @@
 
               <gpds-card-row
                 label="Population"
-                [test]="germplasmPedigree.parent2Type && germplasmPedigree.parent2Type == 'POPULATION'">
+                [test]="germplasmPedigree && (germplasmPedigree.parent2Type && germplasmPedigree.parent2Type == 'POPULATION')">
                 <ng-template>
                   {{ germplasmPedigree.parent2Name }}
                 </ng-template>
@@ -707,7 +716,7 @@
 
               <gpds-card-row
                 label="SELF"
-                [test]="germplasmPedigree.parent2Type == 'SELF'">
+                [test]="germplasmPedigree && (germplasmPedigree.parent2Type == 'SELF')">
                 <ng-template>
                   Self
                 </ng-template>
@@ -718,7 +727,7 @@
 
           <gpds-card-row
             label="Sibling accessions"
-            [test]="germplasmPedigree.siblings && germplasmPedigree.siblings.length > 0">
+            [test]="germplasmPedigree && (germplasmPedigree.siblings && germplasmPedigree.siblings.length > 0)">
             <ng-template>
 
               <div class="content-overflow">
@@ -740,8 +749,8 @@
           <div class="content-overflow-big">
             <ng-container *ngFor="let child of germplasmProgeny">
 
-              <gpds-card-row
-                [label]="'Child of ' + child.firstParentName + ' and ' + child.secondParentName"
+              <gpds-card-row class="text"
+                [label]="'child(ren) of ' + child.firstParentName + ' and ' + child.secondParentName"
                 [test]="testProgeny()">
                 <ng-template>
 
@@ -765,7 +774,7 @@
       header="Evaluation Data"
       [test]="germplasmAttributes && germplasmAttributes.length > 0">
       <ng-template>
-        <div class="card-body">
+        <div class="card-body card-section-body">
 
           <ng-container *ngFor="let descriptor of germplasmAttributes">
             <gpds-card-row
@@ -783,7 +792,7 @@
       header="Collection"
       [test]="germplasmGnpis.collection && germplasmGnpis.collection.length > 0">
       <ng-template>
-        <div class="card-body">
+        <div class="card-body card-section-body">
 
           <ng-container *ngFor="let collection of germplasmGnpis.collection">
             <gpds-card-row
@@ -806,7 +815,7 @@
       header="Panel"
       [test]="germplasmGnpis.panel && germplasmGnpis.panel.length > 0">
       <ng-template>
-        <div class="card-body">
+        <div class="card-body card-section-body">
 
           <ng-container *ngFor="let panel of germplasmGnpis.panel">
             <gpds-card-row
@@ -827,7 +836,7 @@
       header="Population"
       [test]="germplasmGnpis.population && germplasmGnpis.population.length > 0">
       <ng-template>
-        <div class="card-body">
+        <div class="card-body card-section-body card-section-body">
 
           <ng-container *ngFor="let population of germplasmGnpis.population">
             <gpds-card-row

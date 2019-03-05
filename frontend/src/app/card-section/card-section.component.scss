@@ -1,8 +1,11 @@
+@import '../../styles.scss';
+
+a {
+  text-decoration: underline;
+}
+
 .card {
-  margin-top: 25px;
-  margin-bottom: 10px;
-  border-color: rgba(15, 97, 145, 0.25);
-  border-width: 2px;
+  border: none;
 }
 
 .card-header {
@@ -10,6 +13,5 @@
   font-weight: bold;
   color: #f5f5f5;
   background-color: #0f6191;
-  border-color: #0f6191;
-  border-width: 2px;
 }
+

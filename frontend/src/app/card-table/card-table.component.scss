@@ -9,3 +9,11 @@
     background-color: white;
   }
 }
+
+.table-card-body {
+  padding: 0;
+  border: 2px solid rgb(195, 214, 226);
+  border-top-width: 0px;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
