@@ -94,7 +94,7 @@ describe('DocumentComponent', () => {
         tester.detectChanges();
         expect(component).toBeTruthy();
 
-        expect(tester.title).toContainText('doc_name');
+        expect(tester.title).toContainText('(go to this Germplasm card)');
         expect(tester.title.nativeElement['routerLink']).toEqual('/germplasm');
         expect(component.getQueryParam().id).toEqual('g1');
 

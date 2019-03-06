@@ -22,22 +22,22 @@ export class DocumentComponent implements OnInit {
     needTruncation = false;
     opened = false;
 
+
     getURL() {
         return this.document['schema:url'] || '';
     }
 
     getRouterLink() {
-        if (!this.getURL()) {
-            for (const type of this.document['@type']) {
-                const cardUrl = DocumentComponent.CARD_TYPE[type];
-                if (cardUrl === 'studies') {
-                    return `/${cardUrl}/${this.document['schema:identifier']}`;
-                }
-                if (cardUrl === 'germplasm') {
-                    return `/${cardUrl}`;
-                }
+        for (const type of this.document['@type']) {
+            const cardUrl = DocumentComponent.CARD_TYPE[type];
+            if (cardUrl === 'studies') {
+                return `/${cardUrl}/${this.document['schema:identifier']}`;
+            }
+            if (cardUrl === 'germplasm') {
+                return `/${cardUrl}`;
             }
         }
+
         return '';
     }
 

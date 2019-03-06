@@ -146,4 +146,3 @@ export class GermplasmCardComponent implements OnInit {
             || (this.germplasmGnpis.breeder);
     }
 }
-
