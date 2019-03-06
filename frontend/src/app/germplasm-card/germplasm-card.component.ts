@@ -125,8 +125,8 @@ export class GermplasmCardComponent implements OnInit {
     }
 
     testCollectorInstituteFields() {
-        return (
-            this.germplasmGnpis.collector.germplasmPUI
+        return (this.germplasmGnpis.collector) &&
+            (this.germplasmGnpis.collector.germplasmPUI
             || this.germplasmGnpis.collector.accessionNumber
             || this.germplasmGnpis.collector.accessionCreationDate
             || this.germplasmGnpis.collector.materialType
