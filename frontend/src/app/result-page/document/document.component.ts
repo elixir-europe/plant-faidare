@@ -28,9 +28,14 @@ export class DocumentComponent implements OnInit {
     }
 
     getRouterLink() {
+        const urgiStudy = this.document['schema:includedInDataCatalog']['schema:url'] === 'https://urgi.versailles.inra.fr';
         for (const type of this.document['@type']) {
             const cardUrl = DocumentComponent.CARD_TYPE[type];
             if (cardUrl === 'studies') {
+                if (urgiStudy) {
+                    const studyId = this.document['@id'].replace(/urn:URGI\/study\//, '');
+                    return `/${cardUrl}/${studyId}`;
+                }
                 return `/${cardUrl}/${this.document['schema:identifier']}`;
             }
             if (cardUrl === 'germplasm') {

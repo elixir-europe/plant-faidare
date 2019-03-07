@@ -106,6 +106,19 @@ export class GermplasmCardComponent implements OnInit {
             && this.germplasmProgeny.length > 0);
     }
 
+    testBreeder() {
+        return (this.germplasmGnpis.breeder)
+            && (this.germplasmGnpis.breeder.institute.instituteName
+            || this.germplasmGnpis.breeder.germplasmPUI
+            || this.germplasmGnpis.breeder.accessionNumber
+            || this.germplasmGnpis.breeder.accessionCreationDate
+            || this.germplasmGnpis.breeder.materialType
+            || this.germplasmGnpis.breeder.collectors
+            || this.germplasmGnpis.breeder.registrationYear
+            || this.germplasmGnpis.breeder.deregistrationYear
+            || this.germplasmGnpis.breeder.distributionStatus);
+    }
+
     testPedigree() {
         return (this.germplasmPedigree
             && (this.germplasmPedigree.parent1Name
@@ -127,14 +140,14 @@ export class GermplasmCardComponent implements OnInit {
     testCollectorInstituteFields() {
         return (this.germplasmGnpis.collector) &&
             (this.germplasmGnpis.collector.germplasmPUI
-            || this.germplasmGnpis.collector.accessionNumber
-            || this.germplasmGnpis.collector.accessionCreationDate
-            || this.germplasmGnpis.collector.materialType
-            || this.germplasmGnpis.collector.collectors
-            || this.germplasmGnpis.collector.registrationYear
-            || this.germplasmGnpis.collector.deregistrationYear
-            || this.germplasmGnpis.collector.distributionStatus
-        );
+                || this.germplasmGnpis.collector.accessionNumber
+                || this.germplasmGnpis.collector.accessionCreationDate
+                || this.germplasmGnpis.collector.materialType
+                || this.germplasmGnpis.collector.collectors
+                || this.germplasmGnpis.collector.registrationYear
+                || this.germplasmGnpis.collector.deregistrationYear
+                || this.germplasmGnpis.collector.distributionStatus
+            );
     }
 
     testOrigin() {
