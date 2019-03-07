@@ -55,12 +55,12 @@ export interface BrapiLocation extends BrapiHasDocumentationURL  {
     locationDbId: string;
     locationName: string;
     locationType: string;
-    abbreviation: string;
-    countryCode: string;
-    countryName: string;
-    institutionAddress: string;
-    institutionName: string;
-    altitude: number;
+    abbreviation?: string;
+    countryCode?: string;
+    countryName?: string;
+    institutionAddress?: string;
+    institutionName?: string;
+    altitude?: number;
     latitude: number;
     longitude: number;
     additionalInfo?: AdditionalInfo;

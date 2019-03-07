@@ -47,10 +47,3 @@ export interface BrapiDonor {
     donorInstitute: Institute;
 }
 
-export interface BrapiSet {
-    germplasmCount: number;
-    germplasmRef: string;
-    id: number;
-    name: string;
-    type: string;
-}

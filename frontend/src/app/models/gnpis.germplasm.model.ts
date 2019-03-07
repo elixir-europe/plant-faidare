@@ -1,9 +1,9 @@
-import { BrapiDescriptor, BrapiDonor, BrapiSet } from './brapi.germplasm.model';
+import { BrapiDescriptor, BrapiDonor } from './brapi.germplasm.model';
 
 export interface Site {
     latitude: number;
     longitude: number;
-    siteId: number;
+    siteId: string;
     siteName: string;
     siteType: string;
 }
@@ -54,7 +54,6 @@ export interface GermplasmProgeny {
     sibblings: {
         name: string;
         pui: string;
-        value: string;
     }[];
 
 }
@@ -102,10 +101,22 @@ export interface Germplasm {
     collector: Origin;
     breeder: Origin;
     distributors: Origin[];
-    panel: BrapiSet[];
-    collection: BrapiSet[];
-    population: BrapiSet[];
+    panel: GermplasmSet[];
+    collection: GermplasmSet[];
+    population: GermplasmSet[];
 }
+
+export interface GermplasmSet {
+    id: number;
+    name: string;
+    type: string;
+    germplasmCount: number;
+    germplasmRef: {
+        pui: string;
+        name: string;
+    };
+}
+
 
 export interface GermplasmData<T> {
     data: T;

@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
-import { Germplasm, GermplasmProgeny } from '../models/gnpis.germplasm.model';
+import { Germplasm, GermplasmProgeny, Site } from '../models/gnpis.germplasm.model';
 import { BrapiGermplasmAttributes, BrapiGermplasmPedigree } from '../models/brapi.germplasm.model';
+import { BrapiLocation } from '../models/brapi.model';
 
 @Component({
     selector: 'gpds-germplasm-card',
@@ -32,9 +33,13 @@ export class GermplasmCardComponent implements OnInit {
     germplasmPedigree: BrapiGermplasmPedigree;
     germplasmProgeny: GermplasmProgeny[];
     germplasmAttributes: BrapiGermplasmAttributes[];
+    germplasmLocations: BrapiLocation[] = [];
     germplasmId: string;
     germplasmPuid: string;
-    IMAGES_SIREGAL_URL = 'https://urgi.versailles.inra.fr/files/siregal/images/accession';
+    IMAGES_ACCESSION_URL = 'https://urgi.versailles.inra.fr/files/siregal/images/accession/';
+    IMAGES_INSTITUTION_URL = 'https://urgi.versailles.inra.fr/files/siregal/images//institution/';
+    IMAGES_BRC_URL = 'https://urgi.versailles.inra.fr/files/siregal/images/grc/inra_brc_en.png';
+
 
     loaded: Promise<any>;
     loading = true;
@@ -89,6 +94,11 @@ export class GermplasmCardComponent implements OnInit {
                 .then(germplasmGnpis => {
                     this.germplasmGnpis = germplasmGnpis;
                     this.germplasmProgeny = germplasmGnpis.children;
+                    this.siteToBrapiLocation(this.germplasmGnpis.collectingSite);
+                    this.siteToBrapiLocation(this.germplasmGnpis.originSite);
+                    for (const site of this.germplasmGnpis.evaluationSites) {
+                        this.siteToBrapiLocation(site);
+                    }
                 });
         } else {
             germplasm$ = this.gnpisService.germplasmByPuid(pui).toPromise();
@@ -100,26 +110,38 @@ export class GermplasmCardComponent implements OnInit {
         return germplasm$;
     }
 
+    siteToBrapiLocation(site: Site) {
+        if (site.siteId && site.latitude && site.longitude) {
+            this.germplasmLocations.push({
+                locationDbId: site.siteId,
+                locationName: site.siteName,
+                locationType: site.siteType,
+                latitude: site.latitude,
+                longitude: site.longitude
+            });
+        }
+    }
+
     // TODO: use a generic function to get path in object (or null if non-existent)
-    testProgeny() {
+    checkProgeny() {
         return (this.germplasmProgeny
             && this.germplasmProgeny.length > 0);
     }
 
-    testBreeder() {
+    checkBreeder() {
         return (this.germplasmGnpis.breeder)
             && (this.germplasmGnpis.breeder.institute.instituteName
-            || this.germplasmGnpis.breeder.germplasmPUI
-            || this.germplasmGnpis.breeder.accessionNumber
-            || this.germplasmGnpis.breeder.accessionCreationDate
-            || this.germplasmGnpis.breeder.materialType
-            || this.germplasmGnpis.breeder.collectors
-            || this.germplasmGnpis.breeder.registrationYear
-            || this.germplasmGnpis.breeder.deregistrationYear
-            || this.germplasmGnpis.breeder.distributionStatus);
+                || this.germplasmGnpis.breeder.germplasmPUI
+                || this.germplasmGnpis.breeder.accessionNumber
+                || this.germplasmGnpis.breeder.accessionCreationDate
+                || this.germplasmGnpis.breeder.materialType
+                || this.germplasmGnpis.breeder.collectors
+                || this.germplasmGnpis.breeder.registrationYear
+                || this.germplasmGnpis.breeder.deregistrationYear
+                || this.germplasmGnpis.breeder.distributionStatus);
     }
 
-    testPedigree() {
+    checkPedigree() {
         return (this.germplasmPedigree
             && (this.germplasmPedigree.parent1Name
                 || this.germplasmPedigree.parent2Name
@@ -130,14 +152,14 @@ export class GermplasmCardComponent implements OnInit {
     }
 
 
-    testCollectorInstituteObject() {
+    checkCollectorInstituteObject() {
         return (
             this.germplasmGnpis.collector
             && this.germplasmGnpis.collector.institute
             && this.germplasmGnpis.collector.institute.instituteName);
     }
 
-    testCollectorInstituteFields() {
+    checkCollectorInstituteFields() {
         return (this.germplasmGnpis.collector) &&
             (this.germplasmGnpis.collector.germplasmPUI
                 || this.germplasmGnpis.collector.accessionNumber
@@ -150,12 +172,10 @@ export class GermplasmCardComponent implements OnInit {
             );
     }
 
-    testOrigin() {
+    checkOriginCollecting() {
 
         return (this.germplasmGnpis.originSite && this.germplasmGnpis.originSite.siteName)
-            || (this.germplasmGnpis.donors && this.germplasmGnpis.donors.length > 0)
-            || ((this.testCollectorInstituteObject() || this.testCollectorInstituteFields())
-                || (this.germplasmGnpis.collectingSite && this.germplasmGnpis.collectingSite.siteName))
-            || (this.germplasmGnpis.breeder);
+            || (this.germplasmGnpis.collectingSite && this.germplasmGnpis.collectingSite.siteName)
+            || (this.checkCollectorInstituteObject() || this.checkCollectorInstituteFields());
     }
 }
