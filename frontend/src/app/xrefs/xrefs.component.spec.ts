@@ -17,7 +17,11 @@ describe('XrefsComponent', () => {
         }
 
         get cardHeader() {
-            return this.elements('div.card-header');
+            return this.element('div.card-header');
+        }
+
+        get columns() {
+            return this.elements('td');
         }
     }
 
@@ -36,7 +40,8 @@ describe('XrefsComponent', () => {
     }];
 
 
-    gnpisService.xref.and.returnValue(of(xref));
+    const xrefBlank: XrefModel[] = [];
+
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -50,10 +55,26 @@ describe('XrefsComponent', () => {
     }));
 
     it('should fetch the xref information', async(() => {
+        gnpisService.xref.and.returnValue(of(xref));
+        const tester = new XrefsComponentTester();
+
+        tester.detectChanges();
+
+        expect(tester.cardHeader).toContainText('Cross References');
+        expect(tester.columns[0]).toContainText(xref[0].db_version);
+        expect(tester.columns[1]).toContainText(xref[0].database_name);
+        expect(tester.columns[2]).toContainText(xref[0].entry_type);
+        expect(tester.columns[3].textContent.length).toBeLessThanOrEqual(124);
+
+    }));
+
+
+    it('should not display cross references', async(() => {
+        gnpisService.xref.and.returnValue(of(xrefBlank));
         const tester = new XrefsComponentTester();
         tester.detectChanges();
 
-        expect(tester.cardHeader[0]).toContainText('Cross References');
+        expect(tester.cardHeader).toBeFalsy();
 
     }));
 });

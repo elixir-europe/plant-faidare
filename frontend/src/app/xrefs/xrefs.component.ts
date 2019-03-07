@@ -9,7 +9,6 @@ import { XrefModel } from '../models/xref.model';
 })
 export class XrefsComponent implements OnInit {
 
-
     xrefs: Array<XrefModel> = new Array<XrefModel>();
     @Input() xrefId: string;
 
@@ -23,5 +22,6 @@ export class XrefsComponent implements OnInit {
                 this.xrefs = xrefs;
             }
         );
+
     }
 }
