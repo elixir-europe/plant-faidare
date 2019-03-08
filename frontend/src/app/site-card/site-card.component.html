@@ -3,9 +3,13 @@
 <ng-container *ngIf="location">
   <h3>
     Site: {{ location.locationName }}
+
+
   </h3>
 
   <gpds-map [locations]="[location]" *ngIf="location && location.latitude && location.longitude"></gpds-map>
+
+
 
   <gpds-card-section
     header="Details">
@@ -75,4 +79,8 @@
       </gpds-card-table>
     </ng-template>
   </gpds-card-section>
+
+  <!--XRefs part -->
+  <gpds-xrefs [xrefId]="location.locationDbId"></gpds-xrefs>
+
 </ng-container>

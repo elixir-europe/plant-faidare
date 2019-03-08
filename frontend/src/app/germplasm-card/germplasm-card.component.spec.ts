@@ -19,6 +19,9 @@ import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin, Site } fr
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'ngx-moment';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { MockComponent } from 'ng-mocks';
+import { XrefsComponent } from '../xrefs/xrefs.component';
+
 
 describe('GermplasmCardComponent', () => {
 
@@ -74,7 +77,7 @@ describe('GermplasmCardComponent', () => {
     };
 
     const brapiGermplasmPedigree: GermplasmResult<BrapiGermplasmPedigree> = {
-        result : {
+        result: {
             germplasmDbId: '12',
             defaultDisplayName: '12',
             pedigree: null,
@@ -139,7 +142,7 @@ describe('GermplasmCardComponent', () => {
 
     const brapiGermplasmAttributes: GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>> = {
         result: {
-            data: [ {
+            data: [{
                 attributeName: 'longueur',
                 value: '30'
             }]
@@ -202,13 +205,14 @@ describe('GermplasmCardComponent', () => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule, NgbPopoverModule, MomentModule],
             declarations: [
-                GermplasmCardComponent, LoadingSpinnerComponent
+                GermplasmCardComponent, LoadingSpinnerComponent, MockComponent(XrefsComponent)
             ],
             providers: [
                 // { provide: ActivatedRoute, useValue: activatedRoute },
                 { provide: BrapiService, useValue: brapiService },
                 { provide: GnpisService, useValue: gnpisService },
-                { provide: ActivatedRoute,
+                {
+                    provide: ActivatedRoute,
                     useValue: {
                         snapshot: {
                             queryParams: convertToParamMap({

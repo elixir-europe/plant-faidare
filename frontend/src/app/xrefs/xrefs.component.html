@@ -1,0 +1,22 @@
+<gpds-card-section *ngIf="xrefs.length > 0"
+                   header="Cross References">
+  <ng-template>
+    <gpds-card-table
+      [headers]="[
+          'Name',
+           'Source',
+           'Type',
+           'Description'
+        ]"
+      [rows]=xrefs>
+      <ng-template let-crossRef>
+        <tr>
+          <td><a [href]="crossRef.url">{{ crossRef.db_version }}</a></td>
+          <td>{{ crossRef.database_name }}</td>
+          <td>{{ crossRef.entry_type }}</td>
+          <td>{{ crossRef.description | slice:0:120 }}...</td>
+        </tr>
+      </ng-template>
+    </gpds-card-table>
+  </ng-template>
+</gpds-card-section>

@@ -23,6 +23,8 @@ import { CardSectionComponent } from './card-section/card-section.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { CardTableComponent } from './card-table/card-table.component';
 import { MomentModule } from 'ngx-moment';
+import { XrefsComponent } from './xrefs/xrefs.component';
+
 
 @NgModule({
     declarations: [
@@ -43,6 +45,7 @@ import { MomentModule } from 'ngx-moment';
         CardSectionComponent,
         LoadingSpinnerComponent,
         CardTableComponent,
+        XrefsComponent
     ],
     imports: [
         BrowserModule,

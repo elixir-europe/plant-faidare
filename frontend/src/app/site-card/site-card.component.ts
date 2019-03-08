@@ -15,6 +15,7 @@ export class SiteCardComponent implements OnInit {
     additionalInfos: KeyValueObject[];
     loading = true;
 
+
     constructor(private brapiService: BrapiService, private route: ActivatedRoute) {
     }
 
@@ -22,11 +23,9 @@ export class SiteCardComponent implements OnInit {
         this.route.paramMap.subscribe(paramMap => {
             // initialize site from location ID
             const locationId = paramMap.get('id');
-
             this.brapiService.location(locationId).subscribe(
                 response => {
                     this.location = response.result;
-
                     this.additionalInfos = [];
                     if (this.location.additionalInfo) {
                         this.additionalInfos = KeyValueObject.fromObject(this.location.additionalInfo);

@@ -23,6 +23,9 @@ import { CardSectionComponent } from '../card-section/card-section.component';
 import { CardRowComponent } from '../card-row/card-row.component';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { CardTableComponent } from '../card-table/card-table.component';
+import { MockComponent } from 'ng-mocks';
+import { XrefsComponent } from '../xrefs/xrefs.component';
+
 
 describe('StudyCardComponent', () => {
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
@@ -204,7 +207,7 @@ describe('StudyCardComponent', () => {
             imports: [RouterTestingModule],
             declarations: [
                 StudyCardComponent, MapComponent, CardSectionComponent,
-                CardRowComponent, LoadingSpinnerComponent, CardTableComponent
+                CardRowComponent, LoadingSpinnerComponent, CardTableComponent, MockComponent(XrefsComponent)
             ],
             providers: [
                 { provide: ActivatedRoute, useValue: activatedRoute },
