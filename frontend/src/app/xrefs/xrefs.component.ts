@@ -18,7 +18,6 @@ export class XrefsComponent implements OnInit {
     ngOnInit() {
         this.gnpisService.xref(this.xrefId).subscribe(
             xrefs => {
-                console.log(xrefs);
                 this.xrefs = xrefs;
             }
         );

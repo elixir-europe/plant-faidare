@@ -33,7 +33,8 @@ describe('XrefsComponent', () => {
 
     const xref: XrefModel[] = [{
         url: 'https://urgi.versailles.inra.fr/association/association/viewer.do#results/analysisIds=1808038',
-        description: 'Col-Fa-b*_MLM+Q+K is a GWAS analysis involving CC_Qualité panel',
+        description: 'Col-Fa-b*_MLM+Q+K is a GWASd anté paneCol-Fa-b*_MLM+Q+K is aGAS anlysis involving CC_Qualité' +
+            'djs dsqdsq djsqpodsjqodsqdsqkpdqpdWOLOLOLOOOOOOOsqpkdsqkdsqkdsqdsdsqdsqdsqddsqffjùsodfusjùfsfsd',
         database_name: 'GnpIS',
         entry_type: 'GWAS analysis',
         db_version: 'GWAS_ANALYSIS_1808038_1'
