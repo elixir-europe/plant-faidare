@@ -2,29 +2,28 @@
 
 <ng-container *ngIf="germplasmGnpis">
   <h3 class="mb-4">
-    <figure *ngIf="germplasmGnpis.holdingGenbank && germplasmGnpis.holdingGenbank.instituteName">
-      <img
-        [src]="IMAGES_BRC_URL"
-        align="right" />
-    </figure>
+    <img *ngIf="germplasmGnpis.holdingGenbank && germplasmGnpis.holdingGenbank.instituteName"
+         [src]="IMAGES_BRC_URL"
+         align="right"/>
     Germplasm: {{ germplasmGnpis.germplasmName }}
   </h3>
 
-
-
   <!-- Display the map -->
-  <gpds-map  *ngIf="germplasmLocations.length > 0" [locations]="germplasmLocations"></gpds-map>
+  <gpds-map [locations]="germplasmLocations"></gpds-map>
 
   <div class="row align-items-center">
 
     <!--Templates for gerplasm card-->
-    <ng-template #holdingInstituteTemplate >
+    <ng-template #holdingInstituteTemplate>
 
-      <figure *ngIf="germplasmGnpis.holdingInstitute && germplasmGnpis.holdingInstitute.logo">
-        <img
-          [src]="IMAGES_INSTITUTION_URL + germplasmGnpis.holdingInstitute.logo"
-          align="middle" />
-      </figure>
+      <gpds-card-row
+        label=""
+        [test]="germplasmGnpis.holdingInstitute && germplasmGnpis.holdingInstitute.logo">
+        <ng-template>
+          <img
+            [src]="IMAGES_INSTITUTION_URL + germplasmGnpis.holdingInstitute.logo"/>
+        </ng-template>
+      </gpds-card-row>
 
       <gpds-card-row
         label="Code"
@@ -53,7 +52,12 @@
 
       <gpds-card-row
         label="Website"
-        [value]="germplasmGnpis.holdingInstitute.webSite">
+        [test]="germplasmGnpis.holdingInstitute.webSite">
+        <ng-template>
+          <a [href]="germplasmGnpis.breeder.institute.webSite">
+            {{ germplasmGnpis.holdingInstitute.webSite }}
+          </a>
+        </ng-template>
       </gpds-card-row>
 
     </ng-template>
@@ -61,11 +65,14 @@
 
     <ng-template #BreederInstituteTemplate>
 
-      <figure *ngIf="germplasmGnpis.breeder && germplasmGnpis.breeder.institute && germplasmGnpis.breeder.institute.logo">
-        <img
-          [src]="IMAGES_INSTITUTION_URL + germplasmGnpis.breeder.institute.logo"
-          align="middle" />
-      </figure>
+      <gpds-card-row
+        label=""
+        [test]="germplasmGnpis.breeder && germplasmGnpis.breeder.institute && germplasmGnpis.breeder.institute.logo">
+        <ng-template>
+          <img
+            [src]="IMAGES_INSTITUTION_URL + germplasmGnpis.breeder.institute.logo"/>
+        </ng-template>
+      </gpds-card-row>
 
       <gpds-card-row
         label="Code"
@@ -106,11 +113,14 @@
 
     <ng-template #CollectorInstituteTemplate>
 
-      <figure *ngIf="germplasmGnpis.collector && germplasmGnpis.collector.institute && germplasmGnpis.collector.institute.logo">
-        <img
-          [src]="IMAGES_INSTITUTION_URL + germplasmGnpis.collector.institute.logo"
-          align="middle" />
-      </figure>
+      <gpds-card-row
+        label=""
+        [test]="germplasmGnpis.collector && germplasmGnpis.collector.institute && germplasmGnpis.collector.institute.logo">
+        <ng-template>
+          <img
+            [src]="IMAGES_INSTITUTION_URL + germplasmGnpis.collector.institute.logo"/>
+        </ng-template>
+      </gpds-card-row>
 
       <gpds-card-row
         label="Code"
@@ -142,24 +152,20 @@
         </ng-template>
       </gpds-card-row>
 
-
     </ng-template>
-
 
 
     <!--Section for the image representing the germplasm and the details about this image-->
     <div class="col-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFileName">
-      <figure class="figure">
+      <a class="btn popovers" data-boundary="window" placement="right" [ngbPopover]="imageTemplate"
+         [popoverTitle]="germplasmGnpis.photo.photoName" container="body">
         <img
           [src]="IMAGES_ACCESSION_URL + germplasmGnpis.holdingGenbank.instituteCode + '/' + germplasmGnpis.photo.thumbnailFileName"
           class="img-fluid">
         <figcaption class="figure-caption">
-          <a class="btn popovers" data-boundary="window" placement="right" [ngbPopover]="imageTemplate"
-             [popoverTitle]="germplasmGnpis.photo.photoName" container="body">
-            Click to see more details.
-          </a>
+          Click to see more details
         </figcaption>
-      </figure>
+      </a>
 
       <ng-template #imageTemplate>
         <div class="card ngb-popover-window ">
@@ -287,7 +293,7 @@
         <gpds-card-row
           label="Institution">
           <ng-template>
-            <a class="popovers" data-boundary="window" placement="top"
+            <a class="popover-underline" data-boundary="window" placement="top"
                [ngbPopover]="holdingInstituteTemplate"
                [popoverTitle]="germplasmGnpis.holdingInstitute.instituteName"
                container="body">
@@ -297,16 +303,19 @@
 
         <gpds-card-row
           label="Stock center name"
-          [test]="germplasmGnpis.holdingGenbank.instituteName">
+          [test]="germplasmGnpis.holdingGenbank.instituteName && germplasmGnpis.holdingGenbank.webSite">
           <ng-template>
-            <ng-container *ngIf="germplasmGnpis.holdingGenbank.webSite">
-              <a [href]="germplasmGnpis.holdingGenbank.webSite">
-                {{ germplasmGnpis.holdingGenbank.instituteName }}
-              </a>
-            </ng-container>
-            <ng-container *ngIf="!germplasmGnpis.holdingGenbank.webSite">
+            <a [href]="germplasmGnpis.holdingGenbank.webSite">
               {{ germplasmGnpis.holdingGenbank.instituteName }}
-            </ng-container>
+            </a>
+          </ng-template>
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Stock center name"
+          [test]="germplasmGnpis.holdingGenbank.instituteName && !germplasmGnpis.holdingGenbank.webSite">
+          <ng-template>
+            {{ germplasmGnpis.holdingGenbank.instituteName }}
           </ng-template>
         </gpds-card-row>
 
@@ -462,11 +471,14 @@
           <tr>
             <ng-template #InstituteTemplate>
 
-              <figure *ngIf="row.donorInstitute && row.donorInstitute.logo">
-                <img
-                  [src]="IMAGES_INSTITUTION_URL + row.donorInstitute.logo"
-                  align="middle" />
-              </figure>
+              <gpds-card-row
+                label=""
+                [test]="row.donorInstitute && row.donorInstitute.logo">
+                <ng-template>
+                  <img
+                    [src]="IMAGES_INSTITUTION_URL + row.donorInstitute.logo"/>
+                </ng-template>
+              </gpds-card-row>
 
               <gpds-card-row
                 label="Code"
@@ -540,11 +552,14 @@
           <tr>
             <ng-template #InstituteTemplate>
 
-              <figure *ngIf="row.institute && row.institute.logo">
-                <img
-                  [src]="IMAGES_INSTITUTION_URL + row.institute.logo"
-                  align="middle" />
-              </figure>
+              <gpds-card-row
+                label=""
+                [test]="row.institute && row.institute.logo">
+                <ng-template>
+                  <img
+                    [src]="IMAGES_INSTITUTION_URL + row.institute.logo"/>
+                </ng-template>
+              </gpds-card-row>
 
               <gpds-card-row
                 label="Code"

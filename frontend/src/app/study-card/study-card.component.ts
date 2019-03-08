@@ -92,10 +92,6 @@ export class StudyCardComponent implements OnInit {
 
     }
 
-    checkLocation(location: BrapiLocation) {
-        return location && location.longitude && location.latitude;
-    }
-
     isNotURN(pui: string) {
         return !(pui.substring(0, 3) === 'urn');
     }

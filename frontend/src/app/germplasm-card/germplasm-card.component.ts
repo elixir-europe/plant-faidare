@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
-import { Germplasm, GermplasmProgeny, Site } from '../models/gnpis.germplasm.model';
-import { BrapiGermplasmAttributes, BrapiGermplasmPedigree } from '../models/brapi.germplasm.model';
-import { BrapiLocation } from '../models/brapi.model';
+import { Germplasm, Children, Site } from '../models/gnpis.germplasm.model';
+import { BrapiGermplasmPedigree } from '../models/brapi.germplasm.model';
+import { BrapiGermplasmAttributes, BrapiLocation } from '../models/brapi.model';
 
-@Component({
+@Component( {
     selector: 'gpds-germplasm-card',
     templateUrl: './germplasm-card.component.html',
     styleUrls: ['./germplasm-card.component.scss']
-})
+} )
 
 export class GermplasmCardComponent implements OnInit {
 
@@ -31,7 +31,7 @@ export class GermplasmCardComponent implements OnInit {
 
     germplasmGnpis: Germplasm;
     germplasmPedigree: BrapiGermplasmPedigree;
-    germplasmProgeny: GermplasmProgeny[];
+    germplasmProgeny: Children[];
     germplasmAttributes: BrapiGermplasmAttributes[];
     germplasmLocations: BrapiLocation[] = [];
     germplasmId: string;

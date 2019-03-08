@@ -6,14 +6,7 @@ import { BrapiService } from '../brapi.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
-import {
-    BrapiDescriptor,
-    BrapiDonor,
-    BrapiGermplasmAttributes,
-    BrapiGermplasmPedigree,
-    BrapiSibling
-} from '../models/brapi.germplasm.model';
-import { Germplasm, GermplasmData, GermplasmResult, GermplasmSet, Institute, Origin, Site } from '../models/gnpis.germplasm.model';
+
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'ngx-moment';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
@@ -21,6 +14,13 @@ import { CardSectionComponent } from '../card-section/card-section.component';
 import { CardRowComponent } from '../card-row/card-row.component';
 import { CardTableComponent } from '../card-table/card-table.component';
 import { MapComponent } from '../map/map.component';
+import {
+    BrapiGermplasmAttributes,
+    BrapiGermplasmPedigree,
+    BrapiResult,
+    BrapiSibling
+} from "../models/brapi.model";
+import {Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site} from "../models/gnpis.model";
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
 
@@ -59,7 +59,7 @@ describe('GermplasmCardComponent', () => {
         ]
     );
 
-    const brapiSite: Site = {
+    const gnpisSite: Site = {
         latitude: null,
         longitude: null,
         siteId: null,
@@ -72,13 +72,9 @@ describe('GermplasmCardComponent', () => {
         defaultDisplayName: 'frere1'
     };
 
-    const brapiDescriptor: BrapiDescriptor = {
-        name: 'caracteristique1',
-        pui: '12',
-        value: '32'
-    };
 
-    const brapiGermplasmPedigree: GermplasmResult<BrapiGermplasmPedigree> = {
+    const brapiGermplasmPedigree: BrapiResult<BrapiGermplasmPedigree> = {
+        metadata: null,
         result: {
             germplasmDbId: '12',
             defaultDisplayName: '12',
@@ -104,7 +100,7 @@ describe('GermplasmCardComponent', () => {
         }
     };*/
 
-    const brapiInstitute: Institute = {
+    const gnpisInstitute: Institute = {
         instituteName: 'urgi',
         instituteCode: 'inra',
         acronym: 'urgi',
@@ -115,9 +111,8 @@ describe('GermplasmCardComponent', () => {
         logo: null
     };
 
-    const brapiOrigin: Origin = { ... brapiInstitute,
-        institute: brapiInstitute,
-        germplasmPUI: '12',
+    const gnpisGermplasmInstitute: GermplasmInstitute = { ... gnpisInstitute,
+        institute: gnpisInstitute,
         accessionNumber: '12',
         accessionCreationDate: '1993',
         materialType: 'feuille',
@@ -127,15 +122,15 @@ describe('GermplasmCardComponent', () => {
         distributionStatus: null
     };
 
-    const brapiDonor: BrapiDonor = {
-        donorInstitute: brapiInstitute,
+    const gnpisDonor: Donor = {
+        donorInstitute: gnpisInstitute,
         donorGermplasmPUI: '12',
         donorAccessionNumber: '12',
         donorInstituteCode: 'urgi',
         donationDate: null
     };
 
-    const germplasmSet: GermplasmSet = {
+    const gnpisGermplasmSet: GermplasmSet = {
         germplasmCount: 12,
         germplasmRef: null,
         id: 12,
@@ -143,18 +138,21 @@ describe('GermplasmCardComponent', () => {
         type: 'plan'
     };
 
-    const brapiGermplasmAttributes: GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>> = {
+    const brapiGermplasmAttributes: BrapiResult<BrapiGermplasmAttributes> = {
+        metadata: null,
         result: {
+            germplasmDbId: '12',
             data: [{
                 attributeName: 'longueur',
-                value: '30'
+                value: '30',
+                attributeDbId: '1',
+                attributeCode: 'longeur',
+                determinedDate: 'today'
             }]
         }
     };
 
     const germplasmTest: Germplasm = {
-        url: 'www.cirad.fr',
-        source: 'cirad',
         germplasmDbId: 'test',
         defaultDisplayName: 'test',
         accessionNumber: 'test',
@@ -175,7 +173,7 @@ describe('GermplasmCardComponent', () => {
         speciesAuthority: 'L',
         subtaxa: null,
         subtaxaAuthority: null,
-        donors: [brapiDonor],
+        donors: [gnpisDonor],
         acquisitionDate: null,
         genusSpecies: null,
         genusSpeciesSubtaxa: null,
@@ -184,20 +182,19 @@ describe('GermplasmCardComponent', () => {
         geneticNature: null,
         comment: null,
         photo: null,
-        holdingInstitute: brapiInstitute,
-        holdingGenbank: brapiInstitute,
+        holdingInstitute: gnpisInstitute,
+        holdingGenbank: gnpisInstitute,
         presenceStatus: null,
         children: null,
-        descriptors: [brapiDescriptor],
         originSite: null,
         collectingSite: null,
         evaluationSites: null,
-        collector: brapiOrigin,
-        breeder: brapiOrigin,
-        distributors: [brapiOrigin],
-        panel: [germplasmSet],
-        collection: [germplasmSet],
-        population: [germplasmSet]
+        collector: gnpisGermplasmInstitute,
+        breeder: gnpisGermplasmInstitute,
+        distributors: [gnpisGermplasmInstitute],
+        panel: [gnpisGermplasmSet],
+        collection: [gnpisGermplasmSet],
+        population: [gnpisGermplasmSet]
     };
 
     beforeEach(async(() => {

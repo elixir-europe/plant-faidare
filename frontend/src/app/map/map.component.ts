@@ -11,17 +11,20 @@ import { BrapiLocation } from '../models/brapi.model';
 export class MapComponent implements OnInit {
 
     @Input() locations: BrapiLocation[];
+    curatedLocationList: BrapiLocation[] = [];
 
     constructor() {
     }
 
     ngOnInit() {
-        const container = L.DomUtil.get('map');
-        if (container) {
+
+        this.removeEmptyLocations(this.locations);
+        if (this.curatedLocationList.length > 0) {
+            const container = L.DomUtil.get('map');
             const map = L.map('map');
 
             // initialize map centered on the first site
-            const firstLocation: BrapiLocation = this.locations[0];
+            const firstLocation: BrapiLocation = this.curatedLocationList[0];
             if (firstLocation) {
                 map.setView([firstLocation.latitude, firstLocation.longitude], 5);
             }
@@ -30,9 +33,10 @@ export class MapComponent implements OnInit {
                 attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, ' +
                     'Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
             }).addTo(map);
+
             // add markers for all locations using markercluster plugin
             const markers = new MarkerClusterGroup();
-            for (const location of this.locations) {
+            for (const location of this.curatedLocationList) {
                 const icon = L.icon({
                     iconUrl: this.getMarkerIconUrl(location)
                 });
@@ -49,11 +53,14 @@ export class MapComponent implements OnInit {
                 );
             }
             map.addLayer(markers);
+        } else {
+            L.DomUtil.get('map').remove();
         }
     }
 
+
     getMarkerIconUrl(site: BrapiLocation): string {
-        if (site.locationType === 'Origin site') {
+        if (site.locationType === 'GermplasmInstitute site') {
             return 'assets/gpds/images/marker-icon-red.png';
         }
         if (site.locationType === 'Collecting site') {
@@ -63,5 +70,13 @@ export class MapComponent implements OnInit {
             return 'assets/gpds/images/marker-icon-green.png';
         }
         return 'assets/gpds/images/marker-icon-purple.png';
+    }
+
+    removeEmptyLocations(locations: BrapiLocation[]) {
+        for (const location of locations) {
+            if (location.latitude && location.longitude) {
+                this.curatedLocationList.push(location);
+            }
+        }
     }
 }

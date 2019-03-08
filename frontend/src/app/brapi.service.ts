@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Germplasm, GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
 import {
-    BrapiGermplasm,
+    BrapiGermplasm, BrapiGermplasmAttributes,
     BrapiLocation,
     BrapiObservationVariable,
     BrapiResult,
@@ -11,7 +11,7 @@ import {
     BrapiStudy,
     BrapiTrial
 } from './models/brapi.model';
-import { BrapiGermplasmAttributes, BrapiGermplasmPedigree } from './models/brapi.germplasm.model';
+import { BrapiGermplasmPedigree } from './models/brapi.germplasm.model';
 
 export const BASE_URL = 'brapi/v1';
 

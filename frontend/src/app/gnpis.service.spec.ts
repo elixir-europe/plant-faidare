@@ -1,9 +1,9 @@
-import { Germplasm, GermplasmSet, Institute, Origin, Site } from './models/gnpis.germplasm.model';
+import { Germplasm, GermplasmSet, Institute, GermplasmInstitute, Site } from './models/gnpis.germplasm.model';
 
 import { BASE_URL, BASE_URL_GERMPLASM, GnpisService } from './gnpis.service';
-import { BrapiMetaData, BrapiResults } from './models/brapi.model';
+import {BrapiDonor, BrapiMetaData, BrapiResults} from './models/brapi.model';
 import { DataDiscoveryCriteria, DataDiscoverySource } from './models/data-discovery.model';
-import { BrapiDescriptor, BrapiDonor } from './models/brapi.germplasm.model';
+import { BrapiDescriptor} from './models/brapi.germplasm.model';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
@@ -51,7 +51,7 @@ describe('GnpisService', () => {
         logo: null
     };
 
-    const brapiOrigin: Origin = { ...brapiInstitute,
+    const brapiOrigin: GermplasmInstitute = { ...brapiInstitute,
         institute: brapiInstitute,
         germplasmPUI: '12',
         accessionNumber: '12',

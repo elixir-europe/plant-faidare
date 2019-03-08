@@ -7,7 +7,7 @@
 
   </h3>
 
-  <gpds-map [locations]="[location]" *ngIf="location && location.latitude && location.longitude"></gpds-map>
+  <gpds-map [locations]="[location]"></gpds-map>
 
 
 
@@ -15,10 +15,6 @@
     header="Details">
     <ng-template>
       <div class="card-body card-section-body">
-        <gpds-card-row
-          label="Site type"
-          [value]="location.locationType">
-        </gpds-card-row>
 
         <gpds-card-row
           label="Abbreviation"
@@ -26,8 +22,45 @@
         </gpds-card-row>
 
         <gpds-card-row
-          label="Country code"
-          [value]="location.countryCode">
+          label="Type"
+          [value]="location.locationType">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Status"
+          [value]="location.additionalInfo['Site status']">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Institution/Landowner"
+          [value]="location.institutionName">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Institution address"
+          [value]="location.institutionAddress">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Coordinates precision"
+          [value]="location.additionalInfo['Coordinates precision']">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Latitude"
+          [value]="location.latitude">
+          <!--[value]="formatCoordinates(location.latitude)">-->
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Longitude"
+          [value]="location.longitude">
+          <!--[value]="formatCoordinates(location.longitude)">-->
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Geographical location"
+          [value]="location.additionalInfo['Geographical location']">
         </gpds-card-row>
 
         <gpds-card-row
@@ -37,13 +70,9 @@
         </gpds-card-row>
 
         <gpds-card-row
-          label="Institution address"
-          [value]="location.institutionAddress">
-        </gpds-card-row>
-
-        <gpds-card-row
-          label="Institution name"
-          [value]="location.institutionAddress">
+          label="Country code"
+          [test]="location.countryCode && !location.additionalInfo['Geographical location']">
+          [value]="location.countryCode">
         </gpds-card-row>
 
         <gpds-card-row
@@ -52,31 +81,58 @@
         </gpds-card-row>
 
         <gpds-card-row
-          label="Latitude"
-          [value]="location.latitude">
+          label="Slope"
+          [value]="location.additionalInfo['Slope']">
         </gpds-card-row>
 
         <gpds-card-row
-          label="Longitude"
-          [value]="location.longitude">
+          label="Exposure"
+          [value]="location.additionalInfo['Exposure']">
         </gpds-card-row>
+
+        <gpds-card-row
+          label="Topography"
+          [value]="location.additionalInfo['Topography']">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Environment type"
+          [value]="location.additionalInfo['Environment type']">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Distance to city"
+          [value]="location.additionalInfo['Distance to city']">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Direction from city"
+          [value]="location.additionalInfo['Direction from city']">
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Comment"
+          [value]="location.additionalInfo['Comment']">
+        </gpds-card-row>
+
       </div>
     </ng-template>
   </gpds-card-section>
 
   <gpds-card-section
     header="Additional information"
-    [test]="additionalInfos && additionalInfos.length != 0">
+    [test]="additionalInfos && additionalInfos.length > 0">
     <ng-template>
-      <gpds-card-table
-        [rows]="additionalInfos">
-        <ng-template let-row>
-          <tr>
-            <td width="50%">{{ row.key }}</td>
-            <td>{{ row.value }}</td>
-          </tr>
-        </ng-template>
-      </gpds-card-table>
+      <div class="card-body card-section-body">
+
+        <ng-container *ngFor="let additionalInfo of additionalInfos">
+          <gpds-card-row
+            [label]="additionalInfo.key"
+            [value]="additionalInfo.value">
+          </gpds-card-row>
+        </ng-container>
+
+      </div>
     </ng-template>
   </gpds-card-section>
 
