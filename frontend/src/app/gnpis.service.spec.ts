@@ -1,9 +1,9 @@
-import { Germplasm, Institute, Origin, Site } from './models/gnpis.germplasm.model';
+import { Germplasm, GermplasmSet, Institute, Origin, Site } from './models/gnpis.germplasm.model';
 
 import { BASE_URL, BASE_URL_GERMPLASM, GnpisService } from './gnpis.service';
 import { BrapiMetaData, BrapiResults } from './models/brapi.model';
 import { DataDiscoveryCriteria, DataDiscoverySource } from './models/data-discovery.model';
-import { BrapiDescriptor, BrapiDonor, BrapiSet } from './models/brapi.germplasm.model';
+import { BrapiDescriptor, BrapiDonor } from './models/brapi.germplasm.model';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
@@ -29,7 +29,7 @@ describe('GnpisService', () => {
     const site: Site = {
         latitude: null,
         longitude: null,
-        siteId: 1,
+        siteId: '1',
         siteName: 'Nantes',
         siteType: null
     };
@@ -71,7 +71,7 @@ describe('GnpisService', () => {
         donationDate: null
     };
 
-    const brapiSet: BrapiSet = {
+    const germplasmSet: GermplasmSet = {
         germplasmCount: 12,
         germplasmRef: null,
         id: 12,
@@ -122,9 +122,9 @@ describe('GnpisService', () => {
         collector: brapiOrigin,
         breeder: brapiOrigin,
         distributors: [brapiOrigin],
-        panel: [brapiSet],
-        collection: [brapiSet],
-        population: [brapiSet]
+        panel: [germplasmSet],
+        collection: [germplasmSet],
+        population: [germplasmSet]
     };
 
     let gnpisService: GnpisService;

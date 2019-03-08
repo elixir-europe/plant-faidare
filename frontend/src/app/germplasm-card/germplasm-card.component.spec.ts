@@ -11,16 +11,16 @@ import {
     BrapiDonor,
     BrapiGermplasmAttributes,
     BrapiGermplasmPedigree,
-    BrapiSet,
     BrapiSibling
 } from '../models/brapi.germplasm.model';
-import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin, Site } from '../models/gnpis.germplasm.model';
+import { Germplasm, GermplasmData, GermplasmResult, GermplasmSet, Institute, Origin, Site } from '../models/gnpis.germplasm.model';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'ngx-moment';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { CardSectionComponent } from '../card-section/card-section.component';
 import { CardRowComponent } from '../card-row/card-row.component';
 import { CardTableComponent } from '../card-table/card-table.component';
+import { MapComponent } from '../map/map.component';
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
 
@@ -135,7 +135,7 @@ describe('GermplasmCardComponent', () => {
         donationDate: null
     };
 
-    const brapiSet: BrapiSet = {
+    const germplasmSet: GermplasmSet = {
         germplasmCount: 12,
         germplasmRef: null,
         id: 12,
@@ -195,9 +195,9 @@ describe('GermplasmCardComponent', () => {
         collector: brapiOrigin,
         breeder: brapiOrigin,
         distributors: [brapiOrigin],
-        panel: [brapiSet],
-        collection: [brapiSet],
-        population: [brapiSet]
+        panel: [germplasmSet],
+        collection: [germplasmSet],
+        population: [germplasmSet]
     };
 
     beforeEach(async(() => {
@@ -206,7 +206,7 @@ describe('GermplasmCardComponent', () => {
             declarations: [
                 GermplasmCardComponent, LoadingSpinnerComponent, MockComponent(XrefsComponent)
                 GermplasmCardComponent, CardSectionComponent,
-                CardRowComponent, LoadingSpinnerComponent, CardTableComponent
+                CardRowComponent, LoadingSpinnerComponent, CardTableComponent, MapComponent
             ],
             providers: [
                 { provide: BrapiService, useValue: brapiService },
@@ -241,10 +241,11 @@ describe('GermplasmCardComponent', () => {
             expect(tester.title).toContainText('Germplasm: test');
             expect(tester.cardHeader[0]).toContainText('Identification');
             expect(tester.cardHeader[1]).toContainText('Holding');
-            expect(tester.cardHeader[2]).toContainText('Origin');
-            expect(tester.cardHeader[3]).toContainText('Distribution');
-            expect(tester.cardHeader[4]).toContainText('Genealogy');
-            expect(tester.cardHeader[5]).toContainText('Evaluation Data');
+            expect(tester.cardHeader[2]).toContainText('Collecting');
+            expect(tester.cardHeader[3]).toContainText('Breeder');
+            expect(tester.cardHeader[4]).toContainText('Donation');
+            expect(tester.cardHeader[5]).toContainText('Distribution');
+            expect(tester.cardHeader[6]).toContainText('Evaluation Data');
         });
     }));
 });

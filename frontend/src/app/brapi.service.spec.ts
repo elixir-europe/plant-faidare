@@ -16,10 +16,9 @@ import {
     BrapiGermplasmAttributes,
     BrapiGermplasmPedigree,
     BrapiGermplasmProgeny,
-    BrapiSet,
     BrapiSibling
 } from './models/brapi.germplasm.model';
-import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin, Site } from './models/gnpis.germplasm.model';
+import { Germplasm, GermplasmData, GermplasmResult, GermplasmSet, Institute, Origin, Site } from './models/gnpis.germplasm.model';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
@@ -212,7 +211,7 @@ describe('BrapiService', () => {
         donationDate: null
     };
 
-    const brapiSet: BrapiSet = {
+    const germplasmSet: GermplasmSet = {
         germplasmCount: 12,
         germplasmRef: null,
         id: 12,
@@ -272,9 +271,9 @@ describe('BrapiService', () => {
         collector: origin,
         breeder: origin,
         distributors: [origin],
-        panel: [brapiSet],
-        collection: [brapiSet],
-        population: [brapiSet]
+        panel: [germplasmSet],
+        collection: [germplasmSet],
+        population: [germplasmSet]
     };
 
     const germplasmResultTest = {
