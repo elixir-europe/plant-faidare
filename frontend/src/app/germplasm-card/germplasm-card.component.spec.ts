@@ -14,6 +14,8 @@ import { CardSectionComponent } from '../card-section/card-section.component';
 import { CardRowComponent } from '../card-row/card-row.component';
 import { CardTableComponent } from '../card-table/card-table.component';
 import { MapComponent } from '../map/map.component';
+import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiResult, BrapiSibling } from '../models/brapi.model';
+import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } from '../models/gnpis.model';
 import {
     BrapiGermplasmAttributes,
     BrapiGermplasmPedigree,
@@ -111,7 +113,8 @@ describe('GermplasmCardComponent', () => {
         logo: null
     };
 
-    const gnpisGermplasmInstitute: GermplasmInstitute = { ... gnpisInstitute,
+    const gnpisGermplasmInstitute: GermplasmInstitute = {
+        ...gnpisInstitute,
         institute: gnpisInstitute,
         accessionNumber: '12',
         accessionCreationDate: '1993',
@@ -208,7 +211,8 @@ describe('GermplasmCardComponent', () => {
             providers: [
                 { provide: BrapiService, useValue: brapiService },
                 { provide: GnpisService, useValue: gnpisService },
-                { provide: ActivatedRoute,
+                {
+                    provide: ActivatedRoute,
                     useValue: {
                         snapshot: {
                             queryParams: convertToParamMap({

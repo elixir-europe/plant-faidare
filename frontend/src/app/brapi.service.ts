@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Germplasm, GermplasmData, GermplasmResult } from './models/gnpis.germplasm.model';
 import {
-    BrapiGermplasm, BrapiGermplasmAttributes,
+    BrapiGermplasm,
+    BrapiGermplasmAttributes,
+    BrapiGermplasmPedigree,
     BrapiLocation,
     BrapiObservationVariable,
     BrapiResult,
@@ -11,7 +12,7 @@ import {
     BrapiStudy,
     BrapiTrial
 } from './models/brapi.model';
-import { BrapiGermplasmPedigree } from './models/brapi.germplasm.model';
+import { Germplasm } from './models/gnpis.model';
 
 export const BASE_URL = 'brapi/v1';
 
@@ -28,18 +29,18 @@ export class BrapiService {
             .get<Germplasm>(`${BASE_URL}/germplasm/${germplasmDbId}`);
     }
 
-    germplasmPedigree(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmPedigree>> {
+    germplasmPedigree(germplasmDbId: string): Observable<BrapiResult<BrapiGermplasmPedigree>> {
         return this.http
-            .get<GermplasmResult<BrapiGermplasmPedigree>>(`${BASE_URL}/germplasm/${germplasmDbId}/pedigree`);
+            .get<BrapiResult<BrapiGermplasmPedigree>>(`${BASE_URL}/germplasm/${germplasmDbId}/pedigree`);
     }
 
     /*germplasmProgeny(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmProgeny>> {
         return this.http.get<GermplasmResult<BrapiGermplasmProgeny>>(`${BASE_URL}/germplasm/${germplasmDbId}/progeny`);
     }*/
 
-    germplasmAttributes(germplasmDbId: string): Observable<GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>>> {
+    germplasmAttributes(germplasmDbId: string): Observable<BrapiResult<BrapiGermplasmAttributes>> {
         return this.http
-            .get<GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>>>(`${BASE_URL}/germplasm/${germplasmDbId}/attributes`);
+            .get<BrapiResult<BrapiGermplasmAttributes>>(`${BASE_URL}/germplasm/${germplasmDbId}/attributes`);
     }
 
     study(studyDbId: string): Observable<BrapiResult<BrapiStudy>> {

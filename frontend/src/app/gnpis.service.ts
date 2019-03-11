@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, zip } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Germplasm } from './models/gnpis.germplasm.model';
 import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDiscoverySource } from './models/data-discovery.model';
 import { BrapiResults } from './models/brapi.model';
 import { map } from 'rxjs/operators';
+import { Germplasm } from './models/gnpis.model';
 import { XrefResponse } from './models/xref.model';
 
 

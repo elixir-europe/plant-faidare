@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
-import { Germplasm, Children, Site } from '../models/gnpis.germplasm.model';
-import { BrapiGermplasmPedigree } from '../models/brapi.germplasm.model';
-import { BrapiGermplasmAttributes, BrapiLocation } from '../models/brapi.model';
+import { BrapiAttributeData, BrapiGermplasmPedigree, BrapiLocation } from '../models/brapi.model';
+import { Children, Germplasm, Site } from '../models/gnpis.model';
 
 @Component( {
     selector: 'gpds-germplasm-card',
@@ -32,7 +31,7 @@ export class GermplasmCardComponent implements OnInit {
     germplasmGnpis: Germplasm;
     germplasmPedigree: BrapiGermplasmPedigree;
     germplasmProgeny: Children[];
-    germplasmAttributes: BrapiGermplasmAttributes[];
+    germplasmAttributes: BrapiAttributeData[];
     germplasmLocations: BrapiLocation[] = [];
     germplasmId: string;
     germplasmPuid: string;
@@ -130,15 +129,11 @@ export class GermplasmCardComponent implements OnInit {
 
     checkBreeder() {
         return (this.germplasmGnpis.breeder)
-            && (this.germplasmGnpis.breeder.institute.instituteName
-                || this.germplasmGnpis.breeder.germplasmPUI
-                || this.germplasmGnpis.breeder.accessionNumber
+            && (this.germplasmGnpis.breeder.institute
                 || this.germplasmGnpis.breeder.accessionCreationDate
-                || this.germplasmGnpis.breeder.materialType
-                || this.germplasmGnpis.breeder.collectors
+                || this.germplasmGnpis.breeder.accessionNumber
                 || this.germplasmGnpis.breeder.registrationYear
-                || this.germplasmGnpis.breeder.deregistrationYear
-                || this.germplasmGnpis.breeder.distributionStatus);
+                || this.germplasmGnpis.breeder.deregistrationYear);
     }
 
     checkPedigree() {
@@ -161,8 +156,7 @@ export class GermplasmCardComponent implements OnInit {
 
     checkCollectorInstituteFields() {
         return (this.germplasmGnpis.collector) &&
-            (this.germplasmGnpis.collector.germplasmPUI
-                || this.germplasmGnpis.collector.accessionNumber
+            (this.germplasmGnpis.collector.accessionNumber
                 || this.germplasmGnpis.collector.accessionCreationDate
                 || this.germplasmGnpis.collector.materialType
                 || this.germplasmGnpis.collector.collectors

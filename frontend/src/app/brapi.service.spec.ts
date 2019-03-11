@@ -1,18 +1,23 @@
 import { BrapiService } from './brapi.service';
 import {
-    BrapiContacts, BrapiData, BrapiDonor,
-    BrapiGermplasm, BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiGermplasmProgeny,
+    BrapiContacts,
+    BrapiGermplasm,
+    BrapiGermplasmAttributes,
+    BrapiGermplasmPedigree,
+    BrapiGermplasmProgeny,
     BrapiLocation,
     BrapiObservationVariable,
-    BrapiResult, BrapiResults, BrapiSibling,
-    BrapiStudy, BrapiTaxonIds,
+    BrapiProgeny,
+    BrapiResult,
+    BrapiResults,
+    BrapiSibling,
+    BrapiStudy,
     BrapiTrial
 } from './models/brapi.model';
 import { DataDiscoverySource } from './models/data-discovery.model';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import {Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site} from "./models/gnpis.model";
-import Result = jasmine.Result;
+import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } from './models/gnpis.model';
 
 describe('BrapiService', () => {
 
@@ -172,7 +177,14 @@ describe('BrapiService', () => {
         defaultDisplayName: 'frere1'
     };
 
+    const brapiProgeny: BrapiProgeny = {
+        germplasmDbId: 'test',
+        defaultDisplayName: 'progeny1',
+        parentType: 'parent1'
+    };
+
     const brapiGermplasmPedigree: BrapiResult<BrapiGermplasmPedigree> = {
+        metadata: null,
         result: {
             germplasmDbId: 'test',
             defaultDisplayName: '12',
@@ -191,10 +203,11 @@ describe('BrapiService', () => {
     };
 
     const brapiGermplasmProgeny: BrapiResult<BrapiGermplasmProgeny> = {
+        metadata: null,
         result: {
             germplasmDbId: 'test',
             defaultDisplayName: '11',
-            progeny: [brapiSibling]
+            progeny: [brapiProgeny]
         }
 
     };
@@ -209,9 +222,9 @@ describe('BrapiService', () => {
         address: '12',
         logo: null
     };
-    const origin: GermplasmInstitute = { ... institute,
+    const origin: GermplasmInstitute = {
+        ...institute,
         institute: institute,
-        germplasmPUI: '12',
         accessionNumber: '12',
         accessionCreationDate: '1993',
         materialType: 'feuille',
@@ -221,7 +234,7 @@ describe('BrapiService', () => {
         distributionStatus: null
     };
 
-    const brapiDonor: BrapiDonor = {
+    const brapiDonor: Donor = {
         donorInstitute: institute,
         donorGermplasmPUI: '12',
         donorAccessionNumber: '12',
@@ -237,10 +250,15 @@ describe('BrapiService', () => {
         type: 'plan'
     };
 
-    const brapiGermplasmAttributes: BrapiResult<BrapiData<BrapiGermplasmAttributes[]>> = {
+    const brapiGermplasmAttributes: BrapiResult<BrapiGermplasmAttributes> = {
+        metadata: null,
         result: {
+            germplasmDbId: 'test',
             data: [{
+                attributeCode: 'att',
+                attributeDbId: 'attr2',
                 attributeName: 'longueur',
+                determinedDate: '2019',
                 value: '30'
             }]
         }
@@ -289,10 +307,6 @@ describe('BrapiService', () => {
         panel: [germplasmSet],
         collection: [germplasmSet],
         population: [germplasmSet]
-    };
-
-    const germplasmResultTest = {
-        result: germplasmTest
     };
 
     let brapiService: BrapiService;
@@ -408,7 +422,7 @@ describe('BrapiService', () => {
 
     it('should fetch the germplasm attributes', () => {
 
-        let fetchedGermplasmAttributes: BrapiResult<BrapiData<BrapiGermplasmAttributes[]>>;
+        let fetchedGermplasmAttributes: BrapiResult<BrapiGermplasmAttributes>;
         const germplasmDbId: string = germplasmTest.germplasmDbId;
         brapiService.germplasmAttributes(germplasmDbId).subscribe(response => {
             fetchedGermplasmAttributes = response;

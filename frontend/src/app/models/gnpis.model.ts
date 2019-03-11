@@ -1,4 +1,4 @@
-import {BrapiDonor, BrapiGermplasm} from "./brapi.model";
+import { BrapiDonor, BrapiGermplasm } from './brapi.model';
 
 export interface Germplasm extends BrapiGermplasm {
     genusSpecies: string;
@@ -51,7 +51,7 @@ export interface GermplasmInstitute extends Institute {
     collectors: string;
     registrationYear: string;
     deregistrationYear: string;
-    distributionStatus: string;
+    distributionStatus?: string;
 }
 
 export interface Photo {
@@ -75,8 +75,8 @@ export interface Children {
 
 }
 
-export interface Donor extends  BrapiDonor{
-        donorInstitute: Institute
+export interface Donor extends BrapiDonor {
+    donorInstitute: Institute;
 }
 
 

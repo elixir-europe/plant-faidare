@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
-import {BrapiAdditionalInfo, BrapiLocation} from '../models/brapi.model';
+import { BrapiLocation } from '../models/brapi.model';
 import { KeyValueObject } from '../utils';
 
 @Component({
@@ -39,7 +39,17 @@ export class SiteCardComponent implements OnInit {
     }
 
     manageAdditionalInfo(keyValues: KeyValueObject[]) {
-        var forbiddenElements: String[] = ['Site status', 'Coordinates precision', 'Slope', 'Exposure', 'Geographical location', 'Distance to city', 'Direction from city', 'Environment type', 'Topography', 'Comment'];
+        const forbiddenElements: String[] = [
+            'Site status',
+            'Coordinates precision',
+            'Slope',
+            'Exposure',
+            'Geographical location',
+            'Distance to city',
+            'Direction from city',
+            'Environment type',
+            'Topography',
+            'Comment'];
         for (const keyValue of keyValues) {
             if (!forbiddenElements.includes(keyValue.key)) {
                 this.additionalInfos.push(keyValue);
@@ -49,28 +59,27 @@ export class SiteCardComponent implements OnInit {
 
     formatCoordinates(decimalDegrees: number, type: string): string {
         if (decimalDegrees && type) {
-            var degree = Math.floor(decimalDegrees);
-            var decimalMinute = (decimalDegrees - degree) * 60;
-            var minute = Math.floor(decimalMinute);
-            var decimalSeconde = (decimalMinute - minute) * 60;
-            var seconde = Math.floor(decimalSeconde);
+            const degree = Math.floor(decimalDegrees);
+            const decimalMinute = (decimalDegrees - degree) * 60;
+            const minute = Math.floor(decimalMinute);
+            const decimalSeconde = (decimalMinute - minute) * 60;
+            const seconde = Math.floor(decimalSeconde);
 
-            var direction = '';
-            if (type == 'latitude') {
+            let direction = '';
+            if (type === 'latitude') {
                 if (decimalDegrees >= 0) {
-                    direction = "N";
+                    direction = 'N';
                 } else {
-                    direction = "S";
+                    direction = 'S';
+                }
+            } else if (type === 'longitude') {
+                if (decimalDegrees >= 0) {
+                    direction = 'E';
+                } else {
+                    direction = 'W';
                 }
             }
-            else if (type == 'longitude') {
-                if (decimalDegrees >= 0) {
-                    direction = "E";
-                } else {
-                    direction = "W";
-                }
-            }
-            return decimalDegrees + "° (" + degree + "° " + minute + "' " + seconde + "'' " + direction + ")";
+            return decimalDegrees + '° (' + degree + '° ' + minute + '\' ' + seconde + '\'\' ' + direction + ')';
         } else {
             return null;
         }

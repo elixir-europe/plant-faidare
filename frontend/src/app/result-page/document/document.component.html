@@ -12,10 +12,10 @@
     </a>
   </h5>
   <h5>
-    <a class="title" *ngIf="getRouterLink() && document['@type'] == 'Phenotyping Study'" [routerLink]="getRouterLink()">
+    <a class="title" *ngIf="getRouterLink() && document['@type'].includes('Phenotyping Study')" [routerLink]="getRouterLink()">
       (go to this {{ document["@type"] }} card)
     </a>
-    <a class="title" *ngIf="getRouterLink() && document['@type'] != 'Phenotyping Study'" [routerLink]="getRouterLink()" [queryParams]="getQueryParam()">
+    <a class="title" *ngIf="getRouterLink() && !document['@type'].includes('Phenotyping Study')" [routerLink]="getRouterLink()" [queryParams]="getQueryParam()">
       (go to this {{ document["@type"] }} card)
     </a>
   </h5>
