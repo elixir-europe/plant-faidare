@@ -28,7 +28,10 @@
 
         <gpds-card-row
           label="Status"
-          [value]="location.additionalInfo['Site status']">
+          [test]="location.additionalInfo['Site status']">
+          <ng-template>
+            {{ location.additionalInfo['Site status'] }}
+          </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
@@ -43,36 +46,44 @@
 
         <gpds-card-row
           label="Coordinates precision"
-          [value]="location.additionalInfo['Coordinates precision']">
+          [test]="location.additionalInfo['Coordinates precision']">
+          <ng-template>
+            {{ location.additionalInfo['Coordinates precision'] }}
+          </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
           label="Latitude"
-          [value]="location.latitude">
-          <!--[value]="formatCoordinates(location.latitude)">-->
+          [value]="formatCoordinates(location.latitude, 'latitude')">
         </gpds-card-row>
 
         <gpds-card-row
           label="Longitude"
-          [value]="location.longitude">
-          <!--[value]="formatCoordinates(location.longitude)">-->
+          [value]="formatCoordinates(location.longitude, 'longitude')">
         </gpds-card-row>
 
         <gpds-card-row
           label="Geographical location"
-          [value]="location.additionalInfo['Geographical location']">
+          [test]="location.additionalInfo['Geographical location']">
+          <ng-template>
+            {{ location.additionalInfo['Geographical location'] }}
+          </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
           label="Country name"
-          [test]="location.countryName && !location.additionalInfo['Geographical location']"
-          [value]="location.countryName">
+          [test]="location.countryName && !location.additionalInfo['Geographical location']">
+          <ng-template>
+            {{ location.countryName }}
+          </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
           label="Country code"
           [test]="location.countryCode && !location.additionalInfo['Geographical location']">
-          [value]="location.countryCode">
+          <ng-template>
+            {{ location.countryCode }}
+          </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
@@ -87,32 +98,50 @@
 
         <gpds-card-row
           label="Exposure"
-          [value]="location.additionalInfo['Exposure']">
+          [test]="location.additionalInfo['Exposure']">
+          <ng-template>
+            {{ location.additionalInfo['Exposure'] }}
+          </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
           label="Topography"
-          [value]="location.additionalInfo['Topography']">
+          [test]="location.additionalInfo['Topography']">
+          <ng-template>
+            {{ location.additionalInfo['Topography'] }}
+          </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
           label="Environment type"
-          [value]="location.additionalInfo['Environment type']">
+          [test]="location.additionalInfo['Environment type']">
+          <ng-template>
+            {{ location.additionalInfo['Environment type'] }}
+          </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
           label="Distance to city"
-          [value]="location.additionalInfo['Distance to city']">
+          [test]="location.additionalInfo['Distance to city']">
+          <ng-template>
+            {{ location.additionalInfo['Distance to city'] }}
+          </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
           label="Direction from city"
-          [value]="location.additionalInfo['Direction from city']">
+          [test]="location.additionalInfo['Direction from city']">
+          <ng-template>
+            {{ location.additionalInfo['Direction from city'] }}
+          </ng-template>
         </gpds-card-row>
 
         <gpds-card-row
           label="Comment"
-          [value]="location.additionalInfo['Comment']">
+          [test]="location.additionalInfo['Comment']">
+          <ng-template>
+            {{ location.additionalInfo['Comment'] }}
+          </ng-template>
         </gpds-card-row>
 
       </div>

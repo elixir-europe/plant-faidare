@@ -60,7 +60,7 @@ export class MapComponent implements OnInit {
 
 
     getMarkerIconUrl(site: BrapiLocation): string {
-        if (site.locationType === 'GermplasmInstitute site') {
+        if (site.locationType === 'Origin site') {
             return 'assets/gpds/images/marker-icon-red.png';
         }
         if (site.locationType === 'Collecting site') {
@@ -74,7 +74,7 @@ export class MapComponent implements OnInit {
 
     removeEmptyLocations(locations: BrapiLocation[]) {
         for (const location of locations) {
-            if (location.latitude && location.longitude) {
+            if (location && location.latitude && location.longitude) {
                 this.curatedLocationList.push(location);
             }
         }

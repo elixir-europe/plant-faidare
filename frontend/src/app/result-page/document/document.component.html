@@ -7,16 +7,17 @@
     <a class="badge badge-source mr-2" [href]="getSourceURL()" target="_blank">
       {{ getSource() }}
     </a>
-    <a class="title" *ngIf="getURL()" [href]="getURL()">
+    <a class="title" *ngIf="getRouterLink() && document['@type'].includes('Phenotyping Study')" [routerLink]="getRouterLink()">
+      {{ document["schema:name"] }}
+    </a>
+    <a class="title" *ngIf="getRouterLink() && !document['@type'].includes('Phenotyping Study')" [routerLink]="getRouterLink()" [queryParams]="getQueryParam()">
       {{ document["schema:name"] }}
     </a>
   </h5>
+
   <h5>
-    <a class="title" *ngIf="getRouterLink() && document['@type'].includes('Phenotyping Study')" [routerLink]="getRouterLink()">
-      (go to this {{ document["@type"] }} card)
-    </a>
-    <a class="title" *ngIf="getRouterLink() && !document['@type'].includes('Phenotyping Study')" [routerLink]="getRouterLink()" [queryParams]="getQueryParam()">
-      (go to this {{ document["@type"] }} card)
+    <a class="title" *ngIf="getURL()" [href]="getURL()" target="_blank">
+      (external link to this {{ document["@type"] }} card)
     </a>
   </h5>
   <span class="text-justify description">

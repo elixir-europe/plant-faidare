@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
-import { BrapiGermplasm, BrapiLocation, BrapiObservationVariable, BrapiStudy, BrapiTrial } from '../models/brapi.model';
+import { BrapiGermplasm, BrapiObservationVariable, BrapiStudy, BrapiTrial } from '../models/brapi.model';
 
 import { GnpisService } from '../gnpis.service';
 import { DataDiscoverySource } from '../models/data-discovery.model';
@@ -36,14 +36,20 @@ export class StudyCardComponent implements OnInit {
             study$
                 .then(response => {
                     this.study = response.result;
+                    if (this.study.contacts) {
+                        this.study.contacts.sort(this.compareContacts);
+                    }
 
                     this.additionalInfos = [];
                     if (this.study.additionalInfo) {
-                        this.additionalInfos = KeyValueObject.fromObject(this.study.additionalInfo);
+                        this.additionalInfos = KeyValueObject.fromObject(this.study.additionalInfo).sort();
                     }
 
                     // Get study trials
-                    this.trialsIds = this.study.trialDbIds;
+                    if (this.study.trialDbIds) {
+                        this.trialsIds = this.study.trialDbIds.sort();
+                    }
+
                     this.studyDataset = [];
                     if (this.trialsIds && this.trialsIds !== []) {
                         for (const trialsId of this.trialsIds) {
@@ -57,6 +63,9 @@ export class StudyCardComponent implements OnInit {
                                     this.studyDataset.push(trial);
                                 });
                         }
+                        if (this.studyDataset) {
+                            this.studyDataset.sort(this.compareTrials);
+                        }
                     }
 
                     // Get study source
@@ -65,6 +74,7 @@ export class StudyCardComponent implements OnInit {
                         const source$ = this.gnpisService.getSource(sourceURI);
                         source$
                             .subscribe(src => {
+                                console.log(src);
                                 this.studySource = src;
                             });
                     }
@@ -74,14 +84,14 @@ export class StudyCardComponent implements OnInit {
             const variable$ = this.brapiService.studyObservationVariables(studyDbId).toPromise();
             variable$
                 .then(response => {
-                    this.studyObservationVariables = response.result.data;
+                    this.studyObservationVariables = response.result.data.sort(this.compareVariables);
                 });
 
             this.studyGermplasms = [];
             const germplasm$ = this.brapiService.studyGermplasms(studyDbId).toPromise();
             germplasm$
                 .then(studyGermplasm => {
-                    this.studyGermplasms = studyGermplasm.result.data;
+                    this.studyGermplasms = studyGermplasm.result.data.sort(this.compareStudyGermplasm);
                 });
 
             this.loaded = Promise.all([study$, variable$, germplasm$]);
@@ -94,5 +104,45 @@ export class StudyCardComponent implements OnInit {
 
     isNotURN(pui: string) {
         return !(pui.substring(0, 3) === 'urn');
+    }
+
+    compareTrials(a, b) {
+        if (a.trialName < b.trialName) {
+            return -1;
+        }
+        if (a.trialName > b.trialName) {
+            return 1;
+        }
+        return 0;
+    }
+
+    compareStudyGermplasm(a, b) {
+        if (a.germplasmName < b.germplasmName) {
+            return -1;
+        }
+        if (a.germplasmName > b.germplasmName) {
+            return 1;
+        }
+        return 0;
+    }
+
+    compareVariables(a, b) {
+        if (a.observationVariableDbId < b.observationVariableDbId) {
+            return -1;
+        }
+        if (a.observationVariableDbId > b.observationVariableDbId) {
+            return 1;
+        }
+        return 0;
+    }
+
+    compareContacts(a, b) {
+        if (a.name < b.name) {
+            return -1;
+        }
+        if (a.name > b.name) {
+            return 1;
+        }
+        return 0;
     }
 }

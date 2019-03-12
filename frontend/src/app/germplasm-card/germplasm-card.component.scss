@@ -1,2 +1,13 @@
 @import "theme";
 @import '../../styles.scss';
+
+a {
+  color: #0f6fa1;
+  text-decoration: underline;
+}
+
+a:not([href]):not([tabindex]) {
+  color: #0f6fa1;
+  cursor: pointer;
+  text-decoration: underline;
+}

@@ -71,7 +71,7 @@ describe('DocumentComponent', () => {
         expect(tester.source.attr('href')).toEqual('http://dco/url');
 
         expect(tester.title).toContainText('doc_name');
-        expect(tester.title.attr('href')).toEqual('http://dco/url');
+        expect(tester.title.nativeElement['routerLink']).toEqual('/germplasm');
 
         expect(tester.description).toContainText('description');
 
@@ -94,7 +94,7 @@ describe('DocumentComponent', () => {
         tester.detectChanges();
         expect(component).toBeTruthy();
 
-        expect(tester.title).toContainText('(go to this Germplasm card)');
+        expect(tester.title).toContainText('doc_name');
         expect(tester.title.nativeElement['routerLink']).toEqual('/germplasm');
         expect(component.getQueryParam().id).toEqual('g1');
 

@@ -5,11 +5,11 @@ import { GnpisService } from '../gnpis.service';
 import { BrapiAttributeData, BrapiGermplasmPedigree, BrapiLocation } from '../models/brapi.model';
 import { Children, Germplasm, Site } from '../models/gnpis.model';
 
-@Component( {
+@Component({
     selector: 'gpds-germplasm-card',
     templateUrl: './germplasm-card.component.html',
     styleUrls: ['./germplasm-card.component.scss']
-} )
+})
 
 export class GermplasmCardComponent implements OnInit {
 
@@ -46,8 +46,6 @@ export class GermplasmCardComponent implements OnInit {
 
     ngOnInit() {
 
-        // console.log(this.route.snapshot);
-        // console.log(this.route);
         this.germplasmId = this.route.snapshot.queryParams.id;
         this.germplasmPuid = this.route.snapshot.queryParams.pui;
 
@@ -70,8 +68,8 @@ export class GermplasmCardComponent implements OnInit {
             const germplasmAttributes$ = this.brapiService.germplasmAttributes(germplasmId).toPromise();
             germplasmAttributes$
                 .then(germplasmAttributes => {
-                    if (germplasmAttributes.result) {
-                        this.germplasmAttributes = germplasmAttributes.result.data;
+                    if (germplasmAttributes.result.data) {
+                        this.germplasmAttributes = germplasmAttributes.result.data.sort(this.compareAttributes);
                     }
 
                 });
@@ -92,7 +90,18 @@ export class GermplasmCardComponent implements OnInit {
             germplasm$
                 .then(germplasmGnpis => {
                     this.germplasmGnpis = germplasmGnpis;
-                    this.germplasmProgeny = germplasmGnpis.children;
+                    if (germplasmGnpis.children) {
+                        this.germplasmProgeny = germplasmGnpis.children.sort();
+                    }
+                    if (germplasmGnpis.donors) {
+                        this.germplasmGnpis.donors.sort(this.compareDonorInstitutes);
+                    }
+                    if (germplasmGnpis.collection) {
+                        this.germplasmGnpis.collection.sort(this.compareCollectionPanel);
+                    }
+                    if (this.germplasmGnpis.panel) {
+                        this.germplasmGnpis.panel.sort(this.compareCollectionPanel);
+                    }
                     this.siteToBrapiLocation(this.germplasmGnpis.collectingSite);
                     this.siteToBrapiLocation(this.germplasmGnpis.originSite);
                     for (const site of this.germplasmGnpis.evaluationSites) {
@@ -129,7 +138,7 @@ export class GermplasmCardComponent implements OnInit {
 
     checkBreeder() {
         return (this.germplasmGnpis.breeder)
-            && (this.germplasmGnpis.breeder.institute
+            && ((this.germplasmGnpis.breeder.institute && this.germplasmGnpis.breeder.institute.instituteName)
                 || this.germplasmGnpis.breeder.accessionCreationDate
                 || this.germplasmGnpis.breeder.accessionNumber
                 || this.germplasmGnpis.breeder.registrationYear
@@ -171,5 +180,35 @@ export class GermplasmCardComponent implements OnInit {
         return (this.germplasmGnpis.originSite && this.germplasmGnpis.originSite.siteName)
             || (this.germplasmGnpis.collectingSite && this.germplasmGnpis.collectingSite.siteName)
             || (this.checkCollectorInstituteObject() || this.checkCollectorInstituteFields());
+    }
+
+    compareDonorInstitutes(a, b) {
+        if (a.donorInstitute.instituteName < b.donorInstitute.instituteName) {
+            return -1;
+        }
+        if (a.donorInstitute.instituteName > b.donorInstitute.instituteName) {
+            return 1;
+        }
+        return 0;
+    }
+
+    compareAttributes(a, b) {
+        if (a.attributeName < b.attributeName) {
+            return -1;
+        }
+        if (a.attributeName > b.attributeName) {
+            return 1;
+        }
+        return 0;
+    }
+
+    compareCollectionPanel(a, b) {
+        if (a.name < b.name) {
+            return -1;
+        }
+        if (a.name > b.name) {
+            return 1;
+        }
+        return 0;
     }
 }

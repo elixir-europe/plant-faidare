@@ -28,8 +28,7 @@ export class SiteCardComponent implements OnInit {
                     this.location = response.result;
                     this.additionalInfos = [];
                     if (this.location.additionalInfo) {
-                        console.log(this.location.additionalInfo);
-                        this.manageAdditionalInfo(KeyValueObject.fromObject(this.location.additionalInfo));
+                        this.manageAdditionalInfo(KeyValueObject.fromObject(this.location.additionalInfo).sort());
                     }
                     this.loading = false;
                 }

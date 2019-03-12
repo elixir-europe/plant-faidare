@@ -124,17 +124,17 @@
 
       <gpds-card-row
         label="Code"
-        [value]="germplasmGnpis.collector.instituteCode">
+        [value]="germplasmGnpis.collector.institute.instituteCode">
       </gpds-card-row>
 
       <gpds-card-row
         label="Acronym"
-        [value]="germplasmGnpis.collector.acronym">
+        [value]="germplasmGnpis.collector.institute.acronym">
       </gpds-card-row>
 
       <gpds-card-row
         label="Organisation"
-        [value]="germplasmGnpis.collector.organisation">
+        [value]="germplasmGnpis.collector.institute.organisation">
       </gpds-card-row>
 
       <gpds-card-row
@@ -603,7 +603,6 @@
             </td>
             <td>{{ row.accessionNumber }}</td>
             <td>{{ row.distributionStatus }}</td>
-            <!--<td>{{ '' }}</td>-->
           </tr>
         </ng-template>
 
