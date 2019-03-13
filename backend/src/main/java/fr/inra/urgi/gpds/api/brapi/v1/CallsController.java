@@ -1,7 +1,6 @@
 package fr.inra.urgi.gpds.api.brapi.v1;
 
-import com.google.common.collect.Lists;
-import com.google.common.reflect.ClassPath;
+import com.google.common.collect.ImmutableSet;
 import fr.inra.urgi.gpds.domain.brapi.v1.data.BrapiCall;
 import fr.inra.urgi.gpds.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.gpds.domain.criteria.base.PaginationCriteriaImpl;
@@ -9,15 +8,19 @@ import fr.inra.urgi.gpds.domain.data.CallVO;
 import fr.inra.urgi.gpds.domain.response.ApiResponseFactory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.service.ApiDescription;
+import springfox.documentation.service.Documentation;
+import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.validation.Valid;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.*;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author gcornut
@@ -25,132 +28,81 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Api(tags = {"Breeding API"}, description = "BrAPI endpoint")
 @RestController
 public class CallsController {
+    private static final String BRAPI_PATH = "/brapi/v1/";
 
-    private static final List<String> DATA_TYPES = Arrays.asList(
+    public static final Set<String> DEFAULT_DATA_TYPES = ImmutableSet.of(
         "json"
     );
 
-    private static final List<String> BRAPI_VERSIONS = Arrays.asList(
+    public static final Set<String> DEFAULT_BRAPI_VERSIONS = ImmutableSet.of(
         "1.0",
         "1.1",
         "1.2"
     );
 
-    private final List<BrapiCall> implementedCalls;
+    private List<BrapiCall> implementedCalls;
 
-    public CallsController() {
-        this.implementedCalls = listImplementedCalls();
+    private final DocumentationCache documentationCache;
+
+    @Autowired
+    public CallsController(DocumentationCache documentationCache) {
+        this.documentationCache = documentationCache;
     }
 
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Calls/Calls.md
      */
     @ApiOperation("List implemented Breeding API calls")
-    @GetMapping(value = {"/brapi/v1/calls", "/brapi/v1/"})
+    @GetMapping("/brapi/v1/calls")
     public BrapiListResponse<BrapiCall> calls(@Valid PaginationCriteriaImpl criteria) {
+        if (implementedCalls == null) {
+            implementedCalls = swaggerToBrapiCalls();
+        }
+
         return ApiResponseFactory.createSubListResponse(
             criteria.getPageSize(), criteria.getPage(), implementedCalls
         );
     }
 
     /**
-     * Generate {@link BrapiCall} by reflectively reading Spring REST
-     * annotations
+     * Get swagger API documentation and transform it to list of BrAPI calls
+     *
+     * This must be done after swagger has time to generate the API
+     * documentation and thus can't be done in this class constructor
      */
-    private List<BrapiCall> listImplementedCalls() {
-        Map<String, BrapiCall> calls = new HashMap<>();
+    private List<BrapiCall> swaggerToBrapiCalls() {
+        Documentation apiDocumentation = this.documentationCache.documentationByGroup(Docket.DEFAULT_GROUP_NAME);
 
-        Class<?> aClass = getClass();
-        ClassLoader classLoader = aClass.getClassLoader();
-        ClassPath classPath;
-        try {
-            classPath = ClassPath.from(classLoader);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        // Get all endpoints
+        return apiDocumentation.getApiListings().values().stream()
+            .flatMap(endpointListing -> endpointListing.getApis().stream())
+            // Only with BrAPI path
+            .filter(endpointDescription -> endpointDescription.getPath().startsWith(BRAPI_PATH))
+            // Group by endpoint path (ex: /brapi/v1/phenotype => [GET, POST, ...])
+            .collect(Collectors.groupingBy(ApiDescription::getPath))
+            .entrySet().stream()
+            // Convert to BrAPI call
+            .map(endpointGroup -> {
+                String path = endpointGroup.getKey();
+                List<ApiDescription> endpoints = endpointGroup.getValue();
 
-        String brapiControllerPackage = aClass.getPackage().getName();
-        Set<ClassPath.ClassInfo> controllerClasses = classPath.getTopLevelClasses(brapiControllerPackage);
-        for (ClassPath.ClassInfo controllerClassInfo : controllerClasses) {
-            Class<?> controllerClass = controllerClassInfo.load();
-            if (controllerClass.getAnnotation(RestController.class) == null) {
-                // Class is not a RestController
-                continue;
-            }
+                // BrAPI call path should not include the base BrAPI path
+                CallVO call = new CallVO(path.replace(BRAPI_PATH, ""));
 
-            for (Method method : controllerClass.getMethods()) {
-                ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
-                if (apiOperation != null && apiOperation.hidden()) {
-                    // Rest call is hidden = ignore
-                    continue;
-                }
+                // List every endpoint for current path
+                Set<String> methods = endpoints.stream()
+                    // List all operations for each endpoint
+                    .flatMap(endpointDescription -> endpointDescription.getOperations().stream())
+                    // List all methods
+                    .map(operation -> operation.getMethod().toString())
+                    .collect(Collectors.toSet());
+                call.setMethods(methods);
 
-                String[] paths = getCallPath(method);
-                if (paths == null) {
-                    // No rest path mapping => ignore
-                    continue;
-                }
-                for (String path : paths) {
-                    String[] pathSplit = path.split("/brapi/v1/");
-                    if (pathSplit.length != 2) {
-                        continue;
-                    }
-                    path = pathSplit[1];
-
-                    RequestMethod[] httpMethods = getCallMethods(method);
-                    List<String> httpMethodNames = Lists.newArrayList();
-                    for (RequestMethod httpMethod : httpMethods) {
-                        httpMethodNames.add(httpMethod.name());
-                    }
-
-                    BrapiCall call = calls.get(path);
-                    if (call == null) {
-                        call = new CallVO(path);
-                        calls.put(path, call);
-                    }
-                    call.getMethods().addAll(httpMethodNames);
-                    call.getDatatypes().addAll(DATA_TYPES);
-                    call.getVersions().addAll(BRAPI_VERSIONS);
-                }
-            }
-        }
-
-        ArrayList<BrapiCall> allCalls = new ArrayList<>(calls.values());
-        // Sort by call name
-        Collections.sort(allCalls, Comparator.comparing(BrapiCall::getCall));
-        return allCalls;
-    }
-
-    private String[] getCallPath(Method method) {
-        RequestMapping annotation = method.getAnnotation(RequestMapping.class);
-        if (annotation != null) {
-            return annotation.value();
-        }
-        GetMapping getAnnotation = method.getAnnotation(GetMapping.class);
-        if (getAnnotation != null) {
-            return getAnnotation.value();
-        }
-        PostMapping postAnnotation = method.getAnnotation(PostMapping.class);
-        if (postAnnotation != null) {
-            return postAnnotation.value();
-        }
-        return null;
-    }
-
-    private RequestMethod[] getCallMethods(Method method) {
-        RequestMapping annotation = method.getAnnotation(RequestMapping.class);
-        if (annotation != null) {
-            return annotation.method();
-        }
-        GetMapping getAnnotation = method.getAnnotation(GetMapping.class);
-        if (getAnnotation != null) {
-            return new RequestMethod[]{GET};
-        }
-        PostMapping postAnnotation = method.getAnnotation(PostMapping.class);
-        if (postAnnotation != null) {
-            return new RequestMethod[]{POST};
-        }
-        return null;
+                return call;
+            })
+            // Sort by call name
+            .sorted(Comparator.comparing(CallVO::getCall))
+            .collect(Collectors.toList());
     }
 
 }
