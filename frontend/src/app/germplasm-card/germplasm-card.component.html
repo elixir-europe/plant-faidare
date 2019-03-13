@@ -54,7 +54,7 @@
         label="Website"
         [test]="germplasmGnpis.holdingInstitute.webSite">
         <ng-template>
-          <a [href]="germplasmGnpis.breeder.institute.webSite">
+          <a [href]="germplasmGnpis.breeder.institute.webSite" target="_blank">
             {{ germplasmGnpis.holdingInstitute.webSite }}
           </a>
         </ng-template>
@@ -103,7 +103,7 @@
         label="Website"
         [test]="germplasmGnpis.breeder.institute.webSite">
         <ng-template>
-          <a [href]="germplasmGnpis.breeder.institute.webSite">
+          <a [href]="germplasmGnpis.breeder.institute.webSite" target="_blank">
             {{ germplasmGnpis.breeder.institute.webSite }}
           </a>
         </ng-template>
@@ -146,7 +146,7 @@
         label="Website"
         [test]="germplasmGnpis.collector.institute.webSite">
         <ng-template>
-          <a [href]="germplasmGnpis.collector.institute.webSite">
+          <a [href]="germplasmGnpis.collector.institute.webSite" target="_blank">
             {{ germplasmGnpis.collector.institute.webSite }}
           </a>
         </ng-template>
@@ -305,7 +305,7 @@
           label="Stock center name"
           [test]="germplasmGnpis.holdingGenbank.instituteName && germplasmGnpis.holdingGenbank.webSite">
           <ng-template>
-            <a [href]="germplasmGnpis.holdingGenbank.webSite">
+            <a [href]="germplasmGnpis.holdingGenbank.webSite" target="_blank">
               {{ germplasmGnpis.holdingGenbank.instituteName }}
             </a>
           </ng-template>
@@ -506,7 +506,7 @@
                 label="Website"
                 [test]="row.donorInstitute.webSite">
                 <ng-template>
-                  <a [href]=" row.donorInstitute.webSite ">
+                  <a [href]=" row.donorInstitute.webSite " target="_blank">
                     {{ row.donorInstitute.webSite }}
                   </a>
                 </ng-template>
@@ -587,7 +587,7 @@
                 label="Website"
                 [test]="row.institute.webSite">
                 <ng-template>
-                  <a [href]="row.institute.webSite">
+                  <a [href]="row.institute.webSite" target="_blank">
                     {{ row.institute.webSite }}
                   </a>
                 </ng-template>

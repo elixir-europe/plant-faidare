@@ -18,51 +18,33 @@ export const environment = {
                 ]
             },
             {
-                label: 'Taxon/Germplasm',
+                label: 'Genomes & Synteny',
                 url: '#',
                 subMenu: [
-                    { label: 'Taxon', url: 'https://urgi.versailles.inra.fr/siregal/common/taxon/form.do' },
-                    { label: 'Accession Simple', url: 'https://urgi.versailles.inra.fr/gnpis-core' },
-                    { label: 'Accession passport', url: 'https://urgi.versailles.inra.fr/siregal/siregal/accessionForm.do' },
-                    { label: 'Collections CRB', url: 'https://urgi.versailles.inra.fr/siregal/siregal/grc.do' },
+                    { label: 'Genomes', url: 'https://urgi.versailles.inra.fr/Data/Genome/Genome-data-access' },
+                    { label: 'Synteny', url: 'https://urgi.versailles.inra.fr/synteny/synteny/viewer.do#dataset' }
                 ]
             },
-            { label: 'Phenotyping', url: 'https://urgi.versailles.inra.fr/ephesis/ephesis/viewer.do' },
             {
-                label: 'Polymorphism',
+                label: 'Genetic resources',
                 url: '#',
                 subMenu: [
-                    { label: 'Genotyping', url: 'https://urgi.versailles.inra.fr/GnpSNP/snp/genotyping/form.do' },
-                    { label: 'SNP Discovery', url: 'https://urgi.versailles.inra.fr/GnpSNP/snp/welcome.do' },
+                    { label: 'Plant genetic resources', url: 'https://urgi.versailles.inra.fr/beta/gnpis-core' },
+                    { label: 'BRC collections', url: 'https://urgi.versailles.inra.fr/beta/siregal/siregal/grc.do' },
                 ]
             },
-            { label: 'Association', url: 'https://urgi.versailles.inra.fr/association/association/viewer.do#form' },
             {
-                label: 'Map/Marker/QTL',
+                label: 'Genetic analyses',
                 url: '#',
                 subMenu: [
-                    { label: 'Map', url: 'https://urgi.versailles.inra.fr/GnpMap/mapping/searchMap.do' },
-                    { label: 'Loci', url: 'https://urgi.versailles.inra.fr/GnpMap/mapping/loci/queryLociSelect.do' },
-                    { label: 'QTL', url: 'https://urgi.versailles.inra.fr/GnpMap/mapping/qtl/queryQtlSelect.do' },
-                    { label: 'MetaQTLs', url: 'https://urgi.versailles.inra.fr/GnpMap/mapping/metaqtl/form.do' },
-                    { label: 'Marker', url: 'https://urgi.versailles.inra.fr/GnpMap/mapping/marker/markerForm.do' },
-                    { label: 'Pool', url: 'https://urgi.versailles.inra.fr/GnpMap/mapping/pool/poolForm.do' },
-                    { label: 'Traits', url: 'https://urgi.versailles.inra.fr/GnpMap/mapping/queryTraitSelect.do' },
-                    { label: 'Biomercator', url: 'https://urgi.versailles.inra.fr/Tools/BioMercator-V4' },
+                    { label: 'Genetic maps & QTL', url: 'https://urgi.versailles.inra.fr/beta/GnpMap/mapping/welcome.do' },
+                    { label: 'GnpAsso', url: 'https://urgi.versailles.inra.fr/beta/association/association/viewer.do#form' },
                 ]
             },
-            { label: 'Genomes', url: 'https://urgi.versailles.inra.fr/Data/Genome/Genome-data-access' },
-            { label: 'Synteny', url: 'https://urgi.versailles.inra.fr/synteny/synteny/viewer.do#dataset' },
-            {
-                label: 'Sequence',
-                url: '#',
-                subMenu: [
-                    { label: 'Sequence', url: 'https://urgi.versailles.inra.fr/sequence/sequence/sequence/form.do' },
-                    { label: 'Experiment', url: 'https://urgi.versailles.inra.fr/sequence/sequence/experiment/form.do' },
-                    { label: 'Analysis', url: 'https://urgi.versailles.inra.fr/sequence/sequence/analysis/form.do' },
-                    { label: 'Project', url: 'https://urgi.versailles.inra.fr/sequence/sequence/project/form.do' },
-                ]
-            }
+            { label: 'Phenotypes', url: 'https://urgi.versailles.inra.fr/beta/ephesis' },
+            { label: 'Polymorphisms', url: 'https://urgi.versailles.inra.fr/beta/GnpSNP/snp/genotyping/form.do' },
+            { label: 'Sequences', url: 'https://urgi.versailles.inra.fr/beta/sequence' },
+            { label: 'Transcriptomic', url: 'https://urgi.versailles.inra.fr/beta/GnpArray' },
 
         ]
     }

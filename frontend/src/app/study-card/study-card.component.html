@@ -21,13 +21,7 @@
 
         <gpds-card-row
           label="Identifier"
-          [test]="study.studyDbId">
-          <ng-template>
-            {{ study.studyDbId }}
-            <a target="_blank" *ngIf="studySource && study.documentationURL" [href]="study.documentationURL">
-              ( Link to this study on {{ studySource["schema:identifier"] }} )
-            </a>
-          </ng-template>
+          [value]="study.studyDbId">
         </gpds-card-row>
 
         <gpds-card-row
@@ -52,7 +46,7 @@
           [test]="studySource && study.documentationURL">
           <ng-template>
             <a target="_blank" *ngIf="study.documentationURL" [href]="study.documentationURL">
-              ( Link to this study on {{ studySource["schema:identifier"] }} )
+              Link to this study on {{ studySource["schema:identifier"] }}
             </a>
           </ng-template>
         </gpds-card-row>

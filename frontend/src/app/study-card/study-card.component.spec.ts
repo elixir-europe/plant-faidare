@@ -266,7 +266,8 @@ describe('StudyCardComponent', () => {
 
             expect(tester.cardHeader[0]).toContainText('Identification');
 
-            expect(tester.studyInfo[1]).toContainText('Link to this study on srcId');
+            expect(tester.studyInfo[0]).toContainText('study1');
+            expect(tester.studyInfo[1]).toContainText('s1');
 
             expect(tester.cardHeader[1]).toContainText('Genotype');
             expect(component.studyGermplasms.length).toEqual(2);
