@@ -9,11 +9,7 @@ export const routes: Routes = [
     { path: 'studies/:id', component: StudyCardComponent },
     { path: 'sites/:id', component: SiteCardComponent },
     { path: '', component: ResultPageComponent },
-    {
-        path: 'germplasm',
-        component: GermplasmCardComponent,
-        runGuardsAndResolvers: 'paramsOrQueryParamsChange'
-    }
+    { path: 'germplasm', component: GermplasmCardComponent }
 ];
 
 @NgModule({

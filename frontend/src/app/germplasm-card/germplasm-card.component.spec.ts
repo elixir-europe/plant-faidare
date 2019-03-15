@@ -16,6 +16,7 @@ import { CardTableComponent } from '../card-table/card-table.component';
 import { MapComponent } from '../map/map.component';
 import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiResult, BrapiSibling } from '../models/brapi.model';
 import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } from '../models/gnpis.model';
+import { DataDiscoverySource } from '../models/data-discovery.model';
 import {
     BrapiGermplasmAttributes,
     BrapiGermplasmPedigree,
@@ -57,7 +58,8 @@ describe('GermplasmCardComponent', () => {
     const gnpisService = jasmine.createSpyObj(
         'GnpisService', [
             'germplasm',
-            'germplasmByPuid'
+            'germplasmByPuid',
+            'getSource'
         ]
     );
 
@@ -200,6 +202,15 @@ describe('GermplasmCardComponent', () => {
         population: [gnpisGermplasmSet]
     };
 
+    const source: DataDiscoverySource = {
+        '@id': 'src1',
+        '@type': ['schema:DataCatalog'],
+        'schema:identifier': 'srcId',
+        'schema:name': 'source1',
+        'schema:url': 'srcUrl',
+        'schema:image': null
+    };
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule, NgbPopoverModule, MomentModule],
@@ -228,6 +239,7 @@ describe('GermplasmCardComponent', () => {
 
     gnpisService.germplasm.and.returnValue(of(germplasmTest));
     gnpisService.germplasmByPuid.and.returnValue(of(germplasmTest));
+    gnpisService.getSource.and.returnValue(of(source));
     /*brapiService.germplasmProgeny.and.returnValue(of(brapiGermplasmProgeny));*/
     brapiService.germplasmPedigree.and.returnValue(of(brapiGermplasmPedigree));
     brapiService.germplasmAttributes.and.returnValue(of(brapiGermplasmAttributes));
@@ -244,8 +256,8 @@ describe('GermplasmCardComponent', () => {
             expect(tester.cardHeader[1]).toContainText('Holding');
             expect(tester.cardHeader[2]).toContainText('Collecting');
             expect(tester.cardHeader[3]).toContainText('Breeder');
-            expect(tester.cardHeader[4]).toContainText('Donation');
-            expect(tester.cardHeader[5]).toContainText('Distribution');
+            expect(tester.cardHeader[4]).toContainText('Donor');
+            expect(tester.cardHeader[5]).toContainText('Distributor');
             expect(tester.cardHeader[6]).toContainText('Evaluation Data');
         });
     }));

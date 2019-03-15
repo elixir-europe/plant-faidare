@@ -17,6 +17,27 @@
       <div class="card-body card-section-body">
 
         <gpds-card-row
+          label="Source"
+          [test]="location">
+          <ng-template>
+            <a target="_blank"
+               [href]="locationSource['schema:url']">
+              <img [src]="locationSource['schema:image']" alt="Location source image"/>
+            </a>
+          </ng-template>
+        </gpds-card-row>
+
+        <gpds-card-row
+          label="Data source"
+          [test]="location && location.documentationURL">
+          <ng-template>
+            <a target="_blank" [href]="location.documentationURL">
+              Link to this study on {{ location["schema:identifier"] }}
+            </a>
+          </ng-template>
+        </gpds-card-row>
+
+        <gpds-card-row
           label="Abbreviation"
           [value]="location.abbreviation">
         </gpds-card-row>

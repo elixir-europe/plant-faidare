@@ -3,6 +3,8 @@ import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
 import { BrapiLocation } from '../models/brapi.model';
 import { KeyValueObject } from '../utils';
+import { DataDiscoverySource } from '../models/data-discovery.model';
+import { GnpisService } from '../gnpis.service';
 
 @Component({
     selector: 'gpds-site-card',
@@ -12,11 +14,11 @@ import { KeyValueObject } from '../utils';
 export class SiteCardComponent implements OnInit {
 
     location: BrapiLocation;
+    locationSource: DataDiscoverySource;
     additionalInfos: KeyValueObject[];
     loading = true;
 
-
-    constructor(private brapiService: BrapiService, private route: ActivatedRoute) {
+    constructor(private brapiService: BrapiService, private gnpisService: GnpisService, private route: ActivatedRoute) {
     }
 
     ngOnInit() {
@@ -29,6 +31,22 @@ export class SiteCardComponent implements OnInit {
                     this.additionalInfos = [];
                     if (this.location.additionalInfo) {
                         this.manageAdditionalInfo(KeyValueObject.fromObject(this.location.additionalInfo).sort());
+                    }
+                    const sourceURI = location['schema:includedInDataCatalog'];
+                    // TODO Remove the condition when the field includedInDataCatalog will be added to URGI study.
+                    if (sourceURI) {
+                        const source$ = this.gnpisService.getSource(sourceURI);
+                        source$
+                            .subscribe(src => {
+                                this.locationSource = src;
+                            });
+                    } else {
+                        const urgiURI = 'https://urgi.versailles.inra.fr';
+                        const source$ = this.gnpisService.getSource(urgiURI);
+                        source$
+                            .subscribe(src => {
+                                this.locationSource = src;
+                            });
                     }
                     this.loading = false;
                 }

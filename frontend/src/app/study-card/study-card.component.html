@@ -45,7 +45,7 @@
           label="Data source"
           [test]="studySource && study.documentationURL">
           <ng-template>
-            <a target="_blank" *ngIf="study.documentationURL" [href]="study.documentationURL">
+            <a target="_blank" [href]="study.documentationURL">
               Link to this study on {{ studySource["schema:identifier"] }}
             </a>
           </ng-template>
@@ -102,7 +102,7 @@
           [test]="study.dataLinks && study.dataLinks.length != 0">
           <ng-template>
             <div *ngFor="let dataLink of study.dataLinks">
-              <a [href]="dataLink.url">
+              <a target="_blank" [href]="dataLink.url">
                 {{ dataLink.name }}
               </a>
             </div>
@@ -159,7 +159,7 @@
             <td>
               <ng-template #name>{{ row.observationVariableDbId }}</ng-template>
               <ng-template #link>
-                <a [href]=row.documentationURL>{{ row.observationVariableDbId }}</a>
+                <a target="_blank" [href]=row.documentationURL>{{ row.observationVariableDbId }}</a>
               </ng-template>
               <ng-container *ngIf="row.documentationURL; then link else name"></ng-container>
             </td>
@@ -189,7 +189,7 @@
             <td>
               <ng-template #name>{{ row.trialName }}</ng-template>
               <ng-template #link>
-                <a [href]=row.documentationURL>{{ row.trialName }}</a>
+                <a target="_blank" [href]=row.documentationURL>{{ row.trialName }}</a>
               </ng-template>
               <ng-container *ngIf="row.documentationURL; then link else name"></ng-container>
             </td>

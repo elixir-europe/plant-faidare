@@ -21,17 +21,19 @@ logging.level:
 
 gpds:
   elasticsearch-alias-template:
-    gnpis_{source}_{documentType}_5432_scratchy-group{groupId}
+    gnpis_{source}_{documentType}_5432_krusty-group{groupId}
 
   elasticsearch-xref-index-name:
-    urgi_xref
+    urgi_xref_dev
 
   cropOntology-repository-url:
     https://urgi.versailles.inra.fr/files/ephesis/trait-ontology/data_16.3/ontology-repository.json
 
-  # TODO: Remove this and store at document generation directly (in BrAPI `observationVariable.documentationURL` field)
-  cropOntology-portal-link:
-    https://urgi.versailles.inra.fr/ephesis/ephesis/ontologyportal.do#termIdentifier=
+  gnpis-legacy-url:
+    https://urgi.versailles.inra.fr/
+
+  siregal-files-url:
+    /files/siregal/images/
 
   # Provides access to user group WS used to query private data ES aliases
   security-user-group-ws-url:

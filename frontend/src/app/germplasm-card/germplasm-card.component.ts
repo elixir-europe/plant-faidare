@@ -4,6 +4,7 @@ import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
 import { BrapiAttributeData, BrapiGermplasmPedigree, BrapiLocation } from '../models/brapi.model';
 import { Children, Germplasm, Site } from '../models/gnpis.model';
+import { DataDiscoverySource } from '../models/data-discovery.model';
 
 @Component({
     selector: 'gpds-germplasm-card',
@@ -35,6 +36,7 @@ export class GermplasmCardComponent implements OnInit {
     germplasmLocations: BrapiLocation[] = [];
     germplasmId: string;
     germplasmPuid: string;
+    germplasmSource: DataDiscoverySource;
     IMAGES_ACCESSION_URL = 'https://urgi.versailles.inra.fr/files/siregal/images/accession/';
     IMAGES_INSTITUTION_URL = 'https://urgi.versailles.inra.fr/files/siregal/images//institution/';
     IMAGES_BRC_URL = 'https://urgi.versailles.inra.fr/files/siregal/images/grc/inra_brc_en.png';
@@ -90,36 +92,73 @@ export class GermplasmCardComponent implements OnInit {
             germplasm$
                 .then(germplasmGnpis => {
                     this.germplasmGnpis = germplasmGnpis;
-                    if (germplasmGnpis.children) {
-                        this.germplasmProgeny = germplasmGnpis.children.sort();
-                    }
-                    if (germplasmGnpis.donors) {
-                        this.germplasmGnpis.donors.sort(this.compareDonorInstitutes);
-                    }
-                    if (germplasmGnpis.collection) {
-                        this.germplasmGnpis.collection.sort(this.compareCollectionPanel);
-                    }
-                    if (this.germplasmGnpis.panel) {
-                        this.germplasmGnpis.panel.sort(this.compareCollectionPanel);
-                    }
-                    this.siteToBrapiLocation(this.germplasmGnpis.collectingSite);
-                    this.siteToBrapiLocation(this.germplasmGnpis.originSite);
-                    for (const site of this.germplasmGnpis.evaluationSites) {
-                        this.siteToBrapiLocation(site);
-                    }
+                    // Get germplasm source
+                    const sourceURI = germplasmGnpis['schema:includedInDataCatalog'];
+                    this.getGermplasmSource(sourceURI);
+                    this.reformatData(germplasmGnpis);
                 });
         } else {
             germplasm$ = this.gnpisService.germplasmByPuid(pui).toPromise();
             germplasm$
                 .then(germplasmGnpis => {
                     this.germplasmGnpis = germplasmGnpis;
+                    // Get germplasm source
+                    const sourceURI = germplasmGnpis['schema:includedInDataCatalog'];
+                    this.getGermplasmSource(sourceURI);
+                    this.reformatData(germplasmGnpis);
                 });
         }
         return germplasm$;
     }
 
+    // TODO Remove the condition when the field includedInDataCatalog will be added to URGI study.
+    getGermplasmSource(sourceURI: string) {
+        if (sourceURI) {
+            const source$ = this.gnpisService.getSource(sourceURI);
+            source$
+                .subscribe(src => {
+                    this.germplasmSource = src;
+                });
+        } else {
+            const urgiURI = 'https://urgi.versailles.inra.fr';
+            const source$ = this.gnpisService.getSource(urgiURI);
+            source$
+                .subscribe(src => {
+                    this.germplasmSource = src;
+                });
+        }
+    }
+
+
+    reformatData(germplasmGnpis) {
+        if (germplasmGnpis.children) {
+            this.germplasmProgeny = germplasmGnpis.children.sort();
+        }
+        if (germplasmGnpis.donors) {
+            this.germplasmGnpis.donors.sort(this.compareDonorInstitutes);
+        }
+        if (germplasmGnpis.collection) {
+            this.germplasmGnpis.collection.sort(this.compareCollectionPanel);
+        }
+        if (this.germplasmGnpis.panel) {
+            this.germplasmGnpis.panel.sort(this.compareCollectionPanel);
+        }
+        if (this.germplasmGnpis.collectingSite) {
+            this.siteToBrapiLocation(this.germplasmGnpis.collectingSite);
+        }
+        if (this.germplasmGnpis.originSite) {
+            this.siteToBrapiLocation(this.germplasmGnpis.originSite);
+        }
+        if (this.germplasmGnpis.evaluationSites && this.germplasmGnpis.evaluationSites.length > 0) {
+            for (const site of this.germplasmGnpis.evaluationSites) {
+                this.siteToBrapiLocation(site);
+            }
+        }
+    }
+
+
     siteToBrapiLocation(site: Site) {
-        if (site.siteId && site.latitude && site.longitude) {
+        if (site && site.siteId && site.latitude && site.longitude) {
             this.germplasmLocations.push({
                 locationDbId: site.siteId,
                 locationName: site.siteName,

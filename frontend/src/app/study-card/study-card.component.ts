@@ -37,7 +37,8 @@ export class StudyCardComponent implements OnInit {
                 .then(response => {
                     this.study = response.result;
                     if (this.study.contacts) {
-                        this.study.contacts.sort(this.compareContacts);
+                        this.study.contacts.sort((var1, var2) =>
+                            var1.name.localeCompare(var2.name));
                     }
 
                     this.additionalInfos = [];
@@ -64,17 +65,25 @@ export class StudyCardComponent implements OnInit {
                                 });
                         }
                         if (this.studyDataset) {
-                            this.studyDataset.sort(this.compareTrials);
+                            this.studyDataset.sort((var1, var2) =>
+                                var1.trialName.localeCompare(var2.trialName));
                         }
                     }
 
                     // Get study source
+                    // TODO Remove the condition when the field includedInDataCatalog will be added to URGI study.
                     const sourceURI = this.study['schema:includedInDataCatalog'];
                     if (sourceURI) {
                         const source$ = this.gnpisService.getSource(sourceURI);
                         source$
                             .subscribe(src => {
-                                console.log(src);
+                                this.studySource = src;
+                            });
+                    } else {
+                        const urgiURI = 'https://urgi.versailles.inra.fr';
+                        const source$ = this.gnpisService.getSource(urgiURI);
+                        source$
+                            .subscribe(src => {
                                 this.studySource = src;
                             });
                     }
@@ -84,14 +93,16 @@ export class StudyCardComponent implements OnInit {
             const variable$ = this.brapiService.studyObservationVariables(studyDbId).toPromise();
             variable$
                 .then(response => {
-                    this.studyObservationVariables = response.result.data.sort(this.compareVariables);
+                    this.studyObservationVariables = response.result.data.sort((var1, var2) =>
+                        var1.observationVariableDbId.localeCompare(var2.observationVariableDbId));
                 });
 
             this.studyGermplasms = [];
             const germplasm$ = this.brapiService.studyGermplasms(studyDbId).toPromise();
             germplasm$
                 .then(studyGermplasm => {
-                    this.studyGermplasms = studyGermplasm.result.data.sort(this.compareStudyGermplasm);
+                    this.studyGermplasms = studyGermplasm.result.data.sort((var1, var2) =>
+                        var1.germplasmName.localeCompare(var2.germplasmName));
                 });
 
             this.loaded = Promise.all([study$, variable$, germplasm$]);
@@ -104,45 +115,5 @@ export class StudyCardComponent implements OnInit {
 
     isNotURN(pui: string) {
         return !(pui.substring(0, 3) === 'urn');
-    }
-
-    compareTrials(a, b) {
-        if (a.trialName < b.trialName) {
-            return -1;
-        }
-        if (a.trialName > b.trialName) {
-            return 1;
-        }
-        return 0;
-    }
-
-    compareStudyGermplasm(a, b) {
-        if (a.germplasmName < b.germplasmName) {
-            return -1;
-        }
-        if (a.germplasmName > b.germplasmName) {
-            return 1;
-        }
-        return 0;
-    }
-
-    compareVariables(a, b) {
-        if (a.observationVariableDbId < b.observationVariableDbId) {
-            return -1;
-        }
-        if (a.observationVariableDbId > b.observationVariableDbId) {
-            return 1;
-        }
-        return 0;
-    }
-
-    compareContacts(a, b) {
-        if (a.name < b.name) {
-            return -1;
-        }
-        if (a.name > b.name) {
-            return 1;
-        }
-        return 0;
     }
 }

@@ -20,7 +20,6 @@ export class MapComponent implements OnInit {
 
         this.removeEmptyLocations(this.locations);
         if (this.curatedLocationList.length > 0) {
-            const container = L.DomUtil.get('map');
             const map = L.map('map');
 
             // initialize map centered on the first site

@@ -10,6 +10,8 @@ import { CardRowComponent } from '../card-row/card-row.component';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { CardTableComponent } from '../card-table/card-table.component';
 import { CardSectionComponent } from '../card-section/card-section.component';
+import { DataDiscoverySource } from '../models/data-discovery.model';
+import { GnpisService } from '../gnpis.service';
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
 
@@ -17,6 +19,9 @@ import { XrefsComponent } from '../xrefs/xrefs.component';
 describe('SiteCardComponent', () => {
     const brapiService = jasmine.createSpyObj(
         'BrapiService', ['location']
+    );
+    const gnpisService = jasmine.createSpyObj(
+        'GnpisService', ['getSource']
     );
     const response: BrapiResult<BrapiLocation> = {
         metadata: null,
@@ -47,6 +52,15 @@ describe('SiteCardComponent', () => {
         }
     };
 
+    const source: DataDiscoverySource = {
+        '@id': 'src1',
+        '@type': ['schema:DataCatalog'],
+        'schema:identifier': 'srcId',
+        'schema:name': 'source1',
+        'schema:url': 'srcUrl',
+        'schema:image': null
+    };
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
@@ -56,6 +70,7 @@ describe('SiteCardComponent', () => {
             ],
             providers: [
                 { provide: BrapiService, useValue: brapiService },
+                { provide: GnpisService, useValue: gnpisService },
                 {
                     provide: ActivatedRoute,
                     useValue: {
@@ -76,6 +91,7 @@ describe('SiteCardComponent', () => {
         const fixture = TestBed.createComponent(SiteCardComponent);
         const component = fixture.componentInstance;
         brapiService.location.and.returnValues(of(response));
+        gnpisService.getSource.and.returnValue(of(source));
         fixture.detectChanges();
         const element = fixture.nativeElement;
         expect(element.querySelector('h3').textContent).toBe(' Site: site1 ');

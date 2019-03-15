@@ -221,6 +221,29 @@
           </gpds-card-row>
 
           <gpds-card-row
+            label="Source"
+            [test]="germplasmSource">
+            <ng-template>
+              <a target="_blank"
+                 [href]="germplasmSource['schema:url']">
+                <img [src]="germplasmSource['schema:image']" alt="Germplasm source image"/>
+              </a>
+            </ng-template>
+          </gpds-card-row>
+
+          <gpds-card-row
+            label="Data source"
+            [test]="germplasmGnpis.documentationURL">
+            <ng-template>
+              <a target="_blank" [href]="germplasmGnpis.documentationURL">
+                Link to this study on source
+              </a>
+            </ng-template>
+          </gpds-card-row>
+
+
+
+          <gpds-card-row
             label="Accession synonyms"
             [test]="germplasmGnpis.synonyms && germplasmGnpis.synonyms.length > 0">
             <ng-template>
@@ -452,7 +475,7 @@
   </gpds-card-section>
 
   <gpds-card-section
-    header="Donation"
+    header="Donor"
     [test]="germplasmGnpis.donors && germplasmGnpis.donors.length > 0">
     <ng-template>
       <gpds-card-table
@@ -532,7 +555,7 @@
   </gpds-card-section>
 
   <gpds-card-section
-    header="Distribution"
+    header="Distributor"
     [test]="germplasmGnpis.distributors && germplasmGnpis.distributors.length>0">
     <ng-template>
 

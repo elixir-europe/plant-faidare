@@ -7,7 +7,6 @@ export const environment = {
     navbar: {
         title: 'GnpIS Plant Data Search',
         links: [
-            { label: 'INRA', url: 'http://www.inra.fr/' },
             {
                 label: 'URGI',
                 url: '#',
@@ -17,34 +16,10 @@ export const environment = {
                     { label: 'About us', url: 'https://urgi.versailles.inra.fr/About-us' }
                 ]
             },
-            {
-                label: 'Genomes & Synteny',
-                url: '#',
-                subMenu: [
-                    { label: 'Genomes', url: 'https://urgi.versailles.inra.fr/Data/Genome/Genome-data-access' },
-                    { label: 'Synteny', url: 'https://urgi.versailles.inra.fr/synteny/synteny/viewer.do#dataset' }
-                ]
-            },
-            {
-                label: 'Genetic resources',
-                url: '#',
-                subMenu: [
-                    { label: 'Plant genetic resources', url: 'https://urgi.versailles.inra.fr/beta/gnpis-core' },
-                    { label: 'BRC collections', url: 'https://urgi.versailles.inra.fr/beta/siregal/siregal/grc.do' },
-                ]
-            },
-            {
-                label: 'Genetic analyses',
-                url: '#',
-                subMenu: [
-                    { label: 'Genetic maps & QTL', url: 'https://urgi.versailles.inra.fr/beta/GnpMap/mapping/welcome.do' },
-                    { label: 'GnpAsso', url: 'https://urgi.versailles.inra.fr/beta/association/association/viewer.do#form' },
-                ]
-            },
-            { label: 'Phenotypes', url: 'https://urgi.versailles.inra.fr/beta/ephesis' },
-            { label: 'Polymorphisms', url: 'https://urgi.versailles.inra.fr/beta/GnpSNP/snp/genotyping/form.do' },
-            { label: 'Sequences', url: 'https://urgi.versailles.inra.fr/beta/sequence' },
-            { label: 'Transcriptomic', url: 'https://urgi.versailles.inra.fr/beta/GnpArray' },
+            { label: 'GNPIS', url: 'https://urgi.versailles.inra.fr/gnpis/' },
+            { label: 'CIRAD', url: 'http://tropgenedb.cirad.fr/' },
+            { label: 'VIB', url: 'http://pippa.psb.ugent.be' },
+            { label: 'IBET', url: 'https://biodata.pt' }
 
         ]
     }
