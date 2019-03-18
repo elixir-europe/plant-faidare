@@ -37,6 +37,8 @@ export class GermplasmCardComponent implements OnInit {
     germplasmId: string;
     germplasmPuid: string;
     germplasmSource: DataDiscoverySource;
+
+    // TODO extract those url in a configuration file.
     IMAGES_ACCESSION_URL = 'https://urgi.versailles.inra.fr/files/siregal/images/accession/';
     IMAGES_INSTITUTION_URL = 'https://urgi.versailles.inra.fr/files/siregal/images//institution/';
     IMAGES_BRC_URL = 'https://urgi.versailles.inra.fr/files/siregal/images/grc/inra_brc_en.png';
@@ -55,6 +57,7 @@ export class GermplasmCardComponent implements OnInit {
         germplasm$.then(result => {
             const germplasmId = this.germplasmId ? this.germplasmId : result.germplasmDbId;
 
+            // TODO use the progeny call when the information about parent will be added.
             /*const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
             germplasmProgeny$
                 .then(germplasmProgeny => {

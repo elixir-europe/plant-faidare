@@ -29,12 +29,6 @@ gpds:
   cropOntology-repository-url:
     https://urgi.versailles.inra.fr/files/ephesis/trait-ontology/data_16.3/ontology-repository.json
 
-  gnpis-legacy-url:
-    https://urgi.versailles.inra.fr/
-
-  siregal-files-url:
-    /files/siregal/images/
-
   # Provides access to user group WS used to query private data ES aliases
   security-user-group-ws-url:
   security-user-group-ws-token:

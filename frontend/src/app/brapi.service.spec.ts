@@ -406,6 +406,7 @@ describe('BrapiService', () => {
 
     });
 
+    // TODO test the progeny call when the information about parent will be added
     /*it('should fetch the germplasm progeny', () => {
 
         let fetchedGermplasmProgeny: GermplasmResult<BrapiGermplasmProgeny>;

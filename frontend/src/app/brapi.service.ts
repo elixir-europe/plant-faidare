@@ -33,7 +33,7 @@ export class BrapiService {
         return this.http
             .get<BrapiResult<BrapiGermplasmPedigree>>(`${BASE_URL}/germplasm/${germplasmDbId}/pedigree`);
     }
-
+    // TODO use the progeny call when the information about parent will be added
     /*germplasmProgeny(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmProgeny>> {
         return this.http.get<GermplasmResult<BrapiGermplasmProgeny>>(`${BASE_URL}/germplasm/${germplasmDbId}/progeny`);
     }*/

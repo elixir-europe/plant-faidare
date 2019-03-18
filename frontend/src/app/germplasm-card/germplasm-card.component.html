@@ -242,12 +242,13 @@
           </gpds-card-row>
 
 
-
           <gpds-card-row
             label="Accession synonyms"
             [test]="germplasmGnpis.synonyms && germplasmGnpis.synonyms.length > 0">
             <ng-template>
-              {{ germplasmGnpis.synonyms.join(', ') }}
+              <div class="content-overflow">
+                {{ germplasmGnpis.synonyms.join(', ') }}
+              </div>
             </ng-template>
           </gpds-card-row>
 
@@ -264,7 +265,9 @@
             label="Taxon common names"
             [test]="germplasmGnpis.taxonCommonNames && germplasmGnpis.taxonCommonNames.length > 0">
             <ng-template>
-              {{ germplasmGnpis.taxonCommonNames.join(', ') }}
+              <div class="content-overflow">
+                {{ germplasmGnpis.taxonCommonNames.join(', ') }}
+              </div>
             </ng-template>
           </gpds-card-row>
 
@@ -272,7 +275,9 @@
             label="Taxon synonyms"
             [test]="germplasmGnpis.taxonSynonyms && germplasmGnpis.taxonSynonyms.length > 0">
             <ng-template>
-              <i>{{ germplasmGnpis.taxonSynonyms.join(', ') }}</i>
+              <div class="content-overflow">
+                <i>{{ germplasmGnpis.taxonSynonyms.join(', ') }}</i>
+              </div>
             </ng-template>
           </gpds-card-row>
 
@@ -850,6 +855,6 @@
   </gpds-card-section>
 
   <!--XRefs part -->
- <gpds-xrefs [xrefId]="germplasmGnpis.germplasmPUI"></gpds-xrefs>
+  <gpds-xrefs [xrefId]="germplasmGnpis.germplasmPUI"></gpds-xrefs>
 </ng-container>
 
