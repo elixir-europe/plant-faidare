@@ -17,13 +17,6 @@ import { MapComponent } from '../map/map.component';
 import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiResult, BrapiSibling } from '../models/brapi.model';
 import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } from '../models/gnpis.model';
 import { DataDiscoverySource } from '../models/data-discovery.model';
-import {
-    BrapiGermplasmAttributes,
-    BrapiGermplasmPedigree,
-    BrapiResult,
-    BrapiSibling
-} from "../models/brapi.model";
-import {Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site} from "../models/gnpis.model";
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
 
@@ -215,8 +208,7 @@ describe('GermplasmCardComponent', () => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule, NgbPopoverModule, MomentModule],
             declarations: [
-                GermplasmCardComponent, LoadingSpinnerComponent, MockComponent(XrefsComponent)
-                GermplasmCardComponent, CardSectionComponent,
+                GermplasmCardComponent, LoadingSpinnerComponent, MockComponent(XrefsComponent), CardSectionComponent,
                 CardRowComponent, LoadingSpinnerComponent, CardTableComponent, MapComponent
             ],
             providers: [

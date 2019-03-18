@@ -1,4 +1,4 @@
-import { BASE_URL, BASE_URL_GERMPLASM, GnpisService } from './gnpis.service';
+import { BASE_URL, GnpisService } from './gnpis.service';
 import { BrapiMetaData, BrapiResults } from './models/brapi.model';
 import { DataDiscoveryCriteria, DataDiscoverySource } from './models/data-discovery.model';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
@@ -134,7 +134,7 @@ describe('GnpisService', () => {
 
         const req = http.expectOne({
             method: 'GET',
-            url: `${BASE_URL}/sources`
+            url: `${BASE_URL}/datadiscovery/sources`
         });
         req.flush(sources);
 
@@ -157,7 +157,7 @@ describe('GnpisService', () => {
         });
 
         const req = http.expectOne({
-            url: `${BASE_URL}/suggest?field=${field}&text=${text}&fetchSize=${fetchSize}`,
+            url: `${BASE_URL}/datadiscovery/suggest?field=${field}&text=${text}&fetchSize=${fetchSize}`,
             method: 'POST'
         });
         req.flush(expectedSuggestions);
@@ -173,7 +173,7 @@ describe('GnpisService', () => {
         gnpisService.germplasm(germplasmDbId).subscribe(response => {
             fetchedGermplasm = response;
         });
-        http.expectOne(`${BASE_URL_GERMPLASM}/germplasm?id=${germplasmDbId}`)
+        http.expectOne(`${BASE_URL}/germplasm?id=${germplasmDbId}`)
             .flush(germplasmTest);
 
         expect(fetchedGermplasm).toEqual(germplasmTest);
@@ -213,7 +213,7 @@ describe('GnpisService', () => {
         });
 
         const req = http.expectOne({
-            url: `${BASE_URL}/search`,
+            url: `${BASE_URL}/datadiscovery/search`,
             method: 'POST'
         });
         req.flush(rawResult);
