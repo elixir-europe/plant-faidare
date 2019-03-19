@@ -30,7 +30,7 @@ export class DocumentComponent implements OnInit {
     // TODO: index URGI schema:identifier like the partners
 
     getRouterLink() {
-        const urgiStudy = this.document['schema:includedInDataCatalog']['schema:url'] === 'https://urgi.versailles.inra.fr';
+        const urgiStudy = this.document['schema:includedInDataCatalog']['schema:url'] === 'https://urgi.versailles.inra.fr/gnpis/';
         for (const type of this.document['@type']) {
             const cardUrl = DocumentComponent.CARD_TYPE[type];
             if (cardUrl === 'studies') {
