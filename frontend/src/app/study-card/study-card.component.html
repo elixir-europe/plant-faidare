@@ -43,7 +43,7 @@
 
         <gpds-card-row
           label="Data source"
-          [test]="studySource && study.documentationURL">
+          [test]="studySource && studySource['schema:identifier'] && study.documentationURL">
           <ng-template>
             <a target="_blank" [href]="study.documentationURL">
               Link to this study on {{ studySource["schema:identifier"] }}

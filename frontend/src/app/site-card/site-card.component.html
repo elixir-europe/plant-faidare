@@ -29,10 +29,10 @@
 
         <gpds-card-row
           label="Data source"
-          [test]="location && location.documentationURL">
+          [test]="location && location['schema:identifier'] && location.documentationURL">
           <ng-template>
             <a target="_blank" [href]="location.documentationURL">
-              Link to this study on {{ location["schema:identifier"] }}
+              Link to this study on {{ location['schema:identifier'] }}
             </a>
           </ng-template>
         </gpds-card-row>

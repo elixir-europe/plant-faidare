@@ -24,6 +24,7 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.compo
 import { CardTableComponent } from './card-table/card-table.component';
 import { MomentModule } from 'ngx-moment';
 import { XrefsComponent } from './xrefs/xrefs.component';
+import { CoordinatesModule } from 'angular-coordinates';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { XrefsComponent } from './xrefs/xrefs.component';
         NgbPopoverModule,
         FormsModule,
         ReactiveFormsModule,
-        MomentModule
+        MomentModule,
+        CoordinatesModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useExisting: ErrorInterceptorService, multi: true }

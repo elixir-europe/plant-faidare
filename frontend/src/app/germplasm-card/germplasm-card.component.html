@@ -233,10 +233,10 @@
 
           <gpds-card-row
             label="Data source"
-            [test]="germplasmGnpis.documentationURL">
+            [test]="germplasmSource['schema:identifier'] && germplasmGnpis.documentationURL">
             <ng-template>
               <a target="_blank" [href]="germplasmGnpis.documentationURL">
-                Link to this study on source
+                Link to this study on {{ germplasmSource['schema:identifier'] }}
               </a>
             </ng-template>
           </gpds-card-row>

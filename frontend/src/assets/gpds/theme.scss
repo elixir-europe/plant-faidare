@@ -73,7 +73,7 @@ $theme-btn-hover-border-color: $_theme-blue;
 // custom navbar
 $theme-navbar-height: 4rem;
 $theme-navbar-color: $black;
-$theme-navbar-bg-color: repeating-linear-gradient(#9b9b9b, #eaeaea, #eaeaea);
+$theme-navbar-bg-color: $_theme-light-gray;
 $theme-navbar-hover-color: $white;
 $theme-navbar-hover-bg-color: $_theme-gray;
 

@@ -92,25 +92,17 @@ export class GermplasmCardComponent implements OnInit {
         let germplasm$: Promise<Germplasm>;
         if (id) {
             germplasm$ = this.gnpisService.germplasm(id).toPromise();
-            germplasm$
-                .then(germplasmGnpis => {
-                    this.germplasmGnpis = germplasmGnpis;
-                    // Get germplasm source
-                    const sourceURI = germplasmGnpis['schema:includedInDataCatalog'];
-                    this.getGermplasmSource(sourceURI);
-                    this.reformatData(germplasmGnpis);
-                });
         } else {
             germplasm$ = this.gnpisService.germplasmByPuid(pui).toPromise();
-            germplasm$
-                .then(germplasmGnpis => {
-                    this.germplasmGnpis = germplasmGnpis;
-                    // Get germplasm source
-                    const sourceURI = germplasmGnpis['schema:includedInDataCatalog'];
-                    this.getGermplasmSource(sourceURI);
-                    this.reformatData(germplasmGnpis);
-                });
         }
+        germplasm$
+            .then(germplasmGnpis => {
+                this.germplasmGnpis = germplasmGnpis;
+                // Get germplasm source
+                const sourceURI = germplasmGnpis['schema:includedInDataCatalog'];
+                this.getGermplasmSource(sourceURI);
+                this.reformatData(germplasmGnpis);
+            });
         return germplasm$;
     }
 
