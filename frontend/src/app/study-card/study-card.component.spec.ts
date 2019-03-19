@@ -48,7 +48,7 @@ describe('StudyCardComponent', () => {
         }
 
         get map() {
-            return this.element('gpds-map');
+            return this.element('div #map');
         }
     }
 
@@ -170,18 +170,50 @@ describe('StudyCardComponent', () => {
         result: {
             data: [{
                 germplasmDbId: 'g1',
+                defaultDisplayName: 'germplam1',
                 accessionNumber: 'G_10',
                 germplasmName: 'germplam1',
+                germplasmPUI: 'urn_g1',
+                pedigree: null,
+                seedSource: 'Versaille Institute',
+                synonyms: null,
+                commonCropName: 'cheery',
+                instituteCode: '78',
+                instituteName: 'Versaille Institute',
+                biologicalStatusOfAccessionCode: null,
+                countryOfOriginCode: 'FR',
+                typeOfGermplasmStorageCode: null,
+                taxonIds: null,
                 genus: 'Populus',
                 species: 'x generosa',
-                subtaxa: ''
+                speciesAuthority: 'Pop',
+                subtaxa: 'subsp',
+                subtaxaAuthority: '',
+                donors: null,
+                acquisitionDate: 'yesterday'
             }, {
                 germplasmDbId: 'g2',
+                defaultDisplayName: 'germplam2',
                 accessionNumber: 'G_20',
                 germplasmName: 'germplam2',
+                germplasmPUI: 'urn_g2',
+                pedigree: null,
+                seedSource: 'Versaille Institute',
+                synonyms: null,
+                commonCropName: 'cheery',
+                instituteCode: '78',
+                instituteName: 'Versaille Institute',
+                biologicalStatusOfAccessionCode: null,
+                countryOfOriginCode: 'FR',
+                typeOfGermplasmStorageCode: null,
+                taxonIds: null,
                 genus: 'Triticum',
                 species: 'aestivum',
-                subtaxa: 'subsp'
+                speciesAuthority: 'Trit',
+                subtaxa: 'subsp',
+                subtaxaAuthority: '',
+                donors: null,
+                acquisitionDate: 'today'
             }],
         }
     };
@@ -234,7 +266,8 @@ describe('StudyCardComponent', () => {
 
             expect(tester.cardHeader[0]).toContainText('Identification');
 
-            expect(tester.studyInfo[1]).toContainText('Link to this study on srcId');
+            expect(tester.studyInfo[0]).toContainText('study1');
+            expect(tester.studyInfo[1]).toContainText('s1');
 
             expect(tester.cardHeader[1]).toContainText('Genotype');
             expect(component.studyGermplasms.length).toEqual(2);

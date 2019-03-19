@@ -40,7 +40,8 @@
       "@id": "https://urgi.versailles.inra.fr",
       "schema:identifier": "URGI",
       "schema:name": "URGI GnpIS",
-      "schema:url": "https://urgi.versailles.inra.fr"
+      "schema:url": "https://urgi.versailles.inra.fr/gnpis/",
+      "schema:image": "./logos/GnpIS.png"
     },
     {
       "@type": "schema:DataCatalog",

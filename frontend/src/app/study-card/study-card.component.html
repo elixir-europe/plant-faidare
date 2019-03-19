@@ -6,13 +6,13 @@
   </h3>
 
   <!-- Display the map -->
-  <gpds-map *ngIf="checkLocation(study.location)" [locations]="[study.location]"></gpds-map>
+  <gpds-map [locations]="[study.location]"></gpds-map>
 
   <!-- Display the study's info -->
   <gpds-card-section
     header="Identification">
     <ng-template>
-      <div class="card-body">
+      <div class="card-body card-section-body">
 
         <gpds-card-row
           label="Name"
@@ -21,13 +21,7 @@
 
         <gpds-card-row
           label="Identifier"
-          [test]="study.studyDbId">
-          <ng-template>
-            {{ study.studyDbId }}
-            <a target="_blank" *ngIf="studySource && study.documentationURL" [href]="study.documentationURL">
-              ( Link to this study on {{ studySource["schema:identifier"] }} )
-            </a>
-          </ng-template>
+          [value]="study.studyDbId">
         </gpds-card-row>
 
         <gpds-card-row
@@ -49,10 +43,10 @@
 
         <gpds-card-row
           label="Data source"
-          [test]="studySource && study.documentationURL">
+          [test]="studySource && studySource['schema:identifier'] && study.documentationURL">
           <ng-template>
-            <a target="_blank" *ngIf="study.documentationURL" [href]="study.documentationURL">
-              ( Link to this study on {{ studySource["schema:identifier"] }} )
+            <a target="_blank" [href]="study.documentationURL">
+              Link to this study on {{ studySource["schema:identifier"] }}
             </a>
           </ng-template>
         </gpds-card-row>
@@ -108,7 +102,7 @@
           [test]="study.dataLinks && study.dataLinks.length != 0">
           <ng-template>
             <div *ngFor="let dataLink of study.dataLinks">
-              <a [href]="dataLink.url">
+              <a target="_blank" [href]="dataLink.url">
                 {{ dataLink.name }}
               </a>
             </div>
@@ -165,7 +159,7 @@
             <td>
               <ng-template #name>{{ row.observationVariableDbId }}</ng-template>
               <ng-template #link>
-                <a [href]=row.documentationURL>{{ row.observationVariableDbId }}</a>
+                <a target="_blank" [href]=row.documentationURL>{{ row.observationVariableDbId }}</a>
               </ng-template>
               <ng-container *ngIf="row.documentationURL; then link else name"></ng-container>
             </td>
@@ -195,7 +189,7 @@
             <td>
               <ng-template #name>{{ row.trialName }}</ng-template>
               <ng-template #link>
-                <a [href]=row.documentationURL>{{ row.trialName }}</a>
+                <a target="_blank" [href]=row.documentationURL>{{ row.trialName }}</a>
               </ng-template>
               <ng-container *ngIf="row.documentationURL; then link else name"></ng-container>
             </td>
@@ -221,9 +215,9 @@
       <gpds-card-table
         [headers]="[
           'Role',
-           'Name',
-           'Email',
-           'Institution'
+          'Name',
+          'Email',
+          'Institution'
         ]"
         [rows]="study.contacts">
         <ng-template let-row>

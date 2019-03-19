@@ -10,6 +10,39 @@ $fa-font-path: '~font-awesome/fonts';
   }
 }
 
-a {
-  text-decoration: underline;
+h3 {
+  font-weight: bold;
+  color: #0f6191;
+}
+
+.card-section-body {
+  border: 2px solid rgb(195, 214, 226);
+  border-top-width: 0px;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.row-sep {
+  border-top: 1px solid #f0f0f0;
+}
+
+.row-sep .row-sep:first-of-type {
+  border: none;
+}
+
+.content-overflow {
+  max-height: 175px;
+  overflow-y: auto;
+}
+
+.content-overflow-big {
+  max-height: 275px;
+  overflow: auto;
+}
+
+.display-spinner-front {
+  position: absolute;
+  top: 70px;
+  left: 720px;
+  background-color: #F9F9F9;
 }

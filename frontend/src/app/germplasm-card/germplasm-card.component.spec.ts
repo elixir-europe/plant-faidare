@@ -6,19 +6,17 @@ import { BrapiService } from '../brapi.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
-import {
-    BrapiDescriptor,
-    BrapiDonor,
-    BrapiGermplasmAttributes,
-    BrapiGermplasmPedigree,
-    BrapiGermplasmProgeny,
-    BrapiSet,
-    BrapiSibling
-} from '../models/brapi.germplasm.model';
-import { Germplasm, GermplasmData, GermplasmResult, Institute, Origin, Site } from '../models/gnpis.germplasm.model';
+
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MomentModule } from 'ngx-moment';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { CardSectionComponent } from '../card-section/card-section.component';
+import { CardRowComponent } from '../card-row/card-row.component';
+import { CardTableComponent } from '../card-table/card-table.component';
+import { MapComponent } from '../map/map.component';
+import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiResult, BrapiSibling } from '../models/brapi.model';
+import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } from '../models/gnpis.model';
+import { DataDiscoverySource } from '../models/data-discovery.model';
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
 
@@ -36,15 +34,15 @@ describe('GermplasmCardComponent', () => {
             return this.element('h3');
         }
 
-        get headerTitle() {
-            return this.elements('.headerTitle');
+        get cardHeader() {
+            return this.elements('div.card-header');
         }
     }
 
     const brapiService = jasmine.createSpyObj(
         'BrapiService', [
             'germplasm',
-            'germplasmProgeny',
+            /*'germplasmProgeny',*/
             'germplasmPedigree',
             'germplasmAttributes'
         ]
@@ -53,11 +51,12 @@ describe('GermplasmCardComponent', () => {
     const gnpisService = jasmine.createSpyObj(
         'GnpisService', [
             'germplasm',
-            'germplasmByPuid'
+            'germplasmByPuid',
+            'getSource'
         ]
     );
 
-    const brapiSite: Site = {
+    const gnpisSite: Site = {
         latitude: null,
         longitude: null,
         siteId: null,
@@ -70,13 +69,9 @@ describe('GermplasmCardComponent', () => {
         defaultDisplayName: 'frere1'
     };
 
-    const brapiDescriptor: BrapiDescriptor = {
-        name: 'caracteristique1',
-        pui: '12',
-        value: '32'
-    };
 
-    const brapiGermplasmPedigree: GermplasmResult<BrapiGermplasmPedigree> = {
+    const brapiGermplasmPedigree: BrapiResult<BrapiGermplasmPedigree> = {
+        metadata: null,
         result: {
             germplasmDbId: '12',
             defaultDisplayName: '12',
@@ -94,15 +89,15 @@ describe('GermplasmCardComponent', () => {
         }
     };
 
-    const brapiGermplasmProgeny: GermplasmResult<BrapiGermplasmProgeny> = {
+    /*const brapiGermplasmProgeny: GermplasmResult<BrapiGermplasmProgeny> = {
         result: {
             germplasmDbId: '11',
             defaultDisplayName: '11',
             progeny: [brapiSibling]
         }
-    };
+    };*/
 
-    const brapiInstitute: Institute = {
+    const gnpisInstitute: Institute = {
         instituteName: 'urgi',
         instituteCode: 'inra',
         acronym: 'urgi',
@@ -113,9 +108,9 @@ describe('GermplasmCardComponent', () => {
         logo: null
     };
 
-    const brapiOrigin: Origin = {
-        institute: brapiInstitute,
-        germplasmPUI: '12',
+    const gnpisGermplasmInstitute: GermplasmInstitute = {
+        ...gnpisInstitute,
+        institute: gnpisInstitute,
         accessionNumber: '12',
         accessionCreationDate: '1993',
         materialType: 'feuille',
@@ -125,14 +120,15 @@ describe('GermplasmCardComponent', () => {
         distributionStatus: null
     };
 
-    const brapiDonor: BrapiDonor = {
-        donorInstitute: brapiInstitute,
-        germplasmPUI: '12',
-        accessionNumber: '12',
-        donorInstituteCode: 'urgi'
+    const gnpisDonor: Donor = {
+        donorInstitute: gnpisInstitute,
+        donorGermplasmPUI: '12',
+        donorAccessionNumber: '12',
+        donorInstituteCode: 'urgi',
+        donationDate: null
     };
 
-    const brapiSet: BrapiSet = {
+    const gnpisGermplasmSet: GermplasmSet = {
         germplasmCount: 12,
         germplasmRef: null,
         id: 12,
@@ -140,18 +136,21 @@ describe('GermplasmCardComponent', () => {
         type: 'plan'
     };
 
-    const brapiGermplasmAttributes: GermplasmResult<GermplasmData<BrapiGermplasmAttributes[]>> = {
+    const brapiGermplasmAttributes: BrapiResult<BrapiGermplasmAttributes> = {
+        metadata: null,
         result: {
+            germplasmDbId: '12',
             data: [{
                 attributeName: 'longueur',
-                value: '30'
+                value: '30',
+                attributeDbId: '1',
+                attributeCode: 'longeur',
+                determinedDate: 'today'
             }]
         }
     };
 
     const germplasmTest: Germplasm = {
-        url: 'www.cirad.fr',
-        source: 'cirad',
         germplasmDbId: 'test',
         defaultDisplayName: 'test',
         accessionNumber: 'test',
@@ -172,7 +171,7 @@ describe('GermplasmCardComponent', () => {
         speciesAuthority: 'L',
         subtaxa: null,
         subtaxaAuthority: null,
-        donors: [brapiDonor],
+        donors: [gnpisDonor],
         acquisitionDate: null,
         genusSpecies: null,
         genusSpeciesSubtaxa: null,
@@ -181,34 +180,38 @@ describe('GermplasmCardComponent', () => {
         geneticNature: null,
         comment: null,
         photo: null,
-        holdingInstitute: brapiInstitute,
-        holdingGenbank: brapiInstitute,
+        holdingInstitute: gnpisInstitute,
+        holdingGenbank: gnpisInstitute,
         presenceStatus: null,
         children: null,
-        descriptors: [brapiDescriptor],
         originSite: null,
         collectingSite: null,
         evaluationSites: null,
-        collector: brapiOrigin,
-        breeder: brapiOrigin,
-        distributors: [brapiOrigin],
-        panel: [brapiSet],
-        collection: [brapiSet],
-        population: [brapiSet]
+        collector: gnpisGermplasmInstitute,
+        breeder: gnpisGermplasmInstitute,
+        distributors: [gnpisGermplasmInstitute],
+        panel: [gnpisGermplasmSet],
+        collection: [gnpisGermplasmSet],
+        population: [gnpisGermplasmSet]
     };
 
-    const germplasmResultTest = {
-        result: germplasmTest
+    const source: DataDiscoverySource = {
+        '@id': 'src1',
+        '@type': ['schema:DataCatalog'],
+        'schema:identifier': 'srcId',
+        'schema:name': 'source1',
+        'schema:url': 'srcUrl',
+        'schema:image': null
     };
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule, NgbPopoverModule, MomentModule],
             declarations: [
-                GermplasmCardComponent, LoadingSpinnerComponent, MockComponent(XrefsComponent)
+                GermplasmCardComponent, LoadingSpinnerComponent, MockComponent(XrefsComponent), CardSectionComponent,
+                CardRowComponent, LoadingSpinnerComponent, CardTableComponent, MapComponent
             ],
             providers: [
-                // { provide: ActivatedRoute, useValue: activatedRoute },
                 { provide: BrapiService, useValue: brapiService },
                 { provide: GnpisService, useValue: gnpisService },
                 {
@@ -228,7 +231,8 @@ describe('GermplasmCardComponent', () => {
 
     gnpisService.germplasm.and.returnValue(of(germplasmTest));
     gnpisService.germplasmByPuid.and.returnValue(of(germplasmTest));
-    brapiService.germplasmProgeny.and.returnValue(of(brapiGermplasmProgeny));
+    gnpisService.getSource.and.returnValue(of(source));
+    /*brapiService.germplasmProgeny.and.returnValue(of(brapiGermplasmProgeny));*/
     brapiService.germplasmPedigree.and.returnValue(of(brapiGermplasmPedigree));
     brapiService.germplasmAttributes.and.returnValue(of(brapiGermplasmAttributes));
 
@@ -240,10 +244,13 @@ describe('GermplasmCardComponent', () => {
             expect(component.germplasmGnpis).toBeTruthy();
             tester.detectChanges();
             expect(tester.title).toContainText('Germplasm: test');
-            expect(tester.headerTitle[0]).toContainText('Identification');
-            expect(tester.headerTitle[1]).toContainText('Holding');
-            expect(tester.headerTitle[2]).toContainText('Breeder');
-            expect(tester.headerTitle[3]).toContainText('Collecting');
+            expect(tester.cardHeader[0]).toContainText('Identification');
+            expect(tester.cardHeader[1]).toContainText('Holding');
+            expect(tester.cardHeader[2]).toContainText('Collecting');
+            expect(tester.cardHeader[3]).toContainText('Breeder');
+            expect(tester.cardHeader[4]).toContainText('Donor');
+            expect(tester.cardHeader[5]).toContainText('Distributor');
+            expect(tester.cardHeader[6]).toContainText('Evaluation Data');
         });
     }));
 });

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
-import { BrapiGermplasm, BrapiLocation, BrapiObservationVariable, BrapiStudy, BrapiTrial } from '../models/brapi.model';
+import { BrapiGermplasm, BrapiObservationVariable, BrapiStudy, BrapiTrial } from '../models/brapi.model';
 
 import { GnpisService } from '../gnpis.service';
 import { DataDiscoverySource } from '../models/data-discovery.model';
@@ -36,14 +36,21 @@ export class StudyCardComponent implements OnInit {
             study$
                 .then(response => {
                     this.study = response.result;
+                    if (this.study.contacts) {
+                        this.study.contacts.sort((var1, var2) =>
+                            var1.name.localeCompare(var2.name));
+                    }
 
                     this.additionalInfos = [];
                     if (this.study.additionalInfo) {
-                        this.additionalInfos = KeyValueObject.fromObject(this.study.additionalInfo);
+                        this.additionalInfos = KeyValueObject.fromObject(this.study.additionalInfo).sort();
                     }
 
                     // Get study trials
-                    this.trialsIds = this.study.trialDbIds;
+                    if (this.study.trialDbIds) {
+                        this.trialsIds = this.study.trialDbIds.sort();
+                    }
+
                     this.studyDataset = [];
                     if (this.trialsIds && this.trialsIds !== []) {
                         for (const trialsId of this.trialsIds) {
@@ -57,12 +64,24 @@ export class StudyCardComponent implements OnInit {
                                     this.studyDataset.push(trial);
                                 });
                         }
+                        if (this.studyDataset) {
+                            this.studyDataset.sort((var1, var2) =>
+                                var1.trialName.localeCompare(var2.trialName));
+                        }
                     }
 
                     // Get study source
+                    // TODO Remove the condition when the field includedInDataCatalog will be added to URGI study.
                     const sourceURI = this.study['schema:includedInDataCatalog'];
                     if (sourceURI) {
                         const source$ = this.gnpisService.getSource(sourceURI);
+                        source$
+                            .subscribe(src => {
+                                this.studySource = src;
+                            });
+                    } else {
+                        const urgiURI = 'https://urgi.versailles.inra.fr';
+                        const source$ = this.gnpisService.getSource(urgiURI);
                         source$
                             .subscribe(src => {
                                 this.studySource = src;
@@ -74,14 +93,16 @@ export class StudyCardComponent implements OnInit {
             const variable$ = this.brapiService.studyObservationVariables(studyDbId).toPromise();
             variable$
                 .then(response => {
-                    this.studyObservationVariables = response.result.data;
+                    this.studyObservationVariables = response.result.data.sort((var1, var2) =>
+                        var1.observationVariableDbId.localeCompare(var2.observationVariableDbId));
                 });
 
             this.studyGermplasms = [];
             const germplasm$ = this.brapiService.studyGermplasms(studyDbId).toPromise();
             germplasm$
                 .then(studyGermplasm => {
-                    this.studyGermplasms = studyGermplasm.result.data;
+                    this.studyGermplasms = studyGermplasm.result.data.sort((var1, var2) =>
+                        var1.germplasmName.localeCompare(var2.germplasmName));
                 });
 
             this.loaded = Promise.all([study$, variable$, germplasm$]);
@@ -90,10 +111,6 @@ export class StudyCardComponent implements OnInit {
             });
         });
 
-    }
-
-    checkLocation(location: BrapiLocation) {
-        return location && location.longitude && location.latitude;
     }
 
     isNotURN(pui: string) {

@@ -5,15 +5,15 @@ import { GermplasmCardComponent } from './germplasm-card/germplasm-card.componen
 import { StudyCardComponent } from './study-card/study-card.component';
 import { SiteCardComponent } from './site-card/site-card.component';
 
-const routes: Routes = [
-    { path: 'germplasm', component: GermplasmCardComponent },
+export const routes: Routes = [
     { path: 'studies/:id', component: StudyCardComponent },
     { path: 'sites/:id', component: SiteCardComponent },
     { path: '', component: ResultPageComponent },
+    { path: 'germplasm', component: GermplasmCardComponent }
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
+    imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
     exports: [RouterModule]
 })
 export class AppRoutingModule {

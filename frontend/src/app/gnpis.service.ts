@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, zip } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Germplasm } from './models/gnpis.germplasm.model';
 import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDiscoverySource } from './models/data-discovery.model';
 import { BrapiResults } from './models/brapi.model';
 import { map } from 'rxjs/operators';
+import { Germplasm } from './models/gnpis.model';
 import { XrefResponse } from './models/xref.model';
 
 
-export const BASE_URL = 'gnpis/v1/datadiscovery';
-export const BASE_URL_GERMPLASM = 'gnpis/v1';
+export const BASE_URL = 'gnpis/v1';
 
 @Injectable({
     providedIn: 'root'
@@ -22,7 +21,7 @@ export class GnpisService {
     }
 
     private fetchSources(): void {
-        this.http.get(`${BASE_URL}/sources`).subscribe(
+        this.http.get(`${BASE_URL}/datadiscovery/sources`).subscribe(
             (response: BrapiResults<DataDiscoverySource>) => {
                 const sourceByURI = {};
                 for (const source of response.result.data) {
@@ -49,7 +48,7 @@ export class GnpisService {
     ): Observable<string[]> {
         const params = { field, text, fetchSize: fetchSize.toString() };
         return this.http.post<string[]>(
-            `${BASE_URL}/suggest`, criteria, { params }
+            `${BASE_URL}/datadiscovery/suggest`, criteria, { params }
         );
     }
 
@@ -65,7 +64,7 @@ export class GnpisService {
             // Get source by URI
             this.sourceByURI$,
             // Get documents by criteria
-            this.http.post<any>(`${BASE_URL}/search`, criteria)
+            this.http.post<any>(`${BASE_URL}/datadiscovery/search`, criteria)
         ).pipe(map(([sourceByURI, response]) => {
             // Extract BrAPI documents from result
             const documents = response.result.data;
@@ -94,11 +93,11 @@ export class GnpisService {
     }
 
     germplasm(germplasmDbId: string): Observable<Germplasm> {
-        return this.http.get<Germplasm>(`${BASE_URL_GERMPLASM}/germplasm?id=${germplasmDbId}`);
+        return this.http.get<Germplasm>(`${BASE_URL}/germplasm?id=${germplasmDbId}`);
     }
 
     germplasmByPuid(pui: string): Observable<Germplasm> {
-        return this.http.get<Germplasm>(`${BASE_URL_GERMPLASM}/germplasm?pui=${pui}`);
+        return this.http.get<Germplasm>(`${BASE_URL}/germplasm?pui=${pui}`);
     }
 
     /**
@@ -109,7 +108,7 @@ export class GnpisService {
     }
 
     xref(xrefId: string): Observable<XrefResponse> {
-        return this.http.get<XrefResponse>(`gnpis/v1/xref/documentbyfulltextid?linkedRessourcesID=${xrefId}`);
+        return this.http.get<XrefResponse>(`${BASE_URL}/xref/documentbyfulltextid?linkedRessourcesID=${xrefId}`);
     }
 
 }

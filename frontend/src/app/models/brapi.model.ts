@@ -14,7 +14,7 @@ export interface BrapiResult<T> {
 }
 
 
-interface BrapiData<T> {
+export interface BrapiData<T> {
     data: T[];
 }
 
@@ -42,33 +42,12 @@ export interface BrapiStudy extends BrapiHasDocumentationURL {
     trialDbIds: string[];
     location: BrapiLocation;
     contacts: BrapiContacts[];
-    additionalInfo: AdditionalInfo;
+    additionalInfo: BrapiAdditionalInfo;
     dataLinks: {
         name: string;
         type: string;
         url: string;
     }[];
-}
-
-
-export interface BrapiLocation extends BrapiHasDocumentationURL  {
-    locationDbId: string;
-    locationName: string;
-    locationType: string;
-    abbreviation: string;
-    countryCode: string;
-    countryName: string;
-    institutionAddress: string;
-    institutionName: string;
-    altitude: number;
-    latitude: number;
-    longitude: number;
-    additionalInfo?: AdditionalInfo;
-}
-
-
-export interface AdditionalInfo {
-    [key: string]: string;
 }
 
 
@@ -78,6 +57,27 @@ export interface BrapiContacts {
     email: string;
     type: string;
     institutionName: string;
+}
+
+
+export interface BrapiLocation extends BrapiHasDocumentationURL  {
+    locationDbId: string;
+    locationName: string;
+    locationType: string;
+    abbreviation?: string;
+    countryCode?: string;
+    countryName?: string;
+    institutionAddress?: string;
+    institutionName?: string;
+    altitude?: number;
+    latitude: number;
+    longitude: number;
+    additionalInfo?: BrapiAdditionalInfo;
+}
+
+
+export interface BrapiAdditionalInfo {
+    [key: string]: string;
 }
 
 
@@ -99,16 +99,6 @@ export interface BrapiObservationVariable extends BrapiHasDocumentationURL  {
 }
 
 
-export interface BrapiGermplasm extends BrapiHasDocumentationURL {
-    germplasmDbId: string;
-    accessionNumber: string;
-    germplasmName: string;
-    genus: string;
-    species: string;
-    subtaxa: string;
-}
-
-
 export interface BrapiTrial extends BrapiHasDocumentationURL {
     trialDbId: string;
     trialName: string;
@@ -118,4 +108,90 @@ export interface BrapiTrial extends BrapiHasDocumentationURL {
         studyDbId: string;
         studyName: string;
     }[];
+}
+
+export interface BrapiGermplasm extends BrapiHasDocumentationURL {
+    germplasmDbId: string;
+    defaultDisplayName: string;
+    accessionNumber: string;
+    germplasmName: string;
+    germplasmPUI: string;
+    pedigree: string;
+    seedSource: string;
+    synonyms: string[];
+    commonCropName: string;
+    instituteCode: string;
+    instituteName: string;
+    biologicalStatusOfAccessionCode: string;
+    countryOfOriginCode: string;
+    typeOfGermplasmStorageCode: string[];
+    taxonIds: BrapiTaxonIds[];
+    genus: string;
+    species: string;
+    speciesAuthority: string;
+    subtaxa: string;
+    subtaxaAuthority: string;
+    donors: BrapiDonor[];
+    acquisitionDate: string;
+}
+
+
+export interface BrapiTaxonIds {
+    sourceName: string;
+    taxonId: string;
+}
+
+export interface BrapiDonor {
+    donorGermplasmPUI: string;
+    donorAccessionNumber: string;
+    donorInstituteCode: string;
+    donationDate: number;
+}
+
+export interface BrapiGermplasmPedigree {
+    germplasmDbId: string;
+    defaultDisplayName: string;
+    pedigree: string;
+    crossingPlan: string;
+    crossingYear: string;
+    familyCode: string;
+    parent1DbId: string;
+    parent1Name: string;
+    parent1Type: string;
+    parent2DbId: string;
+    parent2Name: string;
+    parent2Type: string;
+    siblings: BrapiSibling[];
+}
+
+export interface BrapiSibling {
+    germplasmDbId: string;
+    defaultDisplayName: string;
+}
+
+export interface BrapiGermplasmProgeny {
+    germplasmDbId: string;
+    defaultDisplayName: string;
+    progeny: BrapiProgeny[];
+}
+
+export interface BrapiProgeny {
+    germplasmDbId: string;
+    defaultDisplayName: string;
+    parentType: string;
+
+}
+
+
+export interface BrapiGermplasmAttributes {
+    germplasmDbId: string;
+    data: BrapiAttributeData[];
+}
+
+export interface BrapiAttributeData  {
+    attributeDbId: string;
+    attributeName: string;
+    attributeCode: string;
+    value: string;
+    determinedDate: string;
 }

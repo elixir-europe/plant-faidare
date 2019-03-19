@@ -1,6 +1,6 @@
 <div id="map" class="rounded">
 </div>
-<div id="maplegend">
+<div *ngIf="curatedLocationList.length > 0" id="maplegend">
   <img src="assets/gpds/images/marker-icon-red.png" id="red"/>
   <label for="red">Origin site</label>
   <img src="assets/gpds/images/marker-icon-blue.png" id="blue"/>

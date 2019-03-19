@@ -1,7 +1,7 @@
-.row-sep {
-  border-top: 0.01px solid #f0f0f0;
-}
+@import '../../styles.scss';
 
 .field {
   font-weight: bold;
+  overflow-wrap: normal;
 }
+

@@ -1,11 +1,9 @@
-import { Germplasm, Institute, Origin, Site } from './models/gnpis.germplasm.model';
-
-import { BASE_URL, BASE_URL_GERMPLASM, GnpisService } from './gnpis.service';
+import { BASE_URL, GnpisService } from './gnpis.service';
 import { BrapiMetaData, BrapiResults } from './models/brapi.model';
 import { DataDiscoveryCriteria, DataDiscoverySource } from './models/data-discovery.model';
-import { BrapiDescriptor, BrapiDonor, BrapiSet } from './models/brapi.germplasm.model';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } from './models/gnpis.model';
 
 describe('GnpisService', () => {
 
@@ -29,15 +27,9 @@ describe('GnpisService', () => {
     const site: Site = {
         latitude: null,
         longitude: null,
-        siteId: 1,
+        siteId: '1',
         siteName: 'Nantes',
         siteType: null
-    };
-
-    const brapiDescriptor: BrapiDescriptor = {
-        name: 'caracteristique1',
-        pui: '12',
-        value: '32'
     };
 
     const brapiInstitute: Institute = {
@@ -51,9 +43,9 @@ describe('GnpisService', () => {
         logo: null
     };
 
-    const brapiOrigin: Origin = {
+    const germplasmInstitute: GermplasmInstitute = {
+        ...brapiInstitute,
         institute: brapiInstitute,
-        germplasmPUI: '12',
         accessionNumber: '12',
         accessionCreationDate: '1993',
         materialType: 'feuille',
@@ -63,14 +55,15 @@ describe('GnpisService', () => {
         distributionStatus: null
     };
 
-    const brapiDonor: BrapiDonor = {
+    const brapiDonor: Donor = {
         donorInstitute: brapiInstitute,
-        germplasmPUI: '12',
-        accessionNumber: '12',
-        donorInstituteCode: 'urgi'
+        donorGermplasmPUI: '12',
+        donorAccessionNumber: '12',
+        donorInstituteCode: 'urgi',
+        donationDate: null
     };
 
-    const brapiSet: BrapiSet = {
+    const germplasmSet: GermplasmSet = {
         germplasmCount: 12,
         germplasmRef: null,
         id: 12,
@@ -79,8 +72,6 @@ describe('GnpisService', () => {
     };
 
     const germplasmTest: Germplasm = {
-        url: 'www.cirad.fr',
-        source: 'cirad',
         germplasmDbId: 'test',
         defaultDisplayName: 'test',
         accessionNumber: 'test',
@@ -114,16 +105,15 @@ describe('GnpisService', () => {
         holdingGenbank: brapiInstitute,
         presenceStatus: null,
         children: null,
-        descriptors: [brapiDescriptor],
         originSite: site,
         collectingSite: null,
         evaluationSites: null,
-        collector: brapiOrigin,
-        breeder: brapiOrigin,
-        distributors: [brapiOrigin],
-        panel: [brapiSet],
-        collection: [brapiSet],
-        population: [brapiSet]
+        collector: germplasmInstitute,
+        breeder: germplasmInstitute,
+        distributors: [germplasmInstitute],
+        panel: [germplasmSet],
+        collection: [germplasmSet],
+        population: [germplasmSet]
     };
 
     let gnpisService: GnpisService;
@@ -144,7 +134,7 @@ describe('GnpisService', () => {
 
         const req = http.expectOne({
             method: 'GET',
-            url: `${BASE_URL}/sources`
+            url: `${BASE_URL}/datadiscovery/sources`
         });
         req.flush(sources);
 
@@ -167,7 +157,7 @@ describe('GnpisService', () => {
         });
 
         const req = http.expectOne({
-            url: `${BASE_URL}/suggest?field=${field}&text=${text}&fetchSize=${fetchSize}`,
+            url: `${BASE_URL}/datadiscovery/suggest?field=${field}&text=${text}&fetchSize=${fetchSize}`,
             method: 'POST'
         });
         req.flush(expectedSuggestions);
@@ -183,7 +173,7 @@ describe('GnpisService', () => {
         gnpisService.germplasm(germplasmDbId).subscribe(response => {
             fetchedGermplasm = response;
         });
-        http.expectOne(`${BASE_URL_GERMPLASM}/germplasm?id=${germplasmDbId}`)
+        http.expectOne(`${BASE_URL}/germplasm?id=${germplasmDbId}`)
             .flush(germplasmTest);
 
         expect(fetchedGermplasm).toEqual(germplasmTest);
@@ -223,7 +213,7 @@ describe('GnpisService', () => {
         });
 
         const req = http.expectOne({
-            url: `${BASE_URL}/search`,
+            url: `${BASE_URL}/datadiscovery/search`,
             method: 'POST'
         });
         req.flush(rawResult);

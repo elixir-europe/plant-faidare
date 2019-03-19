@@ -71,7 +71,7 @@ describe('DocumentComponent', () => {
         expect(tester.source.attr('href')).toEqual('http://dco/url');
 
         expect(tester.title).toContainText('doc_name');
-        expect(tester.title.attr('href')).toEqual('http://dco/url');
+        expect(tester.title.nativeElement['routerLink']).toEqual('/germplasm');
 
         expect(tester.description).toContainText('description');
 
