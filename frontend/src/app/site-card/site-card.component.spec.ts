@@ -14,6 +14,7 @@ import { DataDiscoverySource } from '../models/data-discovery.model';
 import { GnpisService } from '../gnpis.service';
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
+import { CoordinatesPipe, CoordinatesService } from 'angular-coordinates';
 
 
 describe('SiteCardComponent', () => {
@@ -23,6 +24,10 @@ describe('SiteCardComponent', () => {
     const gnpisService = jasmine.createSpyObj(
         'GnpisService', ['getSource']
     );
+    const coordinatesService = jasmine.createSpyObj(
+        'CoordinatesService', ['transform']
+    );
+
     const response: BrapiResult<BrapiLocation> = {
         metadata: null,
         result: {
@@ -65,12 +70,13 @@ describe('SiteCardComponent', () => {
         TestBed.configureTestingModule({
             declarations: [
                 SiteCardComponent, MapComponent, LoadingSpinnerComponent,
-                CardRowComponent, CardSectionComponent, CardTableComponent,
+                CardRowComponent, CardSectionComponent, CardTableComponent, CoordinatesPipe,
                 MockComponent(XrefsComponent)
             ],
             providers: [
                 { provide: BrapiService, useValue: brapiService },
                 { provide: GnpisService, useValue: gnpisService },
+                { provide: CoordinatesService, useValue: coordinatesService },
                 {
                     provide: ActivatedRoute,
                     useValue: {
@@ -89,7 +95,6 @@ describe('SiteCardComponent', () => {
 
     it('should display site', () => {
         const fixture = TestBed.createComponent(SiteCardComponent);
-        const component = fixture.componentInstance;
         brapiService.location.and.returnValues(of(response));
         gnpisService.getSource.and.returnValue(of(source));
         fixture.detectChanges();
