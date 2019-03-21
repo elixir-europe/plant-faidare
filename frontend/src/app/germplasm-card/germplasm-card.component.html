@@ -2,7 +2,7 @@
 
 <ng-container *ngIf="germplasmGnpis">
   <h3 class="mb-4">
-    <img *ngIf="germplasmGnpis.holdingGenbank && germplasmGnpis.holdingGenbank.instituteName"
+    <img *ngIf="!loading && germplasmGnpis.holdingGenbank && germplasmGnpis.holdingGenbank.instituteName"
          [src]="germplasmGnpis.holdingGenbank.logo"
          align="right"/>
     Germplasm: {{ germplasmGnpis.germplasmName }}
@@ -11,7 +11,7 @@
   <!-- Display the map -->
   <faidare-map [locations]="germplasmLocations"></faidare-map>
 
-  <div class="row align-items-center">
+  <div class="row align-items-center justify-content-center">
 
     <!--Templates for gerplasm card-->
 
@@ -169,6 +169,8 @@
     </ng-template>
 
     <!--Section for the image representing the germplasm and the details about this image-->
+    <div class="col-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFileName">
+      <a class="btn popovers" data-boundary="window" placement="auto" [ngbPopover]="imageTemplate"
     <div class="col-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFile">
       <a class="btn popovers" data-boundary="window" placement="auto"
          [autoClose]="'outside'"
@@ -339,7 +341,7 @@
               {{ germplasmGnpis.holdingInstitute.instituteName }}</a>
           </ng-template>
         </faidare-card-row>
-  
+
         <faidare-card-row
           label="Stock center name"
           [test]="germplasmGnpis.holdingGenbank.instituteName && germplasmGnpis.holdingGenbank.webSite">
@@ -401,15 +403,15 @@
         </faidare-card-row>
 
         <faidare-card-row
-          label="Acquisition/Creation date"
+          label="Acquisition / Creation date"
           [test]="germplasmGnpis.collector.accessionCreationDate">
           <ng-template>
-            {{ germplasmGnpis.collector.accessionCreationDate | amParse:'YYYYMMDD' | amDateFormat:'YYYY-MM-DD' }}
+            {{ germplasmGnpis.collector.accessionCreationDate }}
           </ng-template>
         </faidare-card-row>
 
         <faidare-card-row
-          label="Acquisition/Creation date"
+          label="Acquisition / Creation date"
           [test]="germplasmGnpis.acquisitionDate && !germplasmGnpis.collector.accessionCreationDate">
           <ng-template>
             {{ germplasmGnpis.acquisitionDate }}
@@ -519,7 +521,7 @@
             <td>{{ row.donationDate }}</td>
             <td>{{ row.donorAccessionNumber }}</td>
             <td>{{ row.donorGermplasmPUI }}</td>
-            </tr>
+          </tr>
         </ng-template>
       </faidare-card-table>
 

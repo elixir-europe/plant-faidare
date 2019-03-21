@@ -37,7 +37,8 @@ export class MapComponent implements OnInit {
             const markers = new MarkerClusterGroup();
             for (const location of this.curatedLocationList) {
                 const icon = L.icon({
-                    iconUrl: this.getMarkerIconUrl(location)
+                    iconUrl: this.getMarkerIconUrl(location),
+                    iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
                 });
                 const popupText = `
                   <b>${location.locationName}</b><br/>
