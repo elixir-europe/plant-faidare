@@ -45,6 +45,13 @@ export class GermplasmCardComponent implements OnInit {
     germplasmTaxon: string;
     germplasmTaxonAuthor: string;
     germplasmSource: DataDiscoverySource;
+    toReplace = /_/g;
+
+    // TODO extract those url in a configuration file. URL maybe be added during extraction.
+    IMAGES_ACCESSION_URL = 'https://urgi.versailles.inra.fr/files/siregal/images/accession/';
+    IMAGES_INSTITUTION_URL = 'https://urgi.versailles.inra.fr/files/siregal/images//institution/';
+    IMAGES_BRC_URL = 'https://urgi.versailles.inra.fr/files/siregal/images/grc/inra_brc_en.png';
+
 
     loaded: Promise<any>;
     loading = true;

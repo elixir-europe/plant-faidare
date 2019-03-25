@@ -246,8 +246,8 @@ describe('GermplasmCardComponent', () => {
             tester.detectChanges();
             expect(tester.title).toContainText('Germplasm: test');
             expect(tester.cardHeader[0]).toContainText('Identification');
-            expect(tester.cardHeader[1]).toContainText('Holding');
-            expect(tester.cardHeader[2]).toContainText('Collecting');
+            expect(tester.cardHeader[1]).toContainText('Depositary');
+            expect(tester.cardHeader[2]).toContainText('Collector');
             expect(tester.cardHeader[3]).toContainText('Breeder');
             expect(tester.cardHeader[4]).toContainText('Donor');
             expect(tester.cardHeader[5]).toContainText('Distributor');

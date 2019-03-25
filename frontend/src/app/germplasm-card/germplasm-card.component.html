@@ -179,8 +179,8 @@
         <img
           [src]="germplasmGnpis.photo.thumbnailFile"
           class="img-fluid">
-        <figcaption class="figure-caption">
-          Click to see more details
+        <figcaption class="figure-caption" style="color: #0f6fa1;">
+          © {{ germplasmGnpis.photo.copyright }}
         </figcaption>
       </a>
 
@@ -253,7 +253,7 @@
             [test]="germplasmSource['schema:identifier'] && germplasmGnpis.documentationURL">
             <ng-template>
               <a target="_blank" [href]="germplasmGnpis.documentationURL">
-                Link to this study on {{ germplasmSource['schema:identifier'] }}
+                Link to this germplasm on {{ germplasmSource['schema:name'] }}
               </a>
             </ng-template>
           </faidare-card-row>
@@ -324,8 +324,8 @@
   </div>
 
   <!--Section for the information about the holding of the germplasm-->
-  <faidare-card-section
-    header="Holding"
+  <gpds-card-section
+    header="Depositary"
     [test]="germplasmGnpis.holdingInstitute">
     <ng-template>
       <div class="card-body card-section-body">
@@ -371,7 +371,7 @@
 
   <!--Section for the information about the collector of the germplasm-->
   <faidare-card-section
-    header="Collecting"
+    header="Collector"
     [test]="checkCollecting()">
     <ng-template>
       <div class="card-body card-section-body">
@@ -492,7 +492,7 @@
     header="Donor"
     [test]="germplasmGnpis.donors && germplasmGnpis.donors.length > 0">
     <ng-template>
-
+      <div class="table-responsive scroll-table table-card-body">
       <faidare-card-table
         [headers]="[
                 'Institute name',
@@ -525,6 +525,8 @@
         </ng-template>
       </faidare-card-table>
 
+      </faidare-card-table>
+      </div>
     </ng-template>
   </faidare-card-section>
 
@@ -533,6 +535,7 @@
     header="Distributor"
     [test]="germplasmGnpis.distributors && germplasmGnpis.distributors.length>0">
     <ng-template>
+      <div class="table-responsive scroll-table table-card-body">
 
       <!--TODO : Add order column when ordering URL will be available-->
       <faidare-card-table
@@ -561,8 +564,9 @@
             <td>{{ row.distributionStatus }}</td>
           </tr>
         </ng-template>
-      </faidare-card-table>
 
+      </faidare-card-table>
+      </div>
     </ng-template>
   </faidare-card-section>
 
@@ -768,9 +772,8 @@
     <ng-template>
       <div class="card-body card-section-body">
         <ng-container *ngFor="let panel of germplasmGnpis.panel">
-
-          <faidare-card-row
-            [label]="panel.type ? panel.name + ' (' + panel.type + ')' : panel.name">
+          <gpds-card-row
+            [label]="panel.type ? panel.name.replace(toReplace, ' ') + ' (' + panel.type + ')' : panel.name.replace(toReplace,' ')">
             <ng-template>
               <a [routerLink]="['/']"
                  [queryParams]="{germplasmLists: panel.name, types: 'Germplasm'}">

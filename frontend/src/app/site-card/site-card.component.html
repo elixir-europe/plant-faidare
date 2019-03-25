@@ -22,7 +22,7 @@
           <ng-template>
             <a target="_blank"
                [href]="locationSource['schema:url']">
-              <img [src]="locationSource['schema:image']" alt="Location source image"/>
+              <img [src]="locationSource['schema:image']" alt="Location source image" style="height: 60px"/>
             </a>
           </ng-template>
         </faidare-card-row>
@@ -32,7 +32,7 @@
           [test]="location && location['schema:identifier'] && location.documentationURL">
           <ng-template>
             <a target="_blank" [href]="location.documentationURL">
-              Link to this study on {{ location['schema:identifier'] }}
+              Link to this site on {{ location['schema:name'] }}
             </a>
           </ng-template>
         </faidare-card-row>

@@ -1,19 +1,7 @@
 
-.scroll-table {
-  max-height: 200px;
-  overflow-y: auto;
-
-  thead th {
-    position: sticky;
-    top: 0;
-    background-color: white;
-  }
+thead th {
+  position: sticky;
+  top: 0;
+  background-color: white;
 }
 
-.table-card-body {
-  padding: 0;
-  border: 2px solid rgb(195, 214, 226);
-  border-top-width: 0px;
-  border-bottom-left-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
-}
