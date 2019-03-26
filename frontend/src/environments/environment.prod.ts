@@ -16,9 +16,9 @@ export const environment = {
                 ]
             },
             { label: 'GNPIS', url: 'https://urgi.versailles.inra.fr/gnpis/' },
-            { label: 'CIRAD', url: 'http://tropgenedb.cirad.fr/' },
-            { label: 'VIB', url: 'http://pippa.psb.ugent.be' },
-            { label: 'IBET', url: 'https://biodata.pt' }
+            { label: 'CIRAD TropGENE', url: 'http://tropgenedb.cirad.fr/' },
+            { label: 'VIB Pippa', url: 'http://pippa.psb.ugent.be' },
+            { label: 'IBET BioData', url: 'https://biodata.pt' }
 
         ],
         contributor: {

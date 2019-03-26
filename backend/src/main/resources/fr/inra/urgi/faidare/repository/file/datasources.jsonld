@@ -17,7 +17,7 @@
       "schema:identifier": "VIB",
       "schema:name": "VIB PIPPA",
       "schema:url": "http://pippa.psb.ugent.be",
-      "schema:image": "./logos/VIB_40h.png"
+      "schema:image": "./logos/VIB.png"
     },
     {
       "@type": "schema:DataCatalog",

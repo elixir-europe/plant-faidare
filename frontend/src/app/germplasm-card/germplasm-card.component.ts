@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
 import { BrapiAttributeData, BrapiGermplasmPedigree, BrapiLocation, BrapiTaxonIds } from '../models/brapi.model';
@@ -18,15 +18,7 @@ export class GermplasmCardComponent implements OnInit {
 
     constructor(private brapiService: BrapiService,
                 private gnpisService: GnpisService,
-                private route: ActivatedRoute,
-                private router: Router) {
-
-        this.router.events.subscribe((event: any) => {
-            // If it is a NavigationEnd event re-initalise the component
-            if (this.alreadyInitialize && event instanceof NavigationEnd) {
-                this.ngOnInit();
-            }
-        });
+                private route: ActivatedRoute) {
     }
 
     NCBI_URL = 'https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=';
@@ -57,42 +49,45 @@ export class GermplasmCardComponent implements OnInit {
     loading = true;
 
     ngOnInit() {
-        this.germplasmId = this.route.snapshot.queryParams.id;
-        this.germplasmPuid = this.route.snapshot.queryParams.pui;
 
-        const germplasm$ = this.getGermplasm(this.germplasmId, this.germplasmPuid);
-        germplasm$.then(result => {
-            const germplasmId = this.germplasmId ? this.germplasmId : result.germplasmDbId;
+        this.route.queryParams.subscribe(queryParams => {
 
-            // TODO use the progeny call when the information about parent will be added.
-            /*const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
-            germplasmProgeny$
-                .then(germplasmProgeny => {
-                    this.germplasmProgeny = germplasmProgeny.result;
-                });*/
+            this.germplasmId = queryParams.id;
+            this.germplasmPuid = queryParams.pui;
 
-            const germplasmPedigree$ = this.brapiService.germplasmPedigree(germplasmId).toPromise();
-            germplasmPedigree$
-                .then(germplasmPedigree => {
-                    this.germplasmPedigree = germplasmPedigree.result;
-                });
+            const germplasm$ = this.getGermplasm(this.germplasmId, this.germplasmPuid);
+            germplasm$.then(result => {
+                const germplasmId = this.germplasmId ? this.germplasmId : result.germplasmDbId;
 
-            const germplasmAttributes$ = this.brapiService.germplasmAttributes(germplasmId).toPromise();
-            germplasmAttributes$
-                .then(germplasmAttributes => {
-                    if (germplasmAttributes.result.data) {
-                        this.germplasmAttributes = germplasmAttributes.result.data.sort(this.compareAttributes);
-                    }
+                // TODO use the progeny call when the information about parent will be added.
+                /*const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
+                germplasmProgeny$
+                    .then(germplasmProgeny => {
+                        this.germplasmProgeny = germplasmProgeny.result;
+                    });*/
 
-                });
+                const germplasmPedigree$ = this.brapiService.germplasmPedigree(germplasmId).toPromise();
+                germplasmPedigree$
+                    .then(germplasmPedigree => {
+                        this.germplasmPedigree = germplasmPedigree.result;
+                    });
+
+                const germplasmAttributes$ = this.brapiService.germplasmAttributes(germplasmId).toPromise();
+                germplasmAttributes$
+                    .then(germplasmAttributes => {
+                        if (germplasmAttributes.result && germplasmAttributes.result.data) {
+                            this.germplasmAttributes = germplasmAttributes.result.data.sort(this.compareAttributes);
+                        }
+
+                    });
+            });
+
+            this.loaded = Promise.all([germplasm$]);
+            this.loaded.then(() => {
+                this.loading = false;
+                this.alreadyInitialize = true;
+            });
         });
-
-        this.loaded = Promise.all([germplasm$]);
-        this.loaded.then(() => {
-            this.loading = false;
-            this.alreadyInitialize = true;
-        });
-
     }
 
     getGermplasm(id: string, pui: string): Promise<Germplasm> {

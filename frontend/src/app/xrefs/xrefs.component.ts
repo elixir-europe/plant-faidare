@@ -21,6 +21,5 @@ export class XrefsComponent implements OnInit {
                 this.xrefs = xrefs;
             }
         );
-
     }
 }

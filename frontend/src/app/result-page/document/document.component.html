@@ -13,12 +13,12 @@
     </a>
     <a class="title" *ngIf="getRouterLink() && !document['@type'].includes('Phenotyping Study')"
        [routerLink]="getRouterLink()" [queryParams]="getQueryParam()">
-      {{ document["schema:name"] }},
+      {{ document["schema:name"] }}
     </a>
-    <small>
-      or link to this
-      <a *ngIf="getURL()" [href]="getURL()" target="_blank">
-        {{ document['@type'] }} on {{ document['schema:includedInDataCatalog']['schema:name'] }}
+    <small *ngIf="getURL()">
+      or link to
+      <a [href]="getURL()" target="_blank">
+        this {{ document['@type'] }} on {{ document['schema:includedInDataCatalog']['schema:name'] }}
       </a>
     </small>
   </h5>
