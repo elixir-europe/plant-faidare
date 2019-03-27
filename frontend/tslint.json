@@ -159,7 +159,7 @@
     "template-conditional-complexity": true,
     "template-cyclomatic-complexity": [
       true,
-      10
+      11
     ],
     "templates-no-negated-async": true,
     "use-host-property-decorator": true,

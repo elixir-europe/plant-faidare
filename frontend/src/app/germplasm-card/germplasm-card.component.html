@@ -3,7 +3,7 @@
 <ng-container *ngIf="germplasmGnpis">
   <h3 class="mb-4">
     <img *ngIf="germplasmGnpis.holdingGenbank && germplasmGnpis.holdingGenbank.instituteName"
-         [src]="IMAGES_BRC_URL"
+         [src]="germplasmGnpis.holdingGenbank.logo"
          align="right"/>
     Germplasm: {{ germplasmGnpis.germplasmName }}
   </h3>
@@ -14,153 +14,188 @@
   <div class="row align-items-center">
 
     <!--Templates for gerplasm card-->
+
+    <ng-template #taxonTemplate>
+      <gpds-card-row
+        label="Genus"
+        [test]="germplasmGnpis.genus">
+        <ng-template>
+          <i>{{ germplasmGnpis.genus }}</i>
+        </ng-template>
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Species"
+        [test]="germplasmGnpis.species">
+        <ng-template>
+          <i>{{ germplasmGnpis.species }}</i>
+        </ng-template>
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Subtaxa"
+        [test]="germplasmGnpis.subtaxa">
+        <ng-template>
+          <i>{{ germplasmGnpis.subtaxa }}</i>
+        </ng-template>
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Authority"
+        [test]="germplasmTaxonAuthor">
+        <ng-template>
+          {{ germplasmTaxonAuthor }}
+        </ng-template>
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Taxon ID"
+        [test]="germplasmGnpis.taxonIds && germplasmGnpis.taxonIds.length > 0">
+        <ng-container *ngFor="let taxonId of germplasmGnpis.taxonIds">
+
+          <gpds-card-row
+            [label]="taxonId.sourceName">
+            [test]="taxonId.url">
+            <ng-template>
+              <a [href]="" target="_blank">
+                {{ taxonId.taxonId }}
+              </a>
+            </ng-template>
+          </gpds-card-row>
+
+          <gpds-card-row
+            [label]="taxonId.sourceName">
+            [test]="!taxonId.url">
+            <ng-template></ng-template>
+                {{ taxonId.taxonId }}
+            </ng-template>
+          </gpds-card-row>
+
+        </ng-container>
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Taxon ID (test)"
+        [test]="taxonIdsWithURL && taxonIdsWithURL.length > 0">
+        <ng-container *ngFor="let taxonId of taxonIdsWithURL">
+
+          <gpds-card-row
+            [label]="taxonId.sourceName">
+            [test]="taxonId.url">
+            <ng-template>
+              <a [href]="" target="_blank">
+                {{ taxonId.taxonId }}
+              </a>
+            </ng-template>
+          </gpds-card-row>
+
+          <gpds-card-row
+            [label]="taxonId.sourceName">
+            [test]="!taxonId.url">
+            <ng-template></ng-template>
+            {{ taxonId.taxonId }}
+            </ng-template>
+          </gpds-card-row>
+        </ng-container>
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Comment"
+        [test]="germplasmGnpis.taxonComment">
+        <ng-template>
+          {{ germplasmGnpis.taxonComment }}
+        </ng-template>
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Taxon common names"
+        [test]="germplasmGnpis.taxonCommonNames && germplasmGnpis.taxonCommonNames.length > 0">
+        <ng-template>
+          <div class="content-overflow">
+            {{ germplasmGnpis.taxonCommonNames.join(', ') }}
+          </div>
+        </ng-template>
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Taxon synonyms"
+        [test]="germplasmGnpis.taxonSynonyms && germplasmGnpis.taxonSynonyms.length > 0">
+        <ng-template>
+          <div class="content-overflow">
+            <i>{{ germplasmGnpis.taxonSynonyms.join(', ') }}</i>
+          </div>
+        </ng-template>
+      </gpds-card-row>
+    </ng-template>
+
+    <ng-template #instituteTemplate let-logo="logo" let-code="instituteCode" let-acronym="acronym" let-organisation="organisation" let-type="instituteType" let-webSite="webSite" let-address="address">
+      <gpds-card-row
+        label=""
+        [test]="logo">
+        <ng-template>
+          <img
+            [src]="logo"/>
+        </ng-template>
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Code"
+        [value]="code">
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Acronym"
+        [value]="acronym">
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Organisation"
+        [value]="organisation">
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Type"
+        [value]="type">
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Address"
+        [value]="address">
+      </gpds-card-row>
+
+      <gpds-card-row
+        label="Website"
+        [test]="webSite">
+        <ng-template>
+          <a [href]="webSite" target="_blank">
+            {{ webSite }}
+          </a>
+        </ng-template>
+      </gpds-card-row>
+    </ng-template>
+
     <ng-template #holdingInstituteTemplate>
-
-      <gpds-card-row
-        label=""
-        [test]="germplasmGnpis.holdingInstitute && germplasmGnpis.holdingInstitute.logo">
-        <ng-template>
-          <img
-            [src]="IMAGES_INSTITUTION_URL + germplasmGnpis.holdingInstitute.logo"/>
-        </ng-template>
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Code"
-        [value]="germplasmGnpis.holdingInstitute.instituteCode">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Acronym"
-        [value]="germplasmGnpis.holdingInstitute.acronym">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Organisation"
-        [value]="germplasmGnpis.holdingInstitute.organisation">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Type"
-        [value]="germplasmGnpis.holdingInstitute.instituteType">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Address"
-        [value]="germplasmGnpis.holdingInstitute.address">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Website"
-        [test]="germplasmGnpis.holdingInstitute.webSite">
-        <ng-template>
-          <a [href]="germplasmGnpis.breeder.institute.webSite" target="_blank">
-            {{ germplasmGnpis.holdingInstitute.webSite }}
-          </a>
-        </ng-template>
-      </gpds-card-row>
-
+      <ng-container *ngTemplateOutlet="instituteTemplate;context:germplasmGnpis.holdingInstitute">
+      </ng-container>
     </ng-template>
 
-
-    <ng-template #BreederInstituteTemplate>
-
-      <gpds-card-row
-        label=""
-        [test]="germplasmGnpis.breeder && germplasmGnpis.breeder.institute && germplasmGnpis.breeder.institute.logo">
-        <ng-template>
-          <img
-            [src]="IMAGES_INSTITUTION_URL + germplasmGnpis.breeder.institute.logo"/>
-        </ng-template>
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Code"
-        [value]="germplasmGnpis.breeder.institute.instituteCode">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Acronym"
-        [value]="germplasmGnpis.breeder.institute.acronym">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Organisation"
-        [value]="germplasmGnpis.breeder.institute.organisation">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Type"
-        [value]="germplasmGnpis.breeder.institute.instituteType">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Address"
-        [value]="germplasmGnpis.breeder.institute.address">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Website"
-        [test]="germplasmGnpis.breeder.institute.webSite">
-        <ng-template>
-          <a [href]="germplasmGnpis.breeder.institute.webSite" target="_blank">
-            {{ germplasmGnpis.breeder.institute.webSite }}
-          </a>
-        </ng-template>
-      </gpds-card-row>
-
+    <ng-template #collectorInstituteTemplate>
+      <ng-container *ngTemplateOutlet="instituteTemplate;context:germplasmGnpis.collector.institute">
+      </ng-container>
     </ng-template>
 
-    <ng-template #CollectorInstituteTemplate>
-
-      <gpds-card-row
-        label=""
-        [test]="germplasmGnpis.collector && germplasmGnpis.collector.institute && germplasmGnpis.collector.institute.logo">
-        <ng-template>
-          <img
-            [src]="IMAGES_INSTITUTION_URL + germplasmGnpis.collector.institute.logo"/>
-        </ng-template>
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Code"
-        [value]="germplasmGnpis.collector.institute.instituteCode">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Acronym"
-        [value]="germplasmGnpis.collector.institute.acronym">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Organisation"
-        [value]="germplasmGnpis.collector.institute.organisation">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Address"
-        [value]="germplasmGnpis.collector.institute.address">
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Website"
-        [test]="germplasmGnpis.collector.institute.webSite">
-        <ng-template>
-          <a [href]="germplasmGnpis.collector.institute.webSite" target="_blank">
-            {{ germplasmGnpis.collector.institute.webSite }}
-          </a>
-        </ng-template>
-      </gpds-card-row>
-
+    <ng-template #breederInstituteTemplate>
+      <ng-container *ngTemplateOutlet="instituteTemplate;context:germplasmGnpis.breeder.institute">
+      </ng-container>
     </ng-template>
-
 
     <!--Section for the image representing the germplasm and the details about this image-->
     <div class="col-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFileName">
-      <a class="btn popovers" data-boundary="window" placement="right" [ngbPopover]="imageTemplate"
+      <a class="btn popovers" data-boundary="window" placement="right"
+         [ngbPopover]="imageTemplate"
          [popoverTitle]="germplasmGnpis.photo.photoName" container="body">
         <img
-          [src]="IMAGES_ACCESSION_URL + germplasmGnpis.holdingGenbank.instituteCode + '/' + germplasmGnpis.photo.thumbnailFileName"
+          [src]="germplasmGnpis.photo.thumbnailFileName"
           class="img-fluid">
         <figcaption class="figure-caption">
           Click to see more details
@@ -170,7 +205,7 @@
       <ng-template #imageTemplate>
         <div class="card ngb-popover-window ">
           <img class="card-img-top"
-               [src]="IMAGES_ACCESSION_URL + germplasmGnpis.holdingGenbank.instituteCode + '/' + germplasmGnpis.photo.fileName"
+               [src]="germplasmGnpis.photo.fileName"
                alt="" width="250px">
           <div class="card-body">
 
@@ -241,7 +276,6 @@
             </ng-template>
           </gpds-card-row>
 
-
           <gpds-card-row
             label="Accession synonyms"
             [test]="germplasmGnpis.synonyms && germplasmGnpis.synonyms.length > 0">
@@ -254,30 +288,15 @@
 
           <gpds-card-row
             label="Taxon"
-            [test]="germplasmGnpis.genus || germplasmGnpis.species || germplasmGnpis.subtaxa">
+            [test]="germplasmTaxon">
             <ng-template>
-              <i>{{ germplasmGnpis.genus }} {{ germplasmGnpis.species }} {{ germplasmGnpis.subtaxa }}</i>
-              {{ germplasmGnpis.speciesAuthority ? '(' + germplasmGnpis.speciesAuthority + ')' : '' }}
-            </ng-template>
-          </gpds-card-row>
-
-          <gpds-card-row
-            label="Taxon common names"
-            [test]="germplasmGnpis.taxonCommonNames && germplasmGnpis.taxonCommonNames.length > 0">
-            <ng-template>
-              <div class="content-overflow">
-                {{ germplasmGnpis.taxonCommonNames.join(', ') }}
-              </div>
-            </ng-template>
-          </gpds-card-row>
-
-          <gpds-card-row
-            label="Taxon synonyms"
-            [test]="germplasmGnpis.taxonSynonyms && germplasmGnpis.taxonSynonyms.length > 0">
-            <ng-template>
-              <div class="content-overflow">
-                <i>{{ germplasmGnpis.taxonSynonyms.join(', ') }}</i>
-              </div>
+              <a class="popover-underline" data-boundary="window" placement="top"
+                 [ngbPopover]="taxonTemplate"
+                 [popoverTitle]="germplasmTaxon"
+                 container="body">
+                <i>{{ germplasmTaxon }}</i>
+                {{ germplasmTaxonAuthor ? '(' + germplasmTaxonAuthor + ')' : '' }}
+              </a>
             </ng-template>
           </gpds-card-row>
 
@@ -306,6 +325,16 @@
             [value]="germplasmGnpis.comment">
           </gpds-card-row>
 
+          <gpds-card-row
+            label="Origin site"
+            [test]="germplasmGnpis.originSite && germplasmGnpis.originSite.siteName">
+            <ng-template>
+              <a [routerLink]="['/sites/', germplasmGnpis.originSite.siteId]">
+                {{ germplasmGnpis.originSite.siteName }}
+              </a>
+            </ng-template>
+          </gpds-card-row>
+
         </div>
       </ng-template>
     </gpds-card-section>
@@ -328,7 +357,7 @@
               {{ germplasmGnpis.holdingInstitute.instituteName }}</a>
           </ng-template>
         </gpds-card-row>
-
+  
         <gpds-card-row
           label="Stock center name"
           [test]="germplasmGnpis.holdingGenbank.instituteName && germplasmGnpis.holdingGenbank.webSite">
@@ -356,22 +385,12 @@
     </ng-template>
   </gpds-card-section>
 
-
+  <!--Section for the information about the collector of the germplasm-->
   <gpds-card-section
     header="Collecting"
-    [test]="checkOriginCollecting()">
+    [test]="checkCollecting()">
     <ng-template>
       <div class="card-body card-section-body">
-
-        <gpds-card-row
-          label="Origin site"
-          [test]="germplasmGnpis.originSite && germplasmGnpis.originSite.siteName">
-          <ng-template>
-            <a [routerLink]="['/sites/', germplasmGnpis.originSite.siteId]">
-              {{ germplasmGnpis.originSite.siteName }}
-            </a>
-          </ng-template>
-        </gpds-card-row>
 
         <gpds-card-row
           label="Collecting site"
@@ -419,8 +438,8 @@
           label="Institution"
           [test]="germplasmGnpis.collector.institute && germplasmGnpis.collector.institute.instituteName">
           <ng-template>
-            <a class="popovers" placement="top"
-               [ngbPopover]="CollectorInstituteTemplate"
+            <a class="popover-underline" data-boundary="window" placement="top"
+               [ngbPopover]="collectorInstituteTemplate"
                [popoverTitle]="germplasmGnpis.collector.institute.instituteName">
               {{ germplasmGnpis.collector.institute.instituteName }}
             </a>
@@ -434,10 +453,12 @@
             {{ germplasmGnpis.collector.accessionNumber }}
           </ng-template>
         </gpds-card-row>
+
       </div>
     </ng-template>
   </gpds-card-section>
 
+  <!--Section for the information about the breeder of the germplasm-->
   <gpds-card-section
     header="Breeder"
     [test]="checkBreeder()">
@@ -448,8 +469,8 @@
           label="Institute"
           [test]="germplasmGnpis.breeder.institute && germplasmGnpis.breeder.institute.instituteName">
           <ng-template>
-            <a class="popovers" placement="top"
-               [ngbPopover]="BreederInstituteTemplate"
+            <a class="popover-underline" data-boundary="window" placement="top"
+               [ngbPopover]="breederInstituteTemplate"
                [popoverTitle]="germplasmGnpis.breeder.institute.instituteName">
               {{ germplasmGnpis.breeder.institute.instituteName }}
             </a>
@@ -475,14 +496,17 @@
           label="Catalog deregistration year"
           [value]="germplasmGnpis.breeder.deregistrationYear">
         </gpds-card-row>
+
       </div>
     </ng-template>
   </gpds-card-section>
 
+  <!--Section for the information about the donor of the germplasm-->
   <gpds-card-section
     header="Donor"
     [test]="germplasmGnpis.donors && germplasmGnpis.donors.length > 0">
     <ng-template>
+
       <gpds-card-table
         [headers]="[
                 'Institute name',
@@ -494,56 +518,14 @@
         [rows]="germplasmGnpis.donors">
         <ng-template let-row>
           <tr>
-            <ng-template #InstituteTemplate>
-
-              <gpds-card-row
-                label=""
-                [test]="row.donorInstitute && row.donorInstitute.logo">
-                <ng-template>
-                  <img
-                    [src]="IMAGES_INSTITUTION_URL + row.donorInstitute.logo"/>
-                </ng-template>
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Code"
-                [value]="row.donorInstitute.instituteCode">
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Acronym"
-                [value]="row.donorInstitute.acronym">
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Organisation"
-                [value]="row.donorInstitute.organisation">
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Type"
-                [value]="row.donorInstitute.instituteType">
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Address"
-                [value]="row.donorInstitute.address">
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Website"
-                [test]="row.donorInstitute.webSite">
-                <ng-template>
-                  <a [href]=" row.donorInstitute.webSite " target="_blank">
-                    {{ row.donorInstitute.webSite }}
-                  </a>
-                </ng-template>
-              </gpds-card-row>
+            <ng-template #donorInstituteTemplate>
+              <ng-container *ngTemplateOutlet="instituteTemplate;context:row.donorInstitute">
+              </ng-container>
             </ng-template>
 
             <td>
               <a class="popovers" placement="top"
-                 [ngbPopover]="InstituteTemplate"
+                 [ngbPopover]="donorInstituteTemplate"
                  [popoverTitle]="row.donorInstitute.instituteName">
                 {{ row.donorInstitute.instituteName }}
               </a>
@@ -552,13 +534,14 @@
             <td>{{ row.donationDate }}</td>
             <td>{{ row.donorAccessionNumber }}</td>
             <td>{{ row.donorGermplasmPUI }}</td>
-          </tr>
+            </tr>
         </ng-template>
-
       </gpds-card-table>
+
     </ng-template>
   </gpds-card-section>
 
+  <!--Section for the information about the distributor of the germplasm-->
   <gpds-card-section
     header="Distributor"
     [test]="germplasmGnpis.distributors && germplasmGnpis.distributors.length>0">
@@ -570,61 +553,18 @@
         'Institute',
         'Accession number',
         'Distribution status'
-
         ]"
         [rows]="germplasmGnpis.distributors">
         <ng-template let-row>
           <tr>
-            <ng-template #InstituteTemplate>
-
-              <gpds-card-row
-                label=""
-                [test]="row.institute && row.institute.logo">
-                <ng-template>
-                  <img
-                    [src]="IMAGES_INSTITUTION_URL + row.institute.logo"/>
-                </ng-template>
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Code"
-                [value]="row.institute.instituteCode">
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Acronym"
-                [value]="row.institute.acronym">
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Organisation"
-                [value]="row.institute.organisation">
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Type"
-                [value]="row.institute.instituteType">
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Address"
-                [value]="row.institute.address">
-              </gpds-card-row>
-
-              <gpds-card-row
-                label="Website"
-                [test]="row.institute.webSite">
-                <ng-template>
-                  <a [href]="row.institute.webSite" target="_blank">
-                    {{ row.institute.webSite }}
-                  </a>
-                </ng-template>
-              </gpds-card-row>
+            <ng-template #distributorInstituteTemplate>
+              <ng-container *ngTemplateOutlet="instituteTemplate;context:row.institute">
+              </ng-container>
             </ng-template>
 
             <td>
               <a class="popovers" placement="top"
-                 [ngbPopover]="InstituteTemplate"
+                 [ngbPopover]="instituteTemplate"
                  [popoverTitle]="row.institute.instituteName">
                 {{ row.institute.instituteName }}
               </a>
@@ -633,12 +573,12 @@
             <td>{{ row.distributionStatus }}</td>
           </tr>
         </ng-template>
-
       </gpds-card-table>
 
     </ng-template>
   </gpds-card-section>
 
+  <!--Section for the information about the primary descriptors of the germplasm-->
   <gpds-card-section
     header="Evaluation Data"
     [test]="germplasmAttributes && germplasmAttributes.length > 0">
@@ -656,6 +596,7 @@
     </ng-template>
   </gpds-card-section>
 
+  <!--Section for the information about the genealoggy of the germplasm-->
   <gpds-card-section
     header="Genealogy"
     [test]="checkPedigree() || checkProgeny()">
@@ -717,7 +658,7 @@
         </gpds-card-row>
 
         <gpds-card-row
-          label="Sibling accessions"
+          label="Sibling accession"
           [test]="germplasmPedigree && (germplasmPedigree.siblings && germplasmPedigree.siblings.length > 0)">
           <ng-template>
 
@@ -733,7 +674,7 @@
         </gpds-card-row>
 
         <gpds-card-row
-          label="Descendant :"
+          label="Descendant"
           [test]="checkProgeny()">
         </gpds-card-row>
 
@@ -760,12 +701,12 @@
     </ng-template>
   </gpds-card-section>
 
+  <!--Section for the information about the population, collection and panel of the germplasm-->
   <gpds-card-section
     header="Population"
     [test]="germplasmGnpis.population && germplasmGnpis.population.length > 0">
     <ng-template>
-      <div class="card-body card-section-body card-section-body">
-
+       <div class="card-body card-section-body card-section-body">
         <ng-container *ngFor="let population of germplasmGnpis.population">
 
           <gpds-card-row
@@ -782,6 +723,7 @@
             </a>
             </ng-template>
           </gpds-card-row>
+
           <gpds-card-row
             [label]="population.type ? population.name + ' (' + population.type + ')' : population.name"
             [test]="population.germplasmRef && population.germplasmRef.pui && population.germplasmRef.pui == germplasmGnpis.germplasmDbId">
@@ -793,6 +735,7 @@
             </a>
             </ng-template>
           </gpds-card-row>
+
           <gpds-card-row
             [label]="population.type ? population.name + ' (' + population.type + ')' : population.name"
             [test]="population.germplasmRef && !population.germplasmRef.pui">
@@ -803,8 +746,8 @@
               </a>
             </ng-template>
           </gpds-card-row>
-        </ng-container>
 
+        </ng-container>
       </div>
     </ng-template>
   </gpds-card-section>
@@ -814,8 +757,8 @@
     [test]="germplasmGnpis.collection && germplasmGnpis.collection.length > 0">
     <ng-template>
       <div class="card-body card-section-body">
-
         <ng-container *ngFor="let collection of germplasmGnpis.collection">
+
           <gpds-card-row
             [label]="collection.type ? collection.name + ' (' + collection.type + ')' : collection.name">
             <ng-template>
@@ -825,20 +768,19 @@
               </a>
             </ng-template>
           </gpds-card-row>
-        </ng-container>
 
+        </ng-container>
       </div>
     </ng-template>
   </gpds-card-section>
-
 
   <gpds-card-section
     header="Panel"
     [test]="germplasmGnpis.panel && germplasmGnpis.panel.length > 0">
     <ng-template>
       <div class="card-body card-section-body">
-
         <ng-container *ngFor="let panel of germplasmGnpis.panel">
+
           <gpds-card-row
             [label]="panel.type ? panel.name + ' (' + panel.type + ')' : panel.name">
             <ng-template>
@@ -848,13 +790,13 @@
               </a>
             </ng-template>
           </gpds-card-row>
-        </ng-container>
 
+        </ng-container>
       </div>
     </ng-template>
   </gpds-card-section>
 
-  <!--XRefs part -->
+  <!-- XRefs part -->
   <gpds-xrefs [xrefId]="germplasmGnpis.germplasmPUI"></gpds-xrefs>
 </ng-container>
 
