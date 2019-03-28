@@ -29,6 +29,7 @@
         [test]="germplasmGnpis.species">
         <ng-template>
           <i>{{ germplasmGnpis.species }}</i>
+          {{ germplasmGnpis.speciesAuthority ? '(' + germplasmGnpis.speciesAuthority + ')' : '' }}
         </ng-template>
       </gpds-card-row>
 
@@ -37,6 +38,7 @@
         [test]="germplasmGnpis.subtaxa">
         <ng-template>
           <i>{{ germplasmGnpis.subtaxa }}</i>
+          {{ germplasmGnpis.subtaxaAuthority ? '(' + germplasmGnpis.subtaxaAuthority + ')' : '' }}
         </ng-template>
       </gpds-card-row>
 
@@ -50,53 +52,30 @@
 
       <gpds-card-row
         label="Taxon ID"
-        [test]="germplasmGnpis.taxonIds && germplasmGnpis.taxonIds.length > 0">
-        <ng-container *ngFor="let taxonId of germplasmGnpis.taxonIds">
-
-          <gpds-card-row
-            [label]="taxonId.sourceName">
-            [test]="taxonId.url">
-            <ng-template>
-              <a [href]="" target="_blank">
-                {{ taxonId.taxonId }}
-              </a>
-            </ng-template>
-          </gpds-card-row>
-
-          <gpds-card-row
-            [label]="taxonId.sourceName">
-            [test]="!taxonId.url">
-            <ng-template></ng-template>
-                {{ taxonId.taxonId }}
-            </ng-template>
-          </gpds-card-row>
-
-        </ng-container>
-      </gpds-card-row>
-
-      <gpds-card-row
-        label="Taxon ID (test)"
         [test]="taxonIdsWithURL && taxonIdsWithURL.length > 0">
-        <ng-container *ngFor="let taxonId of taxonIdsWithURL">
+        <ng-template>
+          <ng-container *ngFor="let taxonRef of taxonIdsWithURL">
 
-          <gpds-card-row
-            [label]="taxonId.sourceName">
-            [test]="taxonId.url">
-            <ng-template>
-              <a [href]="" target="_blank">
-                {{ taxonId.taxonId }}
-              </a>
-            </ng-template>
-          </gpds-card-row>
+            <gpds-card-row
+              [label]="taxonRef.sourceName"
+              [test]="taxonRef.url">
+              <ng-template>
+                <a [href]="taxonRef.url" target="_blank">
+                  {{ taxonRef.taxonId }}
+                </a>
+              </ng-template>
+            </gpds-card-row>
 
-          <gpds-card-row
-            [label]="taxonId.sourceName">
-            [test]="!taxonId.url">
-            <ng-template></ng-template>
-            {{ taxonId.taxonId }}
-            </ng-template>
-          </gpds-card-row>
-        </ng-container>
+            <gpds-card-row
+              [label]="taxonRef.sourceName"
+              [test]="!taxonRef.url">
+              <ng-template>
+                {{ taxonRef.taxonId }}
+              </ng-template>
+            </gpds-card-row>
+
+          </ng-container>
+        </ng-template>
       </gpds-card-row>
 
       <gpds-card-row
@@ -190,12 +169,12 @@
     </ng-template>
 
     <!--Section for the image representing the germplasm and the details about this image-->
-    <div class="col-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFileName">
+    <div class="col-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFile">
       <a class="btn popovers" data-boundary="window" placement="right"
          [ngbPopover]="imageTemplate"
          [popoverTitle]="germplasmGnpis.photo.photoName" container="body">
         <img
-          [src]="germplasmGnpis.photo.thumbnailFileName"
+          [src]="germplasmGnpis.photo.thumbnailFile"
           class="img-fluid">
         <figcaption class="figure-caption">
           Click to see more details
@@ -205,7 +184,7 @@
       <ng-template #imageTemplate>
         <div class="card ngb-popover-window ">
           <img class="card-img-top"
-               [src]="germplasmGnpis.photo.fileName"
+               [src]="germplasmGnpis.photo.file"
                alt="" width="250px">
           <div class="card-body">
 
@@ -291,6 +270,7 @@
             [test]="germplasmTaxon">
             <ng-template>
               <a class="popover-underline" data-boundary="window" placement="top"
+                 [autoClose]="'outside'"
                  [ngbPopover]="taxonTemplate"
                  [popoverTitle]="germplasmTaxon"
                  container="body">
@@ -666,7 +646,7 @@
               <ng-container *ngFor="let sibling of germplasmPedigree.siblings">
                 <a [routerLink]="['/germplasm']" [queryParams]="{id:sibling.germplasmDbId }">
                   {{ sibling.defaultDisplayName }}
-                </a>,
+                </a>
               </ng-container>
             </div>
 
@@ -689,7 +669,7 @@
                 <ng-container *ngFor="let sibling of child.sibblings">
                   <a [routerLink]="['/germplasm']" [queryParams]="{id:sibling.pui}">
                     {{ sibling.name }}
-                  </a>,
+                  </a>
                 </ng-container>
 
               </ng-template>

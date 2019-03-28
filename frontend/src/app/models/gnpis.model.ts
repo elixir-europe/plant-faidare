@@ -58,9 +58,9 @@ export interface GermplasmInstitute extends Institute {
 export interface Photo {
     copyright: string;
     description: string;
-    fileName: string;
+    file: string;
     photoName: string;
-    thumbnailFileName: string;
+    thumbnailFile: string;
 
 }
 

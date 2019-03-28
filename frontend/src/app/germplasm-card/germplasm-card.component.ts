@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
-import {BrapiAttributeData, BrapiGermplasmPedigree, BrapiLocation, BrapiTaxonIds} from '../models/brapi.model';
+import { BrapiAttributeData, BrapiGermplasmPedigree, BrapiLocation, BrapiTaxonIds } from '../models/brapi.model';
 import { Children, Germplasm, Site } from '../models/gnpis.model';
 import { DataDiscoverySource } from '../models/data-discovery.model';
 
@@ -29,10 +29,10 @@ export class GermplasmCardComponent implements OnInit {
         });
     }
 
-    NCBI_URL = "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=";
-    THEPLANTLIST_URL = "http://www.theplantlist.org/tpl1.1/record/";
-    TAXREF_URL = "https://inpn.mnhn.fr/espece/cd_nom/";
-    CATALOGUEOFLIFE_URL = "http://www.catalogueoflife.org/col/details/species/id/";
+    NCBI_URL = 'https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=';
+    THEPLANTLIST_URL = 'http://www.theplantlist.org/tpl1.1/record/';
+    TAXREF_URL = 'https://inpn.mnhn.fr/espece/cd_nom/';
+    CATALOGUEOFLIFE_URL = 'http://www.catalogueoflife.org/col/details/species/id/';
     taxonIdsWithURL: BrapiTaxonIds[] = [];
 
     germplasmGnpis: Germplasm;
@@ -171,8 +171,8 @@ export class GermplasmCardComponent implements OnInit {
                 this.siteToBrapiLocation(site);
             }
         }
-        if (this.germplasmGnpis.taxonIds && germplasmGnpis.taxonId.length > 0) {
-           this.addRefURL(this.germplasmGnpis.taxonIds);
+        if (this.germplasmGnpis.taxonIds && this.germplasmGnpis.taxonIds.length > 0) {
+            this.addRefURL(this.germplasmGnpis.taxonIds);
         }
     }
 
@@ -190,14 +190,14 @@ export class GermplasmCardComponent implements OnInit {
 
     addRefURL(taxonIds: BrapiTaxonIds[]) {
         for (const taxonId of taxonIds) {
-            if (taxonId.sourceName == "NCBI") {
-                taxonId.url = this.NCBI_URL;
-            } else if (taxonId.sourceName == "ThePlantList") {
-                taxonId.url = this.THEPLANTLIST_URL;
-            } else if (taxonId.sourceName == "TAXREF") {
-                taxonId.url = this.TAXREF_URL;
-            } else if (taxonId.sourceName == "CatalogueOfLife") {
-                taxonId.url = this.CATALOGUEOFLIFE_URL
+            if (taxonId.sourceName === 'NCBI') {
+                taxonId.url = this.NCBI_URL + taxonId.taxonId;
+            } else if (taxonId.sourceName === 'ThePlantList') {
+                taxonId.url = this.THEPLANTLIST_URL + taxonId.taxonId;
+            } else if (taxonId.sourceName === 'TAXREF') {
+                taxonId.url = this.TAXREF_URL + taxonId.taxonId;
+            } else if (taxonId.sourceName === 'CatalogueOfLife') {
+                taxonId.url = this.CATALOGUEOFLIFE_URL + taxonId.taxonId;
             } else {
                 taxonId.url = null;
             }

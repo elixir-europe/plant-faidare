@@ -8,10 +8,10 @@ import fr.inra.urgi.gpds.domain.JSONView;
  */
 public interface Photo {
     @JsonView(JSONView.GnpISFields.class)
-    String getFileName();
+    String getFile();
 
     @JsonView(JSONView.GnpISFields.class)
-    String getThumbnailFileName();
+    String getThumbnailFile();
 
     @JsonView(JSONView.GnpISFields.class)
     String getPhotoName();

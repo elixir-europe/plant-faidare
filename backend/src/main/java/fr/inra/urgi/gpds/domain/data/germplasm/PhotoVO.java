@@ -6,28 +6,28 @@ public class PhotoVO implements Serializable, Photo {
 
     private static final long serialVersionUID = -4993890419772211643L;
 
-    private String fileName;
-    private String thumbnailFileName;
+    private String file;
+    private String thumbnailFile;
     private String photoName;
     private String description;
     private String copyright;
 
     @Override
-    public String getFileName() {
-        return fileName;
+    public String getFile() {
+        return file;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFile(String file) {
+        this.file = file;
     }
 
     @Override
-    public String getThumbnailFileName() {
-        return thumbnailFileName;
+    public String getThumbnailFile() {
+        return thumbnailFile;
     }
 
-    public void setThumbnailFileName(String thumbnailFileName) {
-        this.thumbnailFileName = thumbnailFileName;
+    public void setThumbnailFile(String thumbnailFile) {
+        this.thumbnailFile = thumbnailFile;
     }
 
     @Override
