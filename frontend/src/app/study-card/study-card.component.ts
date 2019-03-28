@@ -5,7 +5,7 @@ import { BrapiGermplasm, BrapiObservationVariable, BrapiStudy, BrapiTrial } from
 
 import { GnpisService } from '../gnpis.service';
 import { DataDiscoverySource } from '../models/data-discovery.model';
-import { KeyValueObject } from '../utils';
+import { KeyValueObject, toKeyValueObjects } from '../utils';
 
 @Component({
     selector: 'gpds-study-card',
@@ -43,7 +43,7 @@ export class StudyCardComponent implements OnInit {
 
                     this.additionalInfos = [];
                     if (this.study.additionalInfo) {
-                        this.additionalInfos = KeyValueObject.fromObject(this.study.additionalInfo).sort();
+                        this.additionalInfos = toKeyValueObjects(this.study.additionalInfo).sort();
                     }
 
                     // Get study trials
