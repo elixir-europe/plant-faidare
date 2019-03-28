@@ -1,22 +1,22 @@
 <ul class="nav nav-tabs">
   <li class="nav-item">
     <a tabindex="0"
-       class="nav-link {{ activeTab == 'Germplasm' ? 'active' : ''}}"
-       (click)="activeTab='Germplasm'">
-      Germplasm
+       class="nav-link germplasm {{ getNavClass(tabs.GERMPLASM) }}"
+       (click)="activeTab=tabs.GERMPLASM">
+      {{ tabs.GERMPLASM }}
     </a>
   </li>
   <li class="nav-item">
     <a tabindex="1"
-       class="nav-link {{ activeTab == 'Variable' ? 'active' : ''}}"
-       (click)="activeTab='Variable'">
-      Trait
+       class="nav-link trait {{ getNavClass(tabs.TRAIT) }}"
+       (click)="activeTab=tabs.TRAIT">
+      {{ tabs.TRAIT }}
     </a>
   </li>
 </ul>
 
 <!-- Germplasm tab -->
-<div class="{{ activeTab == 'Germplasm' ? 'visible' : 'd-none' }}">
+<div class="germplasm {{ getTabClass(tabs.GERMPLASM) }}">
   <!-- Input for the crops field -->
   <div class="form-group row pt-3">
     <label for="crops" class="col-sm-4">
@@ -70,8 +70,8 @@
   </div>
 </div>
 
-<!-- Variable tab -->
-<div class="{{ activeTab == 'Variable' ? 'visible' : 'd-none' }}">
+<!-- Trait tab -->
+<div class="trait {{ getTabClass(tabs.TRAIT) }}">
   <gpds-trait-ontology-widget
     [criteria$]="criteria$"
     (initialized)="traitWidgetInitialized.emit($event)">
