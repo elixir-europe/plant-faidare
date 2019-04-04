@@ -1,10 +1,10 @@
-import { KeyValueObject } from './utils';
+import { KeyValueObject, toKeyValueObjects } from './utils';
 
 
 describe('KeyValueObject', () => {
 
     it('should convert JS object to array of KeyValueObject', () => {
-        const actual = KeyValueObject.fromObject({
+        const actual = toKeyValueObjects({
             'a': '1',
             'b': '2',
             'c': null,
@@ -13,10 +13,10 @@ describe('KeyValueObject', () => {
             'f': '3'
         });
 
-        const expected = [
-            new KeyValueObject('a', '1'),
-            new KeyValueObject('b', '2'),
-            new KeyValueObject('f', '3'),
+        const expected: KeyValueObject[] = [
+            { key: 'a', value: '1' },
+            { key: 'b', value: '2' },
+            { key: 'f', value: '3' },
         ];
 
         expect(actual).toEqual(expected);

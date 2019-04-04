@@ -13,4 +13,13 @@ export class CardRowComponent {
 
     @ContentChild(TemplateRef) template: TemplateRef<any>;
 
+    shouldShow(): boolean {
+        return this.test && (
+            // Value not provided and template provided
+            (this.value === undefined && this.template !== undefined)
+            ||
+            // Or value truthy
+            !!this.value
+        );
+    }
 }
