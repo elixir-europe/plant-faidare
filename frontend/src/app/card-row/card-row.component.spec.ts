@@ -89,16 +89,6 @@ describe('CardRowComponent', () => {
         expect(tester.rowDiv).toBeFalsy();
     });
 
-    it('should hide truthy test, falsy value', () => {
-        const tester = new CardRowComponentTester();
-        tester.componentInstance.label = 'Label1';
-        tester.componentInstance.value = '';
-        tester.componentInstance.test = true;
-        tester.detectChanges();
-
-        expect(tester.rowDiv).toBeFalsy();
-    });
-
     it('should show truthy test, truthy value', () => {
         const tester = new CardRowComponentTester();
         tester.componentInstance.label = 'Label1';
