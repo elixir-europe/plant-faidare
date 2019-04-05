@@ -1,8 +1,11 @@
 package fr.inra.urgi.faidare.config;
 
+import fr.inra.urgi.gpds.domain.datadiscovery.data.DataSourceImpl;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Properties class holding the properties of the application (typically stored in application.yml)
@@ -26,6 +29,8 @@ public class FaidareProperties {
 
     private String securityUserGroupWsUrl;
     private String securityUserGroupWsToken;
+
+    private List<DataSourceImpl> dataSources = new ArrayList<>();
 
     public String getElasticsearchAliasTemplate() {
         return elasticsearchAliasTemplate;
@@ -73,6 +78,14 @@ public class FaidareProperties {
 
     public void setCropOntologyPortalLink(String cropOntologyPortalLink) {
         this.cropOntologyPortalLink = cropOntologyPortalLink;
+    }
+
+    public List<DataSourceImpl> getDataSources() {
+        return dataSources;
+    }
+
+    public void setDataSources(List<DataSourceImpl> dataSources) {
+        this.dataSources = dataSources;
     }
 
     /**

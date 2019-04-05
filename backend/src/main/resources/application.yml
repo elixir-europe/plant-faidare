@@ -33,6 +33,40 @@ faidare:
   security-user-group-ws-url:
   security-user-group-ws-token:
 
+  # TODO: Update URIs to match URL (update in generated JSON document too)
+  # Warning! URIs should match with GPDS datadiscovery 'schema:includedInDataCatalog' field value
+  dataSources:
+  # WUR EU-SOL BreeDB
+  - uri: https://www.eu-sol.wur.nl/
+    url: https://www.eu-sol.wur.nl/
+    name: WUR EU-SOL BreeDB
+    image: https://urgi.versailles.inra.fr/files/gpds/logos/EU-SOL.png
+  # VIB PIPPA
+  - uri: http://pippa.psb.ugent.be
+    url: http://pippa.psb.ugent.be
+    name: VIB PIPPA
+    image: https://urgi.versailles.inra.fr/files/gpds/logos/VIB.png
+  # IBET BioData
+  - uri: https://biodata.pt
+    url: https://biodata.pt
+    name: IBET BioData
+    image: https://urgi.versailles.inra.fr/files/gpds/logos/biodata.png
+  # NIB PISA
+  - uri: http://nib.si
+    url: http://www.pisa.nib.si
+    name: NIB PISA
+    image: https://urgi.versailles.inra.fr/files/gpds/logos/NIB.png
+  # URGI GnpIS
+  - uri: https://urgi.versailles.inra.fr
+    url: https://urgi.versailles.inra.fr/gnpis
+    name: URGI GnpIS
+    image: https://urgi.versailles.inra.fr/files/gpds/logos/GnpIS.png
+  # CIRAD TropGENE
+  - uri: http://brapi.tropgenedb.cirad.fr:8888/
+    url: http://tropgenedb.cirad.fr
+    name: CIRAD TropGENE
+    image: https://urgi.versailles.inra.fr/files/gpds/logos/CIRAD.jpg
+
 server:
   compression:
     enabled: true

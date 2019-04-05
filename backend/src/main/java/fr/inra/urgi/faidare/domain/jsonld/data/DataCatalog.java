@@ -36,6 +36,6 @@ public interface DataCatalog extends JSONLD, HasURL {
      */
     @JsonView(JSONView.JSONLDFields.class)
     @JsonProperty("schema:image")
-    String getImageUrl();
+    String getImage();
 
 }

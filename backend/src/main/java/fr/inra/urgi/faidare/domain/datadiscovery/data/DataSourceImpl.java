@@ -1,6 +1,7 @@
 package fr.inra.urgi.faidare.domain.datadiscovery.data;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -8,12 +9,23 @@ import java.util.List;
  * @author gcornut
  */
 public class DataSourceImpl implements Serializable, DataSource {
+    private final List<String> type = Collections.singletonList(
+        "schema:DataCatalog"
+    );
     private String uri;
     private String identifier;
     private String name;
-    private List<String> type;
     private String url;
-    private String imageUrl;
+    private String image;
+
+    public DataSourceImpl() {}
+    public DataSourceImpl(String uri, String identifier, String name, String url, String image) {
+        this.uri = uri;
+        this.identifier = identifier;
+        this.name = name;
+        this.url = url;
+        this.image = image;
+    }
 
     @Override
     public String getIdentifier() {
@@ -41,8 +53,8 @@ public class DataSourceImpl implements Serializable, DataSource {
     }
 
     @Override
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
     public void setUri(String uri) {
@@ -57,15 +69,11 @@ public class DataSourceImpl implements Serializable, DataSource {
         this.name = name;
     }
 
-    public void setType(List<String> type) {
-        this.type = type;
-    }
-
     public void setUrl(String url) {
         this.url = url;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

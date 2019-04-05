@@ -1,5 +1,6 @@
 package fr.inra.urgi.faidare.api.gnpis.v1;
 
+import fr.inra.urgi.faidare.config.FaidareProperties;
 import fr.inra.urgi.faidare.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.faidare.domain.datadiscovery.criteria.DataDiscoveryCriteriaImpl;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSource;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -26,12 +27,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class DataDiscoveryController {
 
     private final DataDiscoveryRepository dataDiscoveryRepository;
-    private final DataSourceRepository dataSourceRepository;
+    private final FaidareProperties properties;
 
     @Autowired
-    public DataDiscoveryController(DataDiscoveryRepository dataDiscoveryRepository, DataSourceRepository dataSourceRepository) {
+    public DataDiscoveryController(DataDiscoveryRepository dataDiscoveryRepository, FaidareProperties properties) {
         this.dataDiscoveryRepository = dataDiscoveryRepository;
-        this.dataSourceRepository = dataSourceRepository;
+        this.properties = properties;
     }
 
     @ApiOperation("Suggest data discovery document field values")
@@ -56,8 +57,8 @@ public class DataDiscoveryController {
     @ApiOperation("Get list of data sources")
     @GetMapping("/sources")
     public BrapiListResponse<? extends DataSource> sources() {
-        Collection<DataSource> dataSources = dataSourceRepository.listAll();
-        return ApiResponseFactory.createSubListResponse(dataSources.size(), 0, new ArrayList<>(dataSources));
+        List<DataSourceImpl> dataSources = properties.getDataSources();
+        return ApiResponseFactory.createSubListResponse(dataSources.size(), 0, dataSources);
     }
 
 }
