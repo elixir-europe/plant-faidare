@@ -170,7 +170,8 @@
 
     <!--Section for the image representing the germplasm and the details about this image-->
     <div class="col-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFile">
-      <a class="btn popovers" data-boundary="window" placement="right"
+      <a class="btn popovers" data-boundary="window" placement="auto"
+         [autoClose]="'outside'"
          [ngbPopover]="imageTemplate"
          [popoverTitle]="germplasmGnpis.photo.photoName" container="body">
         <img
@@ -269,7 +270,7 @@
             label="Taxon"
             [test]="germplasmTaxon">
             <ng-template>
-              <a class="popover-underline" data-boundary="window" placement="top"
+              <a class="popover-underline" data-boundary="window" placement="auto"
                  [autoClose]="'outside'"
                  [ngbPopover]="taxonTemplate"
                  [popoverTitle]="germplasmTaxon"
@@ -330,7 +331,8 @@
         <gpds-card-row
           label="Institution">
           <ng-template>
-            <a class="popover-underline" data-boundary="window" placement="top"
+            <a class="popover-underline" data-boundary="window" placement="auto"
+               [autoClose]="'outside'"
                [ngbPopover]="holdingInstituteTemplate"
                [popoverTitle]="germplasmGnpis.holdingInstitute.instituteName"
                container="body">
@@ -418,7 +420,8 @@
           label="Institution"
           [test]="germplasmGnpis.collector.institute && germplasmGnpis.collector.institute.instituteName">
           <ng-template>
-            <a class="popover-underline" data-boundary="window" placement="top"
+            <a class="popover-underline" data-boundary="window" placement="auto"
+               [autoClose]="'outside'"
                [ngbPopover]="collectorInstituteTemplate"
                [popoverTitle]="germplasmGnpis.collector.institute.instituteName">
               {{ germplasmGnpis.collector.institute.instituteName }}
@@ -449,7 +452,8 @@
           label="Institute"
           [test]="germplasmGnpis.breeder.institute && germplasmGnpis.breeder.institute.instituteName">
           <ng-template>
-            <a class="popover-underline" data-boundary="window" placement="top"
+            <a class="popover-underline" data-boundary="window" placement="auto"
+               [autoClose]="'outside'"
                [ngbPopover]="breederInstituteTemplate"
                [popoverTitle]="germplasmGnpis.breeder.institute.instituteName">
               {{ germplasmGnpis.breeder.institute.instituteName }}
@@ -504,7 +508,8 @@
             </ng-template>
 
             <td>
-              <a class="popovers" placement="top"
+              <a class="popovers" placement="auto"
+                 [autoClose]="'outside'"
                  [ngbPopover]="donorInstituteTemplate"
                  [popoverTitle]="row.donorInstitute.instituteName">
                 {{ row.donorInstitute.instituteName }}
@@ -543,7 +548,8 @@
             </ng-template>
 
             <td>
-              <a class="popovers" placement="top"
+              <a class="popovers" placement="auto"
+                 [autoClose]="'outside'"
                  [ngbPopover]="instituteTemplate"
                  [popoverTitle]="row.institute.instituteName">
                 {{ row.institute.instituteName }}
