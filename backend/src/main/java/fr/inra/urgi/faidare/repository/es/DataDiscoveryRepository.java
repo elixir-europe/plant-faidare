@@ -22,7 +22,7 @@ public interface DataDiscoveryRepository
      * @return
      */
     @Override
-    LinkedHashSet<String> suggest(String field, String searchText, Long fetchSize, DataDiscoveryCriteria criteria);
+    LinkedHashSet<String> suggest(String field, String searchText, Integer fetchSize, DataDiscoveryCriteria criteria);
 
     DataDiscoveryResponse find(DataDiscoveryCriteria criteria);
 }

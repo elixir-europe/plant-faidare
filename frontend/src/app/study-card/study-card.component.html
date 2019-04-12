@@ -24,32 +24,11 @@
           [value]="study.studyDbId">
         </faidare-card-row>
 
-        <faidare-card-row
-          label="Permanent unique identifier"
-          [test]="study['@id'] && isNotURN(study['@id'])"
-          [value]="study['@id']">
-        </faidare-card-row>
-
-        <faidare-card-row
-          label="Source"
-          [test]="studySource">
-          <ng-template>
-            <a target="_blank"
-               [href]="studySource['schema:url']">
-              <img [src]="studySource['schema:image']" alt="Study source image" style="height: 60px"/>
-            </a>
-          </ng-template>
-        </faidare-card-row>
-
-        <faidare-card-row
-          label="Data source"
-          [test]="studySource && studySource['schema:identifier'] && study.documentationURL">
-          <ng-template>
-            <a target="_blank" [href]="study.documentationURL">
-              Link to this study on {{ studySource["schema:name"] }}
-            </a>
-          </ng-template>
-        </faidare-card-row>
+         <!-- Display generic document details (PUI, data source links, etc.) -->
+        <gpds-card-generic-document
+          [document]="study"
+          documentType="study">
+        </gpds-card-generic-document>
 
         <faidare-card-row
           label="Project name"
@@ -125,20 +104,20 @@
           'Name',
           'Taxon'
         ]"
-          [rows]="studyGermplasms">
-          <ng-template let-row>
-            <tr>
-              <td>
-                <a [routerLink]="'/germplasm'" [queryParams]="{id:row.germplasmDbId}">
-                  {{ row.accessionNumber }}
-                </a>
-              </td>
-              <td>{{ row.germplasmName }}</td>
-              <td>{{ row.genus }} {{ row.species }} {{ row.subtaxa }}</td>
-            </tr>
-          </ng-template>
-        </faidare-card-table>
-      </div>
+        [rows]="studyGermplasms">
+        <ng-template let-row>
+          <tr>
+            <td>
+              <a [routerLink]="'/germplasm'" [queryParams]="{id:row.germplasmDbId}">
+                {{ row.accessionNumber }}
+              </a>
+            </td>
+            <td>{{ row.germplasmName }}</td>
+            <td>{{ row.genus }} {{ row.species }} {{ row.subtaxa }}</td>
+          </tr>
+        </ng-template>
+      </faidare-card-table>
+     </div>
     </ng-template>
   </faidare-card-section>
 
@@ -156,23 +135,23 @@
           'Ontology name',
           'Trait description'
         ]"
-          [rows]="studyObservationVariables">
-          <ng-template let-row>
-            <tr>
-              <td>
-                <ng-template #name>{{ row.observationVariableDbId }}</ng-template>
-                <ng-template #link>
-                  <a target="_blank" [href]=row.documentationURL>{{ row.observationVariableDbId }}</a>
-                </ng-template>
-                <ng-container *ngIf="row.documentationURL; then link else name"></ng-container>
-              </td>
-              <td>{{ row.name }}</td>
-              <td>{{ row.synonyms[0] }}</td>
-              <td>{{ row.ontologyName }}</td>
-              <td>{{ row.trait.description }}</td>
-            </tr>
-          </ng-template>
-        </faidare-card-table>
+        [rows]="studyObservationVariables">
+        <ng-template let-row>
+          <tr>
+            <td>
+              <ng-template #name>{{ row.observationVariableDbId }}</ng-template>
+              <ng-template #link>
+                <a target="_blank" [href]=row.documentationURL>{{ row.observationVariableDbId }}</a>
+              </ng-template>
+              <ng-container *ngIf="row.documentationURL; then link else name"></ng-container>
+            </td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.synonyms[0] }}</td>
+            <td>{{ row.ontologyName }}</td>
+            <td>{{ row.trait.description }}</td>
+          </tr>
+        </ng-template>
+       </faidare-card-table>
       </div>
     </ng-template>
   </faidare-card-section>
@@ -188,28 +167,28 @@
           'Type',
           'Linked studies identifiers'
         ]"
-          [rows]="studyDataset">
-          <ng-template let-row>
-            <tr>
-              <td>
-                <ng-template #name>{{ row.trialName }}</ng-template>
-                <ng-template #link>
-                  <a target="_blank" [href]=row.documentationURL>{{ row.trialName }}</a>
-                </ng-template>
-                <ng-container *ngIf="row.documentationURL; then link else name"></ng-container>
-              </td>
-              <td>{{ row.trialType }}</td>
-              <td width="60%">
-                <ng-container *ngFor="let trialStudy of row.studies">
-                  <a
-                    [routerLink]="['/studies', trialStudy.studyDbId]">
-                    {{ trialStudy.studyName.trim() }}
-                  </a>;
-                </ng-container>
-              </td>
-            </tr>
-          </ng-template>
-        </faidare-card-table>
+        [rows]="studyDataset">
+        <ng-template let-row>
+          <tr>
+            <td>
+              <ng-template #name>{{ row.trialName }}</ng-template>
+              <ng-template #link>
+                <a target="_blank" [href]=row.documentationURL>{{ row.trialName }}</a>
+              </ng-template>
+              <ng-container *ngIf="row.documentationURL; then link else name"></ng-container>
+            </td>
+            <td>{{ row.trialType }}</td>
+            <td width="60%">
+              <ng-container *ngFor="let trialStudy of row.studies">
+                <a
+                  [routerLink]="['/studies', trialStudy.studyDbId]">
+                  {{ trialStudy.studyName.trim() }}
+                </a>;
+              </ng-container>
+            </td>
+          </tr>
+        </ng-template>
+       </faidare-card-table>
       </div>
     </ng-template>
   </faidare-card-section>
@@ -226,16 +205,15 @@
           'Email',
           'Institution'
         ]"
-          [rows]="study.contacts">
-          <ng-template let-row>
-            <tr>
-              <td>{{ row.type }}</td>
-              <td>{{ row.name }}</td>
-              <td>{{ row.email.replace('@', ' at ') }}</td>
-              <td>{{ row.institutionName }}</td>
-            </tr>
-          </ng-template>
-        </faidare-card-table>
+        <ng-template let-row>
+          <tr>
+            <td>{{ row.type }}</td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.email }}</td>
+            <td>{{ row.institutionName }}</td>
+          </tr>
+        </ng-template>
+       </faidare-card-table>
       </div>
     </ng-template>
   </faidare-card-section>
@@ -246,13 +224,13 @@
     <ng-template>
       <div class="table-responsive scroll-table table-card-body">
         <faidare-card-table
-          [rows]="additionalInfos">
-          <ng-template let-row>
-            <tr>
-              <td width="50%">{{ row.key }}</td>
-              <td>{{ row.value }}</td>
-            </tr>
-          </ng-template>
+         [rows]="additionalInfos">
+         <ng-template let-row>
+          <tr>
+            <td width="50%">{{ row.key }}</td>
+            <td>{{ row.value }}</td>
+          </tr>
+         </ng-template>
         </faidare-card-table>
       </div>
     </ng-template>

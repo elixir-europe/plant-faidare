@@ -16,26 +16,11 @@
     <ng-template>
       <div class="card-body card-section-body">
 
-        <faidare-card-row
-          label="Source"
-          [test]="location">
-          <ng-template>
-            <a target="_blank"
-               [href]="locationSource['schema:url']">
-              <img [src]="locationSource['schema:image']" alt="Location source image" style="height: 60px"/>
-            </a>
-          </ng-template>
-        </faidare-card-row>
-
-        <faidare-card-row
-          label="Data source"
-          [test]="location && location['schema:identifier'] && location.documentationURL">
-          <ng-template>
-            <a target="_blank" [href]="location.documentationURL">
-              Link to this site on {{ location['schema:name'] }}
-            </a>
-          </ng-template>
-        </faidare-card-row>
+         <!-- Display generic document details (PUI, data source links, etc.) -->
+        <gpds-card-generic-document
+          [document]="location"
+          documentType="location">
+        </gpds-card-generic-document>
 
         <faidare-card-row
           label="Abbreviation"

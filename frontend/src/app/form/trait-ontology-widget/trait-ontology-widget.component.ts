@@ -68,9 +68,8 @@ export class TraitOntologyWidgetComponent implements OnInit {
                 }
 
                 const field = 'observationVariableIds';
-                const fetchSize = 2147483647;
 
-                this.gnpisService.suggest(field, fetchSize, '', this.localCriteria)
+                this.gnpisService.suggest(field, null, '', this.localCriteria)
                     .subscribe(ids => {
                         this.variablesList = ids;
                         this.widget.showOnly(ids);

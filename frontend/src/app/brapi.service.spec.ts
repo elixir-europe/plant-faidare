@@ -14,7 +14,6 @@ import {
     BrapiStudy,
     BrapiTrial
 } from './models/brapi.model';
-import { DataDiscoverySource } from './models/data-discovery.model';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } from './models/gnpis.model';
@@ -153,15 +152,6 @@ describe('BrapiService', () => {
                 acquisitionDate: null
             }],
         }
-    };
-
-    const source: DataDiscoverySource = {
-        '@id': 'src1',
-        '@type': ['schema:DataCatalog'],
-        'schema:identifier': 'srcId',
-        'schema:name': 'source1',
-        'schema:url': 'srcUrl',
-        'schema:image': null
     };
 
     const brapiSite: Site = {
@@ -323,7 +313,7 @@ describe('BrapiService', () => {
 
     afterEach(() => http.verify());
 
-    it('should fetch the study', () => {
+    it('should fetch the study with data source', () => {
         let fetchedStudy: BrapiResult<BrapiStudy>;
         const studyDbId: string = searchStudy.result.studyDbId;
         brapiService.study(searchStudy.result.studyDbId).subscribe(response => {
@@ -333,7 +323,6 @@ describe('BrapiService', () => {
             .flush(searchStudy);
 
         expect(fetchedStudy).toEqual(searchStudy);
-
     });
 
     it('should fetch the germplasm of studies call', () => {
@@ -378,7 +367,7 @@ describe('BrapiService', () => {
 
     });
 
-    it('should fetch 1 location', () => {
+    it('should fetch location with data source', () => {
         const mockResponse: BrapiResult<BrapiLocation> = {
             metadata: null,
             result: location

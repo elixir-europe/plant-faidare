@@ -22,7 +22,7 @@ describe('TraitOntologyWidgetComponent', () => {
                 get_bottom_selected() {
                     return ['a', 'b', 'c'];
                 },
-                select_node() {}
+                select_node(id) {}
             },
             load() {
                 return {

@@ -69,8 +69,8 @@ public class ESGenericSuggestRepository<C extends PaginationCriteria, VO> implem
     }
 
     @Override
-    public LinkedHashSet<String> suggest(String field, String searchText, Long fetchSize, C criteria) {
-        int size = fetchSize != null ? fetchSize.intValue() : 10;
+    public LinkedHashSet<String> suggest(String field, String searchText, Integer fetchSize, C criteria) {
+        int size = fetchSize != null ? fetchSize : 10;
 
         QueryBuilder query = null;
         if (criteria != null) {

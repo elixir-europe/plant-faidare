@@ -10,7 +10,6 @@ describe('GnpisService', () => {
     const source1: DataDiscoverySource = {
         '@id': 'id1',
         '@type': ['schema:DataCatalog'],
-        'schema:identifier': 'ID 1',
         'schema:name': 'source 1',
         'schema:url': 'http://source1.com',
         'schema:image': 'image1',
@@ -18,7 +17,6 @@ describe('GnpisService', () => {
     const source2: DataDiscoverySource = {
         '@id': 'id2',
         '@type': ['schema:DataCatalog'],
-        'schema:identifier': 'ID 2',
         'schema:name': 'source 2',
         'schema:url': 'http://source2.com',
         'schema:image': 'image2',
@@ -171,7 +169,7 @@ describe('GnpisService', () => {
     it('should fetch the germplasm', () => {
         let fetchedGermplasm: Germplasm;
         const germplasmDbId: string = germplasmTest.germplasmDbId;
-        gnpisService.germplasm(germplasmDbId).subscribe(response => {
+        gnpisService.getGermplasm({ id: germplasmDbId }).subscribe(response => {
             fetchedGermplasm = response;
         });
         http.expectOne(`${BASE_URL}/germplasm?id=${germplasmDbId}`)

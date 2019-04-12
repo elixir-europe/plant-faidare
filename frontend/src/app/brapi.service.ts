@@ -12,7 +12,6 @@ import {
     BrapiStudy,
     BrapiTrial
 } from './models/brapi.model';
-import { Germplasm } from './models/gnpis.model';
 
 export const BASE_URL = 'brapi/v1';
 
@@ -24,15 +23,11 @@ export class BrapiService {
     constructor(private http: HttpClient) {
     }
 
-    germplasm(germplasmDbId: string): Observable<Germplasm> {
-        return this.http
-            .get<Germplasm>(`${BASE_URL}/germplasm/${germplasmDbId}`);
-    }
-
     germplasmPedigree(germplasmDbId: string): Observable<BrapiResult<BrapiGermplasmPedigree>> {
         return this.http
             .get<BrapiResult<BrapiGermplasmPedigree>>(`${BASE_URL}/germplasm/${germplasmDbId}/pedigree`);
     }
+
     // TODO use the progeny call when the information about parent will be added
     /*germplasmProgeny(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmProgeny>> {
         return this.http.get<GermplasmResult<BrapiGermplasmProgeny>>(`${BASE_URL}/germplasm/${germplasmDbId}/progeny`);
@@ -44,9 +39,7 @@ export class BrapiService {
     }
 
     study(studyDbId: string): Observable<BrapiResult<BrapiStudy>> {
-        const options = { headers: { 'Accept': 'application/ld+json,application/json' } };
-        return this.http
-            .get<BrapiResult<BrapiStudy>>(`${BASE_URL}/studies/${studyDbId}`, options);
+        return this.getWithSource(`${BASE_URL}/studies/${studyDbId}`);
     }
 
     studyGermplasms(studyDbId: string): Observable<BrapiResults<BrapiGermplasm>> {
@@ -60,12 +53,22 @@ export class BrapiService {
     }
 
     location(locationId: string): Observable<BrapiResult<BrapiLocation>> {
-        return this.http
-            .get<BrapiResult<BrapiLocation>>(`${BASE_URL}/locations/${locationId}`);
+        return this.getWithSource(`${BASE_URL}/locations/${locationId}`);
     }
 
     studyTrials(trialsId: string): Observable<BrapiResult<BrapiTrial>> {
         return this.http
             .get<BrapiResult<BrapiTrial>>(`${BASE_URL}/trials/${trialsId}`);
+    }
+
+    /**
+     * Get BrAPI single result response and replace the 'schema:includedInDataCatalog' URI value to the actual source object value.
+     */
+    private getWithSource<T>(url: string): Observable<BrapiResult<T>> {
+        return this.http.get<BrapiResult<T>>(
+            url,
+            // Ask JSON-LD (or JSON) response
+            { headers: { 'Accept': 'application/ld+json,application/json' } }
+        );
     }
 }

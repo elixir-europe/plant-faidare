@@ -14,6 +14,6 @@ public interface ESSuggestRepository<C extends PaginationCriteria> {
     /**
      * Suggest field values
      */
-    LinkedHashSet<String> suggest(String field, String searchText, Long fetchSize, C criteria);
+    LinkedHashSet<String> suggest(String field, String searchText, Integer fetchSize, C criteria);
 
 }

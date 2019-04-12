@@ -25,6 +25,7 @@ import { CardTableComponent } from './card-table/card-table.component';
 import { MomentModule } from 'ngx-moment';
 import { XrefsComponent } from './xrefs/xrefs.component';
 import { CoordinatesModule } from 'angular-coordinates';
+import { CardGenericDocumentComponent } from './card-generic-document/card-generic-document.component';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { CoordinatesModule } from 'angular-coordinates';
         LoadingSpinnerComponent,
         CardTableComponent,
         XrefsComponent,
+        CardGenericDocumentComponent
     ],
     imports: [
         BrowserModule,

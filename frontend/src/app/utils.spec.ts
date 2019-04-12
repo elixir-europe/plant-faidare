@@ -1,7 +1,7 @@
-import { KeyValueObject, toKeyValueObjects } from './utils';
+import { KeyValueObject, removeNullUndefined, toKeyValueObjects } from './utils';
 
 
-describe('KeyValueObject', () => {
+describe('utils.toKeyValueObjects', () => {
 
     it('should convert JS object to array of KeyValueObject', () => {
         const actual = toKeyValueObjects({
@@ -19,6 +19,23 @@ describe('KeyValueObject', () => {
             { key: 'f', value: '3' },
         ];
 
+        expect(actual).toEqual(expected);
+    });
+
+});
+
+describe('utils.removeNullUndefined', () => {
+
+    it('should remove undefined fields in object', () => {
+        const input = {
+            'a': undefined,
+            'b': 3,
+            'c': null,
+        };
+        const expected = {
+            'b': 3
+        };
+        const actual = removeNullUndefined(input);
         expect(actual).toEqual(expected);
     });
 

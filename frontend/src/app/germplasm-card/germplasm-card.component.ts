@@ -4,7 +4,6 @@ import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
 import { BrapiAttributeData, BrapiGermplasmPedigree, BrapiLocation, BrapiTaxonIds } from '../models/brapi.model';
 import { Children, Germplasm, Site } from '../models/gnpis.model';
-import { DataDiscoverySource } from '../models/data-discovery.model';
 
 @Component({
     selector: 'faidare-germplasm-card',
@@ -32,27 +31,24 @@ export class GermplasmCardComponent implements OnInit {
     germplasmProgeny: Children[];
     germplasmAttributes: BrapiAttributeData[];
     germplasmLocations: BrapiLocation[] = [];
-    germplasmId: string;
-    germplasmPuid: string;
     germplasmTaxon: string;
     germplasmTaxonAuthor: string;
-    germplasmSource: DataDiscoverySource;
     toReplace = /_/g;
 
 
-    loaded: Promise<any>;
+    loaded: Promise<void>;
     loading = true;
 
-    ngOnInit() {
 
-        this.route.queryParams.subscribe(queryParams => {
+    async ngOnInit() {
+         this.route.queryParams.subscribe(queryParams => {
+         const { id, pui } = this.route.snapshot.queryParams;
 
-            this.germplasmId = queryParams.id;
-            this.germplasmPuid = queryParams.pui;
-
-            const germplasm$ = this.getGermplasm(this.germplasmId, this.germplasmPuid);
-            germplasm$.then(result => {
-                const germplasmId = this.germplasmId ? this.germplasmId : result.germplasmDbId;
+        this.loaded = this.gnpisService.getGermplasm({ id, pui }).toPromise()
+            .then(germplasm => {
+                const germplasmId = id || germplasm.germplasmDbId;
+                this.germplasmGnpis = germplasm;
+                this.reformatData();
 
                 // TODO use the progeny call when the information about parent will be added.
                 /*const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
@@ -61,28 +57,25 @@ export class GermplasmCardComponent implements OnInit {
                         this.germplasmProgeny = germplasmProgeny.result;
                     });*/
 
-                const germplasmPedigree$ = this.brapiService.germplasmPedigree(germplasmId).toPromise();
-                germplasmPedigree$
-                    .then(germplasmPedigree => {
+                this.germplasmPedigree = null;
+                this.brapiService.germplasmPedigree(germplasmId)
+                    .subscribe(germplasmPedigree => {
                         this.germplasmPedigree = germplasmPedigree.result;
                     });
 
-                const germplasmAttributes$ = this.brapiService.germplasmAttributes(germplasmId).toPromise();
-                germplasmAttributes$
-                    .then(germplasmAttributes => {
+                this.germplasmAttributes = [];
+                this.brapiService.germplasmAttributes(germplasmId)
+                    .subscribe(germplasmAttributes => {
                         if (germplasmAttributes.result && germplasmAttributes.result.data) {
                             this.germplasmAttributes = germplasmAttributes.result.data.sort(this.compareAttributes);
                         }
-
                     });
-            });
 
-            this.loaded = Promise.all([germplasm$]);
-            this.loaded.then(() => {
                 this.loading = false;
                 this.alreadyInitialize = true;
             });
-        });
+       });
+
     }
 
     getGermplasm(id: string, pui: string): Promise<Germplasm> {
@@ -141,17 +134,18 @@ export class GermplasmCardComponent implements OnInit {
         }
     }
 
+    // TODO: do this in ETL!
     reformatData(germplasmGnpis) {
-        if (germplasmGnpis.children) {
-            this.germplasmProgeny = germplasmGnpis.children.sort();
+        if (this.germplasmGnpis.children) {
+            this.germplasmProgeny = this.germplasmGnpis.children.sort();
         }
-        if (germplasmGnpis.donors) {
+        if (this.germplasmGnpis.donors) {
             this.germplasmGnpis.donors.sort(this.compareDonorInstitutes);
         }
-        if (germplasmGnpis.collection) {
+        if (this.germplasmGnpis.collection) {
             this.germplasmGnpis.collection.sort(this.compareCollectionPopulationPanel);
         }
-        if (germplasmGnpis.population) {
+        if (this.germplasmGnpis.population) {
             this.germplasmGnpis.population.sort(this.compareCollectionPopulationPanel);
         }
         if (this.germplasmGnpis.panel) {
@@ -173,6 +167,7 @@ export class GermplasmCardComponent implements OnInit {
         }
     }
 
+    // TODO: do this in ETL!
     siteToBrapiLocation(site: Site) {
         if (site && site.siteId && site.latitude && site.longitude) {
             this.germplasmLocations.push({

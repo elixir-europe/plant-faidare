@@ -35,7 +35,12 @@ faidare:
 
   # TODO: Update URIs to match URL (update in generated JSON document too)
   # Warning! URIs should match with GPDS datadiscovery 'schema:includedInDataCatalog' field value
-  dataSources:
+  data-sources:
+  # URGI GnpIS
+  - uri: https://urgi.versailles.inra.fr
+    url: https://urgi.versailles.inra.fr/gnpis
+    name: URGI GnpIS
+    image: https://urgi.versailles.inra.fr/files/gpds/logos/GnpIS.png
   # WUR EU-SOL BreeDB
   - uri: https://www.eu-sol.wur.nl/
     url: https://www.eu-sol.wur.nl/
@@ -56,11 +61,6 @@ faidare:
     url: http://www.pisa.nib.si
     name: NIB PISA
     image: https://urgi.versailles.inra.fr/files/gpds/logos/NIB.png
-  # URGI GnpIS
-  - uri: https://urgi.versailles.inra.fr
-    url: https://urgi.versailles.inra.fr/gnpis
-    name: URGI GnpIS
-    image: https://urgi.versailles.inra.fr/files/gpds/logos/GnpIS.png
   # CIRAD TropGENE
   - uri: http://brapi.tropgenedb.cirad.fr:8888/
     url: http://tropgenedb.cirad.fr

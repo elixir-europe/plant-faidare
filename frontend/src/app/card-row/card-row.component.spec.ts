@@ -18,7 +18,7 @@ class CardRowComponentTester extends ComponentTester<CardRowComponent> {
     }
 
     get valueDiv() {
-        return this.element('div.col');
+        return this.element('div.value');
     }
 }
 

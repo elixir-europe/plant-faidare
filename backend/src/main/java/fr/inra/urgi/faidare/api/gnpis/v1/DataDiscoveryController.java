@@ -40,9 +40,12 @@ public class DataDiscoveryController {
     public Collection<String> suggest(
         @RequestParam String field,
         @RequestParam(required = false) String text,
-        @RequestParam(required = false) Long fetchSize,
+        @RequestParam(required = false) Integer fetchSize,
         @RequestBody(required = false) @Valid DataDiscoveryCriteriaImpl criteria
     ) throws UnsupportedEncodingException {
+        if (fetchSize == null) {
+            fetchSize = Integer.MAX_VALUE;
+        }
         return dataDiscoveryRepository.suggest(field, StringFunctions.asUTF8(text), fetchSize, criteria);
     }
 

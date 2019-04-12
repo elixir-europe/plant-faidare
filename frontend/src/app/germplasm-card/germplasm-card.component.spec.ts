@@ -19,6 +19,7 @@ import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } f
 import { DataDiscoverySource } from '../models/data-discovery.model';
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
+import { CardGenericDocumentComponent } from '../card-generic-document/card-generic-document.component';
 
 
 describe('GermplasmCardComponent', () => {
@@ -38,23 +39,6 @@ describe('GermplasmCardComponent', () => {
             return this.elements('div.card-header');
         }
     }
-
-    const brapiService = jasmine.createSpyObj(
-        'BrapiService', [
-            'germplasm',
-            /*'germplasmProgeny',*/
-            'germplasmPedigree',
-            'germplasmAttributes'
-        ]
-    );
-
-    const gnpisService = jasmine.createSpyObj(
-        'GnpisService', [
-            'germplasm',
-            'germplasmByPuid',
-            'getSource'
-        ]
-    );
 
     const gnpisSite: Site = {
         latitude: null,
@@ -150,6 +134,14 @@ describe('GermplasmCardComponent', () => {
         }
     };
 
+    const source: DataDiscoverySource = {
+        '@id': 'src1',
+        '@type': ['schema:DataCatalog'],
+        'schema:name': 'source1',
+        'schema:url': 'srcUrl',
+        'schema:image': null
+    };
+
     const germplasmTest: Germplasm = {
         germplasmDbId: 'test',
         defaultDisplayName: 'test',
@@ -193,17 +185,29 @@ describe('GermplasmCardComponent', () => {
         distributors: [gnpisGermplasmInstitute],
         panel: [gnpisGermplasmSet],
         collection: [gnpisGermplasmSet],
-        population: [gnpisGermplasmSet]
+        population: [gnpisGermplasmSet],
+        'schema:includedInDataCatalog': source
     };
 
-    const source: DataDiscoverySource = {
-        '@id': 'src1',
-        '@type': ['schema:DataCatalog'],
-        'schema:identifier': 'srcId',
-        'schema:name': 'source1',
-        'schema:url': 'srcUrl',
-        'schema:image': null
-    };
+    const gnpisService = jasmine.createSpyObj(
+        'GnpisService', [
+            'getGermplasm',
+            'getSource'
+        ]
+    );
+    gnpisService.getGermplasm.and.returnValue(of(germplasmTest));
+    gnpisService.getSource.and.returnValue(of(source));
+
+    const brapiService = jasmine.createSpyObj(
+        'BrapiService', [
+            // 'germplasmProgeny',
+            'germplasmPedigree',
+            'germplasmAttributes'
+        ]
+    );
+    // brapiService.germplasmProgeny.and.returnValue(of(brapiGermplasmProgeny));
+    brapiService.germplasmPedigree.and.returnValue(of(brapiGermplasmPedigree));
+    brapiService.germplasmAttributes.and.returnValue(of(brapiGermplasmAttributes));
 
     const activatedRoute = fakeRoute({
         queryParams: of({ id: 'test' })
@@ -214,7 +218,8 @@ describe('GermplasmCardComponent', () => {
             imports: [RouterTestingModule, NgbPopoverModule, MomentModule],
             declarations: [
                 GermplasmCardComponent, LoadingSpinnerComponent, MockComponent(XrefsComponent), CardSectionComponent,
-                CardRowComponent, LoadingSpinnerComponent, CardTableComponent, MapComponent
+                CardRowComponent, LoadingSpinnerComponent, CardTableComponent,
+                MapComponent, MockComponent(CardGenericDocumentComponent)
             ],
             providers: [
                 { provide: BrapiService, useValue: brapiService },
@@ -223,14 +228,6 @@ describe('GermplasmCardComponent', () => {
             ]
         });
     }));
-
-
-    gnpisService.germplasm.and.returnValue(of(germplasmTest));
-    gnpisService.germplasmByPuid.and.returnValue(of(germplasmTest));
-    gnpisService.getSource.and.returnValue(of(source));
-    /*brapiService.germplasmProgeny.and.returnValue(of(brapiGermplasmProgeny));*/
-    brapiService.germplasmPedigree.and.returnValue(of(brapiGermplasmPedigree));
-    brapiService.germplasmAttributes.and.returnValue(of(brapiGermplasmAttributes));
 
     it('should fetch germplasm information', async(() => {
         const tester = new GermplasmCardComponentTester();

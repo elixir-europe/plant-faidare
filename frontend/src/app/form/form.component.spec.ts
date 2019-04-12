@@ -1,36 +1,18 @@
 import { async, TestBed } from '@angular/core/testing';
 
 import { FormComponent } from './form.component';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MockComponents } from 'ng-mocks';
+import { SuggestionFieldComponent } from './suggestion-field/suggestion-field.component';
+import { TraitOntologyWidgetComponent } from './trait-ontology-widget/trait-ontology-widget.component';
 
-/**
- * Mock faidare-suggestion-field
- */
-@Component({
-    selector: 'faidare-suggestion-field',
-    template: '<br/>'
-})
-class MockSuggestionFieldComponent {
-    @Input() criteria$: any;
-}
-
-/**
- * Mock faidare-trait-ontology-widget
- */
-@Component({
-    selector: 'faidare-trait-ontology-widget',
-    template: '<br/>'
-})
-class MockTraitWidgetComponent {
-    @Input() criteria$: any;
-    @Output() initialized = new EventEmitter();
-}
 
 describe('FormComponent', () => {
 
     beforeEach(async(() =>
         TestBed.configureTestingModule({
-            declarations: [FormComponent, MockSuggestionFieldComponent, MockTraitWidgetComponent],
+            declarations: [
+                FormComponent, MockComponents(SuggestionFieldComponent), MockComponents(TraitOntologyWidgetComponent)
+            ],
         }).compileComponents()
     ));
 

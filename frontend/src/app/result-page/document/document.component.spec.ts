@@ -53,7 +53,6 @@ describe('DocumentComponent', () => {
             'schema:includedInDataCatalog': {
                 '@id': 'http://source1.com',
                 '@type': ['schema:DataCatalog'],
-                'schema:identifier': 'source1',
                 'schema:image': null,
                 'schema:name': 'source1',
                 'schema:url': 'http://dco/url'

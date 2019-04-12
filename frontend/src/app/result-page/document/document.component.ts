@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DataDiscoveryDocument, DataDiscoveryType } from '../../models/data-discovery.model';
+import { DataDiscoveryDocument, DataDiscoverySource, DataDiscoveryType } from '../../models/data-discovery.model';
+import { GnpisService } from '../../gnpis.service';
 
 @Component({
     selector: 'faidare-document',
@@ -22,15 +23,17 @@ export class DocumentComponent implements OnInit {
     needTruncation = false;
     opened = false;
 
+    get dataSource(): DataDiscoverySource {
+        return this.document['schema:includedInDataCatalog'];
+    }
 
     getURL() {
         return this.document['schema:url'] || '';
     }
 
-    // TODO: index URGI schema:identifier like the partners
-
     getRouterLink() {
-        const urgiStudy = this.document['schema:includedInDataCatalog']['schema:url'] === 'https://urgi.versailles.inra.fr/gnpis/';
+        // TODO: index URGI schema:identifier like the partners
+        const urgiStudy = this.dataSource['schema:url'] === GnpisService.URGI_SOURCE_URI;
         for (const type of this.document['@type']) {
             const cardUrl = DocumentComponent.CARD_TYPE[type];
             if (cardUrl === 'studies') {
@@ -46,14 +49,6 @@ export class DocumentComponent implements OnInit {
         }
 
         return '';
-    }
-
-    getSource() {
-        return this.document['schema:includedInDataCatalog']['schema:name'];
-    }
-
-    getSourceURL() {
-        return this.document['schema:includedInDataCatalog']['schema:url'];
     }
 
     getQueryParam() {
