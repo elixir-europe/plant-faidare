@@ -55,6 +55,7 @@ public class GermplasmVO
 
     private List<String> taxonSynonyms;
     private List<String> taxonCommonNames;
+    private String taxonComment;
     private String geneticNature;
     private String comment;
     private PhotoVO photo;
@@ -352,6 +353,15 @@ public class GermplasmVO
 
     public void setTaxonCommonNames(List<String> taxonCommonNames) {
         this.taxonCommonNames = taxonCommonNames;
+    }
+
+    @Override
+    public String getTaxonComment() {
+        return taxonComment;
+    }
+
+    public void setTaxonComment(String taxonComment) {
+        this.taxonComment = taxonComment;
     }
 
     @Override

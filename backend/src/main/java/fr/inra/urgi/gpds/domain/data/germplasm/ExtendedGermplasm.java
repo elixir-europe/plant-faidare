@@ -21,6 +21,9 @@ public interface ExtendedGermplasm extends BrapiGermplasm, GnpISInternal {
     List<String> getTaxonCommonNames();
 
     @JsonView(JSONView.GnpISFields.class)
+    String getTaxonComment();
+
+    @JsonView(JSONView.GnpISFields.class)
     String getGeneticNature();
 
     @JsonView(JSONView.GnpISFields.class)

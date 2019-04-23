@@ -5,6 +5,7 @@ export interface Germplasm extends BrapiGermplasm {
     genusSpeciesSubtaxa: string;
     taxonSynonyms: string[];
     taxonCommonNames: string[];
+    taxonComment: string;
     geneticNature: string;
     comment: string;
     photo: Photo;
@@ -57,9 +58,9 @@ export interface GermplasmInstitute extends Institute {
 export interface Photo {
     copyright: string;
     description: string;
-    fileName: string;
+    file: string;
     photoName: string;
-    thumbnailFileName: string;
+    thumbnailFile: string;
 
 }
 

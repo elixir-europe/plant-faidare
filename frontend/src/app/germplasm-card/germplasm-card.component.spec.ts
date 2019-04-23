@@ -177,6 +177,7 @@ describe('GermplasmCardComponent', () => {
         genusSpeciesSubtaxa: null,
         taxonSynonyms: ['pomme', 'api'],
         taxonCommonNames: ['pomme', 'api'],
+        taxonComment: null,
         geneticNature: null,
         comment: null,
         photo: null,

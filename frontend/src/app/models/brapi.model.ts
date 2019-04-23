@@ -139,6 +139,7 @@ export interface BrapiGermplasm extends BrapiHasDocumentationURL {
 export interface BrapiTaxonIds {
     sourceName: string;
     taxonId: string;
+    url: string;
 }
 
 export interface BrapiDonor {
