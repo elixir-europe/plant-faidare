@@ -1,7 +1,13 @@
 <faidare-loading-spinner [loading]="loading" class="float-right"></faidare-loading-spinner>
 
+<div class="text-right back-form-button">
+  <button type="button" class="btn btn-secondary mt-1" routerLink="/">
+    <span> < Back to form </span>
+  </button>
+</div>
+
 <ng-container *ngIf="location">
-  <h3>
+  <h3 class="mb-4">
     Site: {{ location.locationName }}
 
 

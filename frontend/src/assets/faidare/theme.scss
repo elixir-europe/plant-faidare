@@ -53,6 +53,15 @@ $enable-shadows: true;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+.back-form-button {
+  top: 0;
+  right: 0;
+  position: fixed;
+  z-index: 1100;
+  margin-top: 8px;
+  margin-right: 100px;
+}
+
 h4 {
   color: #0f6191;
 }

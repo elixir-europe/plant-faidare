@@ -1,7 +1,8 @@
 @import "theme";
 
 .navbar {
-  background-color: $theme-navbar-bg-color;
+  /*background-color: $theme-navbar-bg-color;*/
+  background-image: linear-gradient($theme-navbar-bg-color, $theme-navbar-bg-color, #c9ced9);
 }
 
 .navbar-toggler {
