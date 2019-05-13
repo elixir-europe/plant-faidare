@@ -9,7 +9,7 @@ import fr.inra.urgi.faidare.domain.response.ApiResponseFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Brapi exception handling intercepting every spring web Exception and generate a correct BrAPI response out of it.
@@ -41,30 +42,34 @@ public class BrapiExceptionHandler {
         return ResponseEntity.status(httpStatus).body(body);
     }
 
+    /**
+     * Generate BrAPI error response from Exception
+     *
+     * Automatically extracts javax.validation error message into the BrAPI status
+     */
     private static ResponseEntity<Object> createErrorResponse(
         Exception exception, HttpStatus httpStatus
     ) {
         List<BrapiStatus> statuses = new ArrayList<>();
         BrapiPagination pagination = null;
 
-        if (exception instanceof BindException) {
-            // Exception occurring when a user provided parameter that did not pass spring validation
-
-            BindException bindException = (BindException) exception;
-            List<FieldError> fieldErrors = bindException.getFieldErrors();
-            statusFromFieldError(httpStatus, statuses, fieldErrors);
-        } else if (exception instanceof MethodArgumentNotValidException) {
-            // Exception occurring when a user provided request body parameter that did not pass spring validation
-
-            MethodArgumentNotValidException notValidException = (MethodArgumentNotValidException) exception;
-
-            ObjectError globalError = notValidException.getBindingResult().getGlobalError();
-            if (globalError != null) {
-                Exception e = new Exception(globalError.getDefaultMessage());
-                statuses.add(ApiResponseFactory.createStatus(e, httpStatus));
+        if (exception instanceof BindException || exception instanceof MethodArgumentNotValidException) {
+            BindingResult bindingResult;
+            if (exception instanceof BindException) {
+                // Exception occurring when a user provided parameter that did not pass spring validation
+                bindingResult = (BindException) exception;
+            } else {
+                // Exception occurring when a user provided request body parameter that did not pass spring validation
+                bindingResult = ((MethodArgumentNotValidException) exception).getBindingResult();
             }
-            List<FieldError> fieldErrors = notValidException.getBindingResult().getFieldErrors();
-            statusFromFieldError(httpStatus, statuses, fieldErrors);
+
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            errors.stream()
+                // Convert to Exception
+                .map(err -> new Exception(err.getDefaultMessage()))
+                // Convert to BrapiStatus
+                .map(ex -> ApiResponseFactory.createStatus(ex, httpStatus))
+                .collect(Collectors.toCollection(() -> statuses));
         } else {
             // Other exceptions
 
@@ -77,18 +82,6 @@ public class BrapiExceptionHandler {
         }
 
         return createErrorResponse(httpStatus, statuses, pagination);
-    }
-
-    /**
-     * Convert spring field errors into BrAPI statuses
-     */
-    private static void statusFromFieldError(HttpStatus httpStatus, List<BrapiStatus> statuses, List<FieldError> fieldErrors) {
-        if (fieldErrors != null) {
-            for (FieldError error : fieldErrors) {
-                Exception e = new Exception(error.getDefaultMessage());
-                statuses.add(ApiResponseFactory.createStatus(e, httpStatus));
-            }
-        }
     }
 
     /**

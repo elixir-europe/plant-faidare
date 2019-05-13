@@ -44,11 +44,16 @@ class BrapiExceptionHandlerTest {
                 "      \"totalPages\": 0,\n" +
                 "      \"currentPage\": 0\n" +
                 "    },\n" +
-                "    \"status\": [{\n" +
-                "      \"name\": \"Bad Request: Page size cannot be above 1000\",\n" +
-                "      \"code\": \"400\"\n" +
-                "    }],\n" +
-                "    \"datafiles\": []\n" +
+                "    \"status\": [" +
+                "       {" +
+                "           \"name\":\"Bad Request: Page size cannot be above 1000\"," +
+                "           \"code\":\"400\"" +
+                "       },{" +
+                "           \"name\":\"Bad Request: The result window (page x pageSize) cannot be over 10000. Please use an export API to download all the requested data.\"," +
+                "           \"code\":\"400\"" +
+                "       }" +
+                "   ]," +
+                "   \"datafiles\": []\n" +
                 "  },\n" +
                 "  \"result\": null\n" +
                 "}"));
