@@ -1,2 +1,2 @@
-rootProject.name = "gpds"
+rootProject.name = "faidare"
 include("backend", "frontend")

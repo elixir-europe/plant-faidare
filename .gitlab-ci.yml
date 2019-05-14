@@ -16,7 +16,7 @@ image: urgi/docker-browsers:latest
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
-  APP_NAME: gpds
+  APP_NAME: faidare
   JAR_PATH: "backend/build/libs/${APP_NAME}.jar"
 
 

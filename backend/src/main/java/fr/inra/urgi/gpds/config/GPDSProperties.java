@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
  *
  * @author gcornut
  */
-@ConfigurationProperties(prefix = "gpds")
+@ConfigurationProperties(prefix = "faidare")
 public class GPDSProperties {
 
     @NotBlank

@@ -7,7 +7,7 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "gpds",
+      "prefix": "faidare",
       "schematics": {
         "@schematics/angular:component": {
           "styleext": "scss"
@@ -42,7 +42,7 @@
               "node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css"
             ],
             "scripts": [],
-            "baseHref": "/gpds-dev/",
+            "baseHref": "/faidare-dev/",
             "es5BrowserSupport": true
           },
           "configurations": {

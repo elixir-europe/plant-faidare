@@ -65,10 +65,10 @@ If you just need access to API (to run the `ng serve` on top of it), you can run
 Otherwise, for the complete server (backend APIs + frontend interface), you can run:
 
 ```sh
-./gradlew assemble && java -jar backend/build/libs/gpds.jar
+./gradlew assemble && java -jar backend/build/libs/faidare.jar
 ```
 
-The server should then be accessible at http://localhost:8380/gpds-dev
+The server should then be accessible at http://localhost:8380/faidare-dev
 
 ## Run frontend development server
 
@@ -105,7 +105,7 @@ The details of this remote server are filled in the `bootstrap.yml` file.
 By default, it tries to connect to the remote server on http://localhost:8888
 but it can of course be changed, or even configured via the `SPRING_CONFIG_URI` environment variable.
 
-It will try to fetch the configuration for the application name `gpds`, and the default profile.
+It will try to fetch the configuration for the application name `faidare`, and the default profile.
 If such a configuration is not found, it will then fallback to the local `application.yml` properties.
 To avoid running the Spring Cloud config server every time when developing the application,
 all the properties are still available in `application.yml` even if they are configured on the remote Spring Cloud server as well.

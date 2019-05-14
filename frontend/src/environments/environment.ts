@@ -5,7 +5,7 @@
 export const environment = {
     production: false,
     navbar: {
-        title: 'GnpIS Plant Data Search',
+        title: 'FAIDARE : FAIR Data-finder for Agronomic REsearch',
         links: [
             {
                 label: 'URGI',
