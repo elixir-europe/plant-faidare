@@ -1,7 +1,7 @@
 import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
 
 @Component({
-    selector: 'gpds-card-section',
+    selector: 'faidare-card-section',
     templateUrl: './card-section.component.html',
     styleUrls: ['./card-section.component.scss']
 })

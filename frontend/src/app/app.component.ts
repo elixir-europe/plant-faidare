@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'gpds-root',
+    selector: 'faidare-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })

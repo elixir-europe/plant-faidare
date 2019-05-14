@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ErrorInterceptorService } from '../error-interceptor.service';
 
 @Component({
-    selector: 'gpds-loading-spinner',
+    selector: 'faidare-loading-spinner',
     template: `
         <div *ngIf="loading" class="loading">
           <i class="fa fa-spin fa-spinner" title="Loading..."></i>

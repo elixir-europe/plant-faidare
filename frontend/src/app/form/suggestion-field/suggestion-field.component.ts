@@ -7,7 +7,7 @@ import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
 import { DataDiscoveryCriteria } from '../../models/data-discovery.model';
 
 @Component({
-    selector: 'gpds-suggestion-field',
+    selector: 'faidare-suggestion-field',
     templateUrl: './suggestion-field.component.html',
     styleUrls: ['./suggestion-field.component.scss']
 })

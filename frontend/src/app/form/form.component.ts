@@ -8,7 +8,7 @@ enum Tabs {
 }
 
 @Component({
-    selector: 'gpds-form',
+    selector: 'faidare-form',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss']
 })

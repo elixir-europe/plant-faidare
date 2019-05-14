@@ -1,4 +1,4 @@
-<gpds-loading-spinner [loading]="loading" class="float-right"></gpds-loading-spinner>
+<faidare-loading-spinner [loading]="loading" class="float-right"></faidare-loading-spinner>
 
 <ng-container *ngIf="study">
   <h3>
@@ -6,31 +6,31 @@
   </h3>
 
   <!-- Display the map -->
-  <gpds-map [locations]="[study.location]"></gpds-map>
+  <faidare-map [locations]="[study.location]"></faidare-map>
 
   <!-- Display the study's info -->
-  <gpds-card-section
+  <faidare-card-section
     header="Identification">
     <ng-template>
       <div class="card-body card-section-body">
 
-        <gpds-card-row
+        <faidare-card-row
           label="Name"
           [value]="study.studyName">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Identifier"
           [value]="study.studyDbId">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Permanent unique identifier"
           [test]="study['@id'] && isNotURN(study['@id'])"
           [value]="study['@id']">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Source"
           [test]="studySource">
           <ng-template>
@@ -39,9 +39,9 @@
               <img [src]="studySource['schema:image']" alt="Study source image"/>
             </a>
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Data source"
           [test]="studySource && studySource['schema:identifier'] && study.documentationURL">
           <ng-template>
@@ -49,35 +49,35 @@
               Link to this study on {{ studySource["schema:identifier"] }}
             </a>
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Project name"
           [value]="study.programName">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Description"
           [value]="study.studyDescription">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Active"
           [test]="study.active != null">
           <ng-template>
             {{ study.active ? "Yes" : "No" }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Seasons"
           [test]="study.seasons && study.seasons.length != 0">
           <ng-template>
             {{ study.seasons.join(', ') }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Date"
           [test]="study.startDate">
           <ng-template>
@@ -85,9 +85,9 @@
             'From ' + study.startDate + ' to ' + study.endDate :
             'Started on ' + study.startDate }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Location name"
           [test]="study.location && study.location.locationDbId">
           <ng-template>
@@ -95,9 +95,9 @@
               {{ study.location.locationName }}
             </a>
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Data files"
           [test]="study.dataLinks && study.dataLinks.length != 0">
           <ng-template>
@@ -107,18 +107,18 @@
               </a>
             </div>
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
       </div>
 
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
 
-  <gpds-card-section
+  <faidare-card-section
     header="Genotype"
     [test]="studyGermplasms && studyGermplasms.length != 0">
     <ng-template>
-      <gpds-card-table
+      <faidare-card-table
         [headers]="[
           'Accession number',
           'Name',
@@ -136,16 +136,16 @@
             <td>{{ row.genus }} {{ row.species }} {{ row.subtaxa }}</td>
           </tr>
         </ng-template>
-      </gpds-card-table>
+      </faidare-card-table>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
 
-  <gpds-card-section
+  <faidare-card-section
     header="Variables"
     [test]="studyObservationVariables && studyObservationVariables.length != 0">
     <ng-template>
-      <gpds-card-table
+      <faidare-card-table
         [headers]="[
           'Variable id',
           'Variable short name',
@@ -169,15 +169,15 @@
             <td>{{ row.trait.description }}</td>
           </tr>
         </ng-template>
-      </gpds-card-table>
+      </faidare-card-table>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
-  <gpds-card-section
+  <faidare-card-section
     header="Data Set"
     [test]="studyDataset && studyDataset.length != 0">
     <ng-template>
-      <gpds-card-table
+      <faidare-card-table
         [headers]="[
           'Name',
           'Type',
@@ -204,15 +204,15 @@
             </td>
           </tr>
         </ng-template>
-      </gpds-card-table>
+      </faidare-card-table>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
-  <gpds-card-section
+  <faidare-card-section
     header="Contact"
     [test]="study.contacts && study.contacts.length != 0">
     <ng-template>
-      <gpds-card-table
+      <faidare-card-table
         [headers]="[
           'Role',
           'Name',
@@ -228,15 +228,15 @@
             <td>{{ row.institutionName }}</td>
           </tr>
         </ng-template>
-      </gpds-card-table>
+      </faidare-card-table>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
-  <gpds-card-section
+  <faidare-card-section
     header="Additional information"
     [test]="additionalInfos && additionalInfos.length != 0">
     <ng-template>
-      <gpds-card-table
+      <faidare-card-table
         [rows]="additionalInfos">
         <ng-template let-row>
           <tr>
@@ -244,10 +244,10 @@
             <td>{{ row.value }}</td>
           </tr>
         </ng-template>
-      </gpds-card-table>
+      </faidare-card-table>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
   <!--XRefs part -->
-  <gpds-xrefs [xrefId]="study.studyDbId"></gpds-xrefs>
+  <faidare-xrefs [xrefId]="study.studyDbId"></faidare-xrefs>
 </ng-container>

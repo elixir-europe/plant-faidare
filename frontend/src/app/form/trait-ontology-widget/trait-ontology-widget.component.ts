@@ -17,7 +17,7 @@ export class CropOntologyWidgetFactory {
 }
 
 @Component({
-    selector: 'gpds-trait-ontology-widget',
+    selector: 'faidare-trait-ontology-widget',
     templateUrl: './trait-ontology-widget.component.html',
     styleUrls: ['./trait-ontology-widget.component.scss'],
 

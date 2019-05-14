@@ -24,16 +24,16 @@ class CardRowComponentTester extends ComponentTester<CardRowComponent> {
 
 
 /**
- * Test gpds-card-row with a provided `ng-template`
+ * Test faidare-card-row with a provided `ng-template`
  */
 @Component({
-    selector: 'gpds-test',
+    selector: 'faidare-test',
     template: `
-        <gpds-card-row>
+        <faidare-card-row>
             <ng-template>
                 <strong>Value HTML template</strong>
             </ng-template>
-        </gpds-card-row>`
+        </faidare-card-row>`
 })
 class CardRowWithTemplateComponent {
     @ViewChild(CardRowComponent) component: CardRowComponent;

@@ -6,16 +6,16 @@ import { Component, ViewChild } from '@angular/core';
 
 
 /**
- * Test gpds-card-section with a provided `ng-template`
+ * Test faidare-card-section with a provided `ng-template`
  */
 @Component({
-    selector: 'gpds-test',
+    selector: 'faidare-test',
     template: `
-        <gpds-card-section>
+        <faidare-card-section>
             <ng-template>
                 <div class="test-body">Body HTML template</div>
             </ng-template>
-        </gpds-card-section>`
+        </faidare-card-section>`
 })
 class CardSectionTestWrapperComponent {
     @ViewChild(CardSectionComponent) component: CardSectionComponent;

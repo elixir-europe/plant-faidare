@@ -7,7 +7,7 @@ import { DataDiscoverySource } from '../models/data-discovery.model';
 import { GnpisService } from '../gnpis.service';
 
 @Component({
-    selector: 'gpds-site-card',
+    selector: 'faidare-site-card',
     templateUrl: './site-card.component.html',
     styleUrls: ['./site-card.component.scss']
 })

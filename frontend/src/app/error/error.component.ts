@@ -6,7 +6,7 @@ import { filter, map } from 'rxjs/operators';
 import { Location } from '@angular/common';
 
 @Component({
-    selector: 'gpds-error',
+    selector: 'faidare-error',
     templateUrl: './error.component.html',
     styleUrls: ['./error.component.scss']
 })

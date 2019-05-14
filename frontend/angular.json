@@ -25,14 +25,14 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "src/assets/gpds",
+                "input": "src/assets/faidare",
                 "output": "/assets"
               },
               "src/assets"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/assets/gpds/"
+                "src/assets/faidare/"
               ]
             },
             "styles": [
@@ -71,7 +71,7 @@
               ],
               "stylePreprocessorOptions": {
                 "includePaths": [
-                  "src/assets/gpds/"
+                  "src/assets/faidare/"
                 ]
               },
             "baseHref": "./"
@@ -101,14 +101,14 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "src/assets/gpds",
+                "input": "src/assets/faidare",
                 "output": "/assets"
               },
               "src/assets"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/assets/gpds/"
+                "src/assets/faidare/"
               ]
             },
             "styles": [
