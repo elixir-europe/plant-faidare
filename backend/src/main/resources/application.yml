@@ -19,7 +19,7 @@ logging.level:
     web.client.RestTemplate: DEBUG
   fr.inra: DEBUG
 
-gpds:
+faidare:
   elasticsearch-alias-template:
     gnpis_{source}_{documentType}_5432_krusty-group{groupId}
 
@@ -43,5 +43,5 @@ server:
       - text/css
   port: 8380
   servlet:
-    context-path: /gpds-dev
+    context-path: /faidare-dev
 

@@ -26,12 +26,12 @@
       </small>
     </label>
     <div class="col-sm-8">
-      <gpds-suggestion-field
+      <faidare-suggestion-field
         inputId="crops"
         criteriaField="crops"
         [criteria$]="criteria$"
         placeholder="Search crops">
-      </gpds-suggestion-field>
+      </faidare-suggestion-field>
     </div>
   </div>
   <!-- Input for the germplasmList field -->
@@ -43,12 +43,12 @@
       </small>
     </label>
     <div class="col-sm-8">
-      <gpds-suggestion-field
+      <faidare-suggestion-field
         inputId="germplasmList"
         criteriaField="germplasmLists"
         [criteria$]="criteria$"
         placeholder="Search germplasm lists">
-      </gpds-suggestion-field>
+      </faidare-suggestion-field>
     </div>
   </div>
   <!-- Input for the accessions field -->
@@ -60,20 +60,20 @@
       </small>
     </label>
     <div class="col-sm-8">
-      <gpds-suggestion-field
+      <faidare-suggestion-field
         inputId="accessions"
         criteriaField="accessions"
         [criteria$]="criteria$"
         placeholder="Search germplasm accession">
-      </gpds-suggestion-field>
+      </faidare-suggestion-field>
     </div>
   </div>
 </div>
 
 <!-- Trait tab -->
 <div class="trait {{ getTabClass(tabs.TRAIT) }}">
-  <gpds-trait-ontology-widget
+  <faidare-trait-ontology-widget
     [criteria$]="criteria$"
     (initialized)="traitWidgetInitialized.emit($event)">
-  </gpds-trait-ontology-widget>
+  </faidare-trait-ontology-widget>
 </div>

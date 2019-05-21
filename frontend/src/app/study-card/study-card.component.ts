@@ -8,7 +8,7 @@ import { DataDiscoverySource } from '../models/data-discovery.model';
 import { KeyValueObject, toKeyValueObjects } from '../utils';
 
 @Component({
-    selector: 'gpds-study-card',
+    selector: 'faidare-study-card',
     templateUrl: './study-card.component.html',
     styleUrls: ['./study-card.component.scss']
 })

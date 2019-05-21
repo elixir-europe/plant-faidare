@@ -4,7 +4,7 @@ import { MarkerClusterGroup } from 'leaflet.markercluster/src';
 import { BrapiLocation } from '../models/brapi.model';
 
 @Component({
-    selector: 'gpds-map',
+    selector: 'faidare-map',
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.scss']
 })
@@ -60,15 +60,15 @@ export class MapComponent implements OnInit {
 
     getMarkerIconUrl(site: BrapiLocation): string {
         if (site.locationType === 'Origin site') {
-            return 'assets/gpds/images/marker-icon-red.png';
+            return 'assets/faidare/images/marker-icon-red.png';
         }
         if (site.locationType === 'Collecting site') {
-            return 'assets/gpds/images/marker-icon-blue.png';
+            return 'assets/faidare/images/marker-icon-blue.png';
         }
         if (site.locationType === 'Evaluation site') {
-            return 'assets/gpds/images/marker-icon-green.png';
+            return 'assets/faidare/images/marker-icon-green.png';
         }
-        return 'assets/gpds/images/marker-icon-purple.png';
+        return 'assets/faidare/images/marker-icon-purple.png';
     }
 
     removeEmptyLocations(locations: BrapiLocation[]) {

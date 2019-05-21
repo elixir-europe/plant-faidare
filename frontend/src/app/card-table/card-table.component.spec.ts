@@ -4,12 +4,12 @@ import { CardTableComponent } from './card-table.component';
 import { Component, ViewChild } from '@angular/core';
 
 /**
- * Test gpds-card-table with a simple provided row `ng-template`
+ * Test faidare-card-table with a simple provided row `ng-template`
  */
 @Component({
-    selector: 'gpds-test',
+    selector: 'faidare-test',
     template: `
-        <gpds-card-table>
+        <faidare-card-table>
             <ng-template let-row>
                 <tr>
                     <td>{{ row[0] }}</td>
@@ -17,7 +17,7 @@ import { Component, ViewChild } from '@angular/core';
                     <td>{{ row[2] }}</td>
                 </tr>
             </ng-template>
-        </gpds-card-table>`
+        </faidare-card-table>`
 })
 class CardTableTestWrapperComponent {
     @ViewChild(CardTableComponent) component: CardTableComponent;

@@ -6,10 +6,10 @@ export class AppPage {
     }
 
     getTitleText() {
-        return element(by.css('gpds-root p')).getText();
+        return element(by.css('faidare-root p')).getText();
     }
 
     getLabel(id) {
-        return element(by.css('gpds-root label[for=' + id + ']')).getText();
+        return element(by.css('faidare-root label[for=' + id + ']')).getText();
     }
 }

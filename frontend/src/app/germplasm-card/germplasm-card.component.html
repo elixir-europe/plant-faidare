@@ -1,4 +1,4 @@
-<gpds-loading-spinner [loading]="loading" class="float-right"></gpds-loading-spinner>
+<faidare-loading-spinner [loading]="loading" class="float-right"></faidare-loading-spinner>
 
 <ng-container *ngIf="germplasmGnpis">
   <h3 class="mb-4">
@@ -9,54 +9,54 @@
   </h3>
 
   <!-- Display the map -->
-  <gpds-map [locations]="germplasmLocations"></gpds-map>
+  <faidare-map [locations]="germplasmLocations"></faidare-map>
 
   <div class="row align-items-center">
 
     <!--Templates for gerplasm card-->
 
     <ng-template #taxonTemplate>
-      <gpds-card-row
+      <faidare-card-row
         label="Genus"
         [test]="germplasmGnpis.genus">
         <ng-template>
           <i>{{ germplasmGnpis.genus }}</i>
         </ng-template>
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Species"
         [test]="germplasmGnpis.species">
         <ng-template>
           <i>{{ germplasmGnpis.species }}</i>
           {{ germplasmGnpis.speciesAuthority ? '(' + germplasmGnpis.speciesAuthority + ')' : '' }}
         </ng-template>
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Subtaxa"
         [test]="germplasmGnpis.subtaxa">
         <ng-template>
           <i>{{ germplasmGnpis.subtaxa }}</i>
           {{ germplasmGnpis.subtaxaAuthority ? '(' + germplasmGnpis.subtaxaAuthority + ')' : '' }}
         </ng-template>
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Authority"
         [test]="germplasmTaxonAuthor">
         <ng-template>
           {{ germplasmTaxonAuthor }}
         </ng-template>
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Taxon ID"
         [test]="taxonIdsWithURL && taxonIdsWithURL.length > 0">
         <ng-template>
           <ng-container *ngFor="let taxonRef of taxonIdsWithURL">
 
-            <gpds-card-row
+            <faidare-card-row
               [label]="taxonRef.sourceName"
               [test]="taxonRef.url">
               <ng-template>
@@ -64,29 +64,29 @@
                   {{ taxonRef.taxonId }}
                 </a>
               </ng-template>
-            </gpds-card-row>
+            </faidare-card-row>
 
-            <gpds-card-row
+            <faidare-card-row
               [label]="taxonRef.sourceName"
               [test]="!taxonRef.url">
               <ng-template>
                 {{ taxonRef.taxonId }}
               </ng-template>
-            </gpds-card-row>
+            </faidare-card-row>
 
           </ng-container>
         </ng-template>
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Comment"
         [test]="germplasmGnpis.taxonComment">
         <ng-template>
           {{ germplasmGnpis.taxonComment }}
         </ng-template>
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Taxon common names"
         [test]="germplasmGnpis.taxonCommonNames && germplasmGnpis.taxonCommonNames.length > 0">
         <ng-template>
@@ -94,9 +94,9 @@
             {{ germplasmGnpis.taxonCommonNames.join(', ') }}
           </div>
         </ng-template>
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Taxon synonyms"
         [test]="germplasmGnpis.taxonSynonyms && germplasmGnpis.taxonSynonyms.length > 0">
         <ng-template>
@@ -104,45 +104,45 @@
             <i>{{ germplasmGnpis.taxonSynonyms.join(', ') }}</i>
           </div>
         </ng-template>
-      </gpds-card-row>
+      </faidare-card-row>
     </ng-template>
 
     <ng-template #instituteTemplate let-logo="logo" let-code="instituteCode" let-acronym="acronym" let-organisation="organisation" let-type="instituteType" let-webSite="webSite" let-address="address">
-      <gpds-card-row
+      <faidare-card-row
         label=""
         [test]="logo">
         <ng-template>
           <img
             [src]="logo"/>
         </ng-template>
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Code"
         [value]="code">
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Acronym"
         [value]="acronym">
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Organisation"
         [value]="organisation">
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Type"
         [value]="type">
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Address"
         [value]="address">
-      </gpds-card-row>
+      </faidare-card-row>
 
-      <gpds-card-row
+      <faidare-card-row
         label="Website"
         [test]="webSite">
         <ng-template>
@@ -150,7 +150,7 @@
             {{ webSite }}
           </a>
         </ng-template>
-      </gpds-card-row>
+      </faidare-card-row>
     </ng-template>
 
     <ng-template #holdingInstituteTemplate>
@@ -189,53 +189,53 @@
                alt="" width="250px">
           <div class="card-body">
 
-            <gpds-card-row
+            <faidare-card-row
               label="Accession name"
               [value]="germplasmGnpis.germplasmName">
-            </gpds-card-row>
+            </faidare-card-row>
 
-            <gpds-card-row
+            <faidare-card-row
               label="Photo name"
               [value]="germplasmGnpis.photo.photoName">
-            </gpds-card-row>
+            </faidare-card-row>
 
-            <gpds-card-row
+            <faidare-card-row
               label="Description"
               [value]="germplasmGnpis.photo.description">
-            </gpds-card-row>
+            </faidare-card-row>
 
-            <gpds-card-row
+            <faidare-card-row
               label="Copyright"
               [value]="'© '+germplasmGnpis.photo.copyright">
-            </gpds-card-row>
+            </faidare-card-row>
           </div>
         </div>
       </ng-template>
     </div>
 
     <!--Section for the information about the identification of the germplasm-->
-    <gpds-card-section
+    <faidare-card-section
       class="col-12 col-lg"
       header="Identification">
       <ng-template>
         <div class="card-body card-section-body">
 
-          <gpds-card-row
+          <faidare-card-row
             label="Germplasm name"
             [value]="germplasmGnpis.germplasmName">
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Accession number"
             [value]="germplasmGnpis.accessionNumber">
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Permanent Unique Identifier"
             [value]="germplasmGnpis.germplasmPUI">
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Source"
             [test]="germplasmSource">
             <ng-template>
@@ -244,9 +244,9 @@
                 <img [src]="germplasmSource['schema:image']" alt="Germplasm source image"/>
               </a>
             </ng-template>
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Data source"
             [test]="germplasmSource['schema:identifier'] && germplasmGnpis.documentationURL">
             <ng-template>
@@ -254,9 +254,9 @@
                 Link to this study on {{ germplasmSource['schema:identifier'] }}
               </a>
             </ng-template>
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Accession synonyms"
             [test]="germplasmGnpis.synonyms && germplasmGnpis.synonyms.length > 0">
             <ng-template>
@@ -264,9 +264,9 @@
                 {{ germplasmGnpis.synonyms.join(', ') }}
               </div>
             </ng-template>
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Taxon"
             [test]="germplasmTaxon">
             <ng-template>
@@ -279,34 +279,34 @@
                 {{ germplasmTaxonAuthor ? '(' + germplasmTaxonAuthor + ')' : '' }}
               </a>
             </ng-template>
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Biological status"
             [value]="germplasmGnpis.biologicalStatusOfAccessionCode">
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Genetic nature"
             [value]="germplasmGnpis.geneticNature">
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Seed source"
             [value]="germplasmGnpis.seedSource">
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Pedigree"
             [value]="germplasmGnpis.pedigree">
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Comments"
             [value]="germplasmGnpis.comment">
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             label="Origin site"
             [test]="germplasmGnpis.originSite && germplasmGnpis.originSite.siteName">
             <ng-template>
@@ -314,21 +314,21 @@
                 {{ germplasmGnpis.originSite.siteName }}
               </a>
             </ng-template>
-          </gpds-card-row>
+          </faidare-card-row>
 
         </div>
       </ng-template>
-    </gpds-card-section>
+    </faidare-card-section>
   </div>
 
   <!--Section for the information about the holding of the germplasm-->
-  <gpds-card-section
+  <faidare-card-section
     header="Holding"
     [test]="germplasmGnpis.holdingInstitute">
     <ng-template>
       <div class="card-body card-section-body">
 
-        <gpds-card-row
+        <faidare-card-row
           label="Institution">
           <ng-template>
             <a class="popover-underline" data-boundary="window" placement="auto"
@@ -338,9 +338,9 @@
                container="body">
               {{ germplasmGnpis.holdingInstitute.instituteName }}</a>
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
   
-        <gpds-card-row
+        <faidare-card-row
           label="Stock center name"
           [test]="germplasmGnpis.holdingGenbank.instituteName && germplasmGnpis.holdingGenbank.webSite">
           <ng-template>
@@ -348,33 +348,33 @@
               {{ germplasmGnpis.holdingGenbank.instituteName }}
             </a>
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Stock center name"
           [test]="germplasmGnpis.holdingGenbank.instituteName && !germplasmGnpis.holdingGenbank.webSite">
           <ng-template>
             {{ germplasmGnpis.holdingGenbank.instituteName }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Presence status"
           [value]="germplasmGnpis.presenceStatus">
-        </gpds-card-row>
+        </faidare-card-row>
 
       </div>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
   <!--Section for the information about the collector of the germplasm-->
-  <gpds-card-section
+  <faidare-card-section
     header="Collecting"
     [test]="checkCollecting()">
     <ng-template>
       <div class="card-body card-section-body">
 
-        <gpds-card-row
+        <faidare-card-row
           label="Collecting site"
           [test]="germplasmGnpis.collectingSite && germplasmGnpis.collectingSite.siteName">
           <ng-template>
@@ -382,41 +382,41 @@
               {{ germplasmGnpis.collectingSite.siteName }}
             </a>
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Material type"
           [test]="germplasmGnpis.collector && germplasmGnpis.collector.materialType">
           <ng-template>
             {{ germplasmGnpis.collector.materialType }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Collectors"
           [test]="germplasmGnpis.collector && germplasmGnpis.collector.collectors">
           <ng-template>
             {{ germplasmGnpis.collector.collectors }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Acquisition/Creation date"
           [test]="germplasmGnpis.collector.accessionCreationDate">
           <ng-template>
             {{ germplasmGnpis.collector.accessionCreationDate | amParse:'YYYYMMDD' | amDateFormat:'YYYY-MM-DD' }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Acquisition/Creation date"
           [test]="germplasmGnpis.acquisitionDate && !germplasmGnpis.collector.accessionCreationDate">
           <ng-template>
             {{ germplasmGnpis.acquisitionDate }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Institution"
           [test]="germplasmGnpis.collector.institute && germplasmGnpis.collector.institute.instituteName">
           <ng-template>
@@ -427,28 +427,28 @@
               {{ germplasmGnpis.collector.institute.instituteName }}
             </a>
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Accession number"
           [test]="germplasmGnpis.collector && germplasmGnpis.collector.accessionNumber">
           <ng-template>
             {{ germplasmGnpis.collector.accessionNumber }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
       </div>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
   <!--Section for the information about the breeder of the germplasm-->
-  <gpds-card-section
+  <faidare-card-section
     header="Breeder"
     [test]="checkBreeder()">
     <ng-template>
       <div class="card-body card-section-body">
 
-        <gpds-card-row
+        <faidare-card-row
           label="Institute"
           [test]="germplasmGnpis.breeder.institute && germplasmGnpis.breeder.institute.instituteName">
           <ng-template>
@@ -459,39 +459,39 @@
               {{ germplasmGnpis.breeder.institute.instituteName }}
             </a>
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Accession creation year"
           [value]="germplasmGnpis.breeder.accessionCreationDate ">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Accession number"
           [value]="germplasmGnpis.breeder.accessionNumber">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Catalog registration year"
           [value]="germplasmGnpis.breeder.registrationYear">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Catalog deregistration year"
           [value]="germplasmGnpis.breeder.deregistrationYear">
-        </gpds-card-row>
+        </faidare-card-row>
 
       </div>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
   <!--Section for the information about the donor of the germplasm-->
-  <gpds-card-section
+  <faidare-card-section
     header="Donor"
     [test]="germplasmGnpis.donors && germplasmGnpis.donors.length > 0">
     <ng-template>
 
-      <gpds-card-table
+      <faidare-card-table
         [headers]="[
                 'Institute name',
                 'Institute code',
@@ -521,19 +521,19 @@
             <td>{{ row.donorGermplasmPUI }}</td>
             </tr>
         </ng-template>
-      </gpds-card-table>
+      </faidare-card-table>
 
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
   <!--Section for the information about the distributor of the germplasm-->
-  <gpds-card-section
+  <faidare-card-section
     header="Distributor"
     [test]="germplasmGnpis.distributors && germplasmGnpis.distributors.length>0">
     <ng-template>
 
       <!--TODO : Add order column when ordering URL will be available-->
-      <gpds-card-table
+      <faidare-card-table
         [headers]="[
         'Institute',
         'Accession number',
@@ -559,66 +559,66 @@
             <td>{{ row.distributionStatus }}</td>
           </tr>
         </ng-template>
-      </gpds-card-table>
+      </faidare-card-table>
 
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
   <!--Section for the information about the primary descriptors of the germplasm-->
-  <gpds-card-section
+  <faidare-card-section
     header="Evaluation Data"
     [test]="germplasmAttributes && germplasmAttributes.length > 0">
     <ng-template>
       <div class="card-body card-section-body">
 
         <ng-container *ngFor="let descriptor of germplasmAttributes">
-          <gpds-card-row
+          <faidare-card-row
             [label]="descriptor.attributeName"
             [value]="descriptor.value">
-          </gpds-card-row>
+          </faidare-card-row>
         </ng-container>
 
       </div>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
   <!--Section for the information about the genealoggy of the germplasm-->
-  <gpds-card-section
+  <faidare-card-section
     header="Genealogy"
     [test]="checkPedigree() || checkProgeny()">
     <ng-template>
       <div class="card-body card-section-body">
 
-        <gpds-card-row
+        <faidare-card-row
           label="Crossing plan"
           [test]="germplasmPedigree && germplasmPedigree.crossingPlan">
           <ng-template>
             {{ germplasmPedigree.crossingPlan }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Crossing year"
           [test]="germplasmPedigree && germplasmPedigree.crossingYear">
           <ng-template>
             {{ germplasmPedigree.crossingYear }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Family code"
           [test]="germplasmPedigree && germplasmPedigree.familyCode">
           <ng-template>
             {{ germplasmPedigree.familyCode }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Parent accessions"
           [test]="germplasmPedigree && germplasmPedigree.parent1Name">
 
           <ng-template>
-            <gpds-card-row
+            <faidare-card-row
               [label]="germplasmPedigree.parent1Type"
               [test]="germplasmPedigree && germplasmPedigree.parent1DbId">
               <ng-template>
@@ -627,9 +627,9 @@
                   {{ germplasmPedigree.parent1Name }}
                 </a>
               </ng-template>
-            </gpds-card-row>
+            </faidare-card-row>
 
-            <gpds-card-row
+            <faidare-card-row
               [label]="germplasmPedigree.parent2Type"
               [test]="germplasmPedigree && germplasmPedigree.parent2DbId">
               <ng-template>
@@ -638,12 +638,12 @@
                   {{ germplasmPedigree.parent2Name }}
                 </a>
               </ng-template>
-            </gpds-card-row>
+            </faidare-card-row>
 
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Sibling accession"
           [test]="germplasmPedigree && (germplasmPedigree.siblings && germplasmPedigree.siblings.length > 0)">
           <ng-template>
@@ -657,17 +657,17 @@
             </div>
 
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Descendant"
           [test]="checkProgeny()">
-        </gpds-card-row>
+        </faidare-card-row>
 
         <div class="content-overflow-big">
           <ng-container *ngFor="let child of germplasmProgeny">
 
-            <gpds-card-row class="text"
+            <faidare-card-row class="text"
                            [label]="child.secondParentName ? 'child(ren) of ' + child.firstParentName + ' x ' + child.secondParentName : 'child(ren) of ' + child.firstParentName"
                            [test]="checkProgeny()">
               <ng-template>
@@ -679,23 +679,23 @@
                 </ng-container>
 
               </ng-template>
-            </gpds-card-row>
+            </faidare-card-row>
           </ng-container>
         </div>
 
       </div>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
   <!--Section for the information about the population, collection and panel of the germplasm-->
-  <gpds-card-section
+  <faidare-card-section
     header="Population"
     [test]="germplasmGnpis.population && germplasmGnpis.population.length > 0">
     <ng-template>
        <div class="card-body card-section-body card-section-body">
         <ng-container *ngFor="let population of germplasmGnpis.population">
 
-          <gpds-card-row
+          <faidare-card-row
             [label]="population.type ? population.name + ' (' + population.type + ')' : population.name"
             [test]="population.germplasmRef && population.germplasmRef.pui && population.germplasmRef.pui != germplasmGnpis.germplasmDbId">
             <ng-template>
@@ -708,9 +708,9 @@
               {{ population.germplasmCount }} accessions
             </a>
             </ng-template>
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             [label]="population.type ? population.name + ' (' + population.type + ')' : population.name"
             [test]="population.germplasmRef && population.germplasmRef.pui && population.germplasmRef.pui == germplasmGnpis.germplasmDbId">
             <ng-template>
@@ -720,9 +720,9 @@
               {{ population.germplasmCount }} accessions
             </a>
             </ng-template>
-          </gpds-card-row>
+          </faidare-card-row>
 
-          <gpds-card-row
+          <faidare-card-row
             [label]="population.type ? population.name + ' (' + population.type + ')' : population.name"
             [test]="population.germplasmRef && !population.germplasmRef.pui">
             <ng-template>
@@ -731,21 +731,21 @@
                 {{ population.germplasmCount }} accessions
               </a>
             </ng-template>
-          </gpds-card-row>
+          </faidare-card-row>
 
         </ng-container>
       </div>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
-  <gpds-card-section
+  <faidare-card-section
     header="Collection"
     [test]="germplasmGnpis.collection && germplasmGnpis.collection.length > 0">
     <ng-template>
       <div class="card-body card-section-body">
         <ng-container *ngFor="let collection of germplasmGnpis.collection">
 
-          <gpds-card-row
+          <faidare-card-row
             [label]="collection.type ? collection.name + ' (' + collection.type + ')' : collection.name">
             <ng-template>
               <a [routerLink]="['/']"
@@ -753,21 +753,21 @@
                 {{ collection.germplasmCount }} accessions
               </a>
             </ng-template>
-          </gpds-card-row>
+          </faidare-card-row>
 
         </ng-container>
       </div>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
-  <gpds-card-section
+  <faidare-card-section
     header="Panel"
     [test]="germplasmGnpis.panel && germplasmGnpis.panel.length > 0">
     <ng-template>
       <div class="card-body card-section-body">
         <ng-container *ngFor="let panel of germplasmGnpis.panel">
 
-          <gpds-card-row
+          <faidare-card-row
             [label]="panel.type ? panel.name + ' (' + panel.type + ')' : panel.name">
             <ng-template>
               <a [routerLink]="['/']"
@@ -775,14 +775,14 @@
                 {{ panel.germplasmCount }} accessions
               </a>
             </ng-template>
-          </gpds-card-row>
+          </faidare-card-row>
 
         </ng-container>
       </div>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
   <!-- XRefs part -->
-  <gpds-xrefs [xrefId]="germplasmGnpis.germplasmPUI"></gpds-xrefs>
+  <faidare-xrefs [xrefId]="germplasmGnpis.germplasmPUI"></faidare-xrefs>
 </ng-container>
 

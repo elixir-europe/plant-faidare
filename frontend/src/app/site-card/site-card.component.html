@@ -1,4 +1,4 @@
-<gpds-loading-spinner [loading]="loading" class="float-right"></gpds-loading-spinner>
+<faidare-loading-spinner [loading]="loading" class="float-right"></faidare-loading-spinner>
 
 <ng-container *ngIf="location">
   <h3>
@@ -7,16 +7,16 @@
 
   </h3>
 
-  <gpds-map [locations]="[location]"></gpds-map>
+  <faidare-map [locations]="[location]"></faidare-map>
 
 
 
-  <gpds-card-section
+  <faidare-card-section
     header="Details">
     <ng-template>
       <div class="card-body card-section-body">
 
-        <gpds-card-row
+        <faidare-card-row
           label="Source"
           [test]="location">
           <ng-template>
@@ -25,9 +25,9 @@
               <img [src]="locationSource['schema:image']" alt="Location source image"/>
             </a>
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Data source"
           [test]="location && location['schema:identifier'] && location.documentationURL">
           <ng-template>
@@ -35,158 +35,158 @@
               Link to this study on {{ location['schema:identifier'] }}
             </a>
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Abbreviation"
           [value]="location.abbreviation">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Type"
           [value]="location.locationType">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Status"
           [test]="location.additionalInfo['Site status']">
           <ng-template>
             {{ location.additionalInfo['Site status'] }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Institution/Landowner"
           [value]="location.institutionName">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Institution address"
           [value]="location.institutionAddress">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Coordinates precision"
           [test]="location.additionalInfo['Coordinates precision']">
           <ng-template>
             {{ location.additionalInfo['Coordinates precision'] }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Latitude"
           [value]="formatCoordinates(location.latitude, 'latitude')">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Longitude"
           [value]="formatCoordinates(location.longitude, 'longitude')">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Geographical location"
           [test]="location.additionalInfo['Geographical location']">
           <ng-template>
             {{ location.additionalInfo['Geographical location'] }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Country name"
           [test]="location.countryName && !location.additionalInfo['Geographical location']">
           <ng-template>
             {{ location.countryName }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Country code"
           [test]="location.countryCode && !location.additionalInfo['Geographical location']">
           <ng-template>
             {{ location.countryCode }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Altitude"
           [value]="location.altitude">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Slope"
           [value]="location.additionalInfo['Slope']">
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Exposure"
           [test]="location.additionalInfo['Exposure']">
           <ng-template>
             {{ location.additionalInfo['Exposure'] }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Topography"
           [test]="location.additionalInfo['Topography']">
           <ng-template>
             {{ location.additionalInfo['Topography'] }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Environment type"
           [test]="location.additionalInfo['Environment type']">
           <ng-template>
             {{ location.additionalInfo['Environment type'] }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Distance to city"
           [test]="location.additionalInfo['Distance to city']">
           <ng-template>
             {{ location.additionalInfo['Distance to city'] }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Direction from city"
           [test]="location.additionalInfo['Direction from city']">
           <ng-template>
             {{ location.additionalInfo['Direction from city'] }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
-        <gpds-card-row
+        <faidare-card-row
           label="Comment"
           [test]="location.additionalInfo['Comment']">
           <ng-template>
             {{ location.additionalInfo['Comment'] }}
           </ng-template>
-        </gpds-card-row>
+        </faidare-card-row>
 
       </div>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
-  <gpds-card-section
+  <faidare-card-section
     header="Additional information"
     [test]="additionalInfos && additionalInfos.length > 0">
     <ng-template>
       <div class="card-body card-section-body">
 
         <ng-container *ngFor="let additionalInfo of additionalInfos">
-          <gpds-card-row
+          <faidare-card-row
             [label]="additionalInfo.key"
             [value]="additionalInfo.value">
-          </gpds-card-row>
+          </faidare-card-row>
         </ng-container>
 
       </div>
     </ng-template>
-  </gpds-card-section>
+  </faidare-card-section>
 
   <!--XRefs part -->
-  <gpds-xrefs [xrefId]="location.locationDbId"></gpds-xrefs>
+  <faidare-xrefs [xrefId]="location.locationDbId"></faidare-xrefs>
 
 </ng-container>

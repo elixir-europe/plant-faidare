@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
-    selector: 'gpds-facets',
+    selector: 'faidare-facets',
     templateUrl: './facets.component.html',
     styleUrls: ['./facets.component.scss']
 })

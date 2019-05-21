@@ -1,4 +1,4 @@
-# How to contribute to GPDS
+# How to contribute to FAIDARE
 
 ## Git management
 
@@ -27,9 +27,9 @@
 	Total 0 (delta 0), reused 0 (delta 0)
 	remote:
 	remote: To create a merge request for chore/explaining_how_to_merge, visit:
-	remote:   https://forgemia.inra.fr/urgi-is/gpds/merge_requests/new?merge_request%5Bsource_branch%5D=chore/explaining_how_to_merge
+	remote:   https://forgemia.inra.fr/urgi-is/faidare/merge_requests/new?merge_request%5Bsource_branch%5D=chore/explaining_how_to_merge
 	remote:
-	To forgemia.inra.fr:urgi-is/gpds.git
+	To forgemia.inra.fr:urgi-is/faidare.git
 	* [new branch]      chore/explaining_how_to_merge -> chore/explaining_how_to_merge
 	La branche 'chore/explaining_how_to_merge' est paramétrée pour suivre la branche distante 'chore/explaining_how_to_merge' depuis 'origin'.
 	```

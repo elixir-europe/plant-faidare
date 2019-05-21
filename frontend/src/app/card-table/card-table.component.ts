@@ -1,7 +1,7 @@
 import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
 
 @Component({
-    selector: 'gpds-card-table',
+    selector: 'faidare-card-table',
     templateUrl: './card-table.component.html',
     styleUrls: ['./card-table.component.scss']
 })

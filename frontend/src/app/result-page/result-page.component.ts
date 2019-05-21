@@ -15,7 +15,7 @@ import { FormComponent } from '../form/form.component';
 
 
 @Component({
-    selector: 'gpds-result',
+    selector: 'faidare-result',
     templateUrl: './result-page.component.html',
     styleUrls: ['./result-page.component.scss'],
 })

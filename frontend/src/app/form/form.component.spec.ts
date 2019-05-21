@@ -4,10 +4,10 @@ import { FormComponent } from './form.component';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 /**
- * Mock gpds-suggestion-field
+ * Mock faidare-suggestion-field
  */
 @Component({
-    selector: 'gpds-suggestion-field',
+    selector: 'faidare-suggestion-field',
     template: '<br/>'
 })
 class MockSuggestionFieldComponent {
@@ -15,10 +15,10 @@ class MockSuggestionFieldComponent {
 }
 
 /**
- * Mock gpds-trait-ontology-widget
+ * Mock faidare-trait-ontology-widget
  */
 @Component({
-    selector: 'gpds-trait-ontology-widget',
+    selector: 'faidare-trait-ontology-widget',
     template: '<br/>'
 })
 class MockTraitWidgetComponent {

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataDiscoveryDocument, DataDiscoveryType } from '../../models/data-discovery.model';
 
 @Component({
-    selector: 'gpds-document',
+    selector: 'faidare-document',
     templateUrl: './document.component.html',
     styleUrls: ['./document.component.scss']
 })

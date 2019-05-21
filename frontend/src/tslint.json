@@ -4,13 +4,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "gpds",
+      "faidare",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "gpds",
+      "faidare",
       "kebab-case"
     ],
     "template-cyclomatic-complexity": [

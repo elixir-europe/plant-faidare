@@ -7,7 +7,7 @@ import { Children, Germplasm, Site } from '../models/gnpis.model';
 import { DataDiscoverySource } from '../models/data-discovery.model';
 
 @Component({
-    selector: 'gpds-germplasm-card',
+    selector: 'faidare-germplasm-card',
     templateUrl: './germplasm-card.component.html',
     styleUrls: ['./germplasm-card.component.scss']
 })

@@ -3,7 +3,7 @@ import { GnpisService } from '../gnpis.service';
 import { XrefModel } from '../models/xref.model';
 
 @Component({
-    selector: 'gpds-xrefs',
+    selector: 'faidare-xrefs',
     templateUrl: './xrefs.component.html',
     styleUrls: ['./xrefs.component.scss']
 })
