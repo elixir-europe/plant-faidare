@@ -1,4 +1,4 @@
-This directory contains document mappings and index settings for GPDS Elasticsearch documents.
+This directory contains document mappings and index settings for FAIDARE Elasticsearch documents.
 
 This directory is a copy of the directory from the GnpIS `database` git repository with the path: `GnpIS/elasticsearch/template/gnpis`.
 
