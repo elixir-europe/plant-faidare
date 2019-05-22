@@ -1,6 +1,5 @@
-# GnpIS Plant Data Search
-
-GnpIS Plant Data Search *aka* legacy Unified Interface.
+# FAIDARE: FAIR Data-finder for Agronomic Research
+This application provides web services (based on the BrAPI standard) and a web interface with easy to use filters to facilitates the access to plant datasets from a federation of sources.
 
 ## How to contribute
 
