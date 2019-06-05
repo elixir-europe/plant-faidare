@@ -10,7 +10,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -38,11 +37,21 @@ class CallsControllerTest {
 
     @Test
     void should_Fail_Page_Overflow() throws Exception {
-        mockMvc.perform(get("/brapi/v1/calls?pageSize=50000")
+        mockMvc.perform(get("/brapi/v1/calls?pageSize=100&page=2")
             .contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.metadata.status", hasSize(1)))
-            .andExpect(jsonPath("$.metadata.status[0].code", is("400")));
+            .andExpect(content().json("{" +
+                "\"metadata\":{" +
+                    "\"pagination\":{\"pageSize\":100,\"currentPage\":2,\"totalCount\":26,\"totalPages\":1}," +
+                    "\"status\":[{" +
+                        "\"name\":\"Bad Request: The current page should be strictly less than the total number of pages.\"," +
+                        "\"code\":\"400\"" +
+                    "}]," +
+                    "\"datafiles\":[]" +
+                "}," +
+                "\"result\":{\"data\":null}" +
+            "}"
+            ));
     }
 
     @Test
