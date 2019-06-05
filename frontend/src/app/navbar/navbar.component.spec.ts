@@ -54,16 +54,23 @@ describe('NavbarComponent', () => {
         const component = tester.componentInstance;
 
         component.navbar = {
-            title: 'GnpIS Plant Data Search',
+            name: 'FAIDARE',
+            title: 'FAIR Data-finder for Agronomic REsearch',
+            logo: 'assets/logo.png',
             links: [
                 { label: 'INRA', url: 'http://www.inra.fr/' },
                 { label: 'URGI', url: 'https://urgi.versailles.inra.fr/' }
-            ]
+            ],
+            contributor: {
+                name: 'Elixir',
+                url: 'https://elixir-europe.org/',
+                logo: 'assets/elixir_logo.png'
+            }
         };
 
         tester.detectChanges();
 
-        expect(tester.logo.attr('title')).toBe('GnpIS Plant Data Search');
+        expect(tester.logo.attr('title')).toBe('FAIR Data-finder for Agronomic REsearch');
 
         expect(tester.links.length).toBe(2);
 

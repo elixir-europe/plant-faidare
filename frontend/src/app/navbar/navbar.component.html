@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark py-0 mb-4">
   <div class="container px-0">
     <a class="navbar-brand d-flex align-items-center mr-0 px-2" routerLink="/">
-      <img src="assets/logo.png" alt="Logo" title="{{ navbar.title }}" height="60px"/>
+      <img src="{{ navbar.logo }}" alt="{{ navbar.name }} logo" title="{{ navbar.title }}" height="60px"/>
     </a>
     <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
       <span class="fa fa-bars"></span>
@@ -41,5 +41,9 @@
         </li>
       </ul>
     </div>
+    <a class="navbar-brand d-flex align-items-center"
+       [href]="navbar.contributor.url" target="_blank">
+      <img src="{{ navbar.contributor.logo }}" alt="{{ navbar.contributor.name }} logo" height="60px"/>
+    </a>
   </div>
 </nav>

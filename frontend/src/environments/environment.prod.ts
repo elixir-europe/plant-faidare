@@ -2,7 +2,9 @@
 export const environment = {
     production: false,
     navbar: {
-        title: 'FAIDARE : FAIR Data-finder for Agronomic REsearch',
+        name: 'FAIDARE',
+        title: 'FAIR Data-finder for Agronomic REsearch',
+        logo: 'assets/logo.png',
         links: [
             {
                 label: 'URGI',
@@ -18,6 +20,11 @@ export const environment = {
             { label: 'VIB', url: 'http://pippa.psb.ugent.be' },
             { label: 'IBET', url: 'https://biodata.pt' }
 
-        ]
+        ],
+        contributor: {
+            name: 'Elixir',
+            url: 'https://elixir-europe.org/',
+            logo: 'assets/elixir_logo.png'
+        }
     }
 };
