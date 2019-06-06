@@ -4,7 +4,7 @@ export const environment = {
     navbar: {
         name: 'FAIDARE',
         title: 'FAIR Data-finder for Agronomic REsearch',
-        logo: 'assets/logo.png',
+        logo: 'assets/applicationLogo.png',
         links: [
             {
                 label: 'URGI',

@@ -113,7 +113,8 @@
       </faidare-card-row>
     </ng-template>
 
-    <ng-template #instituteTemplate let-logo="logo" let-code="instituteCode" let-acronym="acronym" let-organisation="organisation" let-type="instituteType" let-webSite="webSite" let-address="address">
+    <ng-template #instituteTemplate let-logo="logo" let-code="instituteCode" let-acronym="acronym"
+                 let-organisation="organisation" let-type="instituteType" let-webSite="webSite" let-address="address">
       <faidare-card-row
         label=""
         [test]="logo">
@@ -175,8 +176,6 @@
     </ng-template>
 
     <!--Section for the image representing the germplasm and the details about this image-->
-    <div class="col-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFileName">
-      <a class="btn popovers" data-boundary="window" placement="auto" [ngbPopover]="imageTemplate"
     <div class="col-auto field" *ngIf="germplasmGnpis.photo && germplasmGnpis.photo.thumbnailFile">
       <a class="btn popovers" data-boundary="window" placement="auto"
          [autoClose]="'outside'"
@@ -185,6 +184,7 @@
         <img
           [src]="germplasmGnpis.photo.thumbnailFile"
           class="img-fluid">
+
         <figcaption class="figure-caption" style="color: #0f6fa1;">
           © {{ germplasmGnpis.photo.copyright }}
         </figcaption>
@@ -330,7 +330,7 @@
   </div>
 
   <!--Section for the information about the holding of the germplasm-->
-  <gpds-card-section
+  <faidare-card-section
     header="Depositary"
     [test]="germplasmGnpis.holdingInstitute">
     <ng-template>
@@ -499,39 +499,38 @@
     [test]="germplasmGnpis.donors && germplasmGnpis.donors.length > 0">
     <ng-template>
       <div class="table-responsive scroll-table table-card-body">
-      <faidare-card-table
-        [headers]="[
+        <faidare-card-table
+          [headers]="[
                 'Institute name',
                 'Institute code',
                 'Donation date',
                 'Accession number',
                 'Accession PUI'
                 ]"
-        [rows]="germplasmGnpis.donors">
-        <ng-template let-row>
-          <tr>
-            <ng-template #donorInstituteTemplate>
-              <ng-container *ngTemplateOutlet="instituteTemplate;context:row.donorInstitute">
-              </ng-container>
-            </ng-template>
+          [rows]="germplasmGnpis.donors">
+          <ng-template let-row>
+            <tr>
+              <ng-template #donorInstituteTemplate>
+                <ng-container *ngTemplateOutlet="instituteTemplate;context:row.donorInstitute">
+                </ng-container>
+              </ng-template>
 
-            <td>
-              <a class="popovers" placement="auto"
-                 [autoClose]="'outside'"
-                 [ngbPopover]="donorInstituteTemplate"
-                 [popoverTitle]="row.donorInstitute.instituteName">
-                {{ row.donorInstitute.instituteName }}
-              </a>
-            </td>
-            <td>{{ row.donorInstituteCode }}</td>
-            <td>{{ row.donationDate }}</td>
-            <td>{{ row.donorAccessionNumber }}</td>
-            <td>{{ row.donorGermplasmPUI }}</td>
-          </tr>
-        </ng-template>
-      </faidare-card-table>
+              <td>
+                <a class="popovers" placement="auto"
+                   [autoClose]="'outside'"
+                   [ngbPopover]="donorInstituteTemplate"
+                   [popoverTitle]="row.donorInstitute.instituteName">
+                  {{ row.donorInstitute.instituteName }}
+                </a>
+              </td>
+              <td>{{ row.donorInstituteCode }}</td>
+              <td>{{ row.donationDate }}</td>
+              <td>{{ row.donorAccessionNumber }}</td>
+              <td>{{ row.donorGermplasmPUI }}</td>
+            </tr>
+          </ng-template>
+        </faidare-card-table>
 
-      </faidare-card-table>
       </div>
     </ng-template>
   </faidare-card-section>
@@ -543,35 +542,35 @@
     <ng-template>
       <div class="table-responsive scroll-table table-card-body">
 
-      <!--TODO : Add order column when ordering URL will be available-->
-      <faidare-card-table
-        [headers]="[
+        <!--TODO : Add order column when ordering URL will be available-->
+        <faidare-card-table
+          [headers]="[
         'Institute',
         'Accession number',
         'Distribution status'
         ]"
-        [rows]="germplasmGnpis.distributors">
-        <ng-template let-row>
-          <tr>
-            <ng-template #distributorInstituteTemplate>
-              <ng-container *ngTemplateOutlet="instituteTemplate;context:row.institute">
-              </ng-container>
-            </ng-template>
+          [rows]="germplasmGnpis.distributors">
+          <ng-template let-row>
+            <tr>
+              <ng-template #distributorInstituteTemplate>
+                <ng-container *ngTemplateOutlet="instituteTemplate;context:row.institute">
+                </ng-container>
+              </ng-template>
 
-            <td>
-              <a class="popovers" placement="auto"
-                 [autoClose]="'outside'"
-                 [ngbPopover]="instituteTemplate"
-                 [popoverTitle]="row.institute.instituteName">
-                {{ row.institute.instituteName }}
-              </a>
-            </td>
-            <td>{{ row.accessionNumber }}</td>
-            <td>{{ row.distributionStatus }}</td>
-          </tr>
-        </ng-template>
+              <td>
+                <a class="popovers" placement="auto"
+                   [autoClose]="'outside'"
+                   [ngbPopover]="instituteTemplate"
+                   [popoverTitle]="row.institute.instituteName">
+                  {{ row.institute.instituteName }}
+                </a>
+              </td>
+              <td>{{ row.accessionNumber }}</td>
+              <td>{{ row.distributionStatus }}</td>
+            </tr>
+          </ng-template>
 
-      </faidare-card-table>
+        </faidare-card-table>
       </div>
     </ng-template>
   </faidare-card-section>
@@ -680,8 +679,8 @@
           <ng-container *ngFor="let child of germplasmProgeny">
 
             <faidare-card-row class="text"
-                           [label]="child.secondParentName ? 'child(ren) of ' + child.firstParentName + ' x ' + child.secondParentName : 'child(ren) of ' + child.firstParentName"
-                           [test]="checkProgeny()">
+                              [label]="child.secondParentName ? 'child(ren) of ' + child.firstParentName + ' x ' + child.secondParentName : 'child(ren) of ' + child.firstParentName"
+                              [test]="checkProgeny()">
               <ng-template>
 
                 <ng-container *ngFor="let sibling of child.sibblings">
@@ -704,7 +703,7 @@
     header="Population"
     [test]="germplasmGnpis.population && germplasmGnpis.population.length > 0">
     <ng-template>
-       <div class="card-body card-section-body card-section-body">
+      <div class="card-body card-section-body card-section-body">
         <ng-container *ngFor="let population of germplasmGnpis.population">
 
           <faidare-card-row
@@ -778,8 +777,9 @@
     <ng-template>
       <div class="card-body card-section-body">
         <ng-container *ngFor="let panel of germplasmGnpis.panel">
-          <gpds-card-row
-            [label]="panel.type ? panel.name.replace(toReplace, ' ') + ' (' + panel.type + ')' : panel.name.replace(toReplace,' ')">
+          <faidare-card-row
+            [label]="panel.type ? panel.name.replace(toReplace, ' ') + ' (' + panel.type + ')' :
+            panel.name.replace(toReplace,' ')">
             <ng-template>
               <a [routerLink]="['/']"
                  [queryParams]="{germplasmLists: panel.name, types: 'Germplasm'}">
