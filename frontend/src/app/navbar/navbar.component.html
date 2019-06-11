@@ -45,5 +45,15 @@
        [href]="navbar.contributor.url" target="_blank">
       <img src="{{ navbar.contributor.logo }}" alt="{{ navbar.contributor.name }} logo" height="60px"/>
     </a>
+    <div>
+      <a [routerLink]="['/']"
+         [queryParams]="previousQueryParam">
+        <button *ngIf="displayBackButton" type="button" class="btn btn-secondary">
+          < Back to form
+        </button>
+      </a>
+    </div>
+
+
   </div>
 </nav>
