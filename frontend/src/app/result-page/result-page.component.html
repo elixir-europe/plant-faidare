@@ -48,7 +48,7 @@
       <div class="container">
         <div class="row result align-content-center">
           <span class="col-4 mt-2 bolder">
-            Results :
+            Results:
           </span>
           <span *ngIf="pagination.totalResult" class="col-8 text-right small text-muted mt-3">
           From {{ pagination.startResult | number }} to {{ pagination.endResult | number }}
@@ -82,7 +82,7 @@
 
       <!-- Pagination -->
       <!--Bottom page navigator-->
-      <div class="d-flex justify-content-center mt-5" *ngIf="pagination.totalPages > 1">
+      <div class="d-flex justify-content-center mt-4 mb-5" *ngIf="pagination.totalPages > 1">
         <!-- we add 1 to the page because ngb-pagination is 1 based -->
         <ngb-pagination [page]="pagination.currentPage + 1"
                         (pageChange)="changePage($event)"

@@ -56,7 +56,7 @@ describe('NavbarComponent', () => {
         component.navbar = {
             name: 'FAIDARE',
             title: 'FAIR Data-finder for Agronomic REsearch',
-            logo: 'assets/logo.png',
+            logo: 'assets/applicationLogo.png',
             links: [
                 { label: 'INRA', url: 'http://www.inra.fr/' },
                 { label: 'URGI', url: 'https://urgi.versailles.inra.fr/' }

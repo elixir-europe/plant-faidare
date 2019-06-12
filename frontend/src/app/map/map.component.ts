@@ -35,23 +35,38 @@ export class MapComponent implements OnInit {
 
             // add markers for all locations using markercluster plugin
             const markers = new MarkerClusterGroup();
+            const mapMarkers = [];
             for (const location of this.curatedLocationList) {
                 const icon = L.icon({
-                    iconUrl: this.getMarkerIconUrl(location)
+                    iconUrl: this.getMarkerIconUrl(location),
+                    iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
                 });
                 const popupText = `
                   <b>${location.locationName}</b><br/>
                   ${location.locationType}<br/>
                   <a href="sites/${location.locationDbId}">Details</a>
                 `;
-                markers.addLayer(
-                    L.marker(
-                        [location.latitude, location.longitude],
-                        { icon: icon }
-                    ).bindPopup(popupText)
+                const marker = L.marker(
+                    [location.latitude, location.longitude],
+                    { icon: icon }
                 );
+                markers.addLayer(
+                    marker.bindPopup(popupText)
+                );
+                mapMarkers.push(marker);
             }
-            map.addLayer(markers);
+            const initialZoom = map.getZoom();
+
+
+            map.fitBounds(L.featureGroup(mapMarkers).getBounds());
+            const markerZoom = map.getZoom();
+
+            setTimeout(() => {
+                map.setZoom(Math.min(initialZoom, markerZoom));
+                map.addLayer(markers);
+            }
+                , 100);
+
         } else {
             L.DomUtil.get('map').remove();
         }

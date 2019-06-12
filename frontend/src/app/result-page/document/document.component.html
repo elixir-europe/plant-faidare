@@ -15,14 +15,16 @@
        [routerLink]="getRouterLink()" [queryParams]="getQueryParam()">
       {{ document["schema:name"] }}
     </a>
+    <small *ngIf="getURL()">
+      or link to
+      <a [href]="getURL()" target="_blank">
+        this {{ document['@type'] }} on {{ document['schema:includedInDataCatalog']['schema:name'] }}
+      </a>
+    </small>
   </h5>
 
-  <h5>
-    <a class="title" *ngIf="getURL()" [href]="getURL()" target="_blank">
-      ({{ document['schema:includedInDataCatalog']['schema:identifier'] }} data source link)
-    </a>
-  </h5>
   <span class="text-justify description">
+    <strong>Description :</strong><br>
     <ng-container *ngIf="!needTruncation || opened">
       {{ document["schema:description"] }}
 

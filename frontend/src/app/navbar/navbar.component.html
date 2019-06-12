@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark py-0 mb-4">
+<nav class="navbar fixed-top navbar-expand-md navbar-dark py-0 mb-4">
   <div class="container px-0">
     <a class="navbar-brand d-flex align-items-center mr-0 px-2" routerLink="/">
       <img src="{{ navbar.logo }}" alt="{{ navbar.name }} logo" title="{{ navbar.title }}" height="60px"/>
@@ -11,13 +11,13 @@
         <li class="nav-item" *ngFor="let link of navbar.links">
 
           <!-- Simple link -->
-          <div *ngIf="!link.subMenu">
+          <div class="mr-2" *ngIf="!link.subMenu">
             <a class="nav-link d-flex align-items-center"
                [href]="link.url" target="_blank">{{ link.label }}</a>
           </div>
 
           <!-- OR Dropdown button -->
-          <div *ngIf="link.subMenu" class="dropdown-container" ngbDropdown>
+          <div class="mr-2" *ngIf="link.subMenu" class="dropdown-container" ngbDropdown>
 
             <!-- Toggle button -->
             <a class="nav-link d-flex align-items-center dropdown-toggle" ngbDropdownToggle
@@ -45,5 +45,15 @@
        [href]="navbar.contributor.url" target="_blank">
       <img src="{{ navbar.contributor.logo }}" alt="{{ navbar.contributor.name }} logo" height="60px"/>
     </a>
+    <div>
+      <!--<a *ngIf="displayBackButton"
+         [routerLink]="['/']"
+         [queryParams]="previousQueryParam">
+        <button type="button" class="btn btn-secondary">
+          < Back to form
+        </button>
+      </a>-->
+    </div>
+
   </div>
 </nav>

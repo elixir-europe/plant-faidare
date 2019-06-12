@@ -1,9 +1,9 @@
 import { async, TestBed } from '@angular/core/testing';
 import { GermplasmCardComponent } from './germplasm-card.component';
-import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester, fakeRoute, speculoosMatchers } from 'ngx-speculoos';
 import { GnpisService } from '../gnpis.service';
 import { BrapiService } from '../brapi.service';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
@@ -205,6 +205,10 @@ describe('GermplasmCardComponent', () => {
         'schema:image': null
     };
 
+    const activatedRoute = fakeRoute({
+        queryParams: of({ id: 'test' })
+    });
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule, NgbPopoverModule, MomentModule],
@@ -215,16 +219,7 @@ describe('GermplasmCardComponent', () => {
             providers: [
                 { provide: BrapiService, useValue: brapiService },
                 { provide: GnpisService, useValue: gnpisService },
-                {
-                    provide: ActivatedRoute,
-                    useValue: {
-                        snapshot: {
-                            queryParams: convertToParamMap({
-                                id: 'test'
-                            })
-                        }
-                    }
-                }
+                { provide: ActivatedRoute, useValue: activatedRoute },
             ]
         });
     }));
@@ -246,8 +241,8 @@ describe('GermplasmCardComponent', () => {
             tester.detectChanges();
             expect(tester.title).toContainText('Germplasm: test');
             expect(tester.cardHeader[0]).toContainText('Identification');
-            expect(tester.cardHeader[1]).toContainText('Holding');
-            expect(tester.cardHeader[2]).toContainText('Collecting');
+            expect(tester.cardHeader[1]).toContainText('Depositary');
+            expect(tester.cardHeader[2]).toContainText('Collector');
             expect(tester.cardHeader[3]).toContainText('Breeder');
             expect(tester.cardHeader[4]).toContainText('Donor');
             expect(tester.cardHeader[5]).toContainText('Distributor');

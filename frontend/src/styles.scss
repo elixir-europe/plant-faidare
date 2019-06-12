@@ -22,6 +22,14 @@ h3 {
   border-bottom-right-radius: 0.25rem;
 }
 
+.table-card-body {
+  padding: 0;
+  border: 2px solid rgb(195, 214, 226);
+  border-top-width: 0px;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
 .row-sep {
   border-top: 1px solid #f0f0f0;
 }
@@ -31,7 +39,7 @@ h3 {
 }
 
 .content-overflow {
-  max-height: 175px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
@@ -39,10 +47,28 @@ h3 {
   max-height: 275px;
   overflow: auto;
 }
+.scroll-table {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.scroll-big-table {
+  max-height: 500px;
+  overflow-y: auto;
+}
 
 .display-spinner-front {
   position: absolute;
   top: 70px;
   left: 720px;
   background-color: #F9F9F9;
+}
+
+.popover {
+  width: 100%;
+  max-width:500px;
+}
+
+.mt-custom{
+  margin-top: 75px;
 }

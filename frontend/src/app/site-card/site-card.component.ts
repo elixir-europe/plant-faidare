@@ -5,6 +5,7 @@ import { BrapiLocation } from '../models/brapi.model';
 import { KeyValueObject, toKeyValueObjects } from '../utils';
 import { DataDiscoverySource } from '../models/data-discovery.model';
 import { GnpisService } from '../gnpis.service';
+import { Direction, TransformationType } from 'angular-coordinates';
 
 @Component({
     selector: 'faidare-site-card',
@@ -16,6 +17,8 @@ export class SiteCardComponent implements OnInit {
     location: BrapiLocation;
     locationSource: DataDiscoverySource;
     additionalInfos: KeyValueObject[];
+    direction = Direction;
+    type = TransformationType;
     loading = true;
 
     constructor(private brapiService: BrapiService, private gnpisService: GnpisService, private route: ActivatedRoute) {
@@ -73,34 +76,5 @@ export class SiteCardComponent implements OnInit {
             }
         }
     }
-
-    formatCoordinates(decimalDegrees: number, type: string): string {
-        if (decimalDegrees && type) {
-            const degree = Math.floor(decimalDegrees);
-            const decimalMinute = (decimalDegrees - degree) * 60;
-            const minute = Math.floor(decimalMinute);
-            const decimalSeconde = (decimalMinute - minute) * 60;
-            const seconde = Math.floor(decimalSeconde);
-
-            let direction = '';
-            if (type === 'latitude') {
-                if (decimalDegrees >= 0) {
-                    direction = 'N';
-                } else {
-                    direction = 'S';
-                }
-            } else if (type === 'longitude') {
-                if (decimalDegrees >= 0) {
-                    direction = 'E';
-                } else {
-                    direction = 'W';
-                }
-            }
-            return decimalDegrees + '° (' + degree + '° ' + minute + '\' ' + seconde + '\'\' ' + direction + ')';
-        } else {
-            return null;
-        }
-    }
-
 }
 

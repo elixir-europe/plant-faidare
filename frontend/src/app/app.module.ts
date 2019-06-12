@@ -46,7 +46,7 @@ import { CoordinatesModule } from 'angular-coordinates';
         CardSectionComponent,
         LoadingSpinnerComponent,
         CardTableComponent,
-        XrefsComponent
+        XrefsComponent,
     ],
     imports: [
         BrowserModule,
