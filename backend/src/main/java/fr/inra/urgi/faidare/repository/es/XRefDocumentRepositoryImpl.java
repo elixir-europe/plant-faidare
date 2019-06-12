@@ -11,6 +11,7 @@ import fr.inra.urgi.faidare.elasticsearch.query.impl.ESGenericQueryFactory;
 import fr.inra.urgi.faidare.repository.http.UserGroupsResourceClient;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -71,7 +72,8 @@ public class XRefDocumentRepositoryImpl implements XRefDocumentRepository {
 
             SearchRequest searchRequest = new SearchRequest()
                 .indices(aliases)
-                .source(source);
+                .source(source)
+                .indicesOptions(IndicesOptions.fromOptions(true, false, false, false));
 
             SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
 

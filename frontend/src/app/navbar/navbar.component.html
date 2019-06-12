@@ -46,14 +46,14 @@
       <img src="{{ navbar.contributor.logo }}" alt="{{ navbar.contributor.name }} logo" height="60px"/>
     </a>
     <div>
-      <a [routerLink]="['/']"
+      <!--<a *ngIf="displayBackButton"
+         [routerLink]="['/']"
          [queryParams]="previousQueryParam">
-        <button *ngIf="displayBackButton" type="button" class="btn btn-secondary">
+        <button type="button" class="btn btn-secondary">
           < Back to form
         </button>
-      </a>
+      </a>-->
     </div>
-
 
   </div>
 </nav>
