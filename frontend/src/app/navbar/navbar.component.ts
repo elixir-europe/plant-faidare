@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { routes as appUrlRoutes } from '../app-routing.module';
-import { ActivatedRoute, Params, Router, RoutesRecognized } from '@angular/router';
 
 @Component({
     selector: 'faidare-navbar',
@@ -10,7 +8,7 @@ import { ActivatedRoute, Params, Router, RoutesRecognized } from '@angular/route
 })
 export class NavbarComponent {
 
-    displayBackButton = false;
+    /*displayBackButton = false;
     previousQueryParam: Params;
 
     constructor(private router: Router, private route: ActivatedRoute
@@ -28,7 +26,7 @@ export class NavbarComponent {
                 }
             }
         });
-    }
+    }*/
 
     navbar = environment.navbar;
     navbarCollapsed = true;
@@ -37,7 +35,7 @@ export class NavbarComponent {
         this.navbarCollapsed = !this.navbarCollapsed;
     }
 
-    checkIsFormPage(url: String) {
+    /*checkIsFormPage(url: String) {
         for (const route of appUrlRoutes) {
             const routeType: string = route.path.split(':')[0];
             if (routeType !== '' && url.startsWith('/' + routeType)) {
@@ -45,5 +43,5 @@ export class NavbarComponent {
             }
         }
         return true;
-    }
+    }*/
 }
