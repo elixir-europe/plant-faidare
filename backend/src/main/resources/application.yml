@@ -34,38 +34,38 @@ faidare:
   security-user-group-ws-token:
 
   # TODO: Update URIs to match URL (update in generated JSON document too)
-  # Warning! URIs should match with GPDS datadiscovery 'schema:includedInDataCatalog' field value
+  # Warning! URIs should match with FAIDARE datadiscovery 'schema:includedInDataCatalog' field value
   data-sources:
   # URGI GnpIS
   - uri: https://urgi.versailles.inra.fr
     url: https://urgi.versailles.inra.fr/gnpis
     name: URGI GnpIS
-    image: https://urgi.versailles.inra.fr/files/gpds/logos/GnpIS.png
+    image: https://urgi.versailles.inra.fr/files/faidare/logos/GnpIS.png
   # WUR EU-SOL BreeDB
   - uri: https://www.eu-sol.wur.nl/
     url: https://www.eu-sol.wur.nl/
     name: WUR EU-SOL BreeDB
-    image: https://urgi.versailles.inra.fr/files/gpds/logos/EU-SOL.png
+    image: https://urgi.versailles.inra.fr/files/faidare/logos/EU-SOL.png
   # VIB PIPPA
   - uri: http://pippa.psb.ugent.be
     url: http://pippa.psb.ugent.be
     name: VIB PIPPA
-    image: https://urgi.versailles.inra.fr/files/gpds/logos/VIB.png
+    image: https://urgi.versailles.inra.fr/files/faidare/logos/VIB.png
   # IBET BioData
   - uri: https://biodata.pt
     url: https://biodata.pt
     name: IBET BioData
-    image: https://urgi.versailles.inra.fr/files/gpds/logos/biodata.png
+    image: https://urgi.versailles.inra.fr/files/faidare/logos/biodata.png
   # NIB PISA
   - uri: http://nib.si
     url: http://www.pisa.nib.si
     name: NIB PISA
-    image: https://urgi.versailles.inra.fr/files/gpds/logos/NIB.png
+    image: https://urgi.versailles.inra.fr/files/faidare/logos/NIB.png
   # CIRAD TropGENE
   - uri: http://brapi.tropgenedb.cirad.fr:8888/
     url: http://tropgenedb.cirad.fr
     name: CIRAD TropGENE
-    image: https://urgi.versailles.inra.fr/files/gpds/logos/CIRAD.jpg
+    image: https://urgi.versailles.inra.fr/files/faidare/logos/CIRAD.jpg
 
 server:
   compression:

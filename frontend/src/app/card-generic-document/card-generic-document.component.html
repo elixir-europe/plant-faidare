@@ -6,17 +6,17 @@ TODO: display generic document name and identifier here?
 
 
 <!-- Document PUI -->
-<gpds-card-row
+<faidare-card-row
   class="pui-row"
   label="Permanent unique identifier"
   [test]="document['@id'] && !document['@id'].startsWith('urn:')"
   [value]="document['@id']">
-</gpds-card-row>
+</faidare-card-row>
 
 
 <ng-container *ngIf="dataSource && dataSource['schema:name']">
 
-  <gpds-card-row
+  <faidare-card-row
     label="Source"
     class="data-source-row"
     [test]="dataSource['schema:url']">
@@ -35,9 +35,9 @@ TODO: display generic document name and identifier here?
         {{ dataSource['schema:name'] }}
       </a>
     </ng-template>
-  </gpds-card-row>
+  </faidare-card-row>
 
-  <gpds-card-row
+  <faidare-card-row
     label="Data link"
     class="data-link-row"
     [test]="document['schema:url']">
@@ -47,6 +47,6 @@ TODO: display generic document name and identifier here?
         Link to this {{ documentType }} on {{ dataSource["schema:name"] }}
       </a>
     </ng-template>
-  </gpds-card-row>
+  </faidare-card-row>
 
 </ng-container>

@@ -3,7 +3,7 @@ import * as schema from '../models/schema.org.model';
 import { GnpisService } from '../gnpis.service';
 
 @Component({
-    selector: 'gpds-card-generic-document',
+    selector: 'faidare-card-generic-document',
     templateUrl: './card-generic-document.component.html'
 })
 export class CardGenericDocumentComponent implements OnInit {

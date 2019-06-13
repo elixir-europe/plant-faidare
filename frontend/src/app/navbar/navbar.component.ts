@@ -9,10 +9,18 @@ interface Link {
     url: string;
     subMenu?: Link[];
 }
+interface Contributor {
+    name: string,
+    url: string,
+    logo: string
+}
 
 interface NavBar {
+    name: string;
     title: string;
+    logo: string;
     links: Link[];
+    contributor: Contributor;
 }
 
 @Component({

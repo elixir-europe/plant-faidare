@@ -48,7 +48,9 @@ export class GermplasmCardComponent implements OnInit {
             .then(germplasm => {
                 const germplasmId = id || germplasm.germplasmDbId;
                 this.germplasmGnpis = germplasm;
+                this.getTaxon();
                 this.reformatData();
+
 
                 // TODO use the progeny call when the information about parent will be added.
                 /*const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
@@ -78,64 +80,27 @@ export class GermplasmCardComponent implements OnInit {
 
     }
 
-    getGermplasm(id: string, pui: string): Promise<Germplasm> {
-        let germplasm$: Promise<Germplasm>;
-        if (id) {
-            germplasm$ = this.gnpisService.germplasm(id).toPromise();
+    getTaxon() {
+        if (this.germplasmGnpis.genusSpeciesSubtaxa) {
+            this.germplasmTaxon = this.germplasmGnpis.genusSpeciesSubtaxa;
+            this.germplasmTaxonAuthor = this.germplasmGnpis.subtaxaAuthority;
+        } else if (this.germplasmGnpis.genusSpecies) {
+            this.germplasmTaxon = this.germplasmGnpis.genusSpecies;
+            this.germplasmTaxonAuthor = this.germplasmGnpis.speciesAuthority;
+        } else if (this.germplasmGnpis.subtaxa) {
+            this.germplasmTaxon = this.germplasmGnpis.genus + ' ' + this.germplasmGnpis.species + ' ' + this.germplasmGnpis.subtaxa;
+            this.germplasmTaxonAuthor = this.germplasmGnpis.subtaxaAuthority;
+        } else if (this.germplasmGnpis.species) {
+            this.germplasmTaxon = this.germplasmGnpis.genus + ' ' + this.germplasmGnpis.species;
+            this.germplasmTaxonAuthor = this.germplasmGnpis.speciesAuthority;
         } else {
-            germplasm$ = this.gnpisService.germplasmByPuid(pui).toPromise();
-        }
-        germplasm$
-            .then(germplasmGnpis => {
-                this.germplasmGnpis = germplasmGnpis;
-                // Get germplasm source
-                const sourceURI = germplasmGnpis['schema:includedInDataCatalog'];
-                this.getGermplasmSource(sourceURI);
-                this.getTaxon(germplasmGnpis);
-                this.reformatData(germplasmGnpis);
-            });
-        return germplasm$;
-    }
-
-    // TODO Remove the condition when the field includedInDataCatalog will be added to URGI study.
-    getGermplasmSource(sourceURI: string) {
-        if (sourceURI) {
-            const source$ = this.gnpisService.getSource(sourceURI);
-            source$
-                .subscribe(src => {
-                    this.germplasmSource = src;
-                });
-        } else {
-            const urgiURI = 'https://urgi.versailles.inra.fr';
-            const source$ = this.gnpisService.getSource(urgiURI);
-            source$
-                .subscribe(src => {
-                    this.germplasmSource = src;
-                });
-        }
-    }
-
-    getTaxon(germplasmGnpis) {
-        if (germplasmGnpis.genusSpeciesSubtaxa) {
-            this.germplasmTaxon = germplasmGnpis.genusSpeciesSubtaxa;
-            this.germplasmTaxonAuthor = germplasmGnpis.subtaxaAuthority;
-        } else if (germplasmGnpis.genusSpecies) {
-            this.germplasmTaxon = germplasmGnpis.genusSpecies;
-            this.germplasmTaxonAuthor = germplasmGnpis.speciesAuthority;
-        } else if (germplasmGnpis.subtaxa) {
-            this.germplasmTaxon = germplasmGnpis.genus + ' ' + germplasmGnpis.species + ' ' + germplasmGnpis.subtaxa;
-            this.germplasmTaxonAuthor = germplasmGnpis.subtaxaAuthority;
-        } else if (germplasmGnpis.species) {
-            this.germplasmTaxon = germplasmGnpis.genus + ' ' + germplasmGnpis.species;
-            this.germplasmTaxonAuthor = germplasmGnpis.speciesAuthority;
-        } else {
-            this.germplasmTaxon = germplasmGnpis.genus;
+            this.germplasmTaxon = this.germplasmGnpis.genus;
             this.germplasmTaxonAuthor = '';
         }
     }
 
     // TODO: do this in ETL!
-    reformatData(germplasmGnpis) {
+    reformatData() {
         if (this.germplasmGnpis.children) {
             this.germplasmProgeny = this.germplasmGnpis.children.sort();
         }

@@ -233,7 +233,7 @@ describe('GermplasmCardComponent', () => {
         const tester = new GermplasmCardComponentTester();
         const component = tester.componentInstance;
         tester.detectChanges();
-        component.loaded.then(() => {
+
             expect(component.germplasmGnpis).toBeTruthy();
             tester.detectChanges();
             expect(tester.title).toContainText('Germplasm: test');
@@ -244,7 +244,6 @@ describe('GermplasmCardComponent', () => {
             expect(tester.cardHeader[4]).toContainText('Donor');
             expect(tester.cardHeader[5]).toContainText('Distributor');
             expect(tester.cardHeader[6]).toContainText('Evaluation Data');
-        });
     }));
 });
 

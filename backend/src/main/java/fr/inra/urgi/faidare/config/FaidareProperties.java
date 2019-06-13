@@ -1,6 +1,6 @@
 package fr.inra.urgi.faidare.config;
 
-import fr.inra.urgi.gpds.domain.datadiscovery.data.DataSourceImpl;
+import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSourceImpl;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.validation.constraints.NotBlank;
