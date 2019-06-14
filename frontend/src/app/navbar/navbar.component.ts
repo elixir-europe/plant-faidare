@@ -10,9 +10,9 @@ interface Link {
     subMenu?: Link[];
 }
 interface Contributor {
-    name: string,
-    url: string,
-    logo: string
+    name: string;
+    url: string;
+    logo: string;
 }
 
 interface NavBar {

@@ -1,9 +1,9 @@
 import { async, TestBed } from '@angular/core/testing';
 import { GermplasmCardComponent } from './germplasm-card.component';
-import { ComponentTester, fakeRoute, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { GnpisService } from '../gnpis.service';
 import { BrapiService } from '../brapi.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
@@ -209,11 +209,19 @@ describe('GermplasmCardComponent', () => {
     brapiService.germplasmPedigree.and.returnValue(of(brapiGermplasmPedigree));
     brapiService.germplasmAttributes.and.returnValue(of(brapiGermplasmAttributes));
 
-    const activatedRoute = fakeRoute({
-        queryParams: of({ id: 'test' })
-    });
+
+    const activatedRouteParams = {
+        queryParams: of({ id: 'test' }),
+        snapshot: {
+            queryParams: convertToParamMap({
+                id: 'test'
+            })
+        }
+    };
+
 
     beforeEach(async(() => {
+
         TestBed.configureTestingModule({
             imports: [RouterTestingModule, NgbPopoverModule, MomentModule],
             declarations: [
@@ -224,7 +232,7 @@ describe('GermplasmCardComponent', () => {
             providers: [
                 { provide: BrapiService, useValue: brapiService },
                 { provide: GnpisService, useValue: gnpisService },
-                { provide: ActivatedRoute, useValue: activatedRoute },
+                { provide: ActivatedRoute, useValue: activatedRouteParams },
             ]
         });
     }));
@@ -234,6 +242,7 @@ describe('GermplasmCardComponent', () => {
         const component = tester.componentInstance;
         tester.detectChanges();
 
+        component.loaded.then(() => {
             expect(component.germplasmGnpis).toBeTruthy();
             tester.detectChanges();
             expect(tester.title).toContainText('Germplasm: test');
@@ -244,6 +253,9 @@ describe('GermplasmCardComponent', () => {
             expect(tester.cardHeader[4]).toContainText('Donor');
             expect(tester.cardHeader[5]).toContainText('Distributor');
             expect(tester.cardHeader[6]).toContainText('Evaluation Data');
+        });
     }));
-});
+
+})
+;
 

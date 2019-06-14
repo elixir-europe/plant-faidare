@@ -41,42 +41,42 @@ export class GermplasmCardComponent implements OnInit {
 
 
     async ngOnInit() {
-         this.route.queryParams.subscribe(queryParams => {
-         const { id, pui } = this.route.snapshot.queryParams;
+        this.route.queryParams.subscribe(() => {
+            const { id, pui } = this.route.snapshot.queryParams;
 
-        this.loaded = this.gnpisService.getGermplasm({ id, pui }).toPromise()
-            .then(germplasm => {
-                const germplasmId = id || germplasm.germplasmDbId;
-                this.germplasmGnpis = germplasm;
-                this.getTaxon();
-                this.reformatData();
+            this.loaded = this.gnpisService.getGermplasm({ id, pui }).toPromise()
+                .then(germplasm => {
+                    const germplasmId = id || germplasm.germplasmDbId;
+                    this.germplasmGnpis = germplasm;
+                    this.getTaxon();
+                    this.reformatData();
 
 
-                // TODO use the progeny call when the information about parent will be added.
-                /*const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
-                germplasmProgeny$
-                    .then(germplasmProgeny => {
-                        this.germplasmProgeny = germplasmProgeny.result;
-                    });*/
+                    // TODO use the progeny call when the information about parent will be added.
+                    /*const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
+                    germplasmProgeny$
+                        .then(germplasmProgeny => {
+                            this.germplasmProgeny = germplasmProgeny.result;
+                        });*/
 
-                this.germplasmPedigree = null;
-                this.brapiService.germplasmPedigree(germplasmId)
-                    .subscribe(germplasmPedigree => {
-                        this.germplasmPedigree = germplasmPedigree.result;
-                    });
+                    this.germplasmPedigree = null;
+                    this.brapiService.germplasmPedigree(germplasmId)
+                        .subscribe(germplasmPedigree => {
+                            this.germplasmPedigree = germplasmPedigree.result;
+                        });
 
-                this.germplasmAttributes = [];
-                this.brapiService.germplasmAttributes(germplasmId)
-                    .subscribe(germplasmAttributes => {
-                        if (germplasmAttributes.result && germplasmAttributes.result.data) {
-                            this.germplasmAttributes = germplasmAttributes.result.data.sort(this.compareAttributes);
-                        }
-                    });
+                    this.germplasmAttributes = [];
+                    this.brapiService.germplasmAttributes(germplasmId)
+                        .subscribe(germplasmAttributes => {
+                            if (germplasmAttributes.result && germplasmAttributes.result.data) {
+                                this.germplasmAttributes = germplasmAttributes.result.data.sort(this.compareAttributes);
+                            }
+                        });
 
-                this.loading = false;
-                this.alreadyInitialize = true;
-            });
-       });
+                    this.loading = false;
+                    this.alreadyInitialize = true;
+                });
+        });
 
     }
 
