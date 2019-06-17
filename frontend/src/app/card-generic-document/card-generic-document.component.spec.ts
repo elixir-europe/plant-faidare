@@ -82,7 +82,6 @@ describe('CardGenericDocumentComponent', () => {
         tester.detectChanges();
 
         expect(tester.componentInstance.dataSource).toBe(dataSource);
-        expect(tester.dataSource).toContainText(dataSource['schema:name']);
     }));
 
 
