@@ -35,6 +35,6 @@ public interface DataSource extends DataCatalog {
 
     @Override
     @JsonView(JSONView.GnpISFields.class)
-    String getImageUrl();
+    String getImage();
 
 }

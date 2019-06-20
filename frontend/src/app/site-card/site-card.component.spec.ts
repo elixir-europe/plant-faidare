@@ -15,6 +15,7 @@ import { GnpisService } from '../gnpis.service';
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
 import { CoordinatesPipe, CoordinatesService } from 'angular-coordinates';
+import { CardGenericDocumentComponent } from '../card-generic-document/card-generic-document.component';
 
 
 describe('SiteCardComponent', () => {
@@ -60,7 +61,6 @@ describe('SiteCardComponent', () => {
     const source: DataDiscoverySource = {
         '@id': 'src1',
         '@type': ['schema:DataCatalog'],
-        'schema:identifier': 'srcId',
         'schema:name': 'source1',
         'schema:url': 'srcUrl',
         'schema:image': null
@@ -71,7 +71,7 @@ describe('SiteCardComponent', () => {
             declarations: [
                 SiteCardComponent, MapComponent, LoadingSpinnerComponent,
                 CardRowComponent, CardSectionComponent, CardTableComponent, CoordinatesPipe,
-                MockComponent(XrefsComponent)
+                MockComponent(CardGenericDocumentComponent), MockComponent(XrefsComponent)
             ],
             providers: [
                 { provide: BrapiService, useValue: brapiService },

@@ -15,7 +15,6 @@ import {
     BrapiTrial
 } from '../models/brapi.model';
 import { BrapiService } from '../brapi.service';
-import { GnpisService } from '../gnpis.service';
 import { DataDiscoverySource } from '../models/data-discovery.model';
 import { MapComponent } from '../map/map.component';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -25,6 +24,7 @@ import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.comp
 import { CardTableComponent } from '../card-table/card-table.component';
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
+import { CardGenericDocumentComponent } from '../card-generic-document/card-generic-document.component';
 
 
 describe('StudyCardComponent', () => {
@@ -52,22 +52,17 @@ describe('StudyCardComponent', () => {
         }
     }
 
-    const brapiService = jasmine.createSpyObj(
-        'BrapiService', [
-            'study',
-            'studyTrials',
-            'studyObservationVariables',
-            'studyGermplasms'
-        ]
-    );
-
-    const gnpisService = jasmine.createSpyObj(
-        'GnpisService', ['getSource']
-    );
-
     const activatedRoute = fakeRoute({
         params: of({ id: 's1' })
     });
+
+    const source: DataDiscoverySource = {
+        '@id': 'src1',
+        '@type': ['schema:DataCatalog'],
+        'schema:name': 'source1',
+        'schema:url': 'srcUrl',
+        'schema:image': null
+    };
 
     const location: BrapiLocation = {
         locationDbId: '1',
@@ -110,7 +105,7 @@ describe('StudyCardComponent', () => {
             additionalInfo: null,
             documentationURL: 'http://example.com/Study/s1',
             dataLinks: [],
-            'schema:includedInDataCatalog': 'src1'
+            'schema:includedInDataCatalog': source
         } as BrapiStudy
     };
 
@@ -218,33 +213,31 @@ describe('StudyCardComponent', () => {
         }
     };
 
-    const source: DataDiscoverySource = {
-        '@id': 'src1',
-        '@type': ['schema:DataCatalog'],
-        'schema:identifier': 'srcId',
-        'schema:name': 'source1',
-        'schema:url': 'srcUrl',
-        'schema:image': null
-    };
-
+    const brapiService = jasmine.createSpyObj(
+        'BrapiService', [
+            'study',
+            'studyTrials',
+            'studyObservationVariables',
+            'studyGermplasms'
+        ]
+    );
     brapiService.study.and.returnValue(of(searchStudy));
     brapiService.studyTrials.withArgs('10').and.returnValue(of(trial1));
     brapiService.studyTrials.withArgs('20').and.returnValue(of(trial2));
     brapiService.studyObservationVariables.and.returnValue(of(osbVariable));
     brapiService.studyGermplasms.and.returnValue(of(germplasm));
-    gnpisService.getSource.and.returnValue(of(source));
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule],
             declarations: [
                 StudyCardComponent, MapComponent, CardSectionComponent,
-                CardRowComponent, LoadingSpinnerComponent, CardTableComponent, MockComponent(XrefsComponent)
+                CardRowComponent, LoadingSpinnerComponent, CardTableComponent,
+                MockComponent(CardGenericDocumentComponent), MockComponent(XrefsComponent)
             ],
             providers: [
                 { provide: ActivatedRoute, useValue: activatedRoute },
-                { provide: BrapiService, useValue: brapiService },
-                { provide: GnpisService, useValue: gnpisService }
+                { provide: BrapiService, useValue: brapiService }
             ]
         });
     }));

@@ -1,9 +1,9 @@
 import { async, TestBed } from '@angular/core/testing';
 import { GermplasmCardComponent } from './germplasm-card.component';
-import { ComponentTester, fakeRoute, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { GnpisService } from '../gnpis.service';
 import { BrapiService } from '../brapi.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
@@ -19,6 +19,7 @@ import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } f
 import { DataDiscoverySource } from '../models/data-discovery.model';
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
+import { CardGenericDocumentComponent } from '../card-generic-document/card-generic-document.component';
 
 
 describe('GermplasmCardComponent', () => {
@@ -38,23 +39,6 @@ describe('GermplasmCardComponent', () => {
             return this.elements('div.card-header');
         }
     }
-
-    const brapiService = jasmine.createSpyObj(
-        'BrapiService', [
-            'germplasm',
-            /*'germplasmProgeny',*/
-            'germplasmPedigree',
-            'germplasmAttributes'
-        ]
-    );
-
-    const gnpisService = jasmine.createSpyObj(
-        'GnpisService', [
-            'germplasm',
-            'germplasmByPuid',
-            'getSource'
-        ]
-    );
 
     const gnpisSite: Site = {
         latitude: null,
@@ -150,6 +134,14 @@ describe('GermplasmCardComponent', () => {
         }
     };
 
+    const source: DataDiscoverySource = {
+        '@id': 'src1',
+        '@type': ['schema:DataCatalog'],
+        'schema:name': 'source1',
+        'schema:url': 'srcUrl',
+        'schema:image': null
+    };
+
     const germplasmTest: Germplasm = {
         germplasmDbId: 'test',
         defaultDisplayName: 'test',
@@ -193,49 +185,63 @@ describe('GermplasmCardComponent', () => {
         distributors: [gnpisGermplasmInstitute],
         panel: [gnpisGermplasmSet],
         collection: [gnpisGermplasmSet],
-        population: [gnpisGermplasmSet]
+        population: [gnpisGermplasmSet],
+        'schema:includedInDataCatalog': source
     };
 
-    const source: DataDiscoverySource = {
-        '@id': 'src1',
-        '@type': ['schema:DataCatalog'],
-        'schema:identifier': 'srcId',
-        'schema:name': 'source1',
-        'schema:url': 'srcUrl',
-        'schema:image': null
+    const gnpisService = jasmine.createSpyObj(
+        'GnpisService', [
+            'getGermplasm',
+            'getSource'
+        ]
+    );
+    gnpisService.getGermplasm.and.returnValue(of(germplasmTest));
+    gnpisService.getSource.and.returnValue(of(source));
+
+    const brapiService = jasmine.createSpyObj(
+        'BrapiService', [
+            // 'germplasmProgeny',
+            'germplasmPedigree',
+            'germplasmAttributes'
+        ]
+    );
+    // brapiService.germplasmProgeny.and.returnValue(of(brapiGermplasmProgeny));
+    brapiService.germplasmPedigree.and.returnValue(of(brapiGermplasmPedigree));
+    brapiService.germplasmAttributes.and.returnValue(of(brapiGermplasmAttributes));
+
+
+    const activatedRouteParams = {
+        queryParams: of({ id: 'test' }),
+        snapshot: {
+            queryParams: convertToParamMap({
+                id: 'test'
+            })
+        }
     };
 
-    const activatedRoute = fakeRoute({
-        queryParams: of({ id: 'test' })
-    });
 
     beforeEach(async(() => {
+
         TestBed.configureTestingModule({
             imports: [RouterTestingModule, NgbPopoverModule, MomentModule],
             declarations: [
                 GermplasmCardComponent, LoadingSpinnerComponent, MockComponent(XrefsComponent), CardSectionComponent,
-                CardRowComponent, LoadingSpinnerComponent, CardTableComponent, MapComponent
+                CardRowComponent, LoadingSpinnerComponent, CardTableComponent,
+                MapComponent, MockComponent(CardGenericDocumentComponent)
             ],
             providers: [
                 { provide: BrapiService, useValue: brapiService },
                 { provide: GnpisService, useValue: gnpisService },
-                { provide: ActivatedRoute, useValue: activatedRoute },
+                { provide: ActivatedRoute, useValue: activatedRouteParams },
             ]
         });
     }));
-
-
-    gnpisService.germplasm.and.returnValue(of(germplasmTest));
-    gnpisService.germplasmByPuid.and.returnValue(of(germplasmTest));
-    gnpisService.getSource.and.returnValue(of(source));
-    /*brapiService.germplasmProgeny.and.returnValue(of(brapiGermplasmProgeny));*/
-    brapiService.germplasmPedigree.and.returnValue(of(brapiGermplasmPedigree));
-    brapiService.germplasmAttributes.and.returnValue(of(brapiGermplasmAttributes));
 
     it('should fetch germplasm information', async(() => {
         const tester = new GermplasmCardComponentTester();
         const component = tester.componentInstance;
         tester.detectChanges();
+
         component.loaded.then(() => {
             expect(component.germplasmGnpis).toBeTruthy();
             tester.detectChanges();
@@ -249,5 +255,7 @@ describe('GermplasmCardComponent', () => {
             expect(tester.cardHeader[6]).toContainText('Evaluation Data');
         });
     }));
-});
+
+})
+;
 

@@ -19,7 +19,19 @@ export interface KeyValueObject {
  */
 export function toKeyValueObjects(object: Record<string, string>): KeyValueObject[] {
     return Object.entries(object)
-            .filter(([key, value]) => !!key && !!value)
-            .map(([key, value]) => ({ key, value }));
+        .filter(([key, value]) => !!key && !!value)
+        .map(([key, value]) => ({ key, value }));
 }
 
+
+/**
+ * Takes an object copies non null and non undefined field/value into a new object
+ */
+export function removeNullUndefined(obj: Record<string, any>): Record<string, any> {
+    return Object.entries(obj)
+        .filter(([key, value]) => value !== undefined && value !== null)
+        .reduce((newObject, [key, value]) => {
+            newObject[key] = value;
+            return newObject;
+        }, {});
+}

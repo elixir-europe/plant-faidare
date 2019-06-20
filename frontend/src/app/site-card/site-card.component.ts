@@ -35,22 +35,7 @@ export class SiteCardComponent implements OnInit {
                     if (this.location.additionalInfo) {
                         this.manageAdditionalInfo(toKeyValueObjects(this.location.additionalInfo).sort());
                     }
-                    const sourceURI = location['schema:includedInDataCatalog'];
-                    // TODO Remove the condition when the field includedInDataCatalog will be added to URGI study.
-                    if (sourceURI) {
-                        const source$ = this.gnpisService.getSource(sourceURI);
-                        source$
-                            .subscribe(src => {
-                                this.locationSource = src;
-                            });
-                    } else {
-                        const urgiURI = 'https://urgi.versailles.inra.fr';
-                        const source$ = this.gnpisService.getSource(urgiURI);
-                        source$
-                            .subscribe(src => {
-                                this.locationSource = src;
-                            });
-                    }
+                    this.locationSource = location['schema:includedInDataCatalog'];
                     this.loading = false;
                 }
             );

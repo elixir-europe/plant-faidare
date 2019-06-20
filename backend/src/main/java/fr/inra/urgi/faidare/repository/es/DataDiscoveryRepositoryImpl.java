@@ -78,7 +78,7 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
 
     @Override
     public LinkedHashSet<String> suggest(
-        String criteriaField, String searchText, Long fetchSize, DataDiscoveryCriteria criteria
+        String criteriaField, String searchText, Integer fetchSize, DataDiscoveryCriteria criteria
     ) {
         String documentFieldPath = criteriaMapping.getDocumentPath(criteriaField, true);
         return suggestRepository.suggest(documentFieldPath, searchText, fetchSize, criteria);

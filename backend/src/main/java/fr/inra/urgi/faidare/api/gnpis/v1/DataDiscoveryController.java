@@ -1,12 +1,13 @@
 package fr.inra.urgi.faidare.api.gnpis.v1;
 
+import fr.inra.urgi.faidare.config.FaidareProperties;
 import fr.inra.urgi.faidare.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.faidare.domain.datadiscovery.criteria.DataDiscoveryCriteriaImpl;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSource;
+import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSourceImpl;
 import fr.inra.urgi.faidare.domain.datadiscovery.response.DataDiscoveryResponse;
 import fr.inra.urgi.faidare.domain.response.ApiResponseFactory;
 import fr.inra.urgi.faidare.repository.es.DataDiscoveryRepository;
-import fr.inra.urgi.faidare.repository.file.DataSourceRepository;
 import fr.inra.urgi.faidare.utils.StringFunctions;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -26,12 +27,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class DataDiscoveryController {
 
     private final DataDiscoveryRepository dataDiscoveryRepository;
-    private final DataSourceRepository dataSourceRepository;
+    private final FaidareProperties properties;
 
     @Autowired
-    public DataDiscoveryController(DataDiscoveryRepository dataDiscoveryRepository, DataSourceRepository dataSourceRepository) {
+    public DataDiscoveryController(DataDiscoveryRepository dataDiscoveryRepository, FaidareProperties properties) {
         this.dataDiscoveryRepository = dataDiscoveryRepository;
-        this.dataSourceRepository = dataSourceRepository;
+        this.properties = properties;
     }
 
     @ApiOperation("Suggest data discovery document field values")
@@ -39,9 +40,12 @@ public class DataDiscoveryController {
     public Collection<String> suggest(
         @RequestParam String field,
         @RequestParam(required = false) String text,
-        @RequestParam(required = false) Long fetchSize,
+        @RequestParam(required = false) Integer fetchSize,
         @RequestBody(required = false) @Valid DataDiscoveryCriteriaImpl criteria
     ) throws UnsupportedEncodingException {
+        if (fetchSize == null) {
+            fetchSize = Integer.MAX_VALUE;
+        }
         return dataDiscoveryRepository.suggest(field, StringFunctions.asUTF8(text), fetchSize, criteria);
     }
 
@@ -56,8 +60,8 @@ public class DataDiscoveryController {
     @ApiOperation("Get list of data sources")
     @GetMapping("/sources")
     public BrapiListResponse<? extends DataSource> sources() {
-        Collection<DataSource> dataSources = dataSourceRepository.listAll();
-        return ApiResponseFactory.createSubListResponse(dataSources.size(), 0, new ArrayList<>(dataSources));
+        List<DataSourceImpl> dataSources = properties.getDataSources();
+        return ApiResponseFactory.createSubListResponse(dataSources.size(), 0, dataSources);
     }
 
 }

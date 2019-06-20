@@ -56,9 +56,9 @@ class DataDiscoveryRepositoryTest {
     @Test
     void should_Suggest_Fetch_Size() {
         String field = "crops";
-        Long fetchSize = 5L;
+        Integer fetchSize = 5;
         Collection<String> result = repository.suggest(field, null, fetchSize, null);
-        assertThat(result).isNotNull().hasSize(fetchSize.intValue());
+        assertThat(result).isNotNull().hasSize(fetchSize);
     }
 
     @Test

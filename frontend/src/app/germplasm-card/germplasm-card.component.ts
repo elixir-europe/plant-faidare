@@ -4,7 +4,6 @@ import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
 import { BrapiAttributeData, BrapiGermplasmPedigree, BrapiLocation, BrapiTaxonIds } from '../models/brapi.model';
 import { Children, Germplasm, Site } from '../models/gnpis.model';
-import { DataDiscoverySource } from '../models/data-discovery.model';
 
 @Component({
     selector: 'faidare-germplasm-card',
@@ -32,126 +31,86 @@ export class GermplasmCardComponent implements OnInit {
     germplasmProgeny: Children[];
     germplasmAttributes: BrapiAttributeData[];
     germplasmLocations: BrapiLocation[] = [];
-    germplasmId: string;
-    germplasmPuid: string;
     germplasmTaxon: string;
     germplasmTaxonAuthor: string;
-    germplasmSource: DataDiscoverySource;
     toReplace = /_/g;
 
 
-    loaded: Promise<any>;
+    loaded: Promise<void>;
     loading = true;
 
-    ngOnInit() {
 
-        this.route.queryParams.subscribe(queryParams => {
+    async ngOnInit() {
+        this.route.queryParams.subscribe(() => {
+            const { id, pui } = this.route.snapshot.queryParams;
 
-            this.germplasmId = queryParams.id;
-            this.germplasmPuid = queryParams.pui;
+            this.loaded = this.gnpisService.getGermplasm({ id, pui }).toPromise()
+                .then(germplasm => {
+                    const germplasmId = id || germplasm.germplasmDbId;
+                    this.germplasmGnpis = germplasm;
+                    this.getTaxon();
+                    this.reformatData();
 
-            const germplasm$ = this.getGermplasm(this.germplasmId, this.germplasmPuid);
-            germplasm$.then(result => {
-                const germplasmId = this.germplasmId ? this.germplasmId : result.germplasmDbId;
 
-                // TODO use the progeny call when the information about parent will be added.
-                /*const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
-                germplasmProgeny$
-                    .then(germplasmProgeny => {
-                        this.germplasmProgeny = germplasmProgeny.result;
-                    });*/
+                    // TODO use the progeny call when the information about parent will be added.
+                    /*const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
+                    germplasmProgeny$
+                        .then(germplasmProgeny => {
+                            this.germplasmProgeny = germplasmProgeny.result;
+                        });*/
 
-                const germplasmPedigree$ = this.brapiService.germplasmPedigree(germplasmId).toPromise();
-                germplasmPedigree$
-                    .then(germplasmPedigree => {
-                        this.germplasmPedigree = germplasmPedigree.result;
-                    });
+                    this.germplasmPedigree = null;
+                    this.brapiService.germplasmPedigree(germplasmId)
+                        .subscribe(germplasmPedigree => {
+                            this.germplasmPedigree = germplasmPedigree.result;
+                        });
 
-                const germplasmAttributes$ = this.brapiService.germplasmAttributes(germplasmId).toPromise();
-                germplasmAttributes$
-                    .then(germplasmAttributes => {
-                        if (germplasmAttributes.result && germplasmAttributes.result.data) {
-                            this.germplasmAttributes = germplasmAttributes.result.data.sort(this.compareAttributes);
-                        }
+                    this.germplasmAttributes = [];
+                    this.brapiService.germplasmAttributes(germplasmId)
+                        .subscribe(germplasmAttributes => {
+                            if (germplasmAttributes.result && germplasmAttributes.result.data) {
+                                this.germplasmAttributes = germplasmAttributes.result.data.sort(this.compareAttributes);
+                            }
+                        });
 
-                    });
-            });
-
-            this.loaded = Promise.all([germplasm$]);
-            this.loaded.then(() => {
-                this.loading = false;
-                this.alreadyInitialize = true;
-            });
+                    this.loading = false;
+                    this.alreadyInitialize = true;
+                });
         });
+
     }
 
-    getGermplasm(id: string, pui: string): Promise<Germplasm> {
-        let germplasm$: Promise<Germplasm>;
-        if (id) {
-            germplasm$ = this.gnpisService.germplasm(id).toPromise();
+    getTaxon() {
+        if (this.germplasmGnpis.genusSpeciesSubtaxa) {
+            this.germplasmTaxon = this.germplasmGnpis.genusSpeciesSubtaxa;
+            this.germplasmTaxonAuthor = this.germplasmGnpis.subtaxaAuthority;
+        } else if (this.germplasmGnpis.genusSpecies) {
+            this.germplasmTaxon = this.germplasmGnpis.genusSpecies;
+            this.germplasmTaxonAuthor = this.germplasmGnpis.speciesAuthority;
+        } else if (this.germplasmGnpis.subtaxa) {
+            this.germplasmTaxon = this.germplasmGnpis.genus + ' ' + this.germplasmGnpis.species + ' ' + this.germplasmGnpis.subtaxa;
+            this.germplasmTaxonAuthor = this.germplasmGnpis.subtaxaAuthority;
+        } else if (this.germplasmGnpis.species) {
+            this.germplasmTaxon = this.germplasmGnpis.genus + ' ' + this.germplasmGnpis.species;
+            this.germplasmTaxonAuthor = this.germplasmGnpis.speciesAuthority;
         } else {
-            germplasm$ = this.gnpisService.germplasmByPuid(pui).toPromise();
-        }
-        germplasm$
-            .then(germplasmGnpis => {
-                this.germplasmGnpis = germplasmGnpis;
-                // Get germplasm source
-                const sourceURI = germplasmGnpis['schema:includedInDataCatalog'];
-                this.getGermplasmSource(sourceURI);
-                this.getTaxon(germplasmGnpis);
-                this.reformatData(germplasmGnpis);
-            });
-        return germplasm$;
-    }
-
-    // TODO Remove the condition when the field includedInDataCatalog will be added to URGI study.
-    getGermplasmSource(sourceURI: string) {
-        if (sourceURI) {
-            const source$ = this.gnpisService.getSource(sourceURI);
-            source$
-                .subscribe(src => {
-                    this.germplasmSource = src;
-                });
-        } else {
-            const urgiURI = 'https://urgi.versailles.inra.fr';
-            const source$ = this.gnpisService.getSource(urgiURI);
-            source$
-                .subscribe(src => {
-                    this.germplasmSource = src;
-                });
-        }
-    }
-
-    getTaxon(germplasmGnpis) {
-        if (germplasmGnpis.genusSpeciesSubtaxa) {
-            this.germplasmTaxon = germplasmGnpis.genusSpeciesSubtaxa;
-            this.germplasmTaxonAuthor = germplasmGnpis.subtaxaAuthority;
-        } else if (germplasmGnpis.genusSpecies) {
-            this.germplasmTaxon = germplasmGnpis.genusSpecies;
-            this.germplasmTaxonAuthor = germplasmGnpis.speciesAuthority;
-        } else if (germplasmGnpis.subtaxa) {
-            this.germplasmTaxon = germplasmGnpis.genus + ' ' + germplasmGnpis.species + ' ' + germplasmGnpis.subtaxa;
-            this.germplasmTaxonAuthor = germplasmGnpis.subtaxaAuthority;
-        } else if (germplasmGnpis.species) {
-            this.germplasmTaxon = germplasmGnpis.genus + ' ' + germplasmGnpis.species;
-            this.germplasmTaxonAuthor = germplasmGnpis.speciesAuthority;
-        } else {
-            this.germplasmTaxon = germplasmGnpis.genus;
+            this.germplasmTaxon = this.germplasmGnpis.genus;
             this.germplasmTaxonAuthor = '';
         }
     }
 
-    reformatData(germplasmGnpis) {
-        if (germplasmGnpis.children) {
-            this.germplasmProgeny = germplasmGnpis.children.sort();
+    // TODO: do this in ETL!
+    reformatData() {
+        if (this.germplasmGnpis.children) {
+            this.germplasmProgeny = this.germplasmGnpis.children.sort();
         }
-        if (germplasmGnpis.donors) {
+        if (this.germplasmGnpis.donors) {
             this.germplasmGnpis.donors.sort(this.compareDonorInstitutes);
         }
-        if (germplasmGnpis.collection) {
+        if (this.germplasmGnpis.collection) {
             this.germplasmGnpis.collection.sort(this.compareCollectionPopulationPanel);
         }
-        if (germplasmGnpis.population) {
+        if (this.germplasmGnpis.population) {
             this.germplasmGnpis.population.sort(this.compareCollectionPopulationPanel);
         }
         if (this.germplasmGnpis.panel) {
@@ -173,6 +132,7 @@ export class GermplasmCardComponent implements OnInit {
         }
     }
 
+    // TODO: do this in ETL!
     siteToBrapiLocation(site: Site) {
         if (site && site.siteId && site.latitude && site.longitude) {
             this.germplasmLocations.push({

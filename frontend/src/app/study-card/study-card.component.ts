@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { BrapiService } from '../brapi.service';
 import { ActivatedRoute } from '@angular/router';
 import { BrapiGermplasm, BrapiObservationVariable, BrapiStudy, BrapiTrial } from '../models/brapi.model';
-
-import { GnpisService } from '../gnpis.service';
-import { DataDiscoverySource } from '../models/data-discovery.model';
 import { KeyValueObject, toKeyValueObjects } from '../utils';
 
 @Component({
@@ -15,7 +12,6 @@ import { KeyValueObject, toKeyValueObjects } from '../utils';
 export class StudyCardComponent implements OnInit {
 
     study: BrapiStudy;
-    studySource: DataDiscoverySource;
     studyGermplasms: BrapiGermplasm[];
     studyObservationVariables: BrapiObservationVariable[];
     additionalInfos: KeyValueObject[];
@@ -24,7 +20,7 @@ export class StudyCardComponent implements OnInit {
     loading: boolean;
     loaded: Promise<any>;
 
-    constructor(private brapiService: BrapiService, private  gnpisService: GnpisService, private route: ActivatedRoute) {
+    constructor(private brapiService: BrapiService, private route: ActivatedRoute) {
     }
 
     ngOnInit() {
@@ -69,24 +65,6 @@ export class StudyCardComponent implements OnInit {
                                 var1.trialName.localeCompare(var2.trialName));
                         }
                     }
-
-                    // Get study source
-                    // TODO Remove the condition when the field includedInDataCatalog will be added to URGI study.
-                    const sourceURI = this.study['schema:includedInDataCatalog'];
-                    if (sourceURI) {
-                        const source$ = this.gnpisService.getSource(sourceURI);
-                        source$
-                            .subscribe(src => {
-                                this.studySource = src;
-                            });
-                    } else {
-                        const urgiURI = 'https://urgi.versailles.inra.fr';
-                        const source$ = this.gnpisService.getSource(urgiURI);
-                        source$
-                            .subscribe(src => {
-                                this.studySource = src;
-                            });
-                    }
                 });
 
             this.studyObservationVariables = [];
@@ -111,9 +89,5 @@ export class StudyCardComponent implements OnInit {
             });
         });
 
-    }
-
-    isNotURN(pui: string) {
-        return !(pui.substring(0, 3) === 'urn');
     }
 }

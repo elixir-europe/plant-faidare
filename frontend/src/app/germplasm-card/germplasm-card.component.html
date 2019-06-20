@@ -232,31 +232,11 @@
             [value]="germplasmGnpis.accessionNumber">
           </faidare-card-row>
 
-          <faidare-card-row
-            label="Permanent Unique Identifier"
-            [value]="germplasmGnpis.germplasmPUI">
-          </faidare-card-row>
-
-          <faidare-card-row
-            label="Source"
-            [test]="germplasmSource">
-            <ng-template>
-              <a target="_blank"
-                 [href]="germplasmSource['schema:url']">
-                <img [src]="germplasmSource['schema:image']" alt="Germplasm source image" style="height: 60px"/>
-              </a>
-            </ng-template>
-          </faidare-card-row>
-
-          <faidare-card-row
-            label="Data source"
-            [test]="germplasmSource['schema:identifier'] && germplasmGnpis.documentationURL">
-            <ng-template>
-              <a target="_blank" [href]="germplasmGnpis.documentationURL">
-                Link to this germplasm on {{ germplasmSource['schema:name'] }}
-              </a>
-            </ng-template>
-          </faidare-card-row>
+          <!-- Display generic document details (PUI, data source links, etc.) -->
+          <faidare-card-generic-document
+            [document]="germplasmGnpis"
+            documentType="germplasm">
+          </faidare-card-generic-document>
 
           <faidare-card-row
             label="Accession synonyms"
@@ -554,7 +534,7 @@
               <td>
                 <a class="popovers" placement="auto"
                    [autoClose]="'outside'"
-                   [ngbPopover]="instituteTemplate"
+                   [ngbPopover]="distributorInstituteTemplate"
                    [popoverTitle]="row.institute.instituteName">
                   {{ row.institute.instituteName }}
                 </a>

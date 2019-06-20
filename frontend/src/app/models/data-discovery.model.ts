@@ -1,6 +1,7 @@
 import { BrapiResults } from './brapi.model';
 import { Params } from '@angular/router';
 import { asArray } from '../utils';
+import * as schema from './schema.org.model';
 
 
 export const MAX_RESULTS = 10000;
@@ -74,16 +75,9 @@ export class DataDiscoveryCriteriaUtils {
     }
 }
 
-export interface DataDiscoverySource {
-    ['@id']: string;
-    ['@type']: ['schema:DataCatalog'];
-    ['schema:identifier']: string;
-    ['schema:name']: string;
-    ['schema:url']: string;
-    ['schema:image']: string;
-}
+export type DataDiscoverySource = schema.DataCatalog;
 
-export interface DataDiscoveryDocument {
+export interface DataDiscoveryDocument extends schema.Dataset {
     ['@id']: string;
     ['@type']: DataDiscoveryType[];
     ['schema:identifier']: string;
@@ -93,6 +87,7 @@ export interface DataDiscoveryDocument {
     ['schema:includedInDataCatalog']: DataDiscoverySource;
 }
 
+// TODO: use enum
 export type DataDiscoveryType = 'Germplasm' | 'Phenotyping Study';
 
 export interface DataDiscoveryResults extends BrapiResults<DataDiscoveryDocument> {

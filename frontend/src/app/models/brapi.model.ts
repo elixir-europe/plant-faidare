@@ -1,3 +1,5 @@
+import * as schema from './schema.org.model';
+
 export interface BrapiMetaData {
     pagination: {
         pageSize: number;
@@ -7,28 +9,27 @@ export interface BrapiMetaData {
     };
 }
 
-
+/**
+ * BrAPI single response
+ */
 export interface BrapiResult<T> {
     metadata: BrapiMetaData;
     result: T;
 }
 
-
-export interface BrapiData<T> {
+/**
+ * BrAPI list response
+ */
+export type BrapiResults<T> = BrapiResult<{
     data: T[];
-}
-
-
-export interface BrapiResults<T> extends BrapiResult<BrapiData<T>> {
-}
+}>;
 
 
 interface BrapiHasDocumentationURL {
     documentationURL?: string;
 }
 
-
-export interface BrapiStudy extends BrapiHasDocumentationURL {
+export interface BrapiStudy extends BrapiHasDocumentationURL, schema.Dataset {
     studyDbId: string;
     studyType: string;
     studyName: string;
@@ -60,7 +61,7 @@ export interface BrapiContacts {
 }
 
 
-export interface BrapiLocation extends BrapiHasDocumentationURL  {
+export interface BrapiLocation extends BrapiHasDocumentationURL, schema.Dataset {
     locationDbId: string;
     locationName: string;
     locationType: string;
@@ -110,7 +111,7 @@ export interface BrapiTrial extends BrapiHasDocumentationURL {
     }[];
 }
 
-export interface BrapiGermplasm extends BrapiHasDocumentationURL {
+export interface BrapiGermplasm extends BrapiHasDocumentationURL, schema.Dataset {
     germplasmDbId: string;
     defaultDisplayName: string;
     accessionNumber: string;
