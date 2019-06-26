@@ -18,24 +18,39 @@
 
           <!-- OR Dropdown button -->
           <div class="mr-2" *ngIf="link.subMenu" class="dropdown-container" ngbDropdown>
-
             <!-- Toggle button -->
             <a class="nav-link d-flex align-items-center dropdown-toggle" ngbDropdownToggle
                role="button"
                aria-haspopup="true"
-               aria-expanded="false">
-              {{ link.label }}
-            </a>
-
+               aria-expanded="false">{{ link.label }}</a>
             <!-- Items -->
             <div class="dropdown-menu" ngbDropdownMenu>
               <div *ngFor="let subItem of link.subMenu">
                 <a class="dropdown-item"
-                   target="_blank"
-                   [href]="subItem.url">
-                  {{ subItem.label }}
-                </a>
+                   target="_blank" [href]="subItem.url">{{ subItem.label }}</a>
               </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Documentation -->
+        <li class="nav-item">
+          <div class="mr-2" class="dropdown-container" ngbDropdown>
+            <a class="nav-link d-flex align-items-center dropdown-toggle" ngbDropdownToggle
+               role="button"
+               aria-haspopup="true"
+               aria-expanded="false">
+              More ...
+            </a>
+            <div class="dropdown-menu" ngbDropdownMenu>
+              <!-- About link -->
+              <a class="dropdown-item" routerLink="/about" routerLinkActive="true" title="About">About</a>
+              <!-- Join us link -->
+              <a class="dropdown-item" routerLink="/join" routerLinkActive="true" title="Join us">Join us</a>
+              <!-- Legal mentions link -->
+              <a class="dropdown-item" routerLink="/legal" routerLinkActive="true" title="Legal mentions" >Legal mentions</a>
+              <!-- Help link -->
+              <a class="dropdown-item" routerLink="/help" routerLinkActive="true" title="Help">Help</a>
             </div>
           </div>
         </li>

@@ -33,6 +33,7 @@
     "leaflet.markercluster": "1.4.1",
     "moment": "2.24.0",
     "ng-mocks": "^7.6.0",
+    "ngx-markdown": "^8.0.2",
     "ngx-moment": "3.3.0",
     "popper.js": "1.14.6",
     "rxjs": "6.4.0",

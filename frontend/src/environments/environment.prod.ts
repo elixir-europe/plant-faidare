@@ -14,6 +14,16 @@ export const environment = {
                     { label: 'News', url: 'https://urgi.versailles.inra.fr/About-us/News' },
                     { label: 'About us', url: 'https://urgi.versailles.inra.fr/About-us' }
                 ]
+            },
+            {
+                label: 'Data providers',
+                url: '#',
+                subMenu: [
+                    { label: 'GNPIS', url: 'https://urgi.versailles.inra.fr/gnpis/' },
+                    { label: 'CIRAD TropGENE', url: 'http://tropgenedb.cirad.fr/' },
+                    { label: 'VIB Pippa', url: 'http://pippa.psb.ugent.be' },
+                    { label: 'IBET BioData', url: 'https://biodata.pt' }
+                ]
             }
         ],
         contributor: {
@@ -21,5 +31,9 @@ export const environment = {
             url: 'https://elixir-europe.org/',
             logo: 'assets/elixir_logo.png'
         }
-    }
+    },
+    helpMdFile: 'assets/help.md',
+    aboutUsMdFile: 'assets/about.md',
+    joinUsMdFile: 'assets/join.md',
+    legalMentionsMdFile: 'assets/legal.md',
 };

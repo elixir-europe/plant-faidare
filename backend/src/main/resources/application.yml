@@ -75,6 +75,7 @@ server:
       - application/javascript
       - text/html
       - text/css
+      - text/markdown
   port: 8380
   servlet:
     context-path: /faidare-dev

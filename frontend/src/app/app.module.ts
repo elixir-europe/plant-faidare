@@ -7,7 +7,7 @@ import { ResultPageComponent } from './result-page/result-page.component';
 import { GermplasmCardComponent } from './germplasm-card/germplasm-card.component';
 import { StudyCardComponent } from './study-card/study-card.component';
 import { SiteCardComponent } from './site-card/site-card.component';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
 import { NgbAlertModule, NgbDropdownModule, NgbPaginationModule, NgbPopoverModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
@@ -26,7 +26,8 @@ import { MomentModule } from 'ngx-moment';
 import { XrefsComponent } from './xrefs/xrefs.component';
 import { CoordinatesModule } from 'angular-coordinates';
 import { CardGenericDocumentComponent } from './card-generic-document/card-generic-document.component';
-
+import { MarkdownModule, MarkedOptions, MarkedRenderer } from "ngx-markdown";
+import { MarkdownPageComponent } from "./markdown-page/markdown-page.component";
 
 @NgModule({
     declarations: [
@@ -48,7 +49,8 @@ import { CardGenericDocumentComponent } from './card-generic-document/card-gener
         LoadingSpinnerComponent,
         CardTableComponent,
         XrefsComponent,
-        CardGenericDocumentComponent
+        CardGenericDocumentComponent,
+        MarkdownPageComponent
     ],
     imports: [
         BrowserModule,
@@ -62,7 +64,24 @@ import { CardGenericDocumentComponent } from './card-generic-document/card-gener
         FormsModule,
         ReactiveFormsModule,
         MomentModule,
-        CoordinatesModule
+        CoordinatesModule,
+        MarkdownModule.forRoot({
+            loader: HttpClient, // optional, only if you use [src] attribute
+            markedOptions: {
+                provide: MarkedOptions,
+                useFactory: markedOptionsFactory,
+                useValue: {
+                    gfm: true, // default
+                    tables: true,
+                    breaks: false,
+                    pedantic: false,
+                    sanitize: false,
+                    smartLists: true,
+                    smartypants: false
+                },
+            }
+        }),
+
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useExisting: ErrorInterceptorService, multi: true }
@@ -70,4 +89,20 @@ import { CardGenericDocumentComponent } from './card-generic-document/card-gener
     bootstrap: [AppComponent]
 })
 export class AppModule {
+}
+
+export function markedOptionsFactory(): MarkedOptions {
+
+    const renderer = new MarkedRenderer();
+
+    renderer.link = (href: string, title: string, text: string) => {
+        if (href.startsWith('#')) {
+            const fragment = href.split('#')[1];
+            return `<a href='${location.pathname}#${fragment}'>${text}</a>`;
+        }
+        return `<a href="${href}" target="_blank" >${text}</a>`;
+    };
+    return {
+        renderer: renderer
+    };
 }
