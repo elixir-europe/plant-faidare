@@ -2,9 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { MarkdownPageComponent } from './markdown-page.component';
-import { ActivatedRoute } from "@angular/router";
-import { environment } from "../../environments/environment";
-import { of } from "rxjs";
+import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../environments/environment';
+import { of } from 'rxjs';
 
 describe('MarkdownPageComponent', () => {
     let component: MarkdownPageComponent;

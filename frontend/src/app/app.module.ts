@@ -26,8 +26,8 @@ import { MomentModule } from 'ngx-moment';
 import { XrefsComponent } from './xrefs/xrefs.component';
 import { CoordinatesModule } from 'angular-coordinates';
 import { CardGenericDocumentComponent } from './card-generic-document/card-generic-document.component';
-import { MarkdownModule, MarkedOptions, MarkedRenderer } from "ngx-markdown";
-import { MarkdownPageComponent } from "./markdown-page/markdown-page.component";
+import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
 
 @NgModule({
     declarations: [

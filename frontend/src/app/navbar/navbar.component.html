@@ -39,9 +39,7 @@
             <a class="nav-link d-flex align-items-center dropdown-toggle" ngbDropdownToggle
                role="button"
                aria-haspopup="true"
-               aria-expanded="false">
-              More ...
-            </a>
+               aria-expanded="false">More...</a>
             <div class="dropdown-menu" ngbDropdownMenu>
               <!-- About link -->
               <a class="dropdown-item" routerLink="/about" routerLinkActive="true" title="About">About</a>
@@ -58,7 +56,7 @@
     </div>
     <a class="navbar-brand d-flex align-items-center"
        [href]="navbar.contributor.url" target="_blank">
-      <img src="{{ navbar.contributor.logo }}" alt="{{ navbar.contributor.name }} logo" height="60px"/>
+      <img src="{{ navbar.contributor.logo }}" alt="{{ navbar.contributor.name }} logo" title="{{ navbar.contributor.name }}" height="60px"/>
     </a>
     <div>
       <!--<a *ngIf="displayBackButton"

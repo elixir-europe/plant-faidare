@@ -4,8 +4,8 @@ import { ResultPageComponent } from './result-page/result-page.component';
 import { GermplasmCardComponent } from './germplasm-card/germplasm-card.component';
 import { StudyCardComponent } from './study-card/study-card.component';
 import { SiteCardComponent } from './site-card/site-card.component';
-import { MarkdownPageComponent } from "./markdown-page/markdown-page.component";
-import { environment } from "../environments/environment";
+import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
+import { environment } from '../environments/environment';
 
 export const routes: Routes = [
     { path: 'studies/:id', component: StudyCardComponent },

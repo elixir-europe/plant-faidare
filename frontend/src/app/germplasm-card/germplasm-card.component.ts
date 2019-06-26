@@ -4,7 +4,7 @@ import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
 import { BrapiAttributeData, BrapiGermplasmPedigree, BrapiLocation, BrapiTaxonIds } from '../models/brapi.model';
 import { Children, Germplasm, Site } from '../models/gnpis.model';
-import { environment } from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'faidare-germplasm-card',
@@ -21,7 +21,7 @@ export class GermplasmCardComponent implements OnInit {
                 private route: ActivatedRoute) {
     }
 
-   taxonIdsWithURL: BrapiTaxonIds[] = [];
+    taxonIdsWithURL: BrapiTaxonIds[] = [];
     germplasmGnpis: Germplasm;
     germplasmPedigree: BrapiGermplasmPedigree;
     germplasmProgeny: Children[];
@@ -141,9 +141,9 @@ export class GermplasmCardComponent implements OnInit {
     addRefURL(taxonIds: BrapiTaxonIds[]) {
         for (const taxonId of taxonIds) {
             if (environment.taxaLinks[taxonId.sourceName]) {
-                 taxonId.url = environment.taxaLinks[taxonId.sourceName] + taxonId.taxonId;
+                taxonId.url = environment.taxaLinks[taxonId.sourceName] + taxonId.taxonId;
             } else {
-                 taxonId.url = null;
+                taxonId.url = null;
             }
             this.taxonIdsWithURL.push(taxonId);
         }

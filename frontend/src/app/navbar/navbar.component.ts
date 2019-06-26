@@ -53,6 +53,12 @@ export class NavbarComponent implements OnInit {
     navbar: NavBar = environment.navbar;
     navbarCollapsed = true;
 
+    dataProvider: Link = {
+        label: 'Data providers',
+        url: '#',
+        subMenu: []
+    };
+
     constructor(private gnpisService: GnpisService) {
     }
 
@@ -66,12 +72,13 @@ export class NavbarComponent implements OnInit {
                 flatMap(dataSourceURI => this.gnpisService.getSource(dataSourceURI)),
             )
             .subscribe(dataSource => {
-                // Add each data source to the nav bar links
-                this.navbar.links.push({
+                // Add each data source to the nav bar, under 'Data providers'
+                this.dataProvider.subMenu.push({
                     label: dataSource['schema:name'],
                     url: dataSource['schema:url']
                 });
             });
+        this.navbar.links.push(this.dataProvider);
     }
 
     toggleNavbar() {

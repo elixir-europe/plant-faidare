@@ -27,32 +27,62 @@ class NavbarComponentTester extends ComponentTester<NavbarComponent> {
         return this.element('li').element('a');
     }
 
-    get firstLinkSubLinks() {
-        return this.element('li').elements('a');
+    get providerLinks() {
+        return this.links[1].elements('a');
     }
 
-    get logo() {
-        return this.element('img');
+    get logos() {
+        return this.elements('img');
     }
 }
 
 describe('NavbarComponent', () => {
 
-    beforeEach(() => TestBed.configureTestingModule({
-        declarations: [NavbarComponent]
-    }));
+    const dataSource1: DataDiscoverySource = {
+        '@id': 'urn:source1',
+        '@type': ['schema:DataCatalog'],
+        'schema:name': 'Example source1',
+        'schema:url': 'http://example1.com',
+        'schema:image': 'http://example1.com/logo.png'
+    };
+
+    const dataSource2: DataDiscoverySource = {
+        '@id': 'urn:source2',
+        '@type': ['schema:DataCatalog'],
+        'schema:name': 'Example source2',
+        'schema:url': 'http://example2.com',
+        'schema:image': 'http://example2.com/logo.png'
+    };
+
+    let gnpisService;
+
+    beforeEach(() => {
+        gnpisService = jasmine.createSpyObj(
+            'GnpisService', [
+                'getSource',
+                'suggest'
+            ]
+        );
+        gnpisService.suggest.and.returnValue(of([dataSource1['@id'], dataSource2['@id']]));
+        gnpisService.getSource.withArgs(dataSource1['@id']).and.returnValue(of(dataSource1));
+        gnpisService.getSource.withArgs(dataSource2['@id']).and.returnValue(of(dataSource2));
+
+        TestBed.configureTestingModule({
+            declarations: [NavbarComponent],
+            providers: [
+                { provide: GnpisService, useValue: gnpisService }
+            ]
+        }).compileComponents();
+    });
 
     it('should toggle the class on click', () => {
         const tester = new NavbarComponentTester();
 
         tester.detectChanges();
-
         expect(tester.navBar.classes).toContain('collapse');
 
         tester.toggler.click();
-
         tester.detectChanges();
-
         expect(tester.navBar.classes).not.toContain('collapse');
     });
 
@@ -65,14 +95,7 @@ describe('NavbarComponent', () => {
             title: 'FAIR Data-finder for Agronomic REsearch',
             logo: 'assets/applicationLogo.png',
             links: [
-                {
-                    label: 'Data providers',
-                    url: '#',
-                    subMenu: [
-                        { label: 'GNPIS', url: 'https://urgi.versailles.inra.fr/gnpis/' },
-                        { label: 'URGI', url: 'https://urgi.versailles.inra.fr/' }
-                    ]
-                }
+                { label: 'URGI', url: 'https://urgi.versailles.inra.fr/' }
             ],
             contributor: {
                 name: 'Elixir',
@@ -85,19 +108,29 @@ describe('NavbarComponent', () => {
         expect(gnpisService.suggest).toHaveBeenCalledTimes(1);
         expect(gnpisService.getSource).toHaveBeenCalledTimes(2);
 
-        expect(tester.logo.attr('title')).toBe('FAIR Data-finder for Agronomic REsearch');
+        expect(tester.logos.length).toBe(2);
+        expect(tester.logos.shift().attr('title')).toBe('FAIR Data-finder for Agronomic REsearch');
+        expect(tester.logos.pop().attr('title')).toBe('Elixir');
 
-        expect(tester.links.length - 1).toBe(1);
-        // minus 1 because of More section (containing Help, About, Join and Legal links) added automatically
-        // Two static links + two dynamic links (fetched data sources)
-        //expect(tester.links.length).toBe(4);
+        expect(tester.links.length).toBe(3);
+        // 'More...' section (containing Help, About, Join and Legal links) added automatically
+        // 'Data providers' section (containing data sources) fetch and added automatically
 
-        expect(tester.firstLink.textContent).toBe('Data providers');
-        expect(tester.firstLinkSubLinks.length -1).toBe(2);
+        expect(tester.firstLink.textContent).toBe('URGI');
+        expect(tester.firstLink.attr('href')).toBe('https://urgi.versailles.inra.fr/');
+        expect(tester.firstLink.attr('target')).toBe('_blank');
+
+        expect(tester.providerLinks.length - 1).toBe(2);
         // minus 1 because of the dropdown link
+        expect(tester.providerLinks.shift().textContent).toBe('Data providers');
+        expect(tester.providerLinks.pop().textContent).toBe('Example source2');
+        expect(tester.providerLinks.pop().attr('href')).toBe('http://example2.com');
+        expect(tester.providerLinks.pop().attr('target')).toBe('_blank');
 
-        expect(tester.firstLinkSubLinks.pop().attr('href')).toBe('https://urgi.versailles.inra.fr/');
-        expect(tester.firstLinkSubLinks.pop().textContent).toBe('URGI');
-        expect(tester.firstLinkSubLinks.pop().attr('target')).toBe('_blank');
-    });
-});
+        expect(tester.links[2].element('a').textContent).toBe('More...');
+
+    }));
+
+})
+
+;
