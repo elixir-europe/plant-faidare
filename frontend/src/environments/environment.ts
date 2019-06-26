@@ -39,6 +39,12 @@ export const environment = {
     aboutUsMdFile: 'assets/about.md',
     joinUsMdFile: 'assets/join.md',
     legalMentionsMdFile: 'assets/legal.md',
+    taxaLinks: {
+        NCBI: 'https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=',
+        ThePlantList:'http://www.theplantlist.org/tpl1.1/record/',
+        TAXREF: 'https://inpn.mnhn.fr/espece/cd_nom/',
+        CatalogueOfLife:'http://www.catalogueoflife.org/col/details/species/id/'
+    }
 };
 
 /*

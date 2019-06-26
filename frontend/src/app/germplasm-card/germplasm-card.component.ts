@@ -4,6 +4,7 @@ import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
 import { BrapiAttributeData, BrapiGermplasmPedigree, BrapiLocation, BrapiTaxonIds } from '../models/brapi.model';
 import { Children, Germplasm, Site } from '../models/gnpis.model';
+import { environment } from "../../environments/environment";
 
 @Component({
     selector: 'faidare-germplasm-card',
@@ -20,12 +21,7 @@ export class GermplasmCardComponent implements OnInit {
                 private route: ActivatedRoute) {
     }
 
-    NCBI_URL = 'https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=';
-    THEPLANTLIST_URL = 'http://www.theplantlist.org/tpl1.1/record/';
-    TAXREF_URL = 'https://inpn.mnhn.fr/espece/cd_nom/';
-    CATALOGUEOFLIFE_URL = 'http://www.catalogueoflife.org/col/details/species/id/';
-    taxonIdsWithURL: BrapiTaxonIds[] = [];
-
+   taxonIdsWithURL: BrapiTaxonIds[] = [];
     germplasmGnpis: Germplasm;
     germplasmPedigree: BrapiGermplasmPedigree;
     germplasmProgeny: Children[];
@@ -35,10 +31,8 @@ export class GermplasmCardComponent implements OnInit {
     germplasmTaxonAuthor: string;
     toReplace = /_/g;
 
-
     loaded: Promise<void>;
     loading = true;
-
 
     async ngOnInit() {
         this.route.queryParams.subscribe(() => {
@@ -50,7 +44,6 @@ export class GermplasmCardComponent implements OnInit {
                     this.germplasmGnpis = germplasm;
                     this.getTaxon();
                     this.reformatData();
-
 
                     // TODO use the progeny call when the information about parent will be added.
                     /*const germplasmProgeny$ = this.brapiService.germplasmProgeny(germplasmId).toPromise();
@@ -147,16 +140,10 @@ export class GermplasmCardComponent implements OnInit {
 
     addRefURL(taxonIds: BrapiTaxonIds[]) {
         for (const taxonId of taxonIds) {
-            if (taxonId.sourceName === 'NCBI') {
-                taxonId.url = this.NCBI_URL + taxonId.taxonId;
-            } else if (taxonId.sourceName === 'ThePlantList') {
-                taxonId.url = this.THEPLANTLIST_URL + taxonId.taxonId;
-            } else if (taxonId.sourceName === 'TAXREF') {
-                taxonId.url = this.TAXREF_URL + taxonId.taxonId;
-            } else if (taxonId.sourceName === 'CatalogueOfLife') {
-                taxonId.url = this.CATALOGUEOFLIFE_URL + taxonId.taxonId;
+            if (environment.taxaLinks[taxonId.sourceName]) {
+                 taxonId.url = environment.taxaLinks[taxonId.sourceName] + taxonId.taxonId;
             } else {
-                taxonId.url = null;
+                 taxonId.url = null;
             }
             this.taxonIdsWithURL.push(taxonId);
         }
