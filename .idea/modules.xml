@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/gpds.iml" filepath="$PROJECT_DIR$/.idea/gpds.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/gpds.backend.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/gpds.backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/gpds.backend.main.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/gpds.backend.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/gpds.backend.test.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/gpds.backend.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontend/gpds.frontend.iml" filepath="$PROJECT_DIR$/.idea/modules/frontend/gpds.frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/faidare.iml" filepath="$PROJECT_DIR$/.idea/modules/faidare.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/faidare.backend.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/faidare.backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/faidare.backend.main.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/faidare.backend.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/faidare.backend.test.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/faidare.backend.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontend/faidare.frontend.iml" filepath="$PROJECT_DIR$/.idea/modules/frontend/faidare.frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/src/main/main.iml" filepath="$PROJECT_DIR$/backend/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/src/test/test.iml" filepath="$PROJECT_DIR$/backend/src/test/test.iml" />
     </modules>
   </component>
 </project>
