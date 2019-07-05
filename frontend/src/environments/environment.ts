@@ -25,10 +25,10 @@ export const environment = {
             logo: 'assets/elixir_logo.png'
         }
     },
-    helpMdFile: 'assets/help.md',
-    aboutUsMdFile: 'assets/about.md',
-    joinUsMdFile: 'assets/join.md',
-    legalMentionsMdFile: 'assets/legal.md',
+    helpMdFile: 'assets/HELP.md',
+    aboutUsMdFile: 'assets/ABOUT.md',
+    joinUsMdFile: 'assets/HOW-TO-JOIN.md',
+    legalMentionsMdFile: 'assets/LEGAL-MENTIONS.md',
     taxaLinks: {
         NCBI: 'https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=',
         ThePlantList: 'http://www.theplantlist.org/tpl1.1/record/',

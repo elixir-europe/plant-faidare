@@ -28,6 +28,6 @@ describe('MarkdownPageComponent', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
-        expect(component.mdFile).toEqual('assets/help.md');
+        expect(component.mdFile).toEqual('assets/HELP.md');
     });
 });

@@ -10,11 +10,6 @@ $fa-font-path: '~font-awesome/fonts';
   }
 }
 
-h3 {
-  font-weight: bold;
-  color: #0f6191;
-}
-
 .card-section-body {
   border: 2px solid rgb(195, 214, 226);
   border-top-width: 0px;
@@ -71,4 +66,31 @@ h3 {
 
 .mt-custom{
   margin-top: 75px;
+}
+
+h1{
+  border-bottom: solid;
+  font-weight: bold;
+  color: #0f6191;
+  margin-bottom: 20px;
+}
+
+h2{
+  border-bottom: solid;
+  color: #0f6191;
+  margin-bottom: 16px;
+}
+
+h3 {
+  font-weight: bold;
+  color: #0f6191;
+}
+
+blockquote{
+  border-left-style: solid;
+  border-left-width: 3px;
+  color: grey;
+  padding-left: 5px;
+  margin-left: 16px;
+  font-style: italic;
 }
