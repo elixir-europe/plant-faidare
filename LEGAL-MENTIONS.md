@@ -1,0 +1,1 @@
+frontend/src/assets/faidare/LEGAL-MENTIONS.md

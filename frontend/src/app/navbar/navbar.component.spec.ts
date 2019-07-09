@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NavbarComponent } from './navbar.component';
 import { ComponentTester } from 'ngx-speculoos';
@@ -20,11 +20,19 @@ class NavbarComponentTester extends ComponentTester<NavbarComponent> {
     }
 
     get links() {
-        return this.elements('li a');
+        return this.elements('li');
     }
 
-    get logo() {
-        return this.element('img');
+    get firstLink() {
+        return this.element('li').element('a');
+    }
+
+    get providerLinks() {
+        return this.links[1].elements('a');
+    }
+
+    get logos() {
+        return this.elements('img');
     }
 }
 
@@ -71,13 +79,10 @@ describe('NavbarComponent', () => {
         const tester = new NavbarComponentTester();
 
         tester.detectChanges();
-
         expect(tester.navBar.classes).toContain('collapse');
 
         tester.toggler.click();
-
         tester.detectChanges();
-
         expect(tester.navBar.classes).not.toContain('collapse');
     });
 
@@ -90,7 +95,6 @@ describe('NavbarComponent', () => {
             title: 'FAIR Data-finder for Agronomic REsearch',
             logo: 'assets/applicationLogo.png',
             links: [
-                { label: 'INRA', url: 'http://www.inra.fr/' },
                 { label: 'URGI', url: 'https://urgi.versailles.inra.fr/' }
             ],
             contributor: {
@@ -104,14 +108,29 @@ describe('NavbarComponent', () => {
         expect(gnpisService.suggest).toHaveBeenCalledTimes(1);
         expect(gnpisService.getSource).toHaveBeenCalledTimes(2);
 
-        expect(tester.logo.attr('title')).toBe('FAIR Data-finder for Agronomic REsearch');
+        expect(tester.logos.length).toBe(2);
+        expect(tester.logos.shift().attr('title')).toBe('FAIR Data-finder for Agronomic REsearch');
+        expect(tester.logos.pop().attr('title')).toBe('Elixir');
 
-        // Two static links + two dynamic links (fetched data sources)
-        expect(tester.links.length).toBe(4);
+        expect(tester.links.length).toBe(3);
+        // 'More...' section (containing Help, About, Join and Legal links) added automatically
+        // 'Data providers' section (containing data sources) fetch and added automatically
 
-        expect(tester.links[0].textContent).toBe('INRA');
-        expect(tester.links[0].attr('href')).toBe('http://www.inra.fr/');
-        expect(tester.links[0].attr('target')).toBe('_blank');
+        expect(tester.firstLink.textContent).toBe('URGI');
+        expect(tester.firstLink.attr('href')).toBe('https://urgi.versailles.inra.fr/');
+        expect(tester.firstLink.attr('target')).toBe('_blank');
+
+        expect(tester.providerLinks.length - 1).toBe(2);
+        // minus 1 because of the dropdown link
+        expect(tester.providerLinks.shift().textContent).toBe('Data providers');
+        expect(tester.providerLinks.pop().textContent).toBe('Example source2');
+        expect(tester.providerLinks.pop().attr('href')).toBe('http://example2.com');
+        expect(tester.providerLinks.pop().attr('target')).toBe('_blank');
+
+        expect(tester.links[2].element('a').textContent).toBe('More...');
+
     }));
+
 })
+
 ;

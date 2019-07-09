@@ -39,7 +39,7 @@ public class AngularRouteFilter implements Filter {
 
     private static final String[] STATIC_SUFFIXES = {
         ".html", ".js", ".css", ".ico", ".png", ".jpg", ".gif", ".eot", ".svg",
-        ".woff2", ".ttf", ".woff"
+        ".woff2", ".ttf", ".woff", ".md"
     };
 
     @Value("${server.servlet.context-path}")
