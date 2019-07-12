@@ -71,34 +71,32 @@ export class StudyCardComponent implements OnInit {
             });
 
             study$.finally(() => {
-                this.location = null;
                 this.brapiService.location(this.study.locationDbId).subscribe(
                     location => {
                         this.location = location.result;
-                        console.log(this.location);
                     });
+            });
 
-                this.studyObservationVariables = [];
-                const variable$ = this.brapiService.studyObservationVariables(studyDbId).toPromise();
-                variable$
-                    .then(response => {
-                        this.studyObservationVariables = response.result.data.sort((var1, var2) =>
-                            var1.observationVariableDbId.localeCompare(var2.observationVariableDbId));
-                    });
-
-                this.studyGermplasms = [];
-                const germplasm$ = this.brapiService.studyGermplasms(studyDbId).toPromise();
-                germplasm$
-                    .then(studyGermplasm => {
-                        this.studyGermplasms = studyGermplasm.result.data.sort((var1, var2) =>
-                            var1.germplasmName.localeCompare(var2.germplasmName));
-                    });
-
-
-                this.loaded = Promise.all([study$, variable$, germplasm$]);
-                this.loaded.then(() => {
-                    this.loading = false;
+            this.studyObservationVariables = [];
+            const variable$ = this.brapiService.studyObservationVariables(studyDbId).toPromise();
+            variable$
+                .then(response => {
+                    this.studyObservationVariables = response.result.data.sort((var1, var2) =>
+                        var1.observationVariableDbId.localeCompare(var2.observationVariableDbId));
                 });
+
+            this.studyGermplasms = [];
+            const germplasm$ = this.brapiService.studyGermplasms(studyDbId).toPromise();
+            germplasm$
+                .then(studyGermplasm => {
+                    this.studyGermplasms = studyGermplasm.result.data.sort((var1, var2) =>
+                        var1.germplasmName.localeCompare(var2.germplasmName));
+                });
+
+
+            this.loaded = Promise.all([ study$, variable$, germplasm$ ]);
+            this.loaded.then(() => {
+                this.loading = false;
             });
         });
 

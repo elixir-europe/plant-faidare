@@ -64,19 +64,40 @@ describe('StudyCardComponent', () => {
         'schema:image': null
     };
 
-    const location: BrapiLocation = {
-        locationDbId: '1',
-        locationName: 'loc1',
-        locationType: 'Collecting site',
-        abbreviation: null,
-        countryCode: 'Fr',
-        countryName: 'France',
-        institutionAddress: null,
-        institutionName: 'Insti',
-        altitude: null,
-        latitude: null,
-        longitude: null,
+    const location: BrapiResult<BrapiLocation> = {
+        metadata: null,
+        result: {
+            locationDbId: '1',
+            locationName: 'loc1',
+            locationType: 'Collecting site',
+            abbreviation: null,
+            countryCode: 'Fr',
+            countryName: 'France',
+            institutionAddress: null,
+            institutionName: 'Insti',
+            altitude: null,
+            latitude: null,
+            longitude: null,
+        }
     };
+
+    const location2: BrapiResult<BrapiLocation> = {
+        metadata: null,
+        result: {
+            locationDbId: '2',
+            locationName: 'loc2',
+            locationType: 'Collecting site',
+            abbreviation: null,
+            countryCode: 'Fr',
+            countryName: 'France',
+            institutionAddress: null,
+            institutionName: 'Insti',
+            altitude: null,
+            latitude: 48.8534,
+            longitude: 2.3488,
+        }
+    };
+
 
     const contacts: BrapiContacts = {
         contactDbId: 'c1',
@@ -100,7 +121,9 @@ describe('StudyCardComponent', () => {
             programDbId: 'p1',
             programName: 'program1',
             trialDbIds: ['10', '20'],
-            location: location,
+            location: location.result,
+            locationDbId: '1',
+            locationName: 'loc1',
             contacts: [contacts],
             additionalInfo: null,
             documentationURL: 'http://example.com/Study/s1',
@@ -218,7 +241,8 @@ describe('StudyCardComponent', () => {
             'study',
             'studyTrials',
             'studyObservationVariables',
-            'studyGermplasms'
+            'studyGermplasms',
+            'location'
         ]
     );
     brapiService.study.and.returnValue(of(searchStudy));
@@ -226,6 +250,8 @@ describe('StudyCardComponent', () => {
     brapiService.studyTrials.withArgs('20').and.returnValue(of(trial2));
     brapiService.studyObservationVariables.and.returnValue(of(osbVariable));
     brapiService.studyGermplasms.and.returnValue(of(germplasm));
+    brapiService.location.withArgs('1').and.returnValue(of(location));
+    brapiService.location.withArgs('2').and.returnValue(of(location2));
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -244,14 +270,15 @@ describe('StudyCardComponent', () => {
 
 
     it('should fetch the study data information but not display map', async(() => {
+        searchStudy.result.locationDbId = '1';
         const tester = new StudyCardComponentTester();
         const component = tester.componentInstance;
         tester.detectChanges();
 
         component.loaded.then(() => {
             expect(component.study).toBeTruthy();
-            component.study.location.longitude = null;
-            component.study.location.latitude = null;
+            expect(component.location.locationDbId).toEqual('1');
+
             tester.detectChanges();
 
             expect(tester.map).toBeFalsy();
@@ -277,14 +304,15 @@ describe('StudyCardComponent', () => {
     }));
 
     it('should display map', async(() => {
+        searchStudy.result.locationDbId = '2';
         const tester = new StudyCardComponentTester();
         const component = tester.componentInstance;
         tester.detectChanges();
 
         component.loaded.then(() => {
             expect(component.study).toBeTruthy();
-            component.study.location.latitude = 48.8534;
-            component.study.location.longitude = 2.3488;
+            expect(component.location.locationDbId).toEqual('2');
+
             tester.detectChanges();
 
             expect(tester.map).toBeTruthy();
