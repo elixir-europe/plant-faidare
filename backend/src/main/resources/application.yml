@@ -37,7 +37,7 @@ faidare:
   # Warning! URIs should match with FAIDARE datadiscovery 'schema:includedInDataCatalog' field value
   data-sources:
   # URGI GnpIS
-    - uri: https://urgi.versailles.inra.fr/gnpis
+  - uri: https://urgi.versailles.inra.fr/gnpis
     url: https://urgi.versailles.inra.fr/gnpis
     name: URGI GnpIS
     image: https://urgi.versailles.inra.fr/files/faidare/logo/GnpIS.png

@@ -107,13 +107,16 @@ export class GermplasmCardComponent implements OnInit {
             this.germplasmGnpis.panel.sort(this.compareCollectionPopulationPanel);
         }
         if (this.germplasmGnpis.collectingSite) {
+            this.germplasmGnpis.collectingSite.siteId = btoa('urn:URGI/location/' + this.germplasmGnpis.collectingSite.siteId);
             this.siteToBrapiLocation(this.germplasmGnpis.collectingSite);
         }
         if (this.germplasmGnpis.originSite) {
+            this.germplasmGnpis.originSite.siteId = btoa('urn:URGI/location/' + this.germplasmGnpis.originSite.siteId);
             this.siteToBrapiLocation(this.germplasmGnpis.originSite);
         }
         if (this.germplasmGnpis.evaluationSites && this.germplasmGnpis.evaluationSites.length > 0) {
             for (const site of this.germplasmGnpis.evaluationSites) {
+                site.siteId = btoa('urn:URGI/location/' + site.siteId);
                 this.siteToBrapiLocation(site);
             }
         }
