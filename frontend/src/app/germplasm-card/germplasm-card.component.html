@@ -324,7 +324,7 @@
 
         <faidare-card-row
           label="Stock center name"
-          [test]="germplasmGnpis.holdingGenbank.instituteName && germplasmGnpis.holdingGenbank.webSite">
+          [test]="germplasmGnpis.holdingGenbank && germplasmGnpis.holdingGenbank.instituteName && germplasmGnpis.holdingGenbank.webSite">
           <ng-template>
             <a [href]="germplasmGnpis.holdingGenbank.webSite" target="_blank">
               {{ germplasmGnpis.holdingGenbank.instituteName }}
@@ -334,7 +334,7 @@
 
         <faidare-card-row
           label="Stock center name"
-          [test]="germplasmGnpis.holdingGenbank.instituteName && !germplasmGnpis.holdingGenbank.webSite">
+          [test]="germplasmGnpis.holdingGenbank && germplasmGnpis.holdingGenbank.instituteName && !germplasmGnpis.holdingGenbank.webSite">
           <ng-template>
             {{ germplasmGnpis.holdingGenbank.instituteName }}
           </ng-template>
@@ -384,7 +384,7 @@
 
         <faidare-card-row
           label="Acquisition / Creation date"
-          [test]="germplasmGnpis.collector.accessionCreationDate">
+          [test]="germplasmGnpis.collector && germplasmGnpis.collector.accessionCreationDate">
           <ng-template>
             {{ germplasmGnpis.collector.accessionCreationDate }}
           </ng-template>
@@ -400,7 +400,7 @@
 
         <faidare-card-row
           label="Institution"
-          [test]="germplasmGnpis.collector.institute && germplasmGnpis.collector.institute.instituteName">
+          [test]="germplasmGnpis.collector && germplasmGnpis.collector.institute && germplasmGnpis.collector.institute.instituteName">
           <ng-template>
             <a class="popover-underline" data-boundary="window" placement="auto"
                [autoClose]="'outside'"

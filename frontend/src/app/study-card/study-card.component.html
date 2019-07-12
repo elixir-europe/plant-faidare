@@ -1,12 +1,12 @@
 <faidare-loading-spinner [loading]="loading" class="float-right"></faidare-loading-spinner>
 
-<ng-container *ngIf="study">
+<ng-container *ngIf="study && !loading">
   <h3 class="mb-4">
     Study {{ study.studyType }}: {{ study.studyName }}
   </h3>
 
   <!-- Display the map -->
-  <faidare-map [locations]="[study.location]"></faidare-map>
+  <faidare-map [locations]="[location]"></faidare-map>
 
   <!-- Display the study's info -->
   <faidare-card-section
@@ -68,10 +68,10 @@
 
         <faidare-card-row
           label="Location name"
-          [test]="study.location && study.location.locationDbId">
+          [test]="study.locationDbId">
           <ng-template>
-            <a [routerLink]="['/sites', study.location.locationDbId]">
-              {{ study.location.locationName }}
+            <a [routerLink]="['/sites', study.locationDbId]">
+              {{ study.locationName }}
             </a>
           </ng-template>
         </faidare-card-row>
@@ -204,7 +204,8 @@
           'Name',
           'Email',
           'Institution'
-        ]">
+        ]"
+          [rows]="study.contacts">
         <ng-template let-row>
           <tr>
             <td>{{ row.type }}</td>

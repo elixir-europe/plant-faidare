@@ -14,8 +14,6 @@ import { environment } from '../../environments/environment';
 
 export class GermplasmCardComponent implements OnInit {
 
-    alreadyInitialize = false;
-
     constructor(private brapiService: BrapiService,
                 private gnpisService: GnpisService,
                 private route: ActivatedRoute) {
@@ -67,7 +65,6 @@ export class GermplasmCardComponent implements OnInit {
                         });
 
                     this.loading = false;
-                    this.alreadyInitialize = true;
                 });
         });
 

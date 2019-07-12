@@ -1,5 +1,6 @@
 package fr.inra.urgi.faidare.config;
 
+import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSource;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSourceImpl;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class FaidareProperties {
 
     @NotBlank
-    private String elasticsearchAliasTemplate;
+    private String elasticsearchIndexingTemplate;
 
     @NotBlank
     private String elasticsearchXrefIndexName;
@@ -32,12 +33,12 @@ public class FaidareProperties {
 
     private List<DataSourceImpl> dataSources = new ArrayList<>();
 
-    public String getElasticsearchAliasTemplate() {
-        return elasticsearchAliasTemplate;
+    public String getElasticsearchIndexingTemplate() {
+        return elasticsearchIndexingTemplate;
     }
 
-    public void setElasticsearchAliasTemplate(String elasticsearchAliasTemplate) {
-        this.elasticsearchAliasTemplate = elasticsearchAliasTemplate;
+    public void setElasticsearchIndexingTemplate(String elasticsearchIndexingTemplate) {
+        this.elasticsearchIndexingTemplate = elasticsearchIndexingTemplate;
     }
 
     public String getElasticsearchXrefIndexName() {
@@ -88,14 +89,34 @@ public class FaidareProperties {
         this.dataSources = dataSources;
     }
 
-    /**
-     * Get ElasticSearch index name using the template property, the document type and the group id
-     */
-    public String getIndexName(String source, String documentType, long groupId) {
-        return elasticsearchAliasTemplate
-            .replace("{source}", source.toLowerCase())
-            .replace("{documentType}", documentType.toLowerCase())
-            .replace("{groupId}", String.valueOf(groupId));
+    public DataSource getByUri(String uri) {
+        for (DataSourceImpl dataSource : getDataSources()) {
+            if (dataSource.getUri().equals(uri)) {
+                return dataSource;
+            }
+        }
+        return null;
     }
+
+    /**
+     * Get ElasticSearch alias name using the template property, the document type and the group id
+     */
+    public String getAliasName(String documentType, long groupId) {
+        return getBaseIndexName(documentType) + "-group" + groupId;
+    }
+
+    /**
+     * Get ElasticSearch index name using the template property, the document type and the index creation timestamp
+     */
+    public String getIndexName(String documentType, long startInstant) {
+        return getBaseIndexName(documentType) + "-d" + startInstant;
+    }
+
+    public String getBaseIndexName(String documentType) {
+        return elasticsearchIndexingTemplate
+            .replace("{documentType}", documentType.toLowerCase());
+    }
+
+
 
 }
