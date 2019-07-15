@@ -123,6 +123,10 @@ export class GermplasmCardComponent implements OnInit {
         if (this.germplasmGnpis.taxonIds && this.germplasmGnpis.taxonIds.length > 0) {
             this.addRefURL(this.germplasmGnpis.taxonIds);
         }
+        // TODO: to remove when extractor script will be up-to-date
+        if (this.germplasmGnpis.holdingGenbank) {
+            this.germplasmGnpis.holdingGenbank.logo = 'https://urgi.versailles.inra.fr/files/siregal/images/grc/inra_brc_en.png';
+        }
     }
 
     // TODO: do this in ETL!
