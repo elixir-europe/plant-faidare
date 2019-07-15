@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DataDiscoveryDocument, DataDiscoverySource, DataDiscoveryType } from '../../models/data-discovery.model';
-import { GnpisService } from '../../gnpis.service';
 
 @Component({
     selector: 'faidare-document',
@@ -32,15 +31,9 @@ export class DocumentComponent implements OnInit {
     }
 
     getRouterLink() {
-        // TODO: index URGI schema:identifier like the partners
-        const urgiStudy = this.dataSource['schema:url'] === GnpisService.URGI_SOURCE_URI;
         for (const type of this.document['@type']) {
             const cardUrl = DocumentComponent.CARD_TYPE[type];
             if (cardUrl === 'studies') {
-                if (urgiStudy) {
-                    const studyId = this.document['@id'].replace(/urn:URGI\/study\//, '');
-                    return `/${cardUrl}/${studyId}`;
-                }
                 return `/${cardUrl}/${this.document['schema:identifier']}`;
             }
             if (cardUrl === 'germplasm') {
@@ -53,9 +46,14 @@ export class DocumentComponent implements OnInit {
 
     getQueryParam() {
         if (this.document['schema:identifier']) {
-            return {
-                id: this.document['schema:identifier']
-            };
+            const id: string = this.document['schema:identifier'];
+            // TODO: remove condition when GnpIS schema:identifier will store an encoded
+            // value (manage the same way as partners data
+            if (id.includes('doi.org') || id.includes('gnpis_pui')) {
+                return { id: btoa(id) };
+            } else {
+                return { id: id };
+            }
         } else {
             return {
                 pui: this.document['@id']

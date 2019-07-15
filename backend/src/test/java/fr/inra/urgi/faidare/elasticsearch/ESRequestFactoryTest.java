@@ -37,7 +37,7 @@ class ESRequestFactoryTest {
         List<Integer> groups = Collections.singletonList(0);
         String index0 = "index_group0";
 
-        when(properties.getIndexName("*", documentType, 0)).thenReturn(index0);
+        when(properties.getAliasName(documentType, 0)).thenReturn(index0);
 
         when(userGroupsResourceClient.getUserGroups()).thenReturn(groups);
 
@@ -54,23 +54,11 @@ class ESRequestFactoryTest {
             "index_sourcea_group1",
             "index_sourcea_group2",
             "index_sourcea_group0",
-            "index_sourceb_group0",
-            "index_sourceb_group1",
-            "index_sourceb_group2",
-            "index_sourcec_group0",
-            "index_sourcec_group1",
-            "index_sourcec_group2",
         };
 
-        when(properties.getIndexName("a", documentType, 1)).thenReturn(indices[0]);
-        when(properties.getIndexName("a", documentType, 2)).thenReturn(indices[1]);
-        when(properties.getIndexName("a", documentType, 0)).thenReturn(indices[2]);
-        when(properties.getIndexName("b", documentType, 0)).thenReturn(indices[3]);
-        when(properties.getIndexName("b", documentType, 1)).thenReturn(indices[4]);
-        when(properties.getIndexName("b", documentType, 2)).thenReturn(indices[5]);
-        when(properties.getIndexName("c", documentType, 0)).thenReturn(indices[6]);
-        when(properties.getIndexName("c", documentType, 1)).thenReturn(indices[7]);
-        when(properties.getIndexName("c", documentType, 2)).thenReturn(indices[8]);
+        when(properties.getAliasName(documentType, 1)).thenReturn(indices[0]);
+        when(properties.getAliasName(documentType, 2)).thenReturn(indices[1]);
+        when(properties.getAliasName(documentType, 0)).thenReturn(indices[2]);
 
         when(userGroupsResourceClient.getUserGroups()).thenReturn(groups);
 

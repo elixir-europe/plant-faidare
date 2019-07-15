@@ -114,7 +114,7 @@ public class ESSetUp {
         String documentType = DocumentAnnotationUtil.getDocumentObjectMetadata(documentClass).getDocumentType();
         try {
             for (long groupId : groupIds) {
-                String indexName = properties.getIndexName("fixture", documentType, groupId);
+                String indexName = properties.getAliasName(documentType, groupId);
 
                 // Delete fixture index if exists
                 deleteIndex(indexName);

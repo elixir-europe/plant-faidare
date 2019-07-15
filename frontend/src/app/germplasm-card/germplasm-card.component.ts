@@ -14,8 +14,6 @@ import { environment } from '../../environments/environment';
 
 export class GermplasmCardComponent implements OnInit {
 
-    alreadyInitialize = false;
-
     constructor(private brapiService: BrapiService,
                 private gnpisService: GnpisService,
                 private route: ActivatedRoute) {
@@ -67,7 +65,6 @@ export class GermplasmCardComponent implements OnInit {
                         });
 
                     this.loading = false;
-                    this.alreadyInitialize = true;
                 });
         });
 
@@ -110,18 +107,25 @@ export class GermplasmCardComponent implements OnInit {
             this.germplasmGnpis.panel.sort(this.compareCollectionPopulationPanel);
         }
         if (this.germplasmGnpis.collectingSite) {
+            this.germplasmGnpis.collectingSite.siteId = btoa('urn:URGI/location/' + this.germplasmGnpis.collectingSite.siteId);
             this.siteToBrapiLocation(this.germplasmGnpis.collectingSite);
         }
         if (this.germplasmGnpis.originSite) {
+            this.germplasmGnpis.originSite.siteId = btoa('urn:URGI/location/' + this.germplasmGnpis.originSite.siteId);
             this.siteToBrapiLocation(this.germplasmGnpis.originSite);
         }
         if (this.germplasmGnpis.evaluationSites && this.germplasmGnpis.evaluationSites.length > 0) {
             for (const site of this.germplasmGnpis.evaluationSites) {
+                site.siteId = btoa('urn:URGI/location/' + site.siteId);
                 this.siteToBrapiLocation(site);
             }
         }
         if (this.germplasmGnpis.taxonIds && this.germplasmGnpis.taxonIds.length > 0) {
             this.addRefURL(this.germplasmGnpis.taxonIds);
+        }
+        // TODO: to remove when extractor script will be up-to-date
+        if (this.germplasmGnpis.holdingGenbank) {
+            this.germplasmGnpis.holdingGenbank.logo = 'https://urgi.versailles.inra.fr/files/siregal/images/grc/inra_brc_en.png';
         }
     }
 

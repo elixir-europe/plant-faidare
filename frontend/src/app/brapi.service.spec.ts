@@ -57,6 +57,8 @@ describe('BrapiService', () => {
             programName: 'program1',
             trialDbIds: ['10', '20'],
             location: location,
+            locationDbId: '1',
+            locationName: 'loc1',
             contacts: [contacts],
             additionalInfo: null,
             dataLinks: []

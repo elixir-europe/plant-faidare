@@ -27,6 +27,12 @@ public interface BrapiStudyDetail extends BrapiStudy {
     @JsonView(JSONView.BrapiFields.class)
     BrapiLocation getLocation();
 
+    @JsonView(JSONView.BrapiFields.class)
+    String getLocationDbId();
+
+    @JsonView(JSONView.BrapiFields.class)
+    String getLocationName();
+
     // Data links
     @JsonView(JSONView.BrapiFields.class)
     List<BrapiStudyDataLink> getDataLinks();

@@ -44,7 +44,7 @@ export class MapComponent implements OnInit {
                 const popupText = `
                   <b>${location.locationName}</b><br/>
                   ${location.locationType}<br/>
-                  <a href="sites/${location.locationDbId}">Details</a>
+                  <a href="sites/${location.locationDbId.replace(/=/g, '%3D')}">Details</a>
                 `;
                 const marker = L.marker(
                     [location.latitude, location.longitude],

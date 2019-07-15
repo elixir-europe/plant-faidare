@@ -20,8 +20,8 @@ logging.level:
   fr.inra: DEBUG
 
 faidare:
-  elasticsearch-alias-template:
-    gnpis_{source}_{documentType}_5432_krusty-group{groupId}
+  elasticsearch-indexing-template:
+    faidare_{documentType}_dev
 
   elasticsearch-xref-index-name:
     urgi_xref_dev
@@ -37,7 +37,7 @@ faidare:
   # Warning! URIs should match with FAIDARE datadiscovery 'schema:includedInDataCatalog' field value
   data-sources:
   # URGI GnpIS
-  - uri: https://urgi.versailles.inra.fr
+  - uri: https://urgi.versailles.inra.fr/gnpis
     url: https://urgi.versailles.inra.fr/gnpis
     name: URGI GnpIS
     image: https://urgi.versailles.inra.fr/files/faidare/logo/GnpIS.png

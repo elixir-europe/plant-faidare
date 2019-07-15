@@ -56,6 +56,9 @@ public class StudyDetailVO implements GnpISInternal, BrapiStudyDetail, HasURI, H
     @JsonDeserialize(as = LocationVO.class)
     private BrapiLocation location;
 
+    private String locationDbId;
+    private String locationName;
+
     @JsonDeserialize(contentAs = StudyDataLinkVO.class)
     private List<BrapiStudyDataLink> dataLinks;
 
@@ -285,6 +288,24 @@ public class StudyDetailVO implements GnpISInternal, BrapiStudyDetail, HasURI, H
 
     public void setLocation(BrapiLocation location) {
         this.location = location;
+    }
+
+    @Override
+    public String getLocationDbId() {
+        return locationDbId;
+    }
+
+    public void setLocationDbId(String locationDbId) {
+        this.locationDbId = locationDbId;
+    }
+
+    @Override
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 
     @Override

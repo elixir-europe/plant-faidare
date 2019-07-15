@@ -42,6 +42,8 @@ export interface BrapiStudy extends BrapiHasDocumentationURL, schema.Dataset {
     programName: string;
     trialDbIds: string[];
     location: BrapiLocation;
+    locationDbId: string;
+    locationName: string;
     contacts: BrapiContacts[];
     additionalInfo: BrapiAdditionalInfo;
     dataLinks: {

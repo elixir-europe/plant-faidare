@@ -114,7 +114,7 @@ public class ESRequestFactory {
         List<String> aliases = new ArrayList<>();
         for (Integer groupId : groupIds) {
             for (String sourceId : sourceIds) {
-                aliases.add(properties.getIndexName(sourceId, documentType, groupId));
+                aliases.add(properties.getAliasName(documentType, groupId));
             }
         }
         return aliases;
