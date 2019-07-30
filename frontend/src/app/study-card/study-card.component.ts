@@ -75,7 +75,7 @@ export class StudyCardComponent implements OnInit {
                     this.brapiService.location(this.study.locationDbId).subscribe(
                         location => {
                             this.location = location.result;
-                    });
+                        });
                 }
             });
 
