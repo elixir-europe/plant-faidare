@@ -4,6 +4,7 @@
 
 export const environment = {
     production: false,
+    appTitle: 'FAIR Data-finder for Agronomic REsearch',
     navbar: {
         name: 'FAIDARE',
         title: 'FAIR Data-finder for Agronomic REsearch',

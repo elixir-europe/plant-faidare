@@ -113,9 +113,7 @@ public class ESRequestFactory {
         List<Integer> groupIds = userGroupsResourceClient.getUserGroups();
         List<String> aliases = new ArrayList<>();
         for (Integer groupId : groupIds) {
-            for (String sourceId : sourceIds) {
-                aliases.add(properties.getAliasName(documentType, groupId));
-            }
+            aliases.add(properties.getAliasName(documentType, groupId));
         }
         return aliases;
     }

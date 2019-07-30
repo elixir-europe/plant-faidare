@@ -12,6 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 import { GnpisService } from '../gnpis.service';
 import { filter } from 'rxjs/operators';
 import { FormComponent } from '../form/form.component';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -22,6 +23,7 @@ import { FormComponent } from '../form/form.component';
 export class ResultPageComponent implements OnInit {
 
     @ViewChild('form') form: FormComponent;
+    appTitle: string = environment.appTitle;
 
     criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
     documents: DataDiscoveryDocument[] = [];
