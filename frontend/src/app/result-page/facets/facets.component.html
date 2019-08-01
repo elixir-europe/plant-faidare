@@ -11,6 +11,13 @@
         />
         <label class="form-check-label" for="{{ term.term }}">
           {{ term.label }} ({{ term.count | number }})
+          <button type="button" class="btn btn-sm btn-outline-secondary"
+                  id="advanceSearch"
+                  [routerLink]="'germplasm-result-page'"
+                  *ngIf="term.term == 'Germplasm' && displayAdvanceGermplasmSearchButton">
+            Advance search
+            <img src="assets/faidare/images/advance_search.png" alt="advance germplasm search" title="" height="20px"/>
+          </button>
         </label>
       </div>
     </form>

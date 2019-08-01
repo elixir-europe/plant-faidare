@@ -6,6 +6,7 @@ import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { DataDiscoveryCriteria, DataDiscoveryCriteriaUtils, DataDiscoveryFacet } from '../../models/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('FacetsComponent', () => {
 
@@ -26,9 +27,13 @@ describe('FacetsComponent', () => {
             return this.elements('input');
         }
 
+        get advanceSearchButton() {
+            return this.elements('button');
+        }
+
     }
 
-    const exampleFacet: DataDiscoveryFacet = {
+    const exampleFacet1: DataDiscoveryFacet = {
         field: 'sources',
         terms: [
             {
@@ -43,9 +48,21 @@ describe('FacetsComponent', () => {
         ]
     };
 
+    const exampleFacet2: DataDiscoveryFacet = {
+        field: 'types',
+        terms: [
+            {
+                term: 'Germplasm',
+                label: 'GERMPLASM',
+                count: 10
+            }
+        ]
+    };
+
     beforeEach(() => TestBed.configureTestingModule({
         imports: [ReactiveFormsModule],
-        declarations: [FacetsComponent]
+        declarations: [FacetsComponent],
+        schemas: [NO_ERRORS_SCHEMA]
     }));
 
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
@@ -54,7 +71,7 @@ describe('FacetsComponent', () => {
         const tester = new FacetsComponentTester();
 
         const component = tester.componentInstance;
-        component.facet = exampleFacet;
+        component.facet = exampleFacet1;
         component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
         tester.detectChanges();
 
@@ -73,7 +90,7 @@ describe('FacetsComponent', () => {
         const tester = new FacetsComponentTester();
 
         const component = tester.componentInstance;
-        component.facet = exampleFacet;
+        component.facet = exampleFacet1;
 
         const criteria = {
             ...DataDiscoveryCriteriaUtils.emptyCriteria(),
@@ -92,7 +109,7 @@ describe('FacetsComponent', () => {
         const tester = new FacetsComponentTester();
 
         const component = tester.componentInstance;
-        component.facet = exampleFacet;
+        component.facet = exampleFacet1;
         component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
         tester.detectChanges();
 
@@ -110,5 +127,38 @@ describe('FacetsComponent', () => {
         component.criteria$.subscribe(criteria => {
             expect(criteria.sources).toEqual(['source 2']);
         });
+    });
+
+    it('should display advance search button for germplasm', () => {
+        const tester = new FacetsComponentTester();
+
+        const component = tester.componentInstance;
+        const criteria = {
+            ...DataDiscoveryCriteriaUtils.emptyCriteria(),
+            types: ['Germplasm']
+        };
+        component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(criteria);
+        component.facet = exampleFacet2;
+        tester.detectChanges();
+
+        expect(tester.advanceSearchButton.length).toEqual(1);
+        expect(tester.advanceSearchButton[0]).toContainText('Advance search');
+
+    });
+
+    it('should not display advance search button for germplasm', () => {
+        const tester = new FacetsComponentTester();
+
+        const component = tester.componentInstance;
+        const criteria = {
+            ...DataDiscoveryCriteriaUtils.emptyCriteria(),
+            types: ['Germplasm', 'Phenotyping Study']
+        };
+        component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(criteria);
+        component.facet = exampleFacet2;
+        tester.detectChanges();
+
+        expect(tester.advanceSearchButton).toEqual([]);
+
     });
 });

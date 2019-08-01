@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { FormComponent } from './form/form.component';
 import { ResultPageComponent } from './result-page/result-page.component';
 import { GermplasmCardComponent } from './germplasm-card/germplasm-card.component';
+import { GermplasmResultPageComponent } from './germplasm-result-page/germplasm-result-page.component';
 import { StudyCardComponent } from './study-card/study-card.component';
 import { SiteCardComponent } from './site-card/site-card.component';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
@@ -35,6 +36,7 @@ import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
         FormComponent,
         ResultPageComponent,
         GermplasmCardComponent,
+        GermplasmResultPageComponent,
         StudyCardComponent,
         SiteCardComponent,
         NavbarComponent,

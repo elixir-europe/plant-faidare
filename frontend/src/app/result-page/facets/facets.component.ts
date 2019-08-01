@@ -17,6 +17,7 @@ export class FacetsComponent implements OnInit {
 
     localCriteria: DataDiscoveryCriteria;
     checkBoxes: FormGroup = new FormGroup({});
+    displayAdvanceGermplasmSearchButton: boolean;
 
     constructor() {
     }
@@ -36,16 +37,28 @@ export class FacetsComponent implements OnInit {
                     const isSelected = selectedTerms.indexOf(key) >= 0;
                     control.setValue(isSelected, { emitEvent: false });
                 }
+
+                if (criteria.types) {
+                    this.showANDHideAdvanceGermplasmSearch(criteria.types);
+                }
+
             });
 
         this.checkBoxes.valueChanges.subscribe(values => {
             const selectedTerms = Object.keys(values).filter(key => values[key]);
+            this.showANDHideAdvanceGermplasmSearch(selectedTerms);
             this.localCriteria = {
                 ...this.localCriteria,
                 [this.facet.field]: selectedTerms
             };
             this.criteria$.next(this.localCriteria);
         });
+    }
+
+    showANDHideAdvanceGermplasmSearch(typeList: String[]) {
+        const facetIsTypes = this.facet.field === 'types';
+        const onlyGermplasmSelected = typeList.length === 1 && typeList.includes('Germplasm');
+        this.displayAdvanceGermplasmSearchButton = facetIsTypes && onlyGermplasmSelected;
     }
 
 
