@@ -40,6 +40,7 @@ import { DecimalPipe } from '@angular/common';
         ResultPageComponent,
         GermplasmCardComponent,
         GermplasmResultPageComponent,
+        GermplasmResultPageComponent,
         NgbdSortableHeader,
         StudyCardComponent,
         SiteCardComponent,
