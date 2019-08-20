@@ -1,3 +1,16 @@
-<p>
-  germplasm-result-page works!
-</p>
+<faidare-card-sortable-table
+[tableHeaders]="['id','name', 'area', 'population']"
+[rows]="countries">
+
+  <ng-template let-row>
+    <tr>
+
+       <th scope="row">{{ row.id }}</th>
+      <td><ngb-highlight [result]="row.name" [term]="row.searchTerm"></ngb-highlight></td>
+      <td><ngb-highlight [result]="row.area | number" [term]="service.searchTerm"></ngb-highlight></td>
+      <td><ngb-highlight [result]="row.population | number" [term]="service.searchTerm"></ngb-highlight></td>
+
+    </tr>
+  </ng-template>
+
+</faidare-card-sortable-table>

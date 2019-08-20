@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CountryService } from '../card-sortable-table/country.services';
+import { Country } from '../card-sortable-table/country';
 
 @Component({
     selector: 'faidare-germplasm-result-page',
@@ -7,10 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GermplasmResultPageComponent implements OnInit {
 
-    constructor() {
+
+    countries: Country[];
+
+    constructor(public service: CountryService) {
+
+        this.service.countries$.subscribe(countries => {
+            this.countries = countries;
+        });
     }
 
     ngOnInit() {
+
     }
 
 }

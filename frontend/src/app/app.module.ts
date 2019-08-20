@@ -23,12 +23,15 @@ import { CardRowComponent } from './card-row/card-row.component';
 import { CardSectionComponent } from './card-section/card-section.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { CardTableComponent } from './card-table/card-table.component';
+import { CardSortableTableComponent } from './card-sortable-table/card-sortable-table.component';
 import { MomentModule } from 'ngx-moment';
 import { XrefsComponent } from './xrefs/xrefs.component';
 import { CoordinatesModule } from 'angular-coordinates';
 import { CardGenericDocumentComponent } from './card-generic-document/card-generic-document.component';
 import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
+import { NgbdSortableHeader } from './card-sortable-table/sortable.directive';
+import { DecimalPipe } from '@angular/common';
 
 @NgModule({
     declarations: [
@@ -37,6 +40,7 @@ import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
         ResultPageComponent,
         GermplasmCardComponent,
         GermplasmResultPageComponent,
+        NgbdSortableHeader,
         StudyCardComponent,
         SiteCardComponent,
         NavbarComponent,
@@ -50,6 +54,7 @@ import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
         CardSectionComponent,
         LoadingSpinnerComponent,
         CardTableComponent,
+        CardSortableTableComponent,
         XrefsComponent,
         CardGenericDocumentComponent,
         MarkdownPageComponent
@@ -86,7 +91,8 @@ import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
 
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useExisting: ErrorInterceptorService, multi: true }
+        { provide: HTTP_INTERCEPTORS, useExisting: ErrorInterceptorService, multi: true },
+        DecimalPipe
     ],
     bootstrap: [AppComponent]
 })
