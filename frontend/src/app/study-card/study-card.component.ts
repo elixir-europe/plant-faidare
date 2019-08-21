@@ -71,10 +71,12 @@ export class StudyCardComponent implements OnInit {
             });
 
             study$.finally(() => {
-                this.brapiService.location(this.study.locationDbId).subscribe(
-                    location => {
-                        this.location = location.result;
-                    });
+                if (this.study.locationDbId) {
+                    this.brapiService.location(this.study.locationDbId).subscribe(
+                        location => {
+                            this.location = location.result;
+                        });
+                }
             });
 
             this.studyObservationVariables = [];
