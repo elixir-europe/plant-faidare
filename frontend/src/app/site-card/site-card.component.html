@@ -34,7 +34,7 @@
 
         <faidare-card-row
           label="Status"
-          [test]="location.additionalInfo['Site status']">
+          [test]="location.additionalInfo && location.additionalInfo['Site status']">
           <ng-template>
             {{ location.additionalInfo['Site status'] }}
           </ng-template>
@@ -52,7 +52,7 @@
 
         <faidare-card-row
           label="Coordinates precision"
-          [test]="location.additionalInfo['Coordinates precision']">
+          [test]="location.additionalInfo && location.additionalInfo[' Coordinates precision']">
           <ng-template>
             {{ location.additionalInfo['Coordinates precision'] }}
           </ng-template>
@@ -76,7 +76,7 @@
 
         <faidare-card-row
           label="Geographical location"
-          [test]="location.additionalInfo['Geographical location']">
+          [test]="location.additionalInfo && location.additionalInfo[' Geographical location']">
           <ng-template>
             {{ location.additionalInfo['Geographical location'] }}
           </ng-template>
@@ -92,7 +92,7 @@
 
         <faidare-card-row
           label="Country code"
-          [test]="location.countryCode && !location.additionalInfo['Geographical location']">
+          [test]="location.countryCode && location.additionalInfo && !location.additionalInfo['Geographical location']">
           <ng-template>
             {{ location.countryCode }}
           </ng-template>
@@ -105,12 +105,15 @@
 
         <faidare-card-row
           label="Slope"
-          [value]="location.additionalInfo['Slope']">
+          [test]="location.additionalInfo && location.additionalInfo['Slope']">
+          <ng-template>
+            {{ location.additionalInfo['Slope'] }}
+          </ng-template>
         </faidare-card-row>
 
         <faidare-card-row
           label="Exposure"
-          [test]="location.additionalInfo['Exposure']">
+          [test]="location.additionalInfo && location.additionalInfo[' Exposure']">
           <ng-template>
             {{ location.additionalInfo['Exposure'] }}
           </ng-template>
@@ -118,7 +121,7 @@
 
         <faidare-card-row
           label="Topography"
-          [test]="location.additionalInfo['Topography']">
+          [test]="location.additionalInfo && location.additionalInfo[' Topography']">
           <ng-template>
             {{ location.additionalInfo['Topography'] }}
           </ng-template>
@@ -126,7 +129,7 @@
 
         <faidare-card-row
           label="Environment type"
-          [test]="location.additionalInfo['Environment type']">
+          [test]="location.additionalInfo && location.additionalInfo[' Environment type']">
           <ng-template>
             {{ location.additionalInfo['Environment type'] }}
           </ng-template>
@@ -134,7 +137,7 @@
 
         <faidare-card-row
           label="Distance to city"
-          [test]="location.additionalInfo['Distance to city']">
+          [test]="location.additionalInfo && location.additionalInfo[' Distance to city']">
           <ng-template>
             {{ location.additionalInfo['Distance to city'] }}
           </ng-template>
@@ -142,7 +145,7 @@
 
         <faidare-card-row
           label="Direction from city"
-          [test]="location.additionalInfo['Direction from city']">
+          [test]="location.additionalInfo && location.additionalInfo[' Direction from city']">
           <ng-template>
             {{ location.additionalInfo['Direction from city'] }}
           </ng-template>
@@ -150,7 +153,7 @@
 
         <faidare-card-row
           label="Comment"
-          [test]="location.additionalInfo['Comment']">
+          [test]="location.additionalInfo && location.additionalInfo[' Comment']">
           <ng-template>
             {{ location.additionalInfo['Comment'] }}
           </ng-template>
