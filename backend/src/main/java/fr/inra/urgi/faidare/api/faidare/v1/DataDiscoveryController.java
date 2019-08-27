@@ -1,4 +1,4 @@
-package fr.inra.urgi.faidare.api.gnpis.v1;
+package fr.inra.urgi.faidare.api.faidare.v1;
 
 import fr.inra.urgi.faidare.config.FaidareProperties;
 import fr.inra.urgi.faidare.domain.brapi.v1.response.BrapiListResponse;
@@ -21,9 +21,9 @@ import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Api(tags = {"GnpIS API"}, description = "Extended GnpIS API")
+@Api(tags = {"Faidare API"}, description = "Extended Faidare API")
 @RestController
-@RequestMapping(value = "/gnpis/v1/datadiscovery")
+@RequestMapping(value = "/faidare/v1/datadiscovery")
 public class DataDiscoveryController {
 
     private final DataDiscoveryRepository dataDiscoveryRepository;

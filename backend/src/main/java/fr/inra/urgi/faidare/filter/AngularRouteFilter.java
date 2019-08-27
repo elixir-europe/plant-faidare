@@ -34,7 +34,7 @@ import java.util.Arrays;
 public class AngularRouteFilter implements Filter {
 
     private static final String[] API_PREFIXES = {
-        "/brapi/v1", "/gnpis/v1", "/actuator", "/v2/api-docs", "/swagger-resources"
+        "/brapi/v1", "/faidare/v1", "/actuator", "/v2/api-docs", "/swagger-resources"
     };
 
     private static final String[] STATIC_SUFFIXES = {

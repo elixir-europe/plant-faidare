@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, zip } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { DataDiscoveryCriteria, DataDiscoveryFacet, DataDiscoveryResults, DataDiscoverySource } from './models/data-discovery.model';
+import {
+    DataDiscoveryCriteria,
+    DataDiscoveryFacet,
+    DataDiscoveryResults,
+    DataDiscoverySource
+} from './models/data-discovery.model';
 import { BrapiResults } from './models/brapi.model';
 import { map } from 'rxjs/operators';
 import { Germplasm } from './models/gnpis.model';
@@ -9,7 +14,7 @@ import { XrefResponse } from './models/xref.model';
 import { removeNullUndefined } from './utils';
 
 
-export const BASE_URL = 'gnpis/v1';
+export const BASE_URL = 'faidare/v1';
 
 @Injectable({
     providedIn: 'root'

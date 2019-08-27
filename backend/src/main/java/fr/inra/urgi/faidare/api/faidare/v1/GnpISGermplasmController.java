@@ -1,4 +1,4 @@
-package fr.inra.urgi.faidare.api.gnpis.v1;
+package fr.inra.urgi.faidare.api.faidare.v1;
 
 import com.google.common.base.Strings;
 import fr.inra.urgi.faidare.api.BadRequestException;
@@ -23,9 +23,9 @@ import java.util.Collections;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-@Api(tags = {"GnpIS API"}, description = "Extended GnpIS API")
+@Api(tags = {"Faidare API"}, description = "Extended Faidare API")
 @RestController
-@RequestMapping(value = "/gnpis/v1/germplasm")
+@RequestMapping(value = "/faidare/v1/germplasm")
 public class GnpISGermplasmController {
 
     private final GermplasmService germplasmService;

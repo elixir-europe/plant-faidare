@@ -1,4 +1,4 @@
-package fr.inra.urgi.faidare.api.gnpis.v1;
+package fr.inra.urgi.faidare.api.faidare.v1;
 
 import fr.inra.urgi.faidare.api.BadRequestException;
 import fr.inra.urgi.faidare.api.NotFoundException;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  *
  * @author gcornut
  */
-@ControllerAdvice(basePackages = "fr.inra.urgi.faidare.api.gnpis.v1")
+@ControllerAdvice(basePackages = "fr.inra.urgi.faidare.api.faidare.v1")
 public class GnpISExceptionHandler {
 
     /**
