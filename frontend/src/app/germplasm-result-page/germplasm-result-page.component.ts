@@ -12,15 +12,12 @@ export class GermplasmResultPageComponent implements OnInit {
 
     countries: Country[];
 
-    constructor(public service: CountryService) {
+    constructor(public service: CountryService) { }
+
+    ngOnInit() {
 
         this.service.countries$.subscribe(countries => {
             this.countries = countries;
         });
     }
-
-    ngOnInit() {
-
-    }
-
 }

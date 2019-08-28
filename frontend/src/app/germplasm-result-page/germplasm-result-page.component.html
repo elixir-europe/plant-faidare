@@ -4,12 +4,13 @@
 
   <ng-template let-row>
     <tr>
-
        <th scope="row">{{ row.id }}</th>
-      <td><ngb-highlight [result]="row.name" [term]="row.searchTerm"></ngb-highlight></td>
+      <td>
+        <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + row.flag" class="mr-2" style="width: 20px">
+        <ngb-highlight [result]="row.name" [term]="service.searchTerm"></ngb-highlight>
+      </td>
       <td><ngb-highlight [result]="row.area | number" [term]="service.searchTerm"></ngb-highlight></td>
       <td><ngb-highlight [result]="row.population | number" [term]="service.searchTerm"></ngb-highlight></td>
-
     </tr>
   </ng-template>
 

@@ -1,12 +1,12 @@
-import {Injectable, PipeTransform} from '@angular/core';
+import { Injectable, PipeTransform } from '@angular/core';
 
-import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 
-import {Country} from './country';
-import {COUNTRIES} from './countries';
-import {DecimalPipe} from '@angular/common';
-import {debounceTime, delay, switchMap, tap} from 'rxjs/operators';
-import {SortDirection} from './sortable.directive';
+import { Country } from './country';
+import { COUNTRIES } from './countries';
+import { DecimalPipe } from '@angular/common';
+import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
+import { SortDirection } from './sortable.directive';
 
 interface SearchResult {
     countries: Country[];
@@ -26,9 +26,6 @@ function compare(v1, v2) {
 }
 
 function sort(countries: Country[], column: string, direction: string): Country[] {
-    console.log(countries);
-    console.log(column);
-    console.log(direction);
 
     if (direction === '') {
         return countries;

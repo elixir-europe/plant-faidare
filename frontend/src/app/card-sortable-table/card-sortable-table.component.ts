@@ -1,4 +1,11 @@
-import { Component, ContentChild, Input, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import {
+    Component,
+    ContentChild,
+    Input,
+    QueryList,
+    TemplateRef,
+    ViewChildren
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { Country } from './country';
 import { CountryService } from './country.services';
@@ -31,7 +38,6 @@ export class CardSortableTableComponent {
     onSort({column, direction}: SortEvent) {
         // resetting other headers
         this.headers.forEach(header => {
-            console.log(header);
             if (header.sortable !== column) {
                 header.direction = '';
             }

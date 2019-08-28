@@ -24,7 +24,14 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let country of countries$ | async">
+
+
+    <ng-container *ngFor="let row of rows"
+                  [ngTemplateOutlet]="template"
+                  [ngTemplateOutletContext]="{$implicit: row}">
+    </ng-container>
+
+    <!--<tr *ngFor="let country of countries$ | async">
       <th scope="row">{{ country.id }}</th>
       <td>
         <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + country.flag" class="mr-2" style="width: 20px">
@@ -32,7 +39,7 @@
       </td>
       <td><ngb-highlight [result]="country.area | number" [term]="service.searchTerm"></ngb-highlight></td>
       <td><ngb-highlight [result]="country.population | number" [term]="service.searchTerm"></ngb-highlight></td>
-    </tr>
+    </tr>-->
     </tbody>
   </table>
 
