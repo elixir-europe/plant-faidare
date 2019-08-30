@@ -9,6 +9,10 @@ public class GermplasmInstituteVO implements Serializable, GermplasmInstitute {
 
     private static final long serialVersionUID = 7976964107440923573L;
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     private InstituteVO institute;
     private String germplasmPUI;
     private String accessionNumber;

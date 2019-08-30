@@ -13,6 +13,10 @@ import {
     BrapiTrial
 } from './models/brapi.model';
 
+
+import { GermplasmMcpd } from './models/gnpis.model';
+
+
 export const BASE_URL = 'brapi/v1';
 
 @Injectable({
@@ -59,6 +63,11 @@ export class BrapiService {
     studyTrials(trialsId: string): Observable<BrapiResult<BrapiTrial>> {
         return this.http
             .get<BrapiResult<BrapiTrial>>(`${BASE_URL}/trials/${trialsId}`);
+    }
+    germplasmMcpd(germplasmDbId: string): Observable<BrapiResult<GermplasmMcpd>> {
+        console.log("VIKAS");
+        return this.http
+            .get<BrapiResult<GermplasmMcpd>>(`${BASE_URL}/germplasm/${germplasmDbId}/mcpd`);
     }
 
 

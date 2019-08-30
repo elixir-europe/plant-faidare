@@ -7,18 +7,18 @@ import fr.inra.urgi.faidare.domain.JSONView;
  * @author gcornut
  */
 public interface CollPop {
-    @JsonView(JSONView.GnpISFields.class)
+    @JsonView(JSONView.BrapiFields.class)
     Long getId();
 
-    @JsonView(JSONView.GnpISFields.class)
+    @JsonView(JSONView.BrapiFields.class)
     String getName();
 
-    @JsonView(JSONView.GnpISFields.class)
+    @JsonView(JSONView.BrapiFields.class)
     String getType();
 
-    @JsonView(JSONView.GnpISFields.class)
+    @JsonView(JSONView.BrapiFields.class)
     PuiNameValue getGermplasmRef();
 
-    @JsonView(JSONView.GnpISFields.class)
+    @JsonView(JSONView.BrapiFields.class)
     Integer getGermplasmCount();
 }

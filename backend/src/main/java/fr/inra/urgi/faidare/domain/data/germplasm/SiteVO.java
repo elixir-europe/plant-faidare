@@ -6,19 +6,20 @@ public class SiteVO implements Serializable, Site {
 
     private static final long serialVersionUID = 7058708694739141664L;
 
-    private Long siteId;
+    private String locationDbId;
     private String siteName;
     private Float latitude;
     private Float longitude;
     private String siteType;
 
     @Override
-    public Long getSiteId() {
-        return siteId;
+    public String getLocationDbId() {
+        return locationDbId;
     }
 
-    public void setSiteId(Long siteId) {
-        this.siteId = siteId;
+
+    public void setLocationDbId(String locationDbId) {
+        this.locationDbId = locationDbId;
     }
 
     @Override

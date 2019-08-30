@@ -60,6 +60,12 @@ export interface Germplasm extends BrapiGermplasm {
     'schema:includedInDataCatalog': any;
 }
 
+
+export interface GermplasmMcpd extends  BrapiGermplasm{
+    mlsStatus: string;
+}
+
+
 export interface Site {
     latitude: number;
     longitude: number;
@@ -125,4 +131,6 @@ export interface GermplasmSet {
         pui: string;
         name: string;
     };
+
+
 }

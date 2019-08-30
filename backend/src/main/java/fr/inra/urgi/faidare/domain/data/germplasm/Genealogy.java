@@ -37,5 +37,5 @@ public interface Genealogy {
     String getSecondParentType();
 
     @JsonView(JSONView.GnpISFields.class)
-    List<SimpleVO> getSibblings();
+    List<PuiNameValueVO> getSibblings();
 }

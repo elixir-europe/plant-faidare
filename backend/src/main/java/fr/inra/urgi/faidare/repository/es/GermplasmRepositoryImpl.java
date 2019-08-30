@@ -38,6 +38,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,6 +65,7 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
     private final ESFindRepository<GermplasmSearchCriteria, GermplasmVO> findRepository;
     private final ESGetByIdRepository<GermplasmVO> getByIdRepository;
     private final ESGenericQueryFactory<GermplasmSearchCriteria> queryFactory;
+    private final ESGetByIdRepository<GermplasmMcpdVO> getMcpdByIdRepository;
 
     @Autowired
     public GermplasmRepositoryImpl(
@@ -76,9 +79,12 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
         this.mapper = mapper;
         this.parser = parser;
         Class<GermplasmVO> voClass = GermplasmVO.class;
+        Class<GermplasmMcpdVO> voMcpdClass = GermplasmMcpdVO.class;
+
         this.queryFactory = new ESGenericQueryFactory<>();
         this.findRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, this.parser);
         this.getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, voClass, this.parser);
+        this.getMcpdByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, voMcpdClass, this.parser);
         Class<GermplasmVO> documentClass = GermplasmVO.class;
         Class<FaidareGermplasmPOSTShearchCriteria> criteriaClass = FaidareGermplasmPOSTShearchCriteria.class;
         this.documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(documentClass);
@@ -127,6 +133,12 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public GermplasmMcpdVO getMcpdById(String germplasmDbId) {
+        return getMcpdByIdRepository.getById(germplasmDbId);
+    }
+
 
     @Override
     public PedigreeVO findPedigree(String germplasmDbId) {

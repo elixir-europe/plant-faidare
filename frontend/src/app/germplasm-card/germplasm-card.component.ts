@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
+import { BrapiAttributeData, BrapiGermplasmPedigree, BrapiLocation, BrapiTaxonIds } from '../models/brapi.model';
+import { Children, Germplasm, GermplasmMcpd, Site } from '../models/gnpis.model';
 import {
     BrapiAttributeData,
     BrapiGermplasmPedigree,
@@ -26,6 +28,7 @@ export class GermplasmCardComponent implements OnInit {
 
     taxonIdsWithURL: BrapiTaxonIds[] = [];
     germplasmGnpis: Germplasm;
+    germplasmMcpd: GermplasmMcpd;
     germplasmPedigree: BrapiGermplasmPedigree;
     germplasmProgeny: Children[];
     germplasmAttributes: BrapiAttributeData[];
@@ -54,6 +57,13 @@ export class GermplasmCardComponent implements OnInit {
                         .then(germplasmProgeny => {
                             this.germplasmProgeny = germplasmProgeny.result;
                         });*/
+
+
+
+                   this.brapiService.germplasmMcpd(germplasmId).subscribe(germplasmMcpd => {
+                            this.germplasmMcpd = germplasmMcpd.result;
+                        });
+
 
                     this.germplasmPedigree = null;
                     this.brapiService.germplasmPedigree(germplasmId)

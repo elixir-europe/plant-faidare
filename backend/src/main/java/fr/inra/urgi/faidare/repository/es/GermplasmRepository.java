@@ -8,6 +8,7 @@ import fr.inra.urgi.faidare.domain.data.germplasm.ProgenyVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.response.GermplasmSearchResponse;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.elasticsearch.repository.ESFindRepository;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 
 import java.util.Iterator;
 
@@ -49,5 +50,11 @@ public interface GermplasmRepository
      * Find progeny for germplasm by id.
      */
     ProgenyVO findProgeny(String germplasmDbId);
+
+    /**
+     * Find germplasm mcpd by id.
+     */
+    GermplasmMcpdVO getMcpdById(String germplasmDbId);
+
 
 }

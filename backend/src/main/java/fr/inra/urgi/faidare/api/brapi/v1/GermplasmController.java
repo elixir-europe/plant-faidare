@@ -1,10 +1,7 @@
 package fr.inra.urgi.faidare.api.brapi.v1;
 
 import fr.inra.urgi.faidare.api.NotFoundException;
-import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiGermplasm;
-import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiGermplasmAttributeValueList;
-import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiPedigree;
-import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiProgeny;
+import fr.inra.urgi.faidare.domain.brapi.v1.data.*;
 import fr.inra.urgi.faidare.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.faidare.domain.brapi.v1.response.BrapiResponse;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmAttributeCriteria;
@@ -68,6 +65,21 @@ public class GermplasmController {
         criteria.setPage(paginationCriteria.getPage());
         return searchGermplasmService(criteria);
     }
+
+    /**
+     * @link https://brapi.docs.apiary.io/#reference/germplasm/germplasm/get-germplasm-mcpd-by-germplasmdbid
+     */
+    @ApiOperation("Get germplasm mcpd by id")
+    @GetMapping("/brapi/v1/germplasm/{germplasmDbId}/mcpd")
+    public BrapiResponse<BrapiGermplasmMcpd> getGermplasmMcpd(@PathVariable String germplasmDbId) {
+        LOGGER.debug("germplasmDbId = " + germplasmDbId);
+        BrapiGermplasmMcpd germplasm = germplasmService.getMcpdById(germplasmDbId);
+        if (germplasm == null) {
+            throw new NotFoundException("Germplasm not found for id '" + germplasmDbId + "'");
+        }
+        return ApiResponseFactory.createSingleObjectResponse(germplasm, null);
+    }
+
 
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Germplasm/GermplasmSearchGET.md

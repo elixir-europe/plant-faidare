@@ -14,6 +14,8 @@ import fr.inra.urgi.faidare.repository.es.GermplasmRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
+
 
 import javax.annotation.Resource;
 import java.io.*;
@@ -61,6 +63,12 @@ public class GermplasmServiceImpl implements GermplasmService {
         }
     }
 
+    @Override
+    public GermplasmMcpdVO getMcpdById(String germplasmDbId) {
+        return germplasmRepository.getMcpdById(germplasmDbId);
+    }
+
+
     private void writeToCSV(Path tmpFile, Iterator<GermplasmVO> germplasms) throws IOException {
         Writer fileStream = new OutputStreamWriter(new FileOutputStream(tmpFile.toFile()), StandardCharsets.UTF_8);
         CSVWriter csvWriter = new CSVWriter(fileStream, ';', '"', '\\', "\n");
@@ -68,7 +76,6 @@ public class GermplasmServiceImpl implements GermplasmService {
             "DOI", "AccessionNumber", "AccessionName", "TaxonGroup", "HoldingInstitution",
             "LotName", "LotSynonym", "CollectionName", "CollectionType", "PanelName", "PanelSize"};
         csvWriter.writeNext(header);
-
 
         while (germplasms.hasNext()) {
             List<String> collectionNames = new ArrayList<>();

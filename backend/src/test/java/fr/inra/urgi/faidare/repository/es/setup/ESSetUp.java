@@ -170,7 +170,11 @@ public class ESSetUp {
     @SuppressWarnings("UnstableApiUsage")
     private String readResource(String path) {
         try {
-            return CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream(path)));
+            InputStream resource = getClass().getResourceAsStream(path);
+            if (resource == null) {
+                throw new RuntimeException("Could not find resource at path '"+path+"'");
+            }
+            return CharStreams.toString(new InputStreamReader(resource));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

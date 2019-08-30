@@ -312,13 +312,5 @@ public class ObservationUnitVO implements BrapiObservationUnit, GnpISInternal, H
         this.groupId = groupId;
     }
 
-    @Override
-    public List<Long> getSpeciesGroup() {
-        return speciesGroup;
-    }
-
-    public void setSpeciesGroup(List<Long> speciesGroup) {
-        this.speciesGroup = speciesGroup;
-    }
 
 }

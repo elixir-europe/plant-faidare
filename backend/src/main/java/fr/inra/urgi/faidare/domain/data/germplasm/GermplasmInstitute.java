@@ -8,7 +8,7 @@ import fr.inra.urgi.faidare.domain.JSONView;
  */
 public interface GermplasmInstitute {
     @JsonView(JSONView.GnpISFields.class)
-    Institute getInstitute();
+    InstituteVO getInstitute();
 
     @JsonView(JSONView.GnpISFields.class)
     String getGermplasmPUI();

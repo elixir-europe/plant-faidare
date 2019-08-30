@@ -7,6 +7,7 @@ import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.ProgenyVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.response.GermplasmSearchResponse;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 
 import java.io.File;
 
@@ -30,5 +31,8 @@ public interface GermplasmService {
     PedigreeVO getPedigree(String germplasmDbId);
 
     ProgenyVO getProgeny(String germplasmDbId);
+
+    GermplasmMcpdVO getMcpdById(String germplasmDbId);
+
 
 }

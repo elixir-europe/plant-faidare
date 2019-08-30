@@ -1,0 +1,14 @@
+
+{
+  "germplasm-mcpd": {
+    "dynamic": "false",
+    "properties": {
+      "germplasmDbId": {
+        "type": "keyword"
+      },
+      "groupId": {
+        "type": "long"
+      }
+    }
+  }
+}

@@ -24,7 +24,6 @@ public class GermplasmVO
     private static final long serialVersionUID = -7719928853974382749L;
 
     private Long groupId;
-    private List<Long> speciesGroup;
 
     @Id
     private String germplasmDbId;
@@ -35,6 +34,7 @@ public class GermplasmVO
     private String seedSource;
     private List<String> synonyms;
     private String commonCropName;
+    private PhotoVO photo;
 
     @JsonSetter(nulls = Nulls.AS_EMPTY)
     private String instituteCode = "";
@@ -58,19 +58,10 @@ public class GermplasmVO
     private List<String> taxonSynonyms;
     private List<String> taxonCommonNames;
     private String taxonComment;
-    private String geneticNature;
-    private String comment;
-    private PhotoVO photo;
-    private InstituteVO holdingInstitute;
-    private InstituteVO holdingGenbank;
-    private String presenceStatus;
 
     private GenealogyVO genealogy;
     private List<GenealogyVO> children;
-    private List<SimpleVO> descriptors;
 
-    private SiteVO originSite;
-    private SiteVO collectingSite;
     private List<SiteVO> evaluationSites;
 
     private GermplasmInstituteVO collector;
@@ -130,15 +121,6 @@ public class GermplasmVO
 
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
-    }
-
-    @Override
-    public List<Long> getSpeciesGroup() {
-        return speciesGroup;
-    }
-
-    public void setSpeciesGroup(List<Long> speciesGroup) {
-        this.speciesGroup = speciesGroup;
     }
 
     @Override
@@ -383,60 +365,6 @@ public class GermplasmVO
     }
 
     @Override
-    public String getGeneticNature() {
-        return geneticNature;
-    }
-
-    public void setGeneticNature(String geneticNature) {
-        this.geneticNature = geneticNature;
-    }
-
-    @Override
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    @Override
-    public PhotoVO getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(PhotoVO photo) {
-        this.photo = photo;
-    }
-
-    @Override
-    public InstituteVO getHoldingInstitute() {
-        return holdingInstitute;
-    }
-
-    public void setHoldingInstitute(InstituteVO holdingInstitute) {
-        this.holdingInstitute = holdingInstitute;
-    }
-
-    @Override
-    public InstituteVO getHoldingGenbank() {
-        return holdingGenbank;
-    }
-
-    public void setHoldingGenbank(InstituteVO holdingGenbank) {
-        this.holdingGenbank = holdingGenbank;
-    }
-
-    @Override
-    public String getPresenceStatus() {
-        return presenceStatus;
-    }
-
-    public void setPresenceStatus(String presenceStatus) {
-        this.presenceStatus = presenceStatus;
-    }
-
-    @Override
     public GenealogyVO getGenealogy() {
         return genealogy;
     }
@@ -452,33 +380,6 @@ public class GermplasmVO
 
     public void setChildren(List<GenealogyVO> children) {
         this.children = children;
-    }
-
-    @Override
-    public List<SimpleVO> getDescriptors() {
-        return descriptors;
-    }
-
-    public void setDescriptors(List<SimpleVO> descriptors) {
-        this.descriptors = descriptors;
-    }
-
-    @Override
-    public SiteVO getOriginSite() {
-        return originSite;
-    }
-
-    public void setOriginSite(SiteVO originSite) {
-        this.originSite = originSite;
-    }
-
-    @Override
-    public SiteVO getCollectingSite() {
-        return collectingSite;
-    }
-
-    public void setCollectingSite(SiteVO collectingSite) {
-        this.collectingSite = collectingSite;
     }
 
     @Override
@@ -543,5 +444,14 @@ public class GermplasmVO
     public void setPopulation(List<CollPopVO> population) {
         this.population = population;
     }
+
+    public PhotoVO getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(PhotoVO photo) {
+        this.photo = photo;
+    }
+
 
 }

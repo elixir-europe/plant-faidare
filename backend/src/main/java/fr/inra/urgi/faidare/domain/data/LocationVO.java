@@ -213,15 +213,6 @@ public class LocationVO implements GnpISInternal, BrapiLocation, HasURI, HasURL,
     }
 
     @Override
-    public List<Long> getSpeciesGroup() {
-        return speciesGroup;
-    }
-
-    public void setSpeciesGroup(List<Long> speciesGroup) {
-        this.speciesGroup = speciesGroup;
-    }
-
-    @Override
     public Long getGroupId() {
         return groupId;
     }

@@ -1,9 +1,8 @@
 package fr.inra.urgi.faidare.domain.data.germplasm;
-
+import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiGermplasmInstitute;
 import java.io.Serializable;
 
-public class InstituteVO implements Serializable, Institute {
-
+public class InstituteVO implements Serializable, BrapiGermplasmInstitute, ExtendedInstitute {
     private static final long serialVersionUID = -680211100453576319L;
 
     private String instituteName;

@@ -22,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,6 +48,8 @@ class GermplasmRepositoryTest {
         esSetUp.initialize(GermplasmVO.class, 0L);
         esSetUp.initialize(ProgenyVO.class, 0L);
         esSetUp.initialize(PedigreeVO.class, 0L);
+        esSetUp.initialize(GermplasmMcpdVO.class, 0L);
+
     }
 
     @Autowired
@@ -70,6 +73,24 @@ class GermplasmRepositoryTest {
         assertThat(germplasm).isNotNull().hasSize(1);
         assertThat(germplasm.get(0).getGermplasmPUI()).isEqualTo(germplasmPUI);
     }
+
+
+    @Test
+    void should_Get_By_Id_Mcpd() {
+        String germplasmDbId = "13705";
+        GermplasmMcpdVO germplasm = repository.getMcpdById(germplasmDbId);
+        assertThat(germplasm).isNotNull();
+        assertThat(germplasm.getGermplasmDbId()).isEqualTo(germplasmDbId);
+    }
+
+
+    @Test
+    void should_Not_Get_Mcpd_With_Wrong_Id() {
+        String germplasmDbId = "489485184";
+        GermplasmMcpdVO germplasm = repository.getMcpdById(germplasmDbId);
+        assertThat(germplasm).isNull();
+    }
+
 
     @Test
     void should_Not_Get_By_Incorrect_Id() {
