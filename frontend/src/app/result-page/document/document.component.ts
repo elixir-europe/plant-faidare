@@ -51,8 +51,7 @@ export class DocumentComponent implements OnInit {
     getQueryParam() {
         if (this.document['schema:identifier']) {
             const id: string = this.document['schema:identifier'];
-            // TODO: remove condition when schema:identifier will store an encoded
-            return { id: btoa(id) };
+            return { id: id };
         } else {
             return {
                 pui: this.document['@id']
