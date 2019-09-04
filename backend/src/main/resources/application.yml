@@ -42,27 +42,27 @@ faidare:
     name: URGI GnpIS
     image: https://urgi.versailles.inra.fr/files/faidare/logo/GnpIS.png
   # WUR EU-SOL BreeDB
-  - uri: WUR
+  - uri: https://www.eu-sol.wur.nl/
     url: https://www.eu-sol.wur.nl/
     name: WUR EU-SOL BreeDB
     image: https://urgi.versailles.inra.fr/files/faidare/logo/EU-SOL.png
   # VIB PIPPA
-  - uri: VIB
+  - uri: http://pippa.psb.ugent.be
     url: http://pippa.psb.ugent.be
     name: VIB PIPPA
     image: https://urgi.versailles.inra.fr/files/faidare/logo/VIB.png
   # IBET BioData
-  - uri: IBET
+  - uri: https://biodata.pt
     url: https://biodata.pt
     name: IBET BioData
     image: https://urgi.versailles.inra.fr/files/faidare/logo/biodata.png
   # NIB PISA
-  - uri: NIB
+  - uri: http://nib.si
     url: http://www.pisa.nib.si
     name: NIB PISA
     image: https://urgi.versailles.inra.fr/files/faidare/logo/NIB.png
   # CIRAD TropGENE
-  - uri: CIRAD
+  - uri: http://tropgenedb.cirad.fr
     url: http://tropgenedb.cirad.fr
     name: CIRAD TropGENE
     image: https://urgi.versailles.inra.fr/files/faidare/logo/CIRAD.jpg
