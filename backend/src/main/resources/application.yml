@@ -66,6 +66,11 @@ faidare:
     url: http://tropgenedb.cirad.fr
     name: CIRAD TropGENE
     image: https://urgi.versailles.inra.fr/files/faidare/logo/CIRAD.jpg
+  # EVA
+  - uri: https://www.ebi.ac.uk/eva
+    url: https://www.ebi.ac.uk/eva
+    name: EVA
+    image: https://urgi.versailles.inra.fr/files/faidare/logo/EVA.jpg
 
 server:
   compression:
