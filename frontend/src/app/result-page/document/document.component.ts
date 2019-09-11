@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DataDiscoveryDocument, DataDiscoverySource, DataDiscoveryType } from '../../models/data-discovery.model';
+import {
+    DataDiscoveryDocument,
+    DataDiscoverySource,
+    DataDiscoveryType
+} from '../../models/data-discovery.model';
 
 @Component({
     selector: 'faidare-document',
@@ -10,8 +14,8 @@ export class DocumentComponent implements OnInit {
     private static MAX_LENGTH = 256;
     private static BADGE_TYPE = {
         'Germplasm': 'badge-germplasm',
-        'Phenotyping Study': 'badge-study',
-        'Genotyping Study': 'badge-study'
+        'Phenotyping Study': 'badge-phenotyping-study',
+        'Genotyping Study': 'badge-genotyping-study'
     };
 
     private static CARD_TYPE = {
