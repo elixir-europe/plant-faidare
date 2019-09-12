@@ -44,7 +44,7 @@ describe('DocumentComponent', () => {
         const component = tester.componentInstance;
 
         component.document = {
-            '@type': ['Germplasm', 'Phenotyping Study'],
+            '@type': ['Germplasm', 'Phenotyping Study', 'Genotyping Study'],
             '@id': 'urn',
             'schema:identifier': 'doc1',
             'schema:name': 'doc_name',
@@ -64,7 +64,10 @@ describe('DocumentComponent', () => {
         expect(tester.types[0].classes).toContain('badge-germplasm');
 
         expect(tester.types[1]).toContainText('Phenotyping Study');
-        expect(tester.types[1].classes).toContain('badge-study');
+        expect(tester.types[1].classes).toContain('badge-phenotyping-study');
+
+        expect(tester.types[2]).toContainText('Genotyping Study');
+        expect(tester.types[2].classes).toContain('badge-genotyping-study');
 
         expect(tester.source).toContainText('source1');
         expect(tester.source.attr('href')).toEqual('http://dco/url');

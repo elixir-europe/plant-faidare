@@ -70,7 +70,7 @@ faidare:
   - uri: https://www.ebi.ac.uk/eva
     url: https://www.ebi.ac.uk/eva
     name: EVA
-    image: https://urgi.versailles.inra.fr/files/faidare/logo/EVA.jpg
+    image: https://urgi.versailles.inra.fr/files/faidare/logo/EVA.png
 
 server:
   compression:
