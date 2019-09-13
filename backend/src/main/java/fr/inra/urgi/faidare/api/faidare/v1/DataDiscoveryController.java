@@ -21,7 +21,7 @@ import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Api(tags = {"Faidare API"}, description = "Extended Faidare API")
+@Api(tags = {"FAIDARE API"}, description = "Extended FAIDARE API")
 @RestController
 @RequestMapping(value = "/faidare/v1/datadiscovery")
 public class DataDiscoveryController {

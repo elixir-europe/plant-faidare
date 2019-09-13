@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Imported and adapted from unified-interface legacy
  */
-@Api(tags = {"Faidare API"}, description = "Extended Faidare API")
+@Api(tags = {"FAIDARE API"}, description = "Extended FAIDARE API")
 @RestController
 public class XRefDocumentController {
 

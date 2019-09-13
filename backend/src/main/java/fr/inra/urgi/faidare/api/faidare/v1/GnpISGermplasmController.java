@@ -23,7 +23,7 @@ import java.util.Collections;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-@Api(tags = {"Faidare API"}, description = "Extended Faidare API")
+@Api(tags = {"FAIDARE API"}, description = "Extended FAIDARE API")
 @RestController
 @RequestMapping(value = "/faidare/v1/germplasm")
 public class GnpISGermplasmController {
