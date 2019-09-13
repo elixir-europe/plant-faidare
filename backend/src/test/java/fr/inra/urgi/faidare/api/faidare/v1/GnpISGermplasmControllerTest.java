@@ -1,4 +1,4 @@
-package fr.inra.urgi.faidare.api.gnpis.v1;
+package fr.inra.urgi.faidare.api.faidare.v1;
 
 import fr.inra.urgi.faidare.domain.criteria.GermplasmGETSearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
@@ -71,7 +71,7 @@ class GnpISGermplasmControllerTest {
         when(service.find(criteriaCaptor.capture())).thenReturn(germplasmPage);
 
         String pui = "doi:10.15454/1.4921786234137117E12";
-        mockMvc.perform(get("/gnpis/v1/germplasm?pui=" + pui)
+        mockMvc.perform(get("/faidare/v1/germplasm?pui=" + pui)
             .contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
@@ -85,7 +85,7 @@ class GnpISGermplasmControllerTest {
 
     @Test
     void should_Return_Bad_Request_With_No_Param() throws Exception {
-        mockMvc.perform(get("/gnpis/v1/germplasm")
+        mockMvc.perform(get("/faidare/v1/germplasm")
             .contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(status().isBadRequest());
     }
@@ -114,7 +114,7 @@ class GnpISGermplasmControllerTest {
 
         when(service.find(any(GermplasmSearchCriteria.class))).thenReturn(germplasmPage);
 
-        mockMvc.perform(get("/gnpis/v1/germplasm?pui=foo")
+        mockMvc.perform(get("/faidare/v1/germplasm?pui=foo")
             .contentType(MediaType.APPLICATION_JSON_UTF8))
 
             // Should not have private fields

@@ -1,4 +1,4 @@
-package fr.inra.urgi.faidare.api.gnpis.v1;
+package fr.inra.urgi.faidare.api.faidare.v1;
 
 import fr.inra.urgi.faidare.domain.JSONView;
 import org.springframework.core.MethodParameter;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJack
 /**
  * @author gcornut
  */
-@ControllerAdvice(basePackages = "fr.inra.urgi.faidare.api.gnpis.v1")
+@ControllerAdvice(basePackages = "fr.inra.urgi.faidare.api.faidare.v1")
 public class GnpISJSONViewHandler extends AbstractMappingJacksonResponseBodyAdvice {
 
     @Override

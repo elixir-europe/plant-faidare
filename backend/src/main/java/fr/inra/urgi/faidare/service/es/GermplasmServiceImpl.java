@@ -1,7 +1,7 @@
 package fr.inra.urgi.faidare.service.es;
 
 import com.opencsv.CSVWriter;
-import fr.inra.urgi.faidare.api.gnpis.v1.GnpISGermplasmController;
+import fr.inra.urgi.faidare.api.faidare.v1.GnpISGermplasmController;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;

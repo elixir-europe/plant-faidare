@@ -1,6 +1,6 @@
 package fr.inra.urgi.faidare.repository.es;
 
-import fr.inra.urgi.faidare.api.gnpis.v1.DataDiscoveryController;
+import fr.inra.urgi.faidare.api.faidare.v1.DataDiscoveryController;
 import fr.inra.urgi.faidare.domain.datadiscovery.criteria.DataDiscoveryCriteria;
 import fr.inra.urgi.faidare.domain.datadiscovery.criteria.DataDiscoveryCriteriaImpl;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataDiscoveryDocument;

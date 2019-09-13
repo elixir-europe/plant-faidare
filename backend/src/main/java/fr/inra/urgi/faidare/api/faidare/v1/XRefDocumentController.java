@@ -1,4 +1,4 @@
-package fr.inra.urgi.faidare.api.gnpis.v1;
+package fr.inra.urgi.faidare.api.faidare.v1;
 
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentSearchCriteria;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Imported and adapted from unified-interface legacy
  */
-@Api(tags = {"GnpIS API"}, description = "Extended GnpIS API")
+@Api(tags = {"FAIDARE API"}, description = "Extended FAIDARE API")
 @RestController
 public class XRefDocumentController {
 
@@ -29,7 +29,7 @@ public class XRefDocumentController {
     }
 
     @ApiOperation("Find xref documents")
-    @GetMapping(value = "/gnpis/v1/xref/documentbyfulltextid")
+    @GetMapping(value = "/faidare/v1/xref/documentbyfulltextid")
     public PaginatedList<XRefDocumentVO> documentByFullTextId(
         @RequestParam(required = false, value = "entry_type") String entryType,
         @RequestParam(required = false) List<String> linkedRessourcesID

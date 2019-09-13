@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DataDiscoveryDocument, DataDiscoverySource, DataDiscoveryType } from '../../models/data-discovery.model';
+import {
+    DataDiscoveryDocument,
+    DataDiscoverySource,
+    DataDiscoveryType
+} from '../../models/data-discovery.model';
 
 @Component({
     selector: 'faidare-document',
@@ -47,13 +51,7 @@ export class DocumentComponent implements OnInit {
     getQueryParam() {
         if (this.document['schema:identifier']) {
             const id: string = this.document['schema:identifier'];
-            // TODO: remove condition when GnpIS schema:identifier will store an encoded
-            // value (manage the same way as partners data
-            if (id.includes('doi.org') || id.includes('gnpis_pui')) {
-                return { id: btoa(id) };
-            } else {
-                return { id: id };
-            }
+            return { id: id };
         } else {
             return {
                 pui: this.document['@id']
