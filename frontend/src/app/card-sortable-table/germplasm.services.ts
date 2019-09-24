@@ -1,15 +1,14 @@
 import { Injectable, PipeTransform } from '@angular/core';
 
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-
-import { Country } from './country';
-import { COUNTRIES } from './countries';
+import { GERMPLASM } from './germplasm';
 import { DecimalPipe } from '@angular/common';
 import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 import { SortDirection } from './sortable.directive';
+import { BrapiGermplasm } from '../models/brapi.model';
 
 interface SearchResult {
-    countries: Country[];
+    germplasm: BrapiGermplasm[];
     total: number;
 }
 
@@ -25,29 +24,30 @@ function compare(v1, v2) {
     return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
 }
 
-function sort(countries: Country[], column: string, direction: string): Country[] {
+function sort(germplasm: BrapiGermplasm[], column: string, direction: string): BrapiGermplasm[] {
 
     if (direction === '') {
-        return countries;
+        return germplasm;
     } else {
-        return [...countries].sort((a, b) => {
+        return [...germplasm].sort((a, b) => {
             const res = compare(a[column], b[column]);
             return direction === 'asc' ? res : -res;
         });
     }
 }
 
-function matches(country: Country, term: string, pipe: PipeTransform) {
-    return country.name.toLowerCase().includes(term.toLowerCase())
-        || pipe.transform(country.area).includes(term)
-        || pipe.transform(country.population).includes(term);
+function matches(germplasm: BrapiGermplasm, term: string, pipe: PipeTransform) {
+    return germplasm.germplasmDbId.toLowerCase().includes(term.toLowerCase())
+        || germplasm.accessionNumber.toLowerCase().includes(term.toLowerCase())
+        || germplasm.instituteName.toLowerCase().includes(term.toLowerCase())
+        || germplasm.commonCropName.toLowerCase().includes(term.toLowerCase());
 }
 
 @Injectable({providedIn: 'root'})
-export class CountryService {
+export class GermplasmService {
     private _loading$ = new BehaviorSubject<boolean>(true);
     private _search$ = new Subject<void>();
-    private _countries$ = new BehaviorSubject<Country[]>([]);
+    private _data$ = new BehaviorSubject<any[]>([]);
     private _total$ = new BehaviorSubject<number>(0);
 
     private _state: State = {
@@ -66,14 +66,14 @@ export class CountryService {
             delay(200),
             tap(() => this._loading$.next(false))
         ).subscribe(result => {
-            this._countries$.next(result.countries);
+            this._data$.next(result['germplasm']);
             this._total$.next(result.total);
         });
 
         this._search$.next();
     }
 
-    get countries$() { return this._countries$.asObservable(); }
+    get data$() { return this._data$.asObservable(); }
     get total$() { return this._total$.asObservable(); }
     get loading$() { return this._loading$.asObservable(); }
     get page() { return this._state.page; }
@@ -91,19 +91,19 @@ export class CountryService {
         this._search$.next();
     }
 
-    private _search(): Observable<SearchResult> {
+    private _search(): Observable<any> {
         const {sortColumn, sortDirection, pageSize, page, searchTerm} = this._state;
 
         // 1. sort
-        let countries = sort(COUNTRIES, sortColumn, sortDirection);
+        let data = sort(GERMPLASM, sortColumn, sortDirection);
 
         // 2. filter
-        countries = countries.filter(country => matches(country, searchTerm, this.pipe));
-        const total = countries.length;
+        data = data.filter(data => matches(data, searchTerm, this.pipe));
+        const total = data.length;
 
         // 3. paginate
-        countries = countries.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
-        return of({countries, total});
+        data = data.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
+        return of({germplasm: data, total});
     }
 }
 

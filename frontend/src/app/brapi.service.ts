@@ -10,8 +10,10 @@ import {
     BrapiResult,
     BrapiResults,
     BrapiStudy,
-    BrapiTrial
+    BrapiTrial,
+    GermplasmCriteria
 } from './models/brapi.model';
+import { Germplasm } from './models/gnpis.model';
 
 export const BASE_URL = 'brapi/v1';
 
@@ -60,6 +62,11 @@ export class BrapiService {
         return this.http
             .get<BrapiResult<BrapiTrial>>(`${BASE_URL}/trials/${trialsId}`);
     }
+
+    germplasmSearch(criteria: GermplasmCriteria): Observable<BrapiResults<BrapiGermplasm>>{
+        return this.http.post<BrapiResults<Germplasm>>(`${BASE_URL}/germplasm-search`,criteria)
+    }
+
 
     /**
      * Get BrAPI single result response and replace the 'schema:includedInDataCatalog' URI value to the actual source object value.

@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { CountryService } from '../card-sortable-table/country.services';
-import { Country } from '../card-sortable-table/country';
+import { GermplasmService } from '../card-sortable-table/germplasm.services';
+
+import { BrapiService } from '../brapi.service';
+import {
+    BrapiCriteriaUtils,
+    BrapiGermplasm,
+    GermplasmCriteria
+} from '../models/brapi.model';
+import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'faidare-germplasm-result-page',
@@ -10,14 +18,38 @@ import { Country } from '../card-sortable-table/country';
 export class GermplasmResultPageComponent implements OnInit {
 
 
-    countries: Country[];
+    germplasm: BrapiGermplasm[];
+    Germplasmcriteria$ = new BehaviorSubject<GermplasmCriteria> (BrapiCriteriaUtils.emptyCriteria());
+    private localCriteria: GermplasmCriteria = BrapiCriteriaUtils.emptyCriteria();
 
-    constructor(public service: CountryService) { }
+    constructor(public service2: GermplasmService, public service: BrapiService) { }
 
     ngOnInit() {
 
-        this.service.countries$.subscribe(countries => {
-            this.countries = countries;
-        });
+        this.Germplasmcriteria$.pipe(filter(c => c !== this.localCriteria))
+            .subscribe(newCriteria => {
+                newCriteria.accessionNumbers = ["10936"];
+                for (const field in newCriteria){
+                    if (newCriteria[field]){
+                        // this.localCriteria[field] = newCriteria[field];
+                    }
+                }
+                this.searchGermplasm();
+
+            });
+
+        this.localCriteria.accessionNumbers = ["10936"];
+        this.service2.data$.subscribe(germplasm =>{
+            this.germplasm = germplasm;
+        })
+
+    }
+
+    searchGermplasm() {
+        this.service.germplasmSearch(this.localCriteria)
+            .subscribe(response => {
+                this.germplasm = response.result.data;
+            });
     }
 }
+

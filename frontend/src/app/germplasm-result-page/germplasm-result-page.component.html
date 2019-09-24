@@ -1,17 +1,42 @@
-<faidare-card-sortable-table
-[tableHeaders]="['id','name', 'area', 'population']"
-[rows]="countries">
+<!--<faidare-germplasm-form
+  inputId="accessions"
+  criteriaField="accessions"
+  [criteria$]="criteria">
+</faidare-germplasm-form>-->
+<ng-container>
+  <h3 class="mb-4">
+    Germplasm result page
+  </h3>
 
-  <ng-template let-row>
-    <tr>
-       <th scope="row">{{ row.id }}</th>
-      <td>
-        <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + row.flag" class="mr-2" style="width: 20px">
-        <ngb-highlight [result]="row.name" [term]="service.searchTerm"></ngb-highlight>
-      </td>
-      <td><ngb-highlight [result]="row.area | number" [term]="service.searchTerm"></ngb-highlight></td>
-      <td><ngb-highlight [result]="row.population | number" [term]="service.searchTerm"></ngb-highlight></td>
-    </tr>
-  </ng-template>
+  <div class="col-sm-8 mb-3">
+    <faidare-suggestion-field
+      inputId="accessions"
+      criteriaField="accessions"
+      [criteria$]="Germplasmcriteria$"
+      placeholder="Search germplasm name">
+    </faidare-suggestion-field>
+  </div>
 
-</faidare-card-sortable-table>
+  <faidare-card-sortable-table
+    [tableHeaders]="['germplasmName', 'accessionNumber', 'commonCropName']"
+    [rows]="germplasm">
+
+    <ng-template let-row>
+      <tr>
+        <td>
+          <ngb-highlight [result]="row.germplasmName"
+                         [term]="service2.searchTerm"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="row.accessionNumber"
+                         [term]="service2.searchTerm"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="row.commonCropName"
+                         [term]="service2.searchTerm"></ngb-highlight>
+        </td>
+      </tr>
+    </ng-template>
+
+  </faidare-card-sortable-table>
+</ng-container>

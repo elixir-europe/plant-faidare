@@ -1,5 +1,33 @@
 import * as schema from './schema.org.model';
 
+export interface GermplasmCriteria {
+    accessionNumbers: string[];
+    germplasmDbIds: string[];
+    germplasmGenus: string[];
+    germplasmNames: string[];
+    germplasmPUIs: string[];
+    germplasmSpecies: string[];
+    page: number;
+    pageSize: number;
+}
+
+export const DEFAULT_PAGE_SIZE = 10;
+
+export class BrapiCriteriaUtils {
+    static emptyCriteria(): GermplasmCriteria {
+        return {
+            accessionNumbers: null,
+            germplasmDbIds: null,
+            germplasmGenus: null,
+            germplasmNames: null,
+            germplasmPUIs: null,
+            germplasmSpecies: null,
+            page: 0,
+            pageSize: DEFAULT_PAGE_SIZE
+        };
+    }
+}
+
 export interface BrapiMetaData {
     pagination: {
         pageSize: number;
@@ -84,7 +112,7 @@ export interface BrapiAdditionalInfo {
 }
 
 
-export interface BrapiObservationVariable extends BrapiHasDocumentationURL  {
+export interface BrapiObservationVariable extends BrapiHasDocumentationURL {
     observationVariableDbId: string;
     contextOfUse: string[];
     institution: string;
@@ -192,7 +220,7 @@ export interface BrapiGermplasmAttributes {
     data: BrapiAttributeData[];
 }
 
-export interface BrapiAttributeData  {
+export interface BrapiAttributeData {
     attributeDbId: string;
     attributeName: string;
     attributeCode: string;

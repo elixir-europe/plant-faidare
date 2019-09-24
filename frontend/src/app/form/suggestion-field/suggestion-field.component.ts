@@ -1,7 +1,10 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { BehaviorSubject, merge, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
+import {
+    NgbTypeahead,
+    NgbTypeaheadSelectItemEvent
+} from '@ng-bootstrap/ng-bootstrap';
 import { GnpisService } from '../../gnpis.service';
 import { debounceTime, filter, map, switchMap } from 'rxjs/operators';
 import { DataDiscoveryCriteria } from '../../models/data-discovery.model';
@@ -25,7 +28,6 @@ export class SuggestionFieldComponent implements OnInit {
     input = new FormControl();
 
     @ViewChild('inputElement') inputElement: ElementRef;
-
     @ViewChild('typeahead') typeahead: NgbTypeahead;
 
     private localCriteria: DataDiscoveryCriteria = null;
@@ -60,18 +62,18 @@ export class SuggestionFieldComponent implements OnInit {
         const clicksWithClosedPopup$ = this.click$.pipe(
             filter(() => !this.typeahead.isPopupOpen())
         );
-        const text2$ = text$.pipe(
+        /*const text2$ = text$.pipe(
             filter(term => term.length >= 2)
-        );
+        );*/
 
         // When new text or focus or click with popup closed
-        return merge(text2$, clicksWithClosedPopup$).pipe(
+        return merge(text$, clicksWithClosedPopup$).pipe(
             debounceTime(250),
             switchMap((term: string) => {
-                if (!term) {
+                /*if (!term) {
                     // No term to search
                     return of([]);
-                }
+                }*/
 
                 // Otherwise, we fetch new suggestions
                 return this.fetchSuggestion(term);

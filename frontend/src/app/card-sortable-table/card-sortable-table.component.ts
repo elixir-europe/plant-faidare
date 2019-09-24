@@ -7,8 +7,7 @@ import {
     ViewChildren
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Country } from './country';
-import { CountryService } from './country.services';
+import { GermplasmService } from './germplasm.services';
 import { NgbdSortableHeader, SortEvent } from './sortable.directive';
 
 @Component({
@@ -18,7 +17,6 @@ import { NgbdSortableHeader, SortEvent } from './sortable.directive';
 })
 export class CardSortableTableComponent {
 
-    countries$: Observable<Country[]>;
     total$: Observable<number>;
 
     @Input() tableHeaders: String[];
@@ -26,8 +24,7 @@ export class CardSortableTableComponent {
 
     @ContentChild(TemplateRef) template: TemplateRef<any>;
 
-    constructor(public service: CountryService) {
-        this.countries$ = service.countries$;
+    constructor(public service: GermplasmService) {
         this.total$ = service.total$;
     }
 
