@@ -1,34 +1,64 @@
 {
-  "program": {
-    "dynamic": false,
-    "properties": {
-      "programDbId": {
-        "type": "keyword"
-      },
-      "programName": {
-        "type": "keyword"
-      },
-      "abbreviation": {
-        "type": "keyword"
-      },
-      "groupId": {
-        "type": "long"
-      },
-      "leadPerson": {
-        "type": "keyword"
-      },
-      "objective": {
-        "type": "keyword"
-      },
-      "source": {
-        "type": "keyword"
-      },
-      "speciesGroup": {
-        "type": "integer"
-      },
-      "documentationURL": {
-        "type": "keyword"
-      }
-    }
-  }
+	"program": {
+	"dynamic": "strict",
+		"properties": {
+			"programDbId": {
+				"type": "keyword"
+			},
+			"name": {
+				"type": "keyword"
+			},
+			"programName": {
+				"type": "keyword"
+			},
+			"abbreviation": {
+				"type": "keyword"
+			},
+			"objective": {
+				"type": "keyword"
+			},
+			"leadPerson": {
+				"type": "keyword"
+			},
+			"source": {
+				"type": "keyword"
+			},
+			"studyDbIds": {
+				"type": "keyword"
+			},
+			"trialDbIds": {
+				"type": "keyword"
+			},
+			"documentationURL": {
+				"type": "keyword"
+			},
+			"programURI": {
+				"type": "keyword"
+			},
+			"studyURIs": {
+				"type": "keyword"
+			},
+			"trialURIs": {
+				"type": "keyword"
+			},
+			"groupId": {
+				"type": "long"
+			},
+			"@type": {
+				"type": "keyword"
+			},
+			"@id": {
+				"type": "keyword"
+			},
+			"schema:includedInDataCatalog": {
+				"type": "keyword"
+			},
+			"schema:identifier": {
+				"type": "keyword"
+			},
+			"schema:name": {
+				"type": "keyword"
+			}
+		}
+	}
 }
