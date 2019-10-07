@@ -7,11 +7,11 @@
     <a class="badge badge-source mr-2" [href]="dataSource['schema:url']" target="_blank">
       {{ dataSource['schema:name'] }}
     </a>
-    <a class="title" *ngIf="getRouterLink() && document['@type'].includes('Phenotyping Study')"
+    <a class="title" *ngIf="getRouterLink() && (document['@type'].includes('Phenotyping Study')  || document['@type'].includes('Genotyping Study'))"
        [routerLink]="getRouterLink()">
       {{ document["schema:name"] }}
     </a>
-    <a class="title" *ngIf="getRouterLink() && !document['@type'].includes('Phenotyping Study')"
+    <a class="title" *ngIf="getRouterLink() && !document['@type'].includes('Phenotyping Study') && !document['@type'].includes('Genotyping Study')"
        [routerLink]="getRouterLink()" [queryParams]="getQueryParam()">
       {{ document["schema:name"] }}
     </a>

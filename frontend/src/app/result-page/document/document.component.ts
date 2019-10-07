@@ -14,12 +14,14 @@ export class DocumentComponent implements OnInit {
     private static MAX_LENGTH = 256;
     private static BADGE_TYPE = {
         'Germplasm': 'badge-germplasm',
-        'Phenotyping Study': 'badge-study'
+        'Phenotyping Study': 'badge-phenotyping-study',
+        'Genotyping Study': 'badge-genotyping-study'
     };
 
     private static CARD_TYPE = {
         'Germplasm': 'germplasm',
-        'Phenotyping Study': 'studies'
+        'Phenotyping Study': 'studies',
+        'Genotyping Study': 'studies'
     };
 
     @Input() document: DataDiscoveryDocument;

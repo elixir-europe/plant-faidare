@@ -88,7 +88,7 @@ export interface DataDiscoveryDocument extends schema.Dataset {
 }
 
 // TODO: use enum
-export type DataDiscoveryType = 'Germplasm' | 'Phenotyping Study';
+export type DataDiscoveryType = 'Germplasm' | 'Phenotyping Study' | 'Genotyping Study';
 
 export interface DataDiscoveryResults extends BrapiResults<DataDiscoveryDocument> {
     facets: DataDiscoveryFacet[];
