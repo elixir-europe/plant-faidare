@@ -69,7 +69,7 @@ class AngularRouteFilterTest {
         "/font.ttf",
         // APIs
         "/brapi/v1/studies",
-        "/gnpis/v1/datadiscovery/suggest",
+        "/faidare/v1/datadiscovery/suggest",
         "/actuator/info",
     })
     void shouldNotForward(String url) throws Exception {
