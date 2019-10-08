@@ -1,94 +1,156 @@
 {
-  "trial": {
-    "dynamic": false,
-    "properties": {
-      "active": {
-        "type": "boolean"
-      },
-      "additionalInfo": {
-        "type": "object",
-        "properties": {}
-      },
-      "contacts": {
-        "properties": {
-          "contactDbId": {
-            "type": "keyword"
-          },
-          "email": {
-            "type": "keyword"
-          },
-          "institutionName": {
-            "type": "keyword"
-          },
-          "name": {
-            "type": "keyword"
-          },
-          "orcid": {
-            "type": "keyword"
-          },
-          "type": {
-            "type": "keyword"
-          }
-        }
-      },
-      "datasetAuthorship": {
-        "properties": {
-          "license": {
-            "type": "keyword"
-          },
-          "datasetPUI": {
-            "type": "keyword"
-          }
-        }
-      },
-      "docId": {
-        "type": "keyword"
-      },
-      "endDate": {
-        "type": "date",
-        "format": "YYYY-MM-dd"
-      },
-      "groupId": {
-        "type": "long"
-      },
-      "source": {
-        "type": "keyword"
-      },
-      "speciesGroup": {
-        "type": "integer"
-      },
-      "startDate": {
-        "type": "date",
-        "format": "YYYY-MM-dd"
-      },
-      "studies": {
-        "properties": {
-          "locationName": {
-            "type": "keyword"
-          },
-          "locationDbId": {
-            "type": "keyword"
-          },
-          "studyDbId": {
-            "type": "keyword"
-          },
-          "studyName": {
-            "type": "keyword"
-          }
-        }
-      },
-      "trialDbId": {
-        "type": "keyword"
-      },
-      "trialName": {
-        "type": "keyword"
-      },
-      "trialType": {
-        "type": "keyword"
-      },
-      "documentationURL": {
-        "type": "keyword"
-      }
-    }
-  }
+	"trial": {
+		"dynamic": "strict",
+		"properties": {
+			"docId": {
+				"type": "keyword"
+			},
+			"trialDbId": {
+				"type": "keyword"
+			},
+			"trialPUI": {
+				"type": "keyword"
+			},
+			"trialName": {
+				"type": "keyword"
+			},
+			"trialType": {
+				"type": "keyword"
+			},
+			"startDate": {
+				"type": "date",
+				"format": "YYYY-MM-dd"
+			},
+			"endDate": {
+				"type": "date",
+				"format": "YYYY-MM-dd"
+			},
+			"active": {
+				"type": "boolean"
+			},
+			"datasetAuthorship": {
+				"properties": {
+					"license": {
+						"type": "keyword"
+					},
+					"datasetPUI": {
+						"type": "keyword"
+					}
+				}
+			},
+			"datasetAuthorships": {
+				"properties": {
+					"license": {
+						"type": "keyword"
+					},
+					"datasetPUI": {
+						"type": "keyword"
+					}
+				}
+			},
+			"contacts": {
+				"properties": {
+					"contactDbId": {
+						"type": "keyword"
+					},
+					"name": {
+						"type": "keyword"
+					},
+					"institutionName": {
+						"type": "keyword"
+					},
+					"email": {
+						"type": "keyword"
+					},
+					"type": {
+						"type": "keyword"
+					},
+					"contactURI": {
+						"type": "keyword"
+					},
+					"orcid": {
+						"type": "keyword"
+					}
+				}
+			},
+			"studies": {
+				"properties": {
+					"studyDbId": {
+						"type": "keyword"
+					},
+					"studyName": {
+						"type": "keyword"
+					},
+					"name": {
+						"type": "keyword"
+					},
+					"locationDbId": {
+						"type": "keyword"
+					},
+					"locationName": {
+						"type": "keyword"
+					},
+					"studyURI": {
+						"type": "keyword"
+					},
+					"locationURI": {
+						"type": "keyword"
+					}
+				}
+			},
+			"commonCropName": {
+				"type": "keyword"
+			},
+			"additionalInfo": {
+				"dynamic": "true",
+				"type": "object",
+				"properties": {}
+			},
+			"programDbId": {
+				"type": "keyword"
+			},
+			"programName": {
+				"type": "keyword"
+			},
+			"studyDbIds": {
+				"type": "keyword"
+			},
+			"contactDbIds": {
+				"type": "keyword"
+			},
+
+			"trialURI": {
+				"type": "keyword"
+			},
+
+			"documentationURL": {
+				"type": "keyword"
+			},
+			"source": {
+				"type": "keyword"
+			},
+
+			"groupId": {
+				"type": "long"
+			},
+			"@type": {
+				"type": "keyword"
+			},
+			"@id": {
+				"type": "keyword"
+			},
+			"schema:includedInDataCatalog": {
+				"type": "keyword"
+			},
+			"schema:identifier": {
+				"type": "keyword"
+			},
+			"schema:name": {
+				"type": "keyword"
+			},
+			"schema:url": {
+				"type": "keyword"
+			}
+		}
+	}
 }

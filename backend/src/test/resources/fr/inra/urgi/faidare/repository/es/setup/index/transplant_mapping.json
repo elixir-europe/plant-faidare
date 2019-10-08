@@ -1,13 +1,13 @@
 {
-  "transplant": {
-    "dynamic": "true",
-    "properties": {
-      "entry_type": {
-        "type": "keyword"
-      },
-      "linkedRessourcesID": {
-        "type": "keyword"
-      }
-    }
-  }
+	"transplant": {
+		"dynamic": "true",
+		"properties": {
+			"entry_type": {
+				"type": "keyword"
+			},
+			"linkedRessourcesID": {
+				"type": "keyword"
+			}
+		}
+	}
 }

@@ -1,56 +1,76 @@
 {
-  "location": {
-    "dynamic": false,
-    "properties": {
-      "locationDbId": {
-        "type": "keyword"
-      },
-      "locationName": {
-        "type": "keyword"
-      },
-      "locationType": {
-        "type": "keyword"
-      },
-      "abbreviation": {
-        "type": "keyword"
-      },
-      "additionalInfo": {
-        "dynamic": "true",
-        "properties": {}
-      },
-      "altitude": {
-        "type": "double"
-      },
-      "countryCode": {
-        "type": "keyword"
-      },
-      "countryName": {
-        "type": "keyword"
-      },
-      "groupId": {
-        "type": "long"
-      },
-      "institutionAdress": {
-        "type": "keyword"
-      },
-      "institutionName": {
-        "type": "keyword"
-      },
-      "latitude": {
-        "type": "double"
-      },
-      "longitude": {
-        "type": "double"
-      },
-      "source": {
-        "type": "keyword"
-      },
-      "speciesGroup": {
-        "type": "long"
-      },
-      "documentationURL": {
-        "type": "keyword"
-      }
-    }
-  }
+	"location": {
+		"dynamic": "strict",
+		"properties": {
+			"locationDbId": {
+				"type": "keyword"
+			},
+			"locationName": {
+				"type": "keyword"
+			},
+			"name": {
+				"type": "keyword"
+			},
+			"locationType": {
+				"type": "keyword"
+			},
+			"abbreviation": {
+				"type": "keyword"
+			},
+			"countryCode": {
+				"type": "keyword"
+			},
+			"countryName": {
+				"type": "keyword"
+			},
+			"institutionName": {
+				"type": "keyword"
+			},
+			"institutionAdress": {
+				"type": "keyword"
+			},
+			"latitude": {
+				"type": "double"
+			},
+			"longitude": {
+				"type": "double"
+			},
+			"altitude": {
+				"type": "double"
+			},
+			"additionalInfo": {
+				"dynamic": "true",
+				"properties": {}
+			},
+
+			"documentationURL": {
+				"type": "keyword"
+			},
+			"source": {
+				"type": "keyword"
+			},
+
+			"groupId": {
+				"type": "long"
+			},
+			"@type": {
+				"type": "keyword"
+			},
+			"@id": {
+				"type": "keyword"
+			},
+			"schema:includedInDataCatalog": {
+				"type": "keyword"
+			},
+			"schema:identifier": {
+				"type": "keyword"
+			},
+			"schema:name": {
+				"type": "keyword"
+			},
+			"schema:url": {
+				"type": "keyword"
+			}
+		}
+	}
 }

@@ -1,6 +1,6 @@
 {
 	"program": {
-	"dynamic": "strict",
+		"dynamic": "strict",
 		"properties": {
 			"programDbId": {
 				"type": "keyword"
@@ -20,16 +20,11 @@
 			"leadPerson": {
 				"type": "keyword"
 			},
-			"source": {
-				"type": "keyword"
-			},
+
 			"studyDbIds": {
 				"type": "keyword"
 			},
 			"trialDbIds": {
-				"type": "keyword"
-			},
-			"documentationURL": {
 				"type": "keyword"
 			},
 			"programURI": {
@@ -41,6 +36,14 @@
 			"trialURIs": {
 				"type": "keyword"
 			},
+
+			"documentationURL": {
+				"type": "keyword"
+			},
+			"source": {
+				"type": "keyword"
+			},
+
 			"groupId": {
 				"type": "long"
 			},
@@ -57,6 +60,9 @@
 				"type": "keyword"
 			},
 			"schema:name": {
+				"type": "keyword"
+			},
+			"schema:url": {
 				"type": "keyword"
 			}
 		}

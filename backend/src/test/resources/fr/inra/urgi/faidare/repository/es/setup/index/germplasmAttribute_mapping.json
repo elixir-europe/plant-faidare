@@ -1,40 +1,60 @@
 {
-  "germplasmAttribute": {
-    "dynamic": false,
-    "properties": {
-      "groupId": {
-        "type": "long"
-      },
-      "source": {
-        "type": "keyword"
-      },
-      "speciesGroup": {
-        "type": "long"
-      },
-      "germplasmDbId": {
-        "type": "keyword"
-      },
-      "data": {
-        "type": "nested",
-        "properties": {
-          "attributeDbId": {
-            "type": "keyword"
-          },
-          "attributeName": {
-            "type": "keyword"
-          },
-          "attributeCode": {
-            "type": "keyword"
-          },
-          "value": {
-            "type": "keyword"
-          },
-          "determinedDate": {
-            "type": "date",
-            "format": "YYYY-MM-dd"
-          }
-        }
-      }
-    }
-  }
+	"germplasmAttribute": {
+		"dynamic": "strict",
+		"properties": {
+			"germplasmDbId": {
+				"type": "keyword"
+			},
+			"data": {
+				"type": "nested",
+				"properties": {
+					"attributeDbId": {
+						"type": "keyword"
+					},
+					"attributeName": {
+						"type": "keyword"
+					},
+					"attributeCode": {
+						"type": "keyword"
+					},
+					"value": {
+						"type": "keyword"
+					},
+					"determinedDate": {
+						"type": "date",
+						"format": "YYYY-MM-dd"
+					}
+				}
+			},
+
+			"documentationURL": {
+				"type": "keyword"
+			},
+			"source": {
+				"type": "keyword"
+			},
+
+			"groupId": {
+				"type": "long"
+			},
+			"@type": {
+				"type": "keyword"
+			},
+			"@id": {
+				"type": "keyword"
+			},
+			"schema:includedInDataCatalog": {
+				"type": "keyword"
+			},
+			"schema:identifier": {
+				"type": "keyword"
+			},
+			"schema:name": {
+				"type": "keyword"
+			},
+			"schema:url": {
+				"type": "keyword"
+			}
+		}
+	}
 }

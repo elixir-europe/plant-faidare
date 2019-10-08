@@ -1,80 +1,79 @@
 {
-  "datadiscovery": {
-    "dynamic": false,
-    "_source": {
-      "includes": ["@id", "@type", "schema:*", "groupId"]
-    },
-    "properties": {
-      "groupId": {
-        "type": "long"
-      },
+	"datadiscovery": {
+		"dynamic": "strict",
+		"_source": {
+			"includes": ["@id", "@type", "schema:*", "groupId"]
+		},
+		"properties": {
+			"groupId": {
+				"type": "long"
+			},
+			"@type": {
+				"type": "keyword"
+			},
+			"@id": {
+				"type": "keyword"
+			},
+			"schema:includedInDataCatalog": {
+				"type": "keyword"
+			},
+			"schema:identifier": {
+				"type": "keyword"
+			},
+			"schema:name": {
+				"type": "keyword"
+			},
+			"schema:url": {
+				"type": "keyword"
+			},
+			"schema:description": {
+				"type": "keyword"
+			},
 
-      "@type": {
-        "type": "keyword"
-      },
-      "@id": {
-        "type": "keyword"
-      },
-      "schema:includedInDataCatalog": {
-        "type": "keyword"
-      },
-      "schema:identifier": {
-        "type": "keyword"
-      },
-      "schema:name": {
-        "type": "keyword"
-      },
-      "schema:url": {
-        "type": "keyword"
-      },
-      "schema:description": {
-        "type": "keyword"
-      },
+			"germplasm": {
+				"type": "object",
+				"properties": {
+					"cropName": {
+						"type": "keyword",
+						"fields": {
+							"suggest": {
+								"type": "text",
+								"search_analyzer": "search_suggester",
+								"analyzer": "index_suggester"
+							}
+						}
+					},
+					"germplasmList": {
+						"type": "keyword",
+						"fields": {
+							"suggest": {
+								"type": "text",
+								"search_analyzer": "search_suggester",
+								"analyzer": "index_suggester"
+							}
+						}
+					},
+					"accession": {
+						"type": "keyword",
+						"fields": {
+							"suggest": {
+								"type": "text",
+								"search_analyzer": "search_suggester",
+								"analyzer": "index_suggester"
+							}
+						}
+					}
+				}
+			},
 
-      "germplasm": {
-        "type": "object",
-        "properties": {
-          "cropName": {
-            "type": "keyword",
-            "fields": {
-              "suggest": {
-                "type": "text",
-                "search_analyzer": "search_suggester",
-                "analyzer": "index_suggester"
-              }
-            }
-          },
-          "germplasmList": {
-            "type": "keyword",
-            "fields": {
-              "suggest": {
-                "type": "text",
-                "search_analyzer": "search_suggester",
-                "analyzer": "index_suggester"
-              }
-            }
-          },
-          "accession": {
-            "type": "keyword",
-            "fields": {
-              "suggest": {
-                "type": "text",
-                "search_analyzer": "search_suggester",
-                "analyzer": "index_suggester"
-              }
-            }
-          }
-        }
-      },
-
-      "trait": {
-        "type": "object",
-        "properties": {
-          "observationVariableIds": {
-            "type": "keyword"
-          }
-        }
-      }
-    }
-  }
+			"trait": {
+				"type": "object",
+				"properties": {
+					"observationVariableIds": {
+						"type": "keyword"
+					}
+				}
+			}
+		}
+	}
 }
