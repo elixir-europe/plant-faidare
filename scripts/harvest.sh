@@ -1,12 +1,13 @@
 #!/bin/bash
 
+
 DATA_DIR=""
 ES_HOST="localhost"
 ES_PORT="9200"
 ENV="dev"
 DOCUMENT_TYPES="all"
 
-ALL_DOCUMENT_TYPES="germplasm germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit datadiscovery"
+ALL_DOCUMENT_TYPES="germplasm germplasm-mcpd germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit datadiscovery"
 ALL_ENVS="dev beta staging int prod test"
 BASEDIR=$(dirname "$0")
 
@@ -106,7 +107,7 @@ fi
 [ "${DOCUMENT_TYPES}" == "all" ] && DOCUMENT_TYPES = "${ALL_DOCUMENT_TYPES}"
 for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	if [ $(find ${DATA_DIR} -name ${DOCUMENT}*.json | wc -l) -le 0 ] && [ $(find ${DATA_DIR} -name ${DOCUMENT}*.json.gz | wc -l) -le 0 ]; then
-		echo -e "${ORANGE}WARNING: The JSON directory ${DATA_DIR} contains no ${DOCUMENT} document, so it will be ignored!${NC}"
+		echo -e "${ORANGE}WARNING: The JSON directory ${DATA_DIR} contains no ${DOCUMENT} document!${NC}"
 	fi
 done
 
@@ -116,12 +117,12 @@ for FILE in $(find ${DATA_DIR} -name *.json); do
 done
 
 for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
-	echo -e "${BOLD}Manage ${DOCUMENT_TYPE} documents...${NC}"
+	echo && echo -e "${BOLD}Manage ${DOCUMENT_TYPE} documents...${NC}"
 	INDEX_PATTERN="faidare_${DOCUMENT_TYPE}_${ENV}"
 	
 	# Create template
 	TEMPLATE_NAME="${INDEX_PATTERN}_template"
-	echo -e "Create setting/mapping template ${TEMPLATE_NAME}..."
+	echo -e "* Create setting/mapping template ${TEMPLATE_NAME}..."
 	LOG=$(curl -s -H 'Content-Type: application/json' -XPUT "${ES_HOST}:${ES_PORT}/_template/${TEMPLATE_NAME}" -d"
 {
 	\"index_patterns\": [\"${INDEX_PATTERN}-*\"],
@@ -134,9 +135,9 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	
 	# Index JSON Bulk
 	INDEX_NAME="${INDEX_PATTERN}-d"$(date +%s)
-	echo -e "Index documents into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice..."
+	echo -e "* Index documents into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice..."
 	{
-		time parallel --bar "
+		parallel --bar "
 			curl -s -H 'Content-Type: application/x-ndjson' -H 'Content-Encoding: gzip' -H 'Accept-Encoding: gzip' -XPOST ${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_bulk --data-binary '@{}' > {.}.log.gz" \
 		::: $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}*.json.gz)
 	} || {
@@ -148,16 +149,16 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	parallel "gunzip -c {} | jq '.errors' | grep -q true && echo -e '${ORANGE}ERROR found in {}${NC}' ;" ::: $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}*.log.gz)
 	
 	# Check indexed data
-	echo -e "Check data indexed from ${DATA_DIR} into ${INDEX_NAME}..."
+	echo -e "* Check data indexed from ${DATA_DIR} into ${INDEX_NAME}..."
 	# skip some documents because they contain nested objects that distort the count
 	if [[ "${DOCUMENT_TYPE}" != "germplasmAttribute" && "${DOCUMENT_TYPE}" != "observationUnit" && "${DOCUMENT_TYPE}" != "datadiscovery" ]]; then
 		COUNT_EXTRACTED_DOCS=0
-		for FILE  in $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}*.json.gz); do
-			echo $FILE
+		for FILE in $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}*.json.gz); do
 			COUNT_FILE_DOCS=$(zcat ${FILE} | grep "\"_id\"" | sort | uniq | wc -l)
 			COUNT_EXTRACTED_DOCS=$((COUNT_EXTRACTED_DOCS+COUNT_FILE_DOCS))
-		done			
-		COUNT_INDEXED_DOCS=$(curl -s -XGET "${ES_HOST}:${ES_PORT}/_cat/indices/${INDEX_NAME}?h=docs.count" | tr -d ' ')
+		done
+		curl -s -XGET "${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_refresh" >/dev/null
+		COUNT_INDEXED_DOCS=$(curl -s -XGET "${ES_HOST}:${ES_PORT}/_cat/indices/${INDEX_NAME}?h=docs.count")
 	fi
 	if [ "$COUNT_INDEXED_DOCS" != "$COUNT_EXTRACTED_DOCS" ]; then
 		echo -e "${RED}ERROR: a problem occurred when indexing data from ${DATA_DIR} on FAIDARE ${ENV}.${NC}"
@@ -167,12 +168,14 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	
 	# Add aliases
 	ALIAS_PATTERN="${INDEX_PATTERN}-group*"
-	echo -e "Delete aliases ${ALIAS_PATTERN}..."
-	echo "curl -s -XGET '${ES_HOST}:${ES_PORT}/_aliases/${ALIAS_PATTERN}'"
-	LOG=$(curl -s -XDELETE "${ES_HOST}:${ES_PORT}/*/_aliases/${ALIAS_PATTERN}")
-	check_acknowledgment "${LOG}" "delete aliases"
+	ALIAS_EXIST=$(curl -s -XGET "${ES_HOST}:${ES_PORT}/_alias/${ALIAS_PATTERN}" | jq '.status' | grep -q "404" && echo "false" || echo "true")
+	if [ "${ALIAS_EXIST}" == "true" ]; then
+		echo -e "* Delete aliases ${ALIAS_PATTERN}..."
+		LOG=$(curl -s -XDELETE "${ES_HOST}:${ES_PORT}/*/_aliases/${ALIAS_PATTERN}")
+		check_acknowledgment "${LOG}" "delete aliases"
+	fi
 	
-	echo -e "List groupId from ${INDEX_NAME} (to create filtered aliases)..."
+	echo -e "* List groupId from ${INDEX_NAME} (to create filtered aliases)..."
 	GROUP_IDS=$(curl -s -H 'Content-Type: application/json' -XGET "${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_search" -d'
 {
 	"size":"0",
@@ -186,7 +189,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 		echo -e "${RED}ERROR: could not list 'groupId' values from index.${NC}"
 		exit 1;
 	}
-	echo -e "Create aliases:"	
+	echo -e "* Create aliases:"	
 	for GROUP_ID in ${GROUP_IDS}; do
 		ALIAS_NAME="${INDEX_PATTERN}-group${GROUP_ID}"
 		FILTER=""
@@ -212,7 +215,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	done
 	
 	# Delete all but last created indices (thanks to the timestamp suffix)
-	echo -e "Delete old indices ${INDEX_PATTERN} (to avoid accumulation over time)..."
+	echo -e "* Delete old indices ${INDEX_PATTERN} (to avoid accumulation over time)..."
 	OLD_INDICES=$(curl -sf -XGET "${ES_HOST}:${ES_PORT}/_cat/indices/${INDEX_PATTERN}?h=index" | sort | head -n -1)
 	for OLD_INDEX in ${OLD_INDICES}; do
 		LOG=$(curl -s -XDELETE "${ES_HOST}:${ES_PORT}/${OLD_INDEX}")
