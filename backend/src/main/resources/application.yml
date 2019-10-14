@@ -71,7 +71,11 @@ faidare:
     url: https://www.ebi.ac.uk/eva
     name: EVA
     image: https://urgi.versailles.inra.fr/files/faidare/logo/EVA.png
-
+  # ENA
+  - uri: https://www.ebi.ac.uk/eva
+    url: https://www.ebi.ac.uk/eva
+    name: EBI European Nucleotide Archive
+    image: https://urgi.versailles.inra.fr/files/faidare/logo/EVA.png
 server:
   compression:
     enabled: true
