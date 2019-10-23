@@ -2,76 +2,43 @@
 	"germplasm": {
 		"dynamic": "strict",
 		"properties": {
+			"germplasmURI": {
+				"type": "keyword"
+			},
 			"germplasmDbId": {
 				"type": "keyword"
 			},
-			"defaultDisplayName": {
+			"germplasmPUI": {
 				"type": "keyword"
-			},
-			"accessionNumber": {
-				"type": "keyword",
-				"doc_values": true
 			},
 			"germplasmName": {
 				"type": "keyword",
 				"doc_values": true
 			},
-			"germplasmPUI": {
-				"type": "keyword"
-			},
-			"pedigree": {
-				"type": "keyword"
-			},
-			"seedSource": {
-				"type": "keyword"
-			},
-			"synonyms": {
+			"accessionNumber": {
 				"type": "keyword",
 				"doc_values": true
 			},
-			"commonCropName": {
-				"type": "keyword",
-				"doc_values": true
-			},
-			"instituteCode": {
-				"type": "keyword"
-			},
-			"instituteName": {
+			"acquisitionDate": {
 				"type": "keyword"
 			},
 			"biologicalStatusOfAccessionCode": {
 				"type": "keyword"
 			},
-			"countryOfOriginCode": {
+			"breedingMethodDbId": {
 				"type": "keyword"
 			},
-			"typeOfGermplasmStorageCode": {
-				"type": "keyword"
-			},
-			"taxonIds": {
-				"properties": {
-					"sourceName": {
-						"type": "keyword"
-					},
-					"taxonId": {
-						"type": "keyword"
-					}
-				}
-			},
-			"genus": {
+			"commonCropName": {
 				"type": "keyword",
 				"doc_values": true
 			},
-			"species": {
+			"countryOfOriginCode": {
 				"type": "keyword"
 			},
-			"speciesAuthority": {
+			"defaultDisplayName": {
 				"type": "keyword"
 			},
-			"subtaxa": {
-				"type": "keyword"
-			},
-			"subtaxaAuthority": {
+			"documentationURL": {
 				"type": "keyword"
 			},
 			"donors": {
@@ -80,6 +47,9 @@
 						"type": "keyword"
 					},
 					"donorGermplasmPUI": {
+						"type": "keyword"
+					},
+					"germplasmPUI": {
 						"type": "keyword"
 					},
 					"donorAccessionNumber": {
@@ -118,16 +88,69 @@
 					}
 				}
 			},
-			"acquisitionDate": {
+			"genus": {
+				"type": "keyword",
+				"doc_values": true
+			},
+			"germplasmGenus": {
+				"type": "keyword",
+				"doc_values": true
+			},
+			"species": {
 				"type": "keyword"
+			},
+			"germplasmSpecies": {
+				"type": "keyword",
+				"doc_values": true
 			},
 			"genusSpecies": {
 				"type": "keyword",
 				"doc_values": true
 			},
+			"speciesAuthority": {
+				"type": "keyword"
+			},
+			"subtaxa": {
+				"type": "keyword"
+			},
+			"subTaxa": {
+				"type": "keyword"
+			},
 			"genusSpeciesSubtaxa": {
 				"type": "keyword",
 				"doc_values": true
+			},
+			"subtaxaAuthority": {
+				"type": "keyword"
+			},
+			"instituteCode": {
+				"type": "keyword"
+			},
+			"instituteName": {
+				"type": "keyword"
+			},			
+			"pedigree": {
+				"type": "keyword"
+			},
+			"seedSource": {
+				"type": "keyword"
+			},
+			"SeedSource": {
+				"type": "keyword"
+			},
+			"synonyms": {
+				"type": "keyword",
+				"doc_values": true
+			},
+			"taxonIds": {
+				"properties": {
+					"sourceName": {
+						"type": "keyword"
+					},
+					"taxonId": {
+						"type": "keyword"
+					}
+				}
 			},
 			"taxonSynonyms": {
 				"type": "keyword",
@@ -138,6 +161,9 @@
 				"doc_values": true
 			},
 			"taxonComment": {
+				"type": "keyword"
+			},
+			"typeOfGermplasmStorageCode": {
 				"type": "keyword"
 			},
 			"geneticNature": {
@@ -531,17 +557,22 @@
 					}
 				}
 			},
+			"studyURIs": {
+				"type": "keyword"
+			},
 			"studyDbIds": {
 				"type": "keyword"
 			},
-
-			"documentationURL": {
+			"studyURI": {
 				"type": "keyword"
 			},
+			"studyDbId": {
+				"type": "keyword"
+			},
+
 			"source": {
 				"type": "keyword"
-			},
-
+			},	
 			"groupId": {
 				"type": "long"
 			},

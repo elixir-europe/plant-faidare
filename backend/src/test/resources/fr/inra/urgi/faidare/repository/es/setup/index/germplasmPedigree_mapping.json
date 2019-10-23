@@ -2,13 +2,19 @@
 	"germplasmPedigree": {
 		"dynamic": "strict",
 		"properties": {
+			"germplasmPedigreeURI": {
+				"type": "keyword"
+			},
+			"germplasmPedigreeDbId": {
+				"type": "keyword"
+			},
+			"germplasmURI": {
+				"type": "keyword"
+			},
 			"germplasmDbId": {
 				"type": "keyword"
 			},
 			"defaultDisplayName": {
-				"type": "keyword"
-			},
-			"pedigree": {
 				"type": "keyword"
 			},
 			"crossingPlan": {
@@ -20,6 +26,9 @@
 			"familyCode": {
 				"type": "keyword"
 			},
+			"parent1URI": {
+				"type": "keyword"
+			},
 			"parent1DbId": {
 				"type": "keyword"
 			},
@@ -27,6 +36,9 @@
 				"type": "keyword"
 			},
 			"parent1Type": {
+				"type": "keyword"
+			},
+			"parent2URI": {
 				"type": "keyword"
 			},
 			"parent2DbId": {
@@ -38,8 +50,14 @@
 			"parent2Type": {
 				"type": "keyword"
 			},
+			"pedigree": {
+				"type": "keyword"
+			},
 			"siblings": {
 				"properties": {
+					"germplasmURI": {
+						"type": "keyword"
+					},
 					"germplasmDbId": {
 						"type": "keyword"
 					},
@@ -49,13 +67,9 @@
 				}
 			},
 
-			"documentationURL": {
-				"type": "keyword"
-			},
 			"source": {
 				"type": "keyword"
 			},
-
 			"groupId": {
 				"type": "long"
 			},

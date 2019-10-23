@@ -2,6 +2,9 @@
 	"location": {
 		"dynamic": "strict",
 		"properties": {
+			"locationURI": {
+				"type": "keyword"
+			},
 			"locationDbId": {
 				"type": "keyword"
 			},
@@ -11,10 +14,13 @@
 			"name": {
 				"type": "keyword"
 			},
-			"locationType": {
+			"abbreviation": {
 				"type": "keyword"
 			},
-			"abbreviation": {
+			"abreviation": {
+				"type": "keyword"
+			},
+			"locationType": {
 				"type": "keyword"
 			},
 			"countryCode": {
@@ -23,11 +29,20 @@
 			"countryName": {
 				"type": "keyword"
 			},
-			"institutionName": {
+			"documentationURL": {
 				"type": "keyword"
 			},
-			"institutionAdress": {
+			"instituteName": {
 				"type": "keyword"
+			},
+			"instituteAddress": {
+				"type": "keyword"
+			},
+			"instituteAdress": {
+				"type": "keyword"
+			},
+			"altitude": {
+				"type": "double"
 			},
 			"latitude": {
 				"type": "double"
@@ -35,21 +50,21 @@
 			"longitude": {
 				"type": "double"
 			},
-			"altitude": {
-				"type": "double"
-			},
 			"additionalInfo": {
 				"dynamic": "true",
 				"properties": {}
 			},
 
-			"documentationURL": {
+			"studyDbIds": {
 				"type": "keyword"
 			},
-			"source": {
+			"studyURIs": {
 				"type": "keyword"
 			},
 
+			"source": {
+				"type": "keyword"
+			},
 			"groupId": {
 				"type": "long"
 			},

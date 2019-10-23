@@ -1,6 +1,6 @@
 {
 	"datadiscovery": {
-		"dynamic": "strict",
+		"dynamic": "false",
 		"_source": {
 			"includes": ["@id", "@type", "schema:*", "groupId"]
 		},
@@ -27,6 +27,19 @@
 				"type": "keyword"
 			},
 			"schema:description": {
+				"type": "keyword"
+			},
+
+			"germplasmURI": {
+				"type": "keyword"
+			},
+			"germplasmDbId": {
+				"type": "keyword"
+			},
+			"studyURIs": {
+				"type": "keyword"
+			},
+			"studyDbIds": {
 				"type": "keyword"
 			},
 

@@ -2,6 +2,9 @@
 	"study": {
 		"dynamic": "strict",
 		"properties": {
+			"studyURI": {
+				"type": "keyword"
+			},
 			"studyDbId": {
 				"type": "keyword"
 			},
@@ -11,87 +14,33 @@
 			"name": {
 				"type": "keyword"
 			},
-			"startDate": {
-				"type": "date",
-				"format": "YYYY-MM-dd"
-			},
-			"endDate": {
-				"type": "date",
-				"format": "YYYY-MM-dd"
-			},
 			"active": {
 				"type": "boolean"
 			},
-			"studyType": {
+			"commonCropName": {
 				"type": "keyword"
 			},
-			
-			"lastUpdate": {
-				"properties": {
-					"version": {
-						"type": "keyword"
-					},
-					"timestamp": {
-						"type": "date",
-						"format": "yyyy-MM-dd||yyyy-MM-dd'T'HH:mm:ss'Z'"
-					}
-				}
-			},
-			"trialDbId": {
+			"organism": {
 				"type": "keyword"
 			},
-			"trialName": {
+			"contactURIs": {
 				"type": "keyword"
 			},
-			"trialDbIds": {
+			"contactDbIds": {
 				"type": "keyword"
-			},
-			"programDbId": {
-				"type": "keyword"
-			},
-			"programName": {
-				"type": "keyword"
-			},
-			
-			"seasons": {
-				"type": "keyword"
-			},
-			"locationDbId": {
-				"type": "keyword"
-			},
-			"locationName": {
-				"type": "keyword"
-			},
-			"location": {
-				"dynamic": "true",
-				"properties": {
-					"locationDbId": {
-						"type": "keyword"
-					}
-				}
-			},
-			"dataLinks": {
-				"properties": {
-					"name": {
-						"type": "keyword"
-					},
-					"type": {
-						"type": "keyword"
-					},
-					"url": {
-						"type": "keyword"
-					}
-				}
 			},
 			"contacts": {
 				"properties": {
+					"contactURI": {
+						"type": "keyword"
+					},
 					"contactDbId": {
 						"type": "keyword"
 					},
 					"name": {
 						"type": "keyword"
 					},
-					"institutionName": {
+					"instituteName": {
 						"type": "keyword"
 					},
 					"email": {
@@ -105,10 +54,180 @@
 					}
 				}
 			},
-			"observationVariableDbIds": {
+			"dataLinks": {
+				"properties": {
+					"dataLinkName": {
+						"type": "keyword"
+					},
+					"name": {
+						"type": "keyword"
+					},
+					"type": {
+						"type": "keyword"
+					},
+					"url": {
+						"type": "keyword"
+					}
+				}
+			},
+			"documentationURL": {
+				"type": "keyword"
+			},
+			"startDate": {
+				"type": "date",
+				"format": "YYYY-MM-dd"
+			},
+			"endDate": {
+				"type": "date",
+				"format": "YYYY-MM-dd"
+			},
+			"year": {
+				"type": "keyword"
+			},
+			"lastUpdate": {
+				"properties": {
+					"version": {
+						"type": "keyword"
+					},
+					"timestamp": {
+						"type": "date",
+						"format": "yyyy-MM-dd||yyyy-MM-dd'T'HH:mm:ss'Z'"
+					}
+				}
+			},
+			"license": {
+				"type": "keyword"
+			},
+			"locationURIs": {
+				"type": "keyword"
+			},
+			"locationDbIds": {
+				"type": "keyword"
+			},
+			"locationURI": {
+				"type": "keyword"
+			},
+			"locationDbId": {
+				"type": "keyword"
+			},
+			"locationName": {
+				"type": "keyword"
+			},
+			"location": {
+				"properties": {
+					"locationURI": {
+						"type": "keyword"
+					},
+					"locationDbId": {
+						"type": "keyword"
+					},
+					"locationName": {
+						"type": "keyword"
+					},
+					"name": {
+						"type": "keyword"
+					},
+					"abbreviation": {
+						"type": "keyword"
+					},
+					"abreviation": {
+						"type": "keyword"
+					},
+					"locationType": {
+						"type": "keyword"
+					},
+					"countryCode": {
+						"type": "keyword"
+					},
+					"countryName": {
+						"type": "keyword"
+					},
+					"documentationURL": {
+						"type": "keyword"
+					},
+					"instituteName": {
+						"type": "keyword"
+					},
+					"instituteAddress": {
+						"type": "keyword"
+					},
+					"instituteAdress": {
+						"type": "keyword"
+					},
+					"altitude": {
+						"type": "double"
+					},
+					"latitude": {
+						"type": "double"
+					},
+					"longitude": {
+						"type": "double"
+					},
+					"additionalInfo": {
+						"dynamic": "true",
+						"type": "object",
+						"properties": {}
+					}
+				}
+			},
+			"programURIs": {
+				"type": "keyword"
+			},
+			"programDbIds": {
+				"type": "keyword"
+			},
+			"programURI": {
+				"type": "keyword"
+			},
+			"programDbId": {
+				"type": "keyword"
+			},
+			"programName": {
+				"type": "keyword"
+			},
+			"seasons": {
+				"type": "keyword"
+			},
+			"studyDescription": {
+				"type": "keyword"
+			},
+			"studyTypeURI": {
+				"type": "keyword"
+			},
+			"studyTypeDbId": {
+				"type": "keyword"
+			},
+			"studyType": {
+				"type": "keyword"
+			},
+			"studyTypeName": {
+				"type": "keyword"
+			},
+			"trialURIs": {
+				"type": "keyword"
+			},
+			"trialDbIds": {
+				"type": "keyword"
+			},
+			"trialURI": {
+				"type": "keyword"
+			},
+			"trialDbId": {
+				"type": "keyword"
+			},
+			"trialName": {
+				"type": "keyword"
+			},
+			"germplasmURIs": {
 				"type": "keyword"
 			},
 			"germplasmDbIds": {
+				"type": "keyword"
+			},
+			"observationVariableURIs": {
+				"type": "keyword"
+			},
+			"observationVariableDbIds": {
 				"type": "keyword"
 			},
 			"additionalInfo": {
@@ -117,13 +236,9 @@
 				"properties": {}
 			},
 
-			"documentationURL": {
-				"type": "keyword"
-			},
 			"source": {
 				"type": "keyword"
 			},
-
 			"groupId": {
 				"type": "long"
 			},

@@ -7,9 +7,10 @@ ES_PORT="9200"
 ENV="dev"
 DOCUMENT_TYPES="all"
 
-ALL_DOCUMENT_TYPES="germplasm germplasm-mcpd germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit datadiscovery"
+ALL_DOCUMENT_TYPES="germplasm germplasmMcpd germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit datadiscovery"
 ALL_ENVS="dev beta staging int prod test"
 BASEDIR=$(dirname "$0")
+TMP_FILE="log.tmp"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -118,7 +119,7 @@ done
 
 for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	echo && echo -e "${BOLD}Manage ${DOCUMENT_TYPE} documents...${NC}"
-	INDEX_PATTERN="faidare_${DOCUMENT_TYPE}_${ENV}"
+	INDEX_PATTERN=$(echo "faidare_${DOCUMENT_TYPE}_${ENV}" | sed -E "s/([a-z])([A-Z])/\1-\2/" | tr '[:upper:]' '[:lower:]')
 	
 	# Create template
 	TEMPLATE_NAME="${INDEX_PATTERN}_template"
@@ -139,21 +140,26 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	{
 		parallel --bar "
 			curl -s -H 'Content-Type: application/x-ndjson' -H 'Content-Encoding: gzip' -H 'Accept-Encoding: gzip' -XPOST ${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_bulk --data-binary '@{}' > {.}.log.gz" \
-		::: $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}*.json.gz)
+		::: $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}-*.json.gz)
 	} || {
 		code=$?
 		echo -e "${RED}ERROR: a problem occurred when trying to index data with parallel program.${NC}"
 		exit $code
 	}
-	#echo -e "${RED}ERROR: a problem occurred when trying to index data into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice.${NC}"
-	parallel "gunzip -c {} | jq '.errors' | grep -q true && echo -e '${ORANGE}ERROR found in {}${NC}' ;" ::: $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}*.log.gz)
+	parallel "gunzip -c {} | jq '.errors' | grep -q true && echo -e '${ORANGE}ERROR found in {}${NC}' >> ${TMP_FILE} ;" ::: $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}-*.log.gz)
+	if [ -f "${TMP_FILE}" ] && [ -s "${TMP_FILE}" ]; then
+		echo -e "${RED}ERROR: a problem occurred when trying to index data into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice.${NC}"
+		echo -e "${ORANGE}$(cat ${TMP_FILE})${NC}"
+		rm "${TMP_FILE}"
+		exit 1;
+	fi
 	
 	# Check indexed data
 	echo -e "* Check data indexed from ${DATA_DIR} into ${INDEX_NAME}..."
 	# skip some documents because they contain nested objects that distort the count
 	if [[ "${DOCUMENT_TYPE}" != "germplasmAttribute" && "${DOCUMENT_TYPE}" != "observationUnit" && "${DOCUMENT_TYPE}" != "datadiscovery" ]]; then
 		COUNT_EXTRACTED_DOCS=0
-		for FILE in $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}*.json.gz); do
+		for FILE in $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}-*.json.gz); do
 			COUNT_FILE_DOCS=$(zcat ${FILE} | grep "\"_id\"" | sort | uniq | wc -l)
 			COUNT_EXTRACTED_DOCS=$((COUNT_EXTRACTED_DOCS+COUNT_FILE_DOCS))
 		done

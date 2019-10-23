@@ -2,10 +2,58 @@
 	"observationUnit": {
 		"dynamic": "strict",
 		"properties": {
+			"observationUnitURI": {
+				"type": "keyword"
+			},
 			"observationUnitDbId": {
 				"type": "keyword"
 			},
 			"observationUnitName": {
+				"type": "keyword"
+			},
+			"X": {
+				"type": "keyword"
+			},
+			"Y": {
+				"type": "keyword"
+			},
+			"Xname": {
+				"type": "keyword"
+			},
+			"Yname": {
+				"type": "keyword"
+			},
+			"Xm": {
+				"type": "keyword"
+			},
+			"Ym": {
+				"type": "keyword"
+			},
+			"blockNumber": {
+				"type": "keyword",
+				"index": false
+			},
+			"entryNumber": {
+				"type": "keyword",
+				"index": false
+			},
+			"entryType": {
+				"type": "keyword",
+				"index": false
+			},
+			"germplasmURI": {
+				"type": "keyword"
+			},
+			"germplasmDbId": {
+				"type": "keyword"
+			},
+			"germplasmPUI": {
+				"type": "keyword"
+			},
+			"germplasmName": {
+				"type": "keyword"
+			},
+			"accessionNumber": {
 				"type": "keyword"
 			},
 			"observationLevel": {
@@ -27,52 +75,6 @@
 					}
 				}
 			},
-			"plotNumber": {
-				"type": "keyword",
-				"index": false
-			},
-			"plantNumber": {
-				"type": "keyword",
-				"index": false
-			},
-			"blockNumber": {
-				"type": "keyword",
-				"index": false
-			},
-			"replicate": {
-				"type": "keyword",
-				"index": false
-			},
-			"X": {
-				"type": "keyword"
-			},
-			"Y": {
-				"type": "keyword"
-			},
-			"Xname": {
-				"type": "keyword"
-			},
-			"Yname": {
-				"type": "keyword"
-			},
-			"Xm": {
-				"type": "keyword"
-			},
-			"Ym": {
-				"type": "keyword"
-			},
-			"germplasmDbId": {
-				"type": "keyword"
-			},
-			"germplasmId": {
-				"type": "long"
-			},
-			"germplasmPUI": {
-				"type": "long"
-			},
-			"germplasmName": {
-				"type": "keyword"
-			},
 			"observationUnitXref": {
 				"properties": {
 					"id": {
@@ -83,22 +85,87 @@
 					}
 				}
 			},
-			"studyDbId": {
-				"type": "keyword"
+			"observations": {
+				"type": "nested",
+				"properties": {
+					"observationURI": {
+						"type": "keyword"
+					},
+					"observationDbId": {
+						"type": "keyword"
+					},
+					"collector": {
+						"type": "keyword",
+						"index": false
+					},
+					"observationTimeStamp": {
+						"type": "date",
+						"format": "yyyy-MM-dd'T'HH:mm:ss'Z'"
+					},
+					"gdd": {
+						"type": "float"
+					},
+					"observationVariableURI": {
+						"type": "keyword"
+					},
+					"observationVariableDbId": {
+						"type": "keyword"
+					},
+					"observationVariableName": {
+						"type": "keyword"
+					},
+					"specificName": {
+						"type": "keyword"
+					},
+					"season": {
+						"type": "keyword"
+					},
+					"value": {
+						"type": "keyword"
+					},
+					"isDataFile": {
+						"type": "boolean",
+						"index": false
+					}
+				}
 			},
-			"studyName": {
-				"type": "keyword"
+			"plantNumber": {
+				"type": "keyword",
+				"index": false
 			},
-			"studyLocationDbId": {
-				"type": "keyword"
+			"plotNumber": {
+				"type": "keyword",
+				"index": false
 			},
-			"studyLocation": {
+			"programURI": {
 				"type": "keyword"
 			},
 			"programDbId": {
 				"type": "keyword"
 			},
 			"programName": {
+				"type": "keyword"
+			},
+			"replicate": {
+				"type": "keyword",
+				"index": false
+			},
+			"studyURI": {
+				"type": "keyword"
+			},
+			"studyDbId": {
+				"type": "keyword"
+			},
+			"studyName": {
+				"type": "keyword"
+			},
+			"studyLocationURI": {
+				"type": "keyword"
+			},
+			"studyLocationDbId": {
+				"type": "keyword"
+			},
+			"studyLocation": {
 				"type": "keyword"
 			},
 			"treatments": {
@@ -111,58 +178,6 @@
 					}
 				}
 			},
-			"observations": {
-				"type": "nested",
-				"properties": {
-					"observationDbId": {
-						"type": "keyword"
-					},
-					"observationVariableDbId": {
-						"type": "keyword"
-					},
-					"observationVariableName": {
-						"type": "keyword"
-					},
-					"observationTimeStamp": {
-						"type": "date",
-						"format": "yyyy-MM-dd'T'HH:mm:ss'Z'"
-					},
-					"season": {
-						"type": "keyword"
-					},
-					"collector": {
-						"type": "keyword",
-						"index": false
-					},
-					"value": {
-						"type": "keyword"
-					},
-					"specificName": {
-						"type": "keyword"
-					},
-					"observationVariableId": {
-						"type": "long"
-					},
-					"isDataFile": {
-						"type": "boolean",
-						"index": false
-					},
-					"gdd": {
-						"type": "float"
-					}
-				}
-			},
-			"entryType": {
-				"type": "keyword",
-				"index": false
-			},
-			"entryNumber": {
-				"type": "keyword",
-				"index": false
-			},
-			"studyId": {
-				"type": "long"
-			},
 			"trials": {
 				"properties": {
 					"id": {
@@ -172,12 +187,6 @@
 						"type": "keyword"
 					}
 				}
-			},
-			"accessionNumber": {
-				"type": "keyword"
-			},
-			"taxonId": {
-				"type": "long"
 			},
 			"taxonScientificName": {
 				"type": "keyword"
@@ -206,13 +215,9 @@
 				}
 			},
 
-			"documentationURL": {
-				"type": "keyword"
-			},
 			"source": {
 				"type": "keyword"
 			},
-
 			"groupId": {
 				"type": "long"
 			},
