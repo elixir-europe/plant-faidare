@@ -23,6 +23,9 @@
 			"commonCropName": {
 				"type": "keyword"
 			},
+      "trialDescription": {
+				"type": "keyword"
+			},
 			"documentationURL": {
 				"type": "keyword"
 			},
@@ -34,6 +37,16 @@
 				"type": "date",
 				"format": "YYYY-MM-dd"
 			},
+      "publications": {
+        "properties": {
+          "publicationReference": {
+            "type": "keyword"
+          },
+          "publicationPUI": {
+            "type": "keyword"
+          }
+        }
+      },
 			"programURIs": {
 				"type": "keyword"
 			},
@@ -67,6 +80,9 @@
 						"type": "keyword"
 					},
 					"name": {
+						"type": "keyword"
+					},
+          "studyDescription": {
 						"type": "keyword"
 					},
 					"locationURI": {
@@ -180,7 +196,7 @@
 						"type": "object",
 						"properties": {}
 					},
-					
+
 					"source": {
 						"type": "keyword"
 					},
@@ -206,7 +222,7 @@
 						"type": "keyword"
 					}
 				}
-			},			
+			},
 			"datasetAuthorship": {
 				"properties": {
 					"license": {
@@ -247,6 +263,9 @@
 					"instituteName": {
 						"type": "keyword"
 					},
+          "institutionName": {
+						"type": "keyword"
+					},
 					"email": {
 						"type": "keyword"
 					},
@@ -268,7 +287,7 @@
 					"trialDbIds": {
 						"type": "keyword"
 					},
-					
+
 					"source": {
 						"type": "keyword"
 					},
