@@ -7,7 +7,8 @@ ES_PORT="9200"
 ENV="dev"
 DOCUMENT_TYPES="all"
 
-ALL_DOCUMENT_TYPES="germplasm germplasmMcpd germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit datadiscovery"
+#ALL_DOCUMENT_TYPES="germplasm germplasmMcpd germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit datadiscovery"
+ALL_DOCUMENT_TYPES="germplasm germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit datadiscovery"
 ALL_ENVS="dev beta staging int prod test"
 BASEDIR=$(dirname "$0")
 TMP_FILE="log.tmp"
@@ -25,7 +26,7 @@ DESCRIPTION:
 	Script used to index data in FAIDARE
 
 USAGE:
-	${SCRIPT} -jsonDir <JSON directory> -es_host <Elasticsearch node host> -es_port <Elasticsearch node port> -env <application environment name> -type <document type(s) to index> [-h|--help]
+	${SCRIPT} -jsonDir <JSON directory> -es_host <Elasticsearch node host> -es_port <Elasticsearch node port> -env <application environment name> -type <document type(s) to index> [-v|--verbose] [-h|--help]
 
 PARAMS:
 	-jsonDir        The directory where JSON bulk files to index are
@@ -105,10 +106,11 @@ if [ $(find ${DATA_DIR} -name *.json | wc -l) -le 0 ] && [ $(find ${DATA_DIR} -n
 	echo -e "${RED}ERROR: The JSON directory ${DATA_DIR} contains no JSON files!${NC}"
 	echo && help
 fi
-[ "${DOCUMENT_TYPES}" == "all" ] && DOCUMENT_TYPES = "${ALL_DOCUMENT_TYPES}"
+[ "${DOCUMENT_TYPES}" == "all" ] && DOCUMENT_TYPES="${ALL_DOCUMENT_TYPES}"
 for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
-	if [ $(find ${DATA_DIR} -name ${DOCUMENT}*.json | wc -l) -le 0 ] && [ $(find ${DATA_DIR} -name ${DOCUMENT}*.json.gz | wc -l) -le 0 ]; then
-		echo -e "${ORANGE}WARNING: The JSON directory ${DATA_DIR} contains no ${DOCUMENT} document!${NC}"
+	if [ $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}*.json" | wc -l) -le 0 ] && [ $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}*.json.gz" | wc -l) -le 0 ]; then
+		echo -e "${ORANGE}WARNING: The JSON directory ${DATA_DIR} contains no ${DOCUMENT_TYPE} document. Type will be ignored!${NC}"
+		DOCUMENT_TYPES=$(echo "${DOCUMENT_TYPES}" | sed "s/ *${DOCUMENT_TYPE} */ /g")
 	fi
 done
 
@@ -221,9 +223,10 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	done
 	
 	# Delete all but last created indices (thanks to the timestamp suffix)
-	echo -e "* Delete old indices ${INDEX_PATTERN} (to avoid accumulation over time)..."
-	OLD_INDICES=$(curl -sf -XGET "${ES_HOST}:${ES_PORT}/_cat/indices/${INDEX_PATTERN}?h=index" | sort | head -n -1)
+	echo -e "* Delete old indices ${INDEX_PATTERN} (to avoid accumulation over time):"
+	OLD_INDICES=$(curl -sf -XGET "${ES_HOST}:${ES_PORT}/_cat/indices/${INDEX_PATTERN}*?h=index" | sort | head -n -1)
 	for OLD_INDEX in ${OLD_INDICES}; do
+		echo -e "\t${OLD_INDEX}..."
 		LOG=$(curl -s -XDELETE "${ES_HOST}:${ES_PORT}/${OLD_INDEX}")
 		check_acknowledgment "${LOG}" "delete index ${OLD_INDEX}"
 	done
