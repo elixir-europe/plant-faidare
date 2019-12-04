@@ -10,10 +10,8 @@ import {
     BrapiResult,
     BrapiResults,
     BrapiStudy,
-    BrapiTrial,
-    GermplasmCriteria
+    BrapiTrial
 } from './models/brapi.model';
-import { Germplasm } from './models/gnpis.model';
 
 export const BASE_URL = 'brapi/v1';
 
@@ -31,9 +29,9 @@ export class BrapiService {
     }
 
     // TODO use the progeny call when the information about parent will be added
-    /*germplasmProgeny(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmProgeny>> {
+    /* germplasmProgeny(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmProgeny>> {
         return this.http.get<GermplasmResult<BrapiGermplasmProgeny>>(`${BASE_URL}/germplasm/${germplasmDbId}/progeny`);
-    }*/
+    } */
 
     germplasmAttributes(germplasmDbId: string): Observable<BrapiResult<BrapiGermplasmAttributes>> {
         return this.http
@@ -61,10 +59,6 @@ export class BrapiService {
     studyTrials(trialsId: string): Observable<BrapiResult<BrapiTrial>> {
         return this.http
             .get<BrapiResult<BrapiTrial>>(`${BASE_URL}/trials/${trialsId}`);
-    }
-
-    germplasmSearch(criteria: GermplasmCriteria): Observable<BrapiResults<BrapiGermplasm>>{
-        return this.http.post<BrapiResults<Germplasm>>(`${BASE_URL}/germplasm-search`,criteria)
     }
 
 

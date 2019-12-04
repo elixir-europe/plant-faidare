@@ -1,14 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { GermplasmService } from '../card-sortable-table/germplasm.services';
+import { Component, Input, OnInit } from '@angular/core';
+import { BrapiGermplasm } from '../models/brapi.model';
+import { GnpisService } from '../gnpis.service';
+import { GermplasmSearchCriteria } from '../models/gnpis.model';
 
-import { BrapiService } from '../brapi.service';
+
+import { saveAs } from 'file-saver';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-    BrapiCriteriaUtils,
-    BrapiGermplasm,
-    GermplasmCriteria
-} from '../models/brapi.model';
+    DataDiscoveryCriteria,
+    DataDiscoveryCriteriaUtils,
+    DataDiscoveryFacet,
+    DEFAULT_PAGE_SIZE,
+    MAX_RESULTS
+} from '../models/data-discovery.model';
+import { asArray } from '../utils';
 import { BehaviorSubject } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'faidare-germplasm-result-page',
@@ -19,37 +25,183 @@ export class GermplasmResultPageComponent implements OnInit {
 
 
     germplasm: BrapiGermplasm[];
-    Germplasmcriteria$ = new BehaviorSubject<GermplasmCriteria> (BrapiCriteriaUtils.emptyCriteria());
-    private localCriteria: GermplasmCriteria = BrapiCriteriaUtils.emptyCriteria();
+    localCriteria: GermplasmSearchCriteria = DataDiscoveryCriteriaUtils.emptyGermplasmSearchCriteria();
 
-    constructor(public service2: GermplasmService, public service: BrapiService) { }
+    @Input() criteriaFromForm$: BehaviorSubject<DataDiscoveryCriteria>;
+    @Input() germplasmSearchCriteria$: BehaviorSubject<GermplasmSearchCriteria>;
+    @Input() germplasmFacets$: BehaviorSubject<DataDiscoveryFacet[]>;
+
+    headers: string[] = ['germplasmName', 'accessionNumber', 'commonCropName', 'instituteName'];
+    elementPerPage: number[] = [15, 20, 25];
+    fieldSortState: object = {
+        germplasmName: null,
+        accessionNumber: null,
+        commonCropName: null,
+        instituteName: null
+    };
+
+    pagination = {
+        startResult: 1,
+        endResult: DEFAULT_PAGE_SIZE,
+        totalResult: null,
+        currentPage: 0,
+        pageSize: DEFAULT_PAGE_SIZE,
+        totalPages: null,
+        maxResults: MAX_RESULTS
+    };
+
+    constructor(public service: GnpisService, private route: ActivatedRoute, private router: Router) {
+    }
 
     ngOnInit() {
 
-        this.Germplasmcriteria$.pipe(filter(c => c !== this.localCriteria))
-            .subscribe(newCriteria => {
-                newCriteria.accessionNumbers = ["10936"];
-                for (const field in newCriteria){
-                    if (newCriteria[field]){
-                        // this.localCriteria[field] = newCriteria[field];
-                    }
-                }
-                this.searchGermplasm();
+        const queryParams = this.route.snapshot.queryParams;
+        this.reassignCriteriaFieldFromDataDiscoveryFields(queryParams);
 
+        this.criteriaFromForm$.subscribe(criteria => {
+            this.reassignCriteriaFieldFromDataDiscoveryFields(criteria);
+            this.germplasmSearchCriteria$.next(this.localCriteria);
+        });
+
+        this.germplasmSearchCriteria$
+            .subscribe(criteria => {
+                this.localCriteria = criteria;
+                this.searchGermplasm(criteria);
             });
-
-        this.localCriteria.accessionNumbers = ["10936"];
-        this.service2.data$.subscribe(germplasm =>{
-            this.germplasm = germplasm;
-        })
 
     }
 
-    searchGermplasm() {
-        this.service.germplasmSearch(this.localCriteria)
-            .subscribe(response => {
-                this.germplasm = response.result.data;
+    searchGermplasm(criteria: GermplasmSearchCriteria) {
+        this.service.germplasmSearch(criteria)
+            .subscribe(({ metadata, facets, result }) => {
+                this.germplasm = result.data;
+                this.germplasmFacets$.next(this.formatFacets(facets));
+                DataDiscoveryCriteriaUtils.updatePagination(this.pagination, metadata.pagination);
             });
+    }
+
+
+    reassignCriteriaFieldFromDataDiscoveryFields(criteria) {
+
+        this.localCriteria = {
+            ...this.localCriteria,
+            commonCropName: asArray(criteria.crops),
+            species: asArray(criteria.crops),
+            germplasmGenus: asArray(criteria.crops),
+            genusSpecies: asArray(criteria.crops),
+            subtaxa: asArray(criteria.crops),
+            genusSpeciesSubtaxa: asArray(criteria.crops),
+            taxonSynonyms: asArray(criteria.crops),
+
+            panel: asArray(criteria.germplasmLists),
+            collection: asArray(criteria.germplasmLists),
+            population: asArray(criteria.germplasmLists),
+
+            germplasmNames: asArray(criteria.accessions),
+            accessionNumbers: asArray(criteria.accessions),
+            synonyms: asArray(criteria.accessions),
+
+            sources: asArray(criteria.sources)
+        };
+
+        this.germplasmSearchCriteria$.next(this.localCriteria);
+
+    }
+
+    exportPlantMaterial(criteria: GermplasmSearchCriteria) {
+        this.service.plantMaterialExport(criteria).subscribe(
+            result => {
+                const blob = new Blob([result], { type: 'text/plain;charset=utf-8' });
+                saveAs(blob, 'germplasm.gnpis.csv');
+            },
+            error => {
+                console.log(error);
+            });
+    }
+
+    getTabField(tabField) {
+
+        this.switchSortOrder(tabField);
+        this.resetOtherFieldSort(tabField);
+
+        this.localCriteria.sortOrder = this.fieldSortState[tabField];
+
+        this.germplasmSearchCriteria$.next(this.localCriteria);
+
+        return tabField;
+    }
+
+    switchSortOrder(tabField) {
+        if (this.fieldSortState[tabField] === 'asc') {
+            this.localCriteria.sortBy = null;
+            return this.fieldSortState[tabField] = null;
+        }
+        if (this.fieldSortState[tabField] === 'desc') {
+            this.localCriteria.sortBy = tabField;
+            return this.fieldSortState[tabField] = 'asc';
+        }
+        if (!this.fieldSortState[tabField]) {
+            this.localCriteria.sortBy = tabField;
+            return this.fieldSortState[tabField] = 'desc';
+        }
+    }
+
+    resetOtherFieldSort(tabField) {
+        const otherHeaders = this.headers.filter(header => header !== tabField);
+        for (const header of otherHeaders) {
+            this.fieldSortState[header] = null;
+        }
+    }
+
+    resultCount() {
+        return Math.min(
+            this.pagination.totalResult,
+            MAX_RESULTS - DEFAULT_PAGE_SIZE
+        );
+    }
+
+    changePage(page: number) {
+        this.localCriteria.page = page - 1;
+        this.germplasmSearchCriteria$.next(this.localCriteria);
+        /*this.router.navigate(['.'], {
+            relativeTo: this.route,
+            queryParams: { page },
+            queryParamsHandling: 'merge'
+        });*/
+    }
+
+    changeNbElementPerPage(pageSize: number) {
+        this.pagination.pageSize = pageSize;
+        this.elementPerPage = [10, 15, 20, 25];
+        this.elementPerPage = this.elementPerPage
+            .filter(otherPageSize => otherPageSize !== pageSize);
+        this.localCriteria.pageSize = pageSize;
+        this.germplasmSearchCriteria$.next(this.localCriteria);
+    }
+
+    formatFacets(facets: DataDiscoveryFacet[]): DataDiscoveryFacet[] {
+        const bioStatusAndGeneticNature = [];
+        let newFacets: DataDiscoveryFacet[] = [];
+        for (const facet of facets) {
+            if (facet.field === 'biologicalStatus' || facet.field === 'geneticNature') {
+                for (const term of facet.terms) {
+                    bioStatusAndGeneticNature
+                        .push(term);
+                }
+            } else if (facet.field === 'holdingInstitute') {
+                facet.field = 'holding institute';
+                newFacets.push(facet);
+            } else {
+                newFacets.push(facet);
+            }
+        }
+        newFacets = [
+            {
+                field: 'Biological status / Genetic nature',
+                terms: bioStatusAndGeneticNature
+            },
+            ...newFacets
+        ];
+        return newFacets;
     }
 }
-

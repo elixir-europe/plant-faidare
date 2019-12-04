@@ -3,25 +3,28 @@ package fr.inra.urgi.faidare.api.faidare.v1;
 import com.google.common.base.Strings;
 import fr.inra.urgi.faidare.api.BadRequestException;
 import fr.inra.urgi.faidare.api.NotFoundException;
+import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmGETSearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmPOSTSearchCriteria;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
+import fr.inra.urgi.faidare.domain.datadiscovery.response.GermplasmSearchResponse;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.service.es.GermplasmService;
+import fr.inra.urgi.faidare.utils.StringFunctions;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Api(tags = {"FAIDARE API"}, description = "Extended FAIDARE API")
 @RestController
@@ -89,8 +92,9 @@ public class GnpISGermplasmController {
      * resp.setContentType("application/zip");
      * </pre>
      */
-    @RequestMapping(value = "/csv", method = GET, produces = "text/csv")
-    public FileSystemResource export(GermplasmPOSTSearchCriteria criteria, HttpServletResponse response) {
+    @PostMapping(value = "/csv", produces = "text/csv", consumes = APPLICATION_JSON_VALUE)
+    public FileSystemResource export(@RequestBody @Valid GermplasmPOSTSearchCriteria criteria, HttpServletResponse response) {
+
         try {
             File exportFile = germplasmService.exportCSV(criteria);
             response.setHeader("Content-Disposition", "attachment; filename=germplasm.gnpis.csv");
@@ -101,4 +105,42 @@ public class GnpISGermplasmController {
         }
     }
 
+    @PostMapping(value = "/germplasm-list-csv", produces = "text/csv", consumes = APPLICATION_JSON_VALUE)
+    public FileSystemResource export(@RequestBody @Valid FaidareGermplasmPOSTShearchCriteria criteria, HttpServletResponse response) {
+
+        try {
+            File exportFile = germplasmService.exportListGermplasmCSV(criteria);
+            response.setHeader("Content-Disposition", "attachment; filename=germplasm.gnpis.csv");
+            return new FileSystemResource(exportFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("An error occurred when exporting germplasm: " + e.getMessage() + ".", e);
+        }
+    }
+
+    @ApiOperation("Search list of germplasm")
+    @PostMapping(value = "/search", consumes = APPLICATION_JSON_VALUE)
+    public GermplasmSearchResponse germplasmSearch(@RequestBody @Valid FaidareGermplasmPOSTShearchCriteria criteria) {
+        try {
+            return germplasmService.esShouldFind(criteria);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
+
+    @ApiOperation("Suggest germplasm document field values")
+    @PostMapping(value = "/suggest", consumes = APPLICATION_JSON_VALUE)
+    public LinkedHashSet<String> germplasmSuggest(
+        @RequestParam String field,
+        @RequestParam(required = false) String text,
+        @RequestParam(required = false) Integer fetchSize,
+        @RequestBody(required = false) @Valid FaidareGermplasmPOSTShearchCriteria criteria)
+        throws UnsupportedEncodingException {
+        if (fetchSize == null) {
+            fetchSize = Integer.MAX_VALUE;
+        }
+        return germplasmService.suggest(field, StringFunctions.asUTF8(text), fetchSize, criteria);
+
+    }
 }

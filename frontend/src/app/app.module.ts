@@ -8,10 +8,20 @@ import { GermplasmCardComponent } from './germplasm-card/germplasm-card.componen
 import { GermplasmResultPageComponent } from './germplasm-result-page/germplasm-result-page.component';
 import { StudyCardComponent } from './study-card/study-card.component';
 import { SiteCardComponent } from './site-card/site-card.component';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+    HTTP_INTERCEPTORS,
+    HttpClient,
+    HttpClientModule
+} from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
-import { NgbAlertModule, NgbDropdownModule, NgbPaginationModule, NgbPopoverModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+    NgbAlertModule,
+    NgbDropdownModule,
+    NgbPaginationModule,
+    NgbPopoverModule,
+    NgbTypeaheadModule
+} from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SuggestionFieldComponent } from './form/suggestion-field/suggestion-field.component';
 import { DocumentComponent } from './result-page/document/document.component';
@@ -23,14 +33,12 @@ import { CardRowComponent } from './card-row/card-row.component';
 import { CardSectionComponent } from './card-section/card-section.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { CardTableComponent } from './card-table/card-table.component';
-import { CardSortableTableComponent } from './card-sortable-table/card-sortable-table.component';
 import { MomentModule } from 'ngx-moment';
 import { XrefsComponent } from './xrefs/xrefs.component';
 import { CoordinatesModule } from 'angular-coordinates';
 import { CardGenericDocumentComponent } from './card-generic-document/card-generic-document.component';
 import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
-import { NgbdSortableHeader } from './card-sortable-table/sortable.directive';
 import { DecimalPipe } from '@angular/common';
 
 @NgModule({
@@ -41,7 +49,6 @@ import { DecimalPipe } from '@angular/common';
         GermplasmCardComponent,
         GermplasmResultPageComponent,
         GermplasmResultPageComponent,
-        NgbdSortableHeader,
         StudyCardComponent,
         SiteCardComponent,
         NavbarComponent,
@@ -55,7 +62,6 @@ import { DecimalPipe } from '@angular/common';
         CardSectionComponent,
         LoadingSpinnerComponent,
         CardTableComponent,
-        CardSortableTableComponent,
         XrefsComponent,
         CardGenericDocumentComponent,
         MarkdownPageComponent
@@ -92,7 +98,11 @@ import { DecimalPipe } from '@angular/common';
 
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useExisting: ErrorInterceptorService, multi: true },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useExisting: ErrorInterceptorService,
+            multi: true
+        },
         DecimalPipe
     ],
     bootstrap: [AppComponent]

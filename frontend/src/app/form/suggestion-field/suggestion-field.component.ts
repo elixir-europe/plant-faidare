@@ -19,6 +19,7 @@ export class SuggestionFieldComponent implements OnInit {
     @Input() criteriaField: string;
     @Input() inputId: string;
     @Input() criteria$: BehaviorSubject<DataDiscoveryCriteria>;
+    @Input() displayGermplasmResult$: BehaviorSubject<boolean>;
     @Input() placeholder: string;
 
     selectedKeys: string[] = [];
@@ -147,5 +148,10 @@ export class SuggestionFieldComponent implements OnInit {
             [this.criteriaField]: [...this.selectedKeys]
         };
         this.criteria$.next(this.localCriteria);
+        let displayGermplasmResult = false;
+        this.displayGermplasmResult$.subscribe(germplasmResultState => {
+            displayGermplasmResult = germplasmResultState;
+        });
+        this.displayGermplasmResult$.next(displayGermplasmResult);
     }
 }

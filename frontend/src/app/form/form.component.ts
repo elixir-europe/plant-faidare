@@ -14,6 +14,7 @@ enum Tabs {
 })
 export class FormComponent {
     @Input() criteria$: BehaviorSubject<DataDiscoveryCriteria>;
+    @Input() displayGermplasmResult$: BehaviorSubject<boolean>;
     @Output() traitWidgetInitialized = new EventEmitter();
 
     // Default active tab

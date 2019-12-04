@@ -1,4 +1,4 @@
-<div class="card mb-1">
+<div class="card mb-1" *ngIf="facet.terms.length">
   <div class="card-body">
     <h3 class="card-title">{{ facet.field | titlecase }}</h3>
 
@@ -11,14 +11,24 @@
         />
         <label class="form-check-label" for="{{ term.term }}">
           {{ term.label }} ({{ term.count | number }})
-          <button type="button" class="btn btn-sm btn-outline-secondary"
-                  id="advanceSearch"
-                  [routerLink]="'germplasm-result-page'"
-                  *ngIf="term.term == 'Germplasm' && displayAdvanceGermplasmSearchButton">
-            Advance search
-            <img src="assets/faidare/images/advance_search.png" alt="advance germplasm search" title="" height="20px"/>
-          </button>
+
         </label>
+
+        <div id="germplasmSearch"
+             title="Focus on germplasm details with export data link"
+             *ngIf="term.term == 'Germplasm' && !criteriaIsEmpty">
+          <label for="selectSwitchButton" style="margin-right: 5px"
+                 id="switchTitle"
+                 >
+            Focus
+          </label>
+          <label class="switch" id="switchButton">
+            <input type="checkbox" id="selectSwitchButton"
+                   (change)="switchToGermplasmResult()">
+            <span class="slider round"></span>
+          </label>
+
+        </div>
       </div>
     </form>
   </div>

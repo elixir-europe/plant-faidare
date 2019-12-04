@@ -1,5 +1,6 @@
 package fr.inra.urgi.faidare.repository.es;
 
+import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
@@ -27,6 +28,11 @@ public interface GermplasmRepository
      * Scroll through all germplasm matching the given criteria.
      */
     Iterator<GermplasmVO> scrollAll(GermplasmSearchCriteria criteria);
+
+    /**
+     * Scroll through all germplasm matching the given FAIDARE search criteria.
+     */
+    Iterator<GermplasmVO> scrollAllGermplasm(FaidareGermplasmPOSTShearchCriteria criteria);
 
     /**
      * Find pedigree for germplasm by id.

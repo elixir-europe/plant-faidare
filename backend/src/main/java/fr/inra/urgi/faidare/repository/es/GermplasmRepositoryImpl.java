@@ -1,6 +1,7 @@
 package fr.inra.urgi.faidare.repository.es;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
@@ -64,6 +65,13 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
     @Override
     public Iterator<GermplasmVO> scrollAll(GermplasmSearchCriteria criteria) {
         QueryBuilder query = queryFactory.createQuery(criteria);
+        int fetchSize = criteria.getPageSize().intValue();
+        return new ESScrollIterator<>(client, requestFactory, parser, GermplasmVO.class, query, fetchSize);
+    }
+
+    @Override
+    public Iterator<GermplasmVO> scrollAllGermplasm(FaidareGermplasmPOSTShearchCriteria criteria) {
+        QueryBuilder query = queryFactory.createEsShouldQuery(criteria);
         int fetchSize = criteria.getPageSize().intValue();
         return new ESScrollIterator<>(client, requestFactory, parser, GermplasmVO.class, query, fetchSize);
     }

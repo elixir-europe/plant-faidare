@@ -1,42 +1,102 @@
-<!--<faidare-germplasm-form
-  inputId="accessions"
-  criteriaField="accessions"
-  [criteria$]="criteria">
-</faidare-germplasm-form>-->
-<ng-container>
-  <h3 class="mb-4">
-    Germplasm result page
-  </h3>
+<ng-container *ngIf="germplasm && germplasm.length>0">
 
-  <div class="col-sm-8 mb-3">
-    <faidare-suggestion-field
-      inputId="accessions"
-      criteriaField="accessions"
-      [criteria$]="Germplasmcriteria$"
-      placeholder="Search germplasm name">
-    </faidare-suggestion-field>
+  <div class="container mb-3">
+    <div class="row result align-content-center">
+          <span class="col mt-2 bolder">
+            Results:
+          </span>
+
+      <div class="row align-content-center">
+  <span *ngIf="pagination.totalResult" style="margin-right: 5px"
+        class="col align-self-end small text-muted mt-3">
+        From {{ pagination.startResult | number }}
+    to {{ pagination.endResult | number }}
+    over {{ pagination.totalResult | number }} documents
+      <span *ngIf="pagination.totalResult > pagination.maxResults">
+      (limited to {{ pagination.maxResults | number }})
+      </span>
+  </span>
+      </div>
+    </div>
   </div>
 
-  <faidare-card-sortable-table
-    [tableHeaders]="['germplasmName', 'accessionNumber', 'commonCropName']"
-    [rows]="germplasm">
+  <button type="button" class="btn btn-outline-success mb-2"
+          (click)="exportPlantMaterial(localCriteria)">
+    Export
+    <img src="assets/faidare/images/csv-logo.png" alt="csv logo" title=""
+         height="20px"/>
+  </button>
 
-    <ng-template let-row>
-      <tr>
-        <td>
-          <ngb-highlight [result]="row.germplasmName"
-                         [term]="service2.searchTerm"></ngb-highlight>
-        </td>
-        <td>
-          <ngb-highlight [result]="row.accessionNumber"
-                         [term]="service2.searchTerm"></ngb-highlight>
-        </td>
-        <td>
-          <ngb-highlight [result]="row.commonCropName"
-                         [term]="service2.searchTerm"></ngb-highlight>
-        </td>
-      </tr>
+  <faidare-card-section
+    class="col-12 col-lg"
+    header="Germplasm data: "
+    [test]="germplasm">
+    <ng-template>
+      <div class="table-responsive table-card-body">
+        <table class="table table-sm table-striped">
+          <thead>
+          <tr>
+            <th id="germplasmResultThead"
+                *ngFor="let header of headers" scope="col">
+              <label id="tabHeader" (click)="getTabField(header)">{{ header }}
+                <i *ngIf="!fieldSortState[header]" class="fa fa-sort"
+                   aria-hidden="true"></i>
+                <i *ngIf="fieldSortState[header] =='desc'"
+                   class="fa fa-sort-desc"
+                   aria-hidden="true"></i>
+                <i *ngIf="fieldSortState[header] == 'asc'"
+                   class="fa fa-sort-asc"
+                   aria-hidden="true"></i>
+              </label>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let accession of germplasm">
+            <tr>
+              <td>{{ accession.germplasmName }}</td>
+              <td>{{ accession.accessionNumber }}</td>
+              <td>{{ accession.commonCropName }}</td>
+              <td>{{ accession.instituteName }}</td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
     </ng-template>
+  </faidare-card-section>
 
-  </faidare-card-sortable-table>
+  <div class="container text-right"
+       style="margin-top: -30px"
+       *ngIf="germplasm">
+    <div ngbDropdown class="dropdown-container">
+      <button class="btn btn-outline-secondary btn-sm"
+              ngbDropdownToggle>Results per page : {{ pagination.pageSize }}
+      </button>
+      <div ngbDropdownMenu class="dropdown-menu" id="pageSizes">
+        <div *ngFor="let pageSize of elementPerPage">
+          <button type="button"
+                  class="btn btn-light"
+                  (click)="changeNbElementPerPage(pageSize)"
+                  style="width: 160px;" ngbDropdownItem>{{ pageSize }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center mt-2 mb-5"
+       *ngIf="pagination.totalPages > 1">
+    <!-- we add 1 to the page because ngb-pagination is 1 based -->
+    <ngb-pagination [page]="pagination.currentPage + 1"
+                    (pageChange)="changePage($event)"
+                    [collectionSize]="resultCount()"
+                    [pageSize]="pagination.pageSize"
+                    [maxSize]="5"
+                    [boundaryLinks]="true"
+                    [ellipses]="false"
+                    size="sm">
+    </ngb-pagination>
+  </div>
+
 </ng-container>

@@ -1,9 +1,22 @@
 import { BASE_URL, GnpisService } from './gnpis.service';
 import { BrapiMetaData, BrapiResults } from './models/brapi.model';
-import { DataDiscoveryCriteria, DataDiscoverySource } from './models/data-discovery.model';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+    DataDiscoveryCriteria,
+    DataDiscoverySource
+} from './models/data-discovery.model';
+import {
+    HttpClientTestingModule,
+    HttpTestingController
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } from './models/gnpis.model';
+import {
+    Donor,
+    Germplasm,
+    GermplasmInstitute,
+    GermplasmSet,
+    Institute,
+    Site
+} from './models/gnpis.model';
 
 describe('GnpisService', () => {
 
@@ -114,6 +127,26 @@ describe('GnpisService', () => {
         collection: [germplasmSet],
         population: [germplasmSet]
     };
+
+    const germplasmExportCriteria: GermplasmExportCriteria = {
+        accessionNumbers: ['VCR010'],
+        germplasmDbIds: [],
+        germplasmGenus: [],
+        germplasmNames: [],
+        germplasmPUIs: [],
+        germplasmSpecies: []
+    };
+
+    const exportFile: string = '"DOI";"AccessionNumber";' +
+        '"AccessionName";"TaxonGroup";' +
+        '"HoldingInstitution";"LotName";' +
+        '"LotSynonym";' +
+        '"CollectionName";' +
+        '"CollectionType";' +
+        '"PanelName";' +
+        '"PanelSize"\n' +
+        '"https://germplasmdoi";"germplasm01";GermplasmTest;Pea;INRA-URGI;;;;;;';
+
 
     let gnpisService: GnpisService;
     let http: HttpTestingController;
@@ -227,6 +260,19 @@ describe('GnpisService', () => {
                 'id2': source2
             });
         });
+    });
+
+    it('should export germplasm as PlantMaterial', () => {
+        gnpisService.plantMaterialExport(germplasmExportCriteria).subscribe(
+            plantMaterialExport => {
+                expect(plantMaterialExport).toEqual(exportFile);
+            }
+        );
+        const req = http.expectOne({
+            url: `${BASE_URL}/germplasm/csv`,
+            method: 'POST'
+        });
+        req.flush(exportFile);
     });
 })
 ;

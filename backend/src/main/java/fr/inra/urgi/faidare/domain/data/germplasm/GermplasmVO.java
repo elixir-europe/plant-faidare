@@ -48,8 +48,10 @@ public class GermplasmVO
 
     private String genus;
     private String species;
+    private String genusSpecies;
     private String speciesAuthority;
     private String subtaxa;
+    private String genusSpeciesSubtaxa;
     private String subtaxaAuthority;
     private String acquisitionDate;
 
@@ -293,6 +295,13 @@ public class GermplasmVO
     }
 
     @Override
+    public String getGenusSpecies() { return genusSpecies; }
+
+    public void setGenusSpecies(String genusSpecies) {
+        this.genusSpecies = genusSpecies;
+    }
+
+    @Override
     public String getSpeciesAuthority() {
         return speciesAuthority;
     }
@@ -308,6 +317,15 @@ public class GermplasmVO
 
     public void setSubtaxa(String subtaxa) {
         this.subtaxa = subtaxa;
+    }
+
+    @Override
+    public String getGenusSpeciesSubtaxa() {
+        return genusSpeciesSubtaxa;
+    }
+
+    public void setGenusSpeciesSubtaxa(String genusSpeciesSubtaxa) {
+        this.genusSpeciesSubtaxa = genusSpeciesSubtaxa;
     }
 
     @Override

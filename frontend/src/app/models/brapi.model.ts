@@ -1,4 +1,5 @@
 import * as schema from './schema.org.model';
+import { DataDiscoveryFacet } from './data-discovery.model';
 
 export interface GermplasmCriteria {
     accessionNumbers: string[];
@@ -45,10 +46,20 @@ export interface BrapiResult<T> {
     result: T;
 }
 
+export interface GermplasmResult<T> {
+    metadata: BrapiMetaData;
+    facets: DataDiscoveryFacet[];
+    result: T;
+}
+
 /**
  * BrAPI list response
  */
 export type BrapiResults<T> = BrapiResult<{
+    data: T[];
+}>;
+
+export type GermplasmResults<T> = GermplasmResult<{
     data: T[];
 }>;
 

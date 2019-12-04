@@ -55,6 +55,24 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
         }
     }
 
+    @Override
+    public QueryBuilder createEsShouldQuery(C criteria) {
+        try {
+            CriteriaMapping voMappingToCriteria = AnnotatedCriteriaMapper.getMapping(criteria.getClass());
+            DocumentMetadata<?> documentMetadata = voMappingToCriteria.getDocumentMetadata();
+
+            List<QueryBuilder> queries = createQueryFromMapping(criteria, null, null, voMappingToCriteria, documentMetadata);
+
+            if (!queries.isEmpty()) {
+                return orQueries(queries);
+            } else {
+                return matchAllQuery();
+            }
+        } catch (Exception e) {
+            throw new ESQueryGenerationException(e);
+        }
+    }
+
     /**
      * Same as {@link ESGenericQueryFactory#createQuery(Object)} but with a list of document fields to exclude from query
      */
@@ -76,6 +94,24 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
         }
     }
 
+    public QueryBuilder createEsShouldQueryExcludingFields(C criteria, String... excludeDocumentFields) {
+        try {
+            CriteriaMapping voMappingToCriteria = AnnotatedCriteriaMapper.getMapping(criteria.getClass());
+            DocumentMetadata<?> documentMetadata = voMappingToCriteria.getDocumentMetadata();
+            Set<String> excludedDocumentFields = ImmutableSet.copyOf(excludeDocumentFields);
+
+            List<QueryBuilder> queries = createQueryFromMapping(criteria, null, excludedDocumentFields, voMappingToCriteria, documentMetadata);
+
+            if (!queries.isEmpty()) {
+                return orQueries(queries);
+            } else {
+                return matchAllQuery();
+            }
+        } catch (Exception e) {
+            throw new ESQueryGenerationException(e);
+        }
+    }
+
     /**
      * Same as {@link ESGenericQueryFactory#createQuery(Object)} but with a list of document fields to include from query (excluding all others)
      */
@@ -89,6 +125,24 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
 
             if (!queries.isEmpty()) {
                 return andQueries(queries);
+            } else {
+                return matchAllQuery();
+            }
+        } catch (Exception e) {
+            throw new ESQueryGenerationException(e);
+        }
+    }
+
+    public QueryBuilder createEsShouldQueryIncludingFields(C criteria, String... includeDocumentFields) {
+        try {
+            CriteriaMapping voMappingToCriteria = AnnotatedCriteriaMapper.getMapping(criteria.getClass());
+            DocumentMetadata<?> documentMetadata = voMappingToCriteria.getDocumentMetadata();
+            Set<String> includedDocumentFields = ImmutableSet.copyOf(includeDocumentFields);
+
+            List<QueryBuilder> queries = createQueryFromMapping(criteria, includedDocumentFields, null, voMappingToCriteria, documentMetadata);
+
+            if (!queries.isEmpty()) {
+                return orQueries(queries);
             } else {
                 return matchAllQuery();
             }
@@ -287,7 +341,7 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
     /**
      * Combine queries into a bool must query
      *
-     * @return null if not queries given; the first query if only only query is given; a bool query otherwise
+     * @return null if not queries given; the first query if only one query is given; a bool query otherwise
      */
     public static QueryBuilder andQueries(List<QueryBuilder> queries) {
         if (queries == null || queries.isEmpty()) {
@@ -304,6 +358,30 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
     }
 
     public static QueryBuilder andQueries(QueryBuilder... queries) {
+        return andQueries(Arrays.asList(queries));
+    }
+
+
+    /**
+     * Combine queries into a bool should query
+     *
+     * @return null if not queries given; the first query if only one query is given; a bool query otherwise
+     */
+    public static QueryBuilder orQueries(List<QueryBuilder> queries) {
+        if (queries == null || queries.isEmpty()) {
+            return null;
+        } else if (queries.size() == 1) {
+            return queries.get(0);
+        } else {
+            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+            for (QueryBuilder query : queries) {
+                boolQueryBuilder.should(query);
+            }
+            return boolQueryBuilder;
+        }
+    }
+
+    public static QueryBuilder orQueries(QueryBuilder... queries) {
         return andQueries(Arrays.asList(queries));
     }
 }

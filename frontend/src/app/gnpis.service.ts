@@ -7,9 +7,14 @@ import {
     DataDiscoveryResults,
     DataDiscoverySource
 } from './models/data-discovery.model';
-import { BrapiResults } from './models/brapi.model';
+import {
+    BrapiGermplasm,
+    BrapiResults,
+    GermplasmCriteria,
+    GermplasmResults
+} from './models/brapi.model';
 import { map } from 'rxjs/operators';
-import { Germplasm } from './models/gnpis.model';
+import { Germplasm, GermplasmSearchCriteria } from './models/gnpis.model';
 import { XrefResponse } from './models/xref.model';
 import { removeNullUndefined } from './utils';
 
@@ -82,17 +87,7 @@ export class GnpisService {
                 return document;
             });
             if (response.facets) {
-                response.facets = response.facets.map((facet: DataDiscoveryFacet) => {
-                    facet.terms = facet.terms.map(term => {
-                        if (facet.field === 'sources') {
-                            term.label = sourceByURI[term.term]['schema:name'];
-                        } else {
-                            term.label = term.term;
-                        }
-                        return term;
-                    });
-                    return facet;
-                });
+                this.getSourcesName(sourceByURI, response);
             }
             return response;
         }));
@@ -112,6 +107,36 @@ export class GnpisService {
         );
     }
 
+    germplasmSearch(criteria: GermplasmCriteria): Observable<GermplasmResults<BrapiGermplasm>> {
+
+        /*return this.http.post<GermplasmResults<Germplasm>>(`${BASE_URL}/germplasm/search`,
+            criteria,
+            { headers: { 'Accept': 'application/ld+json,application/json' } });*/
+
+        return zip(
+            // Get source by URI
+            this.sourceByURI$,
+            // Get documents by criteria
+            this.http.post<GermplasmResults<Germplasm>>(`${BASE_URL}/germplasm/search`,
+                criteria,
+                { headers: { 'Accept': 'application/ld+json,application/json' } }))
+            .pipe(map(([sourceByURI, response]) => {
+                // Extract BrAPI documents from result
+                const germplasm = response.result.data;
+
+                // Transform document to have the source details in place of the source URI
+                response.result.data = germplasm.map(data => {
+                    const sourceURI = data['schema:includedInDataCatalog'];
+                    data['schema:includedInDataCatalog'] = sourceByURI[sourceURI];
+                    return data;
+                });
+                if (response.facets) {
+                    this.getSourcesName(sourceByURI, response);
+                }
+                return response;
+            }));
+    }
+
     /**
      * Get data source by URI
      */
@@ -121,6 +146,32 @@ export class GnpisService {
 
     xref(xrefId: string): Observable<XrefResponse> {
         return this.http.get<XrefResponse>(`${BASE_URL}/xref/documentbyfulltextid?linkedRessourcesID=${xrefId}`);
+    }
+
+    plantMaterialExport(criteria: GermplasmSearchCriteria): Observable<any> {
+        const requestOptions: Object = {
+            /* other options here */
+            responseType: 'text'
+        };
+        return this.http.post<any>(
+            `${BASE_URL}/germplasm/germplasm-list-csv`,
+            criteria,
+            requestOptions
+        );
+    }
+
+    getSourcesName(sourceByURI, response) {
+        response.facets = response.facets.map((facet: DataDiscoveryFacet) => {
+            facet.terms = facet.terms.map(term => {
+                if (facet.field === 'sources') {
+                    term.label = sourceByURI[term.term]['schema:name'];
+                } else {
+                    term.label = term.term;
+                }
+                return term;
+            });
+            return facet;
+        });
     }
 
 }
