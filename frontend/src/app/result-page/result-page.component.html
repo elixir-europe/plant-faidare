@@ -12,7 +12,9 @@
         [displayGermplasmResult$]="displayGermplasmResult$">
       </faidare-facets>
     </div>
-    <div class="row" *ngIf="germplasmfacets.length && displayGermplasmResult">
+
+
+    <!--<div class="row" *ngIf="germplasmfacets.length && displayGermplasmResult">
       <faidare-facets
         class="col-12 col-lg-12 col-sm-6"
         *ngFor="let facet of germplasmfacets"
@@ -20,7 +22,18 @@
         [facet]="facet"
         [displayGermplasmResult$]="displayGermplasmResult$">
       </faidare-facets>
+    </div>-->
+
+    <div class="row" *ngIf="germplasmfacets.length && displayGermplasmResult">
+      <faidare-large-facets
+        class="col-12 col-lg-12 col-sm-6"
+        *ngFor="let facet of germplasmfacets"
+        [criteria$]="criteria$"
+        [facet]="facet"
+        [germplasmSearchCriteria$]="germplasmSearchCriteria$">
+      </faidare-large-facets>
     </div>
+
 
   </div>
 
@@ -36,12 +49,12 @@
 
     <!-- Form -->
     <faidare-form
-        #form
-        [criteria$]="criteria$"
-        [displayGermplasmResult$]="displayGermplasmResult$">
+      #form
+      [criteria$]="criteria$"
+      [displayGermplasmResult$]="displayGermplasmResult$">
     </faidare-form>
 
-      <!-- Loading spinner-->
+    <!-- Loading spinner-->
     <div class="text-center">
       <faidare-loading-spinner [loading]="loading"></faidare-loading-spinner>
     </div>

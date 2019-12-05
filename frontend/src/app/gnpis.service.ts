@@ -28,6 +28,7 @@ export class GnpisService {
     static URGI_SOURCE_URI = 'https://urgi.versailles.inra.fr';
 
     sourceByURI$ = new ReplaySubject<Record<string, DataDiscoverySource>>(1);
+    sources$ = new ReplaySubject<DataDiscoverySource[]>(1);
 
     constructor(private http: HttpClient) {
         // Get data sources
@@ -39,6 +40,7 @@ export class GnpisService {
                 for (const dataSource of dataSources) {
                     sourceByURI[dataSource['@id']] = dataSource;
                 }
+                this.sources$.next(dataSources);
                 this.sourceByURI$.next(sourceByURI);
             });
     }

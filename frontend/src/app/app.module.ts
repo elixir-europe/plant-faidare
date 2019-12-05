@@ -40,6 +40,7 @@ import { CardGenericDocumentComponent } from './card-generic-document/card-gener
 import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
 import { DecimalPipe } from '@angular/common';
+import { LargeFacetsComponent } from './result-page/large-facets/large-facets.component';
 
 @NgModule({
     declarations: [
@@ -64,7 +65,8 @@ import { DecimalPipe } from '@angular/common';
         CardTableComponent,
         XrefsComponent,
         CardGenericDocumentComponent,
-        MarkdownPageComponent
+        MarkdownPageComponent,
+        LargeFacetsComponent
     ],
     imports: [
         BrowserModule,

@@ -7,9 +7,7 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { GnpisService } from '../../gnpis.service';
 import { Params } from '@angular/router';
-import { asArray } from '../../utils';
 import { GermplasmSearchCriteria } from '../../models/gnpis.model';
 
 @Component({
@@ -32,7 +30,7 @@ export class FacetsComponent implements OnInit {
     checkBoxes: FormGroup = new FormGroup({});
     displayAdvanceGermplasmSearchButton: boolean;
 
-    constructor(private gnpisService: GnpisService) {
+    constructor() {
     }
 
     ngOnInit(): void {
@@ -77,7 +75,6 @@ export class FacetsComponent implements OnInit {
             }
             if (this.germplasmSearchCriteria$) {
                 const field = this.facet.field;
-                // console.log(field);
                 if (field === 'holding institute') {
                     this.germplasmLocalCriteria = {
                         ...this.germplasmLocalCriteria,
@@ -132,14 +129,5 @@ export class FacetsComponent implements OnInit {
             }
         }
         this.displayGermplasmResult$.next(!currentState);
-    }
-
-    queryParamsForGermplasmPage(criteria: DataDiscoveryCriteria) {
-        return {
-            crops: asArray(criteria.crops),
-            germplasmLists: asArray(criteria.germplasmLists),
-            accessions: asArray(criteria.accessions),
-            sources: asArray(criteria.sources)
-        };
     }
 }

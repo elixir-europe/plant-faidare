@@ -31,7 +31,7 @@ export class ResultPageComponent implements OnInit {
     facets: DataDiscoveryFacet[] = [];
     germplasmSearchCriteria$ = new BehaviorSubject<GermplasmSearchCriteria>(DataDiscoveryCriteriaUtils.emptyGermplasmSearchCriteria());
     germplasmfacets$ = new BehaviorSubject<DataDiscoveryFacet[]>([]);
-    germplasmfacets: DataDiscoveryFacet[];
+    germplasmfacets: DataDiscoveryFacet[] = [];
     pagination = {
         startResult: 1,
         endResult: DEFAULT_PAGE_SIZE,
