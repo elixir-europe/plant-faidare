@@ -1,18 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FacetsComponent } from './facets.component';
+import { SmallFacetsComponent } from './small-facets.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
-import { DataDiscoveryCriteria, DataDiscoveryCriteriaUtils, DataDiscoveryFacet } from '../../models/data-discovery.model';
+import {
+    DataDiscoveryCriteria,
+    DataDiscoveryCriteriaUtils,
+    DataDiscoveryFacet
+} from '../../models/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-describe('FacetsComponent', () => {
-
-    class FacetsComponentTester extends ComponentTester<FacetsComponent> {
+describe('SmallFacetsComponent', () => {
+    class FacetsComponentTester extends ComponentTester<SmallFacetsComponent> {
         constructor() {
-            super(FacetsComponent);
+            super(SmallFacetsComponent);
         }
 
         get title() {
@@ -61,7 +64,7 @@ describe('FacetsComponent', () => {
 
     beforeEach(() => TestBed.configureTestingModule({
         imports: [ReactiveFormsModule],
-        declarations: [FacetsComponent],
+        declarations: [SmallFacetsComponent],
         schemas: [NO_ERRORS_SCHEMA]
     }));
 

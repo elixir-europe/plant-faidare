@@ -33,6 +33,7 @@ export class GermplasmResultPageComponent implements OnInit {
 
     headers: string[] = ['germplasmName', 'accessionNumber', 'commonCropName', 'instituteName'];
     elementPerPage: number[] = [15, 20, 25];
+    loading: boolean;
     fieldSortState: object = {
         germplasmName: null,
         accessionNumber: null,
@@ -75,7 +76,7 @@ export class GermplasmResultPageComponent implements OnInit {
         this.service.germplasmSearch(criteria)
             .subscribe(({ metadata, facets, result }) => {
                 this.germplasm = result.data;
-                this.germplasmFacets$.next(this.formatFacets(facets));
+                this.germplasmFacets$.next(facets);
                 DataDiscoveryCriteriaUtils.updatePagination(this.pagination, metadata.pagination);
             });
     }
@@ -109,10 +110,12 @@ export class GermplasmResultPageComponent implements OnInit {
     }
 
     exportPlantMaterial(criteria: GermplasmSearchCriteria) {
+        this.loading = true;
         this.service.plantMaterialExport(criteria).subscribe(
             result => {
                 const blob = new Blob([result], { type: 'text/plain;charset=utf-8' });
                 saveAs(blob, 'germplasm.gnpis.csv');
+                this.loading = false;
             },
             error => {
                 console.log(error);

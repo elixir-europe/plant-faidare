@@ -28,7 +28,7 @@ import { DocumentComponent } from './result-page/document/document.component';
 import { ErrorComponent } from './error/error.component';
 import { ErrorInterceptorService } from './error-interceptor.service';
 import { TraitOntologyWidgetComponent } from './form/trait-ontology-widget/trait-ontology-widget.component';
-import { FacetsComponent } from './result-page/facets/facets.component';
+import { FacetsComponent } from './facets/facets.component';
 import { CardRowComponent } from './card-row/card-row.component';
 import { CardSectionComponent } from './card-section/card-section.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
@@ -40,7 +40,8 @@ import { CardGenericDocumentComponent } from './card-generic-document/card-gener
 import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
 import { DecimalPipe } from '@angular/common';
-import { LargeFacetsComponent } from './result-page/large-facets/large-facets.component';
+import { LargeFacetsComponent } from './facets/large-facets/large-facets.component';
+import { SmallFacetsComponent } from './facets/small-facets/small-facets.component';
 
 @NgModule({
     declarations: [
@@ -66,7 +67,8 @@ import { LargeFacetsComponent } from './result-page/large-facets/large-facets.co
         XrefsComponent,
         CardGenericDocumentComponent,
         MarkdownPageComponent,
-        LargeFacetsComponent
+        LargeFacetsComponent,
+        SmallFacetsComponent
     ],
     imports: [
         BrowserModule,

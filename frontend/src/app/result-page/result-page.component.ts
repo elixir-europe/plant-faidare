@@ -113,7 +113,6 @@ export class ResultPageComponent implements OnInit {
         this.criteria$
             .pipe(filter(c => c !== initialCriteria))
             .subscribe(newCriteria => {
-                this.displayGermplasmResult = false;
                 // Reset pagination
                 newCriteria.page = 0;
                 // Fetch documents and facets
@@ -131,9 +130,10 @@ export class ResultPageComponent implements OnInit {
                 this.displayGermplasmResult$.next(this.displayGermplasmResult);
             });
 
-        this.displayGermplasmResult$.subscribe(value => {
+        /*this.displayGermplasmResult$.subscribe(value => {
             this.displayGermplasmResult = value;
         });
+        this.displayGermplasmResult$.next(this.displayGermplasmResult);*/
 
         this.germplasmfacets$.subscribe(facets => {
             this.germplasmfacets = facets;

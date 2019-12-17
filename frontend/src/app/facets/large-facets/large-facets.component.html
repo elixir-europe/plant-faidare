@@ -1,29 +1,36 @@
 <ng-template #resultTemplate let-facet="result" let-t="term">
   <ng-container *ngIf="facet !== 'REFINE'; else refine">
-    <ngb-highlight [result]="displayableKey(facet.label)" [term]="t"></ngb-highlight>
+    <ngb-highlight [result]="displayableKey(facet.label)"
+                   [term]="t"></ngb-highlight>
     <small class="ml-1 text-muted">({{ facet.count | number }})</small>
   </ng-container>
   <ng-template #refine>
-    <div class="text-muted small">Other results are available.<br/>Refine your search.</div>
+    <div class="text-muted small">Other results are available.<br/>Refine your
+      search.
+    </div>
   </ng-template>
 </ng-template>
 
-
-<div class="mb-2">
-      <span class="badge badge-pill badge-secondary mr-1" *ngFor="let term of selectedTerms[facet.field]" tabindex="0"
+<ng-container *ngIf="facet.terms.length && facet.terms.length > 8">
+  <div class="mb-2">
+      <span class="badge badge-pill badge-secondary mr-1"
+            *ngFor="let term of selectedTerms[facet.field]" tabindex="0"
             (keydown.delete)="removeKey(term)"
             (keydown.backspace)="removeKey(term)"> {{ displaySourceName(term) }}
-        <button tabindex="-1" type="button" class="btn btn-link" (click)="removeKey(term)">&times;</button>
+        <button tabindex="-1" type="button" class="btn btn-link"
+                (click)="removeKey(term)">&times;</button>
       </span>
-</div>
-<div class="card mb-1" *ngIf="facet.terms.length">
-  <div class="card-body">
-    <h3 class="card-title">{{ facet.field | titlecase }}</h3>
+  </div>
+  <div class="card mb-1" *ngIf="facet.terms.length">
+    <div class="card-body">
+      <h3 class="card-title">{{ facet.field | titlecase }}</h3>
       <input #typeahead class="form-control" [formControl]="criterion"
              [ngbTypeahead]="search"
              (selectItem)="selectKey($event)" [resultTemplate]="resultTemplate"
 
              placeholder="Filter on {{ facet.field.toLowerCase() }}..."
              (focus)="focus$.next($event.target.value)"/>
+    </div>
   </div>
-</div>
+</ng-container>
+

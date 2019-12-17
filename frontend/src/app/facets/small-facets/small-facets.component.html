@@ -1,4 +1,4 @@
-<div class="card mb-1" *ngIf="facet.terms.length">
+<div class="card mb-1" *ngIf="facet.terms.length && facet.terms.length < 8">
   <div class="card-body">
     <h3 class="card-title">{{ facet.field | titlecase }}</h3>
 
@@ -11,23 +11,21 @@
         />
         <label class="form-check-label" for="{{ term.term }}">
           {{ term.label }} ({{ term.count | number }})
-
         </label>
 
         <div id="germplasmSearch"
              title="Focus on germplasm details with export data link"
              *ngIf="term.term == 'Germplasm' && !criteriaIsEmpty">
           <label for="selectSwitchButton" style="margin-right: 5px"
-                 id="switchTitle"
-                 >
+                 id="switchTitle">
             Focus
           </label>
           <label class="switch" id="switchButton">
             <input type="checkbox" id="selectSwitchButton"
+                   [checked]="displayGermplasmCurrentState"
                    (change)="switchToGermplasmResult()">
             <span class="slider round"></span>
           </label>
-
         </div>
       </div>
     </form>

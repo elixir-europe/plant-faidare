@@ -116,10 +116,10 @@ export class LargeFacetsComponent implements OnInit {
                 }
             }
             if (this.germplasmSearchCriteria$) {
-                if (this.germplasmLocalCriteria[this.facet.field]) {
-                    this.germplasmLocalCriteria[this.facet.field].push(event.item.term);
-                } else {
+                if (!this.germplasmLocalCriteria[this.facet.field]) {
                     this.germplasmLocalCriteria[this.facet.field] = [event.item.term];
+                } else {
+                    this.germplasmLocalCriteria[this.facet.field].push(event.item.term);
                 }
             }
             this.emitChanges();

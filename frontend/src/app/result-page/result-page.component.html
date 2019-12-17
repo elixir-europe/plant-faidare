@@ -3,38 +3,21 @@
 <div class="row justify-content-end">
   <!-- Column for facets -->
   <div class="col-lg-3 order-lg-first">
-    <div class="row">
-      <faidare-facets
-        class="col-12 col-lg-12 col-sm-6"
-        *ngFor="let facet of facets"
-        [criteria$]="criteria$"
-        [facet]="facet"
-        [displayGermplasmResult$]="displayGermplasmResult$">
-      </faidare-facets>
-    </div>
 
+    <faidare-facets
+      [criteria$]="criteria$"
+      [facets]="facets"
+      [displayGermplasmResult$]="displayGermplasmResult$"
+      [germplasmSearchCriteria$]="germplasmSearchCriteria$">
+    </faidare-facets>
 
-    <!--<div class="row" *ngIf="germplasmfacets.length && displayGermplasmResult">
-      <faidare-facets
-        class="col-12 col-lg-12 col-sm-6"
-        *ngFor="let facet of germplasmfacets"
-        [germplasmSearchCriteria$]="germplasmSearchCriteria$"
-        [facet]="facet"
-        [displayGermplasmResult$]="displayGermplasmResult$">
-      </faidare-facets>
-    </div>-->
-
-    <div class="row" *ngIf="germplasmfacets.length && displayGermplasmResult">
-      <faidare-large-facets
-        class="col-12 col-lg-12 col-sm-6"
-        *ngFor="let facet of germplasmfacets"
-        [criteria$]="criteria$"
-        [facet]="facet"
-        [germplasmSearchCriteria$]="germplasmSearchCriteria$">
-      </faidare-large-facets>
-    </div>
-
-
+    <faidare-facets
+      *ngIf="displayGermplasmResult && germplasmfacets.length"
+      [criteria$]="criteria$"
+      [facets]="germplasmfacets"
+      [displayGermplasmResult$]="displayGermplasmResult$"
+      [germplasmSearchCriteria$]="germplasmSearchCriteria$">
+    </faidare-facets>
   </div>
 
   <!-- Column for form and results-->
@@ -134,7 +117,8 @@
     </ng-container>
 
     <!-- Else we display a simple message when no result found -->
-    <div *ngIf="pagination.totalResult == 0 && !loading && !criteriaIsEmpty"
+    <div *ngIf="pagination.totalResult == 0 && !loading
+    && (!criteriaIsEmpty && !displayGermplasmResult)"
          id="no-results" class="text-center">
       <div class="no-result-icon">
         <span class="fa fa-meh-o"></span>

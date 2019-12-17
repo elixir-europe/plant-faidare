@@ -12,8 +12,6 @@
   cursor: pointer;
 }
 
-
-
 /* The switch - the box around the slider */
 
 .switch {
@@ -76,3 +74,4 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
     DataDiscoveryCriteria,
     DataDiscoveryCriteriaUtils,
@@ -11,16 +11,18 @@ import { Params } from '@angular/router';
 import { GermplasmSearchCriteria } from '../../models/gnpis.model';
 
 @Component({
-    selector: 'faidare-facets',
-    templateUrl: './facets.component.html',
-    styleUrls: ['./facets.component.scss']
+    selector: 'faidare-small-facets',
+    templateUrl: './small-facets.component.html',
+    styleUrls: ['./small-facets.component.scss']
 })
-export class FacetsComponent implements OnInit {
+export class SmallFacetsComponent implements OnInit {
 
     @Input() facet: DataDiscoveryFacet;
     @Input() criteria$: BehaviorSubject<DataDiscoveryCriteria>;
     @Input() germplasmSearchCriteria$: BehaviorSubject<GermplasmSearchCriteria>;
     @Input() displayGermplasmResult$: BehaviorSubject<boolean>;
+
+    @Output() changed = new EventEmitter<boolean>();
 
 
     localCriteria: DataDiscoveryCriteria;
@@ -29,6 +31,7 @@ export class FacetsComponent implements OnInit {
     queryParams: Params;
     checkBoxes: FormGroup = new FormGroup({});
     displayAdvanceGermplasmSearchButton: boolean;
+    displayGermplasmCurrentState = false;
 
     constructor() {
     }
@@ -74,28 +77,16 @@ export class FacetsComponent implements OnInit {
                 this.criteria$.next(this.localCriteria);
             }
             if (this.germplasmSearchCriteria$) {
-                const field = this.facet.field;
-                if (field === 'holding institute') {
-                    this.germplasmLocalCriteria = {
-                        ...this.germplasmLocalCriteria,
-                        holdingInstitute: selectedTerms
-                    };
-                }
-                if (field === 'Biological status / Genetic nature') {
-                    this.germplasmLocalCriteria = {
-                        ...this.germplasmLocalCriteria,
-                        biologicalStatus: selectedTerms,
-                        geneticNature: selectedTerms
-                    };
-                }
-                if (field !== 'Biological status / Genetic nature' && field !== 'holding institute') {
-                    this.germplasmLocalCriteria = {
-                        ...this.germplasmLocalCriteria,
-                        [this.facet.field]: selectedTerms
-                    };
-                }
-                this.germplasmSearchCriteria$.next(this.germplasmLocalCriteria);
+                this.germplasmLocalCriteria = {
+                    ...this.germplasmLocalCriteria,
+                    [this.facet.field]: selectedTerms
+                };
             }
+            this.germplasmSearchCriteria$.next(this.germplasmLocalCriteria);
+        });
+
+        this.displayGermplasmResult$.subscribe(value => {
+            this.displayGermplasmCurrentState = value;
         });
     }
 
@@ -119,15 +110,13 @@ export class FacetsComponent implements OnInit {
     }
 
     switchToGermplasmResult() {
-        let currentState = false;
-        this.displayGermplasmResult$.subscribe(value => {
-            currentState = value;
-        });
-        for (const [key, control] of Object.entries(this.checkBoxes.controls)) {
+
+        /*for (const [key, control] of Object.entries(this.checkBoxes.controls)) {
             if (key === 'selectSwitchButton') {
                 control.setValue(currentState, { emitEvent: false });
             }
-        }
-        this.displayGermplasmResult$.next(!currentState);
+        }*/
+        this.displayGermplasmResult$.next(!this.displayGermplasmCurrentState);
     }
+
 }

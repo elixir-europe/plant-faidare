@@ -1,0 +1,22 @@
+
+
+<div class="row">
+  <faidare-small-facets
+    class="col-12 col-lg-12 col-sm-6"
+    *ngFor="let facet of facets"
+    [criteria$]="criteria$"
+    [facet]="facet"
+    [germplasmSearchCriteria$]="germplasmSearchCriteria$"
+    [displayGermplasmResult$]="displayGermplasmResult$">
+  </faidare-small-facets>
+</div>
+
+<div class="row">
+  <faidare-large-facets
+    class="col-12 col-lg-12 col-sm-6"
+    *ngFor="let facet of facets"
+    [criteria$]="criteria$"
+    [facet]="facet"
+    [germplasmSearchCriteria$]="germplasmSearchCriteria$">
+  </faidare-large-facets>
+</div>
