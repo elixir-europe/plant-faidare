@@ -299,7 +299,8 @@ describe('BrapiService', () => {
         distributors: [origin],
         panel: [germplasmSet],
         collection: [germplasmSet],
-        population: [germplasmSet]
+        population: [germplasmSet],
+        'schema:includedInDataCatalog': null
     };
 
     let brapiService: BrapiService;

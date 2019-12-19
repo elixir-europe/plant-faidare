@@ -40,14 +40,6 @@ describe('GermplasmCardComponent', () => {
         }
     }
 
-    const gnpisSite: Site = {
-        latitude: null,
-        longitude: null,
-        siteId: null,
-        siteName: null,
-        siteType: null
-    };
-
     const brapiSibling: BrapiSibling = {
         germplasmDbId: 'frere1',
         defaultDisplayName: 'frere1'

@@ -13,6 +13,7 @@ import {
     Donor,
     Germplasm,
     GermplasmInstitute,
+    GermplasmSearchCriteria,
     GermplasmSet,
     Institute,
     Site
@@ -125,16 +126,38 @@ describe('GnpisService', () => {
         distributors: [germplasmInstitute],
         panel: [germplasmSet],
         collection: [germplasmSet],
-        population: [germplasmSet]
+        population: [germplasmSet],
+        'schema:includedInDataCatalog': null
     };
 
-    const germplasmExportCriteria: GermplasmExportCriteria = {
+    const germplasmExportCriteria: GermplasmSearchCriteria = {
         accessionNumbers: ['VCR010'],
         germplasmDbIds: [],
         germplasmGenus: [],
         germplasmNames: [],
         germplasmPUIs: [],
-        germplasmSpecies: []
+        germplasmSpecies: [],
+
+        synonyms: null,
+        panel: null,
+        collection: null,
+        population: null,
+        commonCropName: null,
+        species: null,
+        genusSpecies: null,
+        subtaxa: null,
+        genusSpeciesSubtaxa: null,
+        taxonSynonyms: null,
+        biologicalStatus: null,
+        geneticNature: null,
+        holdingInstitute: null,
+        sources: null,
+
+        facetFields: null,
+        sortBy: null,
+        sortOrder: null,
+        page: 1,
+        pageSize: 10
     };
 
     const exportFile: string = '"DOI";"AccessionNumber";' +
@@ -269,7 +292,7 @@ describe('GnpisService', () => {
             }
         );
         const req = http.expectOne({
-            url: `${BASE_URL}/germplasm/csv`,
+            url: `${BASE_URL}/germplasm/germplasm-list-csv`,
             method: 'POST'
         });
         req.flush(exportFile);

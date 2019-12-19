@@ -30,8 +30,8 @@ describe('SmallFacetsComponent', () => {
             return this.elements('input');
         }
 
-        get advanceSearchButton() {
-            return this.elements('button');
+        get switchButton() {
+            return this.elements('label#switchTitle');
         }
 
     }
@@ -76,6 +76,7 @@ describe('SmallFacetsComponent', () => {
         const component = tester.componentInstance;
         component.facet = exampleFacet1;
         component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
+        component.displayGermplasmResult$ = new BehaviorSubject<boolean>(false);
         tester.detectChanges();
 
         expect(tester.title).toContainText('Sources');
@@ -100,6 +101,7 @@ describe('SmallFacetsComponent', () => {
             sources: ['source 2']
         };
         component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(criteria);
+        component.displayGermplasmResult$ = new BehaviorSubject<boolean>(false);
 
         tester.detectChanges();
 
@@ -114,6 +116,7 @@ describe('SmallFacetsComponent', () => {
         const component = tester.componentInstance;
         component.facet = exampleFacet1;
         component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
+        component.displayGermplasmResult$ = new BehaviorSubject<boolean>(false);
         tester.detectChanges();
 
         // No sources selected in criteria
@@ -141,11 +144,12 @@ describe('SmallFacetsComponent', () => {
             types: ['Germplasm']
         };
         component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(criteria);
+        component.displayGermplasmResult$ = new BehaviorSubject<boolean>(true);
         component.facet = exampleFacet2;
         tester.detectChanges();
 
-        expect(tester.advanceSearchButton.length).toEqual(1);
-        expect(tester.advanceSearchButton[0]).toContainText('Advance search');
+        expect(tester.switchButton.length).toEqual(1);
+        expect(tester.switchButton[0]).toContainText('Focus');
 
     });
 
@@ -157,11 +161,12 @@ describe('SmallFacetsComponent', () => {
             ...DataDiscoveryCriteriaUtils.emptyCriteria(),
             types: ['Germplasm', 'Phenotyping Study']
         };
-        component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(criteria);
+        component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
+        component.displayGermplasmResult$ = new BehaviorSubject<boolean>(false);
         component.facet = exampleFacet2;
         tester.detectChanges();
 
-        expect(tester.advanceSearchButton).toEqual([]);
+        expect(tester.switchButton).toEqual([]);
 
     });
 });

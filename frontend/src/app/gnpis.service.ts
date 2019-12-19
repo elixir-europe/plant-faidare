@@ -111,10 +111,6 @@ export class GnpisService {
 
     germplasmSearch(criteria: GermplasmCriteria): Observable<GermplasmResults<BrapiGermplasm>> {
 
-        /*return this.http.post<GermplasmResults<Germplasm>>(`${BASE_URL}/germplasm/search`,
-            criteria,
-            { headers: { 'Accept': 'application/ld+json,application/json' } });*/
-
         return zip(
             // Get source by URI
             this.sourceByURI$,

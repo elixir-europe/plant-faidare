@@ -51,7 +51,7 @@ export class GermplasmResultPageComponent implements OnInit {
         maxResults: MAX_RESULTS
     };
 
-    constructor(public service: GnpisService, private route: ActivatedRoute, private router: Router) {
+    constructor(public service: GnpisService, private route: ActivatedRoute) {
     }
 
     ngOnInit() {
