@@ -22,11 +22,11 @@ describe('LargeFacetsComponent', () => {
         }
 
         get  facetTitle() {
-            return this.element('h3')
+            return this.element('h3');
         }
 
         get facetInput() {
-            return this.element('input')
+            return this.element('input');
         }
     }
 
@@ -45,7 +45,7 @@ describe('LargeFacetsComponent', () => {
                 term: 'Germplasm',
                 label: 'GERMPLASM',
                 count: 10
-            },{
+            }, {
                 term: 'Traditional cultivar/landrace',
                 label: 'Traditional cultivar/landrace',
                 count: 74
@@ -57,7 +57,7 @@ describe('LargeFacetsComponent', () => {
                 term: 'Hybrid',
                 label: 'Hybrid',
                 count: 478
-            },{
+            }, {
                 term: 'INRA',
                 label: 'INRA',
                 count: 74
@@ -104,7 +104,7 @@ describe('LargeFacetsComponent', () => {
 
     it ('should display search box', () => {
         const tester = new LargeFacetsComponentTester();
-        const component = tester.componentInstance;
+        component = tester.componentInstance;
         component.facet = largeFacet;
         tester.detectChanges();
 

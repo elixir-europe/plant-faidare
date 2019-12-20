@@ -11,6 +11,7 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { GermplasmSearchCriteria } from '../../models/gnpis.model';
 
 describe('SmallFacetsComponent', () => {
     class FacetsComponentTester extends ComponentTester<SmallFacetsComponent> {
@@ -76,6 +77,8 @@ describe('SmallFacetsComponent', () => {
         const component = tester.componentInstance;
         component.facet = exampleFacet1;
         component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
+        component.germplasmSearchCriteria$ = new BehaviorSubject<GermplasmSearchCriteria>(DataDiscoveryCriteriaUtils
+            .emptyGermplasmSearchCriteria());
         component.displayGermplasmResult$ = new BehaviorSubject<boolean>(false);
         tester.detectChanges();
 
@@ -116,6 +119,8 @@ describe('SmallFacetsComponent', () => {
         const component = tester.componentInstance;
         component.facet = exampleFacet1;
         component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
+        component.germplasmSearchCriteria$ = new BehaviorSubject<GermplasmSearchCriteria>(DataDiscoveryCriteriaUtils
+            .emptyGermplasmSearchCriteria());
         component.displayGermplasmResult$ = new BehaviorSubject<boolean>(false);
         tester.detectChanges();
 
@@ -162,6 +167,8 @@ describe('SmallFacetsComponent', () => {
             types: ['Germplasm', 'Phenotyping Study']
         };
         component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
+        component.germplasmSearchCriteria$ = new BehaviorSubject<GermplasmSearchCriteria>(DataDiscoveryCriteriaUtils
+            .emptyGermplasmSearchCriteria());
         component.displayGermplasmResult$ = new BehaviorSubject<boolean>(false);
         component.facet = exampleFacet2;
         tester.detectChanges();
