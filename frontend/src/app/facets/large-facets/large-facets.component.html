@@ -11,7 +11,7 @@
   </ng-template>
 </ng-template>
 
-<ng-container>
+<ng-container *ngIf="facet.terms.length && facet.terms.length > 8">
   <div class="mb-2">
       <span class="badge badge-pill badge-secondary mr-1"
             *ngFor="let term of selectedTerms[facet.field]" tabindex="0"
@@ -21,7 +21,7 @@
                 (click)="removeKey(term)">&times;</button>
       </span>
   </div>
-  <div class="card mb-1" *ngIf="facet.terms.length">
+  <div class="card mb-1">
     <div class="card-body">
       <h3 class="card-title">{{ facet.field | titlecase }}</h3>
       <input #typeahead class="form-control" [formControl]="criterion"
