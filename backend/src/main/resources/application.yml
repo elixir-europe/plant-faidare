@@ -76,6 +76,11 @@ faidare:
     url: https://www.ebi.ac.uk/eva
     name: EBI European Nucleotide Archive
     image: https://urgi.versailles.inra.fr/files/faidare/logo/EVA.png
+  # TERRA-REF
+  - uri: https://terraref.org
+    url: https://terraref.org
+    name: TERRA-REF
+    image: https://urgi.versailles.inra.fr/files/faidare/logo/TERRAREF.png
 server:
   compression:
     enabled: true
