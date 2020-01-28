@@ -10,7 +10,6 @@ import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.response.GermplasmSearchResponse;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.service.es.GermplasmService;
-import fr.inra.urgi.faidare.utils.StringFunctions;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -129,7 +126,7 @@ public class GnpISGermplasmController {
         }
     }
 
-    @ApiOperation("Suggest germplasm document field values")
+    /*@ApiOperation("Suggest germplasm document field values")
     @PostMapping(value = "/suggest", consumes = APPLICATION_JSON_VALUE)
     public LinkedHashSet<String> germplasmSuggest(
         @RequestParam String field,
@@ -142,5 +139,5 @@ public class GnpISGermplasmController {
         }
         return germplasmService.suggest(field, StringFunctions.asUTF8(text), fetchSize, criteria);
 
-    }
+    }*/
 }

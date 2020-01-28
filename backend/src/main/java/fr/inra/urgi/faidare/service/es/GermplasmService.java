@@ -9,7 +9,6 @@ import fr.inra.urgi.faidare.domain.datadiscovery.response.GermplasmSearchRespons
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 
 import java.io.File;
-import java.util.LinkedHashSet;
 
 
 public interface GermplasmService {
@@ -20,9 +19,9 @@ public interface GermplasmService {
 
     GermplasmSearchResponse esShouldFind(FaidareGermplasmPOSTShearchCriteria criteria);
 
-    LinkedHashSet<String> suggest(
+    /*LinkedHashSet<String> suggest(
         String criteriaField, String searchText, Integer fetchSize, FaidareGermplasmPOSTShearchCriteria criteria
-    );
+    );*/
 
     File exportCSV(GermplasmSearchCriteria criteria);
 
