@@ -1,6 +1,6 @@
 <div class="card mb-1" *ngIf="facet.terms.length && facet.terms.length <= 8">
   <div class="card-body">
-    <h3 class="card-title">{{ facet.field | titlecase }}</h3>
+    <h3 class="card-title">{{ facet.field }}</h3>
 
     <form [formGroup]="checkBoxes" class="card-text">
       <div class="form-check" *ngFor="let term of facet.terms">

@@ -4,7 +4,7 @@ import { GermplasmResultPageComponent } from './germplasm-result-page.component'
 import { RouterTestingModule } from '@angular/router/testing';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { GnpisService } from '../gnpis.service';
-import { BrapiGermplasm, GermplasmResults } from '../models/brapi.model';
+import { GermplasmResults } from '../models/brapi.model';
 import { CardSectionComponent } from '../card-section/card-section.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import {
@@ -14,7 +14,7 @@ import {
     DEFAULT_PAGE_SIZE,
     MAX_RESULTS
 } from '../models/data-discovery.model';
-import { GermplasmSearchCriteria } from '../models/gnpis.model';
+import { Germplasm, GermplasmSearchCriteria } from '../models/gnpis.model';
 import { BehaviorSubject, of } from 'rxjs';
 
 
@@ -86,7 +86,7 @@ describe('GermplasmResultPageComponent', () => {
         }
     ];
 
-    const germplasmSearchResult: GermplasmResults<BrapiGermplasm> = {
+    const germplasmSearchResult: GermplasmResults<Germplasm> = {
         metadata: {
             pagination: pagination
         },
@@ -114,7 +114,31 @@ describe('GermplasmResultPageComponent', () => {
                 subtaxa: 'subsp',
                 subtaxaAuthority: '',
                 donors: null,
-                acquisitionDate: 'yesterday'
+                acquisitionDate: 'yesterday',
+
+
+                genusSpecies: null,
+                genusSpeciesSubtaxa: null,
+                taxonSynonyms: null,
+                taxonCommonNames: null,
+                taxonComment: null,
+                geneticNature: null,
+                comment: null,
+                photo: null,
+                holdingInstitute: null,
+                holdingGenbank: null,
+                presenceStatus: null,
+                children: null,
+                originSite: null,
+                collectingSite: null,
+                evaluationSites: null,
+                collector: null,
+                breeder: null,
+                distributors: null,
+                panel: null,
+                collection: null,
+                population: null,
+                'schema:includedInDataCatalog': null
             }, {
                 germplasmDbId: 'g2',
                 defaultDisplayName: 'germplam2',
@@ -137,10 +161,40 @@ describe('GermplasmResultPageComponent', () => {
                 subtaxa: 'subsp',
                 subtaxaAuthority: '',
                 donors: null,
-                acquisitionDate: 'today'
+                acquisitionDate: 'today',
+
+
+                genusSpecies: null,
+                genusSpeciesSubtaxa: null,
+                taxonSynonyms: null,
+                taxonCommonNames: null,
+                taxonComment: null,
+                geneticNature: null,
+                comment: null,
+                photo: null,
+                holdingInstitute: null,
+                holdingGenbank: null,
+                presenceStatus: null,
+                children: null,
+                originSite: null,
+                collectingSite: null,
+                evaluationSites: null,
+                collector: null,
+                breeder: null,
+                distributors: null,
+                panel: null,
+                collection: null,
+                population: null,
+                'schema:includedInDataCatalog': null
+
             }],
         }
     };
+
+
+
+
+
 
     const criteria: GermplasmSearchCriteria = {
         accessionNumbers: ['G_20'],
@@ -164,6 +218,7 @@ describe('GermplasmResultPageComponent', () => {
         geneticNature: null,
         holdingInstitute: null,
         sources: null,
+        types: null,
 
         facetFields: null,
         sortBy: 'germplasmName',

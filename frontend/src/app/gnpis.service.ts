@@ -8,7 +8,6 @@ import {
     DataDiscoverySource
 } from './models/data-discovery.model';
 import {
-    BrapiGermplasm,
     BrapiResults,
     GermplasmCriteria,
     GermplasmResults
@@ -109,7 +108,7 @@ export class GnpisService {
         );
     }
 
-    germplasmSearch(criteria: GermplasmCriteria): Observable<GermplasmResults<BrapiGermplasm>> {
+    germplasmSearch(criteria: GermplasmCriteria): Observable<GermplasmResults<Germplasm>> {
 
         return zip(
             // Get source by URI

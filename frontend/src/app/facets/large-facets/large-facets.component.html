@@ -23,7 +23,7 @@
   </div>
   <div class="card mb-1">
     <div class="card-body">
-      <h3 class="card-title">{{ facet.field | titlecase }}</h3>
+      <h3 class="card-title">{{ facet.field }}</h3>
       <input #typeahead class="form-control" [formControl]="criterion"
              [ngbTypeahead]="search"
              (selectItem)="selectKey($event)" [resultTemplate]="resultTemplate"

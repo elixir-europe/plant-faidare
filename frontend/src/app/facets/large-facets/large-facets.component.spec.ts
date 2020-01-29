@@ -1,7 +1,8 @@
 import { LargeFacetsComponent } from './large-facets.component';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-    DataDiscoveryCriteria, DataDiscoveryCriteriaUtils,
+    DataDiscoveryCriteria,
+    DataDiscoveryCriteriaUtils,
     DataDiscoveryFacet
 } from '../../models/data-discovery.model';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
@@ -108,7 +109,7 @@ describe('LargeFacetsComponent', () => {
         component.facet = largeFacet;
         tester.detectChanges();
 
-        expect(tester.facetTitle.textContent).toEqual('Large Facet');
+        expect(tester.facetTitle.textContent).toEqual('large Facet');
         expect(tester.facetInput).toBeTruthy();
 
     });

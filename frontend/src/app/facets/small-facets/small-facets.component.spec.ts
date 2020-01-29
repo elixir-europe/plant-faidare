@@ -82,7 +82,7 @@ describe('SmallFacetsComponent', () => {
         component.displayGermplasmResult$ = new BehaviorSubject<boolean>(false);
         tester.detectChanges();
 
-        expect(tester.title).toContainText('Sources');
+        expect(tester.title).toContainText('sources');
 
         expect(tester.terms[0]).toContainText('SOURCE 1 (10)');
         expect(tester.terms[0].attr('for')).toBe('source 1');

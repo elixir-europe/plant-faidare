@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BrapiGermplasm } from '../models/brapi.model';
 import { GnpisService } from '../gnpis.service';
-import { GermplasmSearchCriteria } from '../models/gnpis.model';
+import { Germplasm, GermplasmSearchCriteria } from '../models/gnpis.model';
 
 
 import { saveAs } from 'file-saver';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
     DataDiscoveryCriteria,
     DataDiscoveryCriteriaUtils,
@@ -24,21 +23,22 @@ import { BehaviorSubject } from 'rxjs';
 export class GermplasmResultPageComponent implements OnInit {
 
 
-    germplasm: BrapiGermplasm[];
+    germplasm: Germplasm[];
     localCriteria: GermplasmSearchCriteria = DataDiscoveryCriteriaUtils.emptyGermplasmSearchCriteria();
 
     @Input() criteriaFromForm$: BehaviorSubject<DataDiscoveryCriteria>;
     @Input() germplasmSearchCriteria$: BehaviorSubject<GermplasmSearchCriteria>;
     @Input() germplasmFacets$: BehaviorSubject<DataDiscoveryFacet[]>;
 
-    headers: string[] = ['germplasmName', 'accessionNumber', 'commonCropName', 'instituteName'];
+    headers: string[] = ['germplasmName', 'accessionNumber', 'genusSpecies', 'instituteName', 'biologicalStatusOfAccessionCode'];
     elementPerPage: number[] = [15, 20, 25];
     loading: boolean;
     fieldSortState: object = {
         germplasmName: null,
         accessionNumber: null,
-        commonCropName: null,
-        instituteName: null
+        genusSpecies: null,
+        instituteName: null,
+        biologicalStatusOfAccessionCode: null
     };
 
     pagination = {
@@ -102,7 +102,8 @@ export class GermplasmResultPageComponent implements OnInit {
             accessionNumbers: asArray(criteria.accessions),
             synonyms: asArray(criteria.accessions),
 
-            sources: asArray(criteria.sources)
+            // Do not use the source as a criterion because of the ES should request.
+            // sources: asArray(criteria.sources)
         };
 
         this.germplasmSearchCriteria$.next(this.localCriteria);
@@ -182,7 +183,8 @@ export class GermplasmResultPageComponent implements OnInit {
         this.germplasmSearchCriteria$.next(this.localCriteria);
     }
 
-    formatFacets(facets: DataDiscoveryFacet[]): DataDiscoveryFacet[] {
+    // Format facets by renaming and merging some facets in one facet.
+    /*formatFacets(facets: DataDiscoveryFacet[]): DataDiscoveryFacet[] {
         const bioStatusAndGeneticNature = [];
         let newFacets: DataDiscoveryFacet[] = [];
         for (const facet of facets) {
@@ -206,5 +208,5 @@ export class GermplasmResultPageComponent implements OnInit {
             ...newFacets
         ];
         return newFacets;
-    }
+    }*/
 }
