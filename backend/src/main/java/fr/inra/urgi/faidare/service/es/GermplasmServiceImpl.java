@@ -4,6 +4,7 @@ import com.opencsv.CSVWriter;
 import fr.inra.urgi.faidare.api.faidare.v1.GnpISGermplasmController;
 import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
+import fr.inra.urgi.faidare.domain.data.germplasm.CollPopVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.ProgenyVO;
@@ -19,7 +20,9 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author cpommier, gcornut
@@ -66,14 +69,32 @@ public class GermplasmServiceImpl implements GermplasmService {
             "LotName", "LotSynonym", "CollectionName", "CollectionType", "PanelName", "PanelSize"};
         csvWriter.writeNext(header);
 
+
         while (germplasms.hasNext()) {
+            List<String> collectionNames = new ArrayList<>();
+            List<String> panelNames = new ArrayList<>();
             GermplasmVO germplasmVO = germplasms.next();
+
+            if (germplasmVO.getCollection() != null) {
+                for (CollPopVO collection : germplasmVO.getCollection()) {
+                    collectionNames.add(collection.getName());
+                }
+            }
+
+            if (germplasmVO.getPanel() != null) {
+                for (CollPopVO panel : germplasmVO.getPanel()) {
+                    panelNames.add(panel.getName());
+                }
+            }
+
             String[] line = new String[header.length];
             line[0] = germplasmVO.getGermplasmPUI();
             line[1] = germplasmVO.getAccessionNumber();
             line[2] = germplasmVO.getGermplasmName();
             line[3] = germplasmVO.getCommonCropName();
             line[4] = germplasmVO.getInstituteName();
+            line[7] = (collectionNames != null) ? String.join(", ", collectionNames) : "";
+            line[9] = (panelNames != null) ? String.join(", ", panelNames) : "";
             csvWriter.writeNext(line);
         }
         csvWriter.close();

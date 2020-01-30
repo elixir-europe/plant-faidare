@@ -46,6 +46,10 @@ export class SmallFacetsComponent implements OnInit {
             this.checkBoxes.addControl('selectSwitchButton', switchControl);
         }
 
+        this.displayGermplasmResult$.subscribe(value => {
+            this.displayGermplasmCurrentState = value;
+        });
+
         if (this.criteria$) {
             this.criteria$.pipe(filter(c => c !== this.localCriteria))
                 .subscribe(criteria => {
@@ -62,7 +66,9 @@ export class SmallFacetsComponent implements OnInit {
             this.germplasmSearchCriteria$.pipe(filter(c => c !== this.germplasmLocalCriteria))
                 .subscribe(germplasmCriteria => {
                     this.germplasmLocalCriteria = germplasmCriteria;
-                    this.getSelectedTerms(germplasmCriteria);
+                    if (this.displayGermplasmCurrentState) {
+                        this.getSelectedTerms(germplasmCriteria);
+                    }
                 });
         }
 
@@ -83,10 +89,6 @@ export class SmallFacetsComponent implements OnInit {
                 };
             }
             this.germplasmSearchCriteria$.next(this.germplasmLocalCriteria);
-        });
-
-        this.displayGermplasmResult$.subscribe(value => {
-            this.displayGermplasmCurrentState = value;
         });
     }
 
