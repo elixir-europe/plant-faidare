@@ -117,12 +117,16 @@ deploy-to-staging:
   <<: *deploy_to_vm
   only:
     refs:
-      - master
+      - branches
     changes:
       - .gitlab-ci.yml
       - backend/src/**/*
       - frontend/**/*
-
+  except:
+    refs:
+      - master
+  when: manual
+  allow_failure: false
 
 deploy-to-beta:
   stage: staging
