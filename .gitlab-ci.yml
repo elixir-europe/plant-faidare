@@ -2,6 +2,7 @@
 stages:
   - test
   - build
+  - beta
   - staging
   - production
 
@@ -129,7 +130,7 @@ deploy-to-staging:
   allow_failure: false
 
 deploy-to-beta:
-  stage: staging
+  stage: beta
   variables:
     ENV: beta
     APP_PORT: ${BETA_GPDS_PORT}
@@ -145,9 +146,7 @@ deploy-to-beta:
       - .gitlab-ci.yml
       - backend/src/**/*
       - frontend/**/*
-  when: manual
   allow_failure: false
-
 
 deploy-to-int:
   stage: production
