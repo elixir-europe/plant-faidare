@@ -6,6 +6,12 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { GermplasmSearchCriteria } from '../models/gnpis.model';
 
+export const formatFacets: {[key: string]: string} = {
+    'holdingInstitute': 'holding institute',
+    'biologicalStatus': 'biological status',
+    'geneticNature': 'genetic nature'
+};
+
 @Component({
     selector: 'faidare-facets',
     templateUrl: './facets.component.html',

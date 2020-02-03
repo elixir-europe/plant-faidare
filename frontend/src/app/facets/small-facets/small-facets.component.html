@@ -14,7 +14,7 @@
 
 <div class="card mb-1" *ngIf="facet.terms.length && facet.terms.length <= 8">
   <div class="card-body">
-    <h3 class="card-title">{{ facet.field }}</h3>
+    <h3 class="card-title">{{ formatFacets[facet.field] ? (formatFacets[ facet.field] | titlecase) : facet.field | titlecase }}</h3>
 
     <form [formGroup]="checkBoxes" class="card-text">
       <div class="form-check" *ngFor="let term of facet.terms">
@@ -44,7 +44,7 @@
           <a class="btn popovers" data-boundary="window" placement="auto"
              [autoClose]="'outside'"
              [ngbPopover]="germplasmDetailsPopup"
-             [popoverTitle]="'Details button help.'" container="body">
+             [popoverTitle]="'Details button\'s help.'" container="body">
             <img src="assets/faidare/images/question-mark.png" alt="help" title=""
                  height="20px" style="margin-top: -10px"/>
           </a>

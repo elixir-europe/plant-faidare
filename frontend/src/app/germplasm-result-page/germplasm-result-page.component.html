@@ -43,7 +43,7 @@
           <tr>
             <th id="germplasmResultThead"
                 *ngFor="let header of headers" scope="col">
-              <label id="tabHeader" (click)="getTabField(header)">{{ header }}
+              <label id="tabHeader" (click)="getTabField(header)">{{ formatHeaders[header] }}
                 <i *ngIf="!fieldSortState[header]" class="fa fa-sort"
                    aria-hidden="true"></i>
                 <i *ngIf="fieldSortState[header] =='desc'"

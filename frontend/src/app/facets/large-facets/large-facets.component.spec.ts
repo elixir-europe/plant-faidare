@@ -109,7 +109,7 @@ describe('LargeFacetsComponent', () => {
         component.facet = largeFacet;
         tester.detectChanges();
 
-        expect(tester.facetTitle.textContent).toEqual('large Facet');
+        expect(tester.facetTitle.textContent).toEqual('Large Facet');
         expect(tester.facetInput).toBeTruthy();
 
     });

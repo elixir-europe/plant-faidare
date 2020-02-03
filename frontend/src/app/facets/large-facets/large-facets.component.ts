@@ -10,6 +10,7 @@ import { FormControl } from '@angular/forms';
 import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 import { GermplasmSearchCriteria } from '../../models/gnpis.model';
 import { GnpisService } from '../../gnpis.service';
+import { formatFacets } from '../facets.component';
 
 export type FacetTermOrRefine = {
     term: string;
@@ -30,6 +31,7 @@ export class LargeFacetsComponent implements OnInit {
     @Input() germplasmSearchCriteria$: BehaviorSubject<GermplasmSearchCriteria>;
 
     @ViewChild('typeahead') typeahead: ElementRef<HTMLInputElement>;
+    formatFacets = formatFacets;
 
     localCriteria: DataDiscoveryCriteria;
     germplasmLocalCriteria: GermplasmSearchCriteria;

@@ -9,6 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Params } from '@angular/router';
 import { GermplasmSearchCriteria } from '../../models/gnpis.model';
+import { formatFacets } from '../facets.component';
 
 @Component({
     selector: 'faidare-small-facets',
@@ -23,6 +24,7 @@ export class SmallFacetsComponent implements OnInit {
     @Input() displayGermplasmResult$: BehaviorSubject<boolean>;
 
     @Output() changed = new EventEmitter<boolean>();
+    formatFacets = formatFacets;
 
 
     localCriteria: DataDiscoveryCriteria;
@@ -77,7 +79,7 @@ export class SmallFacetsComponent implements OnInit {
             const multiSelection = Object.keys(values).filter(key => values[key] && key !== 'Germplasm');
             const unselectGermplasm = Object.keys(values).filter(key => key === 'Germplasm' && !values[key]);
 
-            if (multiSelection.length > 0 || unselectGermplasm.length > 0) {
+            if ((multiSelection.length > 0 && this.facet.field === 'types') || unselectGermplasm.length > 0) {
                 this.displayGermplasmResult$.next(false);
             }
 

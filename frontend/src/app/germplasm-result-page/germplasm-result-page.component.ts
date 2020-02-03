@@ -41,6 +41,14 @@ export class GermplasmResultPageComponent implements OnInit {
         biologicalStatusOfAccessionCode: null
     };
 
+    formatHeaders: { [key: string]: string } = {
+        'germplasmName': 'Germplasm name',
+        'accessionNumber': 'Accession number',
+        'genusSpecies': 'Genus species',
+        'instituteName': 'Institute name',
+        'biologicalStatusOfAccessionCode': 'Biological status'
+    };
+
     pagination = {
         startResult: 1,
         endResult: DEFAULT_PAGE_SIZE,

@@ -15,7 +15,7 @@
 
   <div class="card mb-1">
     <div class="card-body">
-      <h3 class="card-title">{{ facet.field }}</h3>
+      <h3 class="card-title">{{ formatFacets[facet.field] ? (formatFacets[ facet.field] | titlecase) : facet.field | titlecase }}</h3>
 
       <div class="mb-2">
       <span class="badge badge-pill badge-secondary mr-1 selectedElem"
