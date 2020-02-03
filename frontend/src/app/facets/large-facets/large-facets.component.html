@@ -12,18 +12,22 @@
 </ng-template>
 
 <ng-container *ngIf="facet.terms.length && facet.terms.length > 8">
-  <div class="mb-2">
-      <span class="badge badge-pill badge-secondary mr-1"
+
+  <div class="card mb-1">
+    <div class="card-body">
+      <h3 class="card-title">{{ facet.field }}</h3>
+
+      <div class="mb-2">
+      <span class="badge badge-pill badge-secondary mr-1 selectedElem"
+            style="font-size: smaller"
             *ngFor="let term of selectedTerms[facet.field]" tabindex="0"
             (keydown.delete)="removeKey(term)"
             (keydown.backspace)="removeKey(term)"> {{ displaySourceName(term) }}
         <button tabindex="-1" type="button" class="btn btn-link"
                 (click)="removeKey(term)">&times;</button>
       </span>
-  </div>
-  <div class="card mb-1">
-    <div class="card-body">
-      <h3 class="card-title">{{ facet.field }}</h3>
+      </div>
+
       <input #typeahead class="form-control" [formControl]="criterion"
              [ngbTypeahead]="search"
              (selectItem)="selectKey($event)" [resultTemplate]="resultTemplate"

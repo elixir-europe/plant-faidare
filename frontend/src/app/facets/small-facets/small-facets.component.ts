@@ -74,6 +74,13 @@ export class SmallFacetsComponent implements OnInit {
 
         this.checkBoxes.valueChanges.subscribe(values => {
             const selectedTerms = Object.keys(values).filter(key => values[key]);
+            const multiSelection = Object.keys(values).filter(key => values[key] && key != 'Germplasm');
+            const unselectGermplasm = Object.keys(values).filter(key => key == 'Germplasm' && !values[key]);
+
+            if (multiSelection.length > 0 || unselectGermplasm.length > 0) {
+                this.displayGermplasmResult$.next(false);
+            }
+
             this.showAndHideAdvanceGermplasmSearch(selectedTerms);
             if (this.criteria$) {
                 this.localCriteria = {

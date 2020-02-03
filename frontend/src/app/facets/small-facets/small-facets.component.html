@@ -1,3 +1,17 @@
+<ng-template #germplasmDetailsPopup>
+  <div class="card ngb-popover-window ">
+    <br>
+    This is a button to view more information about the germplasm
+    (germplasm name, accession number, genus species, institute name * ,  biological status.)
+    that are return by your research. <br>
+    You can also download the data in GnpIS Plant Material standard.<br>
+    <br>
+    * The name of the institute which store the accession.
+  </div>
+</ng-template>
+
+
+
 <div class="card mb-1" *ngIf="facet.terms.length && facet.terms.length <= 8">
   <div class="card-body">
     <h3 class="card-title">{{ facet.field }}</h3>
@@ -15,10 +29,11 @@
 
         <div id="germplasmSearch"
              title="Focus on germplasm details with export data link"
+             style="margin-top: 5px"
              *ngIf="term.term == 'Germplasm' && !criteriaIsEmpty">
           <label for="selectSwitchButton" style="margin-right: 5px"
                  id="switchTitle">
-            Focus
+            Details
           </label>
           <label class="switch" id="switchButton">
             <input type="checkbox" id="selectSwitchButton"
@@ -26,6 +41,13 @@
                    (change)="switchToGermplasmResult()">
             <span class="slider round"></span>
           </label>
+          <a class="btn popovers" data-boundary="window" placement="auto"
+             [autoClose]="'outside'"
+             [ngbPopover]="germplasmDetailsPopup"
+             [popoverTitle]="'Details button help.'" container="body">
+            <img src="assets/faidare/images/question-mark.png" alt="help" title=""
+                 height="20px" style="margin-top: -10px"/>
+          </a>
         </div>
       </div>
     </form>
