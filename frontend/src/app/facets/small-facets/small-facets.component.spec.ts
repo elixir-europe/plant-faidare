@@ -154,7 +154,7 @@ describe('SmallFacetsComponent', () => {
         tester.detectChanges();
 
         expect(tester.switchButton.length).toEqual(1);
-        expect(tester.switchButton[0]).toContainText('Focus');
+        expect(tester.switchButton[0]).toContainText('Details');
 
     });
 
