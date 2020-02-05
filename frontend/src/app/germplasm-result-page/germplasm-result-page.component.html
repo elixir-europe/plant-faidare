@@ -22,7 +22,7 @@
 
   <button type="button" class="btn btn-outline-success mb-2"
           (click)="exportPlantMaterial(localCriteria)">
-    Export GnpIS Plant Material
+    Export Plant Material list
     <img src="assets/faidare/images/csv-logo.png" alt="csv logo" title=""
          height="20px"/>
   </button>
@@ -64,6 +64,7 @@
               <td>{{ accession.genusSpecies }}</td>
               <td>{{ accession.instituteName }}</td>
               <td>{{ accession.biologicalStatusOfAccessionCode }}</td>
+              <td>{{ accession.countryOfOriginCode }}</td>
             </tr>
           </ng-container>
           </tbody>

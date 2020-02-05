@@ -112,7 +112,6 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
     @Override
     public GermplasmSearchResponse esShouldFind(FaidareGermplasmPOSTShearchCriteria germplasmSearchCriteria) {
         try {
-            // QueryBuilder query = queryFactory.createOrQuery(germplasmSearchCriteria);
 
             // Prepare search request
             SearchRequest request = prepareSearchRequest(germplasmSearchCriteria);

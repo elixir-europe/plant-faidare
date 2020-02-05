@@ -30,7 +30,13 @@ export class GermplasmResultPageComponent implements OnInit {
     @Input() germplasmSearchCriteria$: BehaviorSubject<GermplasmSearchCriteria>;
     @Input() germplasmFacets$: BehaviorSubject<DataDiscoveryFacet[]>;
 
-    headers: string[] = ['germplasmName', 'accessionNumber', 'genusSpecies', 'instituteName', 'biologicalStatusOfAccessionCode'];
+    headers: string[] = [
+        'germplasmName',
+        'accessionNumber',
+        'genusSpecies',
+        'instituteName',
+        'biologicalStatusOfAccessionCode',
+        'countryOfOriginCode'];
     elementPerPage: number[] = [15, 20, 25];
     loading: boolean;
     fieldSortState: object = {
@@ -46,7 +52,8 @@ export class GermplasmResultPageComponent implements OnInit {
         'accessionNumber': 'Accession number',
         'genusSpecies': 'Genus species',
         'instituteName': 'Institute name',
-        'biologicalStatusOfAccessionCode': 'Biological status'
+        'biologicalStatusOfAccessionCode': 'Biological status',
+        'countryOfOriginCode': 'Country of origin'
     };
 
     pagination = {
