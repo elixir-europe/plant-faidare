@@ -189,7 +189,10 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	"size":"0",
 	"aggs" : {
 		"uniq_group" : {
-			"terms" : { "field" : "groupId" }
+			"terms" : {
+				"field" : "groupId",
+				"size": 99999
+			}
 		}
 	}
 }' | jq -cr '.aggregations.uniq_group.buckets[].key') # Extract ES aggregation bucket keys
