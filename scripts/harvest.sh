@@ -22,7 +22,7 @@ NC='\033[0m' # No format
 
 help() {
 	cat <<EOF
-DESCRIPTION: 
+DESCRIPTION:
 	Script used to index data in FAIDARE
 
 USAGE:
@@ -66,7 +66,7 @@ for PROGRAM in ${PROGRAMS}; do
 		((MISSING_COUNT += 1))
 	}
 done
-if [ $MISSING_COUNT -ne 0 ]; then 
+if [ $MISSING_COUNT -ne 0 ]; then
 	echo -e "${RED}ERROR: You must install the $MISSING_COUNT missing program(s).${NC}"
 	exit $MISSING_COUNT
 fi
@@ -102,7 +102,7 @@ if [ ! -d "${DATA_DIR}" ]; then
 	echo -e "${RED}ERROR: Mandatory parameter 'jsonDir' is missing!${NC}"
 	echo && help
 fi
-if [ $(find ${DATA_DIR} -name *.json | wc -l) -le 0 ] && [ $(find ${DATA_DIR} -name *.json.gz | wc -l) -le 0 ]; then
+if [ $(find ${DATA_DIR} -name "*.json" | wc -l) -le 0 ] && [ $(find ${DATA_DIR} -name "*.json.gz" | wc -l) -le 0 ]; then
 	echo -e "${RED}ERROR: The JSON directory ${DATA_DIR} contains no JSON files!${NC}"
 	echo && help
 fi
@@ -115,7 +115,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 done
 
 # Compress JSON files
-for FILE in $(find ${DATA_DIR} -name *.json); do
+for FILE in $(find ${DATA_DIR} -name "*.json"); do
 	gzip $FILE
 done
 
@@ -130,38 +130,38 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 {
 	\"index_patterns\": [\"${INDEX_PATTERN}-*\"],
 	\"order\": 101,
-	\"mappings\": 
+	\"mappings\":
 		$(cat ${BASEDIR}/../backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/${DOCUMENT_TYPE}_mapping.json),
 	\"settings\": $(cat ${BASEDIR}/../backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json)
 }")
 	check_acknowledgment "${LOG}" "create template"
-	
+
 	# Index JSON Bulk
 	INDEX_NAME="${INDEX_PATTERN}-d"$(date +%s)
 	echo -e "* Index documents into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice..."
 	{
 		parallel --bar "
 			curl -s -H 'Content-Type: application/x-ndjson' -H 'Content-Encoding: gzip' -H 'Accept-Encoding: gzip' -XPOST ${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_bulk --data-binary '@{}' > {.}.log.gz" \
-		::: $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}-*.json.gz)
+		::: $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.json.gz")
 	} || {
 		code=$?
 		echo -e "${RED}ERROR: a problem occurred when trying to index data with parallel program.${NC}"
 		exit $code
 	}
-	parallel "gunzip -c {} | jq '.errors' | grep -q true && echo -e '${ORANGE}ERROR found in {}${NC}' >> ${TMP_FILE} ;" ::: $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}-*.log.gz)
+	parallel "gunzip -c {} | jq '.errors' | grep -q true && echo -e '${ORANGE}ERROR found in {}${NC}' >> ${TMP_FILE} ;" ::: $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.log.gz")
 	if [ -f "${TMP_FILE}" ] && [ -s "${TMP_FILE}" ]; then
 		echo -e "${RED}ERROR: a problem occurred when trying to index data into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice.${NC}"
 		echo -e "${ORANGE}$(cat ${TMP_FILE})${NC}"
 		rm "${TMP_FILE}"
 		exit 1;
 	fi
-	
+
 	# Check indexed data
 	echo -e "* Check data indexed from ${DATA_DIR} into ${INDEX_NAME}..."
 	# skip some documents because they contain nested objects that distort the count
 	if [[ "${DOCUMENT_TYPE}" != "germplasmAttribute" && "${DOCUMENT_TYPE}" != "observationUnit" && "${DOCUMENT_TYPE}" != "datadiscovery" ]]; then
 		COUNT_EXTRACTED_DOCS=0
-		for FILE in $(find ${DATA_DIR} -name ${DOCUMENT_TYPE}-*.json.gz); do
+		for FILE in $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.json.gz"); do
 			COUNT_FILE_DOCS=$(zcat ${FILE} | grep "\"_id\"" | sort | uniq | wc -l)
 			COUNT_EXTRACTED_DOCS=$((COUNT_EXTRACTED_DOCS+COUNT_FILE_DOCS))
 		done
@@ -200,7 +200,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 		echo -e "${RED}ERROR: could not list 'groupId' values from index.${NC}"
 		exit 1;
 	}
-	echo -e "* Create aliases:"	
+	echo -e "* Create aliases:"
 	for GROUP_ID in ${GROUP_IDS}; do
 		ALIAS_NAME="${INDEX_PATTERN}-group${GROUP_ID}"
 		FILTER=""
