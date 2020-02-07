@@ -37,7 +37,8 @@ describe('XrefsComponent', () => {
             'djs dsqdsq djsqpodsjqodsqdsqkpdqpdWOLOLOLOOOOOOOsqpkdsqkdsqkdsqdsdsqdsqdsqddsqffjùsodfusjùfsfsd',
         database_name: 'GnpIS',
         entry_type: 'GWAS analysis',
-        db_version: 'GWAS_ANALYSIS_1808038_1'
+        db_version: 'GWAS_ANALYSIS_1808038_1',
+        name: 'Col-Fa-b*_MLM+Q+K'
     }];
 
 
@@ -62,7 +63,7 @@ describe('XrefsComponent', () => {
         tester.detectChanges();
 
         expect(tester.cardHeader).toContainText('Cross References');
-        expect(tester.columns[0]).toContainText(xref[0].db_version);
+        expect(tester.columns[0]).toContainText(xref[0].name);
         expect(tester.columns[1]).toContainText(xref[0].database_name);
         expect(tester.columns[2]).toContainText(xref[0].entry_type);
         expect(tester.columns[3].textContent.length).toBeLessThanOrEqual(124);
