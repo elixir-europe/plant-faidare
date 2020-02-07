@@ -117,8 +117,7 @@ export class GermplasmResultPageComponent implements OnInit {
             accessionNumbers: asArray(criteria.accessions),
             synonyms: asArray(criteria.accessions),
 
-            // Do not use the source as a criterion because of the ES should request.
-            // sources: asArray(criteria.sources)
+            sources: asArray(criteria.sources)
         };
 
         this.germplasmSearchCriteria$.next(this.localCriteria);
@@ -197,31 +196,4 @@ export class GermplasmResultPageComponent implements OnInit {
         this.localCriteria.pageSize = pageSize;
         this.germplasmSearchCriteria$.next(this.localCriteria);
     }
-
-    // Format facets by renaming and merging some facets in one facet.
-    /*formatFacets(facets: DataDiscoveryFacet[]): DataDiscoveryFacet[] {
-        const bioStatusAndGeneticNature = [];
-        let newFacets: DataDiscoveryFacet[] = [];
-        for (const facet of facets) {
-            if (facet.field === 'biologicalStatus' || facet.field === 'geneticNature') {
-                for (const term of facet.terms) {
-                    bioStatusAndGeneticNature
-                        .push(term);
-                }
-            } else if (facet.field === 'holdingInstitute') {
-                facet.field = 'holding institute';
-                newFacets.push(facet);
-            } else {
-                newFacets.push(facet);
-            }
-        }
-        newFacets = [
-            {
-                field: 'Biological status / Genetic nature',
-                terms: bioStatusAndGeneticNature
-            },
-            ...newFacets
-        ];
-        return newFacets;
-    }*/
 }

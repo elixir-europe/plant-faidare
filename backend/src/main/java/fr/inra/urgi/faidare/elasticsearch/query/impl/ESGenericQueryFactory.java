@@ -64,7 +64,7 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
             List<QueryBuilder> queries = createQueryFromMapping(criteria, null, null, voMappingToCriteria, documentMetadata);
 
             if (!queries.isEmpty()) {
-                return orQueries(queries);
+                return germplasmFilterQueries(queries);
             } else {
                 return matchAllQuery();
             }
@@ -103,7 +103,7 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
             List<QueryBuilder> queries = createQueryFromMapping(criteria, null, excludedDocumentFields, voMappingToCriteria, documentMetadata);
 
             if (!queries.isEmpty()) {
-                return orQueries(queries);
+                return germplasmFilterQueries(queries);
             } else {
                 return matchAllQuery();
             }
@@ -142,7 +142,7 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
             List<QueryBuilder> queries = createQueryFromMapping(criteria, includedDocumentFields, null, voMappingToCriteria, documentMetadata);
 
             if (!queries.isEmpty()) {
-                return orQueries(queries);
+                return germplasmFilterQueries(queries);
             } else {
                 return matchAllQuery();
             }
@@ -367,21 +367,44 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
      *
      * @return null if not queries given; the first query if only one query is given; a bool query otherwise
      */
-    public static QueryBuilder orQueries(List<QueryBuilder> queries) {
+    public static QueryBuilder germplasmFilterQueries(List<QueryBuilder> queries) {
         if (queries == null || queries.isEmpty()) {
             return null;
         } else if (queries.size() == 1) {
             return queries.get(0);
         } else {
+            List<String> shouldCriterion = Arrays.asList("commonCropName",
+                "species", "germplasmGenus", "genusSpecies", "subtaxa", "genus",
+                "genusSpeciesSubtaxa", "taxonSynonyms", "panel", "collection", "population",
+                "germplasmName", "accessionNumber", "synonyms");
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+            BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+            List<QueryBuilder> filterQueries = new ArrayList<>();
             for (QueryBuilder query : queries) {
-                boolQueryBuilder.should(query);
+                boolean isShouldCriterion = stringContainsItemFromList(query.toString(), shouldCriterion);
+                if (isShouldCriterion){
+                    boolShouldQueryBuilder.should(query);
+                } else {
+                    filterQueries.add(query);
+                }
+            }
+            boolQueryBuilder.must(boolShouldQueryBuilder);
+            for (QueryBuilder query: filterQueries) {
+                boolQueryBuilder.filter(query);
             }
             return boolQueryBuilder;
         }
     }
 
-    public static QueryBuilder orQueries(QueryBuilder... queries) {
-        return andQueries(Arrays.asList(queries));
+    public static boolean stringContainsItemFromList(String inputStr, List<String> items)
+    {
+        for(String item: items)
+        {
+            if(inputStr.contains(item))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
