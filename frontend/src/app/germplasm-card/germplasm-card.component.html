@@ -682,10 +682,10 @@
 
           <faidare-card-row
             [label]="population.type ? population.name + ' (' + population.type + ')' : population.name"
-            [test]="population.germplasmRef && population.germplasmRef.pui && population.germplasmRef.pui != germplasmGnpis.germplasmDbId">
+            [test]="population.germplasmRef && population.germplasmRef.pui && population.germplasmRef.pui != germplasmGnpis.germplasmPUI">
             <ng-template>
               <a [routerLink]="['/germplasm']"
-                 [queryParams]="{id:population.germplasmRef.pui}">
+                 [queryParams]="{pui:population.germplasmRef.pui}">
                 {{ population.germplasmRef.name }}
               </a> is composed by <a
               [routerLink]="['/']"
@@ -697,7 +697,7 @@
 
           <faidare-card-row
             [label]="population.type ? population.name + ' (' + population.type + ')' : population.name"
-            [test]="population.germplasmRef && population.germplasmRef.pui && population.germplasmRef.pui == germplasmGnpis.germplasmDbId">
+            [test]="population.germplasmRef && population.germplasmRef.pui && population.germplasmRef.pui == germplasmGnpis.germplasmPUI">
             <ng-template>
               {{ population.germplasmRef.name }} is composed by <a
               [routerLink]="['/']"
@@ -709,7 +709,7 @@
 
           <faidare-card-row
             [label]="population.type ? population.name + ' (' + population.type + ')' : population.name"
-            [test]="population.germplasmRef && !population.germplasmRef.pui">
+            [test]="!population.germplasmRef">
             <ng-template>
               <a [routerLink]="['/']"
                  [queryParams]="{germplasmLists: population.name, types: 'Germplasm'}">
@@ -768,6 +768,6 @@
   </faidare-card-section>
 
   <!-- XRefs part -->
-  <faidare-xrefs [xrefId]="germplasmGnpis.germplasmPUI"></faidare-xrefs>
+  <faidare-xrefs [xrefId]="germplasmGnpis.germplasmDbId"></faidare-xrefs>
 </ng-container>
 

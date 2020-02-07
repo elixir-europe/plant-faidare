@@ -5,6 +5,7 @@ export interface XrefModel {
     database_name: string;
     entry_type: string;
     db_version: string;
+    name: string;
 
 }
 
