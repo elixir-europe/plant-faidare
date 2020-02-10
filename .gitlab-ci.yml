@@ -107,6 +107,11 @@ build:
     - ssh root@${SERVER_IP} "systemctl restart bootapp@${APP_NAME}-${ENV}"
     - eval $(ssh-agent -k)
     - echo "Deploy done. Application should be available at http://${SERVER_IP}:${APP_PORT}/${CONTEXT_PATH}"
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - backend/src/**/*
+      - frontend/**/*
 
 
 deploy-to-staging:
@@ -119,10 +124,6 @@ deploy-to-staging:
   only:
     refs:
       - branches
-    changes:
-      - .gitlab-ci.yml
-      - backend/src/**/*
-      - frontend/**/*
   except:
     refs:
       - master
@@ -142,10 +143,6 @@ deploy-to-beta:
   only:
     refs:
       - branches
-    changes:
-      - .gitlab-ci.yml
-      - backend/src/**/*
-      - frontend/**/*
   allow_failure: false
 
 deploy-to-int:
@@ -158,10 +155,6 @@ deploy-to-int:
   only:
     refs:
       - master
-    changes:
-      - .gitlab-ci.yml
-      - backend/src/**/*
-      - frontend/**/*
   when: manual
   allow_failure: false
 
@@ -176,10 +169,6 @@ deploy-to-prod-public:
   only:
     refs:
       - master
-    changes:
-      - .gitlab-ci.yml
-      - backend/src/**/*
-      - frontend/**/*
   when: manual
   allow_failure: false
 
@@ -194,9 +183,5 @@ deploy-to-prod-private:
   only:
     refs:
       - master
-    changes:
-      - .gitlab-ci.yml
-      - backend/src/**/*
-      - frontend/**/*
   when: manual
   allow_failure: false
