@@ -42,8 +42,8 @@ faidare:
     name: URGI GnpIS
     image: https://urgi.versailles.inra.fr/files/faidare/logo/GnpIS.png
   # WUR EU-SOL BreeDB
-  - uri: https://www.eu-sol.wur.nl/
-    url: https://www.eu-sol.wur.nl/
+  - uri: https://www.eu-sol.wur.nl
+    url: https://www.eu-sol.wur.nl
     name: WUR EU-SOL BreeDB
     image: https://urgi.versailles.inra.fr/files/faidare/logo/EU-SOL.png
   # VIB PIPPA
@@ -57,7 +57,7 @@ faidare:
     name: IBET BioData
     image: https://urgi.versailles.inra.fr/files/faidare/logo/biodata.png
   # NIB PISA
-  - uri: http://nib.si
+  - uri: http://www.pisa.nib.si
     url: http://www.pisa.nib.si
     name: NIB PISA
     image: https://urgi.versailles.inra.fr/files/faidare/logo/NIB.png
