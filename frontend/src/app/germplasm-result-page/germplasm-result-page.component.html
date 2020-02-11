@@ -5,7 +5,6 @@
           <span class="col mt-2 bolder">
             Results:
           </span>
-
       <div class="row align-content-center">
   <span *ngIf="pagination.totalResult" style="margin-right: 5px"
         class="col align-self-end small text-muted mt-3">
@@ -43,7 +42,8 @@
           <tr>
             <th id="germplasmResultThead"
                 *ngFor="let header of headers" scope="col">
-              <label id="tabHeader" (click)="getTabField(header)">{{ formatHeaders[header] }}
+              <label id="tabHeader"
+                     (click)="getTabField(header)">{{ formatHeaders[header] }}
                 <i *ngIf="!fieldSortState[header]" class="fa fa-sort"
                    aria-hidden="true"></i>
                 <i *ngIf="fieldSortState[header] =='desc'"
