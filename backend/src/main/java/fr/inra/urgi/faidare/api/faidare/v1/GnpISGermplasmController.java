@@ -119,25 +119,10 @@ public class GnpISGermplasmController {
     @PostMapping(value = "/search", consumes = APPLICATION_JSON_VALUE)
     public GermplasmSearchResponse germplasmSearch(@RequestBody @Valid FaidareGermplasmPOSTShearchCriteria criteria) {
         try {
-            return germplasmService.esShouldFind(criteria);
+            return germplasmService.germplasmFind(criteria);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
     }
-
-    /*@ApiOperation("Suggest germplasm document field values")
-    @PostMapping(value = "/suggest", consumes = APPLICATION_JSON_VALUE)
-    public LinkedHashSet<String> germplasmSuggest(
-        @RequestParam String field,
-        @RequestParam(required = false) String text,
-        @RequestParam(required = false) Integer fetchSize,
-        @RequestBody(required = false) @Valid FaidareGermplasmPOSTShearchCriteria criteria)
-        throws UnsupportedEncodingException {
-        if (fetchSize == null) {
-            fetchSize = Integer.MAX_VALUE;
-        }
-        return germplasmService.suggest(field, StringFunctions.asUTF8(text), fetchSize, criteria);
-
-    }*/
 }

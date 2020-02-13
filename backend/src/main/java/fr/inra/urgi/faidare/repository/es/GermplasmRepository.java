@@ -23,7 +23,7 @@ public interface GermplasmRepository
     /**
      * Find germplasm by criteria with pagination with a should query.
      */
-    GermplasmSearchResponse esShouldFind(FaidareGermplasmPOSTShearchCriteria germSearCrit);
+    GermplasmSearchResponse germplasmFind(FaidareGermplasmPOSTShearchCriteria germSearCrit);
 
     /**
      * Get germplasm by id.

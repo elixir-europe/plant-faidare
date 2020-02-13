@@ -1,0 +1,89 @@
+{
+  "bool" : {
+    "must" : [
+      {
+        "bool" : {
+          "should" : [
+            {
+              "terms" : {
+                "commonCropName" : [
+                  "Triticum",
+                  "Populus"
+                ],
+                "boost" : 1.0
+              }
+            },
+            {
+              "terms" : {
+                "genusSpeciesSubtaxa" : [
+                  "Triticum",
+                  "Populus"
+                ],
+                "boost" : 1.0
+              }
+            },
+            {
+              "terms" : {
+                "species" : [
+                  "Triticum",
+                  "Populus"
+                ],
+                "boost" : 1.0
+              }
+            },
+            {
+              "terms" : {
+                "genus" : [
+                  "Triticum",
+                  "Populus"
+                ],
+                "boost" : 1.0
+              }
+            },
+            {
+              "terms" : {
+                "subtaxa" : [
+                  "Triticum",
+                  "Populus"
+                ],
+                "boost" : 1.0
+              }
+            },
+            {
+              "terms" : {
+                "taxonSynonyms" : [
+                  "Triticum",
+                  "Populus"
+                ],
+                "boost" : 1.0
+              }
+            },
+            {
+              "terms" : {
+                "genusSpecies" : [
+                  "Triticum",
+                  "Populus"
+                ],
+                "boost" : 1.0
+              }
+            }
+          ],
+          "adjust_pure_negative" : true,
+          "boost" : 1.0
+        }
+      }
+    ],
+    "filter" : [
+      {
+        "terms" : {
+          "biologicalStatusOfAccessionCode" : [
+            "Wild"
+          ],
+          "boost" : 1.0
+        }
+      }
+    ],
+    "adjust_pure_negative" : true,
+    "boost" : 1.0
+  }
+}

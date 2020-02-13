@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import com.google.common.io.CharStreams;
-import fr.inra.urgi.faidare.domain.criteria.LocationCriteria;
-import fr.inra.urgi.faidare.domain.criteria.ObservationUnitCriteria;
-import fr.inra.urgi.faidare.domain.criteria.ProgramCriteria;
-import fr.inra.urgi.faidare.domain.criteria.StudySearchCriteria;
+import fr.inra.urgi.faidare.domain.criteria.*;
 import fr.inra.urgi.faidare.domain.datadiscovery.criteria.DataDiscoveryCriteria;
 import fr.inra.urgi.faidare.domain.datadiscovery.criteria.DataDiscoveryCriteriaImpl;
 import fr.inra.urgi.faidare.elasticsearch.criteria.annotation.CriteriaForDocument;
@@ -289,6 +286,28 @@ public class ESGenericQueryFactoryTest {
         String actualQuery = query.toString();
 
         String expectedQuery = readResource("expected/query6.json");
+        assertJsonEquals(actualQuery, expectedQuery);
+    }
+
+
+    @Test
+    void should_Generate_Filter_Bool_Terms_Query() throws Exception {
+        FaidareGermplasmPOSTShearchCriteria criteria = new FaidareGermplasmPOSTShearchCriteria();
+
+        criteria.setSpecies(newArrayList("Triticum", "Populus"));
+        criteria.setGenus(newArrayList("Triticum", "Populus"));
+        criteria.setGenusSpecies(newArrayList("Triticum", "Populus"));
+
+        criteria.setBiologicalStatus(newArrayList("Wild"));
+
+        ESGenericQueryFactory<FaidareGermplasmPOSTShearchCriteria> queryFactory =
+            new ESGenericQueryFactory<>();
+
+        QueryBuilder query = queryFactory.createShouldFilterQuery(criteria);
+
+        String actualQuery = query.toString();
+
+        String expectedQuery = readResource("expected/query8.json");
         assertJsonEquals(actualQuery, expectedQuery);
     }
 

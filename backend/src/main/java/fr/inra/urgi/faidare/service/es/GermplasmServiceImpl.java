@@ -111,8 +111,8 @@ public class GermplasmServiceImpl implements GermplasmService {
     }
 
     @Override
-    public GermplasmSearchResponse esShouldFind(FaidareGermplasmPOSTShearchCriteria germplasmSearchCriteria) {
-        return germplasmRepository.esShouldFind(germplasmSearchCriteria);
+    public GermplasmSearchResponse germplasmFind(FaidareGermplasmPOSTShearchCriteria germplasmSearchCriteria) {
+        return germplasmRepository.germplasmFind(germplasmSearchCriteria);
     }
 
     @Override

@@ -17,7 +17,7 @@ public interface GermplasmService {
 
     PaginatedList<GermplasmVO> find(GermplasmSearchCriteria criteria);
 
-    GermplasmSearchResponse esShouldFind(FaidareGermplasmPOSTShearchCriteria criteria);
+    GermplasmSearchResponse germplasmFind(FaidareGermplasmPOSTShearchCriteria criteria);
 
     /*LinkedHashSet<String> suggest(
         String criteriaField, String searchText, Integer fetchSize, FaidareGermplasmPOSTShearchCriteria criteria

@@ -56,7 +56,7 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
     }
 
     @Override
-    public QueryBuilder createEsShouldQuery(C criteria) {
+    public QueryBuilder createShouldFilterQuery(C criteria) {
         try {
             CriteriaMapping voMappingToCriteria = AnnotatedCriteriaMapper.getMapping(criteria.getClass());
             DocumentMetadata<?> documentMetadata = voMappingToCriteria.getDocumentMetadata();

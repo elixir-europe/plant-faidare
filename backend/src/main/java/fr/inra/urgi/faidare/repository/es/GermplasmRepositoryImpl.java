@@ -94,7 +94,7 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
 
     @Override
     public Iterator<GermplasmVO> scrollAllGermplasm(FaidareGermplasmPOSTShearchCriteria criteria) {
-        QueryBuilder query = queryFactory.createEsShouldQuery(criteria);
+        QueryBuilder query = queryFactory.createShouldFilterQuery(criteria);
         int fetchSize = criteria.getPageSize().intValue();
         return new ESScrollIterator<>(client, requestFactory, parser, GermplasmVO.class, query, fetchSize);
     }
@@ -110,7 +110,7 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
     }
 
     @Override
-    public GermplasmSearchResponse esShouldFind(FaidareGermplasmPOSTShearchCriteria germplasmSearchCriteria) {
+    public GermplasmSearchResponse germplasmFind(FaidareGermplasmPOSTShearchCriteria germplasmSearchCriteria) {
         try {
 
             // Prepare search request
