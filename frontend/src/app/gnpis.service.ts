@@ -72,12 +72,17 @@ export class GnpisService {
     search(
         criteria: DataDiscoveryCriteria
     ): Observable<DataDiscoveryResults> {
-        return zip(
+        return this.mapSources( zip(
             // Get source by URI
             this.sourceByURI$,
             // Get documents by criteria
             this.http.post<any>(`${BASE_URL}/datadiscovery/search`, criteria)
-        ).pipe(map(([sourceByURI, response]) => {
+        ));
+    }
+
+
+    mapSources(httpResponse: Observable<any>) {
+        return httpResponse.pipe(map(([sourceByURI, response]) => {
             // Extract BrAPI documents from result
             const documents = response.result.data;
 
@@ -92,7 +97,11 @@ export class GnpisService {
             }
             return response;
         }));
+
     }
+
+
+
 
     /**
      * Get germplasm by ID or PUI with data source (present in JSON-LD response)
@@ -110,28 +119,13 @@ export class GnpisService {
 
     germplasmSearch(criteria: GermplasmCriteria): Observable<GermplasmResults<Germplasm>> {
 
-        return zip(
+        return this.mapSources(zip(
             // Get source by URI
             this.sourceByURI$,
             // Get documents by criteria
             this.http.post<GermplasmResults<Germplasm>>(`${BASE_URL}/germplasm/search`,
                 criteria,
-                { headers: { 'Accept': 'application/ld+json,application/json' } }))
-            .pipe(map(([sourceByURI, response]) => {
-                // Extract BrAPI documents from result
-                const germplasm = response.result.data;
-
-                // Transform document to have the source details in place of the source URI
-                response.result.data = germplasm.map(data => {
-                    const sourceURI = data['schema:includedInDataCatalog'];
-                    data['schema:includedInDataCatalog'] = sourceByURI[sourceURI];
-                    return data;
-                });
-                if (response.facets) {
-                    this.getSourcesName(sourceByURI, response);
-                }
-                return response;
-            }));
+                { headers: { 'Accept': 'application/ld+json,application/json' } })));
     }
 
     /**

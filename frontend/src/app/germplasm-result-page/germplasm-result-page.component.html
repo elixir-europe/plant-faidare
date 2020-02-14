@@ -59,7 +59,13 @@
           <tbody>
           <ng-container *ngFor="let germplasm of germplasms">
             <tr>
-              <td>{{ germplasm.germplasmName }}</td>
+              <td>
+                <a [routerLink]="['/germplasm']"
+                   [queryParams]="{id: germplasm.germplasmDbId}"
+                   target="_blank">
+                  {{ germplasm.germplasmName }}
+                </a>
+              </td>
               <td>{{ germplasm.accessionNumber }}</td>
               <td>{{ germplasm.genusSpecies }}</td>
               <td>{{ germplasm.instituteName }}</td>
@@ -109,7 +115,7 @@
 </ng-container>
 
 
-<div *ngIf="germplasms.length == 0"
+<div *ngIf="germplasms && germplasms.length == 0"
      id="no-results" class="text-center">
   <div class="no-result-icon">
     <span class="fa fa-meh-o"></span>
