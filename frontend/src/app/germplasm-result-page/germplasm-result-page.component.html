@@ -1,4 +1,4 @@
-<ng-container *ngIf="germplasm && germplasm.length>0">
+<ng-container *ngIf="germplasms && germplasms.length>0">
 
   <div class="container mb-3">
     <div class="row result align-content-center">
@@ -34,7 +34,7 @@
   <faidare-card-section
     class="col-12 col-lg"
     header="Germplasm data: "
-    [test]="germplasm">
+    [test]="germplasms">
     <ng-template>
       <div class="table-responsive table-card-body">
         <table class="table table-sm table-striped">
@@ -57,14 +57,14 @@
           </tr>
           </thead>
           <tbody>
-          <ng-container *ngFor="let accession of germplasm">
+          <ng-container *ngFor="let germplasm of germplasms">
             <tr>
-              <td>{{ accession.germplasmName }}</td>
-              <td>{{ accession.accessionNumber }}</td>
-              <td>{{ accession.genusSpecies }}</td>
-              <td>{{ accession.instituteName }}</td>
-              <td>{{ accession.biologicalStatusOfAccessionCode }}</td>
-              <td>{{ accession.countryOfOriginCode }}</td>
+              <td>{{ germplasm.germplasmName }}</td>
+              <td>{{ germplasm.accessionNumber }}</td>
+              <td>{{ germplasm.genusSpecies }}</td>
+              <td>{{ germplasm.instituteName }}</td>
+              <td>{{ germplasm.biologicalStatusOfAccessionCode }}</td>
+              <td>{{ germplasm.countryOfOriginCode }}</td>
             </tr>
           </ng-container>
           </tbody>
@@ -75,7 +75,7 @@
 
   <div class="container text-right"
        style="margin-top: -30px"
-       *ngIf="germplasm">
+       *ngIf="germplasms">
     <div ngbDropdown class="dropdown-container">
       <button class="btn btn-outline-secondary btn-sm"
               ngbDropdownToggle>Results per page : {{ pagination.pageSize }}
@@ -109,7 +109,7 @@
 </ng-container>
 
 
-<div *ngIf="germplasm.length == 0"
+<div *ngIf="germplasms.length == 0"
      id="no-results" class="text-center">
   <div class="no-result-icon">
     <span class="fa fa-meh-o"></span>

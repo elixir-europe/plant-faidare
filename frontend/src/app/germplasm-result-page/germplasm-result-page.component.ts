@@ -23,7 +23,7 @@ import { BehaviorSubject } from 'rxjs';
 export class GermplasmResultPageComponent implements OnInit {
 
 
-    germplasm: Germplasm[];
+    germplasms: Germplasm[];
     localCriteria: GermplasmSearchCriteria = DataDiscoveryCriteriaUtils.emptyGermplasmSearchCriteria();
 
     @Input() criteriaFromForm$: BehaviorSubject<DataDiscoveryCriteria>;
@@ -90,7 +90,7 @@ export class GermplasmResultPageComponent implements OnInit {
     searchGermplasm(criteria: GermplasmSearchCriteria) {
         this.service.germplasmSearch(criteria)
             .subscribe(({ metadata, facets, result }) => {
-                this.germplasm = result.data;
+                this.germplasms = result.data;
                 this.germplasmFacets$.next(facets);
                 DataDiscoveryCriteriaUtils.updatePagination(this.pagination, metadata.pagination);
             });
@@ -119,8 +119,6 @@ export class GermplasmResultPageComponent implements OnInit {
 
             sources: asArray(criteria.sources)
         };
-
-        this.germplasmSearchCriteria$.next(this.localCriteria);
 
     }
 

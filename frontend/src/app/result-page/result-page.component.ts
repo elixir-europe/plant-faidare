@@ -65,16 +65,6 @@ export class ResultPageComponent implements OnInit {
             });
     }
 
-    // TODO : delete because move to DataDiscoveryCriteriaUtils
-    /*private updatePagination({ currentPage, pageSize, totalCount, totalPages }) {
-        this.pagination.currentPage = currentPage;
-        this.pagination.pageSize = pageSize;
-        this.pagination.totalPages = totalPages;
-        this.pagination.startResult = pageSize * currentPage + 1;
-        this.pagination.endResult = this.pagination.startResult + pageSize - 1;
-        this.pagination.totalResult = totalCount;
-    }*/
-
     ngOnInit(): void {
         const queryParams = this.route.snapshot.queryParams;
         this.router.events.subscribe((event) => {
@@ -89,22 +79,6 @@ export class ResultPageComponent implements OnInit {
 
         this.criteriaIsEmpty = DataDiscoveryCriteriaUtils.checkCriteriaIsEmpty(initialCriteria);
 
-
-        // TODO : delete because move to DataDiscoveryCriteriaUtils
-        /*this.criteria$.subscribe(criteria => {
-            this.criteriaIsEmpty = true;
-            for (const field of Object.keys(criteria)) {
-                if (field === 'facetFields') {
-                    // Ignore facet fields criteria
-                    continue;
-                }
-
-                if (criteria[field] && criteria[field].length) {
-                    this.criteriaIsEmpty = false;
-                    break;
-                }
-            }
-        });*/
 
         this.form.traitWidgetInitialized.subscribe(() => {
             this.fetchDocumentsAndFacets();
@@ -129,11 +103,6 @@ export class ResultPageComponent implements OnInit {
                 });
                 this.displayGermplasmResult$.next(this.displayGermplasmResult);
             });
-
-        /*this.displayGermplasmResult$.subscribe(value => {
-            this.displayGermplasmResult = value;
-        });
-        this.displayGermplasmResult$.next(this.displayGermplasmResult);*/
 
         this.germplasmfacets$.subscribe(facets => {
             this.germplasmfacets = facets;

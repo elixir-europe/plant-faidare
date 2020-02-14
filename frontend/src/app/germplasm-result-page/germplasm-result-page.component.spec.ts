@@ -280,7 +280,7 @@ describe('GermplasmResultPageComponent', () => {
         component.germplasmSearchCriteria$.next(criteria);
         expect(component.localCriteria).toEqual(criteria);
         expect(gnpisService.germplasmSearch).toHaveBeenCalledWith(criteria);
-        expect(component.germplasm).toEqual(germplasmSearchResult.result.data);
+        expect(component.germplasms).toEqual(germplasmSearchResult.result.data);
 
     });
 
