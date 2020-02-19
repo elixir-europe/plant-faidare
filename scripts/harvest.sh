@@ -205,7 +205,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 		ALIAS_NAME="${INDEX_PATTERN}-group${GROUP_ID}"
 		FILTER=""
 		if [[ "$GROUP_ID" = "0" || "${GROUP_ID}" =  "null" ]]; then
-			FILTER="{ \"bool\" : { \"must_not\" : { \"exists\" : { \"field\" : \"groupId\" } } } }"
+			FILTER="{ \"bool\": { \"should\": [ { \"bool\": { \"must_not\": { \"exists\": { \"field\": \"groupId\" } } } }, { \"term\": { \"groupId\": 0 } } ] } }"
 		else
 			FILTER="{ \"term\" : { \"groupId\" : \"${GROUP_ID}\" } }"
 		fi
