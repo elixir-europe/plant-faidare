@@ -23,6 +23,9 @@
 			"locationType": {
 				"type": "keyword"
 			},
+			"type": {
+                                "type": "keyword"
+                        },
 			"countryCode": {
 				"type": "keyword"
 			},

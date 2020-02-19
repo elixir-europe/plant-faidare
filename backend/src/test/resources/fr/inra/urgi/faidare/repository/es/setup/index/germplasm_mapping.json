@@ -35,6 +35,9 @@
 			"countryOfOriginCode": {
 				"type": "keyword"
 			},
+			"countryOfOrigin": {
+                                "type": "keyword"
+                        },
 			"defaultDisplayName": {
 				"type": "keyword"
 			},
@@ -557,6 +560,21 @@
 					}
 				}
 			},
+			"xref": {
+				"properties": {
+                                        "id": {
+						"type": "keyword"
+					},
+					"source": {
+						"type": "keyword"
+					}
+				}
+                        },
+			"additionalInfo": {
+                                "dynamic": "true",
+                                "properties": {}
+                        },
+
 			"studyURIs": {
 				"type": "keyword"
 			},

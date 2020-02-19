@@ -20,6 +20,16 @@
 			"commonCropName": {
 				"type": "keyword"
 			},
+			"cropDbId": {
+                                "type": "keyword"
+                        },
+			"statisticalDesign": {
+				"dynamic": "true",
+				"properties": {}
+                        },
+			"description": {
+                                "type": "keyword"
+                        },
 			"organism": {
 				"type": "keyword"
 			},

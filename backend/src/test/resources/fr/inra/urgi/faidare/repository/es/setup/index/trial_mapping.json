@@ -23,7 +23,10 @@
 			"commonCropName": {
 				"type": "keyword"
 			},
-      "trialDescription": {
+			"cropDbId": {
+				"type": "keyword"
+			},
+			"trialDescription": {
 				"type": "keyword"
 			},
 			"documentationURL": {
@@ -37,16 +40,16 @@
 				"type": "date",
 				"format": "YYYY-MM-dd"
 			},
-      "publications": {
-        "properties": {
-          "publicationReference": {
-            "type": "keyword"
-          },
-          "publicationPUI": {
-            "type": "keyword"
-          }
-        }
-      },
+			"publications": {
+				"properties": {
+					"publicationReference": {
+						"type": "keyword"
+					},
+					"publicationPUI": {
+						"type": "keyword"
+					}
+				}
+			},
 			"programURIs": {
 				"type": "keyword"
 			},
@@ -82,9 +85,12 @@
 					"name": {
 						"type": "keyword"
 					},
-          "studyDescription": {
+					"studyDescription": {
 						"type": "keyword"
 					},
+					"description": {
+                                                "type": "keyword"
+                                        },
 					"locationURI": {
 						"type": "keyword"
 					},
@@ -98,6 +104,9 @@
 						"type": "boolean"
 					},
 					"commonCropName": {
+						"type": "keyword"
+					},
+					"cropDbId": {
 						"type": "keyword"
 					},
 					"contactURIs": {
@@ -129,6 +138,10 @@
 					"endDate": {
 						"type": "date",
 						"format": "YYYY-MM-dd"
+					},
+					"lastUpdate": {
+                                                "dynamic": "true",
+                                                "properties": {}
 					},
 					"license": {
 						"type": "keyword"
