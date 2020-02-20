@@ -36,8 +36,8 @@
 				"type": "keyword"
 			},
 			"countryOfOrigin": {
-                                "type": "keyword"
-                        },
+				"type": "keyword"
+			},
 			"defaultDisplayName": {
 				"type": "keyword"
 			},

@@ -70,8 +70,8 @@ export interface BrapiLocation extends BrapiHasDocumentationURL, schema.Dataset 
     abbreviation?: string;
     countryCode?: string;
     countryName?: string;
-    institutionAddress?: string;
-    institutionName?: string;
+    instituteAddress?: string;
+    instituteName?: string;
     altitude?: number;
     latitude: number;
     longitude: number;

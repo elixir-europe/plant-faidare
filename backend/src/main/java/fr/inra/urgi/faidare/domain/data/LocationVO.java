@@ -29,8 +29,8 @@ public class LocationVO implements GnpISInternal, BrapiLocation, HasURI, HasURL,
     private String countryCode;
     private String countryName;
 
-    private String institutionAddress;
-    private String institutionName;
+    private String instituteAddress;
+    private String instituteName;
 
     private Double altitude;
     private Double latitude;
@@ -111,19 +111,19 @@ public class LocationVO implements GnpISInternal, BrapiLocation, HasURI, HasURL,
     }
 
     @Override
-    public String getInstitutionAddress() {
-        return institutionAddress;
+    public String getInstituteAddress() {
+        return instituteAddress;
     }
 
     @Deprecated
     @Override
-    public String getInstitutionAdress() {
-        return institutionAddress;
+    public String getInstituteAdress() {
+        return instituteAddress;
     }
 
     @Override
-    public String getInstitutionName() {
-        return institutionName;
+    public String getInstituteName() {
+        return instituteName;
     }
 
     @Override
@@ -184,16 +184,16 @@ public class LocationVO implements GnpISInternal, BrapiLocation, HasURI, HasURL,
         this.countryName = countryName;
     }
 
-    public void setInstitutionAddress(String institutionAddress) {
-        this.institutionAddress = institutionAddress;
+    public void setInstituteAddress(String instituteAddress) {
+        this.instituteAddress = instituteAddress;
     }
 
-    public void setInstitutionAdress(String institutionAdress) {
-        this.institutionAddress = institutionAdress;
+    public void setInstituteAdress(String instituteAdress) {
+        this.instituteAddress = instituteAdress;
     }
 
-    public void setInstitutionName(String institutionName) {
-        this.institutionName = institutionName;
+    public void setInstituteName(String instituteName) {
+        this.instituteName = instituteName;
     }
 
     public void setAltitude(Double altitude) {

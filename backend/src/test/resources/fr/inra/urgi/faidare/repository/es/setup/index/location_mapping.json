@@ -24,8 +24,8 @@
 				"type": "keyword"
 			},
 			"type": {
-                                "type": "keyword"
-                        },
+				"type": "keyword"
+			},
 			"countryCode": {
 				"type": "keyword"
 			},
