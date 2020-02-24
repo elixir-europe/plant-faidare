@@ -214,6 +214,7 @@ describe('GermplasmResultPageComponent', () => {
         subtaxa: null,
         genusSpeciesSubtaxa: null,
         taxonSynonyms: null,
+        taxonCommonNames: null,
         biologicalStatus: null,
         geneticNature: null,
         holdingInstitute: null,

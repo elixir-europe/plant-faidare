@@ -8,6 +8,9 @@ import fr.inra.urgi.faidare.elasticsearch.criteria.annotation.NoDocumentMapping;
 
 import java.util.List;
 
+/**
+ * @author jdestin
+ */
 @CriteriaForDocument(GermplasmVO.class)
 public class FaidareGermplasmPOSTShearchCriteria extends GermplasmPOSTSearchCriteria implements SortCriteria {
 
@@ -43,6 +46,9 @@ public class FaidareGermplasmPOSTShearchCriteria extends GermplasmPOSTSearchCrit
 
     @DocumentPath("taxonSynonyms")
     private List<String> taxonSynonyms;
+
+    @DocumentPath("taxonCommonNames")
+    private List<String> taxonCommonNames;
 
     @DocumentPath(value = {"holdingInstitute", "organisation"})
     private List<String> holdingInstitute;
@@ -122,6 +128,14 @@ public class FaidareGermplasmPOSTShearchCriteria extends GermplasmPOSTSearchCrit
     public List<String> getSynonyms() { return synonyms; }
 
     public void setSynonyms(List<String> synonyms) { this.synonyms = synonyms; }
+
+    public List<String> getTaxonCommonNames() {
+        return taxonCommonNames;
+    }
+
+    public void setTaxonCommonNames(List<String> taxonCommonNames) {
+        this.taxonCommonNames = taxonCommonNames;
+    }
 
     public List<String> getHoldingInstitute() {
         return holdingInstitute;

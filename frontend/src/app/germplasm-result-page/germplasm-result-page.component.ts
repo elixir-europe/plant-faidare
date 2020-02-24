@@ -108,6 +108,7 @@ export class GermplasmResultPageComponent implements OnInit {
             subtaxa: asArray(criteria.crops),
             genusSpeciesSubtaxa: asArray(criteria.crops),
             taxonSynonyms: asArray(criteria.crops),
+            taxonCommonNames: asArray(criteria.crops),
 
             panel: asArray(criteria.germplasmLists),
             collection: asArray(criteria.germplasmLists),

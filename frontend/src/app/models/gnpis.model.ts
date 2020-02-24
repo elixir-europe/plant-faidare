@@ -19,6 +19,7 @@ export interface GermplasmSearchCriteria {
     subtaxa: string[];
     genusSpeciesSubtaxa: string[];
     taxonSynonyms: string[];
+    taxonCommonNames: string[];
     biologicalStatus: string[];
     geneticNature: string[];
     holdingInstitute: string[];

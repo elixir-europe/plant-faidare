@@ -22,7 +22,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  * Generic Elasticsearch query generator for criteria mapped on value object via
  * {@link DocumentPath} annotations
  *
- * @author gcornut
+ * @author gcornut, jdestin
  */
 public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
 
@@ -373,9 +373,10 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
         } else if (queries.size() == 1) {
             return queries.get(0);
         } else {
+            // List of the criteria that will be use in should query part, the other criteria will be used as filter.
             List<String> shouldCriterion = Arrays.asList("commonCropName",
                 "species", "germplasmGenus", "genusSpecies", "subtaxa", "genus",
-                "genusSpeciesSubtaxa", "taxonSynonyms", "panel", "collection", "population",
+                "genusSpeciesSubtaxa", "taxonSynonyms", "taxonCommonNames", "panel", "collection", "population",
                 "germplasmName", "accessionNumber", "synonyms");
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
             BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();

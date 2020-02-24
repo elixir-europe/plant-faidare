@@ -62,6 +62,7 @@ export class DataDiscoveryCriteriaUtils {
             subtaxa: null,
             genusSpeciesSubtaxa: null,
             taxonSynonyms: null,
+            taxonCommonNames: null,
             biologicalStatus: null,
             geneticNature: null,
             sources: null,

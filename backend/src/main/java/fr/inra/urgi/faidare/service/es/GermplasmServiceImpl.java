@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * @author cpommier, gcornut
+ * @author cpommier, gcornut, jdestin
  */
 @Service("germplasmService")
 public class GermplasmServiceImpl implements GermplasmService {
