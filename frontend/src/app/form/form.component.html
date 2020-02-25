@@ -36,7 +36,8 @@
     </div>
   </div>
   <!-- Input for the germplasmList field -->
-  <div class="form-group row">
+  <div class="form-group row"
+       *ngIf="!displayGermplasmResult">
     <label for="germplasmList" class="col-sm-4">
       <span>Germplasm list</span>
       <small class="small text-muted">

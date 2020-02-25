@@ -31,7 +31,7 @@ export class DataDiscoveryCriteriaUtils {
         return {
             accessions: null,
             crops: null,
-            facetFields: ['sources', 'types'],
+            facetFields: ['types', 'sources'],
             germplasmLists: null,
             observationVariableIds: null,
             topSelectedTraitOntologyIds: null,
@@ -68,7 +68,7 @@ export class DataDiscoveryCriteriaUtils {
             sources: null,
             types: 'Germplasm',
 
-            facetFields: ['holdingInstitute',
+            facetFields: ['sources', 'holdingInstitute',
                 'biologicalStatus', 'geneticNature', 'country'],
             sortBy: null,
             sortOrder: null,

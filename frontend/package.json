@@ -39,7 +39,7 @@
     "popper.js": "1.14.6",
     "rxjs": "6.4.0",
     "trait-ontology-widget": "git+https://github.com/gnpis/trait-ontology-widget.git#v2.2.1",
-    "tslib": "1.9.3",
+    "tslib": "1.11.0",
     "zone.js": "0.8.29"
   },
   "devDependencies": {

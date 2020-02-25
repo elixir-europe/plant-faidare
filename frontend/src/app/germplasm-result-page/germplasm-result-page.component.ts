@@ -72,7 +72,7 @@ export class GermplasmResultPageComponent implements OnInit {
     ngOnInit() {
 
         const queryParams = this.route.snapshot.queryParams;
-        this.reassignCriteriaFieldFromDataDiscoveryFields(queryParams);
+        // this.reassignCriteriaFieldFromDataDiscoveryFields(queryParams);
 
         this.criteriaFromForm$.subscribe(criteria => {
             this.reassignCriteriaFieldFromDataDiscoveryFields(criteria);

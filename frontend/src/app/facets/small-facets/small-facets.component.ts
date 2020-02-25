@@ -121,12 +121,18 @@ export class SmallFacetsComponent implements OnInit {
     }
 
     switchToGermplasmResult() {
-
-        /*for (const [key, control] of Object.entries(this.checkBoxes.controls)) {
-            if (key === 'selectSwitchButton') {
-                control.setValue(currentState, { emitEvent: false });
-            }
-        }*/
+        if (!this.displayGermplasmCurrentState) {
+            this.localCriteria = {
+                ... this.localCriteria,
+                facetFields: ['types']
+            };
+        } else {
+            this.localCriteria = {
+                ... this.localCriteria,
+                facetFields: ['types', 'sources']
+            };
+        }
+        this.criteria$.next(this.localCriteria);
         this.displayGermplasmResult$.next(!this.displayGermplasmCurrentState);
     }
 
