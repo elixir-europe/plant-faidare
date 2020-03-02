@@ -5,12 +5,16 @@ import {
     DataDiscoveryCriteriaUtils,
     DataDiscoveryFacet
 } from '../../models/data-discovery.model';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+    NgbPopoverModule,
+    NgbTypeaheadModule
+} from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BehaviorSubject } from 'rxjs';
 import { GermplasmSearchCriteria } from '../../models/gnpis.model';
 import { ComponentTester } from 'ngx-speculoos';
+import { SwitchButtonComponent } from '../switch-button/switch-button.component';
 
 
 describe('LargeFacetsComponent', () => {
@@ -84,8 +88,8 @@ describe('LargeFacetsComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [NgbTypeaheadModule, ReactiveFormsModule, HttpClientTestingModule ],
-            declarations: [LargeFacetsComponent]
+            imports: [NgbTypeaheadModule, ReactiveFormsModule, HttpClientTestingModule, NgbPopoverModule],
+            declarations: [LargeFacetsComponent, SwitchButtonComponent]
         })
             .compileComponents();
 
@@ -95,6 +99,7 @@ describe('LargeFacetsComponent', () => {
         component.criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
         component.germplasmSearchCriteria$ = new BehaviorSubject<GermplasmSearchCriteria>(DataDiscoveryCriteriaUtils
             .emptyGermplasmSearchCriteria());
+        component.displayGermplasmResult$ = new BehaviorSubject<boolean>(false);
         component.facet = largeFacet;
         fixture.detectChanges();
     }));
@@ -106,6 +111,7 @@ describe('LargeFacetsComponent', () => {
     it ('should display search box', () => {
         const tester = new LargeFacetsComponentTester();
         component = tester.componentInstance;
+        component.displayGermplasmResult$ = new BehaviorSubject<boolean>(false);
         component.facet = largeFacet;
         tester.detectChanges();
 

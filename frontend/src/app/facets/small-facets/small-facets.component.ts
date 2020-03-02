@@ -33,7 +33,7 @@ export class SmallFacetsComponent implements OnInit {
     queryParams: Params;
     checkBoxes: FormGroup = new FormGroup({});
     displayAdvanceGermplasmSearchButton: boolean;
-    displayGermplasmCurrentState = false;
+    germplasmDisplayCurrentState = false;
 
     constructor() {
     }
@@ -49,7 +49,7 @@ export class SmallFacetsComponent implements OnInit {
         }
 
         this.displayGermplasmResult$.subscribe(value => {
-            this.displayGermplasmCurrentState = value;
+            this.germplasmDisplayCurrentState = value;
         });
 
         if (this.criteria$) {
@@ -58,29 +58,36 @@ export class SmallFacetsComponent implements OnInit {
                     this.localCriteria = criteria;
                     this.getSelectedTerms(criteria);
 
+                    this.criteriaIsEmpty = DataDiscoveryCriteriaUtils.checkCriteriaIsEmpty(criteria);
                     if (criteria.types) {
                         this.showAndHideAdvanceGermplasmSearch(criteria.types);
                     }
                 });
         }
 
-        if (this.germplasmSearchCriteria$) {
+        if (this.germplasmSearchCriteria$ && this.germplasmDisplayCurrentState) {
             this.germplasmSearchCriteria$.pipe(filter(c => c !== this.germplasmLocalCriteria))
                 .subscribe(germplasmCriteria => {
                     this.germplasmLocalCriteria = germplasmCriteria;
-                    if (this.displayGermplasmCurrentState) {
+                    if (this.germplasmDisplayCurrentState) {
                         this.getSelectedTerms(germplasmCriteria);
                     }
                 });
         }
 
-        this.checkBoxes.valueChanges.subscribe(values => {
-            const selectedTerms = Object.keys(values).filter(key => values[key]);
-            const multiSelection = Object.keys(values).filter(key => values[key] && key !== 'Germplasm');
-            const unselectGermplasm = Object.keys(values).filter(key => key === 'Germplasm' && !values[key]);
+        this.checkBoxes.valueChanges.subscribe(checkBoxesValue => {
+            const selectedTerms = Object.keys(checkBoxesValue).filter(key => checkBoxesValue[key]);
+            const multiSelection = Object.keys(checkBoxesValue).filter(key => checkBoxesValue[key] && key !== 'Germplasm');
+            const unselectGermplasm = Object.keys(checkBoxesValue).filter(key => key === 'Germplasm' && !checkBoxesValue[key]);
 
             if ((multiSelection.length > 0 && this.facet.field === 'types') || unselectGermplasm.length > 0) {
-                this.switchGermplasmResult();
+                this.localCriteria = {
+                    ...this.localCriteria,
+                    facetFields: ['types', 'sources'],
+                    [this.facet.field]: selectedTerms
+                };
+                this.criteria$.next(this.localCriteria);
+                this.displayGermplasmResult$.next(false);
             }
 
             this.showAndHideAdvanceGermplasmSearch(selectedTerms);
@@ -91,7 +98,7 @@ export class SmallFacetsComponent implements OnInit {
                 };
                 this.criteria$.next(this.localCriteria);
             }
-            if (this.germplasmSearchCriteria$) {
+            if (this.germplasmSearchCriteria$ && this.germplasmDisplayCurrentState) {
                 this.germplasmLocalCriteria = {
                     ...this.germplasmLocalCriteria,
                     [this.facet.field]: selectedTerms
@@ -117,21 +124,4 @@ export class SmallFacetsComponent implements OnInit {
         const GermplasmSelected = typeList.includes('Germplasm');
         this.displayAdvanceGermplasmSearchButton = facetIsTypes && GermplasmSelected;
     }
-
-    switchGermplasmResult() {
-        if (!this.displayGermplasmCurrentState) {
-            this.localCriteria = {
-                ...this.localCriteria,
-                facetFields: ['types']
-            };
-        } else {
-            this.localCriteria = {
-                ...this.localCriteria,
-                facetFields: ['types', 'sources']
-            };
-        }
-        this.criteria$.next(this.localCriteria);
-        this.displayGermplasmResult$.next(!this.displayGermplasmCurrentState);
-    }
-
 }

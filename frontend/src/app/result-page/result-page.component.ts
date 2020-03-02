@@ -103,10 +103,6 @@ export class ResultPageComponent implements OnInit {
                     relativeTo: this.route,
                     queryParams: DataDiscoveryCriteriaUtils.toQueryParams(newCriteria)
                 });
-                this.displayGermplasmResult$.subscribe(value => {
-                    this.displayGermplasmResult = value;
-                });
-                this.displayGermplasmResult$.next(this.displayGermplasmResult);
             });
 
         this.germplasmfacets$.subscribe(facets => {

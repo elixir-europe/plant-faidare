@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
     DataDiscoveryCriteria,
+    DataDiscoveryCriteriaUtils,
     DataDiscoverySource
 } from '../../models/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
@@ -21,7 +22,7 @@ export class SwitchButtonComponent implements OnInit {
     localCriteria: DataDiscoveryCriteria;
     sources: DataDiscoverySource[];
     criteriaIsEmpty = true;
-    displayGermplasmCurrentState = false;
+    germplasmDisplayCurrentState = false;
 
     constructor() {
     }
@@ -29,12 +30,19 @@ export class SwitchButtonComponent implements OnInit {
     ngOnInit() {
 
         this.displayGermplasmResult$.subscribe(value => {
-            this.displayGermplasmCurrentState = value;
+            this.germplasmDisplayCurrentState = value;
         });
+
+        if (this.criteria$) {
+            this.criteria$.subscribe(criteria => {
+                this.localCriteria = criteria;
+                this.criteriaIsEmpty = DataDiscoveryCriteriaUtils.checkCriteriaIsEmpty(criteria);
+            });
+        }
     }
 
     switchGermplasmResult() {
-        if (!this.displayGermplasmCurrentState) {
+        if (!this.germplasmDisplayCurrentState) {
             this.localCriteria = {
                 ...this.localCriteria,
                 facetFields: ['types']
@@ -46,6 +54,6 @@ export class SwitchButtonComponent implements OnInit {
             };
         }
         this.criteria$.next(this.localCriteria);
-        this.displayGermplasmResult$.next(!this.displayGermplasmCurrentState);
+        this.displayGermplasmResult$.next(!this.germplasmDisplayCurrentState);
     }
 }

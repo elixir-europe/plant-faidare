@@ -42,7 +42,7 @@ export class LargeFacetsComponent implements OnInit {
     criterion = new FormControl('');
     sources: DataDiscoverySource[];
     criteriaIsEmpty = true;
-    displayGermplasmCurrentState = false;
+    germplasmDisplayCurrentState = false;
 
     constructor(private gnpisService: GnpisService) {
     }
@@ -53,7 +53,9 @@ export class LargeFacetsComponent implements OnInit {
             this.sources = sources;
         });
 
-        this.displayGermplasmResult$.subscribe(status => this.displayGermplasmCurrentState = status);
+        this.displayGermplasmResult$.subscribe(status => {
+            this.germplasmDisplayCurrentState = status;
+        });
 
         if (this.criteria$) {
             this.criteria$.pipe(filter(c => c !== this.localCriteria))
@@ -64,7 +66,7 @@ export class LargeFacetsComponent implements OnInit {
                 });
         }
 
-        if (this.germplasmSearchCriteria$ && this.displayGermplasmCurrentState) {
+        if (this.germplasmSearchCriteria$ && this.germplasmDisplayCurrentState) {
             this.germplasmSearchCriteria$.pipe(filter(c => c !== this.germplasmLocalCriteria))
                 .subscribe(germplasmCriteria => {
                     this.germplasmLocalCriteria = germplasmCriteria;
@@ -118,14 +120,14 @@ export class LargeFacetsComponent implements OnInit {
         if (selected !== 'REFINE') {
             // the item field of the event contains the facet term
             // we push the selected key to our collection of keys
-            if (this.criteria$ && !this.displayGermplasmCurrentState) {
+            if (this.criteria$) {
                 if (this.localCriteria[this.facet.field]) {
                     this.localCriteria[this.facet.field].push(event.item.term);
                 } else {
                     this.localCriteria[this.facet.field] = [event.item.term];
                 }
             }
-            if (this.germplasmSearchCriteria$ && this.displayGermplasmCurrentState) {
+            if (this.germplasmSearchCriteria$ && this.germplasmDisplayCurrentState) {
 
                 if (event.item.term !== 'Germplasm' && this.facet.field === 'types') {
                     if (this.localCriteria[this.facet.field]) {
@@ -148,10 +150,10 @@ export class LargeFacetsComponent implements OnInit {
     }
 
     emitChanges() {
-        if (this.criteria$ && !this.displayGermplasmCurrentState) {
+        if (this.criteria$) {
             this.criteria$.next(this.localCriteria);
         }
-        if (this.germplasmSearchCriteria$ && this.displayGermplasmCurrentState) {
+        if (this.germplasmSearchCriteria$ && this.germplasmDisplayCurrentState) {
             this.germplasmSearchCriteria$.next(this.germplasmLocalCriteria);
         }
     }
@@ -159,11 +161,11 @@ export class LargeFacetsComponent implements OnInit {
     removeKey(key: string) {
         this.selectedTerms[this.facet.field] =
             this.removeFromList(this.selectedTerms[this.facet.field], key);
-        if (this.criteria$ && !this.displayGermplasmCurrentState) {
+        if (this.criteria$ && !this.germplasmDisplayCurrentState) {
             this.localCriteria[this.facet.field] =
                 this.removeFromList(this.localCriteria[this.facet.field], key);
         }
-        if (this.germplasmSearchCriteria$ && this.displayGermplasmCurrentState) {
+        if (this.germplasmSearchCriteria$ && this.germplasmDisplayCurrentState) {
             if (key === 'Germplasm') {
                 this.switchGermplasmResult();
             }
@@ -181,7 +183,7 @@ export class LargeFacetsComponent implements OnInit {
     }
 
     switchGermplasmResult() {
-        if (!this.displayGermplasmCurrentState) {
+        if (!this.germplasmDisplayCurrentState) {
             this.localCriteria = {
                 ...this.localCriteria,
                 facetFields: ['types']
@@ -193,6 +195,6 @@ export class LargeFacetsComponent implements OnInit {
             };
         }
         this.criteria$.next(this.localCriteria);
-        this.displayGermplasmResult$.next(!this.displayGermplasmCurrentState);
+        this.displayGermplasmResult$.next(!this.germplasmDisplayCurrentState);
     }
 }

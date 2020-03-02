@@ -12,6 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { GermplasmSearchCriteria } from '../../models/gnpis.model';
+import { SwitchButtonComponent } from '../switch-button/switch-button.component';
 
 describe('SmallFacetsComponent', () => {
     class FacetsComponentTester extends ComponentTester<SmallFacetsComponent> {
@@ -65,7 +66,7 @@ describe('SmallFacetsComponent', () => {
 
     beforeEach(() => TestBed.configureTestingModule({
         imports: [ReactiveFormsModule],
-        declarations: [SmallFacetsComponent],
+        declarations: [SmallFacetsComponent, SwitchButtonComponent],
         schemas: [NO_ERRORS_SCHEMA]
     }));
 

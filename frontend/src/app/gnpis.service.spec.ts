@@ -153,7 +153,7 @@ describe('GnpisService', () => {
         geneticNature: null,
         holdingInstitute: null,
         sources: null,
-        types: 'Germplasm',
+        types: ['Germplasm'],
 
         facetFields: null,
         sortBy: null,

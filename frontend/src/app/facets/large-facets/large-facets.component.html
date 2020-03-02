@@ -11,7 +11,7 @@
   </ng-template>
 </ng-template>
 
-<ng-container *ngIf="facet.terms.length && facet.terms.length > 8">
+<ng-container *ngIf="facet.terms.length && facet.terms.length >8">
 
   <div class="card mb-1">
     <div class="card-body">
@@ -23,7 +23,7 @@
             style="font-size: smaller"
             *ngFor="let term of selectedTerms[facet.field]"
             (keydown.delete)="removeKey(term)"
-            (keydown.backspace)="removeKey(term)"> {{ displaySourceName(term)  }}
+            (keydown.backspace)="removeKey(term)"> {{ displaySourceName(term) }}
         <button tabindex="-1" type="button" class="btn btn-link"
                 (click)="removeKey(term)">&times;</button>
       </span>
@@ -38,6 +38,7 @@
     </div>
 
     <faidare-switch-button
+      *ngIf="!criteriaIsEmpty"
       style="margin-top: -10px; margin-left: 25px"
       [criteria$]=criteria$
       [displayGermplasmResult$]="displayGermplasmResult$"

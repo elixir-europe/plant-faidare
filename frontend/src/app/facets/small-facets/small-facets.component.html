@@ -25,7 +25,7 @@
 
         <faidare-switch-button
           style="margin-top: 5px"
-          *ngIf="term.term == 'Germplasm'"
+          *ngIf="term.term == 'Germplasm' && !criteriaIsEmpty"
           [criteria$]=criteria$
           [displayGermplasmResult$]="displayGermplasmResult$"
           [facetFiled]="facet.field"
