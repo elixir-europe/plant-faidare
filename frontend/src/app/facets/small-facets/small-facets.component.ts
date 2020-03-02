@@ -80,7 +80,7 @@ export class SmallFacetsComponent implements OnInit {
             const unselectGermplasm = Object.keys(values).filter(key => key === 'Germplasm' && !values[key]);
 
             if ((multiSelection.length > 0 && this.facet.field === 'types') || unselectGermplasm.length > 0) {
-                this.displayGermplasmResult$.next(false);
+                this.switchGermplasmResult();
             }
 
             this.showAndHideAdvanceGermplasmSearch(selectedTerms);
@@ -109,8 +109,6 @@ export class SmallFacetsComponent implements OnInit {
             control.setValue(isSelected, { emitEvent: false });
         }
 
-        // this.queryParams = this.queryParamsForGermplasmPage(criteria);
-
         this.criteriaIsEmpty = DataDiscoveryCriteriaUtils.checkCriteriaIsEmpty(criteria);
     }
 
@@ -120,15 +118,15 @@ export class SmallFacetsComponent implements OnInit {
         this.displayAdvanceGermplasmSearchButton = facetIsTypes && GermplasmSelected;
     }
 
-    switchToGermplasmResult() {
+    switchGermplasmResult() {
         if (!this.displayGermplasmCurrentState) {
             this.localCriteria = {
-                ... this.localCriteria,
+                ...this.localCriteria,
                 facetFields: ['types']
             };
         } else {
             this.localCriteria = {
-                ... this.localCriteria,
+                ...this.localCriteria,
                 facetFields: ['types', 'sources']
             };
         }

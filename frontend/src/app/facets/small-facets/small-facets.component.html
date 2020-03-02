@@ -23,31 +23,14 @@
           {{ term.label }} ({{ term.count | number }})
         </label>
 
-        <div id="germplasmSearch"
-             title=""
-             style="margin-top: 5px"
-             *ngIf="term.term == 'Germplasm' && !criteriaIsEmpty">
-          <label for="selectSwitchButton" style="margin-right: 5px"
-                 id="switchTitle">
-            Details
-          </label>
-          <label class="switch" id="switchButton">
-            <input type="checkbox" id="selectSwitchButton"
-                   [checked]="displayGermplasmCurrentState"
-                   (change)="switchToGermplasmResult()">
-            <span class="slider round"></span>
-          </label>
-          <a class="btn popovers" data-boundary="window" placement="auto"
-             [autoClose]="'outside'"
-             [ngbPopover]="germplasmDetailsPopup"
-             [popoverTitle]="'Details button\'s help.'" container="body">
-
-            <img src="assets/faidare/images/question-mark.png" alt="help"
-                 title="This is a button to view more information about the germplasm that are return by your search.
-                 You can also download the results in standard format."
-                 height="20px" style="margin-top: -10px; margin-left: 10px"/>
-          </a>
-        </div>
+        <faidare-switch-button
+          style="margin-top: 5px"
+          *ngIf="term.term == 'Germplasm'"
+          [criteria$]=criteria$
+          [displayGermplasmResult$]="displayGermplasmResult$"
+          [facetFiled]="facet.field"
+          [switchTitle]="'Details'">
+        </faidare-switch-button>
       </div>
     </form>
   </div>

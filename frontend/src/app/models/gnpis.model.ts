@@ -24,7 +24,7 @@ export interface GermplasmSearchCriteria {
     geneticNature: string[];
     holdingInstitute: string[];
     sources: string[];
-    types: string;
+    types: string[];
 
     facetFields: string[];
     sortBy: string;

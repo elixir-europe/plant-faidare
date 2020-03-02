@@ -1,0 +1,33 @@
+<div id="germplasmSearch"
+     title=""
+     *ngIf="facetFiled == 'types'">
+  <label for="selectSwitchButton" style="margin-right: 5px"
+         id="switchTitle">
+    {{ switchTitle }}
+  </label>
+  <label class="switch" id="switchButton">
+    <input type="checkbox" id="selectSwitchButton"
+           [checked]="displayGermplasmCurrentState"
+           (change)="switchGermplasmResult()">
+    <span class="slider round"></span>
+  </label>
+  <a class="btn popovers" data-boundary="window" placement="auto"
+     [autoClose]="'outside'"
+     [ngbPopover]="germplasmDetailsPopup"
+     [popoverTitle]="'Details button\'s help.'" container="body">
+
+    <img src="assets/faidare/images/question-mark.png" alt="help"
+         title="This is a button to view more information about the germplasm that are return by your search.
+                 You can also download the results in standard format."
+         height="20px" style="margin-top: -10px; margin-left: 10px"/>
+  </a>
+</div>
+
+
+<ng-template #germplasmDetailsPopup>
+  <div class="card ngb-popover-window ">
+    <br>
+    This is a button to view more information about the germplasm that are return by your search.<br>
+    You can also download the results in standard format.
+  </div>
+</ng-template>

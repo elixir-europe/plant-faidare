@@ -42,6 +42,7 @@ import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
 import { DecimalPipe } from '@angular/common';
 import { LargeFacetsComponent } from './facets/large-facets/large-facets.component';
 import { SmallFacetsComponent } from './facets/small-facets/small-facets.component';
+import { SwitchButtonComponent } from './facets/switch-button/switch-button.component';
 
 @NgModule({
     declarations: [
@@ -68,7 +69,8 @@ import { SmallFacetsComponent } from './facets/small-facets/small-facets.compone
         CardGenericDocumentComponent,
         MarkdownPageComponent,
         LargeFacetsComponent,
-        SmallFacetsComponent
+        SmallFacetsComponent,
+        SwitchButtonComponent
     ],
     imports: [
         BrowserModule,

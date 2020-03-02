@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import {
     DataDiscoveryCriteria,
+    DataDiscoveryCriteriaUtils,
     DataDiscoveryFacet,
     DataDiscoverySource
 } from '../../models/data-discovery.model';
@@ -29,6 +30,7 @@ export class LargeFacetsComponent implements OnInit {
     @Input() facet: DataDiscoveryFacet;
     @Input() criteria$: BehaviorSubject<DataDiscoveryCriteria>;
     @Input() germplasmSearchCriteria$: BehaviorSubject<GermplasmSearchCriteria>;
+    @Input() displayGermplasmResult$: BehaviorSubject<boolean>;
 
     @ViewChild('typeahead') typeahead: ElementRef<HTMLInputElement>;
     formatFacets = formatFacets;
@@ -39,6 +41,8 @@ export class LargeFacetsComponent implements OnInit {
     selectedTerms: { [key: string]: string[]; } = {};
     criterion = new FormControl('');
     sources: DataDiscoverySource[];
+    criteriaIsEmpty = true;
+    displayGermplasmCurrentState = false;
 
     constructor(private gnpisService: GnpisService) {
     }
@@ -49,19 +53,23 @@ export class LargeFacetsComponent implements OnInit {
             this.sources = sources;
         });
 
+        this.displayGermplasmResult$.subscribe(status => this.displayGermplasmCurrentState = status);
+
         if (this.criteria$) {
             this.criteria$.pipe(filter(c => c !== this.localCriteria))
                 .subscribe(criteria => {
                     this.localCriteria = { ...criteria };
                     this.selectedTerms[this.facet.field] = criteria[this.facet.field] || [];
+                    this.criteriaIsEmpty = DataDiscoveryCriteriaUtils.checkCriteriaIsEmpty(criteria);
                 });
         }
 
-        if (this.germplasmSearchCriteria$) {
+        if (this.germplasmSearchCriteria$ && this.displayGermplasmCurrentState) {
             this.germplasmSearchCriteria$.pipe(filter(c => c !== this.germplasmLocalCriteria))
                 .subscribe(germplasmCriteria => {
                     this.germplasmLocalCriteria = germplasmCriteria;
                     this.selectedTerms[this.facet.field] = germplasmCriteria[this.facet.field] || [];
+                    this.criteriaIsEmpty = DataDiscoveryCriteriaUtils.checkCriteriaIsEmpty(germplasmCriteria);
                 });
         }
     }
@@ -110,14 +118,24 @@ export class LargeFacetsComponent implements OnInit {
         if (selected !== 'REFINE') {
             // the item field of the event contains the facet term
             // we push the selected key to our collection of keys
-            if (this.criteria$) {
+            if (this.criteria$ && !this.displayGermplasmCurrentState) {
                 if (this.localCriteria[this.facet.field]) {
                     this.localCriteria[this.facet.field].push(event.item.term);
                 } else {
                     this.localCriteria[this.facet.field] = [event.item.term];
                 }
             }
-            if (this.germplasmSearchCriteria$) {
+            if (this.germplasmSearchCriteria$ && this.displayGermplasmCurrentState) {
+
+                if (event.item.term !== 'Germplasm' && this.facet.field === 'types') {
+                    if (this.localCriteria[this.facet.field]) {
+                        console.log('here');
+                        this.localCriteria[this.facet.field].push(event.item.term);
+                    } else {
+                        this.localCriteria[this.facet.field] = [event.item.term];
+                    }
+                    this.switchGermplasmResult();
+                }
                 if (!this.germplasmLocalCriteria[this.facet.field]) {
                     this.germplasmLocalCriteria[this.facet.field] = [event.item.term];
                 } else {
@@ -130,10 +148,10 @@ export class LargeFacetsComponent implements OnInit {
     }
 
     emitChanges() {
-        if (this.criteria$) {
+        if (this.criteria$ && !this.displayGermplasmCurrentState) {
             this.criteria$.next(this.localCriteria);
         }
-        if (this.germplasmSearchCriteria$) {
+        if (this.germplasmSearchCriteria$ && this.displayGermplasmCurrentState) {
             this.germplasmSearchCriteria$.next(this.germplasmLocalCriteria);
         }
     }
@@ -141,11 +159,14 @@ export class LargeFacetsComponent implements OnInit {
     removeKey(key: string) {
         this.selectedTerms[this.facet.field] =
             this.removeFromList(this.selectedTerms[this.facet.field], key);
-        if (this.criteria$) {
+        if (this.criteria$ && !this.displayGermplasmCurrentState) {
             this.localCriteria[this.facet.field] =
                 this.removeFromList(this.localCriteria[this.facet.field], key);
         }
-        if (this.germplasmSearchCriteria$) {
+        if (this.germplasmSearchCriteria$ && this.displayGermplasmCurrentState) {
+            if (key === 'Germplasm') {
+                this.switchGermplasmResult();
+            }
             this.germplasmLocalCriteria[this.facet.field] =
                 this.removeFromList(this.germplasmLocalCriteria[this.facet.field], key);
         }
@@ -159,4 +180,19 @@ export class LargeFacetsComponent implements OnInit {
             ...list.slice(index + 1)];
     }
 
+    switchGermplasmResult() {
+        if (!this.displayGermplasmCurrentState) {
+            this.localCriteria = {
+                ...this.localCriteria,
+                facetFields: ['types']
+            };
+        } else {
+            this.localCriteria = {
+                ...this.localCriteria,
+                facetFields: ['types', 'sources']
+            };
+        }
+        this.criteria$.next(this.localCriteria);
+        this.displayGermplasmResult$.next(!this.displayGermplasmCurrentState);
+    }
 }

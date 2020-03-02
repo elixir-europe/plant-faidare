@@ -84,6 +84,11 @@ export class ResultPageComponent implements OnInit {
             this.fetchDocumentsAndFacets();
         });
 
+        this.displayGermplasmResult$.subscribe(value => {
+            this.displayGermplasmResult = value;
+        });
+        this.displayGermplasmResult$.next(this.displayGermplasmResult);
+
         this.criteria$
             .pipe(filter(c => c !== initialCriteria))
             .subscribe(newCriteria => {

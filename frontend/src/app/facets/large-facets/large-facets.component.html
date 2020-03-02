@@ -15,14 +15,15 @@
 
   <div class="card mb-1">
     <div class="card-body">
-      <h3 class="card-title">{{ formatFacets[facet.field] ? (formatFacets[ facet.field] | titlecase) : facet.field | titlecase }}</h3>
+      <h3
+        class="card-title">{{ formatFacets[facet.field] ? (formatFacets[facet.field] | titlecase) : facet.field | titlecase }}</h3>
 
       <div class="mb-2">
       <span class="badge badge-pill badge-secondary mr-1 selectedElem"
             style="font-size: smaller"
-            *ngFor="let term of selectedTerms[facet.field]" tabindex="0"
+            *ngFor="let term of selectedTerms[facet.field]"
             (keydown.delete)="removeKey(term)"
-            (keydown.backspace)="removeKey(term)"> {{ displaySourceName(term) }}
+            (keydown.backspace)="removeKey(term)"> {{ displaySourceName(term)  }}
         <button tabindex="-1" type="button" class="btn btn-link"
                 (click)="removeKey(term)">&times;</button>
       </span>
@@ -35,6 +36,15 @@
              placeholder="Filter on {{ facet.field.toLowerCase() }}..."
              (focus)="focus$.next($event.target.value)"/>
     </div>
+
+    <faidare-switch-button
+      style="margin-top: -10px; margin-left: 25px"
+      [criteria$]=criteria$
+      [displayGermplasmResult$]="displayGermplasmResult$"
+      [facetFiled]="facet.field"
+      [switchTitle]="'Germplasm details'">
+    </faidare-switch-button>
+
   </div>
 </ng-container>
 

@@ -66,7 +66,7 @@ export class DataDiscoveryCriteriaUtils {
             biologicalStatus: null,
             geneticNature: null,
             sources: null,
-            types: 'Germplasm',
+            types: ['Germplasm'],
 
             facetFields: ['sources', 'holdingInstitute',
                 'biologicalStatus', 'geneticNature', 'country'],
