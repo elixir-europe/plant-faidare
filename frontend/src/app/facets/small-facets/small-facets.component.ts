@@ -103,8 +103,8 @@ export class SmallFacetsComponent implements OnInit {
                     ...this.germplasmLocalCriteria,
                     [this.facet.field]: selectedTerms
                 };
+                this.germplasmSearchCriteria$.next(this.germplasmLocalCriteria);
             }
-            this.germplasmSearchCriteria$.next(this.germplasmLocalCriteria);
         });
     }
 
