@@ -32,7 +32,6 @@ export class SmallFacetsComponent implements OnInit {
     criteriaIsEmpty = true;
     queryParams: Params;
     checkBoxes: FormGroup = new FormGroup({});
-    displayAdvanceGermplasmSearchButton: boolean;
     germplasmDisplayCurrentState = false;
 
     constructor() {
@@ -59,9 +58,6 @@ export class SmallFacetsComponent implements OnInit {
                     this.getSelectedTerms(criteria);
 
                     this.criteriaIsEmpty = DataDiscoveryCriteriaUtils.checkCriteriaIsEmpty(criteria);
-                    if (criteria.types) {
-                        this.showAndHideAdvanceGermplasmSearch(criteria.types);
-                    }
                 });
         }
 
@@ -90,7 +86,6 @@ export class SmallFacetsComponent implements OnInit {
                 this.displayGermplasmResult$.next(false);
             }
 
-            this.showAndHideAdvanceGermplasmSearch(selectedTerms);
             if (this.criteria$) {
                 this.localCriteria = {
                     ...this.localCriteria,
@@ -117,11 +112,5 @@ export class SmallFacetsComponent implements OnInit {
         }
 
         this.criteriaIsEmpty = DataDiscoveryCriteriaUtils.checkCriteriaIsEmpty(criteria);
-    }
-
-    showAndHideAdvanceGermplasmSearch(typeList: String[]) {
-        const facetIsTypes = this.facet.field === 'types';
-        const GermplasmSelected = typeList.includes('Germplasm');
-        this.displayAdvanceGermplasmSearchButton = facetIsTypes && GermplasmSelected;
     }
 }

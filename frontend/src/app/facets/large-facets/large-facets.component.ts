@@ -131,7 +131,6 @@ export class LargeFacetsComponent implements OnInit {
 
                 if (event.item.term !== 'Germplasm' && this.facet.field === 'types') {
                     if (this.localCriteria[this.facet.field]) {
-                        console.log('here');
                         this.localCriteria[this.facet.field].push(event.item.term);
                     } else {
                         this.localCriteria[this.facet.field] = [event.item.term];

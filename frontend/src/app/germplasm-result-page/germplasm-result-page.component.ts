@@ -72,7 +72,7 @@ export class GermplasmResultPageComponent implements OnInit {
     ngOnInit() {
 
         const queryParams = this.route.snapshot.queryParams;
-        // this.reassignCriteriaFieldFromDataDiscoveryFields(queryParams);
+        this.reassignCriteriaFieldFromDataDiscoveryFields(queryParams);
 
         this.criteriaFromForm$.subscribe(criteria => {
             this.reassignCriteriaFieldFromDataDiscoveryFields(criteria);
@@ -82,7 +82,7 @@ export class GermplasmResultPageComponent implements OnInit {
         this.germplasmSearchCriteria$
             .subscribe(criteria => {
                 this.localCriteria = criteria;
-                this.searchGermplasm(criteria);
+                this.searchGermplasm(this.localCriteria);
             });
 
     }
@@ -180,11 +180,6 @@ export class GermplasmResultPageComponent implements OnInit {
     changePage(page: number) {
         this.localCriteria.page = page - 1;
         this.germplasmSearchCriteria$.next(this.localCriteria);
-        /*this.router.navigate(['.'], {
-            relativeTo: this.route,
-            queryParams: { page },
-            queryParamsHandling: 'merge'
-        });*/
     }
 
     changeNbElementPerPage(pageSize: number) {

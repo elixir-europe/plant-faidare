@@ -27,6 +27,7 @@
           style="margin-top: 5px"
           *ngIf="term.term == 'Germplasm' && !criteriaIsEmpty"
           [criteria$]=criteria$
+          [germplasmSearchCriteria$]="germplasmSearchCriteria$"
           [displayGermplasmResult$]="displayGermplasmResult$"
           [facetFiled]="facet.field"
           [switchTitle]="'Details'">

@@ -5,6 +5,7 @@ import {
     DataDiscoverySource
 } from '../../models/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
+import { GermplasmSearchCriteria } from '../../models/gnpis.model';
 
 @Component({
     selector: 'faidare-switch-button',
@@ -15,6 +16,7 @@ export class SwitchButtonComponent implements OnInit {
 
 
     @Input() criteria$: BehaviorSubject<DataDiscoveryCriteria>;
+    @Input() germplasmSearchCriteria$: BehaviorSubject<GermplasmSearchCriteria>;
     @Input() displayGermplasmResult$: BehaviorSubject<boolean>;
     @Input() facetFiled: string;
     @Input() switchTitle: string;
@@ -52,6 +54,7 @@ export class SwitchButtonComponent implements OnInit {
                 ...this.localCriteria,
                 facetFields: ['types', 'sources']
             };
+            this.germplasmSearchCriteria$.next(DataDiscoveryCriteriaUtils.emptyGermplasmSearchCriteria());
         }
         this.criteria$.next(this.localCriteria);
         this.displayGermplasmResult$.next(!this.germplasmDisplayCurrentState);
