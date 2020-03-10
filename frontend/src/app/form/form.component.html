@@ -6,7 +6,8 @@
       {{ tabs.GERMPLASM }}
     </a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item"
+      *ngIf="!displayGermplasmResult">
     <a tabindex="1"
        class="nav-link trait {{ getNavClass(tabs.TRAIT) }}"
        (click)="activeTab=tabs.TRAIT">

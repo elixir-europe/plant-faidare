@@ -32,6 +32,11 @@ export class FormComponent implements OnInit {
         return this.activeTab === tab ? 'visible' : 'd-none';
     }
     ngOnInit(): void {
-        this.displayGermplasmResult$.subscribe(displayStatus => this.displayGermplasmResult = displayStatus);
+        this.displayGermplasmResult$.subscribe(displayStatus => {
+            this.displayGermplasmResult = displayStatus;
+            if (this.displayGermplasmResult) {
+                this.activeTab = Tabs.GERMPLASM;
+            }
+        });
     }
 }
