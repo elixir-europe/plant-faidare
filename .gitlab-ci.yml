@@ -2,9 +2,9 @@
 stages:
   - test
   - build
-  - beta
-  - staging
-  - production
+  - deploy-beta
+  - deploy-staging
+  - deploy-production
 
 
 image: urgi/docker-browsers:latest
@@ -91,20 +91,20 @@ build:
 # DEPLOY
 
 
-.deploy-to-vm: &deploy_to_vm
+.deploy-to-vm-proxmox: &deploy_to_vm_proxmox
   # Hidden job which serves as template for executed jobs below.
   # See https://docs.gitlab.com/ee/ci/yaml/#anchors
   retry: 2
-  ## SSH initialization
-  before_script:
+  script:
+    ## SSH initialization
     - eval $(ssh-agent -s)
     - ssh-add <(echo "${SSH_PRIVATE_KEY}")
-    - ssh -o StrictHostKeyChecking=no root@${SERVER_IP} 'echo "Successfully connected on $(hostname)"'
-  script:
+    - ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} 'echo "Successfully connected on $(hostname)"'
     # Copy jar
-    - scp ./$JAR_PATH root@${SERVER_IP}:/opt/bootapp/${APP_NAME}-${ENV}.jar
+    - scp ./backend/build/libs/${APP_NAME}.jar ${SERVER_USER}@${SERVER_IP}:/tmp/${APP_NAME}-${ENV}.jar
+    - ssh ${SERVER_USER}@${SERVER_IP} "sudo mv /tmp/${APP_NAME}-${ENV}.jar /opt/bootapp/${APP_NAME}-${ENV}.jar ; sudo chown -R bootapp:bootapp /opt/bootapp/"
     # Restarting service with the updated jar and the according Spring profiles enabled
-    - ssh root@${SERVER_IP} "systemctl restart bootapp@${APP_NAME}-${ENV}"
+    - ssh ${SERVER_USER}@${SERVER_IP} "sudo systemctl restart bootapp@${APP_NAME}-${ENV}"
     - eval $(ssh-agent -k)
     - echo "Deploy done. Application should be available at http://${SERVER_IP}:${APP_PORT}/${CONTEXT_PATH}"
   only:
@@ -114,74 +114,95 @@ build:
       - frontend/**/*
 
 
-deploy-to-staging:
-  stage: staging
-  variables:
-    ENV: staging
-    APP_PORT: ${STAGING_GPDS_PORT}
-    CONTEXT_PATH: ${STAGING_GPDS_CONTEXT_PATH}
-  <<: *deploy_to_vm
+.deploy-to-vm-openstack: &deploy_to_vm_openstack
+  # Hidden job which serves as template for executed jobs below.
+  # See https://docs.gitlab.com/ee/ci/yaml/#anchors
+  retry: 2
+  tags:
+   - openstack
+  script:
+    ## SSH initialization
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "${SSH_PRIVATE_KEY}")
+    - ssh -o StrictHostKeyChecking=no ${SERVER_USER_OPENSTACK}@${SERVER_IP_OPENSTACK} 'echo "Successfully connected on $(hostname)"'
+    # Copy jar
+    - scp ./backend/build/libs/${APP_NAME}.jar ${SERVER_USER_OPENSTACK}@${SERVER_IP_OPENSTACK}:/tmp/${APP_NAME}-${ENV}.jar
+    - ssh ${SERVER_USER_OPENSTACK}@${SERVER_IP_OPENSTACK} "sudo mv /tmp/${APP_NAME}-${ENV}.jar /opt/bootapp/${APP_NAME}-${ENV}.jar ; sudo chown -R bootapp:bootapp /opt/bootapp/"
+    # Restarting service with the updated jar and the according Spring profiles enabled
+    - ssh ${SERVER_USER_OPENSTACK}@${SERVER_IP_OPENSTACK} "sudo systemctl restart bootapp@${APP_NAME}-${ENV}"
+    - eval $(ssh-agent -k)
+    - echo "Deploy done. Application should be available at http://${SERVER_IP_OPENSTACK}:${APP_PORT}/${CONTEXT_PATH}"
   only:
-    refs:
-      - branches
-  except:
-    refs:
-      - master
+    changes:
+      - .gitlab-ci.yml
+      - backend/src/**/*
+      - frontend/**/*
   when: manual
   allow_failure: false
 
 deploy-to-beta:
-  stage: beta
+  stage: deploy-beta
+  extends: .deploy-to-vm-openstack
   variables:
+    APP_PORT: ${BETA_FAIDARE_PORT}
     ENV: beta
-    APP_PORT: ${BETA_GPDS_PORT}
-    CONTEXT_PATH: ${BETA_GPDS_CONTEXT_PATH}
-  <<: *deploy_to_vm
+    CONTEXT_PATH: faidare-beta
   except:
     refs:
       - master
   only:
     refs:
       - branches
-  allow_failure: false
+  when: always
+
+deploy-to-staging:
+  stage: deploy-staging
+  extends: .deploy-to-vm-openstack
+  variables:
+    APP_PORT: ${STAGING_FAIDARE_PORT}
+    ENV: staging
+    CONTEXT_PATH: faidare-staging
+  only:
+    refs:
+      - branches
+  except:
+    refs:
+      - master
+  when: manual
 
 deploy-to-int:
-  stage: production
+  stage: deploy-production
+  extends: .deploy-to-vm-proxmox
   variables:
+    APP_PORT: ${INT_FAIDARE_PORT}
     ENV: int
-    APP_PORT: ${INT_GPDS_PORT}
-    CONTEXT_PATH: ${INT_GPDS_CONTEXT_PATH}
-  <<: *deploy_to_vm
+    CONTEXT_PATH: faidare-int
   only:
     refs:
       - master
   when: manual
-  allow_failure: false
-
 
 deploy-to-prod-public:
-  stage: production
+  stage: deploy-production
+  extends: .deploy-to-vm-proxmox
   variables:
+    APP_PORT: ${PROD_PUBLIC_FAIDARE_PORT}
     ENV: prod-public
-    APP_PORT: ${PROD_PUBLIC_GPDS_PORT}
-    CONTEXT_PATH: ${PROD_PUBLIC_GPDS_CONTEXT_PATH}
-  <<: *deploy_to_vm
+    CONTEXT_PATH: faidare
   only:
     refs:
       - master
   when: manual
-  allow_failure: false
-
 
 deploy-to-prod-private:
-  stage: production
+  stage: deploy-production
+  extends: .deploy-to-vm-proxmox
   variables:
+    APP_PORT: ${PROD_PRIVATE_FAIDARE_PORT}
     ENV: prod-private
-    APP_PORT: ${PROD_PRIVATE_GPDS_PORT}
-    CONTEXT_PATH: ${PROD_PRIVATE_GPDS_CONTEXT_PATH}
-  <<: *deploy_to_vm
+    CONTEXT_PATH: faidare-private
   only:
     refs:
       - master
   when: manual
-  allow_failure: false
+

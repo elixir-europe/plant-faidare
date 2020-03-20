@@ -3,3 +3,4 @@ spring:
   cloud:
     config:
       uri: ${SPRING_CONFIG_URI:http://localhost:8888}
+      # label: feat(_)configure_openstack_ci
