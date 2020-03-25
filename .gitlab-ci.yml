@@ -35,11 +35,15 @@ cache:
 
 lint:
   stage: test
+  tags:
+   - openstack
   script: "./gradlew lint"
 
 
 test-frontend:
   stage: test
+  tags:
+   - openstack
   script: "./gradlew :frontend:test --parallel"
   artifacts:
     reports:
@@ -49,6 +53,8 @@ test-frontend:
 
 test-backend:
   stage: test
+  tags:
+   - openstack
   script: "./gradlew :backend:test --parallel"
   services:
     # even if that would be ideal
@@ -74,6 +80,8 @@ test-backend:
 
 
 build:
+  tags:
+   - openstack
   stage: build
   script:
     - ./gradlew assemble
@@ -205,4 +213,3 @@ deploy-to-prod-private:
     refs:
       - master
   when: manual
-
