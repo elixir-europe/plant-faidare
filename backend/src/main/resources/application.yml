@@ -66,12 +66,7 @@ faidare:
     url: http://tropgenedb.cirad.fr
     name: CIRAD TropGENE
     image: https://urgi.versailles.inra.fr/files/faidare/logo/CIRAD.jpg
-  # EVA
-  - uri: https://www.ebi.ac.uk/eva
-    url: https://www.ebi.ac.uk/eva
-    name: EVA
-    image: https://urgi.versailles.inra.fr/files/faidare/logo/EVA.png
-  # ENA
+  # EVA/ENA
   - uri: https://www.ebi.ac.uk/eva
     url: https://www.ebi.ac.uk/eva
     name: EBI European Nucleotide Archive
@@ -81,6 +76,7 @@ faidare:
     url: https://terraref.org
     name: TERRA-REF
     image: https://urgi.versailles.inra.fr/files/faidare/logo/TERRAREF.png
+
 server:
   compression:
     enabled: true

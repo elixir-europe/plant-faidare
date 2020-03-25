@@ -1,94 +1,362 @@
 {
-  "trial": {
-    "dynamic": false,
-    "properties": {
-      "active": {
-        "type": "boolean"
-      },
-      "additionalInfo": {
-        "type": "object",
-        "properties": {}
-      },
-      "contacts": {
-        "properties": {
-          "contactDbId": {
-            "type": "keyword"
-          },
-          "email": {
-            "type": "keyword"
-          },
+	"trial": {
+		"dynamic": "strict",
+		"properties": {
+			"trialURI": {
+				"type": "keyword"
+			},
+			"trialDbId": {
+				"type": "keyword"
+			},
+			"trialName": {
+				"type": "keyword"
+			},
+			"trialPUI": {
+				"type": "keyword"
+			},
+			"trialType": {
+				"type": "keyword"
+			},
+			"active": {
+				"type": "boolean"
+			},
+			"commonCropName": {
+				"type": "keyword"
+			},
+			"cropDbId": {
+				"type": "keyword"
+			},
+			"trialDescription": {
+				"type": "keyword"
+			},
+			"documentationURL": {
+				"type": "keyword"
+			},
+			"startDate": {
+				"type": "date",
+				"format": "YYYY-MM-dd"
+			},
+			"endDate": {
+				"type": "date",
+				"format": "YYYY-MM-dd"
+			},
+			"publications": {
+				"properties": {
+					"publicationReference": {
+						"type": "keyword"
+					},
+					"publicationPUI": {
+						"type": "keyword"
+					}
+				}
+			},
+			"programURIs": {
+				"type": "keyword"
+			},
+			"programDbIds": {
+				"type": "keyword"
+			},
+			"programURI": {
+				"type": "keyword"
+			},
+			"programDbId": {
+				"type": "keyword"
+			},
+			"programName": {
+				"type": "keyword"
+			},
+			"studyURIs": {
+				"type": "keyword"
+			},
+			"studyDbIds": {
+				"type": "keyword"
+			},
+			"studies": {
+				"properties": {
+					"studyURI": {
+						"type": "keyword"
+					},
+					"studyDbId": {
+						"type": "keyword"
+					},
+					"studyName": {
+						"type": "keyword"
+					},
+					"name": {
+						"type": "keyword"
+					},
+					"studyDescription": {
+						"type": "keyword"
+					},
+					"description": {
+                                                "type": "keyword"
+                                        },
+					"locationURI": {
+						"type": "keyword"
+					},
+					"locationDbId": {
+						"type": "keyword"
+					},
+					"locationName": {
+						"type": "keyword"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"commonCropName": {
+						"type": "keyword"
+					},
+					"cropDbId": {
+						"type": "keyword"
+					},
+					"contactURIs": {
+						"type": "keyword"
+					},
+					"contactDbIds": {
+						"type": "keyword"
+					},
+					"dataLinks": {
+						"properties": {
+							"name": {
+								"type": "keyword"
+							},
+							"type": {
+								"type": "keyword"
+							},
+							"url": {
+								"type": "keyword"
+							}
+						}
+					},
+					"documentationURL": {
+						"type": "keyword"
+					},
+					"startDate": {
+						"type": "date",
+						"format": "YYYY-MM-dd"
+					},
+					"endDate": {
+						"type": "date",
+						"format": "YYYY-MM-dd"
+					},
+					"lastUpdate": {
+                                                "dynamic": "true",
+                                                "properties": {}
+					},
+					"license": {
+						"type": "keyword"
+					},
+					"programURIs": {
+						"type": "keyword"
+					},
+					"programDbIds": {
+						"type": "keyword"
+					},
+					"programURI": {
+						"type": "keyword"
+					},
+					"programDbId": {
+						"type": "keyword"
+					},
+					"programName": {
+						"type": "keyword"
+					},
+					"seasons": {
+						"dynamic": "true",
+						"properties": {}
+					},
+					"studyType": {
+						"type": "keyword"
+					},
+					"studyTypeName": {
+						"type": "keyword"
+					},
+					"trialURIs": {
+						"type": "keyword"
+					},
+					"trialDbIds": {
+						"type": "keyword"
+					},
+					"trialURI": {
+						"type": "keyword"
+					},
+					"trialDbId": {
+						"type": "keyword"
+					},
+					"trialName": {
+						"type": "keyword"
+					},
+					"germplasmURIs": {
+						"type": "keyword"
+					},
+					"germplasmDbIds": {
+						"type": "keyword"
+					},
+					"observationVariableURIs": {
+						"type": "keyword"
+					},
+					"observationVariableDbIds": {
+						"type": "keyword"
+					},
+					"locationURIs": {
+						"type": "keyword"
+					},
+					"locationDbIds": {
+						"type": "keyword"
+					},
+					"additionalInfo": {
+						"dynamic": "true",
+						"type": "object",
+						"properties": {}
+					},
+
+					"source": {
+						"type": "keyword"
+					},
+					"groupId": {
+						"type": "long"
+					},
+					"@type": {
+						"type": "keyword"
+					},
+					"@id": {
+						"type": "keyword"
+					},
+					"schema:includedInDataCatalog": {
+						"type": "keyword"
+					},
+					"schema:identifier": {
+						"type": "keyword"
+					},
+					"schema:name": {
+						"type": "keyword"
+					},
+					"schema:url": {
+						"type": "keyword"
+					}
+				}
+			},
+			"datasetAuthorship": {
+				"properties": {
+					"license": {
+						"type": "keyword"
+					},
+					"datasetPUI": {
+						"type": "keyword"
+					}
+				}
+			},
+			"datasetAuthorships": {
+				"properties": {
+					"license": {
+						"type": "keyword"
+					},
+					"datasetPUI": {
+						"type": "keyword"
+					}
+				}
+			},
+			"contactURIs": {
+				"type": "keyword"
+			},
+			"contactDbIds": {
+				"type": "keyword"
+			},
+			"contacts": {
+				"properties": {
+					"contactURI": {
+						"type": "keyword"
+					},
+					"contactDbId": {
+						"type": "keyword"
+					},
+					"name": {
+						"type": "keyword"
+					},
+					"instituteName": {
+						"type": "keyword"
+					},
           "institutionName": {
-            "type": "keyword"
-          },
-          "name": {
-            "type": "keyword"
-          },
-          "orcid": {
-            "type": "keyword"
-          },
-          "type": {
-            "type": "keyword"
-          }
-        }
-      },
-      "datasetAuthorship": {
-        "properties": {
-          "license": {
-            "type": "keyword"
-          },
-          "datasetPUI": {
-            "type": "keyword"
-          }
-        }
-      },
-      "docId": {
-        "type": "keyword"
-      },
-      "endDate": {
-        "type": "date",
-        "format": "YYYY-MM-dd"
-      },
-      "groupId": {
-        "type": "long"
-      },
-      "source": {
-        "type": "keyword"
-      },
-      "speciesGroup": {
-        "type": "integer"
-      },
-      "startDate": {
-        "type": "date",
-        "format": "YYYY-MM-dd"
-      },
-      "studies": {
-        "properties": {
-          "locationName": {
-            "type": "keyword"
-          },
-          "locationDbId": {
-            "type": "keyword"
-          },
-          "studyDbId": {
-            "type": "keyword"
-          },
-          "studyName": {
-            "type": "keyword"
-          }
-        }
-      },
-      "trialDbId": {
-        "type": "keyword"
-      },
-      "trialName": {
-        "type": "keyword"
-      },
-      "trialType": {
-        "type": "keyword"
-      },
-      "documentationURL": {
-        "type": "keyword"
-      }
-    }
-  }
+						"type": "keyword"
+					},
+					"email": {
+						"type": "keyword"
+					},
+					"type": {
+						"type": "keyword"
+					},
+					"orcid": {
+						"type": "keyword"
+					},
+					"studyURIs": {
+						"type": "keyword"
+					},
+					"studyDbIds": {
+						"type": "keyword"
+					},
+					"trialURIs": {
+						"type": "keyword"
+					},
+					"trialDbIds": {
+						"type": "keyword"
+					},
+
+					"source": {
+						"type": "keyword"
+					},
+					"groupId": {
+						"type": "long"
+					},
+					"@type": {
+						"type": "keyword"
+					},
+					"@id": {
+						"type": "keyword"
+					},
+					"schema:includedInDataCatalog": {
+						"type": "keyword"
+					},
+					"schema:identifier": {
+						"type": "keyword"
+					},
+					"schema:name": {
+						"type": "keyword"
+					},
+					"schema:url": {
+						"type": "keyword"
+					}
+				}
+			},
+			"additionalInfo": {
+				"dynamic": "true",
+				"type": "object",
+				"properties": {}
+			},
+
+			"source": {
+				"type": "keyword"
+			},
+			"groupId": {
+				"type": "long"
+			},
+			"@type": {
+				"type": "keyword"
+			},
+			"@id": {
+				"type": "keyword"
+			},
+			"schema:includedInDataCatalog": {
+				"type": "keyword"
+			},
+			"schema:identifier": {
+				"type": "keyword"
+			},
+			"schema:name": {
+				"type": "keyword"
+			},
+			"schema:url": {
+				"type": "keyword"
+			}
+		}
+	}
 }

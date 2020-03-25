@@ -75,16 +75,16 @@ class LocationRepositoryTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    void should_Have_Same_InstitutionAddress_And_InstitutionAdress() {
+    void should_Have_Same_InstituteAddress_And_InstituteAdress() {
         // 805
         LocationVO result = repository.getById("805");
         assertThat(result).isNotNull();
-        assertThat(result.getInstitutionAddress()).isNotBlank().isEqualTo(result.getInstitutionAdress());
+        assertThat(result.getInstituteAddress()).isNotBlank().isEqualTo(result.getInstituteAdress());
 
         // 806
         result = repository.getById("806");
         assertThat(result).isNotNull();
-        assertThat(result.getInstitutionAddress()).isNotBlank().isEqualTo(result.getInstitutionAdress());
+        assertThat(result.getInstituteAddress()).isNotBlank().isEqualTo(result.getInstituteAdress());
     }
 
     @Test

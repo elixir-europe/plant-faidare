@@ -51,15 +51,15 @@ public interface BrapiLocation extends HasBrapiDocumentationURL {
     // Institution
 
     @JsonView(JSONView.BrapiFields.class)
-    String getInstitutionAddress();
+    String getInstituteAddress();
 
     // For backward compatibility with brapi v1
     @JsonView(JSONView.BrapiFields.class)
     @Deprecated
-    String getInstitutionAdress();
+    String getInstituteAdress();
 
     @JsonView(JSONView.BrapiFields.class)
-    String getInstitutionName();
+    String getInstituteName();
 
     // Additional info
     @JsonView(JSONView.BrapiFields.class)

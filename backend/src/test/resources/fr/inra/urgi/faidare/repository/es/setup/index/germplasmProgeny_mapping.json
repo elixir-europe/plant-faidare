@@ -1,31 +1,63 @@
 {
-  "germplasmProgeny": {
-    "properties": {
-      "docId": {
-        "type": "keyword"
-      },
-      "groupId": {
-        "type": "long"
-      },
-      "germplasmDbId": {
-        "type": "keyword"
-      },
-      "defaultDisplayName": {
-        "type": "keyword"
-      },
-      "progeny": {
-        "properties": {
-          "defaultDisplayName": {
-            "type": "keyword"
-          },
-          "germplasmDbId": {
-            "type": "keyword"
-          },
-          "parentType": {
-            "type": "keyword"
-          }
-        }
-      }
-    }
-  }
+	"germplasmProgeny": {
+		"dynamic": "strict",
+		"properties": {
+			"germplasmProgenyURI": {
+				"type": "keyword"
+			},
+			"germplasmProgenyDbId": {
+				"type": "keyword"
+			},
+			"germplasmURI": {
+				"type": "keyword"
+			},
+			"germplasmDbId": {
+				"type": "keyword"
+			},
+			"defaultDisplayName": {
+				"type": "keyword"
+			},
+			"progeny": {
+				"properties": {
+					"germplasmURI": {
+						"type": "keyword"
+					},
+					"germplasmDbId": {
+						"type": "keyword"
+					},
+					"defaultDisplayName": {
+						"type": "keyword"
+					},
+					"parentType": {
+						"type": "keyword"
+					}
+				}
+			},
+
+			"source": {
+				"type": "keyword"
+			},
+			"groupId": {
+				"type": "long"
+			},
+			"@type": {
+				"type": "keyword"
+			},
+			"@id": {
+				"type": "keyword"
+			},
+			"schema:includedInDataCatalog": {
+				"type": "keyword"
+			},
+			"schema:identifier": {
+				"type": "keyword"
+			},
+			"schema:name": {
+				"type": "keyword"
+			},
+			"schema:url": {
+				"type": "keyword"
+			}
+		}
+	}
 }
