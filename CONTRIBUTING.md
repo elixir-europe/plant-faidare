@@ -65,3 +65,9 @@
     * or run:
       * `detect-secrets scan --update .secrets.baseline` to update the secret baseline, then
       * `detect-secrets audit .secrets.baseline` to tag it as a false positive if relevant.
+
+## Testing recommendations
+
+Behaviour driven development (upon [TDD](https://dannorth.net/2012/05/31/bdd-is-like-tdd-if/)) is recommanded for all new developments.
+
+More information on what is BDD: <https://dannorth.net/introducing-bdd/>
