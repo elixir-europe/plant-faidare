@@ -45,7 +45,8 @@ export class SwitchButtonComponent implements OnInit {
 
     switchGermplasmResult() {
 
-        if (!this.germplasmDisplayCurrentState) {
+        this.displayGermplasmResult$.next(!this.germplasmDisplayCurrentState);
+        if (this.germplasmDisplayCurrentState) {
             this.localCriteria = {
                 ...this.localCriteria,
                 facetFields: ['types'],
@@ -60,6 +61,5 @@ export class SwitchButtonComponent implements OnInit {
             this.germplasmSearchCriteria$.next(DataDiscoveryCriteriaUtils.emptyGermplasmSearchCriteria());
         }
         this.criteria$.next(this.localCriteria);
-        this.displayGermplasmResult$.next(!this.germplasmDisplayCurrentState);
     }
 }

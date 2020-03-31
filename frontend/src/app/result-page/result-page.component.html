@@ -23,6 +23,7 @@
     <faidare-facets
       *ngIf="displayGermplasmResult && germplasmfacets.length"
       [facets]="germplasmfacets"
+      [criteria$]="criteria$"
       [displayGermplasmResult$]="displayGermplasmResult$"
       [germplasmSearchCriteria$]="germplasmSearchCriteria$">
     </faidare-facets>

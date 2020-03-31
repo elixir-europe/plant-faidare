@@ -98,11 +98,13 @@ export class ResultPageComponent implements OnInit {
                 this.fetchDocumentsAndFacets();
                 this.criteriaIsEmpty = DataDiscoveryCriteriaUtils.checkCriteriaIsEmpty(newCriteria);
 
-                // Update URL query params
-                this.router.navigate(['.'], {
-                    relativeTo: this.route,
-                    queryParams: DataDiscoveryCriteriaUtils.toQueryParams(newCriteria)
-                });
+                if (!this.displayGermplasmResult) {
+                    // Update URL query params
+                    this.router.navigate(['.'], {
+                        relativeTo: this.route,
+                        queryParams: DataDiscoveryCriteriaUtils.toQueryParams(newCriteria)
+                    });
+                }
             });
 
         this.germplasmfacets$.subscribe(facets => {
