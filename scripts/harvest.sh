@@ -119,6 +119,22 @@ for FILE in $(find ${DATA_DIR} -name "*.json"); do
 	gzip $FILE
 done
 
+LOG_DIR=${DATA_DIR}"log/"
+export TMP_LOG_FILE
+
+if [[ -d ${LOG_DIR} ]]
+then
+    rm -r "${LOG_DIR}"
+    mkdir "${LOG_DIR}"
+else
+    mkdir "${LOG_DIR}"
+fi
+
+
+basename_dir() { "$1$(basename "$(dirname "$2")")/$3" ; }
+
+export -f basename_dir
+
 for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	echo && echo -e "${BOLD}Manage ${DOCUMENT_TYPE} documents...${NC}"
 	INDEX_PATTERN=$(echo "faidare_${DOCUMENT_TYPE}_${ENV}" | sed -E "s/([a-z])([A-Z])/\1-\2/" | tr '[:upper:]' '[:lower:]')
@@ -141,6 +157,12 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	echo -e "* Index documents into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice..."
 	{
 		parallel -j 2 --bar "
+
+		echo test1
+		    #echo '{= s:.*/[^_]*_:sub/:; =}'
+		    echo {=s:/*::;=}
+            echo test2
+
 			curl -s -H 'Content-Type: application/x-ndjson' -H 'Content-Encoding: gzip' -H 'Accept-Encoding: gzip' -XPOST ${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_bulk --data-binary '@{}' > {.}.log.gz" \
 		::: $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.json.gz")
 	} || {
@@ -173,6 +195,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 		echo -e "${ORANGE}Expected ${COUNT_EXTRACTED_DOCS} documents but got ${COUNT_INDEXED_DOCS} indexed documents.${NC}"
 		exit 1;
 	fi
+	sleep 5
 
 	# Add aliases
 	ALIAS_PATTERN="${INDEX_PATTERN}-group*"
