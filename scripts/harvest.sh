@@ -122,7 +122,7 @@ done
 for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	echo && echo -e "${BOLD}Manage ${DOCUMENT_TYPE} documents...${NC}"
 	INDEX_PATTERN=$(echo "faidare_${DOCUMENT_TYPE}_${ENV}" | sed -E "s/([a-z])([A-Z])/\1-\2/" | tr '[:upper:]' '[:lower:]')
-	
+
 	# Create template
 	TEMPLATE_NAME="${INDEX_PATTERN}_template"
 	echo -e "* Create setting/mapping template ${TEMPLATE_NAME}..."
@@ -140,7 +140,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	INDEX_NAME="${INDEX_PATTERN}-d"$(date +%s)
 	echo -e "* Index documents into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice..."
 	{
-		parallel --bar "
+		parallel -j 2 --bar "
 			curl -s -H 'Content-Type: application/x-ndjson' -H 'Content-Encoding: gzip' -H 'Accept-Encoding: gzip' -XPOST ${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_bulk --data-binary '@{}' > {.}.log.gz" \
 		::: $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.json.gz")
 	} || {
@@ -173,7 +173,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 		echo -e "${ORANGE}Expected ${COUNT_EXTRACTED_DOCS} documents but got ${COUNT_INDEXED_DOCS} indexed documents.${NC}"
 		exit 1;
 	fi
-	
+
 	# Add aliases
 	ALIAS_PATTERN="${INDEX_PATTERN}-group*"
 	ALIAS_EXIST=$(curl -s -XGET "${ES_HOST}:${ES_PORT}/_alias/${ALIAS_PATTERN}" | jq '.status' | grep -q "404" && echo "false" || echo "true")
@@ -182,7 +182,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 		LOG=$(curl -s -XDELETE "${ES_HOST}:${ES_PORT}/*/_aliases/${ALIAS_PATTERN}")
 		check_acknowledgment "${LOG}" "delete aliases"
 	fi
-	
+
 	echo -e "* List groupId from ${INDEX_NAME} (to create filtered aliases)..."
 	GROUP_IDS=$(curl -s -H 'Content-Type: application/json' -XGET "${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_search" -d'
 {
@@ -224,7 +224,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 }")
 		check_acknowledgment "${LOG}" "create aliase"
 	done
-	
+
 	# Delete all but last created indices (thanks to the timestamp suffix)
 	echo -e "* Delete old indices ${INDEX_PATTERN} (to avoid accumulation over time):"
 	OLD_INDICES=$(curl -sf -XGET "${ES_HOST}:${ES_PORT}/_cat/indices/${INDEX_PATTERN}*?h=index" | sort | head -n -1)
