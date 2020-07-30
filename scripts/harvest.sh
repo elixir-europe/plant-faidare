@@ -119,21 +119,29 @@ for FILE in $(find ${DATA_DIR} -name "*.json"); do
 	gzip $FILE
 done
 
-LOG_DIR=${DATA_DIR}"log/"
-export TMP_LOG_FILE
+LOG_DIR="${DATA_DIR%/}/log"
 
 if [[ -d ${LOG_DIR} ]]
 then
     rm -r "${LOG_DIR}"
-    mkdir "${LOG_DIR}"
-else
-    mkdir "${LOG_DIR}"
 fi
 
+export ES_HOST ES_PORT INDEX_NAME LOG_DIR
 
-basename_dir() { "$1$(basename "$(dirname "$2")")/$3" ; }
+process_file() {
+    file=$(basename "$1")
+    logfile="${file%.*}.log.gz"
+    source=$(basename "$(dirname "$1")")
 
-export -f basename_dir
+    if ! [[ -d "${LOG_DIR}/$source" ]]
+    then
+        mkdir -p "${LOG_DIR}/$source"
+    fi
+
+    curl -s -H 'Content-Type: application/x-ndjson' -H 'Content-Encoding: gzip' -H 'Accept-Encoding: gzip' -XPOST "${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_bulk" --data-binary @"$1" > "${LOG_DIR}/$source/$logfile"
+}
+
+export -f process_file
 
 for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	echo && echo -e "${BOLD}Manage ${DOCUMENT_TYPE} documents...${NC}"
@@ -156,15 +164,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	INDEX_NAME="${INDEX_PATTERN}-d"$(date +%s)
 	echo -e "* Index documents into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice..."
 	{
-		parallel -j 2 --bar "
-
-		echo test1
-		    #echo '{= s:.*/[^_]*_:sub/:; =}'
-		    echo {=s:/*::;=}
-            echo test2
-
-			curl -s -H 'Content-Type: application/x-ndjson' -H 'Content-Encoding: gzip' -H 'Accept-Encoding: gzip' -XPOST ${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_bulk --data-binary '@{}' > {.}.log.gz" \
-		::: $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.json.gz")
+		parallel -j 2 --bar process_file ::: $(find "${DATA_DIR}" -name "${DOCUMENT_TYPE}-*.json.gz")
 	} || {
 		code=$?
 		echo -e "${RED}ERROR: a problem occurred when trying to index data with parallel program.${NC}"
