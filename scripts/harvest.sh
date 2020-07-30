@@ -52,7 +52,7 @@ check_acknowledgment() {
 	local MSG=$2
 	echo $LOG | jq '.acknowledged? == true' | grep 'true' >/dev/null || {
 		echo -e "${RED}ERROR: a problem occurred when trying to ${MSG}.${NC}"
-		echo -e "${ORANGE}$(echo ${LOG})${NC}"
+		echo -e "${ORANGE}$(echo "${LOG}")${NC}"
 		exit 1;
 	}
 }
@@ -61,7 +61,7 @@ check_acknowledgment() {
 MISSING_COUNT=0
 PROGRAMS="gzip parallel jq"
 for PROGRAM in ${PROGRAMS}; do
-	command -v ${PROGRAM} >/dev/null || {
+	command -v "${PROGRAM}" >/dev/null || {
 		echo -e "${ORANGE}Program ${PROGRAM} is missing, cannot continue...${NC}"
 		((MISSING_COUNT += 1))
 	}
@@ -102,22 +102,46 @@ if [ ! -d "${DATA_DIR}" ]; then
 	echo -e "${RED}ERROR: Mandatory parameter 'jsonDir' is missing!${NC}"
 	echo && help
 fi
-if [ $(find ${DATA_DIR} -name "*.json" | wc -l) -le 0 ] && [ $(find ${DATA_DIR} -name "*.json.gz" | wc -l) -le 0 ]; then
+if [ $(find "${DATA_DIR}" -name "*.json" | wc -l) -le 0 ] && [ $(find "${DATA_DIR}" -name "*.json.gz" | wc -l) -le 0 ]; then
 	echo -e "${RED}ERROR: The JSON directory ${DATA_DIR} contains no JSON files!${NC}"
 	echo && help
 fi
 [ "${DOCUMENT_TYPES}" == "all" ] && DOCUMENT_TYPES="${ALL_DOCUMENT_TYPES}"
 for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
-	if [ $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}*.json" | wc -l) -le 0 ] && [ $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}*.json.gz" | wc -l) -le 0 ]; then
+	if [ $(find "${DATA_DIR}" -name "${DOCUMENT_TYPE}*.json" | wc -l) -le 0 ] && [ $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}*.json.gz" | wc -l) -le 0 ]; then
 		echo -e "${ORANGE}WARNING: The JSON directory ${DATA_DIR} contains no ${DOCUMENT_TYPE} document. Type will be ignored!${NC}"
 		DOCUMENT_TYPES=$(echo "${DOCUMENT_TYPES}" | sed "s/ *${DOCUMENT_TYPE} */ /g")
 	fi
 done
 
 # Compress JSON files
-for FILE in $(find ${DATA_DIR} -name "*.json"); do
-	gzip $FILE
+for FILE in $(find "${DATA_DIR}" -name "*.json"); do
+	gzip "$FILE"
 done
+
+LOG_DIR="${DATA_DIR%/}/indexing-log"
+
+if [[ -d ${LOG_DIR} ]]
+then
+    rm -r "${LOG_DIR}"
+fi
+
+export ES_HOST ES_PORT INDEX_NAME LOG_DIR
+
+process_file() {
+    file=$(basename "$1")
+    logfile="${file%.*}.log.gz"
+    source=$(basename "$(dirname "$1")")
+
+    if ! [[ -d "${LOG_DIR}/$source" ]]
+    then
+        mkdir -p "${LOG_DIR}/$source"
+    fi
+
+    curl -s -H 'Content-Type: application/x-ndjson' -H 'Content-Encoding: gzip' -H 'Accept-Encoding: gzip' -XPOST "${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_bulk" --data-binary @"$1" > "${LOG_DIR}/$source/$logfile"
+}
+
+export -f process_file
 
 for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	echo && echo -e "${BOLD}Manage ${DOCUMENT_TYPE} documents...${NC}"
@@ -131,8 +155,8 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	\"index_patterns\": [\"${INDEX_PATTERN}-*\"],
 	\"order\": 101,
 	\"mappings\":
-		$(cat ${BASEDIR}/../backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/${DOCUMENT_TYPE}_mapping.json),
-	\"settings\": $(cat ${BASEDIR}/../backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json)
+		$(cat "${BASEDIR}"/../backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/${DOCUMENT_TYPE}_mapping.json),
+	\"settings\": $(cat "${BASEDIR}"/../backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json)
 }")
 	check_acknowledgment "${LOG}" "create template"
 
@@ -140,15 +164,13 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	INDEX_NAME="${INDEX_PATTERN}-d"$(date +%s)
 	echo -e "* Index documents into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice..."
 	{
-		parallel -j 2 --bar "
-			curl -s -H 'Content-Type: application/x-ndjson' -H 'Content-Encoding: gzip' -H 'Accept-Encoding: gzip' -XPOST ${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_bulk --data-binary '@{}' > {.}.log.gz" \
-		::: $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.json.gz")
+		parallel -j 2 --bar process_file ::: $(find "${DATA_DIR}" -name "${DOCUMENT_TYPE}-*.json.gz")
 	} || {
 		code=$?
 		echo -e "${RED}ERROR: a problem occurred when trying to index data with parallel program.${NC}"
 		exit $code
 	}
-	parallel "gunzip -c {} | jq '.errors' | grep -q true && echo -e '${ORANGE}ERROR found in {}${NC}' >> ${TMP_FILE} ;" ::: $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.log.gz")
+	parallel "gunzip -c {} | jq '.errors' | grep -q true && echo -e '${ORANGE}ERROR found in {}${NC}' >> ${TMP_FILE} ;" ::: $(find "${DATA_DIR}" -name "${DOCUMENT_TYPE}-*.log.gz")
 	if [ -f "${TMP_FILE}" ] && [ -s "${TMP_FILE}" ]; then
 		echo -e "${RED}ERROR: a problem occurred when trying to index data into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice.${NC}"
 		echo -e "${ORANGE}$(cat ${TMP_FILE})${NC}"
@@ -173,6 +195,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 		echo -e "${ORANGE}Expected ${COUNT_EXTRACTED_DOCS} documents but got ${COUNT_INDEXED_DOCS} indexed documents.${NC}"
 		exit 1;
 	fi
+	sleep 5
 
 	# Add aliases
 	ALIAS_PATTERN="${INDEX_PATTERN}-group*"
