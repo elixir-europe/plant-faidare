@@ -22,7 +22,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  * Generic Elasticsearch query generator for criteria mapped on value object via
  * {@link DocumentPath} annotations
  *
- * @author gcornut
+ * @author gcornut, jdestin
  */
 public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
 
@@ -55,6 +55,24 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
         }
     }
 
+    @Override
+    public QueryBuilder createShouldFilterQuery(C criteria) {
+        try {
+            CriteriaMapping voMappingToCriteria = AnnotatedCriteriaMapper.getMapping(criteria.getClass());
+            DocumentMetadata<?> documentMetadata = voMappingToCriteria.getDocumentMetadata();
+
+            List<QueryBuilder> queries = createQueryFromMapping(criteria, null, null, voMappingToCriteria, documentMetadata);
+
+            if (!queries.isEmpty()) {
+                return germplasmFilterQueries(queries);
+            } else {
+                return matchAllQuery();
+            }
+        } catch (Exception e) {
+            throw new ESQueryGenerationException(e);
+        }
+    }
+
     /**
      * Same as {@link ESGenericQueryFactory#createQuery(Object)} but with a list of document fields to exclude from query
      */
@@ -76,6 +94,24 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
         }
     }
 
+    public QueryBuilder createEsShouldQueryExcludingFields(C criteria, String... excludeDocumentFields) {
+        try {
+            CriteriaMapping voMappingToCriteria = AnnotatedCriteriaMapper.getMapping(criteria.getClass());
+            DocumentMetadata<?> documentMetadata = voMappingToCriteria.getDocumentMetadata();
+            Set<String> excludedDocumentFields = ImmutableSet.copyOf(excludeDocumentFields);
+
+            List<QueryBuilder> queries = createQueryFromMapping(criteria, null, excludedDocumentFields, voMappingToCriteria, documentMetadata);
+
+            if (!queries.isEmpty()) {
+                return germplasmFilterQueries(queries);
+            } else {
+                return matchAllQuery();
+            }
+        } catch (Exception e) {
+            throw new ESQueryGenerationException(e);
+        }
+    }
+
     /**
      * Same as {@link ESGenericQueryFactory#createQuery(Object)} but with a list of document fields to include from query (excluding all others)
      */
@@ -89,6 +125,24 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
 
             if (!queries.isEmpty()) {
                 return andQueries(queries);
+            } else {
+                return matchAllQuery();
+            }
+        } catch (Exception e) {
+            throw new ESQueryGenerationException(e);
+        }
+    }
+
+    public QueryBuilder createEsShouldQueryIncludingFields(C criteria, String... includeDocumentFields) {
+        try {
+            CriteriaMapping voMappingToCriteria = AnnotatedCriteriaMapper.getMapping(criteria.getClass());
+            DocumentMetadata<?> documentMetadata = voMappingToCriteria.getDocumentMetadata();
+            Set<String> includedDocumentFields = ImmutableSet.copyOf(includeDocumentFields);
+
+            List<QueryBuilder> queries = createQueryFromMapping(criteria, includedDocumentFields, null, voMappingToCriteria, documentMetadata);
+
+            if (!queries.isEmpty()) {
+                return germplasmFilterQueries(queries);
             } else {
                 return matchAllQuery();
             }
@@ -287,7 +341,7 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
     /**
      * Combine queries into a bool must query
      *
-     * @return null if not queries given; the first query if only only query is given; a bool query otherwise
+     * @return null if not queries given; the first query if only one query is given; a bool query otherwise
      */
     public static QueryBuilder andQueries(List<QueryBuilder> queries) {
         if (queries == null || queries.isEmpty()) {
@@ -305,5 +359,53 @@ public class ESGenericQueryFactory<C> implements ESQueryFactory<C> {
 
     public static QueryBuilder andQueries(QueryBuilder... queries) {
         return andQueries(Arrays.asList(queries));
+    }
+
+
+    /**
+     * Combine queries into a bool should query
+     *
+     * @return null if not queries given; the first query if only one query is given; a bool query otherwise
+     */
+    public static QueryBuilder germplasmFilterQueries(List<QueryBuilder> queries) {
+        if (queries == null || queries.isEmpty()) {
+            return null;
+        } else if (queries.size() == 1) {
+            return queries.get(0);
+        } else {
+            // List of the criteria that will be use in should query part, the other criteria will be used as filter.
+            List<String> shouldCriterion = Arrays.asList("commonCropName",
+                "species", "germplasmGenus", "genusSpecies", "subtaxa", "genus",
+                "genusSpeciesSubtaxa", "taxonSynonyms", "taxonCommonNames", "panel", "collection", "population",
+                "germplasmName", "accessionNumber", "synonyms");
+            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+            BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+            List<QueryBuilder> filterQueries = new ArrayList<>();
+            for (QueryBuilder query : queries) {
+                boolean isShouldCriterion = stringContainsItemFromList(query.toString(), shouldCriterion);
+                if (isShouldCriterion){
+                    boolShouldQueryBuilder.should(query);
+                } else {
+                    filterQueries.add(query);
+                }
+            }
+            boolQueryBuilder.must(boolShouldQueryBuilder);
+            for (QueryBuilder query: filterQueries) {
+                boolQueryBuilder.filter(query);
+            }
+            return boolQueryBuilder;
+        }
+    }
+
+    public static boolean stringContainsItemFromList(String inputStr, List<String> items)
+    {
+        for(String item: items)
+        {
+            if(inputStr.contains(item))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

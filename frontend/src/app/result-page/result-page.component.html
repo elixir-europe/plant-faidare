@@ -1,107 +1,141 @@
 <h3 align="center" class="mb-4">{{ appTitle }}</h3>
 
-<div class="row justify-content-end">
-  <!-- Column for form -->
-  <div class="col-lg-9">
-    <!-- Reset all button -->
-    <div class="text-right reset-all-div">
-      <button type="button" class="btn btn-sm btn-danger mt-1" (click)="resetAll()">
-        Reset all
-      </button>
-    </div>
 
-    <!-- Form -->
-    <faidare-form
-      #form
-      [criteria$]="criteria$">
-    </faidare-form>
-  </div>
+<!-- Reset all button -->
+<div class="text-right">
+  <button type="button" class="btn btn-sm btn-danger mt-1"
+          (click)="resetAll()">
+    Reset all
+  </button>
+</div>
+
+<div class="row">
 
   <!-- Column for facets -->
-  <div class="col-lg-3 order-lg-first">
-    <div class="row">
-      <faidare-facets
-        class="col-12 col-lg-12 col-sm-6"
-        *ngFor="let facet of facets"
-        [criteria$]="criteria$"
-        [facet]="facet">
-      </faidare-facets>
-    </div>
+  <div class="col-3">
+    <faidare-facets
+      [criteria$]="criteria$"
+      [facets]="facets"
+      [displayGermplasmResult$]="displayGermplasmResult$"
+      [germplasmSearchCriteria$]="germplasmSearchCriteria$">
+    </faidare-facets>
 
+    <faidare-facets
+      *ngIf="displayGermplasmResult && germplasmfacets.length"
+      [facets]="germplasmfacets"
+      [criteria$]="criteria$"
+      [displayGermplasmResult$]="displayGermplasmResult$"
+      [germplasmSearchCriteria$]="germplasmSearchCriteria$">
+    </faidare-facets>
   </div>
 
-  <!-- Column for result -->
-  <div class="col-lg-9">
-    <!-- Loading spinner-->
-    <div class="text-center">
-      <faidare-loading-spinner [loading]="loading"></faidare-loading-spinner>
-    </div>
 
-    <!-- No criteria selected -->
-    <div *ngIf="criteriaIsEmpty && !loading" class="text-center text-muted mt-5 bolder">
-      Select criteria to get results.
-    </div>
+  <!-- Column for form and results -->
+  <div class="col-9">
+    <div class="row">
 
-    <!-- Display results when possible -->
-    <ng-container *ngIf="documents.length && !criteriaIsEmpty && !loading">
-      <!-- Pagination status -->
-      <div class="container">
-        <div class="row result align-content-center">
+      <div class="col-12">
+        <!-- Form -->
+        <faidare-form
+          #form
+          [criteria$]="criteria$"
+          [displayGermplasmResult$]="displayGermplasmResult$">
+        </faidare-form>
+      </div>
+
+      <div class="col-12">
+        <!-- Loading spinner-->
+        <div class="text-center">
+          <faidare-loading-spinner
+            [loading]="loading"></faidare-loading-spinner>
+        </div>
+
+        <!-- No criteria selected -->
+        <div *ngIf="criteriaIsEmpty && !loading"
+             class="text-center text-muted mt-5 bolder">
+          Select criteria to get results.
+        </div>
+
+
+        <!-- Display results when possible -->
+        <ng-container
+          *ngIf="documents.length && !criteriaIsEmpty && !loading && !displayGermplasmResult">
+          <!-- Pagination status -->
+          <div class="container">
+            <div class="row result align-content-center">
           <span class="col-4 mt-2 bolder">
             Results:
           </span>
-          <span *ngIf="pagination.totalResult" class="col-8 text-right small text-muted mt-3">
-          From {{ pagination.startResult | number }} to {{ pagination.endResult | number }}
-            over {{ pagination.totalResult | number }} documents
+              <span *ngIf="pagination.totalResult"
+                    class="col-8 text-right small text-muted mt-3">
+          From {{ pagination.startResult | number }}
+                to {{ pagination.endResult | number }}
+                over {{ pagination.totalResult | number }} documents
           <span *ngIf="pagination.totalResult > pagination.maxResults">
           (limited to {{ pagination.maxResults | number }})
           </span>
         </span>
+            </div>
+          </div>
+
+          <!--Top page navigator-->
+          <div class="d-flex justify-content-center mt-3"
+               *ngIf="pagination.totalPages > 1">
+            <!-- we add 1 to the page because ngb-pagination is 1 based -->
+            <ngb-pagination [page]="pagination.currentPage + 1"
+                            (pageChange)="changePage($event)"
+                            [collectionSize]="resultCount()"
+                            [pageSize]="pagination.pageSize"
+                            [maxSize]="5"
+                            [boundaryLinks]="true"
+                            [ellipses]="false"
+                            size="sm">
+            </ngb-pagination>
+          </div>
+
+          <!-- Result document -->
+          <faidare-document
+            *ngFor="let document of documents"
+            [document]="document">
+          </faidare-document>
+
+          <!-- Pagination -->
+          <!--Bottom page navigator-->
+          <div class="d-flex justify-content-center mt-4 mb-5"
+               *ngIf="pagination.totalPages > 1">
+            <!-- we add 1 to the page because ngb-pagination is 1 based -->
+            <ngb-pagination [page]="pagination.currentPage + 1"
+                            (pageChange)="changePage($event)"
+                            [collectionSize]="resultCount()"
+                            [pageSize]="pagination.pageSize"
+                            [maxSize]="5"
+                            [boundaryLinks]="true"
+                            [ellipses]="false"
+                            size="sm">
+            </ngb-pagination>
+          </div>
+        </ng-container>
+
+        <!-- Display the table of the germplasm-result-page -->
+        <ng-container *ngIf="displayGermplasmResult">
+          <faidare-germplasm-result-page
+            [criteriaFromForm$]=criteria$
+            [germplasmSearchCriteria$]="germplasmSearchCriteria$"
+            [germplasmFacets$]="germplasmfacets$">
+          </faidare-germplasm-result-page>
+        </ng-container>
+
+        <!-- Else we display a simple message when no result found -->
+        <div *ngIf="pagination.totalResult == 0 && !loading
+    && (!criteriaIsEmpty && !displayGermplasmResult)"
+             id="no-results" class="text-center">
+          <div class="no-result-icon">
+            <span class="fa fa-meh-o"></span>
+          </div>
+          No results.
         </div>
-      </div>
 
-      <!--Top page navigator-->
-      <div class="d-flex justify-content-center mt-3" *ngIf="pagination.totalPages > 1">
-        <!-- we add 1 to the page because ngb-pagination is 1 based -->
-        <ngb-pagination [page]="pagination.currentPage + 1"
-                        (pageChange)="changePage($event)"
-                        [collectionSize]="resultCount()"
-                        [pageSize]="pagination.pageSize"
-                        [maxSize]="5"
-                        [boundaryLinks]="true"
-                        [ellipses]="false"
-                        size="sm">
-        </ngb-pagination>
       </div>
-
-      <!-- Result document -->
-      <faidare-document
-        *ngFor="let document of documents"
-        [document]="document">
-      </faidare-document>
-
-      <!-- Pagination -->
-      <!--Bottom page navigator-->
-      <div class="d-flex justify-content-center mt-4 mb-5" *ngIf="pagination.totalPages > 1">
-        <!-- we add 1 to the page because ngb-pagination is 1 based -->
-        <ngb-pagination [page]="pagination.currentPage + 1"
-                        (pageChange)="changePage($event)"
-                        [collectionSize]="resultCount()"
-                        [pageSize]="pagination.pageSize"
-                        [maxSize]="5"
-                        [boundaryLinks]="true"
-                        [ellipses]="false"
-                        size="sm">
-        </ngb-pagination>
-      </div>
-    </ng-container>
-
-    <!-- Else we display a simple message when no result found -->
-    <div *ngIf="pagination.totalResult == 0 && !loading && !criteriaIsEmpty" id="no-results" class="text-center">
-      <div class="no-result-icon">
-        <span class="fa fa-meh-o"></span>
-      </div>
-      No results.
     </div>
   </div>
 </div>

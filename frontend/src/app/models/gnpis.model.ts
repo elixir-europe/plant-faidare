@@ -1,5 +1,39 @@
 import { BrapiDonor, BrapiGermplasm } from './brapi.model';
 
+
+export interface GermplasmSearchCriteria {
+    accessionNumbers: string[];
+    germplasmDbIds: string[];
+    germplasmGenus: string[];
+    germplasmNames: string[];
+    germplasmPUIs: string[];
+    germplasmSpecies: string[];
+
+    synonyms: string[];
+    panel: string[];
+    collection: string[];
+    population: string[];
+    commonCropName: string[];
+    species: string[];
+    genusSpecies: string[];
+    subtaxa: string[];
+    genusSpeciesSubtaxa: string[];
+    taxonSynonyms: string[];
+    taxonCommonNames: string[];
+    biologicalStatus: string[];
+    geneticNature: string[];
+    holdingInstitute: string[];
+    sources: string[];
+    types: string[];
+
+    facetFields: string[];
+    sortBy: string;
+    sortOrder: string;
+    page: number;
+    pageSize: number;
+}
+
+
 export interface Germplasm extends BrapiGermplasm {
     genusSpecies: string;
     genusSpeciesSubtaxa: string;
@@ -23,6 +57,7 @@ export interface Germplasm extends BrapiGermplasm {
     panel: GermplasmSet[];
     collection: GermplasmSet[];
     population: GermplasmSet[];
+    'schema:includedInDataCatalog': any;
 }
 
 export interface Site {

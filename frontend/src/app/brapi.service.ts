@@ -29,9 +29,9 @@ export class BrapiService {
     }
 
     // TODO use the progeny call when the information about parent will be added
-    /*germplasmProgeny(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmProgeny>> {
+    /* germplasmProgeny(germplasmDbId: string): Observable<GermplasmResult<BrapiGermplasmProgeny>> {
         return this.http.get<GermplasmResult<BrapiGermplasmProgeny>>(`${BASE_URL}/germplasm/${germplasmDbId}/progeny`);
-    }*/
+    } */
 
     germplasmAttributes(germplasmDbId: string): Observable<BrapiResult<BrapiGermplasmAttributes>> {
         return this.http
@@ -60,6 +60,7 @@ export class BrapiService {
         return this.http
             .get<BrapiResult<BrapiTrial>>(`${BASE_URL}/trials/${trialsId}`);
     }
+
 
     /**
      * Get BrAPI single result response and replace the 'schema:includedInDataCatalog' URI value to the actual source object value.

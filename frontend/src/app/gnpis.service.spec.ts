@@ -1,9 +1,23 @@
 import { BASE_URL, GnpisService } from './gnpis.service';
 import { BrapiMetaData, BrapiResults } from './models/brapi.model';
-import { DataDiscoveryCriteria, DataDiscoverySource } from './models/data-discovery.model';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+    DataDiscoveryCriteria,
+    DataDiscoverySource
+} from './models/data-discovery.model';
+import {
+    HttpClientTestingModule,
+    HttpTestingController
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } from './models/gnpis.model';
+import {
+    Donor,
+    Germplasm,
+    GermplasmInstitute,
+    GermplasmSearchCriteria,
+    GermplasmSet,
+    Institute,
+    Site
+} from './models/gnpis.model';
 
 describe('GnpisService', () => {
 
@@ -112,8 +126,52 @@ describe('GnpisService', () => {
         distributors: [germplasmInstitute],
         panel: [germplasmSet],
         collection: [germplasmSet],
-        population: [germplasmSet]
+        population: [germplasmSet],
+        'schema:includedInDataCatalog': null
     };
+
+    const germplasmExportCriteria: GermplasmSearchCriteria = {
+        accessionNumbers: ['VCR010'],
+        germplasmDbIds: [],
+        germplasmGenus: [],
+        germplasmNames: [],
+        germplasmPUIs: [],
+        germplasmSpecies: [],
+
+        synonyms: null,
+        panel: null,
+        collection: null,
+        population: null,
+        commonCropName: null,
+        species: null,
+        genusSpecies: null,
+        subtaxa: null,
+        genusSpeciesSubtaxa: null,
+        taxonSynonyms: null,
+        taxonCommonNames: null,
+        biologicalStatus: null,
+        geneticNature: null,
+        holdingInstitute: null,
+        sources: null,
+        types: ['Germplasm'],
+
+        facetFields: null,
+        sortBy: null,
+        sortOrder: null,
+        page: 1,
+        pageSize: 10
+    };
+
+    const exportFile: string = '"DOI";"AccessionNumber";' +
+        '"AccessionName";"TaxonGroup";' +
+        '"HoldingInstitution";"LotName";' +
+        '"LotSynonym";' +
+        '"CollectionName";' +
+        '"CollectionType";' +
+        '"PanelName";' +
+        '"PanelSize"\n' +
+        '"https://germplasmdoi";"germplasm01";GermplasmTest;Pea;INRA-URGI;;;;;;';
+
 
     let gnpisService: GnpisService;
     let http: HttpTestingController;
@@ -227,6 +285,19 @@ describe('GnpisService', () => {
                 'id2': source2
             });
         });
+    });
+
+    it('should export germplasm as PlantMaterial', () => {
+        gnpisService.plantMaterialExport(germplasmExportCriteria).subscribe(
+            plantMaterialExport => {
+                expect(plantMaterialExport).toEqual(exportFile);
+            }
+        );
+        const req = http.expectOne({
+            url: `${BASE_URL}/germplasm/germplasm-list-csv`,
+            method: 'POST'
+        });
+        req.flush(exportFile);
     });
 })
 ;

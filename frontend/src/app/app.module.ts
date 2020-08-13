@@ -5,19 +5,30 @@ import { AppComponent } from './app.component';
 import { FormComponent } from './form/form.component';
 import { ResultPageComponent } from './result-page/result-page.component';
 import { GermplasmCardComponent } from './germplasm-card/germplasm-card.component';
+import { GermplasmResultPageComponent } from './germplasm-result-page/germplasm-result-page.component';
 import { StudyCardComponent } from './study-card/study-card.component';
 import { SiteCardComponent } from './site-card/site-card.component';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+    HTTP_INTERCEPTORS,
+    HttpClient,
+    HttpClientModule
+} from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
-import { NgbAlertModule, NgbDropdownModule, NgbPaginationModule, NgbPopoverModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+    NgbAlertModule,
+    NgbDropdownModule,
+    NgbPaginationModule,
+    NgbPopoverModule,
+    NgbTypeaheadModule
+} from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SuggestionFieldComponent } from './form/suggestion-field/suggestion-field.component';
 import { DocumentComponent } from './result-page/document/document.component';
 import { ErrorComponent } from './error/error.component';
 import { ErrorInterceptorService } from './error-interceptor.service';
 import { TraitOntologyWidgetComponent } from './form/trait-ontology-widget/trait-ontology-widget.component';
-import { FacetsComponent } from './result-page/facets/facets.component';
+import { FacetsComponent } from './facets/facets.component';
 import { CardRowComponent } from './card-row/card-row.component';
 import { CardSectionComponent } from './card-section/card-section.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
@@ -28,6 +39,10 @@ import { CoordinatesModule } from 'angular-coordinates';
 import { CardGenericDocumentComponent } from './card-generic-document/card-generic-document.component';
 import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
+import { DecimalPipe } from '@angular/common';
+import { LargeFacetsComponent } from './facets/large-facets/large-facets.component';
+import { SmallFacetsComponent } from './facets/small-facets/small-facets.component';
+import { SwitchButtonComponent } from './facets/switch-button/switch-button.component';
 
 @NgModule({
     declarations: [
@@ -35,6 +50,8 @@ import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
         FormComponent,
         ResultPageComponent,
         GermplasmCardComponent,
+        GermplasmResultPageComponent,
+        GermplasmResultPageComponent,
         StudyCardComponent,
         SiteCardComponent,
         NavbarComponent,
@@ -50,7 +67,10 @@ import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
         CardTableComponent,
         XrefsComponent,
         CardGenericDocumentComponent,
-        MarkdownPageComponent
+        MarkdownPageComponent,
+        LargeFacetsComponent,
+        SmallFacetsComponent,
+        SwitchButtonComponent
     ],
     imports: [
         BrowserModule,
@@ -84,7 +104,12 @@ import { MarkdownPageComponent } from './markdown-page/markdown-page.component';
 
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useExisting: ErrorInterceptorService, multi: true }
+        {
+            provide: HTTP_INTERCEPTORS,
+            useExisting: ErrorInterceptorService,
+            multi: true
+        },
+        DecimalPipe
     ],
     bootstrap: [AppComponent]
 })

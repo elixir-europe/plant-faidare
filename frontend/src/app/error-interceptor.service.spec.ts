@@ -34,7 +34,7 @@ describe('ErrorInterceptorService', () => {
             error = err;
         });
 
-        httpClient.get('/test').subscribe(null, noop);
+        httpClient.get('/test').subscribe({ next: null, error: noop });
         http.expectOne('/test').error(new ErrorEvent('unknown', { message: 'not good' }));
 
         expect(error.status).toBeNull();
@@ -47,7 +47,7 @@ describe('ErrorInterceptorService', () => {
             error = err;
         });
 
-        httpClient.get('/test').subscribe(null, noop);
+        httpClient.get('/test').subscribe({ next: null, error: noop });
         http.expectOne('/test').flush(null, { status: 500, statusText: 'Server Error' });
 
         expect(error.status).toBe(500);
@@ -68,7 +68,7 @@ describe('ErrorInterceptorService', () => {
             }
         };
 
-        httpClient.get('/test').subscribe(null, noop);
+        httpClient.get('/test').subscribe({ next: null, error: noop });
         http.expectOne('/test').flush(result, { status: 500, statusText: 'Server Error' });
 
         expect(error.status).toBe(500);
@@ -91,7 +91,7 @@ describe('ErrorInterceptorService', () => {
             }
         };
 
-        httpClient.get('/test').subscribe(null, noop);
+        httpClient.get('/test').subscribe({ next: null, error: noop });
         http.expectOne('/test').flush(result, { status: 500, statusText: 'Server Error' });
 
         expect(error.status).toBe(500);

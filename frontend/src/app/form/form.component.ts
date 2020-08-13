@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DataDiscoveryCriteria } from '../models/data-discovery.model';
 import { BehaviorSubject } from 'rxjs';
 
@@ -12,8 +12,9 @@ enum Tabs {
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss']
 })
-export class FormComponent {
+export class FormComponent implements OnInit {
     @Input() criteria$: BehaviorSubject<DataDiscoveryCriteria>;
+    @Input() displayGermplasmResult$: BehaviorSubject<boolean>;
     @Output() traitWidgetInitialized = new EventEmitter();
 
     // Default active tab
@@ -21,6 +22,7 @@ export class FormComponent {
 
     // to give access in HTML template
     tabs = Tabs;
+    displayGermplasmResult: boolean;
 
     getNavClass(tab: Tabs) {
         return this.activeTab === tab ? 'active' : '';
@@ -28,5 +30,13 @@ export class FormComponent {
 
     getTabClass(tab: Tabs) {
         return this.activeTab === tab ? 'visible' : 'd-none';
+    }
+    ngOnInit(): void {
+        this.displayGermplasmResult$.subscribe(displayStatus => {
+            this.displayGermplasmResult = displayStatus;
+            if (this.displayGermplasmResult) {
+                this.activeTab = Tabs.GERMPLASM;
+            }
+        });
     }
 }

@@ -177,7 +177,7 @@ public class DataDiscoveryRepositoryImpl implements DataDiscoveryRepository {
         return ApiResponseFactory.createListResponseWithFacets(pagination, resultList, facets);
     }
 
-    private String[] criteriaFieldsToDocumentFields(List<String> criteriaFields) {
+    public String[] criteriaFieldsToDocumentFields(List<String> criteriaFields) {
         List<String> fields = new ArrayList<>();
         if (criteriaFields != null) {
             for (String facetField : criteriaFields) {

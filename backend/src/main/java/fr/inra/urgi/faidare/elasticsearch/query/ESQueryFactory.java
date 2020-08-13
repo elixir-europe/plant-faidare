@@ -12,4 +12,6 @@ public interface ESQueryFactory<C> {
      */
     QueryBuilder createQuery(C criteria);
 
+    QueryBuilder createShouldFilterQuery(C criteria);
+
 }

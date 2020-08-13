@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import {
     DataDiscoveryCriteria,
     DataDiscoveryCriteriaUtils,
@@ -13,6 +13,7 @@ import { GnpisService } from '../gnpis.service';
 import { filter } from 'rxjs/operators';
 import { FormComponent } from '../form/form.component';
 import { environment } from '../../environments/environment';
+import { GermplasmSearchCriteria } from '../models/gnpis.model';
 
 
 @Component({
@@ -28,6 +29,9 @@ export class ResultPageComponent implements OnInit {
     criteria$ = new BehaviorSubject<DataDiscoveryCriteria>(DataDiscoveryCriteriaUtils.emptyCriteria());
     documents: DataDiscoveryDocument[] = [];
     facets: DataDiscoveryFacet[] = [];
+    germplasmSearchCriteria$ = new BehaviorSubject<GermplasmSearchCriteria>(DataDiscoveryCriteriaUtils.emptyGermplasmSearchCriteria());
+    germplasmfacets$ = new BehaviorSubject<DataDiscoveryFacet[]>([]);
+    germplasmfacets: DataDiscoveryFacet[] = [];
     pagination = {
         startResult: 1,
         endResult: DEFAULT_PAGE_SIZE,
@@ -39,6 +43,8 @@ export class ResultPageComponent implements OnInit {
     };
 
     criteriaIsEmpty = true;
+    displayGermplasmResult$ = new BehaviorSubject(false);
+    displayGermplasmResult = false;
     loading = true;
 
     constructor(private route: ActivatedRoute,
@@ -54,45 +60,34 @@ export class ResultPageComponent implements OnInit {
             .subscribe(({ metadata, result, facets }) => {
                 this.loading = false;
                 this.documents = result.data;
-                this.updatePagination(metadata.pagination);
+                DataDiscoveryCriteriaUtils.updatePagination(this.pagination, metadata.pagination);
                 this.facets = facets;
             });
     }
 
-    private updatePagination({ currentPage, pageSize, totalCount, totalPages }) {
-        this.pagination.currentPage = currentPage;
-        this.pagination.pageSize = pageSize;
-        this.pagination.totalPages = totalPages;
-        this.pagination.startResult = pageSize * currentPage + 1;
-        this.pagination.endResult = this.pagination.startResult + pageSize - 1;
-        this.pagination.totalResult = totalCount;
-    }
-
     ngOnInit(): void {
         const queryParams = this.route.snapshot.queryParams;
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                this.displayGermplasmResult = false;
+            }
+        });
 
         // Parse criteria from URL query params
         const initialCriteria = DataDiscoveryCriteriaUtils.fromQueryParams(queryParams);
         this.criteria$.next(initialCriteria);
 
-        this.criteria$.subscribe(criteria => {
-            this.criteriaIsEmpty = true;
-            for (const field of Object.keys(criteria)) {
-                if (field === 'facetFields') {
-                    // Ignore facet fields criteria
-                    continue;
-                }
+        this.criteriaIsEmpty = DataDiscoveryCriteriaUtils.checkCriteriaIsEmpty(initialCriteria);
 
-                if (criteria[field] && criteria[field].length) {
-                    this.criteriaIsEmpty = false;
-                    break;
-                }
-            }
-        });
 
         this.form.traitWidgetInitialized.subscribe(() => {
             this.fetchDocumentsAndFacets();
         });
+
+        this.displayGermplasmResult$.subscribe(value => {
+            this.displayGermplasmResult = value;
+        });
+        this.displayGermplasmResult$.next(this.displayGermplasmResult);
 
         this.criteria$
             .pipe(filter(c => c !== initialCriteria))
@@ -101,13 +96,20 @@ export class ResultPageComponent implements OnInit {
                 newCriteria.page = 0;
                 // Fetch documents and facets
                 this.fetchDocumentsAndFacets();
+                this.criteriaIsEmpty = DataDiscoveryCriteriaUtils.checkCriteriaIsEmpty(newCriteria);
 
-                // Update URL query params
-                this.router.navigate(['.'], {
-                    relativeTo: this.route,
-                    queryParams: DataDiscoveryCriteriaUtils.toQueryParams(newCriteria)
-                });
+                if (!this.displayGermplasmResult) {
+                    // Update URL query params
+                    this.router.navigate(['.'], {
+                        relativeTo: this.route,
+                        queryParams: DataDiscoveryCriteriaUtils.toQueryParams(newCriteria)
+                    });
+                }
             });
+
+        this.germplasmfacets$.subscribe(facets => {
+            this.germplasmfacets = facets;
+        });
     }
 
     resultCount() {
@@ -124,6 +126,7 @@ export class ResultPageComponent implements OnInit {
             // Use of empty param to force re-parse of URL in ngOnInit
             queryParams: { empty: [] }
         });
+        this.displayGermplasmResult$.next(false);
         this.criteria$.next(DataDiscoveryCriteriaUtils.emptyCriteria());
     }
 

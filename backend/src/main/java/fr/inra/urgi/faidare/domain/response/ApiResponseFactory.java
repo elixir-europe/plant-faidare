@@ -2,9 +2,11 @@ package fr.inra.urgi.faidare.domain.response;
 
 import fr.inra.urgi.faidare.api.brapi.v1.exception.BrapiPaginationException;
 import fr.inra.urgi.faidare.domain.brapi.v1.response.*;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataDiscoveryDocument;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.FacetImpl;
 import fr.inra.urgi.faidare.domain.datadiscovery.response.DataDiscoveryResponse;
+import fr.inra.urgi.faidare.domain.datadiscovery.response.GermplasmSearchResponse;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
@@ -113,5 +115,13 @@ public class ApiResponseFactory {
     public static DataDiscoveryResponse createListResponseWithFacets(Pagination pagination, List<DataDiscoveryDocument> results, List<FacetImpl> facets) {
         BrapiMetadata metadata = ApiResponseFactory.createMetadata(pagination, null);
         return new DataDiscoveryResponseImpl(metadata, results, facets);
+    }
+
+    /**
+     * Create germplasm search response (brapi list response with facets)
+     */
+    public static GermplasmSearchResponse createGermplasmListResponseWithFacets(Pagination pagination, List<GermplasmVO> results, List<FacetImpl> facets) {
+        BrapiMetadata metadata = ApiResponseFactory.createMetadata(pagination, null);
+        return new GermplasmSearchResponseImpl(metadata, results, facets);
     }
 }

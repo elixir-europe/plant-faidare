@@ -4,6 +4,7 @@ import { FormComponent } from './form.component';
 import { MockComponents } from 'ng-mocks';
 import { SuggestionFieldComponent } from './suggestion-field/suggestion-field.component';
 import { TraitOntologyWidgetComponent } from './trait-ontology-widget/trait-ontology-widget.component';
+import { BehaviorSubject } from 'rxjs';
 
 
 describe('FormComponent', () => {
@@ -18,6 +19,8 @@ describe('FormComponent', () => {
 
     it('should switch tabs', async(() => {
         const fixture = TestBed.createComponent(FormComponent);
+        const component = fixture.componentInstance;
+        component.displayGermplasmResult$ = new BehaviorSubject(false);
         fixture.detectChanges();
 
         const element: HTMLElement = fixture.nativeElement;

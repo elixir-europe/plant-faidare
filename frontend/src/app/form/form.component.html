@@ -6,7 +6,8 @@
       {{ tabs.GERMPLASM }}
     </a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item"
+      *ngIf="!displayGermplasmResult">
     <a tabindex="1"
        class="nav-link trait {{ getNavClass(tabs.TRAIT) }}"
        (click)="activeTab=tabs.TRAIT">
@@ -30,12 +31,14 @@
         inputId="crops"
         criteriaField="crops"
         [criteria$]="criteria$"
+        [displayGermplasmResult$]="displayGermplasmResult$"
         placeholder="Search crops">
       </faidare-suggestion-field>
     </div>
   </div>
   <!-- Input for the germplasmList field -->
-  <div class="form-group row">
+  <div class="form-group row"
+       *ngIf="!displayGermplasmResult">
     <label for="germplasmList" class="col-sm-4">
       <span>Germplasm list</span>
       <small class="small text-muted">
@@ -47,6 +50,7 @@
         inputId="germplasmList"
         criteriaField="germplasmLists"
         [criteria$]="criteria$"
+        [displayGermplasmResult$]="displayGermplasmResult$"
         placeholder="Search germplasm lists">
       </faidare-suggestion-field>
     </div>
@@ -64,6 +68,7 @@
         inputId="accessions"
         criteriaField="accessions"
         [criteria$]="criteria$"
+        [displayGermplasmResult$]="displayGermplasmResult$"
         placeholder="Search germplasm accession">
       </faidare-suggestion-field>
     </div>

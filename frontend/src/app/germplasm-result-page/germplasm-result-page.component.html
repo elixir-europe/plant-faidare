@@ -1,0 +1,124 @@
+<ng-container *ngIf="germplasms && germplasms.length>0">
+
+  <div class="container mb-3">
+    <div class="row result align-content-center">
+          <span class="col mt-2 bolder">
+            Results:
+          </span>
+      <div class="row align-content-center">
+  <span *ngIf="pagination.totalResult" style="margin-right: 5px"
+        class="col align-self-end small text-muted mt-3">
+        From {{ pagination.startResult | number }}
+    to {{ pagination.endResult | number }}
+    over {{ pagination.totalResult | number }} documents
+      <span *ngIf="pagination.totalResult > pagination.maxResults">
+      (limited to {{ pagination.maxResults | number }})
+      </span>
+  </span>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-outline-success mb-2"
+          (click)="exportPlantMaterial(localCriteria)">
+
+    <span class="iconify" data-icon="fa-solid:file-csv" data-inline="false"></span>
+    Export Plant Material list
+  </button>
+
+  <!-- Loading spinner-->
+  <div class="text-center">
+    <faidare-loading-spinner [loading]="loading"></faidare-loading-spinner>
+  </div>
+
+  <faidare-card-section
+    class="col-12 col-lg"
+    header="Germplasm data: "
+    [test]="germplasms">
+    <ng-template>
+      <div class="table-responsive table-card-body">
+        <table class="table table-sm table-striped">
+          <thead>
+          <tr>
+            <th id="germplasmResultThead"
+                *ngFor="let header of headers" scope="col">
+              <label id="tabHeader"
+                     (click)="getTabField(header)">{{ formatHeaders[header] }}
+                <i *ngIf="!fieldSortState[header]" class="fa fa-sort"
+                   aria-hidden="true"></i>
+                <i *ngIf="fieldSortState[header] =='desc'"
+                   class="fa fa-sort-desc"
+                   aria-hidden="true"></i>
+                <i *ngIf="fieldSortState[header] == 'asc'"
+                   class="fa fa-sort-asc"
+                   aria-hidden="true"></i>
+              </label>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let germplasm of germplasms">
+            <tr>
+              <td>
+                <a [routerLink]="['/germplasm']"
+                   [queryParams]="{id: germplasm.germplasmDbId}"
+                   target="_blank">
+                  {{ germplasm.germplasmName }}
+                </a>
+              </td>
+              <td>{{ germplasm.accessionNumber }}</td>
+              <td>{{ germplasm.genusSpecies }}</td>
+              <td>{{ germplasm.instituteName }}</td>
+              <td>{{ germplasm.biologicalStatusOfAccessionCode }}</td>
+              <td>{{ germplasm.countryOfOriginCode }}</td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </ng-template>
+  </faidare-card-section>
+
+  <div class="container text-right"
+       style="margin-top: -30px"
+       *ngIf="germplasms">
+    <div ngbDropdown class="dropdown-container">
+      <button class="btn btn-outline-secondary btn-sm"
+              ngbDropdownToggle>Results per page : {{ pagination.pageSize }}
+      </button>
+      <div ngbDropdownMenu class="dropdown-menu" id="pageSizes">
+        <div *ngFor="let pageSize of elementPerPage">
+          <button type="button"
+                  class="btn btn-light"
+                  (click)="changeNbElementPerPage(pageSize)"
+                  style="width: 160px;" ngbDropdownItem>{{ pageSize }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center mt-2 mb-5"
+       *ngIf="pagination.totalPages > 1">
+    <!-- we add 1 to the page because ngb-pagination is 1 based -->
+    <ngb-pagination [page]="pagination.currentPage + 1"
+                    (pageChange)="changePage($event)"
+                    [collectionSize]="resultCount()"
+                    [pageSize]="pagination.pageSize"
+                    [maxSize]="5"
+                    [boundaryLinks]="true"
+                    [ellipses]="false"
+                    size="sm">
+    </ngb-pagination>
+  </div>
+
+</ng-container>
+
+
+<div *ngIf="germplasms && germplasms.length == 0"
+     id="no-results" class="text-center">
+  <div class="no-result-icon">
+    <span class="fa fa-meh-o"></span>
+  </div>
+  No results.
+</div>

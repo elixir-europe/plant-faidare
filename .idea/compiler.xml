@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-configuration-processor/2.1.2.RELEASE/db9671c321defb942a6700fae8a7700a137a25e/spring-boot-configuration-processor-2.1.2.RELEASE.jar" />
+        </processorPath>
+        <module name="faidare.backend.main" />
+      </profile>
+    </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="faidare.backend.main" target="1.8" />
       <module name="faidare.backend.test" target="1.8" />

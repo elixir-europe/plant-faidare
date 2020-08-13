@@ -131,7 +131,7 @@
 			},
 			"instituteName": {
 				"type": "keyword"
-			},			
+			},
 			"pedigree": {
 				"type": "keyword"
 			},
@@ -590,7 +590,7 @@
 
 			"source": {
 				"type": "keyword"
-			},	
+			},
 			"groupId": {
 				"type": "long"
 			},

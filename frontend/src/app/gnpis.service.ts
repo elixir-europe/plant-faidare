@@ -7,9 +7,13 @@ import {
     DataDiscoveryResults,
     DataDiscoverySource
 } from './models/data-discovery.model';
-import { BrapiResults } from './models/brapi.model';
+import {
+    BrapiResults,
+    GermplasmCriteria,
+    GermplasmResults
+} from './models/brapi.model';
 import { map } from 'rxjs/operators';
-import { Germplasm } from './models/gnpis.model';
+import { Germplasm, GermplasmSearchCriteria } from './models/gnpis.model';
 import { XrefResponse } from './models/xref.model';
 import { removeNullUndefined } from './utils';
 
@@ -23,6 +27,7 @@ export class GnpisService {
     static URGI_SOURCE_URI = 'https://urgi.versailles.inra.fr';
 
     sourceByURI$ = new ReplaySubject<Record<string, DataDiscoverySource>>(1);
+    sources$ = new ReplaySubject<DataDiscoverySource[]>(1);
 
     constructor(private http: HttpClient) {
         // Get data sources
@@ -34,6 +39,7 @@ export class GnpisService {
                 for (const dataSource of dataSources) {
                     sourceByURI[dataSource['@id']] = dataSource;
                 }
+                this.sources$.next(dataSources);
                 this.sourceByURI$.next(sourceByURI);
             });
     }
@@ -66,12 +72,17 @@ export class GnpisService {
     search(
         criteria: DataDiscoveryCriteria
     ): Observable<DataDiscoveryResults> {
-        return zip(
+        return this.mapSources( zip(
             // Get source by URI
             this.sourceByURI$,
             // Get documents by criteria
             this.http.post<any>(`${BASE_URL}/datadiscovery/search`, criteria)
-        ).pipe(map(([sourceByURI, response]) => {
+        ));
+    }
+
+
+    mapSources(httpResponse: Observable<any>) {
+        return httpResponse.pipe(map(([sourceByURI, response]) => {
             // Extract BrAPI documents from result
             const documents = response.result.data;
 
@@ -82,21 +93,15 @@ export class GnpisService {
                 return document;
             });
             if (response.facets) {
-                response.facets = response.facets.map((facet: DataDiscoveryFacet) => {
-                    facet.terms = facet.terms.map(term => {
-                        if (facet.field === 'sources') {
-                            term.label = sourceByURI[term.term]['schema:name'];
-                        } else {
-                            term.label = term.term;
-                        }
-                        return term;
-                    });
-                    return facet;
-                });
+                this.getSourcesName(sourceByURI, response);
             }
             return response;
         }));
+
     }
+
+
+
 
     /**
      * Get germplasm by ID or PUI with data source (present in JSON-LD response)
@@ -112,6 +117,17 @@ export class GnpisService {
         );
     }
 
+    germplasmSearch(criteria: GermplasmCriteria): Observable<GermplasmResults<Germplasm>> {
+
+        return this.mapSources(zip(
+            // Get source by URI
+            this.sourceByURI$,
+            // Get documents by criteria
+            this.http.post<GermplasmResults<Germplasm>>(`${BASE_URL}/germplasm/search`,
+                criteria,
+                { headers: { 'Accept': 'application/ld+json,application/json' } })));
+    }
+
     /**
      * Get data source by URI
      */
@@ -121,6 +137,32 @@ export class GnpisService {
 
     xref(xrefId: string): Observable<XrefResponse> {
         return this.http.get<XrefResponse>(`${BASE_URL}/xref/documentbyfulltextid?linkedRessourcesID=${xrefId}`);
+    }
+
+    plantMaterialExport(criteria: GermplasmSearchCriteria): Observable<any> {
+        const requestOptions: Object = {
+            /* other options here */
+            responseType: 'text'
+        };
+        return this.http.post<any>(
+            `${BASE_URL}/germplasm/germplasm-list-csv`,
+            criteria,
+            requestOptions
+        );
+    }
+
+    getSourcesName(sourceByURI, response) {
+        response.facets = response.facets.map((facet: DataDiscoveryFacet) => {
+            facet.terms = facet.terms.map(term => {
+                if (facet.field === 'sources') {
+                    term.label = sourceByURI[term.term]['schema:name'];
+                } else {
+                    term.label = term.term;
+                }
+                return term;
+            });
+            return facet;
+        });
     }
 
 }
