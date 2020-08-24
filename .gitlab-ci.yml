@@ -40,22 +40,11 @@ lint:
   script: "./gradlew lint"
 
 
-test-frontend:
+test-and-sonarqube:
   stage: test
   tags:
-   - openstack
-  script: "./gradlew :frontend:test --parallel"
-  artifacts:
-    reports:
-      junit:
-        - "./frontend/karma-junit-tests-report/TEST*.xml"
-
-
-test-backend:
-  stage: test
-  tags:
-   - openstack
-  script: "./gradlew :backend:test --parallel"
+    - openstack
+  # the backend tests need an elasticsearch instance
   services:
     # even if that would be ideal
     # we can't just launch the service with just elasticsearch:6.3.1
@@ -70,10 +59,19 @@ test-backend:
       # especially the error regarding
       # `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
       command: ["bin/elasticsearch", "-Ediscovery.type=single-node"]
+  variables:
+    GRADLE_OPTS: "-Dorg.gradle.daemon=true"
+  script:
+    - ./gradlew :frontend:test --parallel
+    - ./gradlew :backend:test --parallel
+    - find /tmp/node/*/bin -name node -exec ln -s {} /tmp/node/node \;
+    - export PATH="/tmp/node/:$PATH"
+    - ./gradlew sonarqube -x test
   artifacts:
     reports:
       junit:
-        - "./backend/build/test-results/test/TEST-*.xml"
+        - ./backend/build/test-results/test/TEST-*.xml
+        - ./frontend/karma-junit-tests-report/TEST*.xml
 
 
 # BUILD
@@ -89,11 +87,6 @@ build:
     paths:
       - "$JAR_PATH"
     expire_in: 1 week
-  only:
-    changes:
-      - .gitlab-ci.yml
-      - backend/src/**/*
-      - frontend/**/*
 
 
 # DEPLOY

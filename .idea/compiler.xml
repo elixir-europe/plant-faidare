@@ -10,9 +10,6 @@
         <module name="faidare.backend.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="faidare.backend.main" target="1.8" />
-      <module name="faidare.backend.test" target="1.8" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8" />
   </component>
 </project>
