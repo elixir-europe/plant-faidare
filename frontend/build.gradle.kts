@@ -3,6 +3,7 @@ import com.moowork.gradle.node.npm.NpmTask
 plugins {
     base
     id("com.moowork.node") version "1.2.0"
+    id("org.sonarqube")
 }
 
 val isCi = System.getenv("CI") != null
