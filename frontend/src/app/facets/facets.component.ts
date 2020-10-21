@@ -9,7 +9,8 @@ import { GermplasmSearchCriteria } from '../models/gnpis.model';
 export const formatFacets: {[key: string]: string} = {
     'holdingInstitute': 'holding institute',
     'biologicalStatus': 'biological status',
-    'geneticNature': 'genetic nature'
+    'geneticNature': 'genetic nature',
+    'country': 'origin country'
 };
 
 @Component({

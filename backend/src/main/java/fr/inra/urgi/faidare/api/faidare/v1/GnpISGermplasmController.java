@@ -105,14 +105,20 @@ public class GnpISGermplasmController {
     @PostMapping(value = "/germplasm-list-csv", produces = "text/csv", consumes = APPLICATION_JSON_VALUE)
     public FileSystemResource export(@RequestBody @Valid FaidareGermplasmPOSTShearchCriteria criteria, HttpServletResponse response) {
 
-        try {
-            File exportFile = germplasmService.exportListGermplasmCSV(criteria);
-            response.setHeader("Content-Disposition", "attachment; filename=germplasm.gnpis.csv");
-            return new FileSystemResource(exportFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("An error occurred when exporting germplasm: " + e.getMessage() + ".", e);
+        long limitResult = 50000L;
+        long nbResult = germplasmService.germplasmFind(criteria).getMetadata().getPagination().getTotalCount();
+
+        if (!(nbResult > limitResult)) {
+            try {
+                File exportFile = germplasmService.exportListGermplasmCSV(criteria);
+                response.setHeader("Content-Disposition", "attachment; filename=germplasm.gnpis.csv");
+                return new FileSystemResource(exportFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("An error occurred when exporting germplasm: " + e.getMessage() + ".", e);
+            }
         }
+        return null;
     }
 
     @ApiOperation("Search list of germplasm")

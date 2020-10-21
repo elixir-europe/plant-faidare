@@ -39,6 +39,7 @@ export class GermplasmResultPageComponent implements OnInit {
         'countryOfOriginCode'];
     elementPerPage: number[] = [15, 20, 25];
     loading: boolean;
+    overLimitSizeExport: boolean = false;
     fieldSortState: object = {
         germplasmName: null,
         accessionNumber: null,
@@ -81,6 +82,7 @@ export class GermplasmResultPageComponent implements OnInit {
 
         this.germplasmSearchCriteria$
             .subscribe(criteria => {
+                this.overLimitSizeExport = false
                 this.localCriteria = criteria;
                 this.searchGermplasm(this.localCriteria);
             });
@@ -127,8 +129,13 @@ export class GermplasmResultPageComponent implements OnInit {
         this.loading = true;
         this.service.plantMaterialExport(criteria).subscribe(
             result => {
-                const blob = new Blob([result], { type: 'text/plain;charset=utf-8' });
-                saveAs(blob, 'germplasm.gnpis.csv');
+                if (result) {
+                    const blob = new Blob([result], { type: 'text/plain;charset=utf-8' });
+                    saveAs(blob, 'germplasm.gnpis.csv');
+                }
+                else {
+                    this.overLimitSizeExport = true
+                }
                 this.loading = false;
             },
             error => {
