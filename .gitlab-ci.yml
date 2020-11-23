@@ -7,7 +7,7 @@ stages:
   - deploy-production
 
 
-image: urgi/docker-browsers:latest
+image: registry.forgemia.inra.fr/urgi-is/docker-rare/docker-browsers:latest
 
 
 # Disable the Gradle daemon for Continuous Integration servers as correctness
