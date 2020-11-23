@@ -139,8 +139,7 @@ export class GnpisService {
         return this.http.get<XrefResponse>(`${BASE_URL}/xref/documentbyfulltextid?linkedRessourcesID=${xrefId}`);
     }
 
-    //TODO Change the service's response to return an object with the number of results
-    // and handle here if the number is over the limit
+    // TODO Change the service's response to return an object with the number of results and handle here if the number is over the limit
     plantMaterialExport(criteria: GermplasmSearchCriteria): Observable<any> {
         const requestOptions: Object = {
             /* other options here */
