@@ -65,7 +65,6 @@ export class BrapiService {
             .get<BrapiResult<BrapiTrial>>(`${BASE_URL}/trials/${trialsId}`);
     }
     germplasmMcpd(germplasmDbId: string): Observable<BrapiResult<GermplasmMcpd>> {
-        console.log("VIKAS");
         return this.http
             .get<BrapiResult<GermplasmMcpd>>(`${BASE_URL}/germplasm/${germplasmDbId}/mcpd`);
     }

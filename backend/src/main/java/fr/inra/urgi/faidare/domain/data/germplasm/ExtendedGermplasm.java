@@ -39,10 +39,10 @@ public interface ExtendedGermplasm extends BrapiGermplasm, GnpISInternal {
     Photo getPhoto();
 
     @JsonView(JSONView.GnpISFields.class)
-    Institute getHoldingInstitute();
+    InstituteVO getHoldingInstitute();
 
     @JsonView(JSONView.GnpISFields.class)
-    Institute getHoldingGenbank();
+    InstituteVO getHoldingGenbank();
 
     @JsonView(JSONView.GnpISFields.class)
     String getPresenceStatus();
