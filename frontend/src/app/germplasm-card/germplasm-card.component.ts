@@ -57,10 +57,9 @@ export class GermplasmCardComponent implements OnInit {
                         });*/
 
 
-
-                   this.brapiService.germplasmMcpd(germplasmId).subscribe(germplasmMcpd => {
-                            this.germplasmMcpd = germplasmMcpd.result;
-                        });
+                    this.brapiService.germplasmMcpd(germplasmId).subscribe(germplasmMcpd => {
+                        this.germplasmMcpd = germplasmMcpd.result;
+                    });
 
 
                     this.germplasmPedigree = null;
