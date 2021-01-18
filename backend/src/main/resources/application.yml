@@ -27,7 +27,7 @@ faidare:
     urgi_xref_dev
 
   cropOntology-repository-url:
-    https://urgi.versailles.inra.fr/files/ephesis/trait-ontology/data_16.3/ontology-repository.json
+    https://urgi.versailles.inrae.fr/files/ephesis/trait-ontology/data_16.3/ontology-repository.json
 
   # Provides access to user group WS used to query private data ES aliases
   security-user-group-ws-url:
@@ -37,45 +37,45 @@ faidare:
   # Warning! URIs should match with FAIDARE datadiscovery 'schema:includedInDataCatalog' field value
   data-sources:
   # URGI GnpIS
-  - uri: https://urgi.versailles.inra.fr/gnpis
-    url: https://urgi.versailles.inra.fr/gnpis
+  - uri: https://urgi.versailles.inrae.fr/gnpis
+    url: https://urgi.versailles.inrae.fr/gnpis
     name: URGI GnpIS
-    image: https://urgi.versailles.inra.fr/files/faidare/logo/GnpIS.png
+    image: https://urgi.versailles.inrae.fr/files/faidare/logo/GnpIS.png
   # WUR EU-SOL BreeDB
   - uri: https://www.eu-sol.wur.nl
     url: https://www.eu-sol.wur.nl
     name: WUR EU-SOL BreeDB
-    image: https://urgi.versailles.inra.fr/files/faidare/logo/EU-SOL.png
+    image: https://urgi.versailles.inrae.fr/files/faidare/logo/EU-SOL.png
   # VIB PIPPA
   - uri: http://pippa.psb.ugent.be
     url: http://pippa.psb.ugent.be
     name: VIB PIPPA
-    image: https://urgi.versailles.inra.fr/files/faidare/logo/VIB.png
+    image: https://urgi.versailles.inrae.fr/files/faidare/logo/VIB.png
   # IBET BioData
   - uri: https://biodata.pt
     url: https://biodata.pt
     name: IBET BioData
-    image: https://urgi.versailles.inra.fr/files/faidare/logo/biodata.png
+    image: https://urgi.versailles.inrae.fr/files/faidare/logo/biodata.png
   # NIB PISA
   - uri: http://www.pisa.nib.si
     url: http://www.pisa.nib.si
     name: NIB PISA
-    image: https://urgi.versailles.inra.fr/files/faidare/logo/NIB.png
+    image: https://urgi.versailles.inrae.fr/files/faidare/logo/NIB.png
   # CIRAD TropGENE
   - uri: http://tropgenedb.cirad.fr
     url: http://tropgenedb.cirad.fr
     name: CIRAD TropGENE
-    image: https://urgi.versailles.inra.fr/files/faidare/logo/CIRAD.jpg
+    image: https://urgi.versailles.inrae.fr/files/faidare/logo/CIRAD.jpg
   # EVA/ENA
   - uri: https://www.ebi.ac.uk/eva
     url: https://www.ebi.ac.uk/eva
     name: EBI European Nucleotide Archive
-    image: https://urgi.versailles.inra.fr/files/faidare/logo/EVA.png
+    image: https://urgi.versailles.inrae.fr/files/faidare/logo/EVA.png
   # TERRA-REF
   - uri: https://terraref.org
     url: https://terraref.org
     name: TERRA-REF
-    image: https://urgi.versailles.inra.fr/files/faidare/logo/TERRAREF.png
+    image: https://urgi.versailles.inrae.fr/files/faidare/logo/TERRAREF.png
 
 server:
   compression:
