@@ -8,7 +8,7 @@ import fr.inra.urgi.faidare.elasticsearch.document.annotation.Id;
 import java.io.Serializable;
 import java.util.List;
 
-@Document(type = "germplasm-mcpd")
+@Document(type = "germplasmMcpd")
 public class GermplasmMcpdVO implements Serializable, BrapiGermplasmMcpd, ExtendedGermplasmMcpd {
 
     private Long groupId;

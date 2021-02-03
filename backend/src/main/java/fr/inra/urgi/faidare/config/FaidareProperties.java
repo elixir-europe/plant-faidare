@@ -113,6 +113,7 @@ public class FaidareProperties {
     }
 
     public String getBaseIndexName(String documentType) {
+        documentType = documentType.replaceAll("([a-z0-9])([A-Z])", "$1-$2").toLowerCase();
         return elasticsearchIndexingTemplate
             .replace("{documentType}", documentType.toLowerCase());
     }

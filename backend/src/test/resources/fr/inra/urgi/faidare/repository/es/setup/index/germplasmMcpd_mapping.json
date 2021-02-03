@@ -1,0 +1,452 @@
+{
+  "germplasmMcpd": {
+    "dynamic": "strict",
+    "properties": {
+      "germplasmURI": {
+        "type": "keyword"
+      },
+      "germplasmName": {
+        "type": "keyword",
+        "doc_values": true
+      },
+      "accessionNames": {
+        "type": "keyword",
+        "doc_values": true
+      },
+      "accessionNumber": {
+        "type": "keyword",
+        "doc_values": true
+      },
+      "acquisitionDate": {
+        "type": "integer"
+      },
+      "acquisitionSourceCode": {
+        "type": "keyword"
+      },
+      "alternateIDs": {
+        "type": "keyword"
+      },
+      "ancestralData": {
+        "type": "keyword"
+      },
+      "biologicalStatusOfAccessionCode": {
+        "type": "keyword"
+      },
+      "breedingInstitutes": {
+        "properties": {
+          "instituteCode": {
+            "type": "keyword"
+          },
+          "instituteName": {
+            "type": "keyword"
+          },
+          "acronym": {
+            "type": "keyword"
+          },
+          "organisation": {
+            "type": "keyword"
+          },
+          "instituteType": {
+            "type": "keyword"
+          },
+          "webSite": {
+            "type": "keyword"
+          },
+          "instituteAddress": {
+            "type": "keyword"
+          },
+          "logo": {
+            "type": "keyword"
+          }
+        }
+      },
+      "breedingMethodDbId": {
+        "type": "keyword"
+      },
+      "breederAccessionNumber": {
+        "type": "keyword"
+      },
+      "breedingCreationYear": {
+        "type": "keyword"
+      },
+      "catalogRegistrationYear": {
+        "type": "keyword"
+      },
+      "catalogDeregistrationYear": {
+        "type": "keyword"
+      },
+      "collectingInfo": {
+        "properties": {
+          "collectingDate": {
+            "type": "integer"
+          },
+          "collectingInstitutes": {
+            "properties": {
+              "instituteCode": {
+                "type": "keyword"
+              },
+              "instituteName": {
+                "type": "keyword"
+              },
+              "acronym": {
+                "type": "keyword"
+              },
+              "organisation": {
+                "type": "keyword"
+              },
+              "instituteType": {
+                "type": "keyword"
+              },
+              "webSite": {
+                "type": "keyword"
+              },
+              "instituteAddress": {
+                "type": "keyword"
+              },
+              "logo": {
+                "type": "keyword"
+              }
+            }
+          },
+          "collectingMissionIdentifier": {
+            "type": "keyword"
+          },
+          "collectingNumber": {
+            "type": "keyword"
+          },
+          "collectors": {
+            "type": "keyword"
+          },
+          "materialType": {
+            "type": "keyword"
+          },
+          "collectingSite": {
+            "properties": {
+              "locationDbId": {
+                "type": "keyword"
+              },
+              "locationName": {
+                "type": "keyword"
+              },
+              "coordinateUncertainty": {
+                "type": "keyword"
+              },
+              "elevation": {
+                "type": "keyword"
+              },
+              "georeferencingMethod":{
+                "type": "keyword"
+              },
+              "latitudeDecimal": {
+                "type": "integer"
+              },
+              "latitudeDegrees": {
+                "type": "integer"
+              },
+              "locationDescription": {
+                "type": "keyword"
+              },
+              "longitudeDecimal":  {
+                "type": "integer"
+              },
+              "longitudeDegrees":  {
+                "type": "integer"
+              },
+              "spatialReferenceSystem": {
+                "type": "keyword"
+              }
+
+            }
+
+          }
+
+        }
+      },
+      "commonCropName": {
+        "type": "keyword",
+        "doc_values": true
+      },
+      "countryOfOrigin": {
+        "type": "keyword"
+      },
+      "countryOfOriginCode": {
+        "type": "keyword"
+      },
+      "originLocationDbId": {
+        "type": "keyword"
+      },
+      "originLocationName": {
+        "type": "keyword"
+      },
+      "documentationURL": {
+        "type": "keyword"
+      },
+      "donors": {
+        "properties": {
+          "donorInstituteCode": {
+            "type": "keyword"
+          },
+          "donorGermplasmPUI": {
+            "type": "keyword"
+          },
+          "germplasmPUI": {
+            "type": "keyword"
+          },
+          "donorAccessionNumber": {
+            "type": "keyword"
+          },
+          "donorInstitute": {
+            "properties": {
+              "instituteName": {
+                "type": "keyword"
+              },
+              "instituteCode": {
+                "type": "keyword"
+              },
+              "acronym": {
+                "type": "keyword"
+              },
+              "organisation": {
+                "type": "keyword"
+              },
+              "instituteType": {
+                "type": "keyword"
+              },
+              "webSite": {
+                "type": "keyword"
+              },
+              "address": {
+                "type": "keyword"
+              },
+              "logo": {
+                "type": "keyword"
+              }
+            }
+          },
+          "donationDate": {
+            "type": "integer"
+          }
+        }
+      },
+      "donorInfo": {
+        "properties":{
+          "donorAccessionNumber": {
+            "type": "keyword"
+          },
+          "donorAccessionPui": {
+            "type": "keyword"
+          },
+          "donationDate": {
+            "type": "keyword"
+          },
+          "donorInstitute": {
+            "properties":{
+              "instituteCode": {
+                "type": "keyword"
+              },
+              "instituteName": {
+                "type": "keyword"
+              },
+              "acronym": {
+                "type": "keyword"
+              },
+              "organisation": {
+                "type": "keyword"
+              },
+              "instituteType": {
+                "type": "keyword"
+              },
+              "webSite": {
+                "type": "keyword"
+              },
+              "instituteAddress": {
+                "type": "keyword"
+              },
+              "logo": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "genus":{
+        "type": "keyword",
+        "doc_values": true
+      },
+      "genusSpecies": {
+        "type": "keyword",
+        "doc_values": true
+      },
+      "germplasmDbId": {
+        "type": "keyword"
+      },
+      "germplasmMcpdDbId": {
+        "type": "keyword"
+      },
+      "germplasmMcpdURI": {
+        "type": "keyword"
+      },
+      "germplasmGenus": {
+        "type": "keyword",
+        "doc_values": true
+      },
+      "germplasmPUI": {
+        "type": "keyword"
+      },
+      "germplasmSpecies": {
+        "type": "keyword",
+        "doc_values": true
+      },
+      "holdingInstitute": {
+        "properties": {
+          "instituteName": {
+            "type": "keyword"
+          },
+          "instituteCode": {
+            "type": "keyword"
+          },
+          "acronym": {
+            "type": "keyword"
+          },
+          "organisation": {
+            "type": "keyword"
+          },
+          "instituteType": {
+            "type": "keyword"
+          },
+          "webSite": {
+            "type": "keyword"
+          },
+          "instituteAddress": {
+            "type": "keyword"
+          },
+          "logo": {
+            "type": "keyword"
+          }
+        }
+      },
+      "holdingGenbank": {
+        "properties": {
+          "instituteName": {
+            "type": "keyword",
+            "doc_values": true
+          },
+          "instituteCode": {
+            "type": "keyword"
+          },
+          "webSite": {
+            "type": "keyword"
+          },
+          "logo": {
+            "type": "keyword"
+          }
+        }
+      },
+      "distributorInfos": {
+        "properties": {
+          "institute": {
+            "properties": {
+              "instituteName": {
+                "type": "keyword"
+              },
+              "instituteCode": {
+                "type": "keyword"
+              },
+              "acronym": {
+                "type": "keyword"
+              },
+              "organisation": {
+                "type": "keyword"
+              },
+              "instituteType": {
+                "type": "keyword"
+              },
+              "webSite": {
+                "type": "keyword"
+              },
+              "instituteAddress": {
+                "type": "keyword"
+              },
+              "logo": {
+                "type": "keyword"
+              }
+            }
+          },
+          "accessionNumber": {
+            "type": "keyword"
+          },
+          "distributionStatus": {
+            "type": "keyword"
+          }
+        }
+      },
+      "instituteCode": {
+        "type": "keyword"
+      },
+      "mlsStatus": {
+        "type": "keyword"
+      },
+      "remarks": {
+        "type": "keyword"
+      },
+      "safetyDuplicateInstitutes": {
+        "properties":{
+          "instituteCode": {
+            "type": "keyword"
+          },
+          "instituteName": {
+            "type": "keyword"
+          }
+        }
+      },
+      "geneticNature": {
+        "type": "keyword"
+      },
+      "species": {
+        "type": "keyword"
+      },
+      "speciesAuthority": {
+        "type": "keyword"
+      },
+      "storageTypeCodes": {
+        "type": "keyword"
+      },
+      "subtaxon": {
+        "type": "keyword"
+      },
+      "subtaxonAuthority": {
+        "type": "keyword"
+      },
+      "subtaxaAuthority": {
+        "type": "keyword"
+      },
+      "groupId": {
+        "type": "long"
+      },
+      "presenceStatus": {
+        "type": "keyword"
+      },
+      "@type": {
+        "type": "keyword"
+      },
+      "@id": {
+        "type": "keyword"
+      },
+      "schema:includedInDataCatalog": {
+        "type": "keyword"
+      },
+      "schema:identifier": {
+        "type": "keyword"
+      },
+      "schema:name": {
+        "type": "keyword"
+      },
+      "schema:url": {
+        "type": "keyword"
+      },
+      "defaultDisplayName": {
+        "type": "keyword"
+      }
+    }
+  }
+}
