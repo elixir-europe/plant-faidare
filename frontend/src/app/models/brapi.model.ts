@@ -177,6 +177,64 @@ export interface BrapiGermplasm extends BrapiHasDocumentationURL, schema.Dataset
     acquisitionDate: string;
 }
 
+export interface BrapiGermplasmMcpd extends BrapiHasDocumentationURL {
+    accessionNames: string[];
+    accessionNumber: string;
+    acquisitionDate: string;
+    acquisitionSourceCode: string;
+    alternateIDs: string[];
+    ancestralData: string;
+    biologicalStatusOfAccessionCode: string;
+    breedingInstitutes: {
+        instituteCode: string;
+        instituteName: string;
+    };
+    collectingInfo: {
+        collectingDate: string;
+        collectingInstitutes: {
+            instituteCode: string;
+            instituteName: string;
+        };
+        collectingMissionIdentifier: string;
+        collectingNumber: string;
+        collectingSite: {
+            coordinateUncertainty: string;
+            elevation: string;
+            georeferencingMethod: string;
+            latitudeDecimal: string;
+            latitudeDegrees: string;
+            locationDescription: string;
+            longitudeDecimal: string;
+            longitudeDegrees: string;
+            spatialReferenceSystem: string;
+        };
+    };
+    commonCropName: string;
+    countryOfOriginCode: string;
+    donorInfo: {
+        donorAccessionNumber: string;
+        donorInstitute: {
+            instituteCode: string;
+            instituteName: string;
+        };
+    };
+    genus: string;
+    germplasmDbId: string;
+    germplasmPUI: string;
+    instituteCode: string;
+    mlsStatus: string;
+    remarks: string;
+    safetyDuplicateInstitutes: {
+        instituteCode: string;
+        instituteName: string;
+    }[];
+    species: string;
+    speciesAuthority: string;
+    storageTypeCodes: string[];
+    subtaxon: string;
+    subtaxonAuthority: string;
+}
+
 
 export interface BrapiTaxonIds {
     sourceName: string;

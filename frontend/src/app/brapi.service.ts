@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import {
     BrapiGermplasm,
     BrapiGermplasmAttributes,
+    BrapiGermplasmMcpd,
     BrapiGermplasmPedigree,
     BrapiLocation,
     BrapiObservationVariable,
@@ -12,9 +13,6 @@ import {
     BrapiStudy,
     BrapiTrial
 } from './models/brapi.model';
-
-
-import { GermplasmMcpd } from './models/gnpis.model';
 
 
 export const BASE_URL = 'brapi/v1';
@@ -64,9 +62,9 @@ export class BrapiService {
         return this.http
             .get<BrapiResult<BrapiTrial>>(`${BASE_URL}/trials/${trialsId}`);
     }
-    germplasmMcpd(germplasmDbId: string): Observable<BrapiResult<GermplasmMcpd>> {
+    germplasmMcpd(germplasmDbId: string): Observable<BrapiResult<BrapiGermplasmMcpd>> {
         return this.http
-            .get<BrapiResult<GermplasmMcpd>>(`${BASE_URL}/germplasm/${germplasmDbId}/mcpd`);
+            .get<BrapiResult<BrapiGermplasmMcpd>>(`${BASE_URL}/germplasm/${germplasmDbId}/mcpd`);
     }
 
 

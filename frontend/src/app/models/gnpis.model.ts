@@ -61,9 +61,9 @@ export interface Germplasm extends BrapiGermplasm {
 }
 
 
-export interface GermplasmMcpd extends  BrapiGermplasm {
+/* export interface GermplasmMcpd extends  BrapiGermplasm {
     mlsStatus: string;
-}
+} */
 
 
 export interface Site {
