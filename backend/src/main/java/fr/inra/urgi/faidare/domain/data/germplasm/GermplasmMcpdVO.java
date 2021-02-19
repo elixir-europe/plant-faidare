@@ -20,7 +20,7 @@ public class GermplasmMcpdVO implements Serializable, BrapiGermplasmMcpd, Extend
     private List<String> alternateIDs;
     private List<String> accessionNames;
 
-    private String cropName;
+    private String commonCropName;
     private String genus;
     private String species;
     private String speciesAuthority;
@@ -108,12 +108,12 @@ public class GermplasmMcpdVO implements Serializable, BrapiGermplasmMcpd, Extend
         this.accessionNames = accessionNames;
     }
 
-    public String getCropName() {
-        return cropName;
+    public String getCommonCropName() {
+        return commonCropName;
     }
 
-    public void setCropName(String cropName) {
-        this.cropName = cropName;
+    public void setCommonCropName(String commonCropName) {
+        this.commonCropName = commonCropName;
     }
 
     public String getGenus() {

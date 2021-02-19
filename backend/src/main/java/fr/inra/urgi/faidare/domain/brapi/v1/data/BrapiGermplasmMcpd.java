@@ -28,7 +28,7 @@ public interface BrapiGermplasmMcpd {
     List<String> getAlternateIDs();
 
     @JsonView(JSONView.BrapiFields.class)
-    String getCropName();
+    String getCommonCropName();
 
     @JsonView(JSONView.BrapiFields.class)
     String getGenus();
@@ -80,5 +80,8 @@ public interface BrapiGermplasmMcpd {
 
     @JsonView(JSONView.BrapiFields.class)
     List<String> getStorageTypeCodes();
+
+    @JsonView(JSONView.BrapiFields.class)
+    String getRemarks();
 
 }
