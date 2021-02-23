@@ -1,7 +1,10 @@
 package fr.inra.urgi.faidare.api.brapi.v1;
 
 import fr.inra.urgi.faidare.api.NotFoundException;
-import fr.inra.urgi.faidare.domain.brapi.v1.data.*;
+import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiGermplasm;
+import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiGermplasmAttributeValueList;
+import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiPedigree;
+import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiProgeny;
 import fr.inra.urgi.faidare.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.faidare.domain.brapi.v1.response.BrapiResponse;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmAttributeCriteria;
@@ -9,6 +12,7 @@ import fr.inra.urgi.faidare.domain.criteria.GermplasmGETSearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmPOSTSearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.base.PaginationCriteriaImpl;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 import fr.inra.urgi.faidare.domain.response.ApiResponseFactory;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.domain.response.Pagination;
@@ -71,9 +75,9 @@ public class GermplasmController {
      */
     @ApiOperation("Get germplasm mcpd by id")
     @GetMapping("/brapi/v1/germplasm/{germplasmDbId}/mcpd")
-    public BrapiResponse<BrapiGermplasmMcpd> getGermplasmMcpd(@PathVariable String germplasmDbId) {
+    public BrapiResponse<GermplasmMcpdVO> getGermplasmMcpd(@PathVariable String germplasmDbId) {
         LOGGER.debug("germplasmDbId = " + germplasmDbId);
-        BrapiGermplasmMcpd germplasm = germplasmService.getMcpdById(germplasmDbId);
+        GermplasmMcpdVO germplasm = germplasmService.getMcpdById(germplasmDbId);
         if (germplasm == null) {
             throw new NotFoundException("Germplasm not found for id '" + germplasmDbId + "'");
         }

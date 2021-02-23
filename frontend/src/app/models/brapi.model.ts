@@ -1,5 +1,5 @@
 import * as schema from './schema.org.model';
-import { DataDiscoveryFacet } from './data-discovery.model';
+import {DataDiscoveryFacet} from './data-discovery.model';
 
 export interface GermplasmCriteria {
     accessionNumbers: string[];
@@ -178,6 +178,7 @@ export interface BrapiGermplasm extends BrapiHasDocumentationURL, schema.Dataset
 }
 
 export interface BrapiGermplasmMcpd extends BrapiHasDocumentationURL {
+    groupId: string;
     accessionNames: string[];
     accessionNumber: string;
     acquisitionDate: string;
@@ -185,19 +186,17 @@ export interface BrapiGermplasmMcpd extends BrapiHasDocumentationURL {
     alternateIDs: string[];
     ancestralData: string;
     biologicalStatusOfAccessionCode: string;
-    breedingInstitutes: {
-        instituteCode: string;
-        instituteName: string;
-    };
+    breedingInstitutes: BrapiInstitute;
     collectingInfo: {
         collectingDate: string;
-        collectingInstitutes: {
-            instituteCode: string;
-            instituteName: string;
-        };
+        collectingInstitutes: BrapiInstitute;
         collectingMissionIdentifier: string;
         collectingNumber: string;
+        collectors: string;
+        materialType: string;
         collectingSite: {
+            locationDbId: string;
+            locationName: string;
             coordinateUncertainty: string;
             elevation: string;
             georeferencingMethod: string;
@@ -213,10 +212,8 @@ export interface BrapiGermplasmMcpd extends BrapiHasDocumentationURL {
     countryOfOriginCode: string;
     donorInfo: {
         donorAccessionNumber: string;
-        donorInstitute: {
-            instituteCode: string;
-            instituteName: string;
-        };
+        donorInstitute: BrapiInstitute;
+        donationDate: string;
     };
     genus: string;
     germplasmDbId: string;
@@ -233,6 +230,37 @@ export interface BrapiGermplasmMcpd extends BrapiHasDocumentationURL {
     storageTypeCodes: string[];
     subtaxon: string;
     subtaxonAuthority: string;
+    breederAccessionNumber: string;
+    breedingCreationYear: string;
+    catalogRegistrationYear: string;
+    catalogDeregistrationYear: string;
+    originLocationDbId: string;
+    originLocationName: string;
+    holdingInstitute: BrapiInstitute;
+    holdingGenbank: {
+        instituteName: string;
+        instituteCode: string;
+        webSite: string;
+        logo: string;
+    };
+    geneticNature: string;
+    presenceStatus: string;
+    distributorInfos: {
+        institute: BrapiInstitute;
+        accessionNumber: string;
+        distrubutionStatus: string;
+    };
+}
+
+export interface BrapiInstitute {
+    instituteName: string;
+    instituteCode: string;
+    acronym: string;
+    organisation: string;
+    instituteType: string;
+    webSite: string;
+    institureAddress: string;
+    logo: string;
 }
 
 

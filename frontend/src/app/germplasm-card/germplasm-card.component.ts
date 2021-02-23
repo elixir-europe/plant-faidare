@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { BrapiService } from '../brapi.service';
-import { GnpisService } from '../gnpis.service';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {BrapiService} from '../brapi.service';
+import {GnpisService} from '../gnpis.service';
 import {
     BrapiAttributeData,
+    BrapiGermplasmMcpd,
     BrapiGermplasmPedigree,
     BrapiLocation,
     BrapiTaxonIds,
 } from '../models/brapi.model';
-import { Children, Germplasm, GermplasmMcpd, Site } from '../models/gnpis.model';
-import { environment } from '../../environments/environment';
+import {Children, Germplasm, Site} from '../models/gnpis.model';
+import {environment} from '../../environments/environment';
 
 @Component({
     selector: 'faidare-germplasm-card',
@@ -26,7 +27,7 @@ export class GermplasmCardComponent implements OnInit {
 
     taxonIdsWithURL: BrapiTaxonIds[] = [];
     germplasmGnpis: Germplasm;
-    germplasmMcpd: GermplasmMcpd;
+    germplasmMcpd: BrapiGermplasmMcpd;
     germplasmPedigree: BrapiGermplasmPedigree;
     germplasmProgeny: Children[];
     germplasmAttributes: BrapiAttributeData[];
@@ -46,7 +47,6 @@ export class GermplasmCardComponent implements OnInit {
                 .then(germplasm => {
                     const germplasmId = id || germplasm.germplasmDbId;
                     this.germplasmGnpis = germplasm;
-                    this.getTaxon();
                     this.reformatData();
 
                     // TODO use the progeny call when the information about parent will be added.
@@ -60,7 +60,7 @@ export class GermplasmCardComponent implements OnInit {
                     this.brapiService.germplasmMcpd(germplasmId).subscribe(germplasmMcpd => {
                         this.germplasmMcpd = germplasmMcpd.result;
                     });
-
+                    this.getTaxon();
 
                     this.germplasmPedigree = null;
                     this.brapiService.germplasmPedigree(germplasmId)
@@ -89,14 +89,14 @@ export class GermplasmCardComponent implements OnInit {
         } else if (this.germplasmGnpis.genusSpecies) {
             this.germplasmTaxon = this.germplasmGnpis.genusSpecies;
             this.germplasmTaxonAuthor = this.germplasmGnpis.speciesAuthority;
-        } else if (this.germplasmGnpis.subtaxa) {
-            this.germplasmTaxon = this.germplasmGnpis.genus + ' ' + this.germplasmGnpis.species + ' ' + this.germplasmGnpis.subtaxa;
-            this.germplasmTaxonAuthor = this.germplasmGnpis.subtaxaAuthority;
-        } else if (this.germplasmGnpis.species) {
-            this.germplasmTaxon = this.germplasmGnpis.genus + ' ' + this.germplasmGnpis.species;
+        } else if (this.germplasmMcpd.subtaxon) {
+            this.germplasmTaxon = this.germplasmMcpd.genus + ' ' + this.germplasmMcpd.species + ' ' + this.germplasmMcpd.subtaxon;
+            this.germplasmTaxonAuthor = this.germplasmMcpd.subtaxonAuthority;
+        } else if (this.germplasmMcpd.species) {
+            this.germplasmTaxon = this.germplasmMcpd.genus + ' ' + this.germplasmMcpd.species;
             this.germplasmTaxonAuthor = this.germplasmGnpis.speciesAuthority;
         } else {
-            this.germplasmTaxon = this.germplasmGnpis.genus;
+            this.germplasmTaxon = this.germplasmMcpd.genus;
             this.germplasmTaxonAuthor = '';
         }
     }

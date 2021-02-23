@@ -4,14 +4,11 @@ import com.google.common.base.Strings;
 import fr.inra.urgi.faidare.api.BadRequestException;
 import fr.inra.urgi.faidare.api.NotFoundException;
 import fr.inra.urgi.faidare.api.brapi.v1.GermplasmController;
-import fr.inra.urgi.faidare.domain.brapi.v1.response.BrapiResponse;
 import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmGETSearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmPOSTSearchCriteria;
-import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.response.GermplasmSearchResponse;
-import fr.inra.urgi.faidare.domain.response.ApiResponseFactory;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.service.es.GermplasmService;
 import io.swagger.annotations.Api;
@@ -85,19 +82,6 @@ public class GnpISGermplasmController {
         return germplasm;
     }
 
-    /**
-     * @link https://brapi.docs.apiary.io/#reference/germplasm/germplasm/get-germplasm-mcpd-by-germplasmdbid
-     */
-    @ApiOperation("Get germplasm mcpd by id")
-    @GetMapping("/faidare/v1/germplasm/{germplasmDbId}/mcpd")
-    public BrapiResponse<GermplasmMcpdVO> getGermplasmMcpd(@PathVariable String germplasmDbId) {
-        LOGGER.debug("germplasmDbId = " + germplasmDbId);
-        GermplasmMcpdVO germplasm = germplasmService.getMcpdById(germplasmDbId);
-        if (germplasm == null) {
-            throw new NotFoundException("Germplasm not found for id '" + germplasmDbId + "'");
-        }
-        return ApiResponseFactory.createSingleObjectResponse(germplasm, null);
-    }
 
     /**
      * Webservice for exporting germplasm by criteria into a CSV.
