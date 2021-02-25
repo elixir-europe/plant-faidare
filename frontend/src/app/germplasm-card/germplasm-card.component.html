@@ -1,6 +1,6 @@
 <faidare-loading-spinner [loading]="loading" class="float-right"></faidare-loading-spinner>
 
-<ng-container *ngIf="germplasmGnpis && germplasmMcpd">
+<ng-container *ngIf="germplasmGnpis">
   <h3 class="mb-4">
     <img *ngIf="!loading && germplasmGnpis.holdingGenbank && germplasmGnpis.holdingGenbank.instituteName"
          [src]="germplasmGnpis.holdingGenbank.logo"
@@ -18,27 +18,27 @@
     <ng-template #taxonTemplate>
       <faidare-card-row
         label="Genus"
-        [test]="germplasmMcpd.genus">
+        [test]="germplasmGnpis.genus">
         <ng-template>
-          <i>{{ germplasmMcpd.genus }}</i>
+          <i>{{ germplasmGnpis.genus }}</i>
         </ng-template>
       </faidare-card-row>
 
       <faidare-card-row
         label="Species"
-        [test]="germplasmMcpd.species">
+        [test]="germplasmGnpis.species">
         <ng-template>
-          <i>{{ germplasmMcpd.species }}</i>
-          {{ germplasmMcpd.speciesAuthority ? '(' + germplasmMcpd.speciesAuthority + ')' : '' }}
+          <i>{{ germplasmGnpis.species }}</i>
+          {{ germplasmGnpis.speciesAuthority ? '(' + germplasmGnpis.speciesAuthority + ')' : '' }}
         </ng-template>
       </faidare-card-row>
 
       <faidare-card-row
         label="Subtaxa"
-        [test]="germplasmMcpd.subtaxon">
+        [test]="germplasmGnpis.subtaxa">
         <ng-template>
-          <i>{{ germplasmMcpd.subtaxon }}</i>
-          {{ germplasmMcpd.subtaxonAuthority ? '(' + germplasmMcpd.subtaxonAuthority + ')' : '' }}
+          <i>{{ germplasmGnpis.subtaxa }}</i>
+          {{ germplasmGnpis.subtaxaAuthority ? '(' + germplasmGnpis.subtaxaAuthority + ')' : '' }}
         </ng-template>
       </faidare-card-row>
 
@@ -266,7 +266,7 @@
 
           <faidare-card-row
             label="Biological status"
-            [value]="germplasmMcpd.biologicalStatusOfAccessionCode">
+            [value]="germplasmGnpis.biologicalStatusOfAccessionCode">
           </faidare-card-row>
 
           <faidare-card-row
@@ -281,7 +281,7 @@
 
           <faidare-card-row
             label="Pedigree"
-              [value]="germplasmMcpd.ancestralData">
+              [value]="germplasmGnpis.pedigree">
           </faidare-card-row>
 
           <faidare-card-row
@@ -346,6 +346,14 @@
           [value]="germplasmGnpis.presenceStatus">
         </faidare-card-row>
 
+        <faidare-card-row
+          label="MLS status"
+          [test]="germplasmMcpd && germplasmMcpd.mlsStatus">
+          <ng-template>
+            {{ germplasmMcpd.mlsStatus }}
+          </ng-template>
+        </faidare-card-row>
+
       </div>
     </ng-template>
   </faidare-card-section>
@@ -401,7 +409,7 @@
 
         <faidare-card-row
           label="Acquisition Source Code"
-          [test]="germplasmMcpd.acquisitionSourceCode">
+          [test]="germplasmMcpd && germplasmMcpd.acquisitionSourceCode">
           <ng-template>
             {{ germplasmMcpd.acquisitionSourceCode }}
           </ng-template>

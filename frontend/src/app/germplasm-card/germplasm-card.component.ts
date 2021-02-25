@@ -89,14 +89,14 @@ export class GermplasmCardComponent implements OnInit {
         } else if (this.germplasmGnpis.genusSpecies) {
             this.germplasmTaxon = this.germplasmGnpis.genusSpecies;
             this.germplasmTaxonAuthor = this.germplasmGnpis.speciesAuthority;
-        } else if (this.germplasmMcpd.subtaxon) {
-            this.germplasmTaxon = this.germplasmMcpd.genus + ' ' + this.germplasmMcpd.species + ' ' + this.germplasmMcpd.subtaxon;
-            this.germplasmTaxonAuthor = this.germplasmMcpd.subtaxonAuthority;
-        } else if (this.germplasmMcpd.species) {
-            this.germplasmTaxon = this.germplasmMcpd.genus + ' ' + this.germplasmMcpd.species;
+        } else if (this.germplasmGnpis.subtaxa) {
+            this.germplasmTaxon = this.germplasmGnpis.genus + ' ' + this.germplasmGnpis.species + ' ' + this.germplasmGnpis.subtaxa;
+            this.germplasmTaxonAuthor = this.germplasmGnpis.subtaxaAuthority;
+        } else if (this.germplasmGnpis.species) {
+            this.germplasmTaxon = this.germplasmGnpis.genus + ' ' + this.germplasmGnpis.species;
             this.germplasmTaxonAuthor = this.germplasmGnpis.speciesAuthority;
         } else {
-            this.germplasmTaxon = this.germplasmMcpd.genus;
+            this.germplasmTaxon = this.germplasmGnpis.genus;
             this.germplasmTaxonAuthor = '';
         }
     }
