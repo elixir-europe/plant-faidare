@@ -10,4 +10,4 @@ FAIDARE offers more detailed search and data retrieval capabilities and it takes
 
 It has been developed by [INRA-URGI](http://urgi.versailles.inra.fr/) in collaboration with [**Elixir Plant**](https://elixir-europe.org/communities/plant-sciences), [**Phenome-Emphasis.fr**](https://www.phenome-emphasis.fr/phenome_eng/Methodological-projects/MCP2-Distributed-Information-system) and [**Elixir-fr/IFB**](https://www.france-bioinformatique.fr).
 
-If you want to join the FAIDARE federation, please read the [HOW TO JOIN guide](HOW-TO-JOIN.md) and [contact us](mailto:urgi-contact@inra.fr?subject=%5BFAIDARE%5D).
+If you want to join the FAIDARE federation, please read the "Join us" section and [contact us](mailto:urgi-contact@inra.fr?subject=%5BFAIDARE%5D).
