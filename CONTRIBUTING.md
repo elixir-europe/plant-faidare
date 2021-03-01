@@ -1,6 +1,6 @@
 # How to contribute to FAIDARE
 
-[_TOC_]
+[[_TOC_]]
 
 ## Git management
 

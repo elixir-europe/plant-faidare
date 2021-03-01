@@ -1,6 +1,8 @@
 # FAIDARE: FAIR Data-finder for Agronomic Research
 This application provides web services (based on the BrAPI standard) and a web interface with easy to use filters to facilitates the access to plant datasets from a federation of sources.
 
+[[_TOC_]]
+
 ## How to contribute
 
 Look at the [contribution guide](CONTRIBUTING.md).
