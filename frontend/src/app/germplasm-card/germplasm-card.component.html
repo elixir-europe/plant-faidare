@@ -299,6 +299,14 @@
             </ng-template>
           </faidare-card-row>
 
+          <faidare-card-row
+            label="MLS status"
+            [test]="germplasmMcpd && germplasmMcpd.mlsStatus">
+            <ng-template>
+              {{ germplasmMcpd.mlsStatus }}
+            </ng-template>
+          </faidare-card-row>
+
         </div>
       </ng-template>
     </faidare-card-section>
@@ -345,15 +353,6 @@
           label="Presence status"
           [value]="germplasmGnpis.presenceStatus">
         </faidare-card-row>
-
-        <faidare-card-row
-          label="MLS status"
-          [test]="germplasmMcpd && germplasmMcpd.mlsStatus">
-          <ng-template>
-            {{ germplasmMcpd.mlsStatus }}
-          </ng-template>
-        </faidare-card-row>
-
       </div>
     </ng-template>
   </faidare-card-section>
@@ -372,6 +371,14 @@
             <a [routerLink]="['/sites/', germplasmGnpis.collectingSite.siteId]">
               {{ germplasmGnpis.collectingSite.siteName }}
             </a>
+          </ng-template>
+        </faidare-card-row>
+
+        <faidare-card-row
+          label="Acquisition Source Code"
+          [test]="germplasmMcpd && germplasmMcpd.acquisitionSourceCode">
+          <ng-template>
+            {{ germplasmMcpd.acquisitionSourceCode }}
           </ng-template>
         </faidare-card-row>
 
@@ -404,14 +411,6 @@
           [test]="germplasmGnpis.acquisitionDate && !germplasmGnpis.collector.accessionCreationDate">
           <ng-template>
             {{ germplasmGnpis.acquisitionDate }}
-          </ng-template>
-        </faidare-card-row>
-
-        <faidare-card-row
-          label="Acquisition Source Code"
-          [test]="germplasmMcpd && germplasmMcpd.acquisitionSourceCode">
-          <ng-template>
-            {{ germplasmMcpd.acquisitionSourceCode }}
           </ng-template>
         </faidare-card-row>
 

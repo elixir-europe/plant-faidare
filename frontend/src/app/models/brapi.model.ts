@@ -237,12 +237,7 @@ export interface BrapiGermplasmMcpd extends BrapiHasDocumentationURL {
     originLocationDbId: string;
     originLocationName: string;
     holdingInstitute: BrapiInstitute;
-    holdingGenbank: {
-        instituteName: string;
-        instituteCode: string;
-        webSite: string;
-        logo: string;
-    };
+    holdingGenbank: BrapiInstitute;
     geneticNature: string;
     presenceStatus: string;
     distributorInfos: {
@@ -259,7 +254,7 @@ export interface BrapiInstitute {
     organisation: string;
     instituteType: string;
     webSite: string;
-    institureAddress: string;
+    instituteAddress: string;
     logo: string;
 }
 
