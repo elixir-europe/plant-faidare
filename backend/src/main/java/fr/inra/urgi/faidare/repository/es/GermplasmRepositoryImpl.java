@@ -3,6 +3,7 @@ package fr.inra.urgi.faidare.repository.es;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.ProgenyVO;
@@ -38,8 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
-
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,6 +102,13 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
         QueryBuilder query = queryFactory.createShouldFilterQuery(criteria);
         int fetchSize = criteria.getPageSize().intValue();
         return new ESScrollIterator<>(client, requestFactory, parser, GermplasmVO.class, query, fetchSize);
+    }
+
+    @Override
+    public Iterator<GermplasmMcpdVO> scrollAllGermplasmMcpd(FaidareGermplasmPOSTShearchCriteria criteria) {
+        QueryBuilder query = queryFactory.createShouldFilterQuery(criteria);
+        int fetchSize = criteria.getPageSize().intValue();
+        return new ESScrollIterator<>(client, requestFactory, parser, GermplasmMcpdVO.class, query, fetchSize);
     }
 
     @Override

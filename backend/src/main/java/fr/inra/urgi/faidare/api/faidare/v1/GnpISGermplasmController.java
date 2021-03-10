@@ -126,6 +126,27 @@ public class GnpISGermplasmController {
         return null;
     }
 
+
+
+    @PostMapping(value = "/germplasm-mcpd-csv", produces = "text/csv", consumes = APPLICATION_JSON_VALUE)
+    public FileSystemResource exportMcpd(@RequestBody @Valid FaidareGermplasmPOSTShearchCriteria criteria, HttpServletResponse response) {
+
+        long limitResult = 50000L;
+        long nbResult = germplasmService.germplasmFind(criteria).getMetadata().getPagination().getTotalCount();
+
+        if (!(nbResult > limitResult)) {
+            try {
+                File exportFile = germplasmService.exportGermplasmMcpd(criteria);
+                response.setHeader("Content-Disposition", "attachment; filename=germplasm.gnpis.csv");
+                return new FileSystemResource(exportFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("An error occurred when exporting germplasm: " + e.getMessage() + ".", e);
+            }
+        }
+        return null;
+    }
+
     @ApiOperation("Search list of germplasm")
     @PostMapping(value = "/search", consumes = APPLICATION_JSON_VALUE)
     public GermplasmSearchResponse germplasmSearch(@RequestBody @Valid FaidareGermplasmPOSTShearchCriteria criteria) {

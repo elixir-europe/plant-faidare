@@ -4,18 +4,13 @@ import com.opencsv.CSVWriter;
 import fr.inra.urgi.faidare.api.faidare.v1.GnpISGermplasmController;
 import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
-import fr.inra.urgi.faidare.domain.data.germplasm.CollPopVO;
-import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
-import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
-import fr.inra.urgi.faidare.domain.data.germplasm.ProgenyVO;
+import fr.inra.urgi.faidare.domain.data.germplasm.*;
 import fr.inra.urgi.faidare.domain.datadiscovery.response.GermplasmSearchResponse;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.repository.es.GermplasmRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
-
 
 import javax.annotation.Resource;
 import java.io.*;
@@ -68,6 +63,19 @@ public class GermplasmServiceImpl implements GermplasmService {
         return germplasmRepository.getMcpdById(germplasmDbId);
     }
 
+    @Override
+    public File exportGermplasmMcpd(FaidareGermplasmPOSTShearchCriteria criteria) {
+        try {
+            Iterator<GermplasmMcpdVO> allGermplasm = germplasmRepository.scrollAllGermplasmMcpd(criteria);
+            Path tmpDirPath = Files.createTempDirectory("germplasm");
+            Path tmpFile = Files.createTempFile(tmpDirPath, "germplasm_", ".csv");
+            writeMcpdToCSV(tmpFile, allGermplasm);
+            return tmpFile.toFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private void writeToCSV(Path tmpFile, Iterator<GermplasmVO> germplasms) throws IOException {
         Writer fileStream = new OutputStreamWriter(new FileOutputStream(tmpFile.toFile()), StandardCharsets.UTF_8);
@@ -106,6 +114,41 @@ public class GermplasmServiceImpl implements GermplasmService {
         }
         csvWriter.close();
     }
+
+
+
+
+    private void writeMcpdToCSV(Path tmpFile, Iterator<GermplasmMcpdVO> germplasms) throws IOException {
+        Writer fileStream = new OutputStreamWriter(new FileOutputStream(tmpFile.toFile()), StandardCharsets.UTF_8);
+        CSVWriter csvWriter = new CSVWriter(fileStream, ';', '"', '\\', "\n");
+        String[] header = new String[]{
+            "PUI", "AccessionNumber", "AccessionNames", "TaxonGroup", "geneticNature", "HoldingInstitution",
+            "mls"
+            };
+        csvWriter.writeNext(header);
+
+        while (germplasms.hasNext()) {
+            List<String> collectionNames = new ArrayList<>();
+            List<String> panelNames = new ArrayList<>();
+            GermplasmMcpdVO germplasmMcpdVO = germplasms.next();
+
+
+            String[] line = new String[header.length];
+            line[0] = germplasmMcpdVO.getGermplasmPUI();
+            line[1] = germplasmMcpdVO.getAccessionNumber();
+            line[2] = String.join(", ", germplasmMcpdVO.getAccessionNames());
+            line[3] = germplasmMcpdVO.getCommonCropName();
+            line[4] = germplasmMcpdVO.getGeneticNature();
+            line[5] = germplasmMcpdVO.getHoldingInstitute().getInstituteName();
+            line[5] = germplasmMcpdVO.getMlsStatus();
+            csvWriter.writeNext(line);
+        }
+        csvWriter.close();
+    }
+
+
+
+
 
     @Override
     public GermplasmVO getById(String germplasmDbId) {

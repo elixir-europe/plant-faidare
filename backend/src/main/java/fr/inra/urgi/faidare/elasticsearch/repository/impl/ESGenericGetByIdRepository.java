@@ -1,5 +1,7 @@
 package fr.inra.urgi.faidare.elasticsearch.repository.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import fr.inra.urgi.faidare.elasticsearch.ESRequestFactory;
 import fr.inra.urgi.faidare.elasticsearch.ESResponseParser;
 import fr.inra.urgi.faidare.elasticsearch.document.DocumentAnnotationUtil;
@@ -64,6 +66,18 @@ public class ESGenericGetByIdRepository<VO> implements ESGetByIdRepository<VO> {
 
             // Parse result list
             List<? extends VO> resultList = parser.parseHits(result, voClass);
+
+
+            System.out.println("");
+            System.out.println("BEGIN");
+            System.out.println("");
+
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            String json = ow.writeValueAsString(result);
+            System.out.println(json);
+
+            System.out.println("END");
+            System.out.println("");
 
             if (resultList != null && !resultList.isEmpty()) {
                 if (resultList.size() > 1) {
