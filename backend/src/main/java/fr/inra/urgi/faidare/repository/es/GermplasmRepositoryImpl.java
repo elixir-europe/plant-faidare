@@ -141,7 +141,7 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
     }
 
     @Override
-    public GermplasmMcpdVO getMcpdById(String germplasmDbId) {
+    public GermplasmMcpdVO getAsMcpdById(String germplasmDbId) {
         return getMcpdByIdRepository.getById(germplasmDbId);
     }
 

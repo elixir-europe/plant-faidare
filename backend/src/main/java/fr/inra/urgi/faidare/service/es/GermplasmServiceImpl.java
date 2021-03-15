@@ -59,8 +59,8 @@ public class GermplasmServiceImpl implements GermplasmService {
     }
 
     @Override
-    public GermplasmMcpdVO getMcpdById(String germplasmDbId) {
-        return germplasmRepository.getMcpdById(germplasmDbId);
+    public GermplasmMcpdVO getAsMcpdById(String germplasmDbId) {
+        return germplasmRepository.getAsMcpdById(germplasmDbId);
     }
 
     @Override

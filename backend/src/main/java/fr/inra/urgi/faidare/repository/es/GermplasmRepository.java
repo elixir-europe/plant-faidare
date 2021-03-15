@@ -59,7 +59,7 @@ public interface GermplasmRepository
     /**
      * Find germplasm mcpd by id.
      */
-    GermplasmMcpdVO getMcpdById(String germplasmDbId);
+    GermplasmMcpdVO getAsMcpdById(String germplasmDbId);
 
 
 }

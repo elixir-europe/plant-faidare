@@ -32,7 +32,7 @@ public interface GermplasmService {
 
     ProgenyVO getProgeny(String germplasmDbId);
 
-    GermplasmMcpdVO getMcpdById(String germplasmDbId);
+    GermplasmMcpdVO getAsMcpdById(String germplasmDbId);
 
     File exportGermplasmMcpd(FaidareGermplasmPOSTShearchCriteria criteria);
 

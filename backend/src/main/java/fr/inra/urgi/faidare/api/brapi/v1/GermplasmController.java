@@ -77,7 +77,7 @@ public class GermplasmController {
     @GetMapping("/brapi/v1/germplasm/{germplasmDbId}/mcpd")
     public BrapiResponse<GermplasmMcpdVO> getGermplasmMcpd(@PathVariable String germplasmDbId) {
         LOGGER.debug("germplasmDbId = " + germplasmDbId);
-        GermplasmMcpdVO germplasm = germplasmService.getMcpdById(germplasmDbId);
+        GermplasmMcpdVO germplasm = germplasmService.getAsMcpdById(germplasmDbId);
         if (germplasm == null) {
             throw new NotFoundException("Germplasm not found for id '" + germplasmDbId + "'");
         }
