@@ -72,7 +72,9 @@
   "storageTypeCodes": [
     ""
   ],
-  "subtaxon": "",
-  "subtaxonAuthority": "L."
+  "subtaxon": "subsp. vulgaris",
+  "subtaxonAuthority": "L.",
+  "originLocationDbId": null,
+  "originLocationName": null
 }
 ]
