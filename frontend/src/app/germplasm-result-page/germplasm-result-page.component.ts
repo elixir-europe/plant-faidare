@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { GnpisService } from '../gnpis.service';
-import { Germplasm, GermplasmSearchCriteria } from '../models/gnpis.model';
+import {Component, Input, OnInit} from '@angular/core';
+import {GnpisService} from '../gnpis.service';
+import {Germplasm, GermplasmSearchCriteria} from '../models/gnpis.model';
 
 
-import { saveAs } from 'file-saver';
-import { ActivatedRoute } from '@angular/router';
+import {saveAs} from 'file-saver';
+import {ActivatedRoute} from '@angular/router';
 import {
     DataDiscoveryCriteria,
     DataDiscoveryCriteriaUtils,
@@ -12,8 +12,8 @@ import {
     DEFAULT_PAGE_SIZE,
     MAX_RESULTS
 } from '../models/data-discovery.model';
-import { asArray } from '../utils';
-import { BehaviorSubject } from 'rxjs';
+import {asArray} from '../utils';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
     selector: 'faidare-germplasm-result-page',
@@ -131,7 +131,24 @@ export class GermplasmResultPageComponent implements OnInit {
             result => {
                 if (result) {
                     const blob = new Blob([result], { type: 'text/plain;charset=utf-8' });
-                    saveAs(blob, 'germplasm.gnpis.csv');
+                    saveAs(blob, 'germplasm_gnpis.csv');
+                } else {
+                    this.overLimitSizeExport = true;
+                }
+                this.loading = false;
+            },
+            error => {
+                console.log(error);
+            });
+    }
+
+    exportMcpd(criteria: GermplasmSearchCriteria) {
+        this.loading = true;
+        this.service.mcpdExport(criteria).subscribe(
+            result => {
+                if (result) {
+                    const blob = new Blob([result], { type: 'text/plain;charset=utf-8' });
+                    saveAs(blob, 'germplasm_mcpd.csv');
                 } else {
                     this.overLimitSizeExport = true;
                 }

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject, zip } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable, ReplaySubject, zip} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
 import {
     DataDiscoveryCriteria,
     DataDiscoveryFacet,
@@ -12,10 +12,10 @@ import {
     GermplasmCriteria,
     GermplasmResults
 } from './models/brapi.model';
-import { map } from 'rxjs/operators';
-import { Germplasm, GermplasmSearchCriteria } from './models/gnpis.model';
-import { XrefResponse } from './models/xref.model';
-import { removeNullUndefined } from './utils';
+import {map} from 'rxjs/operators';
+import {Germplasm, GermplasmSearchCriteria} from './models/gnpis.model';
+import {XrefResponse} from './models/xref.model';
+import {removeNullUndefined} from './utils';
 
 
 export const BASE_URL = 'faidare/v1';
@@ -147,6 +147,19 @@ export class GnpisService {
         };
         return this.http.post<any>(
             `${BASE_URL}/germplasm/germplasm-list-csv`,
+            criteria,
+            requestOptions
+        );
+    }
+
+    // TODO Change the service's response to return an object with the number of results and handle here if the number is over the limit
+    mcpdExport(criteria: GermplasmSearchCriteria): Observable<any> {
+        const requestOptions: Object = {
+            /* other options here */
+            responseType: 'text'
+        };
+        return this.http.post<any>(
+            `${BASE_URL}/germplasm/germplasm-mcpd-csv`,
             criteria,
             requestOptions
         );
