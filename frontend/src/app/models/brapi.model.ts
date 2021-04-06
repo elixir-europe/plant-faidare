@@ -1,5 +1,5 @@
 import * as schema from './schema.org.model';
-import {DataDiscoveryFacet} from './data-discovery.model';
+import { DataDiscoveryFacet } from './data-discovery.model';
 
 export interface GermplasmCriteria {
     accessionNumbers: string[];

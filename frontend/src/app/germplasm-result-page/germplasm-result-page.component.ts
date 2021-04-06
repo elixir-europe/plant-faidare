@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {GnpisService} from '../gnpis.service';
-import {Germplasm, GermplasmSearchCriteria} from '../models/gnpis.model';
+import { Component, Input, OnInit } from '@angular/core';
+import { GnpisService } from '../gnpis.service';
+import { Germplasm, GermplasmSearchCriteria } from '../models/gnpis.model';
 
 
-import {saveAs} from 'file-saver';
-import {ActivatedRoute} from '@angular/router';
+import { saveAs } from 'file-saver';
+import { ActivatedRoute } from '@angular/router';
 import {
     DataDiscoveryCriteria,
     DataDiscoveryCriteriaUtils,
@@ -12,8 +12,8 @@ import {
     DEFAULT_PAGE_SIZE,
     MAX_RESULTS
 } from '../models/data-discovery.model';
-import {asArray} from '../utils';
-import {BehaviorSubject} from 'rxjs';
+import { asArray } from '../utils';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
     selector: 'faidare-germplasm-result-page',

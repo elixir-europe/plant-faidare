@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {Observable, ReplaySubject, zip} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, ReplaySubject, zip } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import {
     DataDiscoveryCriteria,
     DataDiscoveryFacet,
@@ -12,10 +12,10 @@ import {
     GermplasmCriteria,
     GermplasmResults
 } from './models/brapi.model';
-import {map} from 'rxjs/operators';
-import {Germplasm, GermplasmSearchCriteria} from './models/gnpis.model';
-import {XrefResponse} from './models/xref.model';
-import {removeNullUndefined} from './utils';
+import { map } from 'rxjs/operators';
+import { Germplasm, GermplasmSearchCriteria } from './models/gnpis.model';
+import { XrefResponse } from './models/xref.model';
+import { removeNullUndefined } from './utils';
 
 
 export const BASE_URL = 'faidare/v1';

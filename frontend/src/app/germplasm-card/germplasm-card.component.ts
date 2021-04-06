@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {BrapiService} from '../brapi.service';
-import {GnpisService} from '../gnpis.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { BrapiService } from '../brapi.service';
+import { GnpisService } from '../gnpis.service';
 import {
     BrapiAttributeData,
     BrapiGermplasmMcpd,
@@ -9,8 +9,8 @@ import {
     BrapiLocation,
     BrapiTaxonIds,
 } from '../models/brapi.model';
-import {Children, Germplasm, Site} from '../models/gnpis.model';
-import {environment} from '../../environments/environment';
+import { Children, Germplasm, Site } from '../models/gnpis.model';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'faidare-germplasm-card',
