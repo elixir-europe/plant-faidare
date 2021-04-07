@@ -76,7 +76,7 @@ class GermplasmRepositoryTest {
 
 
     @Test
-    void should_Get_By_Id_Mcpd() {
+    void should_Get_Mcpd_By_Id() {
         String germplasmDbId = "13705";
         GermplasmMcpdVO germplasm = repository.getAsMcpdById(germplasmDbId);
         assertThat(germplasm).isNotNull();
@@ -91,6 +91,18 @@ class GermplasmRepositoryTest {
         assertThat(germplasm).isNull();
     }
 
+    @Test
+    void should_Get_Mcpd_By_Id_checkAll() {
+        String germplasmDbId = "13705";
+        GermplasmMcpdVO germplasm = repository.getAsMcpdById(germplasmDbId);
+        assertThat(germplasm).isNotNull();
+        assertThat(germplasm.getGermplasmDbId()).isEqualTo(germplasmDbId);
+        assertThat(germplasm.getCollectingInfo()).isNotNull();
+        assertThat(germplasm.getCollectingInfo().getCollectingSite()).isNotNull();
+        assertThat(germplasm.getCollectingInfo().getCollectingSite().getLocationDbId()).isNotNull();
+        assertThat(germplasm.getCollectingInfo().getCollectingSite().getLocationDbId()).isEqualTo("dXJuOlVSR0kvbG9jYXRpb24vNDA2MzU=");
+        assertThat(germplasm.getCollectingInfo().getCollectingSite().getLocationDbId()).isNotEqualTo("dXJuOlVSR0kvbG9");
+    }
 
     @Test
     void should_Not_Get_By_Incorrect_Id() {

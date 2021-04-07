@@ -138,19 +138,19 @@
                 "type": "keyword"
               },
               "latitudeDecimal": {
-                "type": "integer"
+                "type": "keyword"
               },
               "latitudeDegrees": {
-                "type": "integer"
+                "type": "keyword"
               },
               "locationDescription": {
                 "type": "keyword"
               },
               "longitudeDecimal":  {
-                "type": "integer"
+                "type": "keyword"
               },
               "longitudeDegrees":  {
-                "type": "integer"
+                "type": "keyword"
               },
               "spatialReferenceSystem": {
                 "type": "keyword"
