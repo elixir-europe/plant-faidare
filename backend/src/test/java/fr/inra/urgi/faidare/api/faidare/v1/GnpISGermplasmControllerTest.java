@@ -95,7 +95,6 @@ class GnpISGermplasmControllerTest {
         GermplasmVO germplasm = new GermplasmVO();
 
         germplasm.setGroupId(0L);
-        germplasm.setSpeciesGroup(Collections.singletonList(1L));
 
         germplasm.setGermplasmDbId("germplasmDbId");
         germplasm.setDefaultDisplayName("defaultDisplayName");
@@ -107,7 +106,6 @@ class GnpISGermplasmControllerTest {
 
         DonorVO donor = new DonorVO();
         donor.setDonorGermplasmPUI("pui");
-        donor.setDonationDate(1);
         germplasm.setDonors(Collections.singletonList(donor));
 
         PaginatedList<GermplasmVO> germplasmPage = new PaginatedList<>(null, Collections.singletonList(germplasm));
@@ -127,7 +125,7 @@ class GnpISGermplasmControllerTest {
             .andExpect(jsonPath("$.donors[0].donorGermplasmPUI", is(donor.getDonorGermplasmPUI())))
 
             // GnpIS specific fields should appear
-            .andExpect(jsonPath("$.donors[0].donationDate", is(donor.getDonationDate())))
+            //.andExpect(jsonPath("$.donors[0].donationDate", is(donor.getDonationDate())))
             .andExpect(jsonPath("$.collection[0].name", is(collection.getName())));
 
     }

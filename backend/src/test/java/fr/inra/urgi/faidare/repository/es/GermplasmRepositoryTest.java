@@ -78,7 +78,7 @@ class GermplasmRepositoryTest {
     @Test
     void should_Get_By_Id_Mcpd() {
         String germplasmDbId = "13705";
-        GermplasmMcpdVO germplasm = repository.getMcpdById(germplasmDbId);
+        GermplasmMcpdVO germplasm = repository.getAsMcpdById(germplasmDbId);
         assertThat(germplasm).isNotNull();
         assertThat(germplasm.getGermplasmDbId()).isEqualTo(germplasmDbId);
     }
@@ -87,7 +87,7 @@ class GermplasmRepositoryTest {
     @Test
     void should_Not_Get_Mcpd_With_Wrong_Id() {
         String germplasmDbId = "489485184";
-        GermplasmMcpdVO germplasm = repository.getMcpdById(germplasmDbId);
+        GermplasmMcpdVO germplasm = repository.getAsMcpdById(germplasmDbId);
         assertThat(germplasm).isNull();
     }
 

@@ -108,7 +108,6 @@ class GermplasmControllerTest {
         GermplasmVO germplasm = new GermplasmVO();
 
         germplasm.setGroupId(0L);
-        germplasm.setSpeciesGroup(Collections.singletonList(1L));
 
         germplasm.setGermplasmDbId("germplasmDbId");
         germplasm.setDefaultDisplayName("defaultDisplayName");
@@ -119,7 +118,6 @@ class GermplasmControllerTest {
 
         DonorVO donor = new DonorVO();
         donor.setDonorGermplasmPUI("pui");
-        donor.setDonationDate(1);
         germplasm.setDonors(Collections.singletonList(donor));
 
         when(service.getById(anyString())).thenReturn(germplasm);
