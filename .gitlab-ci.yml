@@ -65,7 +65,7 @@ build-loader-docker-image:
 lint:
   stage: test
   tags:
-   - openstack
+    - openstack
   script: "./gradlew lint"
   cache:
     key: "$CI_COMMIT_REF_NAME"
@@ -135,7 +135,7 @@ test-and-sonarqube-master:
 
 build:
   tags:
-   - openstack
+    - openstack
   stage: build
   script:
     - ./gradlew assemble

@@ -14,7 +14,7 @@
     "13705"
   ],
   "ancestralData": "Il y a deux hypothèses sur l'origine de cette variété : elle aurait été obtenue dans une pépinière de Vitry-sur-Seine ou trouvée dans une propriété à Chatenay (Pomologie de la France 1871).",
-  "biologicalStatusOfAccessionCode": null,
+  "biologicalStatusOfAccessionCode": "test",
   "breedingInstitutes": [
     {
       "instituteName": null,
@@ -33,15 +33,18 @@
     "collectingMissionIdentifier": null,
     "collectingNumber": null,
     "collectingSite": {
-      "coordinateUncertainty": null,
-      "elevation": null,
-      "georeferencingMethod": null,
-      "latitudeDecimal": null,
-      "latitudeDegrees": null,
-      "locationDescription": null,
-      "longitudeDecimal": null,
-      "longitudeDegrees": null,
-      "spatialReferenceSystem": null
+      "locationDbId": "dXJuOlVSR0kvbG9jYXRpb24vNDA2MzU=",
+      "locationName": "(U) Liamone - ULI",
+      "latitudeDecimal": 42.124165,
+      "locationDescription": "Liamone",
+      "longitudeDecimal": 8.749445,
+      "locationURI": "urn:URGI/location/40635",
+      "coordinateUncertainty": "test",
+      "elevation": "test",
+      "georeferencingMethod": "test",
+      "latitudeDegrees": "test",
+      "longitudeDegrees": "test",
+      "spatialReferenceSystem": "test"
     }
   },
   "cropName": "Cherry",
@@ -69,12 +72,20 @@
   ],
   "species": "cerasus",
   "speciesAuthority": "L.",
+  "holdingInstitute": {
+    "instituteName": "UMR0588-BioForA (Biologie Intégrée pour la valorisation de la diversité des arbres et de la Forêt)",
+    "acronym": "BioForA",
+    "organisation": "INRA-ONF",
+    "instituteType": "Public-sector research organization",
+    "webSite": "https://www6.val-de-loire.inrae.fr/biofora",
+    "instituteAddress": "2163 avenue de la Pomme de Pin - CS 40001 ARDON, 45075 ORLÉANS CEDEX 2, France"
+  },
   "storageTypeCodes": [
     ""
   ],
   "subtaxon": "subsp. vulgaris",
   "subtaxonAuthority": "L.",
   "originLocationDbId": "2400",
-  "originLocationName": null
+  "originLocationName": "test"
 }
 ]
