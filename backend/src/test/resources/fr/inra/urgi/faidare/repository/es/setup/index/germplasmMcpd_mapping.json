@@ -1,6 +1,6 @@
 {
   "germplasmMcpd": {
-    "dynamic": "strict",
+    "dynamic": "false",
     "properties": {
       "germplasmURI": {
         "type": "keyword"
