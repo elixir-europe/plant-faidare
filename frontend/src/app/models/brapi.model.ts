@@ -194,19 +194,7 @@ export interface BrapiGermplasmMcpd extends BrapiHasDocumentationURL {
         collectingNumber: string;
         collectors: string;
         materialType: string;
-        collectingSite: {
-            locationDbId: string;
-            locationName: string;
-            coordinateUncertainty: string;
-            elevation: string;
-            georeferencingMethod: string;
-            latitudeDecimal: string;
-            latitudeDegrees: string;
-            locationDescription: string;
-            longitudeDecimal: string;
-            longitudeDegrees: string;
-            spatialReferenceSystem: string;
-        };
+        collectingSite: BrapiCollectingSite
     };
     commonCropName: string;
     countryOfOriginCode: string;
@@ -256,6 +244,20 @@ export interface BrapiInstitute {
     webSite: string;
     instituteAddress: string;
     logo: string;
+}
+
+export interface BrapiCollectingSite {
+    locationDbId: string;
+    locationName: string;
+    coordinateUncertainty: string;
+    elevation: string;
+    georeferencingMethod: string;
+    latitudeDecimal: string;
+    latitudeDegrees: string;
+    locationDescription: string;
+    longitudeDecimal: string;
+    longitudeDegrees: string;
+    spatialReferenceSystem: string;
 }
 
 

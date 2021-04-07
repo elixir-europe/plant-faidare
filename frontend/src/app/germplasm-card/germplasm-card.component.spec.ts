@@ -14,8 +14,22 @@ import { CardSectionComponent } from '../card-section/card-section.component';
 import { CardRowComponent } from '../card-row/card-row.component';
 import { CardTableComponent } from '../card-table/card-table.component';
 import { MapComponent } from '../map/map.component';
-import { BrapiGermplasmAttributes, BrapiGermplasmPedigree, BrapiResult, BrapiSibling } from '../models/brapi.model';
-import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } from '../models/gnpis.model';
+import {
+    BrapiCollectingSite,
+    BrapiGermplasmAttributes,
+    BrapiGermplasmMcpd,
+    BrapiGermplasmPedigree,
+    BrapiInstitute,
+    BrapiResult,
+    BrapiSibling
+} from '../models/brapi.model';
+import {
+    Donor,
+    Germplasm,
+    GermplasmInstitute,
+    GermplasmSet,
+    Institute
+} from '../models/gnpis.model';
 import { DataDiscoverySource } from '../models/data-discovery.model';
 import { MockComponent } from 'ng-mocks';
 import { XrefsComponent } from '../xrefs/xrefs.component';
@@ -84,6 +98,17 @@ describe('GermplasmCardComponent', () => {
         logo: null
     };
 
+    const brapiInstitute: BrapiInstitute = {
+        instituteName: 'INRAE URGI',
+        instituteCode: '78000',
+        acronym: 'INRAE',
+        organisation: 'inrae',
+        instituteType: 'lab',
+        webSite: 'www.labo.fr',
+        instituteAddress: '18',
+        logo: null
+    };
+
     const gnpisGermplasmInstitute: GermplasmInstitute = {
         ...gnpisInstitute,
         institute: gnpisInstitute,
@@ -94,6 +119,20 @@ describe('GermplasmCardComponent', () => {
         registrationYear: '1996',
         deregistrationYear: '1912',
         distributionStatus: null
+    };
+
+    const collectingSite: BrapiCollectingSite = {
+        locationDbId: 'FR-78-INRAE',
+        locationName: 'Versailles',
+        coordinateUncertainty: null,
+        elevation: null,
+        georeferencingMethod: null,
+        latitudeDecimal: null,
+        latitudeDegrees: null,
+        locationDescription: null,
+        longitudeDecimal: null,
+        longitudeDegrees: null,
+        spatialReferenceSystem: null,
     };
 
     const gnpisDonor: Donor = {
@@ -181,6 +220,57 @@ describe('GermplasmCardComponent', () => {
         'schema:includedInDataCatalog': source
     };
 
+    const germplasmMcpdTest: BrapiGermplasmMcpd = {
+        groupId: '0',
+        accessionNames: ['test accession'],
+        accessionNumber: '01',
+        acquisitionDate: '2021',
+        acquisitionSourceCode: 'FR-urgi',
+        alternateIDs: ['Id1', 'Id2'],
+        ancestralData: null,
+        biologicalStatusOfAccessionCode: 'maintained',
+        breedingInstitutes: brapiInstitute,
+        collectingInfo: {
+            collectingDate: '2021',
+            collectingInstitutes: brapiInstitute,
+            collectingMissionIdentifier: '007',
+            collectingNumber: '3',
+            collectors: 'urgi',
+            materialType: 'germplasm',
+            collectingSite: collectingSite,
+        },
+        commonCropName: 'wheat',
+        countryOfOriginCode: 'FR',
+        donorInfo: {
+            donorAccessionNumber: 'ING007',
+            donorInstitute: brapiInstitute,
+            donationDate: '2021',
+        },
+        genus: 'Triti',
+        germplasmDbId: 'Fr-007',
+        germplasmPUI: 'urn/fr-007',
+        instituteCode: 'FR-INRAE',
+        mlsStatus: '0',
+        remarks: null,
+        safetyDuplicateInstitutes: null,
+        species: 'Triti',
+        speciesAuthority: null,
+        storageTypeCodes: null,
+        subtaxon: null,
+        subtaxonAuthority: null,
+        breederAccessionNumber: null,
+        breedingCreationYear: null,
+        catalogRegistrationYear: null,
+        catalogDeregistrationYear: null,
+        originLocationDbId: 'FR-Ver',
+        originLocationName: 'Versailles',
+        holdingInstitute: brapiInstitute,
+        holdingGenbank: brapiInstitute,
+        geneticNature: 'hybrid',
+        presenceStatus: null,
+        distributorInfos: null
+    };
+
     const gnpisService = jasmine.createSpyObj(
         'GnpisService', [
             'getGermplasm',
@@ -194,12 +284,14 @@ describe('GermplasmCardComponent', () => {
         'BrapiService', [
             // 'germplasmProgeny',
             'germplasmPedigree',
-            'germplasmAttributes'
+            'germplasmAttributes',
+            'germplasmMcpd'
         ]
     );
     // brapiService.germplasmProgeny.and.returnValue(of(brapiGermplasmProgeny));
     brapiService.germplasmPedigree.and.returnValue(of(brapiGermplasmPedigree));
     brapiService.germplasmAttributes.and.returnValue(of(brapiGermplasmAttributes));
+    brapiService.germplasmMcpd.and.returnValue(of(germplasmMcpdTest));
 
 
     const activatedRouteParams = {

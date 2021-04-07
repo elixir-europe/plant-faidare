@@ -103,7 +103,7 @@ public class ESSetUp {
 
         if (response.hasFailures()) {
             System.err.println(response.buildFailureMessage());
-            throw new RuntimeException("Indexing failed (index name: '" + indexName + "'");
+            throw new RuntimeException("Indexing failed (index name: '" + indexName + "')");
         }
     }
 
