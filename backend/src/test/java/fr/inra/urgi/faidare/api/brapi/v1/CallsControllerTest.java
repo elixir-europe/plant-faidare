@@ -42,7 +42,7 @@ class CallsControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().json("{" +
                 "\"metadata\":{" +
-                    "\"pagination\":{\"pageSize\":100,\"currentPage\":2,\"totalCount\":26,\"totalPages\":1}," +
+                    "\"pagination\":{\"pageSize\":100,\"currentPage\":2,\"totalCount\":27,\"totalPages\":1}," +
                     "\"status\":[{" +
                         "\"name\":\"Bad Request: The current page should be strictly less than the total number of pages.\"," +
                         "\"code\":\"400\"" +
@@ -64,7 +64,7 @@ class CallsControllerTest {
                 "    \"pagination\": {\n" +
                 "      \"pageSize\": 1000,\n" +
                 "      \"currentPage\": 0,\n" +
-                "      \"totalCount\": 26,\n" +
+                "      \"totalCount\": 27,\n" +
                 "      \"totalPages\": 1\n" +
                 "    },\n" +
                 "    \"status\": [],\n" +
@@ -93,6 +93,11 @@ class CallsControllerTest {
                 "      \"versions\": [\"1.0\", \"1.1\", \"1.2\"]\n" +
                 "    }, {\n" +
                 "      \"call\": \"germplasm/{germplasmDbId}/attributes\",\n" +
+                "      \"datatypes\": [\"json\"],\n" +
+                "      \"methods\": [\"GET\"],\n" +
+                "      \"versions\": [\"1.0\", \"1.1\", \"1.2\"]\n" +
+                "    }, {\n" +
+                "      \"call\": \"germplasm/{germplasmDbId}/mcpd\",\n" +
                 "      \"datatypes\": [\"json\"],\n" +
                 "      \"methods\": [\"GET\"],\n" +
                 "      \"versions\": [\"1.0\", \"1.1\", \"1.2\"]\n" +
