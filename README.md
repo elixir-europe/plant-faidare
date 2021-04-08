@@ -152,4 +152,3 @@ to check what has to be changed.
 If you want to use a Spring Cloud configuration server, please refer to
 https://spring.io/guides/gs/centralized-configuration/
 
-test line will be removed...
