@@ -52,6 +52,14 @@ describe('GermplasmCardComponent', () => {
         get cardHeader() {
             return this.elements('div.card-header');
         }
+
+        get cardRowField() {
+            return this.elements('div.field');
+        }
+
+        get cardRowValue() {
+            return this.elements('div.value');
+        }
     }
 
     const brapiSibling: BrapiSibling = {
@@ -177,7 +185,7 @@ describe('GermplasmCardComponent', () => {
         germplasmDbId: 'test',
         defaultDisplayName: 'test',
         accessionNumber: 'test',
-        germplasmName: 'test',
+        germplasmName: 'testName',
         germplasmPUI: 'doi:1256',
         pedigree: 'tree',
         seedSource: 'inra',
@@ -270,6 +278,10 @@ describe('GermplasmCardComponent', () => {
         presenceStatus: null,
         distributorInfos: null
     };
+    const germplasmMcpdTestResult: BrapiResult<BrapiGermplasmMcpd> = {
+        metadata: null,
+        result: germplasmMcpdTest
+    };
 
     const gnpisService = jasmine.createSpyObj(
         'GnpisService', [
@@ -291,7 +303,7 @@ describe('GermplasmCardComponent', () => {
     // brapiService.germplasmProgeny.and.returnValue(of(brapiGermplasmProgeny));
     brapiService.germplasmPedigree.and.returnValue(of(brapiGermplasmPedigree));
     brapiService.germplasmAttributes.and.returnValue(of(brapiGermplasmAttributes));
-    brapiService.germplasmMcpd.and.returnValue(of(germplasmMcpdTest));
+    brapiService.germplasmMcpd.and.returnValue(of(germplasmMcpdTestResult));
 
 
     const activatedRouteParams = {
@@ -328,15 +340,22 @@ describe('GermplasmCardComponent', () => {
 
         component.loaded.then(() => {
             expect(component.germplasmGnpis).toBeTruthy();
+            expect(component.germplasmMcpd).toBeTruthy();
             tester.detectChanges();
             expect(tester.title).toContainText('Germplasm: test');
             expect(tester.cardHeader[0]).toContainText('Identification');
+            expect(tester.cardRowField[0]).toContainText('Germplasm name');
+            expect(tester.cardRowValue[0]).toContainText('testName');
+
             expect(tester.cardHeader[1]).toContainText('Depositary');
             expect(tester.cardHeader[2]).toContainText('Collector');
             expect(tester.cardHeader[3]).toContainText('Breeder');
             expect(tester.cardHeader[4]).toContainText('Donor');
             expect(tester.cardHeader[5]).toContainText('Distributor');
             expect(tester.cardHeader[6]).toContainText('Evaluation Data');
+
+            expect(tester.cardRowField[5]).toContainText('MLS status');
+            expect(tester.cardRowValue[5]).toContainText('0');
         });
     }));
 

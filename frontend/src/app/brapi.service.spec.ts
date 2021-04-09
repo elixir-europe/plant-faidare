@@ -1,10 +1,13 @@
 import { BrapiService } from './brapi.service';
 import {
+    BrapiCollectingSite,
     BrapiContacts,
     BrapiGermplasm,
     BrapiGermplasmAttributes,
+    BrapiGermplasmMcpd,
     BrapiGermplasmPedigree,
     BrapiGermplasmProgeny,
+    BrapiInstitute,
     BrapiLocation,
     BrapiObservationVariable,
     BrapiProgeny,
@@ -14,9 +17,19 @@ import {
     BrapiStudy,
     BrapiTrial
 } from './models/brapi.model';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+    HttpClientTestingModule,
+    HttpTestingController
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { Donor, Germplasm, GermplasmInstitute, GermplasmSet, Institute, Site } from './models/gnpis.model';
+import {
+    Donor,
+    Germplasm,
+    GermplasmInstitute,
+    GermplasmSet,
+    Institute,
+    Site
+} from './models/gnpis.model';
 
 describe('BrapiService', () => {
 
@@ -214,6 +227,16 @@ describe('BrapiService', () => {
         address: '12',
         logo: null
     };
+    const brapiInstitute: BrapiInstitute = {
+        instituteName: 'INRAE URGI',
+        instituteCode: '78000',
+        acronym: 'INRAE',
+        organisation: 'inrae',
+        instituteType: 'lab',
+        webSite: 'www.labo.fr',
+        instituteAddress: '18',
+        logo: null
+    };
     const origin: GermplasmInstitute = {
         ...institute,
         institute: institute,
@@ -224,6 +247,20 @@ describe('BrapiService', () => {
         registrationYear: '1996',
         deregistrationYear: '1912',
         distributionStatus: null
+    };
+
+    const collectingSite: BrapiCollectingSite = {
+        locationDbId: 'FR-78-INRAE',
+        locationName: 'Versailles',
+        coordinateUncertainty: null,
+        elevation: null,
+        georeferencingMethod: null,
+        latitudeDecimal: null,
+        latitudeDegrees: null,
+        locationDescription: null,
+        longitudeDecimal: null,
+        longitudeDegrees: null,
+        spatialReferenceSystem: null,
     };
 
     const brapiDonor: Donor = {
@@ -301,6 +338,62 @@ describe('BrapiService', () => {
         collection: [germplasmSet],
         population: [germplasmSet],
         'schema:includedInDataCatalog': null
+    };
+
+    const germplasmMcpdTest: BrapiGermplasmMcpd = {
+        groupId: '0',
+        accessionNames: ['test accession'],
+        accessionNumber: '01',
+        acquisitionDate: '2021',
+        acquisitionSourceCode: 'FR-urgi',
+        alternateIDs: ['Id1', 'Id2'],
+        ancestralData: null,
+        biologicalStatusOfAccessionCode: 'maintained',
+        breedingInstitutes: brapiInstitute,
+        collectingInfo: {
+            collectingDate: '2021',
+            collectingInstitutes: brapiInstitute,
+            collectingMissionIdentifier: '007',
+            collectingNumber: '3',
+            collectors: 'urgi',
+            materialType: 'germplasm',
+            collectingSite: collectingSite,
+        },
+        commonCropName: 'wheat',
+        countryOfOriginCode: 'FR',
+        donorInfo: {
+            donorAccessionNumber: 'ING007',
+            donorInstitute: brapiInstitute,
+            donationDate: '2021',
+        },
+        genus: 'Triti',
+        germplasmDbId: 'Fr-007',
+        germplasmPUI: 'urn/fr-007',
+        instituteCode: 'FR-INRAE',
+        mlsStatus: '0',
+        remarks: null,
+        safetyDuplicateInstitutes: null,
+        species: 'Triti',
+        speciesAuthority: null,
+        storageTypeCodes: null,
+        subtaxon: null,
+        subtaxonAuthority: null,
+        breederAccessionNumber: null,
+        breedingCreationYear: null,
+        catalogRegistrationYear: null,
+        catalogDeregistrationYear: null,
+        originLocationDbId: 'FR-Ver',
+        originLocationName: 'Versailles',
+        holdingInstitute: brapiInstitute,
+        holdingGenbank: brapiInstitute,
+        geneticNature: 'hybrid',
+        presenceStatus: null,
+        distributorInfos: null
+    };
+
+    const germplasmMcpdTestResult: BrapiResult<BrapiGermplasmMcpd> = {
+        metadata: null,
+        result: germplasmMcpdTest
     };
 
     let brapiService: BrapiService;
@@ -425,6 +518,20 @@ describe('BrapiService', () => {
             .flush(brapiGermplasmAttributes);
 
         expect(fetchedGermplasmAttributes).toEqual(brapiGermplasmAttributes);
+
+    });
+
+    it('should fetch the germplasm mcpd', () => {
+
+        let fetchedGermplasmMcpd: BrapiResult<BrapiGermplasmMcpd>;
+        const germplasmDbId: string = germplasmTest.germplasmDbId;
+        brapiService.germplasmMcpd(germplasmDbId).subscribe(response => {
+            fetchedGermplasmMcpd = response;
+        });
+        http.expectOne(`brapi/v1/germplasm/${germplasmDbId}/mcpd`)
+            .flush(germplasmMcpdTestResult);
+
+        expect(fetchedGermplasmMcpd).toEqual(germplasmMcpdTestResult);
 
     });
 
