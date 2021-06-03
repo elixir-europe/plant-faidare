@@ -155,26 +155,26 @@ build:
 .restart-config-server: &restart_config_server
   stage: build
   script:
-  - eval $(ssh-agent -s)
-  - ssh-add <(echo "${SSH_PRIVATE_KEY}")
-  - ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} 'echo "Successfully connected on $(hostname)"'
-  - ssh ${SERVER_USER}@${SERVER_IP} "sudo systemctl restart bootapp@config-server"
-  - eval $(ssh-agent -k)
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "${SSH_PRIVATE_KEY}")
+    - ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} 'echo "Successfully connected on $(hostname)"'
+    - ssh ${SERVER_USER}@${SERVER_IP} "sudo systemctl restart bootapp@config-server"
+    - eval $(ssh-agent -k)
   allow_failure: true
 
 restart-config-server-proxmox:
- variables:
-  SERVER_IP: ${SERVER_IP_PROXMOX}
-  SERVER_USER: ${SERVER_USER_PROXMOX}
- <<: *restart_config_server
+  variables:
+    SERVER_IP: ${SERVER_IP_PROXMOX}
+    SERVER_USER: ${SERVER_USER_PROXMOX}
+  <<: *restart_config_server
 
 restart-config-server-openstack:
- tags:
-  - openstack
- variables:
-  SERVER_IP: ${SERVER_IP_OPENSTACK_DEV}
-  SERVER_USER: ${SERVER_USER_OPENSTACK}
- <<: *restart_config_server
+  tags:
+    - openstack
+  variables:
+    SERVER_IP: ${SERVER_IP_OPENSTACK_DEV}
+    SERVER_USER: ${SERVER_USER_OPENSTACK}
+  <<: *restart_config_server
 
 
 # DEPLOY
