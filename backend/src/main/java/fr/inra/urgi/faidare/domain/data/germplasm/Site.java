@@ -8,7 +8,7 @@ import fr.inra.urgi.faidare.domain.JSONView;
  */
 public interface Site {
     @JsonView(JSONView.GnpISFields.class)
-    String getLocationDbId();
+    String getSiteId();
 
     @JsonView(JSONView.GnpISFields.class)
     String getSiteName();

@@ -11,6 +11,9 @@ public class DonorVO implements Serializable, BrapiGermplasmDonor {
     private String donorGermplasmPUI;
     private String donorAccessionNumber;
     private String donorInstituteCode;
+    private Integer donationDate;
+    private InstituteVO donorInstitute;
+
 
     @Override
     public String getDonorGermplasmPUI() {
@@ -38,5 +41,24 @@ public class DonorVO implements Serializable, BrapiGermplasmDonor {
     public void setDonorInstituteCode(String donorInstituteCode) {
         this.donorInstituteCode = donorInstituteCode;
     }
+
+
+    public InstituteVO getDonorInstitute() {
+        return donorInstitute;
+    }
+
+    public void setDonorInstitute(InstituteVO donorInstitute) {
+        this.donorInstitute = donorInstitute;
+    }
+
+
+    public Integer getDonationDate() {
+        return donationDate;
+    }
+
+    public void setDonationDate(Integer donationDate) {
+        this.donationDate = donationDate;
+    }
+
 
 }
