@@ -16,6 +16,7 @@ public class CollectingInfoVO implements BrapiGermplasmCollectingInfo, ExtendedC
     private String collectingNumber;
     private String materialType;
     private String collectors;
+    private String collectingDate;
 
     @JsonDeserialize(as = CollectingSiteVO.class)
     private CollectingSiteVO collectingSite;
@@ -61,6 +62,14 @@ public class CollectingInfoVO implements BrapiGermplasmCollectingInfo, ExtendedC
 
     public void setCollectors(String collectors) {
         this.collectors = collectors;
+    }
+
+    public String getCollectingDate() {
+        return collectingDate;
+    }
+
+    public void setCollectingDate(String collectingDate) {
+        this.collectingDate = collectingDate;
     }
 
     @Override

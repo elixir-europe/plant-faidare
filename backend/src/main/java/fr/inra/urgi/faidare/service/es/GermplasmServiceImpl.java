@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author cpommier, gcornut, jdestin
@@ -122,8 +123,13 @@ public class GermplasmServiceImpl implements GermplasmService {
         Writer fileStream = new OutputStreamWriter(new FileOutputStream(tmpFile.toFile()), StandardCharsets.UTF_8);
         CSVWriter csvWriter = new CSVWriter(fileStream, ';', '"', '\\', "\n");
         String[] header = new String[]{
-            "PUI", "AccessionNumber", "AccessionNames", "TaxonGroup", "geneticNature", "HoldingInstitution",
-            "mls"
+            "PUID", "INSTCODE", "ACCENUMB", "COLLNUMB", "COLLCODE", "COLLNAME",
+            "COLLINSTADDRESS", "COLLMISSID", "GENUS", "SPECIES", "SPAUTHOR", "SUBTAXA",
+            "SUBTAUTHOR", "CROPNAME", "ACCENAME", "ACQDATE", "ORIGCTY", "COLLSITE",
+            "DECLATITUDE", "LATITUDE", "DECLONGITUDE", "LONGITUDE", "COORDUNCERT",
+            "COORDDATUM", "GEOREFMETH", "ELEVATION", "COLLDATE", "BREDCODE",
+            "BREDNAME", "SAMPSTAT", "ANCEST","COLLSRC", "DONORCODE", "DONORNAME",
+            "DONORNUMB", "OTHERNUMB", "DUPLSITE", "DUPLINSTNAME", "STORAGE", "MLSSTAT", "REMARKS",
             };
         csvWriter.writeNext(header);
 
@@ -135,12 +141,54 @@ public class GermplasmServiceImpl implements GermplasmService {
 
             String[] line = new String[header.length];
             line[0] = germplasmMcpdVO.getGermplasmPUI();
-            line[1] = germplasmMcpdVO.getAccessionNumber();
-            line[2] = String.join(", ", germplasmMcpdVO.getAccessionNames());
-            line[3] = germplasmMcpdVO.getCommonCropName();
-            line[4] = germplasmMcpdVO.getGeneticNature();
-            line[5] = germplasmMcpdVO.getHoldingInstitute().getInstituteName();
-            line[5] = germplasmMcpdVO.getMlsStatus();
+            line[1] = germplasmMcpdVO.getInstituteCode();
+            line[2] = germplasmMcpdVO.getAccessionNumber();
+            line[3] = germplasmMcpdVO.getCollectingInfo().getCollectingNumber();
+            line[4] = germplasmMcpdVO.getCollectingInfo().getCollectingInstitutes().stream()
+                .map(InstituteVO::getInstituteCode).collect(Collectors.joining(";"));
+            line[5] = germplasmMcpdVO.getCollectingInfo().getCollectingInstitutes().stream()
+                .map(InstituteVO::getInstituteName).collect(Collectors.joining(";"));
+            line[6] = germplasmMcpdVO.getCollectingInfo().getCollectingInstitutes().stream()
+                .map(InstituteVO::getAddress).collect(Collectors.joining(";"));
+            line[7] = germplasmMcpdVO.getCollectingInfo().getCollectingMissionIdentifier();
+            line[8] = germplasmMcpdVO.getGenus();
+            line[9] = germplasmMcpdVO.getSpecies();
+            line[10] = germplasmMcpdVO.getSpeciesAuthority();
+            line[11] = germplasmMcpdVO.getSubtaxon();
+            line[12] = germplasmMcpdVO.getSubtaxonAuthority();
+            line[13] = germplasmMcpdVO.getCommonCropName();
+            line[14] = String.join(";",germplasmMcpdVO.getAccessionNames());
+            line[15] = germplasmMcpdVO.getAcquisitionDate();
+            line[16] = germplasmMcpdVO.getCountryOfOriginCode();
+            line[18] = germplasmMcpdVO.getCollectingInfo().getCollectingSite().getSiteName();
+            line[19] = germplasmMcpdVO.getCollectingInfo().getCollectingSite().getLatitudeDecimal();
+            line[20] = germplasmMcpdVO.getCollectingInfo().getCollectingSite().getLatitudeDegrees();
+            line[21] = germplasmMcpdVO.getCollectingInfo().getCollectingSite().getLongitudeDecimal();
+            line[22] = germplasmMcpdVO.getCollectingInfo().getCollectingSite().getLongitudeDegrees();
+            line[23] = germplasmMcpdVO.getCollectingInfo().getCollectingSite().getCoordinateUncertainty();
+            line[24] = germplasmMcpdVO.getCollectingInfo().getCollectingSite().getSpatialReferenceSystem();
+            line[25] = germplasmMcpdVO.getCollectingInfo().getCollectingSite().getGeoreferencingMethod();
+            line[26] = germplasmMcpdVO.getCollectingInfo().getCollectingSite().getElevation();
+            line[27] = germplasmMcpdVO.getCollectingInfo().getCollectingDate();
+            line[28] = germplasmMcpdVO.getBreedingInstitutes().stream()
+                .map(InstituteVO::getInstituteCode).collect(Collectors.joining(";"));
+            line[29] = germplasmMcpdVO.getBreedingInstitutes().stream()
+                .map(InstituteVO::getInstituteName).collect(Collectors.joining(";"));
+            line[30] = germplasmMcpdVO.getBiologicalStatusOfAccessionCode();
+            line[31] = germplasmMcpdVO.getAncestralData();
+            line[32] = germplasmMcpdVO.getAcquisitionSourceCode();
+            line[33] = germplasmMcpdVO.getDonorInfo().stream()
+                .map(donorInfoVO -> donorInfoVO.getDonorInstitute().getInstituteCode()).collect(Collectors.joining(";"));
+            line[34] = germplasmMcpdVO.getDonorInfo().stream()
+                .map(donorInfoVO -> donorInfoVO.getDonorInstitute().getInstituteName()).collect(Collectors.joining(";"));
+            line[35] = germplasmMcpdVO.getDonorInfo().stream()
+                .map(DonorInfoVO::getDonorAccessionNumber).collect(Collectors.joining(";"));
+            line[36] = String.join(";", germplasmMcpdVO.getAlternateIDs());
+            line[37] = germplasmMcpdVO.getSafetyDuplicateInstitutes().stream()
+                .map(InstituteVO::getInstituteName).collect(Collectors.joining(";"));
+            line[38] = String.join(";", germplasmMcpdVO.getStorageTypeCodes());
+            line[39] = germplasmMcpdVO.getMlsStatus();
+            line[40] = germplasmMcpdVO.getRemarks();
             csvWriter.writeNext(line);
         }
         csvWriter.close();
