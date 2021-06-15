@@ -64,7 +64,6 @@ test-and-sonarqube:
     GRADLE_OPTS: "-Dorg.gradle.daemon=true"
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-    SONAR_BRANCH_OPTS: "-Dsonar.pullrequest.key=$CI_MERGE_REQUEST_ID -Dsonar.pullrequest.branch=$CI_COMMIT_REF_NAME"
   cache:
     key: "${CI_JOB_NAME}"
     paths:
@@ -74,7 +73,7 @@ test-and-sonarqube:
     - ./gradlew :backend:test jacocoTestReport --parallel
     - find /tmp/node/*/bin -name node -exec ln -s {} /tmp/node/node \;
     - export PATH="/tmp/node/:$PATH"
-    - ./gradlew -s sonarqube -x test $SONAR_BRANCH_OPTS
+    - ./gradlew -s sonarqube -x test
   artifacts:
     reports:
       junit:
@@ -87,8 +86,6 @@ test-and-sonarqube:
 
 test-and-sonarqube-master:
   extends: test-and-sonarqube
-  variables:
-    SONAR_BRANCH_OPTS: ""
   only:
     refs:
       - master
