@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr" th:fragment="layout (title, content)" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title th:replace="${title}">Layout Title</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <link rel="shortcut icon" th:href="@{/static/assets/images/favicon.ico}" type="image/x-icon" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        Common header
+      </header>
+
+      <div th:replace="${content}">
+        <p>Layout content</p>
+      </div>
+
+      <footer>
+        common footer
+      </footer>
+    </div>
+  </body>
+</html>

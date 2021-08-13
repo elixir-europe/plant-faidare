@@ -57,12 +57,8 @@ tasks {
 
     val bootJar by getting(BootJar::class) {
         archiveName = "${rootProject.name}.jar"
-        dependsOn(":frontend:assemble")
         dependsOn(buildInfo)
 
-        into("BOOT-INF/classes/static") {
-            from("${project(":frontend").projectDir}/dist/frontend")
-        }
         into("BOOT-INF/classes/META-INF") {
             from(buildInfo.destinationDir)
         }
@@ -98,6 +94,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
     // Elasticsearch
     implementation("org.elasticsearch:elasticsearch:6.6.2")
