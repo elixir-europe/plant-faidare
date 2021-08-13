@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div th:fragment="row(label, content)" class="row py-2">
+  <div class="col-md-4 label pb-1 pb-md-0" th:text="${label}"></div>
+  <div class="col">
+    <th:block th:replace="${content}" />
+  </div>
+</div>
+
+<div th:fragment="text-row(label, text)" th:if="${!#strings.isEmpty(text)}" class="row py-2">
+  <div class="col-md-4 label pb-1 pb-md-0" th:text="${label}"></div>
+  <div class="col" th:text="${text}"></div>
+</div>
+
+</body>
+
+</html>
