@@ -100,8 +100,8 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-config")
 
     // Elasticsearch
-    implementation("org.elasticsearch:elasticsearch:6.5.4")
-    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:6.5.4")
+    implementation("org.elasticsearch:elasticsearch:6.6.2")
+    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:6.6.2")
 
     // Swagger
     implementation("io.swagger:swagger-annotations:1.5.21")

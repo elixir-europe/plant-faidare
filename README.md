@@ -83,6 +83,38 @@ cd frontend
 ng serve
 ```
 
+## Harvest
+
+Before all, take care to get data locally before running any indexing script.
+
+### TL;DR
+
+Data indexing to your local Elasticsearch is done using the following command (take care to change the path to local data). Note that your local Elasticsearch instance should be already runing using `docker-compose up`:
+
+```sh
+docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest -jsonDir /opt/data/ --help
+```
+Remove the `--help` parameter to run the loading with default params.
+
+### Portability
+
+#### Docker
+
+[TL;DR](#TLDR) section above expects to have an available docker image on the forgemia docker registry. The Gitlab CI rebuil it when needed, but you can update or push such an image using the following commands:
+
+```sh
+# build the image
+docker build -t registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest .
+
+# Login before pushing the image
+docker login registry.forgemia.inra.fr/urgi-is/docker-rare -u <your ForgeMIA username>
+
+# push the built image
+docker push registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest
+```
+
+That should ease the indexing of data without having to craft a dedicated environment.
+
 ## GitLab CI
 
 When creating merge requests on the ForgeMIA GitLab, the GitLab CI will 
