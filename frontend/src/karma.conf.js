@@ -44,6 +44,8 @@ module.exports = function (config) {
                 flags: ['--no-sandbox'] // required for Gitlab CI
             }
         },
+        captureTimeout: 1200000, // increase timeouts: https://github.com/jasmine/jasmine/issues/1413#issuecomment-334247097
+        browserNoActivityTimeout: 120000,
         singleRun: false,
         restartOnFileChange: true
     });

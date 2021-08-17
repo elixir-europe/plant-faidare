@@ -1,5 +1,6 @@
 ---
 stages:
+  - pre-build
   - test
   - build
   - deploy-beta
@@ -20,7 +21,9 @@ variables:
   APP_NAME: faidare
   JAR_PATH: "backend/build/libs/${APP_NAME}.jar"
   GIT_DEPTH: 0
-
+  IMAGE_TAG: $CI_COMMIT_REF_SLUG
+  ELASTIC_VERSION: "6.6.2"
+  DOCKER_OPTS: "--mtu=1450"
 
 # Gradle cache for all jobs
 cache:
@@ -29,6 +32,31 @@ cache:
     - ".gradle"
     - "frontend/.gradle/"
     - "frontend/node_modules/"
+
+# PRE-BUILD
+
+build-loader-docker-image:
+ image: registry.forgemia.inra.fr/urgi-is/docker-rare/docker-git:latest
+ stage: pre-build
+ services:
+  - docker:20.10.6-dind
+ script:
+  # build the image
+  - docker build -t registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:${IMAGE_TAG} .
+  - docker build -t registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest .
+  # Login before pushing the image
+  - docker login registry.forgemia.inra.fr -u $CONTAINER_REGISTRY_USERNAME -p $CONTAINER_REGISTRY_TOKEN
+  # push the built image
+  - docker push registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:${IMAGE_TAG}
+  # only push latest tag on master branch
+  - if [ "master" == "${CI_COMMIT_REF_SLUG}" ] ; then docker push registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest ; fi;
+ only:
+  changes:
+   - scripts/*
+   - backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/*_mapping.json
+   - backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json
+   - .gitlab-ci.yml
+ allow_failure: true
 
 
 # TESTS
@@ -39,6 +67,13 @@ lint:
   tags:
    - openstack
   script: "./gradlew lint"
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - ".gradle"
+      - "frontend/.gradle/"
+      - "frontend/node_modules/"
 
 
 test-and-sonarqube:
@@ -52,7 +87,7 @@ test-and-sonarqube:
     # because we need to pass some variables, but they are passed to _all_ containers
     # so they fail the start of other docker images like urgi/docker-browsers
     # the only solution is to override the entrypoint of the service and pass the arguments manually
-    - name: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
+    - name: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
       alias: elasticsearch
       # discovery.type=single-node
       # single-node is necessary to start in development mode
@@ -65,11 +100,15 @@ test-and-sonarqube:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
-    key: "${CI_JOB_NAME}"
+    key: "${CI_COMMIT_REF_NAME}"
+    policy: pull-push
     paths:
+      - ".gradle"
+      - "frontend/.gradle/"
+      - "frontend/node_modules/"
       - .sonar/cache
   script:
-    - ./gradlew :frontend:test --parallel
+    - ./gradlew :frontend:assemble --parallel
     - ./gradlew :backend:test jacocoTestReport --parallel
     - find /tmp/node/*/bin -name node -exec ln -s {} /tmp/node/node \;
     - export PATH="/tmp/node/:$PATH"
@@ -78,7 +117,7 @@ test-and-sonarqube:
     reports:
       junit:
         - ./backend/build/test-results/test/TEST-*.xml
-        - ./frontend/karma-junit-tests-report/TEST*.xml
+        # - ./frontend/karma-junit-tests-report/TEST*.xml
   only:
     refs:
       - merge_requests
@@ -100,6 +139,13 @@ build:
   stage: build
   script:
     - ./gradlew assemble
+  cache:
+    key: "${CI_COMMIT_REF_NAME}"
+    policy: pull
+    paths:
+      - ".gradle"
+      - "frontend/.gradle/"
+      - "frontend/node_modules/"
   artifacts:
     paths:
       - "$JAR_PATH"
@@ -134,7 +180,7 @@ restart-config-server-openstack:
 # DEPLOY
 
 
-.deploy-to-vm-proxmox: &deploy_to_vm_proxmox
+.deploy-to-vm: &deploy_to_vm
   # Hidden job which serves as template for executed jobs below.
   # See https://docs.gitlab.com/ee/ci/yaml/#anchors
   retry: 2
@@ -155,38 +201,16 @@ restart-config-server-openstack:
       - .gitlab-ci.yml
       - backend/src/**/*
       - frontend/**/*
-
-
-.deploy-to-vm-openstack: &deploy_to_vm_openstack
-  # Hidden job which serves as template for executed jobs below.
-  # See https://docs.gitlab.com/ee/ci/yaml/#anchors
-  retry: 2
-  tags:
-   - openstack
-  script:
-    ## SSH initialization
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "${SSH_PRIVATE_KEY}")
-    - ssh -o StrictHostKeyChecking=no ${SERVER_USER_OPENSTACK}@${SERVER_IP_OPENSTACK} 'echo "Successfully connected on $(hostname)"'
-    # Copy jar
-    - scp ./backend/build/libs/${APP_NAME}.jar ${SERVER_USER_OPENSTACK}@${SERVER_IP_OPENSTACK}:/tmp/${APP_NAME}-${ENV}.jar
-    - ssh ${SERVER_USER_OPENSTACK}@${SERVER_IP_OPENSTACK} "sudo mv /tmp/${APP_NAME}-${ENV}.jar /opt/bootapp/${APP_NAME}-${ENV}.jar ; sudo chown -R bootapp:bootapp /opt/bootapp/"
-    # Restarting service with the updated jar and the according Spring profiles enabled
-    - ssh ${SERVER_USER_OPENSTACK}@${SERVER_IP_OPENSTACK} "sudo systemctl restart bootapp@${APP_NAME}-${ENV}"
-    - eval $(ssh-agent -k)
-    - echo "Deploy done. Application should be available at http://${SERVER_IP_OPENSTACK}:${APP_PORT}/${CONTEXT_PATH}"
-  only:
-    changes:
-      - .gitlab-ci.yml
-      - backend/src/**/*
-      - frontend/**/*
-  when: manual
   allow_failure: false
 
 deploy-to-beta:
+  tags:
+   - openstack
   stage: deploy-beta
-  extends: .deploy-to-vm-openstack
+  extends: .deploy-to-vm
   variables:
+    SERVER_USER: ${SERVER_USER_OPENSTACK}
+    SERVER_IP: ${SERVER_IP_OPENSTACK_DEV}
     APP_PORT: ${BETA_FAIDARE_PORT}
     ENV: beta
     CONTEXT_PATH: faidare-beta
@@ -199,9 +223,13 @@ deploy-to-beta:
   when: always
 
 deploy-to-staging:
+  tags:
+   - openstack
   stage: deploy-staging
-  extends: .deploy-to-vm-openstack
+  extends: .deploy-to-vm
   variables:
+    SERVER_USER: ${SERVER_USER_OPENSTACK}
+    SERVER_IP: ${SERVER_IP_OPENSTACK_DEV}
     APP_PORT: ${STAGING_FAIDARE_PORT}
     ENV: staging
     CONTEXT_PATH: faidare-staging
@@ -214,9 +242,13 @@ deploy-to-staging:
   when: manual
 
 deploy-to-int:
+  tags:
+   - proxmox
   stage: deploy-production
-  extends: .deploy-to-vm-proxmox
+  extends: .deploy-to-vm
   variables:
+    SERVER_USER: ${SERVER_USER_PROXMOX}
+    SERVER_IP: ${SERVER_IP_PROXMOX}
     APP_PORT: ${INT_FAIDARE_PORT}
     ENV: int
     CONTEXT_PATH: faidare-int
@@ -226,9 +258,13 @@ deploy-to-int:
   when: manual
 
 deploy-to-prod-public:
+  tags:
+   - proxmox
   stage: deploy-production
-  extends: .deploy-to-vm-proxmox
+  extends: .deploy-to-vm
   variables:
+    SERVER_USER: ${SERVER_USER_PROXMOX}
+    SERVER_IP: ${SERVER_IP_PROXMOX}
     APP_PORT: ${PROD_PUBLIC_FAIDARE_PORT}
     ENV: prod-public
     CONTEXT_PATH: faidare
@@ -238,9 +274,13 @@ deploy-to-prod-public:
   when: manual
 
 deploy-to-prod-private:
+  tags:
+   - proxmox
   stage: deploy-production
-  extends: .deploy-to-vm-proxmox
+  extends: .deploy-to-vm
   variables:
+    SERVER_USER: ${SERVER_USER_PROXMOX}
+    SERVER_IP: ${SERVER_IP_PROXMOX}
     APP_PORT: ${PROD_PRIVATE_FAIDARE_PORT}
     ENV: prod-private
     CONTEXT_PATH: faidare-private
