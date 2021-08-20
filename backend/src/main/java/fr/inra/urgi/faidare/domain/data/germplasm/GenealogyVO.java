@@ -21,7 +21,7 @@ public class GenealogyVO implements java.io.Serializable, Genealogy {
     private String secondParentPUI;
     private String secondParentType;
 
-    private List<SimpleVO> sibblings; // puid + name
+    private List<PuiNameValueVO> sibblings; // puid + name
 
     @Override
     public String getCrossingPlan() {
@@ -105,11 +105,11 @@ public class GenealogyVO implements java.io.Serializable, Genealogy {
     }
 
     @Override
-    public List<SimpleVO> getSibblings() {
+    public List<PuiNameValueVO> getSibblings() {
         return sibblings;
     }
 
-    public void setSibblings(List<SimpleVO> sibblings) {
+    public void setSibblings(List<PuiNameValueVO> sibblings) {
         this.sibblings = sibblings;
     }
 

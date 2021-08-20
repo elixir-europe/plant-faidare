@@ -2,6 +2,7 @@ package fr.inra.urgi.faidare.service.es;
 
 import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.ProgenyVO;
@@ -30,5 +31,10 @@ public interface GermplasmService {
     PedigreeVO getPedigree(String germplasmDbId);
 
     ProgenyVO getProgeny(String germplasmDbId);
+
+    GermplasmMcpdVO getAsMcpdById(String germplasmDbId);
+
+    File exportGermplasmMcpd(FaidareGermplasmPOSTShearchCriteria criteria);
+
 
 }

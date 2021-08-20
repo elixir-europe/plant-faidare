@@ -124,15 +124,6 @@ public class ProgramVO implements GnpISInternal, BrapiProgram, HasURI, HasURL, I
     }
 
     @Override
-    public List<Long> getSpeciesGroup() {
-        return speciesGroup;
-    }
-
-    public void setSpeciesGroup(List<Long> speciesGroup) {
-        this.speciesGroup = speciesGroup;
-    }
-
-    @Override
     public Long getGroupId() {
         return groupId;
     }

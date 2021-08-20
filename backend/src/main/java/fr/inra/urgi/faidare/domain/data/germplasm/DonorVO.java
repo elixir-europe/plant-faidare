@@ -4,7 +4,7 @@ import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiGermplasmDonor;
 
 import java.io.Serializable;
 
-public class DonorVO implements Serializable, BrapiGermplasmDonor, ExtendedDonor {
+public class DonorVO implements Serializable, BrapiGermplasmDonor {
 
     private static final long serialVersionUID = 7976964107440923573L;
 
@@ -13,6 +13,7 @@ public class DonorVO implements Serializable, BrapiGermplasmDonor, ExtendedDonor
     private String donorInstituteCode;
     private Integer donationDate;
     private InstituteVO donorInstitute;
+
 
     @Override
     public String getDonorGermplasmPUI() {
@@ -41,7 +42,7 @@ public class DonorVO implements Serializable, BrapiGermplasmDonor, ExtendedDonor
         this.donorInstituteCode = donorInstituteCode;
     }
 
-    @Override
+
     public InstituteVO getDonorInstitute() {
         return donorInstitute;
     }
@@ -50,7 +51,7 @@ public class DonorVO implements Serializable, BrapiGermplasmDonor, ExtendedDonor
         this.donorInstitute = donorInstitute;
     }
 
-    @Override
+
     public Integer getDonationDate() {
         return donationDate;
     }
@@ -58,5 +59,6 @@ public class DonorVO implements Serializable, BrapiGermplasmDonor, ExtendedDonor
     public void setDonationDate(Integer donationDate) {
         this.donationDate = donationDate;
     }
+
 
 }

@@ -3,6 +3,7 @@ package fr.inra.urgi.faidare.api.faidare.v1;
 import com.google.common.base.Strings;
 import fr.inra.urgi.faidare.api.BadRequestException;
 import fr.inra.urgi.faidare.api.NotFoundException;
+import fr.inra.urgi.faidare.api.brapi.v1.GermplasmController;
 import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmGETSearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmPOSTSearchCriteria;
@@ -12,6 +13,8 @@ import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.service.es.GermplasmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +32,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class GnpISGermplasmController {
 
     private final GermplasmService germplasmService;
+    private final static Logger LOGGER = LoggerFactory.getLogger(GermplasmController.class);
 
     @Autowired
     public GnpISGermplasmController(GermplasmService germplasmService) {
@@ -78,6 +82,7 @@ public class GnpISGermplasmController {
         return germplasm;
     }
 
+
     /**
      * Webservice for exporting germplasm by criteria into a CSV.
      * <p>
@@ -111,6 +116,27 @@ public class GnpISGermplasmController {
         if (!(nbResult > limitResult)) {
             try {
                 File exportFile = germplasmService.exportListGermplasmCSV(criteria);
+                response.setHeader("Content-Disposition", "attachment; filename=germplasm.gnpis.csv");
+                return new FileSystemResource(exportFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("An error occurred when exporting germplasm: " + e.getMessage() + ".", e);
+            }
+        }
+        return null;
+    }
+
+
+
+    @PostMapping(value = "/germplasm-mcpd-csv", produces = "text/csv", consumes = APPLICATION_JSON_VALUE)
+    public FileSystemResource exportMcpd(@RequestBody @Valid FaidareGermplasmPOSTShearchCriteria criteria, HttpServletResponse response) {
+
+        long limitResult = 50000L;
+        long nbResult = germplasmService.germplasmFind(criteria).getMetadata().getPagination().getTotalCount();
+
+        if (!(nbResult > limitResult)) {
+            try {
+                File exportFile = germplasmService.exportGermplasmMcpd(criteria);
                 response.setHeader("Content-Disposition", "attachment; filename=germplasm.gnpis.csv");
                 return new FileSystemResource(exportFile);
             } catch (Exception e) {

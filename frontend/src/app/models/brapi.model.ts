@@ -177,6 +177,89 @@ export interface BrapiGermplasm extends BrapiHasDocumentationURL, schema.Dataset
     acquisitionDate: string;
 }
 
+export interface BrapiGermplasmMcpd extends BrapiHasDocumentationURL {
+    groupId: string;
+    accessionNames: string[];
+    accessionNumber: string;
+    acquisitionDate: string;
+    acquisitionSourceCode: string;
+    alternateIDs: string[];
+    ancestralData: string;
+    biologicalStatusOfAccessionCode: string;
+    breedingInstitutes: BrapiInstitute;
+    collectingInfo: {
+        collectingDate: string;
+        collectingInstitutes: BrapiInstitute;
+        collectingMissionIdentifier: string;
+        collectingNumber: string;
+        collectors: string;
+        materialType: string;
+        collectingSite: BrapiCollectingSite
+    };
+    commonCropName: string;
+    countryOfOriginCode: string;
+    donorInfo: {
+        donorAccessionNumber: string;
+        donorInstitute: BrapiInstitute;
+        donationDate: string;
+    };
+    genus: string;
+    germplasmDbId: string;
+    germplasmPUI: string;
+    instituteCode: string;
+    mlsStatus: string;
+    remarks: string;
+    safetyDuplicateInstitutes: {
+        instituteCode: string;
+        instituteName: string;
+    }[];
+    species: string;
+    speciesAuthority: string;
+    storageTypeCodes: string[];
+    subtaxon: string;
+    subtaxonAuthority: string;
+    breederAccessionNumber: string;
+    breedingCreationYear: string;
+    catalogRegistrationYear: string;
+    catalogDeregistrationYear: string;
+    originLocationDbId: string;
+    originLocationName: string;
+    holdingInstitute: BrapiInstitute;
+    holdingGenbank: BrapiInstitute;
+    geneticNature: string;
+    presenceStatus: string;
+    distributorInfos: {
+        institute: BrapiInstitute;
+        accessionNumber: string;
+        distrubutionStatus: string;
+    };
+}
+
+export interface BrapiInstitute {
+    instituteName: string;
+    instituteCode: string;
+    acronym: string;
+    organisation: string;
+    instituteType: string;
+    webSite: string;
+    instituteAddress: string;
+    logo: string;
+}
+
+export interface BrapiCollectingSite {
+    locationDbId: string;
+    locationName: string;
+    coordinateUncertainty: string;
+    elevation: string;
+    georeferencingMethod: string;
+    latitudeDecimal: string;
+    latitudeDegrees: string;
+    locationDescription: string;
+    longitudeDecimal: string;
+    longitudeDegrees: string;
+    spatialReferenceSystem: string;
+}
+
 
 export interface BrapiTaxonIds {
     sourceName: string;

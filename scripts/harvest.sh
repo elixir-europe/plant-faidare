@@ -7,8 +7,7 @@ ES_PORT="9200"
 ENV="dev"
 DOCUMENT_TYPES="all"
 
-#ALL_DOCUMENT_TYPES="germplasm germplasmMcpd germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit datadiscovery"
-ALL_DOCUMENT_TYPES="germplasm germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit datadiscovery"
+ALL_DOCUMENT_TYPES="germplasm germplasmMcpd germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit datadiscovery"
 ALL_ENVS="dev beta staging int prod test"
 BASEDIR=$(dirname "$0")
 TMP_FILE="log.tmp"

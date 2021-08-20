@@ -64,7 +64,6 @@ public class ESGenericGetByIdRepository<VO> implements ESGetByIdRepository<VO> {
 
             // Parse result list
             List<? extends VO> resultList = parser.parseHits(result, voClass);
-
             if (resultList != null && !resultList.isEmpty()) {
                 if (resultList.size() > 1) {
                     // Should never happen

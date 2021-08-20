@@ -2,6 +2,7 @@ package fr.inra.urgi.faidare.repository.es;
 
 import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.ProgenyVO;
@@ -41,6 +42,11 @@ public interface GermplasmRepository
     Iterator<GermplasmVO> scrollAllGermplasm(FaidareGermplasmPOSTShearchCriteria criteria);
 
     /**
+     * Scroll through all germplasmMcpd matching the given FAIDARE search criteria.
+     */
+    Iterator<GermplasmMcpdVO> scrollAllGermplasmMcpd(FaidareGermplasmPOSTShearchCriteria criteria);
+
+    /**
      * Find pedigree for germplasm by id.
      */
     PedigreeVO findPedigree(String germplasmDbId);
@@ -49,5 +55,11 @@ public interface GermplasmRepository
      * Find progeny for germplasm by id.
      */
     ProgenyVO findProgeny(String germplasmDbId);
+
+    /**
+     * Find germplasm mcpd by id.
+     */
+    GermplasmMcpdVO getAsMcpdById(String germplasmDbId);
+
 
 }

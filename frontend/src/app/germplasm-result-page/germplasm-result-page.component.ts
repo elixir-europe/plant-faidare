@@ -131,7 +131,24 @@ export class GermplasmResultPageComponent implements OnInit {
             result => {
                 if (result) {
                     const blob = new Blob([result], { type: 'text/plain;charset=utf-8' });
-                    saveAs(blob, 'germplasm.gnpis.csv');
+                    saveAs(blob, 'germplasm_gnpis.csv');
+                } else {
+                    this.overLimitSizeExport = true;
+                }
+                this.loading = false;
+            },
+            error => {
+                console.log(error);
+            });
+    }
+
+    exportMcpd(criteria: GermplasmSearchCriteria) {
+        this.loading = true;
+        this.service.mcpdExport(criteria).subscribe(
+            result => {
+                if (result) {
+                    const blob = new Blob([result], { type: 'text/plain;charset=utf-8' });
+                    saveAs(blob, 'germplasm_mcpd.csv');
                 } else {
                     this.overLimitSizeExport = true;
                 }

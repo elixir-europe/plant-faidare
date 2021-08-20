@@ -1,24 +1,20 @@
 package fr.inra.urgi.faidare.domain.data.germplasm;
-
 import com.fasterxml.jackson.annotation.JsonView;
 import fr.inra.urgi.faidare.domain.JSONView;
 
-/**
- * @author gcornut
- */
-public interface Site {
-    @JsonView(JSONView.GnpISFields.class)
-    String getSiteId();
+import java.io.Serializable;
+
+
+public interface DistributorInfo extends Serializable {
 
     @JsonView(JSONView.GnpISFields.class)
-    String getSiteName();
+    String getAccessionNumber();
 
     @JsonView(JSONView.GnpISFields.class)
-    Float getLatitude();
+    ExtendedInstitute getInstitute();
 
     @JsonView(JSONView.GnpISFields.class)
-    Float getLongitude();
+    String getDistributionStatus();
 
-    @JsonView(JSONView.GnpISFields.class)
-    String getSiteType();
 }
+

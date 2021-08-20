@@ -152,6 +152,19 @@ export class GnpisService {
         );
     }
 
+    // TODO Change the service's response to return an object with the number of results and handle here if the number is over the limit
+    mcpdExport(criteria: GermplasmSearchCriteria): Observable<any> {
+        const requestOptions: Object = {
+            /* other options here */
+            responseType: 'text'
+        };
+        return this.http.post<any>(
+            `${BASE_URL}/germplasm/germplasm-mcpd-csv`,
+            criteria,
+            requestOptions
+        );
+    }
+
     getSourcesName(sourceByURI, response) {
         response.facets = response.facets.map((facet: DataDiscoveryFacet) => {
             facet.terms = facet.terms.map(term => {

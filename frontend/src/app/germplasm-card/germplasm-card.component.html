@@ -42,6 +42,7 @@
         </ng-template>
       </faidare-card-row>
 
+
       <faidare-card-row
         label="Authority"
         [test]="germplasmTaxonAuthor">
@@ -280,7 +281,7 @@
 
           <faidare-card-row
             label="Pedigree"
-            [value]="germplasmGnpis.pedigree">
+              [value]="germplasmGnpis.pedigree">
           </faidare-card-row>
 
           <faidare-card-row
@@ -295,6 +296,14 @@
               <a [routerLink]="['/sites/', germplasmGnpis.originSite.siteId]">
                 {{ germplasmGnpis.originSite.siteName }}
               </a>
+            </ng-template>
+          </faidare-card-row>
+
+          <faidare-card-row
+            label="MLS status"
+            [test]="germplasmMcpd && germplasmMcpd.mlsStatus">
+            <ng-template>
+              {{ germplasmMcpd.mlsStatus }}
             </ng-template>
           </faidare-card-row>
 
@@ -344,7 +353,6 @@
           label="Presence status"
           [value]="germplasmGnpis.presenceStatus">
         </faidare-card-row>
-
       </div>
     </ng-template>
   </faidare-card-section>
@@ -363,6 +371,14 @@
             <a [routerLink]="['/sites/', germplasmGnpis.collectingSite.siteId]">
               {{ germplasmGnpis.collectingSite.siteName }}
             </a>
+          </ng-template>
+        </faidare-card-row>
+
+        <faidare-card-row
+          label="Acquisition Source Code"
+          [test]="germplasmMcpd && germplasmMcpd.acquisitionSourceCode">
+          <ng-template>
+            {{ germplasmMcpd.acquisitionSourceCode }}
           </ng-template>
         </faidare-card-row>
 
@@ -483,7 +499,7 @@
                 ]"
           [rows]="germplasmGnpis.donors">
           <ng-template let-row>
-            <tr>
+            <tr *ngIf="row.donorInstitute">
               <ng-template #donorInstituteTemplate>
                 <ng-container *ngTemplateOutlet="instituteTemplate;context:row.donorInstitute">
                 </ng-container>

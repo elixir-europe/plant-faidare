@@ -24,7 +24,6 @@ public class GermplasmVO
     private static final long serialVersionUID = -7719928853974382749L;
 
     private Long groupId;
-    private List<Long> speciesGroup;
 
     @Id
     private String germplasmDbId;
@@ -130,15 +129,6 @@ public class GermplasmVO
 
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
-    }
-
-    @Override
-    public List<Long> getSpeciesGroup() {
-        return speciesGroup;
-    }
-
-    public void setSpeciesGroup(List<Long> speciesGroup) {
-        this.speciesGroup = speciesGroup;
     }
 
     @Override

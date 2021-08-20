@@ -3,6 +3,7 @@ package fr.inra.urgi.faidare.repository.es;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.ProgenyVO;
@@ -63,6 +64,7 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
     private final ESFindRepository<GermplasmSearchCriteria, GermplasmVO> findRepository;
     private final ESGetByIdRepository<GermplasmVO> getByIdRepository;
     private final ESGenericQueryFactory<GermplasmSearchCriteria> queryFactory;
+    private final ESGetByIdRepository<GermplasmMcpdVO> getMcpdByIdRepository;
 
     @Autowired
     public GermplasmRepositoryImpl(
@@ -76,9 +78,12 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
         this.mapper = mapper;
         this.parser = parser;
         Class<GermplasmVO> voClass = GermplasmVO.class;
+        Class<GermplasmMcpdVO> voMcpdClass = GermplasmMcpdVO.class;
+
         this.queryFactory = new ESGenericQueryFactory<>();
         this.findRepository = new ESGenericFindRepository<>(client, requestFactory, voClass, this.parser);
         this.getByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, voClass, this.parser);
+        this.getMcpdByIdRepository = new ESGenericGetByIdRepository<>(client, requestFactory, voMcpdClass, this.parser);
         Class<GermplasmVO> documentClass = GermplasmVO.class;
         Class<FaidareGermplasmPOSTShearchCriteria> criteriaClass = FaidareGermplasmPOSTShearchCriteria.class;
         this.documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(documentClass);
@@ -97,6 +102,13 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
         QueryBuilder query = queryFactory.createShouldFilterQuery(criteria);
         int fetchSize = criteria.getPageSize().intValue();
         return new ESScrollIterator<>(client, requestFactory, parser, GermplasmVO.class, query, fetchSize);
+    }
+
+    @Override
+    public Iterator<GermplasmMcpdVO> scrollAllGermplasmMcpd(FaidareGermplasmPOSTShearchCriteria criteria) {
+        QueryBuilder query = queryFactory.createShouldFilterQuery(criteria);
+        int fetchSize = criteria.getPageSize().intValue();
+        return new ESScrollIterator<>(client, requestFactory, parser, GermplasmMcpdVO.class, query, fetchSize);
     }
 
     @Override
@@ -127,6 +139,12 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public GermplasmMcpdVO getAsMcpdById(String germplasmDbId) {
+        return getMcpdByIdRepository.getById(germplasmDbId);
+    }
+
 
     @Override
     public PedigreeVO findPedigree(String germplasmDbId) {

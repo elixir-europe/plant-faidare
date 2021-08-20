@@ -4,9 +4,10 @@ import { BrapiService } from '../brapi.service';
 import { GnpisService } from '../gnpis.service';
 import {
     BrapiAttributeData,
+    BrapiGermplasmMcpd,
     BrapiGermplasmPedigree,
     BrapiLocation,
-    BrapiTaxonIds
+    BrapiTaxonIds,
 } from '../models/brapi.model';
 import { Children, Germplasm, Site } from '../models/gnpis.model';
 import { environment } from '../../environments/environment';
@@ -26,6 +27,7 @@ export class GermplasmCardComponent implements OnInit {
 
     taxonIdsWithURL: BrapiTaxonIds[] = [];
     germplasmGnpis: Germplasm;
+    germplasmMcpd: BrapiGermplasmMcpd;
     germplasmPedigree: BrapiGermplasmPedigree;
     germplasmProgeny: Children[];
     germplasmAttributes: BrapiAttributeData[];
@@ -45,7 +47,6 @@ export class GermplasmCardComponent implements OnInit {
                 .then(germplasm => {
                     const germplasmId = id || germplasm.germplasmDbId;
                     this.germplasmGnpis = germplasm;
-                    this.getTaxon();
                     this.reformatData();
 
                     // TODO use the progeny call when the information about parent will be added.
@@ -54,6 +55,12 @@ export class GermplasmCardComponent implements OnInit {
                         .then(germplasmProgeny => {
                             this.germplasmProgeny = germplasmProgeny.result;
                         });*/
+
+
+                    this.brapiService.germplasmMcpd(germplasmId).subscribe(germplasmMcpd => {
+                        this.germplasmMcpd = germplasmMcpd.result;
+                    });
+                    this.getTaxon();
 
                     this.germplasmPedigree = null;
                     this.brapiService.germplasmPedigree(germplasmId)

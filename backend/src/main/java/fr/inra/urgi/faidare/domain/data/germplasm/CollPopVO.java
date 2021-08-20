@@ -12,8 +12,8 @@ public class CollPopVO implements Serializable, CollPop {
     private Long id;
     private String name;
     private String type;
-    private SimpleVO germplasmRef;
     private Integer germplasmCount;
+    private PuiNameValueVO germplasmRef;
 
     @Override
     public Long getId() {
@@ -43,11 +43,11 @@ public class CollPopVO implements Serializable, CollPop {
     }
 
     @Override
-    public SimpleVO getGermplasmRef() {
+    public PuiNameValueVO getGermplasmRef()  {
         return germplasmRef;
     }
 
-    public void setGermplasmRef(SimpleVO germplasmRef) {
+    public void setGermplasmRef(PuiNameValueVO germplasmRef) {
         this.germplasmRef = germplasmRef;
     }
 
