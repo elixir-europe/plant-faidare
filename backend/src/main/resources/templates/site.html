@@ -39,9 +39,9 @@
   <div th:replace="fragments/row::text-row(label='Institution address', text=${model.site.instituteAddress})"></div>
   <div th:replace="fragments/row::text-row(label='Coordinates precision', text=${model.coordinatesPrecision})"></div>
   <div th:if="${model.site.latitude}"
-       th:replace="fragments/row::text-row(label='Latitude', text=${model.site.latitude + ' - TODO in degrees'})"></div>
+       th:replace="fragments/row::text-row(label='Latitude', text=${#coordinates.formatLatitude(model.site.latitude)})"></div>
   <div th:if="${model.site.longitude}"
-       th:replace="fragments/row::text-row(label='Longitude', text=${model.site.longitude + ' - TODO in degrees'})"></div>
+       th:replace="fragments/row::text-row(label='Longitude', text=${#coordinates.formatLongitude(model.site.longitude)})"></div>
   <div th:replace="fragments/row::text-row(label='Geographical location', text=${model.geographicalLocation})"></div>
   <div th:if="${model.site.countryName && !model.geographicalLocation}"
        th:replace="fragments/row::text-row(label='Country name', text=${model.site.countryName})"></div>
@@ -56,11 +56,14 @@
   <div th:replace="fragments/row::text-row(label='Direction from city', text=${model.directionFromCity})"></div>
   <div th:replace="fragments/row::text-row(label='Comment', text=${model.comment})"></div>
 
-  <h2>Additional info</h2>
-  <th:block th:each="prop : ${model.additionalInfoProperties}">
-    <div th:replace="fragments/row::text-row(label=${prop.key}, text=${prop.value})"></div>
+  <th:block th:if="${!#lists.isEmpty(model.additionalInfoProperties)}">
+    <h2>Additional info</h2>
+    <th:block th:each="prop : ${model.additionalInfoProperties}">
+      <div th:replace="fragments/row::text-row(label=${prop.key}, text=${prop.value})"></div>
+    </th:block>
   </th:block>
 
+  <div th:replace="fragments/xrefs::xrefs(crossReferences=${model.crossReferences})"></div>
 </main>
 </body>
 </html>

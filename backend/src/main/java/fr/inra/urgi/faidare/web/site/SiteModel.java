@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import fr.inra.urgi.faidare.domain.data.LocationVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSource;
+import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 
 /**
  * TODO add javadoc
@@ -32,12 +33,16 @@ public final class SiteModel {
     private final LocationVO site;
     private final DataSource source;
     private final Map<String, Object> additionalInfo;
+    private final List<XRefDocumentVO> crossReferences;
     private final List<Map.Entry<String, Object>> additionalInfoProperties;
 
-    public SiteModel(LocationVO site, DataSource source) {
+    public SiteModel(LocationVO site,
+                     DataSource source,
+                     List<XRefDocumentVO> crossReferences) {
         this.site = site;
         this.source = source;
         this.additionalInfo = site.getAdditionalInfo() == null ? Collections.emptyMap() : site.getAdditionalInfo().getProperties();
+        this.crossReferences = crossReferences;
         this.additionalInfoProperties =
             this.additionalInfo
                 .entrySet()
@@ -102,5 +107,9 @@ public final class SiteModel {
 
     public List<Map.Entry<String, Object>> getAdditionalInfoProperties() {
         return additionalInfoProperties;
+    }
+
+    public List<XRefDocumentVO> getCrossReferences() {
+        return crossReferences;
     }
 }

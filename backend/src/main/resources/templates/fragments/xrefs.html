@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div th:fragment="xrefs(crossReferences)" th:if="${!#lists.isEmpty(crossReferences)}">
+  <h2>Cross references</h2>
+
+  <div class="table-responsive scroll-big-table table-card-body">
+    <div class="card">
+      <table class="table table-sm table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Source</th>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="crossRef : ${crossReferences}">
+            <td><a th:href="${crossRef.url}" target="_blank" th:text="${crossRef.name}"></a></td>
+            <td th:text="${crossRef.databaseName}"></td>
+            <td th:text="${crossRef.entryType}"></td>
+            <td th:text="${#strings.abbreviate(crossRef.description, 120)}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+</body>
+
+</html>
