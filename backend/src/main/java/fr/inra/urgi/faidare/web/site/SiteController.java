@@ -7,8 +7,6 @@ import fr.inra.urgi.faidare.api.NotFoundException;
 import fr.inra.urgi.faidare.config.FaidareProperties;
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiAdditionalInfo;
 import fr.inra.urgi.faidare.domain.data.LocationVO;
-import fr.inra.urgi.faidare.domain.response.PaginatedList;
-import fr.inra.urgi.faidare.domain.xref.XRefDocumentSearchCriteria;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.faidare.repository.es.LocationRepository;
 import fr.inra.urgi.faidare.repository.es.XRefDocumentRepository;
@@ -22,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Controller used to display a site card based on its ID.
  * @author JB Nizet
  */
-@Controller
+@Controller("webSiteController")
 @RequestMapping("/sites")
 public class SiteController {
 
