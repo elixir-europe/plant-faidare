@@ -1,13 +1,16 @@
 package fr.inra.urgi.faidare.web.germplasm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiGermplasmAttributeValue;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmInstituteVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
+import fr.inra.urgi.faidare.domain.data.germplasm.SiteVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSource;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
+import fr.inra.urgi.faidare.web.site.MapLocation;
 import org.apache.logging.log4j.util.Strings;
 
 /**
@@ -135,5 +138,20 @@ public final class GermplasmModel {
             || Strings.isNotBlank(this.pedigree.getCrossingPlan())
             || Strings.isNotBlank(this.pedigree.getCrossingYear())
             || Strings.isNotBlank(this.pedigree.getFamilyCode()));
+    }
+
+    public List<MapLocation> getMapLocations() {
+        List<SiteVO> sites = new ArrayList<>();
+        if (germplasm.getCollectingSite() != null) {
+            sites.add(germplasm.getCollectingSite());
+        }
+        if (germplasm.getOriginSite() != null) {
+            sites.add(germplasm.getOriginSite());
+        }
+        if (germplasm.getEvaluationSites() != null) {
+            sites.addAll(germplasm.getEvaluationSites());
+        }
+
+        return MapLocation.sitesToDisplayableMapLocations(sites);
     }
 }

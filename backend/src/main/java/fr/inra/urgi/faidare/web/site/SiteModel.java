@@ -111,4 +111,8 @@ public final class SiteModel {
     public List<XRefDocumentVO> getCrossReferences() {
         return crossReferences;
     }
+
+    public List<MapLocation> getMapLocations() {
+        return MapLocation.locationsToDisplayableMapLocations(Collections.singletonList(this.site));
+    }
 }

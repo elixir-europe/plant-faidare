@@ -2,7 +2,7 @@
 
 <html
   xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main})}"
+  th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main}, script=~{::script})}"
 >
 <head>
   <title>Study <th:block th:text="${model.study.studyType}" />: <th:block th:text="${model.study.studyName}" /></title>
@@ -12,6 +12,8 @@
 <body>
 <main>
   <h1>Study <th:block th:text="${model.study.studyType}" />: <th:block th:text="${model.study.studyName}" /></h1>
+
+  <div th:replace="fragments/map::map"></div>
 
   <h2>Identification</h2>
 
@@ -188,5 +190,12 @@
 
   <div th:replace="fragments/xrefs::xrefs(crossReferences=${model.crossReferences})"></div>
 </main>
+
+<script th:inline="javascript">
+  faidare.initializeMap({
+    contextPath: [[${#request.getContextPath()}]],
+    locations: /*[[${model.mapLocations}]]*/ []
+  });
+</script>
 </body>
 </html>

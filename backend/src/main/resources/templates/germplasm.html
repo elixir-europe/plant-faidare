@@ -2,7 +2,7 @@
 
 <html
   xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main})}"
+  th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main}, script=~{::script})}"
 >
 <head>
   <title>Germplasm: <th:block th:text="${model.germplasm.germplasmName}" /></title>
@@ -17,6 +17,8 @@
       <img th:src="${model.germplasm.holdingGenbank.logo}" th:alt="${model.germplasm.holdingGenbank.instituteName}" />
     </div>
   </div>
+
+  <div th:replace="fragments/map::map"></div>
 
   <div class="row align-items-center justify-content-center">
     <div class="col-auto field" th:if="${model.germplasm.photo != null && model.germplasm.photo.thumbnailFile != null}">
@@ -414,5 +416,13 @@
 
   <div th:replace="fragments/xrefs::xrefs(crossReferences=${model.crossReferences})"></div>
 </main>
+
+<script th:inline="javascript">
+  faidare.initializePopovers();
+  faidare.initializeMap({
+    contextPath: [[${#request.getContextPath()}]],
+    locations: /*[[${model.mapLocations}]]*/ []
+  });
+</script>
 </body>
 </html>

@@ -9,8 +9,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.inra.urgi.faidare.domain.data.germplasm.CollPopVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.TaxonSourceVO;
+import fr.inra.urgi.faidare.utils.Sites;
 import org.apache.logging.log4j.util.Strings;
 
 /**
@@ -21,6 +24,7 @@ public class FaidareExpressions {
 
     private static final Map<String, Function<String, String>> TAXON_ID_URL_FACTORIES_BY_SOURCE_NAME =
         createTaxonIdUrlFactories();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private static Map<String, Function<String, String>> createTaxonIdUrlFactories() {
         Map<String, Function<String, String>> result = new HashMap<>();
@@ -38,7 +42,7 @@ public class FaidareExpressions {
     }
 
     public String toSiteParam(String siteId) {
-        return Base64.getUrlEncoder().encodeToString(("urn:URGI/location/" + siteId).getBytes(StandardCharsets.US_ASCII));
+        return Sites.siteIdToLocationId(siteId);
     }
 
     public String collPopTitle(CollPopVO collPopVO) {
@@ -53,6 +57,15 @@ public class FaidareExpressions {
         Function<String, String> urlFactory =
             TAXON_ID_URL_FACTORIES_BY_SOURCE_NAME.get(taxonSource.getSourceName());
         return urlFactory != null ? urlFactory.apply(taxonSource.getTaxonId()) : null;
+    }
+
+    public String toJson(Object value) {
+        try {
+            return objectMapper.writeValueAsString(value);
+        }
+        catch (JsonProcessingException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     private String collPopTitle(CollPopVO collPopVO, Function<String, String> nameTransformer) {

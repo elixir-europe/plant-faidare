@@ -5,3 +5,11 @@
 .popover {
     max-width: min(80vw, 600px);
 }
+
+#map {
+    height: min(400px, 60vh);
+}
+
+.map-legend img {
+    height: 1.5rem;
+}

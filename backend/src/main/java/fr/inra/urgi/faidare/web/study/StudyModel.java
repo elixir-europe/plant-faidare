@@ -1,11 +1,8 @@
 package fr.inra.urgi.faidare.web.study;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import fr.inra.urgi.faidare.domain.data.LocationVO;
@@ -15,6 +12,7 @@ import fr.inra.urgi.faidare.domain.data.study.StudyDetailVO;
 import fr.inra.urgi.faidare.domain.data.variable.ObservationVariableVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSource;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
+import fr.inra.urgi.faidare.web.site.MapLocation;
 
 /**
  * The model used by the study page
@@ -27,6 +25,7 @@ public final class StudyModel {
     private final List<ObservationVariableVO> variables;
     private final List<TrialVO> trials;
     private final List<XRefDocumentVO> crossReferences;
+    private final LocationVO location;
     private final List<Map.Entry<String, Object>> additionalInfoProperties;
 
     public StudyModel(StudyDetailVO study,
@@ -34,13 +33,15 @@ public final class StudyModel {
                       List<GermplasmVO> germplasms,
                       List<ObservationVariableVO> variables,
                       List<TrialVO> trials,
-                      List<XRefDocumentVO> crossReferences) {
+                      List<XRefDocumentVO> crossReferences,
+                      LocationVO location) {
         this.study = study;
         this.source = source;
         this.germplasms = germplasms;
         this.variables = variables;
         this.trials = trials;
         this.crossReferences = crossReferences;
+        this.location = location;
 
         Map<String, Object> additionalInfo =
             study.getAdditionalInfo() == null ? Collections.emptyMap() : study.getAdditionalInfo().getProperties();
@@ -78,5 +79,12 @@ public final class StudyModel {
 
     public List<Map.Entry<String, Object>> getAdditionalInfoProperties() {
         return additionalInfoProperties;
+    }
+
+    public List<MapLocation> getMapLocations() {
+        if (this.location == null) {
+            return Collections.emptyList();
+        }
+        return MapLocation.locationsToDisplayableMapLocations(Collections.singletonList(this.location));
     }
 }

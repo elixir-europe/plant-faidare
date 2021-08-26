@@ -1,5 +1,6 @@
 package fr.inra.urgi.faidare.web.germplasm;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -105,7 +106,6 @@ public class GermplasmController {
             createXref("bazbing")
         );
 
-
         sortDonors(germplasm);
         sortPopulations(germplasm);
         sortCollections(germplasm);
@@ -117,8 +117,7 @@ public class GermplasmController {
                                     faidareProperties.getByUri(germplasm.getSourceUri()),
                                     attributes,
                                     pedigree,
-                                    crossReferences
-                                )
+                                    crossReferences)
         );
     }
 
@@ -205,7 +204,22 @@ public class GermplasmController {
         SiteVO originSite = new SiteVO();
         originSite.setSiteId("1234");
         originSite.setSiteName("Le Moulon");
+        originSite.setSiteType("Origin site");
+        originSite.setLatitude(47.0F);
+        originSite.setLongitude(12.0F);
         result.setOriginSite(originSite);
+
+        List<SiteVO> evaluationSites = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            SiteVO evaluationSite = new SiteVO();
+            evaluationSite.setSiteId(Integer.toString(12347 + i));
+            evaluationSite.setSiteType("Evaluation site");
+            evaluationSite.setSiteName("Site " + i);
+            evaluationSite.setLatitude(46.0F + i);
+            evaluationSite.setLongitude(13.0F + i);
+            evaluationSites.add(evaluationSite);
+        }
+        result.setEvaluationSites(evaluationSites);
 
         result.setGenus("Genus 1");
         result.setSpecies("Species 1");
@@ -241,7 +255,13 @@ public class GermplasmController {
         collector.setAccessionNumber("567");
         result.setCollector(collector);
 
-        result.setCollectingSite(originSite);
+        SiteVO collectingSite = new SiteVO();
+        collectingSite.setSiteId("1235");
+        collectingSite.setSiteName("St Just");
+        collectingSite.setSiteType("Collecting site");
+        collectingSite.setLatitude(48.0F);
+        collectingSite.setLongitude(13.0F);
+        result.setCollectingSite(collectingSite);
         result.setAcquisitionDate("In the summer");
 
         GermplasmInstituteVO breeder = new GermplasmInstituteVO();

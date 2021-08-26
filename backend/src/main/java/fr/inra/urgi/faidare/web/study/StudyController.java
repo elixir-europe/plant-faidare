@@ -12,16 +12,20 @@ import com.google.common.collect.Lists;
 import fr.inra.urgi.faidare.api.NotFoundException;
 import fr.inra.urgi.faidare.config.FaidareProperties;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmPOSTSearchCriteria;
+import fr.inra.urgi.faidare.domain.data.LocationVO;
 import fr.inra.urgi.faidare.domain.data.TrialVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.study.StudyDetailVO;
 import fr.inra.urgi.faidare.domain.data.variable.ObservationVariableVO;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.faidare.repository.es.GermplasmRepository;
+import fr.inra.urgi.faidare.repository.es.LocationRepository;
 import fr.inra.urgi.faidare.repository.es.StudyRepository;
 import fr.inra.urgi.faidare.repository.es.TrialRepository;
 import fr.inra.urgi.faidare.repository.es.XRefDocumentRepository;
 import fr.inra.urgi.faidare.repository.file.CropOntologyRepository;
+import fr.inra.urgi.faidare.web.site.MapLocation;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,19 +46,22 @@ public class StudyController {
     private final GermplasmRepository germplasmRepository;
     private final CropOntologyRepository cropOntologyRepository;
     private final TrialRepository trialRepository;
+    private final LocationRepository locationRepository;
 
     public StudyController(StudyRepository studyRepository,
                            FaidareProperties faidareProperties,
                            XRefDocumentRepository xRefDocumentRepository,
                            GermplasmRepository germplasmRepository,
                            CropOntologyRepository cropOntologyRepository,
-                           TrialRepository trialRepository) {
+                           TrialRepository trialRepository,
+                           LocationRepository locationRepository) {
         this.studyRepository = studyRepository;
         this.faidareProperties = faidareProperties;
         this.xRefDocumentRepository = xRefDocumentRepository;
         this.germplasmRepository = germplasmRepository;
         this.cropOntologyRepository = cropOntologyRepository;
         this.trialRepository = trialRepository;
+        this.locationRepository = locationRepository;
     }
 
     @GetMapping("/{studyId}")
@@ -77,6 +84,11 @@ public class StudyController {
         List<GermplasmVO> germplasms = getGermplasms(study);
         List<ObservationVariableVO>variables = getVariables(study);
         List<TrialVO> trials = getTrials(study);
+        LocationVO location = getLocation(study);
+
+        // TODO remove this
+        location.setLatitude(34.0);
+        location.setLongitude(14.0);
 
         return new ModelAndView("study",
                                 "model",
@@ -86,9 +98,17 @@ public class StudyController {
                                     germplasms,
                                     variables,
                                     trials,
-                                    crossReferences
+                                    crossReferences,
+                                    location
                                 )
         );
+    }
+
+    private LocationVO getLocation(StudyDetailVO study) {
+        if (Strings.isBlank(study.getLocationDbId())) {
+            return null;
+        }
+        return locationRepository.getById(study.getLocationDbId());
     }
 
     private List<GermplasmVO> getGermplasms(StudyDetailVO study) {
@@ -124,6 +144,8 @@ public class StudyController {
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
     }
+
+
 
     private XRefDocumentVO createXref(String name) {
         XRefDocumentVO xref = new XRefDocumentVO();

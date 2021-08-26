@@ -2,7 +2,7 @@
 
 <html
   xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main})}"
+  th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main}, script=~{::script})}"
 >
 <head>
   <title>Site <th:block th:text="${model.site.locationName}" /></title>
@@ -12,6 +12,8 @@
 <body>
 <main>
   <h1>Site <th:block th:text="${model.site.locationName}" /></h1>
+
+  <div th:replace="fragments/map::map"></div>
 
   <th:block th:if="${model.site.uri != null && !model.site.uri.startsWith('urn:')}">
     <div th:replace="fragments/row::text-row(label='Permanent unique identifier', text=${model.site.uri})"></div>
@@ -58,5 +60,12 @@
 
   <div th:replace="fragments/xrefs::xrefs(crossReferences=${model.crossReferences})"></div>
 </main>
+
+<script th:inline="javascript">
+  faidare.initializeMap({
+    contextPath: [[${#request.getContextPath()}]],
+    locations: /*[[${model.mapLocations}]]*/ []
+  });
+</script>
 </body>
 </html>

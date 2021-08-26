@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<!--
+Reusable fragment displaying a map and its legend.
+The map is initially hidden. The JavaScript displays it if there are locations
+to display
+-->
+<div th:fragment="map" id="map-container" class="d-none">
+  <div id="map" class="border rounded"></div>
+  <div class="map-legend mt-1">
+    <img th:src="@{/assets/images/marker-icon-red.png}" id="red"/>
+    <label for="red" class="me-2">Origin site</label>
+    <img th:src="@{/assets/images/marker-icon-blue.png}" id="blue"/>
+    <label for="blue" class="me-2">Collecting site</label>
+    <img th:src="@{/assets/images/marker-icon-green.png}" id="green"/>
+    <label for="green" class="me-2">Evaluation site</label>
+    <img th:src="@{/assets/images/marker-icon-purple.png}" id="purple"/>
+    <label for="purple">Multi-purpose site</label>
+  </div>
+</div>
