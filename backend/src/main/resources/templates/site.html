@@ -17,22 +17,7 @@
     <div th:replace="fragments/row::text-row(label='Permanent unique identifier', text=${model.site.uri})"></div>
   </th:block>
 
-  <th:block th:if="${model.source != null}">
-    <div th:replace="fragments/row::row(label='Source', content=~{::#source})">
-      <a id="source" target="_blank" th:href="${model.source.url}">
-        <img style="max-height: 60px;" th:src="${model.source.image}" th:alt="${model.source.name} + ' logo'" />
-      </a>
-    </div>
-  </th:block>
-
-  <th:block th:if="${model.site.url != null && model.source != null}">
-    <div
-         th:replace="fragments/row::row(label='Data link', content=~{::#url})">
-      <a id="url" target="_blank" th:href="${model.site.url}">
-        Link to this site on <th:block th:text="${model.source.name}" />
-      </a>
-    </div>
-  </th:block>
+  <div th:replace="fragments/source::source(source=${model.source}, url=${model.site.url}, entityType='site')"></div>
 
   <div th:replace="fragments/row::text-row(label='Abbreviation', text=${model.site.abbreviation})"></div>
   <div th:replace="fragments/row::text-row(label='Type', text=${model.site.locationType})"></div>

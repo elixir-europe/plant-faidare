@@ -4,6 +4,11 @@
 
 <body>
 
+<!--
+Reusable fragment displaying a cross references section, with its title.
+The unique argument (crossReferences) is a List<XRefDocumentVO>
+-->
+
 <div th:fragment="xrefs(crossReferences)" th:if="${!#lists.isEmpty(crossReferences)}">
   <h2>Cross references</h2>
 

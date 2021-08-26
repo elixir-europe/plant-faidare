@@ -58,7 +58,7 @@ public class StudyController {
     }
 
     @GetMapping("/{studyId}")
-    public ModelAndView site(@PathVariable("studyId") String studyId) {
+    public ModelAndView get(@PathVariable("studyId") String studyId) {
         StudyDetailVO study = studyRepository.getById(studyId);
 
         // List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(

@@ -1,3 +1,7 @@
 .label {
     font-weight: 500;
 }
+
+.popover {
+    max-width: min(80vw, 600px);
+}

@@ -37,7 +37,7 @@ public class SiteController {
     }
 
     @GetMapping("/{siteId}")
-    public ModelAndView site(@PathVariable("siteId") String siteId) {
+    public ModelAndView get(@PathVariable("siteId") String siteId) {
         LocationVO site = locationRepository.getById(siteId);
 
         // List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(

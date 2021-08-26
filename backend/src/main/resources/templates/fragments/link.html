@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<!--
+Reusable fragment displaying a link with a label if the provided url is not
+empty, or a span with the label if the provided url is empty.
+Both arguments are strings.
+-->
+<th:block th:fragment="link(label, url)">
+  <a th:unless="${#strings.isEmpty(url)}"
+     th:href="${url}"
+     th:text="${label}"></a>
+  <span th:if="${#strings.isEmpty(url)}" th:text="${label}"></span>
+</th:block>
+
+</body>
+
+</html>

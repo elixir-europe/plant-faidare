@@ -4,6 +4,21 @@
 
 <body>
 
+<!--
+Reusable fragment displaying a responsive row containing a label and a content.
+The label argument is a string.
+The content argument is a fragment which is displayed at the right of the label.
+
+Note that `th:if` is not evaluated when th:replace is used. So if this row must
+be displayed only if some condition is true, the fragment should be enclosed
+into a block with the condition:
+  <th:block th:if="${someCondition}">
+    <div th:replace="fragments/row::row(label='Some label', content=~{::#some-content-id})">
+      <span id="some-content-id">the content here</span>
+    </div>
+  </th:block>
+-->
+
 <div th:fragment="row(label, content)" class="row py-2">
   <div class="col-md-4 label pb-1 pb-md-0" th:text="${label}"></div>
   <div class="col">
@@ -11,7 +26,21 @@
   </div>
 </div>
 
-<div th:fragment="text-row(label, text)" th:if="${!#strings.isEmpty(text)}" class="row py-2">
+<!--
+Reusable fragment displaying a responsive row containing a label and a textual content.
+The label argument is a string.
+The text argument is a string which is displayed at the right of the label.
+The whole row is omitted if the textual content is empty, so the caller does not
+need to test that condition.
+
+Note that `th:if` is not evaluated when th:replace is used. So if this row must
+be displayed only if some other condition is true, the fragment should be enclosed
+into a block with the condition:
+  <th:block th:if="${someCondition}">
+    <div th:replace="fragments/row::text-row(label='Some label', text=${someTextExpression})"></div>
+  </th:block>
+-->
+<div th:fragment="text-row(label, text)" th:unless="${#strings.isEmpty(text)}" class="row py-2">
   <div class="col-md-4 label pb-1 pb-md-0" th:text="${label}"></div>
   <div class="col" th:text="${text}"></div>
 </div>

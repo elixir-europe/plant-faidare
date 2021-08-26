@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<!--
+Reusable fragment displaying the content of an institute popover.
+Its unique argument (institute) is an InstituteVO
+-->
+
+<th:block th:fragment="institute(institute)">
+  <div class="text-center py-2" th:if="${institute.logo}">
+    <img th:src="${institute.logo}" />
+  </div>
+  <div th:replace="fragments/row::text-row(label='Code', text=${institute.instituteCode})"></div>
+  <div th:replace="fragments/row::text-row(label='Acronym', text=${institute.acronym})"></div>
+  <div th:replace="fragments/row::text-row(label='Organization', text=${institute.organisation})"></div>
+  <div th:replace="fragments/row::text-row(label='Type', text=${institute.instituteType})"></div>
+  <div th:replace="fragments/row::text-row(label='Address', text=${institute.address})"></div>
+
+  <th:block th:if="${institute.webSite}">
+    <div th:replace="fragments/row::row(label='Website', content=~{::.institute-website})">
+      <a class="institute-website"
+         target="_blank"
+         th:href="${institute.webSite}"
+         th:text="${#strings.abbreviate(institute.webSite, 25)}"></a>
+    </div>
+  </th:block>
+</th:block>
+
+</body>
+
+</html>
