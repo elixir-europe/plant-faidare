@@ -9,12 +9,11 @@ Reusable fragment displaying a cross references section, with its title.
 The unique argument (crossReferences) is a List<XRefDocumentVO>
 -->
 
-<div th:fragment="xrefs(crossReferences)" th:if="${!#lists.isEmpty(crossReferences)}">
+<div class="f-card" th:fragment="xrefs(crossReferences)" th:if="${!#lists.isEmpty(crossReferences)}">
   <h2>Cross references</h2>
-
-  <div class="table-responsive scroll-big-table table-card-body">
-    <div class="card">
-      <table class="table table-sm table-striped">
+  <div class="f-card-body">
+    <div class="scroll-table-container scroll-table-container-big">
+      <table class="table table-sm table-striped table-sticky table-responsive-sm">
         <thead>
           <tr>
             <th scope="col">Name</th>
@@ -28,13 +27,12 @@ The unique argument (crossReferences) is a List<XRefDocumentVO>
             <td><a th:href="${crossRef.url}" target="_blank" th:text="${crossRef.name}"></a></td>
             <td th:text="${crossRef.databaseName}"></td>
             <td th:text="${crossRef.entryType}"></td>
-            <td th:text="${#strings.abbreviate(crossRef.description, 120)}"></td>
+            <td style="min-width: 30rem;" th:text="${#strings.abbreviate(crossRef.description, 120)}"></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-
 </div>
 
 </body>

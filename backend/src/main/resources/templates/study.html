@@ -15,51 +15,53 @@
 
   <div th:replace="fragments/map::map"></div>
 
-  <h2>Identification</h2>
+  <div class="f-card mt-4">
+    <h2>Identification</h2>
+    <div class="f-card-body">
+      <div th:replace="fragments/row::text-row(label='Name', text=${model.study.studyName})"></div>
+      <div th:replace="fragments/row::text-row(label='Identifier', text=${model.study.studyDbId})"></div>
 
-  <div th:replace="fragments/row::text-row(label='Name', text=${model.study.studyName})"></div>
-  <div th:replace="fragments/row::text-row(label='Identifier', text=${model.study.studyDbId})"></div>
+      <div th:replace="fragments/source::source(source=${model.source}, url=${model.study.url}, entityType='study')"></div>
 
-  <div th:replace="fragments/source::source(source=${model.source}, url=${model.study.url}, entityType='study')"></div>
+      <div th:replace="fragments/row::text-row(label='Project name', text=${model.study.programName})"></div>
+      <div th:replace="fragments/row::text-row(label='Description', text=${model.study.studyDescription})"></div>
+      <th:block th:if="${model.study.active != null}">
+        <div th:replace="fragments/row::text-row(label='Active', text=${model.study.active ? 'Yes' : 'No'})"></div>
+      </th:block>
 
-  <div th:replace="fragments/row::text-row(label='Project name', text=${model.study.programName})"></div>
-  <div th:replace="fragments/row::text-row(label='Description', text=${model.study.studyDescription})"></div>
-  <th:block th:if="${model.study.active != null}">
-    <div th:replace="fragments/row::text-row(label='Active', text=${model.study.active ? 'Yes' : 'No'})"></div>
-  </th:block>
+      <th:block th:unless="${#lists.isEmpty(model.study.seasons)}">
+        <div th:replace="fragments/row::text-row(label='Seasons', text=${#strings.listJoin(model.study.seasons, ',')})"></div>
+      </th:block>
+      <th:block th:if="${model.study.startDate != null && model.study.endDate != null}">
+        <div th:replace="fragments/row::text-row(label='Date', text=${'From ' + #dates.format(model.study.startDate, 'yyyy-MM-dd') + ' to ' + #dates.format(model.study.endDate, 'yyyy-MM-dd') })"></div>
+      </th:block>
+      <th:block th:if="${model.study.startDate != null && model.study.endDate == null}">
+        <div th:replace="fragments/row::text-row(label='Date', text=${'Started on ' + #dates.format(model.study.startDate, 'yyyy-MM-dd')})"></div>
+      </th:block>
 
-  <th:block th:unless="${#lists.isEmpty(model.study.seasons)}">
-    <div th:replace="fragments/row::text-row(label='Seasons', text=${#strings.listJoin(model.study.seasons, ',')})"></div>
-  </th:block>
-  <th:block th:if="${model.study.startDate != null && model.study.endDate != null}">
-    <div th:replace="fragments/row::text-row(label='Date', text=${'From ' + #dates.format(model.study.startDate, 'yyyy-MM-dd') + ' to ' + #dates.format(model.study.endDate, 'yyyy-MM-dd') })"></div>
-  </th:block>
-  <th:block th:if="${model.study.startDate != null && model.study.endDate == null}">
-    <div th:replace="fragments/row::text-row(label='Date', text=${'Started on ' + #dates.format(model.study.startDate, 'yyyy-MM-dd')})"></div>
-  </th:block>
+      <th:block th:if="${model.study.locationDbId}">
+        <div th:replace="fragments/row::row(label='Location name', content=~{::#location})">
+          <a id="location" th:href="@{/sites/{siteId}(siteId=${model.study.locationDbId})}" th:text="${model.study.locationName}"></a>
+        </div>
+      </th:block>
 
-  <th:block th:if="${model.study.locationDbId}">
-    <div th:replace="fragments/row::row(label='Location name', content=~{::#location})">
-      <a id="location" th:href="@{/sites/{siteId}(siteId=${model.study.locationDbId})}" th:text="${model.study.locationName}"></a>
+      <th:block th:unless="${#lists.isEmpty(model.study.dataLinks)}">
+        <div th:replace="fragments/row::row(label='Data files', content=~{::#data-files})">
+          <ul id="data-files" class="list-unstyled">
+            <li th:each="dataLink : ${model.study.dataLinks}">
+              <a target="_blank" th:href="${dataLink.url}" th:text="${dataLink.name}"></a>
+            </li>
+          </ul>
+        </div>
+      </th:block>
     </div>
-  </th:block>
+  </div>
 
-  <th:block th:unless="${#lists.isEmpty(model.study.dataLinks)}">
-    <div th:replace="fragments/row::row(label='Data files', content=~{::#data-files})">
-      <ul id="data-files" class="list-unstyled">
-        <li th:each="dataLink : ${model.study.dataLinks}">
-          <a target="_blank" th:href="${dataLink.url}" th:text="${dataLink.name}"></a>
-        </li>
-      </ul>
-    </div>
-  </th:block>
-
-  <th:block th:unles="${#lists.isEmpty(model.germplasms)}">
+  <div class="f-card" th:unles="${#lists.isEmpty(model.germplasms)}">
     <h2>Genotype</h2>
-
-    <div class="table-responsive scroll-table table-card-body">
-      <div class="card">
-        <table class="table table-sm table-striped">
+    <div class="f-card-body">
+      <div class="scroll-table-container scroll-table-container-big">
+        <table class="table table-sm table-striped table-sticky table-responsive-sm">
           <thead>
             <tr>
               <th scope="col">Accession number</th>
@@ -79,13 +81,13 @@
         </table>
       </div>
     </div>
-  </th:block>
+  </div>
 
-  <th:block th:unless="${#lists.isEmpty(model.variables)}">
+  <div class="f-card" th:unless="${#lists.isEmpty(model.variables)}">
     <h2>Variables</h2>
-    <div class="table-responsive scroll-table table-card-body">
-      <div class="card">
-        <table class="table table-sm table-striped">
+    <div class="f-card-body">
+      <div class="scroll-table-container">
+        <table class="table table-sm table-striped table-sticky table-responsive-sm">
           <thead>
             <tr>
               <th scope="col">Variable ID</th>
@@ -110,13 +112,13 @@
         </table>
       </div>
     </div>
-  </th:block>
+  </div>
 
-  <th:block th:unless="${#lists.isEmpty(model.trials)}">
+  <div class="f-card" th:unless="${#lists.isEmpty(model.trials)}">
     <h2>Data Set</h2>
-    <div class="table-responsive scroll-big-table table-card-body">
-      <div class="card">
-        <table class="table table-sm table-striped">
+    <div class="f-card-body">
+      <div class="scroll-table-container scroll-table-container-big">
+        <table class="table table-sm table-striped table-sticky table-responsive-sm">
           <thead>
             <tr>
               <th scope="col">Name</th>
@@ -144,13 +146,13 @@
         </table>
       </div>
     </div>
-  </th:block>
+  </div>
 
-  <th:block th:unless="${#lists.isEmpty(model.study.contacts)}">
+  <div class="f-card" th:unless="${#lists.isEmpty(model.study.contacts)}">
     <h2>Contact</h2>
-    <div class="table-responsive scroll-table table-card-body">
-      <div class="card">
-        <table class="table table-sm table-striped">
+    <div class="f-card-body">
+      <div class="scroll-table-container">
+        <table class="table table-sm table-striped table-sticky table-responsive-sm">
           <thead>
             <tr>
               <th scope="col">Role</th>
@@ -170,23 +172,23 @@
         </table>
       </div>
     </div>
-  </th:block>
+  </div>
 
-  <th:block th:unless="${#lists.isEmpty(model.additionalInfoProperties)}">
+  <div class="f-card" th:unless="${#lists.isEmpty(model.additionalInfoProperties)}">
     <h2>Additional information</h2>
-    <div class="table-responsive scroll-table table-card-body">
-      <div class="card">
-        <table class="table table-sm table-striped">
+    <div class="f-card-body">
+      <div class="scroll-table-container">
+        <table class="table table-sm">
           <tbody>
             <tr th:each="row : ${model.additionalInfoProperties}">
-              <td style="width: 50%;" th:text="${row.key}"></td>
+              <th class="label" style="width: 33.33%" th:text="${row.key}" scope="row"></th>
               <td th:text="${row.value}"></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-  </th:block>
+  </div>
 
   <div th:replace="fragments/xrefs::xrefs(crossReferences=${model.crossReferences})"></div>
 </main>

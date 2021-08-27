@@ -12,18 +12,17 @@
   </head>
 
   <body>
-    <div class="container">
-      <header>
-        Common header
-      </header>
-
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <span class="navbar-brand py-0">
+          <img th:src="@{/assets/images/logo.png}" style="height: 40px"/>
+        </span>
+      </div>
+    </nav>
+    <div class="container mt-3">
       <div th:replace="${content}">
         <p>Layout content</p>
       </div>
-
-      <footer>
-        common footer
-      </footer>
     </div>
     <script type="text/javascript" th:src="@{/assets/script.js}"></script>
     <script type="text/javascript" th:replace="${script}"></script>

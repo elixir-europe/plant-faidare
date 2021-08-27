@@ -16,7 +16,7 @@ The entityType argument is a string, which is used in the message
   <th:block th:if="${source != null}">
     <div th:replace="fragments/row::row(label='Source', content=~{::.source})">
       <a class="source" target="_blank" th:href="${source.url}">
-        <img style="max-height: 60px;" th:src="${source.image}" th:alt="${source.name} + ' logo'" />
+        <img class="img-fluid" style="max-height: 60px;" th:src="${source.image}" th:alt="${source.name} + ' logo'" />
       </a>
     </div>
   </th:block>

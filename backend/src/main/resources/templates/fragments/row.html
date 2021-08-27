@@ -19,7 +19,7 @@ into a block with the condition:
   </th:block>
 -->
 
-<div th:fragment="row(label, content)" class="row py-2">
+<div th:fragment="row(label, content)" class="row f-row">
   <div class="col-md-4 label pb-1 pb-md-0" th:text="${label}"></div>
   <div class="col">
     <th:block th:replace="${content}" />
@@ -40,7 +40,7 @@ into a block with the condition:
     <div th:replace="fragments/row::text-row(label='Some label', text=${someTextExpression})"></div>
   </th:block>
 -->
-<div th:fragment="text-row(label, text)" th:unless="${#strings.isEmpty(text)}" class="row py-2">
+<div th:fragment="text-row(label, text)" th:unless="${#strings.isEmpty(text)}" class="row f-row">
   <div class="col-md-4 label pb-1 pb-md-0" th:text="${label}"></div>
   <div class="col" th:text="${text}"></div>
 </div>
