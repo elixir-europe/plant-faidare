@@ -1,2 +1,2 @@
 rootProject.name = "faidare"
-include("backend")
+include("backend", "web")

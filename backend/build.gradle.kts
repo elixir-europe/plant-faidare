@@ -1,11 +1,8 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.springframework.boot.gradle.tasks.buildinfo.BuildInfo
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-import org.springframework.boot.gradle.tasks.run.BootRun
 
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
     }
 }
@@ -19,7 +16,6 @@ plugins {
     id("org.sonarqube")
     id("org.owasp.dependencycheck") version "6.0.3"
 }
-
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -40,7 +36,7 @@ tasks {
         options.compilerArgs.add("-parameters")
     }
 
-    getByName<Copy>("processResources") {
+    processResources {
         inputs.property("app", "gnpis")
 
         filesMatching("bootstrap.yml") {}
@@ -51,21 +47,44 @@ tasks {
     // but it's better to do that than using the bootInfo() method of the springBoot closure, because that
     // makes the test task out of date, which makes the build much longer.
     // See https://github.com/spring-projects/spring-boot/issues/13152
-    val buildInfo by creating(BuildInfo::class) {
+    val buildInfo by registering(BuildInfo::class) {
         destinationDir = file("$buildDir/buildInfo")
     }
 
-    val bootJar by getting(BootJar::class) {
+    bootJar {
         archiveName = "${rootProject.name}.jar"
         dependsOn(buildInfo)
+        dependsOn(":web:assemble")
+
+        // replace the script.js and style.css file names referenced in main.html
+        // by their actual name, containing the content hash
+        filesMatching("**/layout/main.html") {
+            val webAssetsDir = project(":web").file("build/dist/assets/");
+            val scriptFileName = webAssetsDir.list().first { it.startsWith("script") && it.endsWith(".js") }
+            val styleFileName = webAssetsDir.list().first { it.startsWith("style") && it.endsWith(".css") }
+
+            filter { line ->
+                if (line.contains("script.js")) {
+                    line.replace("script.js", scriptFileName)
+                }
+                else if (line.contains("style.css")) {
+                    line.replace("style.css", styleFileName)
+                } else {
+                    line
+                }
+            }
+        }
 
         into("BOOT-INF/classes/META-INF") {
-            from(buildInfo.destinationDir)
+            from(buildInfo.map { it.destinationDir })
+        }
+        into("BOOT-INF/classes/static") {
+            from(project(":web").file("build/dist"))
         }
         launchScript()
     }
 
-    val test by getting(Test::class) {
+    test {
         useJUnitPlatform()
         testLogging {
             exceptionFormat = TestExceptionFormat.FULL
@@ -73,7 +92,7 @@ tasks {
         outputs.dir(snippetsDir)
     }
 
-    val jacocoTestReport by getting(JacocoReport::class) {
+    jacocoTestReport {
         reports {
             xml.setEnabled(true)
             html.setEnabled(true)

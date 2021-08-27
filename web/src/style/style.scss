@@ -1,0 +1,21 @@
+@import 'custom-bootstrap';
+@import '~leaflet/dist/leaflet.css';
+@import '~leaflet.markercluster/dist/MarkerCluster.css';
+@import '~leaflet.markercluster/dist/MarkerCluster.Default.css';
+
+.label {
+  font-weight: 500;
+}
+
+.popover {
+  max-width: min(80vw, 600px);
+}
+
+#map {
+  height: min(400px, 60vh);
+}
+
+.map-legend img {
+  height: 1.5rem;
+}
+

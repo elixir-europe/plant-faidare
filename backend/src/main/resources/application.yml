@@ -90,3 +90,11 @@ server:
   servlet:
     context-path: /faidare-dev
 
+---
+spring:
+  profiles:
+    dev
+  resources:
+    static-locations:
+      - classpath:/static/
+      - file:./web/build/dist/
