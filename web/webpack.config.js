@@ -1,13 +1,23 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
-module.exports = {
+module.exports = (env, argv) => ({
+    context: path.resolve(__dirname, '.'),
+    // inline source maps only in development mode
+    devtool: argv.mode === 'production' ? undefined : 'inline-source-map',
     plugins: [
-        // cleans the output directory before each build
-        new CleanWebpackPlugin(),
         // allows extracting the CSS into a CSS file instead of bundling it in a JS file
-        new MiniCssExtractPlugin()
+        new MiniCssExtractPlugin({
+            filename: argv.mode === 'production' ? '[name].[contenthash].css' : '[name].css'
+        }),
+        // cleans the output directory before each build
+        new CleanWebpackPlugin({
+            // and the empty, useless style.js after each build
+            protectWebpackAssets: false,
+            cleanAfterEveryBuildPatterns: ['style*.js']
+        })
     ],
     entry: {
         // a JS bundle is generated for the index.ts entry point. Since the application is really small
@@ -40,7 +50,18 @@ module.exports = {
         extensions: ['.ts', '.js'],
     },
     output: {
+        // the output is stored in build/dist/assets
         path: path.resolve(__dirname, 'build/dist/assets'),
-        filename: '[name].js'
+        filename: argv.mode === 'production' ? '[name].[contenthash].js' : '[name].js'
+    },
+    optimization: {
+        minimizer: [
+            '...',
+            new CssMinimizerPlugin()
+        ]
+    },
+    performance: {
+        maxAssetSize: 300000,
+        maxEntrypointSize: 300000
     }
-};
+});

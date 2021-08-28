@@ -27,8 +27,7 @@ tasks {
     val yarnBuildProd by registering(YarnTask::class) {
         args.set(listOf("run", "build:prod"))
         dependsOn(prepare)
-        inputs.file("webpack.common.js")
-        inputs.file("webpack.prod.js")
+        inputs.file("webpack.config.js")
         inputs.file("tsconfig.json")
         inputs.file("package.json")
         inputs.file("yarn.lock")
