@@ -11,7 +11,7 @@ Its unique argument (institute) is an InstituteVO
 
 <th:block th:fragment="institute(institute)">
   <div class="text-center py-2" th:if="${institute.logo}">
-    <img th:src="${institute.logo}" />
+    <img th:src="${institute.logo}" th:alt="${institute.instituteName}"/>
   </div>
   <div th:replace="fragments/row::text-row(label='Code', text=${institute.instituteCode})"></div>
   <div th:replace="fragments/row::text-row(label='Acronym', text=${institute.acronym})"></div>

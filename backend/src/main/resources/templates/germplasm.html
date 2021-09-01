@@ -112,7 +112,7 @@
                 </div>
               </th:block>
               <th:block th:unless="${#lists.isEmpty(model.germplasm.taxonSynonyms)}">
-                <div th:replace="fragments/row::row(label='Taxon common names', content=~{::#taxon-synonyms})">
+                <div th:replace="fragments/row::row(label='Taxon synonyms', content=~{::#taxon-synonyms})">
                   <div id="taxon-synonyms" class="content-overflow" th:text="${#strings.listJoin(model.germplasm.taxonSynonyms, ', ')}"></div>
                 </div>
               </th:block>
