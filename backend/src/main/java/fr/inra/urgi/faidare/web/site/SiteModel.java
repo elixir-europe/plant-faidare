@@ -13,7 +13,7 @@ import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSource;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 
 /**
- * The model used py the site page
+ * The model used by the site page
  * @author JB Nizet
  */
 public final class SiteModel {
