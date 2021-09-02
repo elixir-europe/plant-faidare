@@ -1,21 +1,29 @@
 <!DOCTYPE html>
-<html lang="fr" th:fragment="layout (title, content, script)" xmlns:th="http://www.thymeleaf.org">
+<html
+  lang="fr"
+  th:fragment="layout (title, content, script)"
+  xmlns:th="http://www.thymeleaf.org"
+>
   <head>
     <title th:replace="${title}">Layout Title</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
 
-    <link th:href="@{/assets/style.css}" rel="stylesheet">
+    <link th:href="@{/assets/style.css}" rel="stylesheet" />
 
-    <link rel="shortcut icon" th:href="@{/static/assets/images/favicon.ico}" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      th:href="@{/static/assets/images/favicon.ico}"
+      type="image/x-icon"
+    />
   </head>
 
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
         <span class="navbar-brand py-0">
-          <img th:src="@{/assets/images/logo.png}" style="height: 40px"/>
+          <img th:src="@{/assets/images/logo.png}" style="height: 40px" />
         </span>
       </div>
     </nav>

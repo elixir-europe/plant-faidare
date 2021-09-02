@@ -1,40 +1,53 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
-
-<body>
-
-<!--
+  <body>
+    <!--
 Reusable fragment displaying a cross references section, with its title.
 The unique argument (crossReferences) is a List<XRefDocumentVO>
 -->
 
-<div class="f-card" th:fragment="xrefs(crossReferences)" th:if="${!#lists.isEmpty(crossReferences)}">
-  <h2>Cross references</h2>
-  <div class="f-card-body">
-    <div class="scroll-table-container scroll-table-container-big">
-      <table class="table table-sm table-striped table-sticky table-responsive-sm">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Source</th>
-            <th scope="col">Type</th>
-            <th scope="col">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="crossRef : ${crossReferences}">
-            <td><a th:href="${crossRef.url}" target="_blank" th:text="${crossRef.name}"></a></td>
-            <td th:text="${crossRef.databaseName}"></td>
-            <td th:text="${crossRef.entryType}"></td>
-            <td style="min-width: 30rem;" th:text="${#strings.abbreviate(crossRef.description, 120)}"></td>
-          </tr>
-        </tbody>
-      </table>
+    <div
+      class="f-card"
+      th:fragment="xrefs(crossReferences)"
+      th:if="${!#lists.isEmpty(crossReferences)}"
+    >
+      <h2>Cross references</h2>
+      <div class="f-card-body">
+        <div class="scroll-table-container scroll-table-container-big">
+          <table
+            class="
+              table table-sm table-striped table-sticky table-responsive-sm
+            "
+          >
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Source</th>
+                <th scope="col">Type</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="crossRef : ${crossReferences}">
+                <td>
+                  <a
+                    th:href="${crossRef.url}"
+                    target="_blank"
+                    th:text="${crossRef.name}"
+                  ></a>
+                </td>
+                <td th:text="${crossRef.databaseName}"></td>
+                <td th:text="${crossRef.entryType}"></td>
+                <td
+                  style="min-width: 30rem"
+                  th:text="${#strings.abbreviate(crossRef.description, 120)}"
+                ></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
-</body>
-
+  </body>
 </html>

@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
-
-<body>
-
-<!--
+  <body>
+    <!--
 Reusable fragment displaying a responsive row containing a label and a content.
 The label argument is a string.
 The content argument is a fragment which is displayed at the right of the label.
@@ -19,14 +17,14 @@ into a block with the condition:
   </th:block>
 -->
 
-<div th:fragment="row(label, content)" class="row f-row">
-  <div class="col-md-4 label pb-1 pb-md-0" th:text="${label}"></div>
-  <div class="col">
-    <th:block th:replace="${content}" />
-  </div>
-</div>
+    <div th:fragment="row(label, content)" class="row f-row">
+      <div class="col-md-4 label pb-1 pb-md-0" th:text="${label}"></div>
+      <div class="col">
+        <th:block th:replace="${content}" />
+      </div>
+    </div>
 
-<!--
+    <!--
 Reusable fragment displaying a responsive row containing a label and a textual content.
 The label argument is a string.
 The text argument is a string which is displayed at the right of the label.
@@ -40,11 +38,13 @@ into a block with the condition:
     <div th:replace="fragments/row::text-row(label='Some label', text=${someTextExpression})"></div>
   </th:block>
 -->
-<div th:fragment="text-row(label, text)" th:unless="${#strings.isEmpty(text)}" class="row f-row">
-  <div class="col-md-4 label pb-1 pb-md-0" th:text="${label}"></div>
-  <div class="col" th:text="${text}"></div>
-</div>
-
-</body>
-
+    <div
+      th:fragment="text-row(label, text)"
+      th:unless="${#strings.isEmpty(text)}"
+      class="row f-row"
+    >
+      <div class="col-md-4 label pb-1 pb-md-0" th:text="${label}"></div>
+      <div class="col" th:text="${text}"></div>
+    </div>
+  </body>
 </html>

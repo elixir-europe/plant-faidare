@@ -4,75 +4,130 @@
   xmlns:th="http://www.thymeleaf.org"
   th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main}, script=~{::script})}"
 >
-<head>
-  <title>Site <th:block th:text="${model.site.locationName}" /></title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
+  <head>
+    <title>Site <th:block th:text="${model.site.locationName}" /></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
 
-<body>
-<main>
-  <h1>Site <th:block th:text="${model.site.locationName}" /></h1>
+  <body>
+    <main>
+      <h1>Site <th:block th:text="${model.site.locationName}" /></h1>
 
-  <div th:replace="fragments/map::map"></div>
+      <div th:replace="fragments/map::map"></div>
 
-  <div class="f-card mt-4">
-    <h2>Details</h2>
-    <div class="f-card-body">
-      <th:block th:if="${model.site.uri != null && !model.site.uri.startsWith('urn:')}">
-        <div th:replace="fragments/row::text-row(label='Permanent unique identifier', text=${model.site.uri})"></div>
-      </th:block>
+      <div class="f-card mt-4">
+        <h2>Details</h2>
+        <div class="f-card-body">
+          <th:block
+            th:if="${model.site.uri != null && !model.site.uri.startsWith('urn:')}"
+          >
+            <div
+              th:replace="fragments/row::text-row(label='Permanent unique identifier', text=${model.site.uri})"
+            ></div>
+          </th:block>
 
-      <div th:replace="fragments/source::source(source=${model.source}, url=${model.site.url}, entityType='site')"></div>
+          <div
+            th:replace="fragments/source::source(source=${model.source}, url=${model.site.url}, entityType='site')"
+          ></div>
 
-      <div th:replace="fragments/row::text-row(label='Abbreviation', text=${model.site.abbreviation})"></div>
-      <div th:replace="fragments/row::text-row(label='Type', text=${model.site.locationType})"></div>
-      <div th:replace="fragments/row::text-row(label='Status', text=${model.siteStatus})"></div>
-      <div th:replace="fragments/row::text-row(label='Institution/Landowner', text=${model.site.instituteName})"></div>
-      <div th:replace="fragments/row::text-row(label='Institution address', text=${model.site.instituteAddress})"></div>
-      <div th:replace="fragments/row::text-row(label='Coordinates precision', text=${model.coordinatesPrecision})"></div>
-      <th:block th:if="${model.site.latitude}">
-        <div th:replace="fragments/row::text-row(label='Latitude', text=${#coordinates.formatLatitude(model.site.latitude)})"></div>
-      </th:block>
-      <th:block th:if="${model.site.longitude}">
-        <div th:replace="fragments/row::text-row(label='Longitude', text=${#coordinates.formatLongitude(model.site.longitude)})"></div>
-      </th:block>
-      <div th:replace="fragments/row::text-row(label='Geographical location', text=${model.geographicalLocation})"></div>
-      <th:block th:if="${model.site.countryName != null && model.geographicalLocation == null}">
-        <div th:replace="fragments/row::text-row(label='Country name', text=${model.site.countryName})"></div>
-      </th:block>
+          <div
+            th:replace="fragments/row::text-row(label='Abbreviation', text=${model.site.abbreviation})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Type', text=${model.site.locationType})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Status', text=${model.siteStatus})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Institution/Landowner', text=${model.site.instituteName})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Institution address', text=${model.site.instituteAddress})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Coordinates precision', text=${model.coordinatesPrecision})"
+          ></div>
+          <th:block th:if="${model.site.latitude}">
+            <div
+              th:replace="fragments/row::text-row(label='Latitude', text=${#coordinates.formatLatitude(model.site.latitude)})"
+            ></div>
+          </th:block>
+          <th:block th:if="${model.site.longitude}">
+            <div
+              th:replace="fragments/row::text-row(label='Longitude', text=${#coordinates.formatLongitude(model.site.longitude)})"
+            ></div>
+          </th:block>
+          <div
+            th:replace="fragments/row::text-row(label='Geographical location', text=${model.geographicalLocation})"
+          ></div>
+          <th:block
+            th:if="${model.site.countryName != null && model.geographicalLocation == null}"
+          >
+            <div
+              th:replace="fragments/row::text-row(label='Country name', text=${model.site.countryName})"
+            ></div>
+          </th:block>
 
-      <th:block th:if="${model.site.countryCode != null && model.geographicalLocation == null}">
-        <div th:replace="fragments/row::text-row(label='Country code', text=${model.site.countryName})"></div>
-      </th:block>
+          <th:block
+            th:if="${model.site.countryCode != null && model.geographicalLocation == null}"
+          >
+            <div
+              th:replace="fragments/row::text-row(label='Country code', text=${model.site.countryName})"
+            ></div>
+          </th:block>
 
-      <div th:replace="fragments/row::text-row(label='Altitude', text=${model.site.altitude})"></div>
-      <div th:replace="fragments/row::text-row(label='Slope', text=${model.slope})"></div>
-      <div th:replace="fragments/row::text-row(label='Exposure', text=${model.exposure})"></div>
-      <div th:replace="fragments/row::text-row(label='Topography', text=${model.topography})"></div>
-      <div th:replace="fragments/row::text-row(label='Environment type', text=${model.environmentType})"></div>
-      <div th:replace="fragments/row::text-row(label='Distance to city', text=${model.distanceToCity})"></div>
-      <div th:replace="fragments/row::text-row(label='Direction from city', text=${model.directionFromCity})"></div>
-      <div th:replace="fragments/row::text-row(label='Comment', text=${model.comment})"></div>
-    </div>
-  </div>
+          <div
+            th:replace="fragments/row::text-row(label='Altitude', text=${model.site.altitude})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Slope', text=${model.slope})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Exposure', text=${model.exposure})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Topography', text=${model.topography})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Environment type', text=${model.environmentType})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Distance to city', text=${model.distanceToCity})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Direction from city', text=${model.directionFromCity})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Comment', text=${model.comment})"
+          ></div>
+        </div>
+      </div>
 
-  <div class="f-card" th:unless="${#lists.isEmpty(model.additionalInfoProperties)}">
-    <h2>Additional info</h2>
-    <div class="f-card-body">
-      <th:block th:each="prop : ${model.additionalInfoProperties}">
-        <div th:replace="fragments/row::text-row(label=${prop.key}, text=${prop.value})"></div>
-      </th:block>
-    </div>
-  </div>
+      <div
+        class="f-card"
+        th:unless="${#lists.isEmpty(model.additionalInfoProperties)}"
+      >
+        <h2>Additional info</h2>
+        <div class="f-card-body">
+          <th:block th:each="prop : ${model.additionalInfoProperties}">
+            <div
+              th:replace="fragments/row::text-row(label=${prop.key}, text=${prop.value})"
+            ></div>
+          </th:block>
+        </div>
+      </div>
 
-  <div th:replace="fragments/xrefs::xrefs(crossReferences=${model.crossReferences})"></div>
-</main>
+      <div
+        th:replace="fragments/xrefs::xrefs(crossReferences=${model.crossReferences})"
+      ></div>
+    </main>
 
-<script th:inline="javascript">
-  faidare.initializeMap({
-    contextPath: [[${#request.getContextPath()}]],
-    locations: /* TODO [[${model.mapLocations}]]*/ []
-  });
-</script>
-</body>
+    <script th:inline="javascript">
+      faidare.initializeMap({
+        contextPath: [[${#request.getContextPath()}]],
+        locations: /* TODO [[${model.mapLocations}]]*/ []
+      });
+    </script>
+  </body>
 </html>

@@ -4,449 +4,710 @@
   xmlns:th="http://www.thymeleaf.org"
   th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main}, script=~{::script})}"
 >
-<head>
-  <title>Germplasm: <th:block th:text="${model.germplasm.germplasmName}" /></title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
+  <head>
+    <title>
+      Germplasm: <th:block th:text="${model.germplasm.germplasmName}" />
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
 
-<body>
-<main>
-  <div class="d-flex">
-    <h1 class="flex-grow-1">Germplasm: <th:block th:text="${model.germplasm.germplasmName}" /></h1>
-    <div th:if="${model.germplasm.holdingGenbank != null && model.germplasm.holdingGenbank.logo != null}">
-      <img th:src="${model.germplasm.holdingGenbank.logo}" th:alt="${model.germplasm.holdingGenbank.instituteName}" />
-    </div>
-  </div>
-
-  <div th:replace="fragments/map::map"></div>
-
-  <div class="row align-items-center justify-content-center mt-4">
-    <div class="col-auto field" th:if="${model.germplasm.photo != null && model.germplasm.photo.thumbnailFile != null}">
-      <template id="photo-popover">
-        <div class="card">
-          <img th:src="${model.germplasm.photo.file}" class="card-img-top" alt="">
-          <div class="card-body">
-            <div th:replace="fragments/row::text-row(label='Accession name', text=${model.germplasm.germplasmName})"></div>
-            <div th:replace="fragments/row::text-row(label='Photo name', text=${model.germplasm.photo.photoName})"></div>
-            <div th:replace="fragments/row::text-row(label='Description', text=${model.germplasm.photo.description})"></div>
-            <div th:replace="fragments/row::text-row(label='Copyright', text=${model.germplasm.photo.copyright})"></div>
-          </div>
+  <body>
+    <main>
+      <div class="d-flex">
+        <h1 class="flex-grow-1">
+          Germplasm: <th:block th:text="${model.germplasm.germplasmName}" />
+        </h1>
+        <div
+          th:if="${model.germplasm.holdingGenbank != null && model.germplasm.holdingGenbank.logo != null}"
+        >
+          <img
+            th:src="${model.germplasm.holdingGenbank.logo}"
+            th:alt="${model.germplasm.holdingGenbank.instituteName}"
+          />
         </div>
-      </template>
+      </div>
 
-      <a role="button"
-         class="d-flex flex-column align-items-center"
-         data-bs-toggle="popover"
-         tabindex="0"
-         th:data-bs-title="${model.germplasm.photo.photoName}"
-         data-bs-element="#photo-popover"
-         data-bs-container="body"
-         data-bs-trigger="focus">
-        <img th:src="${model.germplasm.photo.thumbnailFile}" class="img-fluid" />
+      <div th:replace="fragments/map::map"></div>
 
-        <figcaption class="figure-caption">
-          © <span th:text="${model.germplasm.photo.copyright}"></span>
-        </figcaption>
-      </a>
-    </div>
-
-    <div class="col-12 col-lg">
-      <div class="f-card">
-        <h2>Identification</h2>
-
-        <div class="f-card-body">
-          <div th:replace="fragments/row::text-row(label='Germplasm name', text=${model.germplasm.germplasmName})"></div>
-          <div th:replace="fragments/row::text-row(label='Accession number', text=${model.germplasm.accessionNumber})"></div>
-
-          <div th:replace="fragments/source::source(source=${model.source}, url=${model.germplasm.url}, entityType='germplasm')"></div>
-
-          <th:block th:unless="${#lists.isEmpty(model.germplasm.synonyms)}">
-            <div th:replace="fragments/row::row(label='Accession synonyms', content=~{::#accession-synonyms})">
-              <div id="accession-synonyms" class="content-overflow" th:text="${#strings.listJoin(model.germplasm.synonyms, ', ')}"></div>
-            </div>
-          </th:block>
-
-          <th:block th:unless="${#strings.isEmpty(model.taxon)}">
-            <div th:replace="fragments/row::row(label='Taxon', content=~{::#taxon})">
-              <div id="taxon">
-                <template id="taxon-popover">
-                  <th:block th:unless="${#strings.isEmpty(model.germplasm.genus)}">
-                    <div th:replace="fragments/row::row(label='Genus', content=~{::#taxon-genus})">
-                      <em id="taxon-genus" th:text="${model.germplasm.genus}"></em>
-                    </div>
-                  </th:block>
-                  <th:block th:unless="${#strings.isEmpty(model.germplasm.species)}">
-                    <div th:replace="fragments/row::row(label='Species', content=~{::#taxon-species})">
-                      <span id="taxon-species">
-                        <em th:text="${model.germplasm.species}"></em>
-                        <span th:unless="${#strings.isEmpty(model.germplasm.speciesAuthority)}"
-                              th:text="${'(' + model.germplasm.speciesAuthority + ')'}"></span>
-                      </span>
-                    </div>
-                  </th:block>
-                  <th:block th:unless="${#strings.isEmpty(model.germplasm.subtaxa)}">
-                    <div th:replace="fragments/row::row(label='Subtaxa', content=~{::#taxon-subtaxa})">
-                      <span id="taxon-subtaxa">
-                        <em th:text="${model.germplasm.subtaxa}"></em>
-                        <span th:unless="${#strings.isEmpty(model.germplasm.subtaxaAuthority)}"
-                              th:text="${'(' + model.germplasm.subtaxaAuthority + ')'}"></span>
-                      </span>
-                    </div>
-                  </th:block>
-
-                  <div th:replace="fragments/row::text-row(label='Authority', text=${model.taxonAuthor})"></div>
-
-                  <th:block th:unless="${#lists.isEmpty(model.germplasm.taxonIds)}">
-                    <div th:replace="fragments/row::row(label='Taxon IDs', content=~{::#taxon-ids})">
-                      <div id="taxon-ids">
-                        <div th:each="taxonId : ${model.germplasm.taxonIds}" class="row">
-                          <div class="col-6 text-nowrap" th:text="${taxonId.sourceName}"></div>
-                          <div class="col-6">
-                            <span class="taxon-id"
-                                  th:replace="fragments/link::link(label=${taxonId.taxonId}, url=${#faidare.taxonIdUrl(taxonId)})"></span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </th:block>
-
-                  <div th:replace="fragments/row::text-row(label='Comment', text=${model.germplasm.taxonComment})"></div>
-                  <th:block th:unless="${#lists.isEmpty(model.germplasm.taxonCommonNames)}">
-                    <div th:replace="fragments/row::row(label='Taxon common names', content=~{::#taxon-common-names})">
-                      <div id="taxon-common-names" class="content-overflow" th:text="${#strings.listJoin(model.germplasm.taxonCommonNames, ', ')}"></div>
-                    </div>
-                  </th:block>
-                  <th:block th:unless="${#lists.isEmpty(model.germplasm.taxonSynonyms)}">
-                    <div th:replace="fragments/row::row(label='Taxon synonyms', content=~{::#taxon-synonyms})">
-                      <div id="taxon-synonyms" class="content-overflow" th:text="${#strings.listJoin(model.germplasm.taxonSynonyms, ', ')}"></div>
-                    </div>
-                  </th:block>
-                </template>
-                <a role="button"
-                   tabindex="0"
-                   data-bs-toggle="popover"
-                   th:data-bs-title="${model.taxon}"
-                   data-bs-element="#taxon-popover"
-                   data-bs-container="body"
-                   data-bs-trigger="focus">
-                  <em th:text="${model.taxon}"></em>
-                  <th:block th:unless="${#strings.isEmpty(model.taxonAuthor)}">(<span th:text="${model.taxonAuthor}"></span>)</th:block>
-                </a>
+      <div class="row align-items-center justify-content-center mt-4">
+        <div
+          class="col-auto field"
+          th:if="${model.germplasm.photo != null && model.germplasm.photo.thumbnailFile != null}"
+        >
+          <template id="photo-popover">
+            <div class="card">
+              <img
+                th:src="${model.germplasm.photo.file}"
+                class="card-img-top"
+                alt=""
+              />
+              <div class="card-body">
+                <div
+                  th:replace="fragments/row::text-row(label='Accession name', text=${model.germplasm.germplasmName})"
+                ></div>
+                <div
+                  th:replace="fragments/row::text-row(label='Photo name', text=${model.germplasm.photo.photoName})"
+                ></div>
+                <div
+                  th:replace="fragments/row::text-row(label='Description', text=${model.germplasm.photo.description})"
+                ></div>
+                <div
+                  th:replace="fragments/row::text-row(label='Copyright', text=${model.germplasm.photo.copyright})"
+                ></div>
               </div>
             </div>
-          </th:block>
+          </template>
 
-          <div th:replace="fragments/row::text-row(label='Biological status', text=${model.germplasm.biologicalStatusOfAccessionCode})"></div>
-          <div th:replace="fragments/row::text-row(label='Genetic nature', text=${model.germplasm.geneticNature})"></div>
-          <div th:replace="fragments/row::text-row(label='Seed source', text=${model.germplasm.seedSource})"></div>
-          <div th:replace="fragments/row::text-row(label='Pedigree', text=${model.germplasm.pedigree})"></div>
-          <div th:replace="fragments/row::text-row(label='Comments', text=${model.germplasm.comment})"></div>
+          <a
+            role="button"
+            class="d-flex flex-column align-items-center"
+            data-bs-toggle="popover"
+            tabindex="0"
+            th:data-bs-title="${model.germplasm.photo.photoName}"
+            data-bs-element="#photo-popover"
+            data-bs-container="body"
+            data-bs-trigger="focus"
+          >
+            <img
+              th:src="${model.germplasm.photo.thumbnailFile}"
+              class="img-fluid"
+            />
 
-          <th:block th:if="${model.germplasm.originSite != null && !#strings.isEmpty(model.germplasm.originSite.siteName)}">
-            <div th:replace="fragments/row::row(label='Origin site', content=~{::#origin-site})">
-              <a id="origin-site" th:href="@{/sites/{siteId}(siteId=${#faidare.toSiteParam(model.germplasm.originSite.siteId)})}" th:text="${model.germplasm.originSite.siteName}"></a>
-            </div>
-          </th:block>
+            <figcaption class="figure-caption">
+              © <span th:text="${model.germplasm.photo.copyright}"></span>
+            </figcaption>
+          </a>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="f-card" th:if="${model.germplasm.holdingInstitute}">
-    <h2>Depositary</h2>
-    <div class="f-card-body">
-      <template id="holding-institute-popover">
-        <div th:replace="fragments/institute::institute(institute=${model.germplasm.holdingInstitute})"></div>
-      </template>
-      <div th:replace="fragments/row::row(label='Institution', content=~{::#institution})">
-        <a id="institution"
-           role="button"
-           tabindex="0"
-           data-bs-toggle="popover"
-           th:data-bs-title="${model.germplasm.holdingInstitute.instituteName}"
-           data-bs-element="#holding-institute-popover"
-           data-bs-container="body"
-           data-bs-trigger="focus"
-           th:text="${model.germplasm.holdingInstitute.instituteName}"></a>
-      </div>
+        <div class="col-12 col-lg">
+          <div class="f-card">
+            <h2>Identification</h2>
 
-      <th:block th:if="${model.germplasm.holdingGenbank != null && !#strings.isEmpty(model.germplasm.holdingGenbank.instituteName) && !#strings.isEmpty(model.germplasm.holdingGenbank.webSite)}">
-        <div th:replace="fragments/row::row(label='Stock center name', content=~{::#stock-center-name})">
-          <a id="stock-center-name"
-             target="_blank"
-             th:href="${model.germplasm.holdingGenbank.webSite}"
-             th:text="${model.germplasm.holdingGenbank.instituteName}"></a>
-        </div>
-      </th:block>
+            <div class="f-card-body">
+              <div
+                th:replace="fragments/row::text-row(label='Germplasm name', text=${model.germplasm.germplasmName})"
+              ></div>
+              <div
+                th:replace="fragments/row::text-row(label='Accession number', text=${model.germplasm.accessionNumber})"
+              ></div>
 
-      <div th:replace="fragments/row::text-row(label='Presence status', text=${model.germplasm.presenceStatus})"></div>
-    </div>
-  </div>
+              <div
+                th:replace="fragments/source::source(source=${model.source}, url=${model.germplasm.url}, entityType='germplasm')"
+              ></div>
 
-  <div class="f-card" th:if="${model.collecting}">
-    <h2>Collector</h2>
-    <div class="f-card-body">
-      <th:block th:if="${model.germplasm.collectingSite != null && !#strings.isEmpty(model.germplasm.collectingSite.siteName)}">
-        <div th:replace="fragments/row::row(label='Collecting site', content=~{::#collecting-site})">
-          <a id="collecting-site"
-             th:href="@{/sites/{siteId}(siteId=${#faidare.toSiteParam(model.germplasm.collectingSite.siteId)})}"
-             th:text="${model.germplasm.collectingSite.siteName}"
-          ></a>
-        </div>
-      </th:block>
-
-      <div th:replace="fragments/row::text-row(label='Material type', text=${model.germplasm.collector.materialType})"></div>
-      <div th:replace="fragments/row::text-row(label='Collectors', text=${model.germplasm.collector.collectors})"></div>
-
-      <th:block th:if="${!#strings.isEmpty(model.germplasm.acquisitionDate) && model.germplasm.collector.accessionCreationDate == null}">
-        <div th:replace="fragments/row::text-row(label='Acquisition / Creation date', text=${model.germplasm.acquisitionDate})"></div>
-      </th:block>
-
-      <th:block th:if="${model.germplasm.collector.institute != null && !#strings.isEmpty(model.germplasm.collector.institute.instituteName)}">
-        <template id="collector-institute-popover">
-          <div th:replace="fragments/institute::institute(institute=${model.germplasm.collector.institute})"></div>
-        </template>
-        <div th:replace="fragments/row::row(label='Institution', content=~{::#collecting-institution})">
-          <a id="collecting-institution"
-             role="button"
-             tabindex="0"
-             data-bs-toggle="popover"
-             th:data-bs-title="${model.germplasm.collector.institute.instituteName}"
-             data-bs-element="#collector-institute-popover"
-             data-bs-container="body"
-             data-bs-trigger="focus"
-             th:text="${model.germplasm.collector.institute.instituteName}"></a>
-        </div>
-      </th:block>
-
-      <div th:replace="fragments/row::text-row(label='Accession number', text=${model.germplasm.collector.accessionNumber})"></div>
-    </div>
-  </div>
-
-  <div class="f-card" th:if="${model.breeding}">
-    <h2>Breeder</h2>
-    <div class="f-card-body">
-      <th:block th:if="${model.germplasm.breeder.institute != null && !#strings.isEmpty(model.germplasm.breeder.institute.instituteName)}">
-        <template id="breeder-institute-popover">
-          <div th:replace="fragments/institute::institute(institute=${model.germplasm.breeder.institute})"></div>
-        </template>
-        <div th:replace="fragments/row::row(label='Institute', content=~{::#breeding-institution})">
-          <a id="breeding-institution"
-             role="button"
-             tabindex="0"
-             data-bs-toggle="popover"
-             th:data-bs-title="${model.germplasm.breeder.institute.instituteName}"
-             data-bs-element="#breeder-institute-popover"
-             data-bs-container="body"
-             data-bs-trigger="focus"
-             th:text="${model.germplasm.breeder.institute.instituteName}"></a>
-        </div>
-      </th:block>
-
-      <div th:replace="fragments/row::text-row(label='Accession creation year', text=${model.germplasm.breeder.accessionCreationDate})"></div>
-      <div th:replace="fragments/row::text-row(label='Accession number', text=${model.germplasm.breeder.accessionNumber})"></div>
-      <div th:replace="fragments/row::text-row(label='Catalog registration year', text=${model.germplasm.breeder.registrationYear})"></div>
-      <div th:replace="fragments/row::text-row(label='Catalog deregistration year', text=${model.germplasm.breeder.deregistrationYear})"></div>
-    </div>
-  </div>
-
-  <div class="f-card" th:unless="${#lists.isEmpty(model.germplasm.donors)}">
-    <h2>Donors</h2>
-    <div class="f-card-body">
-      <div class="scroll-table-container">
-        <table class="table table-sm table-striped table-sticky table-responsive-sm">
-          <thead>
-            <tr>
-              <th scope="col">Institute name</th>
-              <th scope="col">Institute code</th>
-              <th scope="col">Donation date</th>
-              <th scope="col">Accession number</th>
-              <th scope="col">Accession PUI</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="row, donorIterStat : ${model.germplasm.donors}">
-              <td>
-                <template th:id="${'donor-institute-popover-' + donorIterStat.index}">
-                  <div th:replace="fragments/institute::institute(institute=${row.donorInstitute})"></div>
-                </template>
-                <a role="button"
-                   tabindex="0"
-                   data-bs-toggle="popover"
-                   th:data-bs-title="${row.donorInstitute.instituteName}"
-                   th:data-bs-element="${'#donor-institute-popover-' + donorIterStat.index}"
-                   data-bs-container="body"
-                   data-bs-trigger="focus"
-                   th:text="${row.donorInstitute.instituteName}"></a>
-              </td>
-              <td th:text="${row.donorInstituteCode}"></td>
-              <td th:text="${row.donationDate}"></td>
-              <td th:text="${row.donorAccessionNumber}"></td>
-              <td th:text="${row.donorGermplasmPUI}"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="f-card" th:unless="${#lists.isEmpty(model.germplasm.distributors)}">
-    <h2>Distributors</h2>
-    <div class="f-card-body">
-      <div class="scroll-table-container">
-        <table class="table table-sm table-striped table-sticky table-responsive-sm">
-          <thead>
-            <tr>
-              <th scope="col">Institute</th>
-              <th scope="col">Accession number</th>
-              <th scope="col">Distribution status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="row, distributorIterStat : ${model.germplasm.distributors}">
-              <td>
-                <template th:id="${'distributor-institute-popover-' + distributorIterStat.index}">
-                  <div th:replace="fragments/institute::institute(institute=${row.institute})"></div>
-                </template>
-                <a role="button"
-                   tabindex="0"
-                   th:data-bs-title="${row.institute.instituteName}"
-                   th:data-bs-element="${'#distributor-institute-popover-' + distributorIterStat.index}"
-                   data-bs-container="body"
-                   data-bs-trigger="focus"
-                   th:text="${row.institute.instituteName}"></a>
-              </td>
-              <td th:text="${row.accessionNumber}"></td>
-              <td th:text="${row.distributionStatus}"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="f-card" th:unless="${#lists.isEmpty(model.attributes)}">
-    <h2>Evaluation Data</h2>
-    <div class="f-card-body">
-      <th:block th:each="descriptor : ${model.attributes}">
-        <div th:replace="fragments/row::text-row(label=${descriptor.attributeName}, text=${descriptor.value})"></div>
-      </th:block>
-    </div>
-  </div>
-
-  <div class="f-card" th:if="${model.genealogyPresent}">
-    <h2>Genealogy</h2>
-    <div class="f-card-body">
-      <th:block th:if="${model.pedigree != null}">
-        <div th:replace="fragments/row::text-row(label='Crossing plan', text=${model.pedigree.crossingPlan})"></div>
-        <div th:replace="fragments/row::text-row(label='Crossing year', text=${model.pedigree.crossingYear})"></div>
-        <div th:replace="fragments/row::text-row(label='Family code', text=${model.pedigree.familyCode})"></div>
-        <th:block th:unless="${#strings.isEmpty(model.pedigree.parent1Name)}">
-          <div th:replace="fragments/row::row(label='Parent accessions', content=~{::#parent-accessions})">
-            <div id="parent-accessions">
-              <th:block th:if="${model.pedigree.parent1DbId}">
-                <div th:replace="fragments/row::row(label=${model.pedigree.parent1Type}, content=~{::#parent1-link})">
-                  <a id="parent1-link" th:href="@{/germplasms/{germplasmId}(germplasmId=${model.pedigree.parent1DbId})}" th:text="${model.pedigree.parent1Name}"></a>
+              <th:block th:unless="${#lists.isEmpty(model.germplasm.synonyms)}">
+                <div
+                  th:replace="fragments/row::row(label='Accession synonyms', content=~{::#accession-synonyms})"
+                >
+                  <div
+                    id="accession-synonyms"
+                    class="content-overflow"
+                    th:text="${#strings.listJoin(model.germplasm.synonyms, ', ')}"
+                  ></div>
                 </div>
               </th:block>
 
-              <th:block th:if="${model.pedigree.parent2DbId}">
-                <div th:replace="fragments/row::row(label=${model.pedigree.parent2Type}, content=~{::#parent2-link})">
-                  <a id="parent2-link" th:href="@{/germplasms/{germplasmId}(germplasmId=${model.pedigree.parent2DbId})}" th:text="${model.pedigree.parent2Name}"></a>
+              <th:block th:unless="${#strings.isEmpty(model.taxon)}">
+                <div
+                  th:replace="fragments/row::row(label='Taxon', content=~{::#taxon})"
+                >
+                  <div id="taxon">
+                    <template id="taxon-popover">
+                      <th:block
+                        th:unless="${#strings.isEmpty(model.germplasm.genus)}"
+                      >
+                        <div
+                          th:replace="fragments/row::row(label='Genus', content=~{::#taxon-genus})"
+                        >
+                          <em
+                            id="taxon-genus"
+                            th:text="${model.germplasm.genus}"
+                          ></em>
+                        </div>
+                      </th:block>
+                      <th:block
+                        th:unless="${#strings.isEmpty(model.germplasm.species)}"
+                      >
+                        <div
+                          th:replace="fragments/row::row(label='Species', content=~{::#taxon-species})"
+                        >
+                          <span id="taxon-species">
+                            <em th:text="${model.germplasm.species}"></em>
+                            <span
+                              th:unless="${#strings.isEmpty(model.germplasm.speciesAuthority)}"
+                              th:text="${'(' + model.germplasm.speciesAuthority + ')'}"
+                            ></span>
+                          </span>
+                        </div>
+                      </th:block>
+                      <th:block
+                        th:unless="${#strings.isEmpty(model.germplasm.subtaxa)}"
+                      >
+                        <div
+                          th:replace="fragments/row::row(label='Subtaxa', content=~{::#taxon-subtaxa})"
+                        >
+                          <span id="taxon-subtaxa">
+                            <em th:text="${model.germplasm.subtaxa}"></em>
+                            <span
+                              th:unless="${#strings.isEmpty(model.germplasm.subtaxaAuthority)}"
+                              th:text="${'(' + model.germplasm.subtaxaAuthority + ')'}"
+                            ></span>
+                          </span>
+                        </div>
+                      </th:block>
+
+                      <div
+                        th:replace="fragments/row::text-row(label='Authority', text=${model.taxonAuthor})"
+                      ></div>
+
+                      <th:block
+                        th:unless="${#lists.isEmpty(model.germplasm.taxonIds)}"
+                      >
+                        <div
+                          th:replace="fragments/row::row(label='Taxon IDs', content=~{::#taxon-ids})"
+                        >
+                          <div id="taxon-ids">
+                            <div
+                              th:each="taxonId : ${model.germplasm.taxonIds}"
+                              class="row"
+                            >
+                              <div
+                                class="col-6 text-nowrap"
+                                th:text="${taxonId.sourceName}"
+                              ></div>
+                              <div class="col-6">
+                                <span
+                                  class="taxon-id"
+                                  th:replace="fragments/link::link(label=${taxonId.taxonId}, url=${#faidare.taxonIdUrl(taxonId)})"
+                                ></span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </th:block>
+
+                      <div
+                        th:replace="fragments/row::text-row(label='Comment', text=${model.germplasm.taxonComment})"
+                      ></div>
+                      <th:block
+                        th:unless="${#lists.isEmpty(model.germplasm.taxonCommonNames)}"
+                      >
+                        <div
+                          th:replace="fragments/row::row(label='Taxon common names', content=~{::#taxon-common-names})"
+                        >
+                          <div
+                            id="taxon-common-names"
+                            class="content-overflow"
+                            th:text="${#strings.listJoin(model.germplasm.taxonCommonNames, ', ')}"
+                          ></div>
+                        </div>
+                      </th:block>
+                      <th:block
+                        th:unless="${#lists.isEmpty(model.germplasm.taxonSynonyms)}"
+                      >
+                        <div
+                          th:replace="fragments/row::row(label='Taxon synonyms', content=~{::#taxon-synonyms})"
+                        >
+                          <div
+                            id="taxon-synonyms"
+                            class="content-overflow"
+                            th:text="${#strings.listJoin(model.germplasm.taxonSynonyms, ', ')}"
+                          ></div>
+                        </div>
+                      </th:block>
+                    </template>
+                    <a
+                      role="button"
+                      tabindex="0"
+                      data-bs-toggle="popover"
+                      th:data-bs-title="${model.taxon}"
+                      data-bs-element="#taxon-popover"
+                      data-bs-container="body"
+                      data-bs-trigger="focus"
+                    >
+                      <em th:text="${model.taxon}"></em>
+                      <th:block
+                        th:unless="${#strings.isEmpty(model.taxonAuthor)}"
+                        >(<span th:text="${model.taxonAuthor}"></span
+                        >)</th:block
+                      >
+                    </a>
+                  </div>
+                </div>
+              </th:block>
+
+              <div
+                th:replace="fragments/row::text-row(label='Biological status', text=${model.germplasm.biologicalStatusOfAccessionCode})"
+              ></div>
+              <div
+                th:replace="fragments/row::text-row(label='Genetic nature', text=${model.germplasm.geneticNature})"
+              ></div>
+              <div
+                th:replace="fragments/row::text-row(label='Seed source', text=${model.germplasm.seedSource})"
+              ></div>
+              <div
+                th:replace="fragments/row::text-row(label='Pedigree', text=${model.germplasm.pedigree})"
+              ></div>
+              <div
+                th:replace="fragments/row::text-row(label='Comments', text=${model.germplasm.comment})"
+              ></div>
+
+              <th:block
+                th:if="${model.germplasm.originSite != null && !#strings.isEmpty(model.germplasm.originSite.siteName)}"
+              >
+                <div
+                  th:replace="fragments/row::row(label='Origin site', content=~{::#origin-site})"
+                >
+                  <a
+                    id="origin-site"
+                    th:href="@{/sites/{siteId}(siteId=${#faidare.toSiteParam(model.germplasm.originSite.siteId)})}"
+                    th:text="${model.germplasm.originSite.siteName}"
+                  ></a>
                 </div>
               </th:block>
             </div>
           </div>
-        </th:block>
+        </div>
+      </div>
 
-        <th:block th:unless="${#lists.isEmpty(model.pedigree.siblings)}">
-          <div th:replace="fragments/row::row(label='Sibling accessions', content=~{::#sibling-accessions})">
-            <div id="sibling-accessions" class="content-overflow">
-              <a th:each="sibling : ${model.pedigree.siblings}"
-                 th:href="@{/germplasms/{germplasmId}(germplasmId=${sibling.germplasmDbId})}"
-                 th:text="${sibling.defaultDisplayName}"></a>
-            </div>
+      <div class="f-card" th:if="${model.germplasm.holdingInstitute}">
+        <h2>Depositary</h2>
+        <div class="f-card-body">
+          <template id="holding-institute-popover">
+            <div
+              th:replace="fragments/institute::institute(institute=${model.germplasm.holdingInstitute})"
+            ></div>
+          </template>
+          <div
+            th:replace="fragments/row::row(label='Institution', content=~{::#institution})"
+          >
+            <a
+              id="institution"
+              role="button"
+              tabindex="0"
+              data-bs-toggle="popover"
+              th:data-bs-title="${model.germplasm.holdingInstitute.instituteName}"
+              data-bs-element="#holding-institute-popover"
+              data-bs-container="body"
+              data-bs-trigger="focus"
+              th:text="${model.germplasm.holdingInstitute.instituteName}"
+            ></a>
           </div>
-        </th:block>
-      </th:block>
 
-      <th:block th:unless="${#lists.isEmpty(model.germplasm.children)}">
-        <div th:replace="fragments/row::row(label='Descendants', content=~{::#descendants})">
-          <div id="descendants" class="content-overflow content-overflow-big">
-            <th:block th:each="child : ${model.germplasm.children}">
-              <div th:replace="fragments/row::row(label=${#strings.isEmpty(child.secondParentName) ? ('children of ' + child.firstParentName) : ('children of ' + child.firstParentName + ' x ' + child.secondParentName) }, content=~{::.descendant-child})">
-                <div class="descendant-child">
-                  <th:block th:each="sibling, siblingIterStat : ${child.sibblings}">
-                    <a th:href="@{/germplasms(pui=${sibling.pui})}"
-                       th:text="${sibling.name}"></a><th:block th:unless="${siblingIterStat.last}">, </th:block>
+          <th:block
+            th:if="${model.germplasm.holdingGenbank != null && !#strings.isEmpty(model.germplasm.holdingGenbank.instituteName) && !#strings.isEmpty(model.germplasm.holdingGenbank.webSite)}"
+          >
+            <div
+              th:replace="fragments/row::row(label='Stock center name', content=~{::#stock-center-name})"
+            >
+              <a
+                id="stock-center-name"
+                target="_blank"
+                th:href="${model.germplasm.holdingGenbank.webSite}"
+                th:text="${model.germplasm.holdingGenbank.instituteName}"
+              ></a>
+            </div>
+          </th:block>
+
+          <div
+            th:replace="fragments/row::text-row(label='Presence status', text=${model.germplasm.presenceStatus})"
+          ></div>
+        </div>
+      </div>
+
+      <div class="f-card" th:if="${model.collecting}">
+        <h2>Collector</h2>
+        <div class="f-card-body">
+          <th:block
+            th:if="${model.germplasm.collectingSite != null && !#strings.isEmpty(model.germplasm.collectingSite.siteName)}"
+          >
+            <div
+              th:replace="fragments/row::row(label='Collecting site', content=~{::#collecting-site})"
+            >
+              <a
+                id="collecting-site"
+                th:href="@{/sites/{siteId}(siteId=${#faidare.toSiteParam(model.germplasm.collectingSite.siteId)})}"
+                th:text="${model.germplasm.collectingSite.siteName}"
+              ></a>
+            </div>
+          </th:block>
+
+          <div
+            th:replace="fragments/row::text-row(label='Material type', text=${model.germplasm.collector.materialType})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Collectors', text=${model.germplasm.collector.collectors})"
+          ></div>
+
+          <th:block
+            th:if="${!#strings.isEmpty(model.germplasm.acquisitionDate) && model.germplasm.collector.accessionCreationDate == null}"
+          >
+            <div
+              th:replace="fragments/row::text-row(label='Acquisition / Creation date', text=${model.germplasm.acquisitionDate})"
+            ></div>
+          </th:block>
+
+          <th:block
+            th:if="${model.germplasm.collector.institute != null && !#strings.isEmpty(model.germplasm.collector.institute.instituteName)}"
+          >
+            <template id="collector-institute-popover">
+              <div
+                th:replace="fragments/institute::institute(institute=${model.germplasm.collector.institute})"
+              ></div>
+            </template>
+            <div
+              th:replace="fragments/row::row(label='Institution', content=~{::#collecting-institution})"
+            >
+              <a
+                id="collecting-institution"
+                role="button"
+                tabindex="0"
+                data-bs-toggle="popover"
+                th:data-bs-title="${model.germplasm.collector.institute.instituteName}"
+                data-bs-element="#collector-institute-popover"
+                data-bs-container="body"
+                data-bs-trigger="focus"
+                th:text="${model.germplasm.collector.institute.instituteName}"
+              ></a>
+            </div>
+          </th:block>
+
+          <div
+            th:replace="fragments/row::text-row(label='Accession number', text=${model.germplasm.collector.accessionNumber})"
+          ></div>
+        </div>
+      </div>
+
+      <div class="f-card" th:if="${model.breeding}">
+        <h2>Breeder</h2>
+        <div class="f-card-body">
+          <th:block
+            th:if="${model.germplasm.breeder.institute != null && !#strings.isEmpty(model.germplasm.breeder.institute.instituteName)}"
+          >
+            <template id="breeder-institute-popover">
+              <div
+                th:replace="fragments/institute::institute(institute=${model.germplasm.breeder.institute})"
+              ></div>
+            </template>
+            <div
+              th:replace="fragments/row::row(label='Institute', content=~{::#breeding-institution})"
+            >
+              <a
+                id="breeding-institution"
+                role="button"
+                tabindex="0"
+                data-bs-toggle="popover"
+                th:data-bs-title="${model.germplasm.breeder.institute.instituteName}"
+                data-bs-element="#breeder-institute-popover"
+                data-bs-container="body"
+                data-bs-trigger="focus"
+                th:text="${model.germplasm.breeder.institute.instituteName}"
+              ></a>
+            </div>
+          </th:block>
+
+          <div
+            th:replace="fragments/row::text-row(label='Accession creation year', text=${model.germplasm.breeder.accessionCreationDate})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Accession number', text=${model.germplasm.breeder.accessionNumber})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Catalog registration year', text=${model.germplasm.breeder.registrationYear})"
+          ></div>
+          <div
+            th:replace="fragments/row::text-row(label='Catalog deregistration year', text=${model.germplasm.breeder.deregistrationYear})"
+          ></div>
+        </div>
+      </div>
+
+      <div class="f-card" th:unless="${#lists.isEmpty(model.germplasm.donors)}">
+        <h2>Donors</h2>
+        <div class="f-card-body">
+          <div class="scroll-table-container">
+            <table
+              class="
+                table table-sm table-striped table-sticky table-responsive-sm
+              "
+            >
+              <thead>
+                <tr>
+                  <th scope="col">Institute name</th>
+                  <th scope="col">Institute code</th>
+                  <th scope="col">Donation date</th>
+                  <th scope="col">Accession number</th>
+                  <th scope="col">Accession PUI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="row, donorIterStat : ${model.germplasm.donors}">
+                  <td>
+                    <template
+                      th:id="${'donor-institute-popover-' + donorIterStat.index}"
+                    >
+                      <div
+                        th:replace="fragments/institute::institute(institute=${row.donorInstitute})"
+                      ></div>
+                    </template>
+                    <a
+                      role="button"
+                      tabindex="0"
+                      data-bs-toggle="popover"
+                      th:data-bs-title="${row.donorInstitute.instituteName}"
+                      th:data-bs-element="${'#donor-institute-popover-' + donorIterStat.index}"
+                      data-bs-container="body"
+                      data-bs-trigger="focus"
+                      th:text="${row.donorInstitute.instituteName}"
+                    ></a>
+                  </td>
+                  <td th:text="${row.donorInstituteCode}"></td>
+                  <td th:text="${row.donationDate}"></td>
+                  <td th:text="${row.donorAccessionNumber}"></td>
+                  <td th:text="${row.donorGermplasmPUI}"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="f-card"
+        th:unless="${#lists.isEmpty(model.germplasm.distributors)}"
+      >
+        <h2>Distributors</h2>
+        <div class="f-card-body">
+          <div class="scroll-table-container">
+            <table
+              class="
+                table table-sm table-striped table-sticky table-responsive-sm
+              "
+            >
+              <thead>
+                <tr>
+                  <th scope="col">Institute</th>
+                  <th scope="col">Accession number</th>
+                  <th scope="col">Distribution status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  th:each="row, distributorIterStat : ${model.germplasm.distributors}"
+                >
+                  <td>
+                    <template
+                      th:id="${'distributor-institute-popover-' + distributorIterStat.index}"
+                    >
+                      <div
+                        th:replace="fragments/institute::institute(institute=${row.institute})"
+                      ></div>
+                    </template>
+                    <a
+                      role="button"
+                      tabindex="0"
+                      th:data-bs-title="${row.institute.instituteName}"
+                      th:data-bs-element="${'#distributor-institute-popover-' + distributorIterStat.index}"
+                      data-bs-container="body"
+                      data-bs-trigger="focus"
+                      th:text="${row.institute.instituteName}"
+                    ></a>
+                  </td>
+                  <td th:text="${row.accessionNumber}"></td>
+                  <td th:text="${row.distributionStatus}"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="f-card" th:unless="${#lists.isEmpty(model.attributes)}">
+        <h2>Evaluation Data</h2>
+        <div class="f-card-body">
+          <th:block th:each="descriptor : ${model.attributes}">
+            <div
+              th:replace="fragments/row::text-row(label=${descriptor.attributeName}, text=${descriptor.value})"
+            ></div>
+          </th:block>
+        </div>
+      </div>
+
+      <div class="f-card" th:if="${model.genealogyPresent}">
+        <h2>Genealogy</h2>
+        <div class="f-card-body">
+          <th:block th:if="${model.pedigree != null}">
+            <div
+              th:replace="fragments/row::text-row(label='Crossing plan', text=${model.pedigree.crossingPlan})"
+            ></div>
+            <div
+              th:replace="fragments/row::text-row(label='Crossing year', text=${model.pedigree.crossingYear})"
+            ></div>
+            <div
+              th:replace="fragments/row::text-row(label='Family code', text=${model.pedigree.familyCode})"
+            ></div>
+            <th:block
+              th:unless="${#strings.isEmpty(model.pedigree.parent1Name)}"
+            >
+              <div
+                th:replace="fragments/row::row(label='Parent accessions', content=~{::#parent-accessions})"
+              >
+                <div id="parent-accessions">
+                  <th:block th:if="${model.pedigree.parent1DbId}">
+                    <div
+                      th:replace="fragments/row::row(label=${model.pedigree.parent1Type}, content=~{::#parent1-link})"
+                    >
+                      <a
+                        id="parent1-link"
+                        th:href="@{/germplasms/{germplasmId}(germplasmId=${model.pedigree.parent1DbId})}"
+                        th:text="${model.pedigree.parent1Name}"
+                      ></a>
+                    </div>
+                  </th:block>
+
+                  <th:block th:if="${model.pedigree.parent2DbId}">
+                    <div
+                      th:replace="fragments/row::row(label=${model.pedigree.parent2Type}, content=~{::#parent2-link})"
+                    >
+                      <a
+                        id="parent2-link"
+                        th:href="@{/germplasms/{germplasmId}(germplasmId=${model.pedigree.parent2DbId})}"
+                        th:text="${model.pedigree.parent2Name}"
+                      ></a>
+                    </div>
                   </th:block>
                 </div>
               </div>
             </th:block>
-          </div>
-        </div>
-      </th:block>
-    </div>
-  </div>
 
-  <div class="f-card" th:unless="${#lists.isEmpty(model.germplasm.population)}">
-    <h2>Population</h2>
-    <div class="f-card-body">
-      <th:block th:each="population : ${model.germplasm.population}">
+            <th:block th:unless="${#lists.isEmpty(model.pedigree.siblings)}">
+              <div
+                th:replace="fragments/row::row(label='Sibling accessions', content=~{::#sibling-accessions})"
+              >
+                <div id="sibling-accessions" class="content-overflow">
+                  <a
+                    th:each="sibling : ${model.pedigree.siblings}"
+                    th:href="@{/germplasms/{germplasmId}(germplasmId=${sibling.germplasmDbId})}"
+                    th:text="${sibling.defaultDisplayName}"
+                  ></a>
+                </div>
+              </div>
+            </th:block>
+          </th:block>
 
-        <th:block th:if="${population.germplasmRef != null}">
-          <th:block th:unless="${#strings.isEmpty(population.germplasmRef.pui)}">
-            <div th:replace="fragments/row::row(label=${#faidare.collPopTitle(population)}, content=~{::.population-1})">
-              <div class="population-1">
-                <a th:if="${population.germplasmRef.pui != model.germplasm.germplasmPUI}"
-                   th:href="@{/germplasms(pui=${population.germplasmRef.pui})}"
-                   th:text="${population.germplasmRef.name}"></a>
-                <span th:if="${population.germplasmRef.pui == model.germplasm.germplasmPUI}"
-                      th:text="${population.germplasmRef.name}"></span>
-                is composed by <span th:text="${population.germplasmCount}"></span> accession(s)
-                <!-- TODO there was a link pointing at a search here -->
+          <th:block th:unless="${#lists.isEmpty(model.germplasm.children)}">
+            <div
+              th:replace="fragments/row::row(label='Descendants', content=~{::#descendants})"
+            >
+              <div
+                id="descendants"
+                class="content-overflow content-overflow-big"
+              >
+                <th:block th:each="child : ${model.germplasm.children}">
+                  <div
+                    th:replace="fragments/row::row(label=${#strings.isEmpty(child.secondParentName) ? ('children of ' + child.firstParentName) : ('children of ' + child.firstParentName + ' x ' + child.secondParentName) }, content=~{::.descendant-child})"
+                  >
+                    <div class="descendant-child">
+                      <th:block
+                        th:each="sibling, siblingIterStat : ${child.sibblings}"
+                      >
+                        <a
+                          th:href="@{/germplasms(pui=${sibling.pui})}"
+                          th:text="${sibling.name}"
+                        ></a
+                        ><th:block th:unless="${siblingIterStat.last}"
+                          >,
+                        </th:block>
+                      </th:block>
+                    </div>
+                  </div>
+                </th:block>
               </div>
             </div>
           </th:block>
-        </th:block>
+        </div>
+      </div>
 
-        <th:block th:if="${population.germplasmRef == null}">
-          <div th:replace="fragments/row::text-row(label=${#faidare.collPopTitle(population)}, text=${population.germplasmCount + ' accession(s)'})"></div>
-          <!-- TODO there was a link pointing at a search here -->
-        </th:block>
-      </th:block>
-    </div>
-  </div>
+      <div
+        class="f-card"
+        th:unless="${#lists.isEmpty(model.germplasm.population)}"
+      >
+        <h2>Population</h2>
+        <div class="f-card-body">
+          <th:block th:each="population : ${model.germplasm.population}">
+            <th:block th:if="${population.germplasmRef != null}">
+              <th:block
+                th:unless="${#strings.isEmpty(population.germplasmRef.pui)}"
+              >
+                <div
+                  th:replace="fragments/row::row(label=${#faidare.collPopTitle(population)}, content=~{::.population-1})"
+                >
+                  <div class="population-1">
+                    <a
+                      th:if="${population.germplasmRef.pui != model.germplasm.germplasmPUI}"
+                      th:href="@{/germplasms(pui=${population.germplasmRef.pui})}"
+                      th:text="${population.germplasmRef.name}"
+                    ></a>
+                    <span
+                      th:if="${population.germplasmRef.pui == model.germplasm.germplasmPUI}"
+                      th:text="${population.germplasmRef.name}"
+                    ></span>
+                    is composed by
+                    <span th:text="${population.germplasmCount}"></span>
+                    accession(s)
+                    <!-- TODO there was a link pointing at a search here -->
+                  </div>
+                </div>
+              </th:block>
+            </th:block>
 
-  <div class="f-card" th:unless="${#lists.isEmpty(model.germplasm.collection)}">
-    <h2>Collection</h2>
-    <div class="f-card-body">
-      <th:block th:each="collection : ${model.germplasm.collection}">
-        <div th:replace="fragments/row::text-row(label=${#faidare.collPopTitle(collection)}, text=${collection.germplasmCount + ' accession(s)'})"></div>
-        <!-- TODO there was a link pointing at a search here -->
-      </th:block>
-    </div>
-  </div>
+            <th:block th:if="${population.germplasmRef == null}">
+              <div
+                th:replace="fragments/row::text-row(label=${#faidare.collPopTitle(population)}, text=${population.germplasmCount + ' accession(s)'})"
+              ></div>
+              <!-- TODO there was a link pointing at a search here -->
+            </th:block>
+          </th:block>
+        </div>
+      </div>
 
-  <div class="f-card" th:unless="${#lists.isEmpty(model.germplasm.panel)}">
-    <h2>Panel</h2>
-    <div class="f-card-body">
-      <th:block th:each="panel : ${model.germplasm.panel}">
-        <div th:replace="fragments/row::text-row(label=${#faidare.collPopTitleWithoutUnderscores(panel)}, text=${panel.germplasmCount + ' accession(s)'})"></div>
-        <!-- TODO there was a link pointing at a search here -->
-      </th:block>
-    </div>
-  </div>
+      <div
+        class="f-card"
+        th:unless="${#lists.isEmpty(model.germplasm.collection)}"
+      >
+        <h2>Collection</h2>
+        <div class="f-card-body">
+          <th:block th:each="collection : ${model.germplasm.collection}">
+            <div
+              th:replace="fragments/row::text-row(label=${#faidare.collPopTitle(collection)}, text=${collection.germplasmCount + ' accession(s)'})"
+            ></div>
+            <!-- TODO there was a link pointing at a search here -->
+          </th:block>
+        </div>
+      </div>
 
-  <div th:replace="fragments/xrefs::xrefs(crossReferences=${model.crossReferences})"></div>
-</main>
+      <div class="f-card" th:unless="${#lists.isEmpty(model.germplasm.panel)}">
+        <h2>Panel</h2>
+        <div class="f-card-body">
+          <th:block th:each="panel : ${model.germplasm.panel}">
+            <div
+              th:replace="fragments/row::text-row(label=${#faidare.collPopTitleWithoutUnderscores(panel)}, text=${panel.germplasmCount + ' accession(s)'})"
+            ></div>
+            <!-- TODO there was a link pointing at a search here -->
+          </th:block>
+        </div>
+      </div>
 
-<script th:inline="javascript">
-  faidare.initializePopovers();
-  faidare.initializeMap({
-    contextPath: [[${#request.getContextPath()}]],
-    locations: /* TODO [[${model.mapLocations}]]*/ []
-  });
-</script>
-</body>
+      <div
+        th:replace="fragments/xrefs::xrefs(crossReferences=${model.crossReferences})"
+      ></div>
+    </main>
+
+    <script th:inline="javascript">
+      faidare.initializePopovers();
+      faidare.initializeMap({
+        contextPath: [[${#request.getContextPath()}]],
+        locations: /* TODO [[${model.mapLocations}]]*/ []
+      });
+    </script>
+  </body>
 </html>
