@@ -54,8 +54,9 @@ public class DocumentAnnotationUtil {
             Map<String, DocumentMetadata.Field> fields = findDocumentFields(ImmutableList.<String>of(),
                 valueObjectClass);
 
+            String[] includedFields = document.includedFields();
             String[] excludedFields = document.excludedFields();
-            metadata = new DocumentMetadata<>(documentType, idFieldName, valueObjectClass, excludedFields, fields);
+            metadata = new DocumentMetadata<>(documentType, idFieldName, valueObjectClass, includedFields, excludedFields, fields);
             metadataCache.put(valueObjectClass, metadata);
         }
         return metadata;

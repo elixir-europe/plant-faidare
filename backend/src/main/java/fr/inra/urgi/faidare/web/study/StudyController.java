@@ -3,19 +3,24 @@ package fr.inra.urgi.faidare.web.study;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.google.common.collect.Lists;
 import fr.inra.urgi.faidare.api.NotFoundException;
 import fr.inra.urgi.faidare.config.FaidareProperties;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmPOSTSearchCriteria;
+import fr.inra.urgi.faidare.domain.data.LocationSitemapVO;
 import fr.inra.urgi.faidare.domain.data.LocationVO;
 import fr.inra.urgi.faidare.domain.data.TrialVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.study.StudyDetailVO;
+import fr.inra.urgi.faidare.domain.data.study.StudySitemapVO;
 import fr.inra.urgi.faidare.domain.data.variable.ObservationVariableVO;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.faidare.repository.es.GermplasmRepository;
@@ -24,13 +29,18 @@ import fr.inra.urgi.faidare.repository.es.StudyRepository;
 import fr.inra.urgi.faidare.repository.es.TrialRepository;
 import fr.inra.urgi.faidare.repository.es.XRefDocumentRepository;
 import fr.inra.urgi.faidare.repository.file.CropOntologyRepository;
+import fr.inra.urgi.faidare.utils.Sitemaps;
 import fr.inra.urgi.faidare.web.site.MapLocation;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
  * Controller used to display a study card based on its ID.
@@ -102,6 +112,24 @@ public class StudyController {
                                     location
                                 )
         );
+    }
+
+    @GetMapping(value = "/sitemap-{index}.txt")
+    @ResponseBody
+    public ResponseEntity<StreamingResponseBody> sitemap(@PathVariable("index") int index) {
+        if (index < 0 || index >= Sitemaps.BUCKET_COUNT) {
+            throw new NotFoundException("no sitemap for this index");
+        }
+        StreamingResponseBody body = out -> {
+            Iterator<StudySitemapVO> iterator = studyRepository.scrollAllForSitemap(1000);
+            Sitemaps.generateSitemap(
+                "/sudies/sitemap-" + index + ".txt",
+                out,
+                iterator,
+                vo -> Math.floorMod(vo.getStudyDbId().hashCode(), Sitemaps.BUCKET_COUNT) == index,
+                vo -> "/studies/" + vo.getStudyDbId());
+        };
+        return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body(body);
     }
 
     private LocationVO getLocation(StudyDetailVO study) {

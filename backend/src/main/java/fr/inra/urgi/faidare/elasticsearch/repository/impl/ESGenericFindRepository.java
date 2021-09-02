@@ -90,10 +90,11 @@ public class ESGenericFindRepository<C extends PaginationCriteria, VO> implement
             request.source().sort(field, order);
         }
 
-        // Add excluded fields if requested
+        // Add included and excluded fields if requested
+        String[] includedFields = documentMetadata.getIncludedFields();
         String[] excludedFields = documentMetadata.getExcludedFields();
-        if (excludedFields != null && excludedFields.length >= 1) {
-            request.source().fetchSource(null, excludedFields);
+        if ((includedFields != null && includedFields.length >= 1) || (excludedFields != null && excludedFields.length >= 1)) {
+            request.source().fetchSource(includedFields, excludedFields);
         }
 
         Logger logger = LoggerFactory.getLogger(ESGenericFindRepository.class);

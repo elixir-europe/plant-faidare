@@ -13,5 +13,6 @@ import java.lang.annotation.Target;
 public @interface Document {
     String type();
 
+    String[] includedFields() default {};
     String[] excludedFields() default {};
 }

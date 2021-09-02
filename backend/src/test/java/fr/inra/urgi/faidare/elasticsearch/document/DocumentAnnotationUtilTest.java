@@ -50,6 +50,7 @@ class DocumentAnnotationUtilTest {
             .getDocumentObjectMetadata(ComplexDocument.class);
         assertThat(metadata).isNotNull();
         assertThat(metadata.getDocumentType()).isEqualTo("dataObject4");
+        assertThat(metadata.getIncludedFields()).containsExactly("id", "nested0");
         assertThat(metadata.getExcludedFields()).containsExactly("a", "b");
 
         assertThat(metadata.getIdField()).isEqualTo("@id");

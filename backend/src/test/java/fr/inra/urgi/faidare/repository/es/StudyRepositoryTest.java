@@ -4,7 +4,9 @@ import com.google.common.collect.Sets;
 import fr.inra.urgi.faidare.Application;
 import fr.inra.urgi.faidare.domain.criteria.StudySearchCriteria;
 import fr.inra.urgi.faidare.domain.data.LocationVO;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmSitemapVO;
 import fr.inra.urgi.faidare.domain.data.study.StudyDetailVO;
+import fr.inra.urgi.faidare.domain.data.study.StudySitemapVO;
 import fr.inra.urgi.faidare.domain.data.study.StudySummaryVO;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.repository.es.setup.ESSetUp;
@@ -20,6 +22,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -155,6 +158,13 @@ class StudyRepositoryTest {
         assertThat(result).isNotNull().isNotEmpty();
 
         assertThat(result).extracting(sortField).isSortedAccordingTo(new DescendingOrder());
+    }
+
+    @Test
+    void shouldScrollAllForSitemap() {
+        Iterator<StudySitemapVO> list = repository.scrollAllForSitemap(100);
+        Assertions.assertThat(list).isNotEmpty()
+                  .allMatch(vo -> !vo.getStudyDbId().isEmpty());
     }
 
     private class DescendingOrder implements Comparator<Object> {

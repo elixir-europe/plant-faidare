@@ -2,12 +2,15 @@ package fr.inra.urgi.faidare.repository.es;
 
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiLocation;
 import fr.inra.urgi.faidare.domain.criteria.StudyCriteria;
+import fr.inra.urgi.faidare.domain.data.LocationSitemapVO;
 import fr.inra.urgi.faidare.domain.data.LocationVO;
 import fr.inra.urgi.faidare.domain.data.study.StudyDetailVO;
+import fr.inra.urgi.faidare.domain.data.study.StudySitemapVO;
 import fr.inra.urgi.faidare.domain.data.study.StudySummaryVO;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.elasticsearch.ESRequestFactory;
 import fr.inra.urgi.faidare.elasticsearch.ESResponseParser;
+import fr.inra.urgi.faidare.elasticsearch.ESScrollIterator;
 import fr.inra.urgi.faidare.elasticsearch.document.DocumentAnnotationUtil;
 import fr.inra.urgi.faidare.elasticsearch.document.DocumentMetadata;
 import fr.inra.urgi.faidare.elasticsearch.query.impl.ESGenericQueryFactory;
@@ -19,6 +22,8 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.bucket.filter.FilterAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.slf4j.Logger;
@@ -28,6 +33,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -129,4 +135,9 @@ public class StudyRepositoryImpl
         return new LinkedHashSet<>(ids);
     }
 
+    @Override
+    public Iterator<StudySitemapVO> scrollAllForSitemap(int fetchSize) {
+        QueryBuilder query = QueryBuilders.matchAllQuery();
+        return new ESScrollIterator<>(client, requestFactory, parser, StudySitemapVO.class, query, fetchSize);
+    }
 }

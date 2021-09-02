@@ -68,6 +68,13 @@ public class ESScrollIterator<T> implements Iterator<T> {
             .size(fetchSize)
             .sort(FieldSortBuilder.DOC_FIELD_NAME, SortOrder.ASC);
 
+        // Add included and excluded fields if requested
+        String[] includedFields = documentMetadata.getIncludedFields();
+        String[] excludedFields = documentMetadata.getExcludedFields();
+        if ((includedFields != null && includedFields.length >= 1) || (excludedFields != null && excludedFields.length >= 1)) {
+            request.source().fetchSource(includedFields, excludedFields);
+        }
+
         SearchResponse response = null;
         try {
             response = client.search(request, RequestOptions.DEFAULT);

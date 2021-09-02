@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author gcornut
  */
-@Document(type = "dataObject4", excludedFields = {"a", "b"})
+@Document(type = "dataObject4", includedFields = { "id", "nested0"}, excludedFields = {"a", "b"})
 public class ComplexDocument {
     @Id(jsonName = "@id")
     String id;

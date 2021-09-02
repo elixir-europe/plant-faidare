@@ -3,7 +3,9 @@ package fr.inra.urgi.faidare.repository.es;
 import com.google.common.collect.Sets;
 import fr.inra.urgi.faidare.Application;
 import fr.inra.urgi.faidare.domain.criteria.LocationCriteria;
+import fr.inra.urgi.faidare.domain.data.LocationSitemapVO;
 import fr.inra.urgi.faidare.domain.data.LocationVO;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmSitemapVO;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.repository.es.setup.ESSetUp;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -114,4 +117,13 @@ class LocationRepositoryTest {
         assertThat(locations).isNotNull().hasSize(3);
         assertThat(locations).extracting("locationType").containsOnlyElementsOf(expectedTypes);
     }
+
+    @Test
+    void shouldScrollAllForSitemap() {
+        Iterator<LocationSitemapVO> list = repository.scrollAllForSitemap(100);
+        assertThat(list).isNotEmpty()
+                        .allMatch(vo -> !vo.getLocationDbId().isEmpty());
+    }
+
+
 }

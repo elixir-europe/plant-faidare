@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.inra.urgi.faidare.domain.criteria.FaidareGermplasmPOSTShearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmSitemapVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.ProgenyVO;
@@ -88,6 +89,12 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
         Class<FaidareGermplasmPOSTShearchCriteria> criteriaClass = FaidareGermplasmPOSTShearchCriteria.class;
         this.documentMetadata = DocumentAnnotationUtil.getDocumentObjectMetadata(documentClass);
         this.criteriaMapping = AnnotatedCriteriaMapper.getMapping(criteriaClass);
+    }
+
+    @Override
+    public Iterator<GermplasmSitemapVO> scrollAllForSitemap(int fetchSize) {
+        QueryBuilder query = QueryBuilders.matchAllQuery();
+        return new ESScrollIterator<>(client, requestFactory, parser, GermplasmSitemapVO.class, query, fetchSize);
     }
 
     @Override

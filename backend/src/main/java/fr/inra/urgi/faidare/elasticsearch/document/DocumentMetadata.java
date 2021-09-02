@@ -17,15 +17,21 @@ public class DocumentMetadata<VO> {
     private final String documentType;
     private final String idField;
     private final Class<VO> documentClass;
+    private final String[] includedFields;
     private final String[] excludedFields;
     private final Map<String, Field> fieldsByName;
     private final Map<List<String>, Field> fieldByPath;
 
-    public DocumentMetadata(String documentType, String idField, Class<VO> documentClass, String[] excludedFields,
+    public DocumentMetadata(String documentType,
+                            String idField,
+                            Class<VO> documentClass,
+                            String[] includedFields,
+                            String[] excludedFields,
                             Map<String, Field> fieldsByName) {
         this.documentType = documentType;
         this.idField = idField;
         this.documentClass = documentClass;
+        this.includedFields = includedFields;
         this.excludedFields = excludedFields;
         this.fieldsByName = fieldsByName;
         this.fieldByPath = flattenDocumentFieldTree(ImmutableList.<String>of(), fieldsByName);
@@ -55,6 +61,10 @@ public class DocumentMetadata<VO> {
 
     public String getIdField() {
         return idField;
+    }
+
+    public String[] getIncludedFields() {
+        return includedFields;
     }
 
     public String[] getExcludedFields() {

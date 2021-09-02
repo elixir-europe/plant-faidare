@@ -6,12 +6,14 @@ import fr.inra.urgi.faidare.Application;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmGETSearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmPOSTSearchCriteria;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmSitemapVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.ProgenyVO;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.domain.response.Pagination;
 import fr.inra.urgi.faidare.repository.es.setup.ESSetUp;
+import org.assertj.core.data.Index;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -126,6 +129,12 @@ class GermplasmRepositoryTest {
         assertThat(list).isNotNull().hasSize(0);
     }
 
+    @Test
+    void shouldScrollAllForSitemap() {
+        Iterator<GermplasmSitemapVO> list = repository.scrollAllForSitemap(100);
+        assertThat(list).isNotEmpty()
+                        .allMatch(vo -> !vo.getGermplasmDbId().isEmpty());
+    }
 
     @Test
     void should_Scroll_By_accessionNumber() {

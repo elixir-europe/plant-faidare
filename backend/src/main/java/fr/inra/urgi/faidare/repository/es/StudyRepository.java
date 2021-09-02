@@ -1,12 +1,15 @@
 package fr.inra.urgi.faidare.repository.es;
 
 import fr.inra.urgi.faidare.domain.criteria.StudyCriteria;
+import fr.inra.urgi.faidare.domain.data.LocationSitemapVO;
 import fr.inra.urgi.faidare.domain.data.study.StudyDetailVO;
+import fr.inra.urgi.faidare.domain.data.study.StudySitemapVO;
 import fr.inra.urgi.faidare.domain.data.study.StudySummaryVO;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.elasticsearch.repository.ESFindRepository;
 import fr.inra.urgi.faidare.elasticsearch.repository.ESGetByIdRepository;
 
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -29,4 +32,5 @@ public interface StudyRepository
      */
     Set<String> getVariableIds(String studyDbId);
 
+    Iterator<StudySitemapVO> scrollAllForSitemap(int fetchSize);
 }

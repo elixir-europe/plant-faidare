@@ -4,9 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Spliterators;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.google.common.collect.Streams;
 import fr.inra.urgi.faidare.api.NotFoundException;
 import fr.inra.urgi.faidare.config.FaidareProperties;
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiGermplasmAttributeValue;
@@ -18,25 +25,30 @@ import fr.inra.urgi.faidare.domain.data.germplasm.DonorVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GenealogyVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmAttributeValueVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmInstituteVO;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmSitemapVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.InstituteVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PhotoVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PuiNameValueVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.SiblingVO;
-import fr.inra.urgi.faidare.domain.data.germplasm.SimpleVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.SiteVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.TaxonSourceVO;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.faidare.repository.es.GermplasmAttributeRepository;
 import fr.inra.urgi.faidare.repository.es.GermplasmRepository;
 import fr.inra.urgi.faidare.repository.es.XRefDocumentRepository;
+import fr.inra.urgi.faidare.utils.Sitemaps;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
  * Controller used to display a germplasm card based on its ID.
@@ -49,7 +61,7 @@ public class GermplasmController {
     private final GermplasmRepository germplasmRepository;
     private final FaidareProperties faidareProperties;
     private final XRefDocumentRepository xRefDocumentRepository;
-    private GermplasmAttributeRepository germplasmAttributeRepository;
+    private final GermplasmAttributeRepository germplasmAttributeRepository;
 
     public GermplasmController(GermplasmRepository germplasmRepository,
                                FaidareProperties faidareProperties,
@@ -85,6 +97,26 @@ public class GermplasmController {
         }
 
         return toModelAndView(germplasms.get(0));
+    }
+
+
+    @GetMapping(value = "/sitemap-{index}.txt")
+    @ResponseBody
+    public ResponseEntity<StreamingResponseBody> sitemap(@PathVariable("index") int index) {
+        if (index < 0 || index >= Sitemaps.BUCKET_COUNT) {
+            throw new NotFoundException("no sitemap for this index");
+        }
+        StreamingResponseBody body = out -> {
+            Iterator<GermplasmSitemapVO> iterator = germplasmRepository.scrollAllForSitemap(1000);
+            Sitemaps.generateSitemap(
+                "/germplasms/sitemap-" + index + ".txt",
+                out,
+                iterator,
+                vo -> Math.floorMod(vo.getGermplasmDbId().hashCode(), Sitemaps.BUCKET_COUNT) == index,
+                vo -> "/germplasms/" + vo.getGermplasmDbId()
+            );
+        };
+        return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body(body);
     }
 
     private ModelAndView toModelAndView(GermplasmVO germplasm) {
