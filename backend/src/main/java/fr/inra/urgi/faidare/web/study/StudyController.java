@@ -9,19 +9,17 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.google.common.collect.Lists;
 import fr.inra.urgi.faidare.api.NotFoundException;
 import fr.inra.urgi.faidare.config.FaidareProperties;
 import fr.inra.urgi.faidare.domain.criteria.GermplasmPOSTSearchCriteria;
-import fr.inra.urgi.faidare.domain.data.LocationSitemapVO;
 import fr.inra.urgi.faidare.domain.data.LocationVO;
 import fr.inra.urgi.faidare.domain.data.TrialVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.study.StudyDetailVO;
 import fr.inra.urgi.faidare.domain.data.study.StudySitemapVO;
 import fr.inra.urgi.faidare.domain.data.variable.ObservationVariableVO;
+import fr.inra.urgi.faidare.domain.xref.XRefDocumentSearchCriteria;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.faidare.repository.es.GermplasmRepository;
 import fr.inra.urgi.faidare.repository.es.LocationRepository;
@@ -30,7 +28,6 @@ import fr.inra.urgi.faidare.repository.es.TrialRepository;
 import fr.inra.urgi.faidare.repository.es.XRefDocumentRepository;
 import fr.inra.urgi.faidare.repository.file.CropOntologyRepository;
 import fr.inra.urgi.faidare.utils.Sitemaps;
-import fr.inra.urgi.faidare.web.site.MapLocation;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -78,21 +75,20 @@ public class StudyController {
     public ModelAndView get(@PathVariable("studyId") String studyId) {
         StudyDetailVO study = studyRepository.getById(studyId);
 
+        // TODO uncomment this
         // List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(
-        //     XRefDocumentSearchCriteria.forXRefId(site.getLocationDbId()));
+        //     XRefDocumentSearchCriteria.forXRefId(study.getStudyDbId()));
         List<XRefDocumentVO> crossReferences = Arrays.asList(
             createXref("foobar"),
             createXref("bazbing")
         );
-
-        // LocationVO site = createSite();
 
         if (study == null) {
             throw new NotFoundException("Study with ID " + studyId + " not found");
         }
 
         List<GermplasmVO> germplasms = getGermplasms(study);
-        List<ObservationVariableVO>variables = getVariables(study);
+        List<ObservationVariableVO> variables = getVariables(study);
         List<TrialVO> trials = getTrials(study);
         LocationVO location = getLocation(study);
 

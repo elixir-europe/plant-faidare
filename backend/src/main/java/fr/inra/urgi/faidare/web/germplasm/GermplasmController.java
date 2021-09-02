@@ -34,6 +34,7 @@ import fr.inra.urgi.faidare.domain.data.germplasm.PuiNameValueVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.SiblingVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.SiteVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.TaxonSourceVO;
+import fr.inra.urgi.faidare.domain.xref.XRefDocumentSearchCriteria;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.faidare.repository.es.GermplasmAttributeRepository;
 import fr.inra.urgi.faidare.repository.es.GermplasmRepository;
@@ -121,8 +122,6 @@ public class GermplasmController {
 
     private ModelAndView toModelAndView(GermplasmVO germplasm) {
         // List<BrapiGermplasmAttributeValue> attributes = getAttributes(germplasm);
-        // List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(
-        //     XRefDocumentSearchCriteria.forXRefId(site.getLocationDbId()));
         // PedigreeVO pedigree = getPedigree(germplasm);
         // List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(
         //     XRefDocumentSearchCriteria.forXRefId(germplasm.getGermplasmDbId())

@@ -136,5 +136,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.mockito:mockito-junit-jupiter:2.23.0")
     testImplementation("org.junit-pioneer:junit-pioneer:0.3.0")
+    testImplementation("org.jsoup:jsoup:1.14.2")
+
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }

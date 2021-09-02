@@ -11,6 +11,7 @@ import fr.inra.urgi.faidare.config.FaidareProperties;
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiAdditionalInfo;
 import fr.inra.urgi.faidare.domain.data.LocationSitemapVO;
 import fr.inra.urgi.faidare.domain.data.LocationVO;
+import fr.inra.urgi.faidare.domain.xref.XRefDocumentSearchCriteria;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.faidare.repository.es.LocationRepository;
 import fr.inra.urgi.faidare.repository.es.XRefDocumentRepository;
