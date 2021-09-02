@@ -36,11 +36,12 @@ export function initializeMap(options: MapOptions) {
     }
 
     const mapContainerElement = document.querySelector('#map-container');
-    mapContainerElement!.classList.remove("d-none");
+    mapContainerElement!.classList.remove('d-none');
     const mapElement = document.querySelector('#map') as HTMLElement;
     const map = L.map(mapElement);
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, ' +
+        attribution:
+            'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, ' +
             'Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
     }).addTo(map);
 
@@ -52,7 +53,7 @@ export function initializeMap(options: MapOptions) {
     for (const location of options.locations) {
         const icon = L.icon({
             iconUrl: markerIconUrl(options.contextPath, location),
-            iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+            iconAnchor: [12, 41] // point of the icon which will correspond to marker's location
         });
 
         const popupElement = document.createElement('div');
@@ -74,10 +75,7 @@ export function initializeMap(options: MapOptions) {
         linkElement.href = `${options.contextPath}/sites/${location.locationDbId}`;
         popupElement.appendChild(linkElement);
 
-        const marker = L.marker(
-            [location.latitude, location.longitude],
-            { icon: icon }
-        );
+        const marker = L.marker([location.latitude, location.longitude], { icon: icon });
         markers.addLayer(marker.bindPopup(popupElement));
         mapMarkers.push(marker);
     }

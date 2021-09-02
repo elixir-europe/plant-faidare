@@ -12,7 +12,7 @@ $table-group-separator-color: $table-border-color;
 @import '~leaflet.markercluster/dist/MarkerCluster.css';
 @import '~leaflet.markercluster/dist/MarkerCluster.Default.css';
 
-a[role=button] {
+a[role='button'] {
   color: $link-color !important;
 }
 

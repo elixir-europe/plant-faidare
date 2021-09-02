@@ -8,7 +8,8 @@
     "build:prod": "webpack --mode production",
     "watch": "webpack --mode development --watch",
     "watch:prod": "webpack --mode production --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write \"src/**/*.+(ts|js|json|html|scss)\""
   },
   "author": "",
   "license": "MIT",
@@ -28,6 +29,7 @@
     "mini-css-extract-plugin": "2.2.2",
     "postcss": "8.3.6",
     "postcss-loader": "6.1.1",
+    "prettier": "2.3.2",
     "sass": "1.39.0",
     "sass-loader": "12.1.0",
     "ts-loader": "9.2.5",
@@ -37,5 +39,11 @@
   },
   "browserslist": [
     "defaults"
-  ]
+  ],
+  "prettier": {
+    "printWidth": 140,
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "trailingComma": "none"
+  }
 }

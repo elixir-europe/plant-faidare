@@ -1,7 +1,7 @@
 import { Popover } from 'bootstrap';
 
 export function initializePopovers() {
-    const popoverTriggerList: Array<HTMLElement> = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    const popoverTriggerList: Array<HTMLElement> = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
     popoverTriggerList.forEach(popoverTriggerEl => {
         const options: Partial<Popover.Options> = {};
         const contentSelector = popoverTriggerEl.dataset.bsElement;
