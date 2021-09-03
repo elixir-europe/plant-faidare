@@ -10,9 +10,9 @@ buildscript {
 plugins {
     java
     jacoco
-    id("org.springframework.boot") version "2.1.2.RELEASE"
+    id("org.springframework.boot") version "2.5.4"
     id("com.gorylenko.gradle-git-properties") version "2.3.1"
-    id("io.spring.dependency-management") version "1.0.6.RELEASE"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.sonarqube")
     id("org.owasp.dependencycheck") version "6.0.3"
 }
@@ -25,8 +25,6 @@ repositories {
     mavenCentral()
 }
 
-val snippetsDir = file("build/generated-snippets")
-
 tasks {
 
     withType(JavaCompile::class.java) {
@@ -34,12 +32,6 @@ tasks {
         // this is useful for Jackson and Spring to automatically deduce propert names or path variable names
         // based on the name of the parameter
         options.compilerArgs.add("-parameters")
-    }
-
-    processResources {
-        inputs.property("app", "gnpis")
-
-        filesMatching("bootstrap.yml") {}
     }
 
     // this task is always out-of-date because it generates a properties file with the build time inside
@@ -52,7 +44,7 @@ tasks {
     }
 
     bootJar {
-        archiveName = "${rootProject.name}.jar"
+        archiveFileName.set("${rootProject.name}.jar")
         dependsOn(buildInfo)
         dependsOn(":web:assemble")
 
@@ -89,27 +81,29 @@ tasks {
         testLogging {
             exceptionFormat = TestExceptionFormat.FULL
         }
-        outputs.dir(snippetsDir)
     }
 
     jacocoTestReport {
         reports {
-            xml.setEnabled(true)
-            html.setEnabled(true)
+            xml.required.set(true)
+            html.required.set(true)
         }
     }
 }
 
+extra["springCloudVersion"] = "2020.0.3"
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:Finchley.SR1")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
     }
 }
 
 dependencies {
     // Spring
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
@@ -129,14 +123,6 @@ dependencies {
     implementation("com.opencsv:opencsv:4.4")
 
     // Test dependencies
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(module = "junit")
-    }
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("org.junit.jupiter:junit-jupiter-params")
-    testImplementation("org.mockito:mockito-junit-jupiter:2.23.0")
-    testImplementation("org.junit-pioneer:junit-pioneer:0.3.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jsoup:jsoup:1.14.2")
-
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }

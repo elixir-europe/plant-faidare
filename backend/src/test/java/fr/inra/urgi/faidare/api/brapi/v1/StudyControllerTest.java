@@ -63,8 +63,7 @@ class StudyControllerTest {
     @Test
     void should_Not_Show_JSON_LD_Fields_By_Default() throws Exception {
         when(repository.getById(STUDY.getStudyDbId())).thenReturn(STUDY);
-        mockMvc.perform(get("/brapi/v1/studies/" + STUDY.getStudyDbId())
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/studies/" + STUDY.getStudyDbId()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result.@id").doesNotExist());
     }
@@ -74,8 +73,7 @@ class StudyControllerTest {
         when(repository.getById(STUDY.getStudyDbId())).thenReturn(STUDY);
 
         mockMvc.perform(get("/brapi/v1/studies/"+ STUDY.getStudyDbId())
-            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+                            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result.@id", is(STUDY.getUri())));
     }
@@ -87,8 +85,7 @@ class StudyControllerTest {
         StudyDetailVO study = new StudyDetailVO();
         when(repository.getById(identifier)).thenReturn(study);
 
-        mockMvc.perform(get("/brapi/v1/studies/" + identifier)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/studies/" + identifier))
             .andExpect(status().isOk());
     }
 
@@ -96,8 +93,7 @@ class StudyControllerTest {
     void should_Return_Not_Found() throws Exception {
         when(repository.getById("foo")).thenReturn(null);
 
-        mockMvc.perform(get("/brapi/v1/studies/foo")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/studies/foo"))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.metadata.status", hasSize(1)))
             .andExpect(jsonPath("$.metadata.status[0].code", is("404")));
@@ -113,8 +109,7 @@ class StudyControllerTest {
         PaginatedList<ObservationUnitVO> observationUnits = new PaginatedList<>(pagination, new ArrayList<>());
         when(observationUnitRepository.find(any())).thenReturn(observationUnits);
 
-        mockMvc.perform(get("/brapi/v1/studies/{id}/observationUnits?page={page}&pageSize={pageSize}", studyDbId, page, pageSize)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/studies/{id}/observationUnits?page={page}&pageSize={pageSize}", studyDbId, page, pageSize))
             .andExpect(jsonPath("$.metadata.pagination.currentPage", is(page)))
             .andExpect(jsonPath("$.metadata.pagination.pageSize", is(pageSize)));
     }

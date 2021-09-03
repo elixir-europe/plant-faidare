@@ -51,7 +51,6 @@ import org.springframework.test.web.servlet.MvcResult;
  * @author JB Nizet
  */
 @WebMvcTest(StudyController.class)
-@Import({CoordinatesDialect.class, FaidareDialect.class})
 public class StudyControllerTest {
     @Autowired
     private MockMvc mockMvc;

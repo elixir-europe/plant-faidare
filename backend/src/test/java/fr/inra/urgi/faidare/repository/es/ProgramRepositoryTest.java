@@ -40,7 +40,7 @@ class ProgramRepositoryTest {
         String expectedId = "P1";
         ProgramVO result = repository.getById(expectedId);
         assertThat(result).isNotNull();
-        assertThat(result).extracting("programDbId").containsOnly(expectedId);
+        assertThat(result.getProgramDbId()).isEqualTo(expectedId);
     }
 
     @Test

@@ -38,7 +38,6 @@ import org.springframework.test.web.servlet.MvcResult;
  * @author JB Nizet
  */
 @WebMvcTest(SiteController.class)
-@Import({CoordinatesDialect.class, FaidareDialect.class})
 public class SiteControllerTest {
     @Autowired
     private MockMvc mockMvc;

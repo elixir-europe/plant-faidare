@@ -42,7 +42,7 @@ class TrialRepositoryTest {
         String expectedId = "T1";
         TrialVO result = repository.getById(expectedId);
         assertThat(result).isNotNull();
-        assertThat(result).extracting("trialDbId").containsOnly(expectedId);
+        assertThat(result.getTrialDbId()).isEqualTo(expectedId);
     }
 
     @Test

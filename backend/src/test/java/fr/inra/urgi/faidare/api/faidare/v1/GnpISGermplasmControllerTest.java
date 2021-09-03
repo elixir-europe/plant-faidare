@@ -47,8 +47,7 @@ class GnpISGermplasmControllerTest {
         String id = "foo";
         when(service.getById(id)).thenReturn(null);
 
-        mockMvc.perform(get("/brapi/v1/germplasm?id=" + id)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/germplasm?id=" + id))
             .andExpect(status().isNotFound());
     }
 
@@ -57,8 +56,7 @@ class GnpISGermplasmControllerTest {
         when(service.find(any(GermplasmSearchCriteria.class))).thenReturn(null);
 
         String pui = "foo";
-        mockMvc.perform(get("/brapi/v1/germplasm?pui=" + pui)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/germplasm?pui=" + pui))
             .andExpect(status().isNotFound());
     }
 
@@ -71,8 +69,7 @@ class GnpISGermplasmControllerTest {
         when(service.find(criteriaCaptor.capture())).thenReturn(germplasmPage);
 
         String pui = "doi:10.15454/1.4921786234137117E12";
-        mockMvc.perform(get("/faidare/v1/germplasm?pui=" + pui)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/faidare/v1/germplasm?pui=" + pui))
             .andExpect(status().isOk());
 
         GermplasmSearchCriteria value = criteriaCaptor.getValue();
@@ -85,8 +82,7 @@ class GnpISGermplasmControllerTest {
 
     @Test
     void should_Return_Bad_Request_With_No_Param() throws Exception {
-        mockMvc.perform(get("/faidare/v1/germplasm")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/faidare/v1/germplasm"))
             .andExpect(status().isBadRequest());
     }
 
@@ -112,9 +108,7 @@ class GnpISGermplasmControllerTest {
 
         when(service.find(any(GermplasmSearchCriteria.class))).thenReturn(germplasmPage);
 
-        mockMvc.perform(get("/faidare/v1/germplasm?pui=foo")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
-
+        mockMvc.perform(get("/faidare/v1/germplasm?pui=foo"))
             // Should not have private fields
             .andExpect(jsonPath("$", not(hasProperty("groupId"))))
             .andExpect(jsonPath("$", not(hasProperty("speciesGroup"))))

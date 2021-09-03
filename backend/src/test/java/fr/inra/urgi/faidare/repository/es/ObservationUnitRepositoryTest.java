@@ -132,7 +132,7 @@ class ObservationUnitRepositoryTest {
         assertThat(result)
             .flatExtracting("observations")
             .extracting("observationVariableDbId")
-            .containsOnlyElementsOf(variableIds);
+            .hasSameElementsAs(variableIds);
     }
 
     @Test
@@ -158,7 +158,7 @@ class ObservationUnitRepositoryTest {
         assertThat(result)
             .flatExtracting("observations")
             .extracting("observationVariableDbId")
-            .containsOnlyElementsOf(variableIds);
+            .hasSameElementsAs(variableIds);
 
         assertThat(result)
             .flatExtracting("observations")
@@ -220,7 +220,7 @@ class ObservationUnitRepositoryTest {
 
         assertThat(result)
             .extracting("studyDbId")
-            .containsOnlyElementsOf(studyIds);
+            .hasSameElementsAs(studyIds);
 
         assertThat(result)
             .extracting("observationLevel")
@@ -228,21 +228,21 @@ class ObservationUnitRepositoryTest {
 
         assertThat(result)
             .extracting("studyLocationDbId")
-            .containsOnlyElementsOf(locationIds);
+            .hasSameElementsAs(locationIds);
 
         assertThat(result)
             .extracting("germplasmDbId")
-            .containsOnlyElementsOf(germplasmIds);
+            .hasSameElementsAs(germplasmIds);
 
         assertThat(result)
             .flatExtracting("observations")
             .extracting("season")
-            .containsOnlyElementsOf(seasons);
+            .hasSameElementsAs(seasons);
 
         assertThat(result)
             .flatExtracting("observations")
             .extracting("observationVariableDbId")
-            .containsOnlyElementsOf(variableIds);
+            .hasSameElementsAs(variableIds);
 
         assertThat(result)
             .flatExtracting("observations")

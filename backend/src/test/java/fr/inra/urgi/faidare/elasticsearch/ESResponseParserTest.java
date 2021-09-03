@@ -107,7 +107,7 @@ class ESResponseParserTest {
 
         assertThat(actualDocumentObject)
             .isNotNull().isNotEmpty()
-            .containsOnlyElementsOf(expectedDocumentObjects);
+            .hasSameElementsAs(expectedDocumentObjects);
     }
 
     private SearchHit mockSearchHit(DocumentObject object) throws IOException {

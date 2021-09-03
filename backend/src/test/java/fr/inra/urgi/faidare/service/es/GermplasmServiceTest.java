@@ -42,7 +42,7 @@ public class GermplasmServiceTest {
         File csvFile = germplasmService.exportCSV(criteria);
 
         CSVReader strings = new CSVReader(new FileReader(csvFile));
-        assertThat(strings.iterator()).hasSize(4);
+        assertThat(strings.iterator()).toIterable().hasSize(4);
         //TODO: Add more validation with mock data
     }
 

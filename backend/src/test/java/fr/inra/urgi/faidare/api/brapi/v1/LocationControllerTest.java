@@ -45,8 +45,7 @@ class LocationControllerTest {
     void should_Not_Show_JSON_LD_Fields_By_Default() throws Exception {
         when(repository.getById(LOCATION.getLocationDbId())).thenReturn(LOCATION);
 
-        mockMvc.perform(get("/brapi/v1/locations/" + LOCATION.getLocationDbId())
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/locations/" + LOCATION.getLocationDbId()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result.@id").doesNotExist());
     }
@@ -56,8 +55,7 @@ class LocationControllerTest {
         when(repository.getById(LOCATION.getLocationDbId())).thenReturn(LOCATION);
 
         mockMvc.perform(get("/brapi/v1/locations/"+LOCATION.getLocationDbId())
-            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+                            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result.@id", is(LOCATION.getUri())));
     }
@@ -69,8 +67,7 @@ class LocationControllerTest {
         LocationVO location = new LocationVO();
         when(repository.getById(identifier)).thenReturn(location);
 
-        mockMvc.perform(get("/brapi/v1/locations/" + identifier)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/locations/" + identifier))
             .andExpect(status().isOk());
     }
 
@@ -78,8 +75,7 @@ class LocationControllerTest {
     void should_Return_Not_Found() throws Exception {
         when(repository.getById("foo")).thenReturn(null);
 
-        mockMvc.perform(get("/brapi/v1/locations/foo")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/locations/foo"))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.metadata.status", hasSize(1)))
             .andExpect(jsonPath("$.metadata.status[0].code", is("404")));

@@ -43,8 +43,7 @@ class ObservationVariableControllerTest {
     @Test
     void should_Not_Show_JSON_LD_Fields_By_Default() throws Exception {
         when(repository.getVariableById(VARIABLE.getObservationVariableDbId())).thenReturn(VARIABLE);
-        mockMvc.perform(get("/brapi/v1/variables/" + VARIABLE.getObservationVariableDbId())
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/variables/" + VARIABLE.getObservationVariableDbId()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result.@id").doesNotExist());
     }
@@ -54,8 +53,7 @@ class ObservationVariableControllerTest {
         when(repository.getVariableById(VARIABLE.getObservationVariableDbId())).thenReturn(VARIABLE);
 
         mockMvc.perform(get("/brapi/v1/variables/"+ VARIABLE.getObservationVariableDbId())
-            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+                            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result.@id", is(VARIABLE.getUri())));
     }
@@ -67,8 +65,7 @@ class ObservationVariableControllerTest {
         ObservationVariableVO variable = new ObservationVariableVO();
         when(repository.getVariableById(identifier)).thenReturn(variable);
 
-        mockMvc.perform(get("/brapi/v1/variables/" + identifier)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/variables/" + identifier))
             .andExpect(status().isOk());
     }
 
@@ -76,8 +73,7 @@ class ObservationVariableControllerTest {
     void should_Return_Not_Found() throws Exception {
         when(repository.getVariableById("foo")).thenReturn(null);
 
-        mockMvc.perform(get("/brapi/v1/variables/foo")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/variables/foo"))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.metadata.status", hasSize(1)))
             .andExpect(jsonPath("$.metadata.status[0].code", is("404")));

@@ -43,8 +43,7 @@ class ProgramControllerTest {
     @Test
     void should_Not_Show_JSON_LD_Fields_By_Default() throws Exception {
         when(repository.getById(PROGRAM.getProgramDbId())).thenReturn(PROGRAM);
-        mockMvc.perform(get("/brapi/v1/programs/" + PROGRAM.getProgramDbId())
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/programs/" + PROGRAM.getProgramDbId()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result.@id").doesNotExist());
     }
@@ -54,8 +53,7 @@ class ProgramControllerTest {
         when(repository.getById(PROGRAM.getProgramDbId())).thenReturn(PROGRAM);
 
         mockMvc.perform(get("/brapi/v1/programs/"+ PROGRAM.getProgramDbId())
-            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+                            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result.@id", is(PROGRAM.getUri())));
     }
@@ -67,8 +65,7 @@ class ProgramControllerTest {
         ProgramVO program = new ProgramVO();
         when(repository.getById(identifier)).thenReturn(program);
 
-        mockMvc.perform(get("/brapi/v1/programs/" + identifier)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/programs/" + identifier))
             .andExpect(status().isOk());
     }
 
@@ -76,8 +73,7 @@ class ProgramControllerTest {
     void should_Return_Not_Found() throws Exception {
         when(repository.getById("foo")).thenReturn(null);
 
-        mockMvc.perform(get("/brapi/v1/programs/foo")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/programs/foo"))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.metadata.status", hasSize(1)))
             .andExpect(jsonPath("$.metadata.status[0].code", is("404")));

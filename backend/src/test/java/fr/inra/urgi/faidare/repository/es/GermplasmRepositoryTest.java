@@ -118,7 +118,7 @@ class GermplasmRepositoryTest {
     void should_Scroll_All() {
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
         Iterator<GermplasmVO> list = repository.scrollAll(criteria);
-        assertThat(list).isNotNull().hasSize(14);
+        assertThat(list).isNotNull().toIterable().hasSize(14);
     }
 
     @Test
@@ -126,13 +126,14 @@ class GermplasmRepositoryTest {
         GermplasmPOSTSearchCriteria criteria = new GermplasmPOSTSearchCriteria();
         criteria.setAccessionNumbers(Collections.singletonList("FOOOO"));
         Iterator<GermplasmVO> list = repository.scrollAll(criteria);
-        assertThat(list).isNotNull().hasSize(0);
+        assertThat(list).isNotNull().toIterable().hasSize(0);
     }
 
     @Test
     void shouldScrollAllForSitemap() {
         Iterator<GermplasmSitemapVO> list = repository.scrollAllForSitemap(100);
-        assertThat(list).isNotEmpty()
+        assertThat(list).toIterable()
+                        .isNotEmpty()
                         .allMatch(vo -> !vo.getGermplasmDbId().isEmpty());
     }
 
@@ -144,8 +145,10 @@ class GermplasmRepositoryTest {
         criteria.setAccessionNumbers(Collections.singletonList(accessionNumber));
 
         Iterator<GermplasmVO> list = repository.scrollAll(criteria);
-        assertThat(list).isNotNull().hasSize(1)
-            .extracting("accessionNumber").containsOnly(accessionNumber);
+        assertThat(list).isNotNull()
+                        .toIterable()
+                        .hasSize(1)
+                        .extracting("accessionNumber").containsOnly(accessionNumber);
     }
 
     @Test
@@ -154,8 +157,10 @@ class GermplasmRepositoryTest {
         String accessionNumber = "2360";
         criteria.setAccessionNumbers(Collections.singletonList(accessionNumber));
         Iterator<GermplasmVO> list = repository.scrollAll(criteria);
-        assertThat(list).isNotNull().hasSize(1)
-            .extracting("accessionNumber").containsOnly(accessionNumber);
+        assertThat(list).isNotNull()
+                        .toIterable()
+                        .hasSize(1)
+                        .extracting("accessionNumber").containsOnly(accessionNumber);
     }
 
     @Test
@@ -164,7 +169,10 @@ class GermplasmRepositoryTest {
         String species = "vinifera";
         criteria.setGermplasmSpecies(Lists.newArrayList(species));
         Iterator<GermplasmVO> result = repository.scrollAll(criteria);
-        assertThat(result).isNotNull().isNotEmpty().extracting("species").containsOnly(species);
+        assertThat(result).isNotNull()
+                          .toIterable()
+                          .isNotEmpty()
+                          .extracting("species").containsOnly(species);
     }
 
     @Test
@@ -173,8 +181,10 @@ class GermplasmRepositoryTest {
         String genus = "Solanum";
         criteria.setGermplasmGenus(Lists.newArrayList(genus));
         Iterator<GermplasmVO> g = repository.scrollAll(criteria);
-        assertThat(g).isNotNull().hasSize(2)
-            .extracting("genus").containsOnly(genus);
+        assertThat(g).isNotNull()
+                     .toIterable()
+                     .hasSize(2)
+                     .extracting("genus").containsOnly(genus);
     }
 
     @Test
@@ -306,7 +316,7 @@ class GermplasmRepositoryTest {
         criteria.setGermplasmSpecies(Lists.newArrayList(species));
 
         Iterator<GermplasmVO> scroll = repository.scrollAll(criteria);
-        assertThat(scroll).isNotNull().hasSize(numberOfAestivum);
+        assertThat(scroll).isNotNull().toIterable().hasSize(numberOfAestivum);
 
         PaginatedList<GermplasmVO> pager = repository.find(criteria);
         assertThat(pager).isNotNull().isNotEmpty();
@@ -348,11 +358,11 @@ class GermplasmRepositoryTest {
         PaginatedList<GermplasmVO> vos = repository.find(criteria);
         assertThat(vos).isNotNull().isNotEmpty();
 
-        assertThat(vos).extracting("accessionNumber").containsOnlyElementsOf(accessionNumbers);
-        assertThat(vos).extracting("germplasmDbId").containsOnlyElementsOf(germplasmDbIds);
-        assertThat(vos).extracting("germplasmName").containsOnlyElementsOf(germplasmNames);
-        assertThat(vos).extracting("genus").containsOnlyElementsOf(germplasmGenus);
-        assertThat(vos).extracting("species").containsOnlyElementsOf(germplasmSpecies);
+        assertThat(vos).extracting("accessionNumber").isSubsetOf(accessionNumbers);
+        assertThat(vos).extracting("germplasmDbId").isSubsetOf(germplasmDbIds);
+        assertThat(vos).extracting("germplasmName").isSubsetOf(germplasmNames);
+        assertThat(vos).extracting("genus").isSubsetOf(germplasmGenus);
+        assertThat(vos).extracting("species").isSubsetOf(germplasmSpecies);
     }
 
     @Test
@@ -369,8 +379,8 @@ class GermplasmRepositoryTest {
         PaginatedList<GermplasmVO> vos = repository.find(criteria);
         assertThat(vos).isNotNull().isNotEmpty();
 
-        assertThat(vos).extracting("germplasmDbId").containsOnlyElementsOf(germplasmDbIds);
-        assertThat(vos).extracting("germplasmName").containsOnlyElementsOf(germplasmNames);
+        assertThat(vos).extracting("germplasmDbId").isSubsetOf(germplasmDbIds);
+        assertThat(vos).extracting("germplasmName").isSubsetOf(germplasmNames);
     }
 
     @Test

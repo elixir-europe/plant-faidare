@@ -1,3 +1,12 @@
+spring:
+  config:
+    import: 'optional:configserver:'
+    name: faidare
+
+  cloud:
+    config:
+      uri: ${SPRING_CONFIG_URI:http://localhost:8888}
+
 data:
   elasticsearch:
     host: 127.0.0.1
@@ -12,12 +21,13 @@ management:
       exposure:
         include: '*'
 
-logging.level:
-  root: ERROR
-  org.springframework:
-    boot.web.embedded.tomcat.TomcatWebServer: INFO
-    web.client.RestTemplate: DEBUG
-  fr.inra: DEBUG
+logging:
+  level:
+    root: ERROR
+    org.springframework:
+      boot.web.embedded.tomcat.TomcatWebServer: INFO
+      web.client.RestTemplate: DEBUG
+    fr.inra: DEBUG
 
 faidare:
   elasticsearch-indexing-template:
@@ -93,9 +103,12 @@ server:
 
 ---
 spring:
-  profiles:
-    dev
-  resources:
-    static-locations:
-      - classpath:/static/
-      - file:./web/build/dist/
+  config:
+    activate:
+      on-profile:
+        dev
+  web:
+    resources:
+      static-locations:
+        - classpath:/static/
+        - file:./web/build/dist/

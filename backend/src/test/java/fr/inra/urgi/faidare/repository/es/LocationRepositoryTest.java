@@ -46,7 +46,7 @@ class LocationRepositoryTest {
         String expectedId = "805";
         LocationVO result = repository.getById(expectedId);
         assertThat(result).isNotNull();
-        assertThat(result).extracting("locationDbId").containsOnly(expectedId);
+        assertThat(result.getLocationDbId()).isEqualTo(expectedId);
     }
 
     @Test
@@ -115,13 +115,14 @@ class LocationRepositoryTest {
         PaginatedList<LocationVO> locations = repository.find(criteria);
 
         assertThat(locations).isNotNull().hasSize(3);
-        assertThat(locations).extracting("locationType").containsOnlyElementsOf(expectedTypes);
+        assertThat(locations).extracting("locationType").hasSameElementsAs(expectedTypes);
     }
 
     @Test
     void shouldScrollAllForSitemap() {
         Iterator<LocationSitemapVO> list = repository.scrollAllForSitemap(100);
-        assertThat(list).isNotEmpty()
+        assertThat(list).toIterable()
+                        .isNotEmpty()
                         .allMatch(vo -> !vo.getLocationDbId().isEmpty());
     }
 

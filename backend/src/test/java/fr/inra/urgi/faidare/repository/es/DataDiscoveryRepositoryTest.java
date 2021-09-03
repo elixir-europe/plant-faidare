@@ -114,7 +114,7 @@ class DataDiscoveryRepositoryTest {
         criteria.setTypes(types);
         DataDiscoveryResponse result = repository.find(criteria);
         assertThat(result.getResult().getData()).isNotNull().hasSize(2)
-            .flatExtracting("type").containsOnlyElementsOf(types);
+            .flatExtracting("type").isSubsetOf(types);
     }
 
     @Test
@@ -124,7 +124,7 @@ class DataDiscoveryRepositoryTest {
         criteria.setSources(sources);
         DataDiscoveryResponse result = repository.find(criteria);
         assertThat(result.getResult().getData()).isNotNull().hasSize(2)
-            .extracting("sourceUri").containsOnlyElementsOf(sources);
+            .extracting("sourceUri").isSubsetOf(sources);
     }
 
     @Test

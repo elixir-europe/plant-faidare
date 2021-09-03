@@ -28,8 +28,7 @@ class CallsControllerTest {
     @Test
     void should_Get_Page_Size() throws Exception {
         int pageSize = 3;
-        mockMvc.perform(get("/brapi/v1/calls?pageSize=" + pageSize)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/calls?pageSize=" + pageSize))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.metadata.status", hasSize(0)))
             .andExpect(jsonPath("$.result.data", hasSize(pageSize)));
@@ -37,8 +36,7 @@ class CallsControllerTest {
 
     @Test
     void should_Fail_Page_Overflow() throws Exception {
-        mockMvc.perform(get("/brapi/v1/calls?pageSize=100&page=2")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/calls?pageSize=100&page=2"))
             .andExpect(status().isBadRequest())
             .andExpect(content().json("{" +
                 "\"metadata\":{" +
@@ -56,8 +54,7 @@ class CallsControllerTest {
 
     @Test
     void should_Get_All() throws Exception {
-        mockMvc.perform(get("/brapi/v1/calls?pageSize=1000")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/calls?pageSize=1000"))
             .andExpect(status().isOk())
             .andExpect(content().json("{\n" +
                 "  \"metadata\": {\n" +

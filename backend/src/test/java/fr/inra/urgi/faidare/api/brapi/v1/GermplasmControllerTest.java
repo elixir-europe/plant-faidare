@@ -54,8 +54,7 @@ class GermplasmControllerTest {
     void should_Not_Show_JSON_LD_Fields_By_Default() throws Exception {
         when(service.getById(anyString())).thenReturn(GERMPLASM);
 
-        mockMvc.perform(get("/brapi/v1/germplasm/" + GERMPLASM.getGermplasmDbId())
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/germplasm/" + GERMPLASM.getGermplasmDbId()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result.@id").doesNotExist());
     }
@@ -65,8 +64,7 @@ class GermplasmControllerTest {
         when(service.getById(anyString())).thenReturn(GERMPLASM);
 
         mockMvc.perform(get("/brapi/v1/germplasm/"+GERMPLASM.getGermplasmDbId())
-            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON)
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+                            .accept(BrapiJSONViewHandler.APPLICATION_LD_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result.@id", is(GERMPLASM.getUri())));
     }
@@ -76,8 +74,7 @@ class GermplasmControllerTest {
         ProgenyVO progeny = new ProgenyVO();
         when(service.getProgeny(anyString())).thenReturn(progeny);
 
-        mockMvc.perform(get("/brapi/v1/germplasm/Z25waXNfcHVpOnVua25vd246UmljZToxNjc4MzEw/progeny")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/germplasm/Z25waXNfcHVpOnVua25vd246UmljZToxNjc4MzEw/progeny"))
             .andExpect(status().isOk());
     }
 
@@ -86,8 +83,7 @@ class GermplasmControllerTest {
         GermplasmVO germplasm = new GermplasmVO();
         when(service.getById(anyString())).thenReturn(germplasm);
 
-        mockMvc.perform(get("/brapi/v1/germplasm/Z25waXNfcHVpOnVua25vd246UmljZToxNjc4MzEw")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/germplasm/Z25waXNfcHVpOnVua25vd246UmljZToxNjc4MzEw"))
             .andExpect(status().isOk());
     }
 
@@ -95,8 +91,7 @@ class GermplasmControllerTest {
     void should_Return_Not_Found() throws Exception {
         when(service.getById(anyString())).thenReturn(null);
 
-        mockMvc.perform(get("/brapi/v1/germplasm/foo")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/germplasm/foo"))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.metadata.status", hasSize(1)))
             .andExpect(jsonPath("$.metadata.status[0].code", is("404")));
@@ -122,9 +117,7 @@ class GermplasmControllerTest {
 
         when(service.getById(anyString())).thenReturn(germplasm);
 
-        mockMvc.perform(get("/brapi/v1/germplasm/foo")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
-
+        mockMvc.perform(get("/brapi/v1/germplasm/foo"))
             // Should not have private fields
             .andExpect(jsonPath("$.result", not(hasProperty("groupId"))))
             .andExpect(jsonPath("$.result", not(hasProperty("speciesGroup"))))

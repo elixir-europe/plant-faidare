@@ -6,7 +6,7 @@ import org.elasticsearch.client.NodeSelector;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.elasticsearch.rest.RestClientAutoConfiguration;
+import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,7 +20,7 @@ public class ElasticSearchConfig {
     private Integer esPort;
 
     /**
-     * Provides builder for {@link RestClientAutoConfiguration}
+     * Provides builder for {@link ElasticsearchRestClientAutoConfiguration}
      */
     @Bean
     public RestClientBuilder restClientBuilder() {

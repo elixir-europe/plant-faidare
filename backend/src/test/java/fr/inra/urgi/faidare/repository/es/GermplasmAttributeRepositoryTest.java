@@ -101,6 +101,6 @@ class GermplasmAttributeRepositoryTest {
         assertThat(data).isNotNull().isNotEmpty().hasSize(2);
         assertThat(data)
             .extracting("attributeDbId")
-            .containsOnlyElementsOf(expectedAttributes);
+            .isSubsetOf(expectedAttributes);
     }
 }

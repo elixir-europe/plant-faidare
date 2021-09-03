@@ -45,7 +45,6 @@ import org.springframework.test.web.servlet.MvcResult;
  * @author JB Nizet
  */
 @WebMvcTest(GermplasmController.class)
-@Import({CoordinatesDialect.class, FaidareDialect.class})
 public class GermplasmControllerTest {
 
     @Autowired

@@ -33,8 +33,7 @@ class BrapiExceptionHandlerTest {
 
     @Test
     void should_Throw_Pagination_Max_Size_Exception() throws Exception {
-        mockMvc.perform(get("/brapi/v1/germplasm?pageSize=99999")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/germplasm?pageSize=99999"))
             .andExpect(status().isBadRequest())
             .andExpect(content().json("{\n" +
                 "  \"metadata\": {\n" +
@@ -61,8 +60,7 @@ class BrapiExceptionHandlerTest {
 
     @Test
     void should_Throw_Pagination_Min_Size_Exception() throws Exception {
-        mockMvc.perform(get("/brapi/v1/germplasm?pageSize=-1")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/germplasm?pageSize=-1"))
             .andExpect(status().isBadRequest())
             .andExpect(content().json("{\n" +
                 "  \"metadata\": {\n" +
@@ -85,8 +83,7 @@ class BrapiExceptionHandlerTest {
 
     @Test
     void should_Throw_Pagination_Min_Page_Exception() throws Exception {
-        mockMvc.perform(get("/brapi/v1/germplasm?page=-1")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/germplasm?page=-1"))
             .andExpect(status().isBadRequest())
             .andExpect(content().json("{\n" +
                 "  \"metadata\": {\n" +
@@ -108,8 +105,7 @@ class BrapiExceptionHandlerTest {
 
     @Test
     void should_Throw_Invalid_Param_Value_Exception() throws Exception {
-        mockMvc.perform(get("/brapi/v1/germplasm?page=foo")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(get("/brapi/v1/germplasm?page=foo"))
             .andExpect(status().isBadRequest())
             .andExpect(content().json("{\n" +
                 "  \"metadata\": {\n" +

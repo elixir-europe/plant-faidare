@@ -52,8 +52,8 @@ class StudyRepositoryTest {
         String expectedId = "BTH_Orgeval_2008_SetA2";
         StudyDetailVO result = repository.getById(expectedId);
         assertThat(result).isNotNull();
-        assertThat(result).extracting("studyDbId").containsOnly(expectedId);
-        assertThat(result).extracting("location").isNotEmpty();
+        assertThat(result.getStudyDbId()).isEqualTo(expectedId);
+        assertThat(result.getLocation()).isNotNull();
     }
 
 
@@ -96,7 +96,7 @@ class StudyRepositoryTest {
 
         assertThat(result).isNotNull().hasSize(3);
         assertThat(result).extracting("locationName")
-            .containsOnlyElementsOf(expectedLocations);
+            .hasSameElementsAs(expectedLocations);
     }
 
     @Test
@@ -109,7 +109,7 @@ class StudyRepositoryTest {
 
         assertThat(result).isNotNull().isNotEmpty();
         assertThat(result).extracting("name")
-            .containsOnlyElementsOf(expectedNames);
+            .hasSameElementsAs(expectedNames);
     }
 
     @Test
@@ -137,9 +137,9 @@ class StudyRepositoryTest {
         PaginatedList<StudySummaryVO> result = repository.find(criteria);
 
         assertThat(result).isNotNull().isNotEmpty();
-        assertThat(result).extracting("name").containsOnlyElementsOf(names);
-        assertThat(result).extracting("locationName").containsOnlyElementsOf(locations);
-        assertThat(result).extracting("programName").containsOnlyElementsOf(programs);
+        assertThat(result).extracting("name").hasSameElementsAs(names);
+        assertThat(result).extracting("locationName").hasSameElementsAs(locations);
+        assertThat(result).extracting("programName").hasSameElementsAs(programs);
         assertThat(result).extracting("active").containsOnly(active);
         assertThat(result).flatExtracting("seasons").contains(season);
         assertThat(result).extracting("studyType").containsOnly(type);
@@ -163,8 +163,9 @@ class StudyRepositoryTest {
     @Test
     void shouldScrollAllForSitemap() {
         Iterator<StudySitemapVO> list = repository.scrollAllForSitemap(100);
-        Assertions.assertThat(list).isNotEmpty()
-                  .allMatch(vo -> !vo.getStudyDbId().isEmpty());
+        assertThat(list).toIterable()
+                        .isNotEmpty()
+                        .allMatch(vo -> !vo.getStudyDbId().isEmpty());
     }
 
     private class DescendingOrder implements Comparator<Object> {
