@@ -20,6 +20,7 @@ import fr.inra.urgi.faidare.domain.data.germplasm.GenealogyVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmAttributeValueListVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmAttributeValueVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmInstituteVO;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.InstituteVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.PedigreeVO;
@@ -383,5 +384,12 @@ public class Fixtures {
         trait.setDescription("Trait 1");
         variable.setTrait(trait);
         return variable;
+    }
+
+    public static GermplasmMcpdVO createGermplasmMcpd() {
+        GermplasmMcpdVO result = new GermplasmMcpdVO();
+        result.setGermplasmPUI("PUI1");
+        result.setInstituteCode("Inst1");
+        return result;
     }
 }

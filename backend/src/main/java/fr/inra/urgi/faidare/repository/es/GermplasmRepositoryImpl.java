@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import static org.elasticsearch.search.aggregations.AggregationBuilders.filter;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
@@ -115,6 +116,12 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
     public Iterator<GermplasmMcpdVO> scrollAllGermplasmMcpd(FaidareGermplasmPOSTShearchCriteria criteria) {
         QueryBuilder query = queryFactory.createShouldFilterQuery(criteria);
         int fetchSize = criteria.getPageSize().intValue();
+        return new ESScrollIterator<>(client, requestFactory, parser, GermplasmMcpdVO.class, query, fetchSize);
+    }
+
+    @Override
+    public Iterator<GermplasmMcpdVO> scrollGermplasmMcpdsByIds(Set<String> ids, int fetchSize) {
+        QueryBuilder query = QueryBuilders.idsQuery().addIds(ids.toArray(new String[0]));
         return new ESScrollIterator<>(client, requestFactory, parser, GermplasmMcpdVO.class, query, fetchSize);
     }
 

@@ -1,35 +1,30 @@
 package fr.inra.urgi.faidare.web.germplasm;
 
 import static fr.inra.urgi.faidare.web.Fixtures.htmlContent;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
 import fr.inra.urgi.faidare.config.FaidareProperties;
-import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiGermplasmAttributeValue;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmAttributeValueListVO;
+import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmSitemapVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
-import fr.inra.urgi.faidare.domain.data.study.StudySitemapVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSource;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
-import fr.inra.urgi.faidare.domain.xref.XRefDocumentSearchCriteria;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.faidare.repository.es.GermplasmAttributeRepository;
 import fr.inra.urgi.faidare.repository.es.GermplasmRepository;
 import fr.inra.urgi.faidare.repository.es.XRefDocumentRepository;
-import fr.inra.urgi.faidare.utils.Sitemaps;
 import fr.inra.urgi.faidare.web.Fixtures;
-import fr.inra.urgi.faidare.web.study.StudyController;
-import fr.inra.urgi.faidare.web.thymeleaf.CoordinatesDialect;
-import fr.inra.urgi.faidare.web.thymeleaf.FaidareDialect;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +40,14 @@ import org.springframework.test.web.servlet.MvcResult;
  * @author JB Nizet
  */
 @WebMvcTest(GermplasmController.class)
+@Import(GermplasmExportService.class)
 public class GermplasmControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private GermplasmRepository mockGermplasmRepository;
@@ -129,6 +128,35 @@ public class GermplasmControllerTest {
         mockMvc.perform(get("/faidare/germplasms/sitemap-17.txt")
                             .contextPath("/faidare"))
                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldExportGermplasms() throws Exception {
+        List<GermplasmMcpdVO> germplasms = Arrays.asList(
+            Fixtures.createGermplasmMcpd(),
+            Fixtures.createGermplasmMcpd()
+        );
+
+        GermplasmExportCommand command = new GermplasmExportCommand(
+            Sets.newHashSet("g1", "g2"),
+            Arrays.asList(GermplasmExportableField.PUID, GermplasmExportableField.INSTCODE));
+
+        when(mockGermplasmRepository.scrollGermplasmMcpdsByIds(eq(command.getIds()), anyInt()))
+            .thenAnswer(invocation -> germplasms.iterator());
+
+        MvcResult mvcResult = mockMvc.perform(post("/germplasms/exports")
+                                                  .contentType(MediaType.APPLICATION_JSON)
+                                                  .content(objectMapper.writeValueAsBytes(
+                                                      command)))
+                                     .andExpect(request().asyncStarted())
+                                     .andReturn();
+
+        this.mockMvc.perform(asyncDispatch(mvcResult))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType("text/csv"))
+               .andExpect(content().string("\"PUID\";\"INSTCODE\"\n" +
+                                               "\"PUI1\";\"Inst1\"\n" +
+                                               "\"PUI1\";\"Inst1\"\n"));
     }
 
     private void testSitemap(int index, String expectedContent) throws Exception {

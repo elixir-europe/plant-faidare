@@ -12,6 +12,7 @@ import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.elasticsearch.repository.ESFindRepository;
 
 import java.util.Iterator;
+import java.util.Set;
 
 public interface GermplasmRepository
     extends ESFindRepository<GermplasmSearchCriteria, GermplasmVO> {
@@ -51,6 +52,11 @@ public interface GermplasmRepository
      * Scroll through all germplasmMcpd matching the given FAIDARE search criteria.
      */
     Iterator<GermplasmMcpdVO> scrollAllGermplasmMcpd(FaidareGermplasmPOSTShearchCriteria criteria);
+
+    /**
+     * Scroll through all germplasmMcpd having one of the given IDs.
+     */
+    Iterator<GermplasmMcpdVO> scrollGermplasmMcpdsByIds(Set<String> ids, int fetchSize);
 
     /**
      * Find pedigree for germplasm by id.
