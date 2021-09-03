@@ -33,7 +33,9 @@ public class SitemapIndexController {
             .append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
             .append("<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
 
-        appendSiteMap(builder, "/sites/sitemap.txt");
+        for (int i = 0; i < Sitemaps.BUCKET_COUNT; i++) {
+            appendSiteMap(builder, "/sites/sitemap-" + i + ".txt");
+        }
         for (int i = 0; i < Sitemaps.BUCKET_COUNT; i++) {
             appendSiteMap(builder, "/germplasms/sitemap-" + i + ".txt");
         }

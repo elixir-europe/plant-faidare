@@ -14,12 +14,14 @@ import java.util.List;
 import fr.inra.urgi.faidare.config.FaidareProperties;
 import fr.inra.urgi.faidare.domain.data.LocationSitemapVO;
 import fr.inra.urgi.faidare.domain.data.LocationVO;
+import fr.inra.urgi.faidare.domain.data.study.StudySitemapVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSource;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentSearchCriteria;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.faidare.repository.es.LocationRepository;
 import fr.inra.urgi.faidare.repository.es.XRefDocumentRepository;
+import fr.inra.urgi.faidare.utils.Sitemaps;
 import fr.inra.urgi.faidare.web.Fixtures;
 import fr.inra.urgi.faidare.web.thymeleaf.CoordinatesDialect;
 import fr.inra.urgi.faidare.web.thymeleaf.FaidareDialect;
@@ -85,10 +87,28 @@ public class SiteControllerTest {
     void shouldGenerateSitemap() throws Exception {
         List<LocationSitemapVO> sites = Arrays.asList(
             new LocationSitemapVO("site1"),
-            new LocationSitemapVO("site2")
+            new LocationSitemapVO("site4"),
+            new LocationSitemapVO("site53"),
+            new LocationSitemapVO("site68")
         );
-        when(mockLocationRepository.scrollAllForSitemap(anyInt())).thenReturn(sites.iterator());
-        MvcResult mvcResult = mockMvc.perform(get("/faidare/sites/sitemap.txt")
+
+        // the hashCode algorithm is specified in the javadoc, so it's guaranteed to be
+        // the same everywhere
+        // uncomment the following line to see which sitemap index each study has
+        // sites.forEach(site -> System.out.println(site.getLocationDbId() + " = " + Math.floorMod(site.getLocationDbId().hashCode(), Sitemaps.BUCKET_COUNT)));
+
+        when(mockLocationRepository.scrollAllForSitemap(anyInt())).thenAnswer(invocation -> sites.iterator());
+        testSitemap(2, "http://localhost/faidare/sites/site1\nhttp://localhost/faidare/sites/site53\n");
+        testSitemap(5, "http://localhost/faidare/sites/site4\nhttp://localhost/faidare/sites/site68\n");
+        testSitemap(7, "");
+
+        mockMvc.perform(get("/faidare/sites/sitemap-17.txt")
+                            .contextPath("/faidare"))
+               .andExpect(status().isNotFound());
+    }
+
+    private void testSitemap(int index, String expectedContent) throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/faidare/sites/sitemap-" + index + ".txt")
                                                   .contextPath("/faidare"))
                                      .andExpect(request().asyncStarted())
                                      .andReturn();
@@ -96,6 +116,7 @@ public class SiteControllerTest {
         this.mockMvc.perform(asyncDispatch(mvcResult))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_PLAIN))
-                    .andExpect(content().string("http://localhost/faidare/sites/site1\nhttp://localhost/faidare/sites/site2\n"));
+                    .andExpect(content().string(expectedContent));
+
     }
 }

@@ -74,16 +74,19 @@ public class SiteController {
         );
     }
 
-    @GetMapping(value = "/sitemap.txt")
+    @GetMapping(value = "/sitemap-{index}.txt")
     @ResponseBody
-    public ResponseEntity<StreamingResponseBody> sitemap() {
+    public ResponseEntity<StreamingResponseBody> sitemap(@PathVariable("index") int index) {
+        if (index < 0 || index >= Sitemaps.BUCKET_COUNT) {
+            throw new NotFoundException("no sitemap for this index");
+        }
         StreamingResponseBody body = out -> {
             Iterator<LocationSitemapVO> iterator = locationRepository.scrollAllForSitemap(1000);
             Sitemaps.generateSitemap(
-                "/sites/sitemap.txt",
+                "/sites/sitemap-" + index + ".txt",
                 out,
                 iterator,
-                vo -> true,
+                vo -> Math.floorMod(vo.getLocationDbId().hashCode(), Sitemaps.BUCKET_COUNT) == index,
                 vo -> "/sites/" + vo.getLocationDbId()
             );
         };

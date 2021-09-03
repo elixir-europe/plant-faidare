@@ -25,10 +25,11 @@ class SitemapIndexControllerTest {
         mockMvc.perform(get("/faidare/sitemap.xml").contextPath("/faidare"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.TEXT_XML))
-            .andExpect(xpath("/sitemapindex/sitemap[1]/loc").string("http://localhost/faidare/sites/sitemap.txt"))
-            .andExpect(xpath("/sitemapindex/sitemap[2]/loc").string("http://localhost/faidare/germplasms/sitemap-0.txt"))
-            .andExpect(xpath("/sitemapindex/sitemap[3]/loc").string("http://localhost/faidare/germplasms/sitemap-1.txt"))
-            .andExpect(xpath("/sitemapindex/sitemap[" + (Sitemaps.BUCKET_COUNT + 2) + "]/loc").string("http://localhost/faidare/studies/sitemap-0.txt"))
-            .andExpect(xpath("/sitemapindex/sitemap[" + (Sitemaps.BUCKET_COUNT + 3) + "]/loc").string("http://localhost/faidare/studies/sitemap-1.txt"));
+            .andExpect(xpath("/sitemapindex/sitemap[1]/loc").string("http://localhost/faidare/sites/sitemap-0.txt"))
+            .andExpect(xpath("/sitemapindex/sitemap[2]/loc").string("http://localhost/faidare/sites/sitemap-1.txt"))
+            .andExpect(xpath("/sitemapindex/sitemap[" + (Sitemaps.BUCKET_COUNT + 1) + "]/loc").string("http://localhost/faidare/germplasms/sitemap-0.txt"))
+            .andExpect(xpath("/sitemapindex/sitemap[" + (Sitemaps.BUCKET_COUNT + 2) + "]/loc").string("http://localhost/faidare/germplasms/sitemap-1.txt"))
+            .andExpect(xpath("/sitemapindex/sitemap[" + (Sitemaps.BUCKET_COUNT * 2 + 1) + "]/loc").string("http://localhost/faidare/studies/sitemap-0.txt"))
+            .andExpect(xpath("/sitemapindex/sitemap[" + (Sitemaps.BUCKET_COUNT * 2 + 2) + "]/loc").string("http://localhost/faidare/studies/sitemap-1.txt"));
     }
 }
