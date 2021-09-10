@@ -50,19 +50,17 @@ public class SiteController {
     public ModelAndView get(@PathVariable("siteId") String siteId) {
         LocationVO site = locationRepository.getById(siteId);
 
+        if (site == null) {
+            throw new NotFoundException("Site with ID " + siteId + " not found");
+        }
+
+        // TODO uncomment this and remove the hard-coded xrefs
         // List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(
         //     XRefDocumentSearchCriteria.forXRefId(site.getLocationDbId()));
         List<XRefDocumentVO> crossReferences = Arrays.asList(
             createXref("foobar"),
             createXref("bazbing")
         );
-
-        // LocationVO site = createSite();
-
-        if (site == null) {
-            throw new NotFoundException("Site with ID " + siteId + " not found");
-        }
-
 
         return new ModelAndView("site",
                                 "model",
@@ -91,24 +89,6 @@ public class SiteController {
             );
         };
         return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body(body);
-    }
-
-    private LocationVO createSite() {
-        LocationVO site = new LocationVO();
-        site.setLocationName("France");
-        site.setSourceUri("https://urgi.versailles.inrae.fr/gnpis");
-        site.setUri("Test URI");
-        site.setUrl("https://google.com");
-        site.setLatitude(45.65);
-        site.setLongitude(1.34);
-        BrapiAdditionalInfo additionalInfo = new BrapiAdditionalInfo();
-        additionalInfo.addProperty("Slope", 4.32);
-        additionalInfo.addProperty("Distance to city", "3 km");
-        additionalInfo.addProperty("foo", "bar");
-        additionalInfo.addProperty("baz", "zing");
-        additionalInfo.addProperty("blob", null);
-        site.setAdditionalInfo(additionalInfo);
-        return site;
     }
 
     private XRefDocumentVO createXref(String name) {

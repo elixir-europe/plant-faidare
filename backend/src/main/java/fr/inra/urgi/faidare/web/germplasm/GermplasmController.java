@@ -76,13 +76,15 @@ public class GermplasmController {
 
     @GetMapping("/{germplasmId}")
     public ModelAndView get(@PathVariable("germplasmId") String germplasmId) {
-        // GermplasmVO germplasm = germplasmRepository.getById(germplasmId);
-
-        // TODO replace this block by the above commented one
-        GermplasmVO germplasm = createGermplasm();
+        GermplasmVO germplasm = germplasmRepository.getById(germplasmId);
 
         if (germplasm == null) {
             throw new NotFoundException("Germplasm with ID " + germplasmId + " not found");
+        }
+
+        // TODO remove this, which is used to display all the sections on a specific germplasm
+        if (germplasm.getGermplasmDbId().equals("dXJuOlZJQi9nZXJtcGxhc20vWmVhX1ZJQl9SSUwxOFJJTDJ3YXlfX185Ng==")) {
+            germplasm = createGermplasm();
         }
 
         return toModelAndView(germplasm);
@@ -132,17 +134,19 @@ public class GermplasmController {
     }
 
     private ModelAndView toModelAndView(GermplasmVO germplasm) {
-        // List<BrapiGermplasmAttributeValue> attributes = getAttributes(germplasm);
-        // PedigreeVO pedigree = getPedigree(germplasm);
+        List<BrapiGermplasmAttributeValue> attributes = getAttributes(germplasm);
+        PedigreeVO pedigree = getPedigree(germplasm);
+
+        // TODO remove this
+        if (germplasm.getGermplasmDbId().equals("dXJuOlZJQi9nZXJtcGxhc20vWmVhX1ZJQl9SSUwxOFJJTDJ3YXlfX185Ng==")) {
+            attributes = Arrays.asList(createAttribute());
+            pedigree = createPedigree();
+        }
+
         // List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(
         //     XRefDocumentSearchCriteria.forXRefId(germplasm.getGermplasmDbId())
         // );
-
         // TODO replace this block by the above commented one
-        List<BrapiGermplasmAttributeValue> attributes = Arrays.asList(
-            createAttribute()
-        );
-        PedigreeVO pedigree = createPedigree();
         List<XRefDocumentVO> crossReferences = Arrays.asList(
             createXref("foobar"),
             createXref("bazbing")
@@ -224,7 +228,7 @@ public class GermplasmController {
 
     private GermplasmVO createGermplasm() {
         GermplasmVO result = new GermplasmVO();
-
+        result.setGermplasmDbId("dXJuOlZJQi9nZXJtcGxhc20vWmVhX1ZJQl9SSUwxOFJJTDJ3YXlfX185Ng==");
         result.setGermplasmName("BLE BARBU DU ROUSSILLON");
         result.setAccessionNumber("1408");
         result.setSynonyms(Arrays.asList("BLE DU ROUSSILLON", "FRA051:1699", "ROUSSILLON"));

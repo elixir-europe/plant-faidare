@@ -75,6 +75,10 @@ public class StudyController {
     public ModelAndView get(@PathVariable("studyId") String studyId) {
         StudyDetailVO study = studyRepository.getById(studyId);
 
+        if (study == null) {
+            throw new NotFoundException("Study with ID " + studyId + " not found");
+        }
+
         // TODO uncomment this
         // List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(
         //     XRefDocumentSearchCriteria.forXRefId(study.getStudyDbId()));
@@ -83,18 +87,10 @@ public class StudyController {
             createXref("bazbing")
         );
 
-        if (study == null) {
-            throw new NotFoundException("Study with ID " + studyId + " not found");
-        }
-
         List<GermplasmVO> germplasms = getGermplasms(study);
         List<ObservationVariableVO> variables = getVariables(study);
         List<TrialVO> trials = getTrials(study);
         LocationVO location = getLocation(study);
-
-        // TODO remove this
-        location.setLatitude(34.0);
-        location.setLongitude(14.0);
 
         return new ModelAndView("study",
                                 "model",
