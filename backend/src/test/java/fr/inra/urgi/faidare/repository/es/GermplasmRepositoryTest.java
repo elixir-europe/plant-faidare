@@ -52,7 +52,6 @@ class GermplasmRepositoryTest {
         esSetUp.initialize(ProgenyVO.class, 0L);
         esSetUp.initialize(PedigreeVO.class, 0L);
         esSetUp.initialize(GermplasmMcpdVO.class, 0L);
-
     }
 
     @Autowired
@@ -135,6 +134,22 @@ class GermplasmRepositoryTest {
         assertThat(list).toIterable()
                         .isNotEmpty()
                         .allMatch(vo -> !vo.getGermplasmDbId().isEmpty());
+    }
+
+    @Test
+    void shouldScrollGermplasmMcpdsByIds() {
+        Iterator<GermplasmMcpdVO> list = repository.scrollGermplasmMcpdsByIds(Collections.singleton("13705"), 1000);
+        assertThat(list).toIterable()
+                        .isNotEmpty()
+                        .allMatch(vo -> !vo.getGermplasmDbId().isEmpty());
+
+        list = repository.scrollGermplasmMcpdsByIds(Collections.singleton("1370"), 1000);
+        assertThat(list).toIterable()
+                        .isEmpty();
+
+        list = repository.scrollGermplasmMcpdsByIds(Collections.singleton("Prunus"), 1000);
+        assertThat(list).toIterable()
+                        .isEmpty();
     }
 
     @Test
