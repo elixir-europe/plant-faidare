@@ -14,7 +14,7 @@
 
     <link
       rel="shortcut icon"
-      th:href="@{/static/assets/images/favicon.ico}"
+      th:href="@{/assets/images/favicon.ico}"
       type="image/x-icon"
     />
   </head>
@@ -22,9 +22,63 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <span class="navbar-brand py-0">
+        <a
+          class="navbar-brand py-0"
+          href="https://urgi.versailles.inrae.fr/faidare"
+        >
           <img th:src="@{/assets/images/logo.png}" style="height: 40px" />
-        </span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+          aria-controls="navbarContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav me-auto">
+            <th:block th:each="topEntry : ${#faidare.navbarEntries}">
+              <li class="nav-item" th:if="${#lists.isEmpty(topEntry.subMenu)}">
+                <a
+                  class="nav-link"
+                  th:href="${topEntry.url}"
+                  th:text="${topEntry.label}"
+                ></a>
+              </li>
+              <li
+                class="nav-item dropdown"
+                th:if="${not #lists.isEmpty(topEntry.subMenu)}"
+              >
+                <a
+                  class="nav-link dropdown-toggle"
+                  th:id="${'navbar-dropdown-' + topEntry.label}"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  th:text="${topEntry.label}"
+                >
+                </a>
+                <ul
+                  class="dropdown-menu bg-light"
+                  th:aria-labelledby="${'navbar-dropdown-' + topEntry.label}"
+                >
+                  <li th:each="subEntry : ${topEntry.subMenu}" class="bg-light">
+                    <a
+                      class="dropdown-item"
+                      th:href="${subEntry.url}"
+                      th:text="${subEntry.label}"
+                    ></a>
+                  </li>
+                </ul>
+              </li>
+            </th:block>
+          </ul>
+        </div>
       </div>
     </nav>
     <div class="container mt-3">

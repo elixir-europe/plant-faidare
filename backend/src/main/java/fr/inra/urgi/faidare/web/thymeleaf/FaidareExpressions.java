@@ -2,9 +2,11 @@ package fr.inra.urgi.faidare.web.thymeleaf;
 
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
@@ -24,7 +26,9 @@ public class FaidareExpressions {
 
     private static final Map<String, Function<String, String>> TAXON_ID_URL_FACTORIES_BY_SOURCE_NAME =
         createTaxonIdUrlFactories();
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    private static final List<NavbarEntry> NAVBAR_ENTRIES =
+        createNavbarEntries();
 
     private static Map<String, Function<String, String>> createTaxonIdUrlFactories() {
         Map<String, Function<String, String>> result = new HashMap<>();
@@ -33,6 +37,23 @@ public class FaidareExpressions {
         result.put("TAXREF", s -> "https://inpn.mnhn.fr/espece/cd_nom/" + s);
         result.put("CatalogueOfLife", s -> "http://www.catalogueoflife.org/col/details/species/id/" + s);
         return Collections.unmodifiableMap(result);
+    }
+
+    private static List<NavbarEntry> createNavbarEntries() {
+        return Arrays.asList(
+            NavbarEntry.menu("URGI", Arrays.asList(
+                NavbarEntry.link("Home", "https://urgi.versailles.inra.fr"),
+                NavbarEntry.link("News", "https://urgi.versailles.inra.fr/About-us/News"),
+                NavbarEntry.link("About us", "https://urgi.versailles.inra.fr/About-us")
+            )),
+            NavbarEntry.menu("More...", Arrays.asList(
+                NavbarEntry.link("About", "https://urgi.versailles.inrae.fr/faidare/about"),
+                NavbarEntry.link("Join us", "https://urgi.versailles.inra.fr/faidare/join"),
+                NavbarEntry.link("Terms of use", "https://urgi.versailles.inra.fr/faidare/legal"),
+                NavbarEntry.link("Help", "https://urgi.versailles.inra.fr/faidare/help"),
+                NavbarEntry.link("News/Perspectives", "https://urgi.versailles.inra.fr/faidare/news")
+            ))
+        );
     }
 
     private final Locale locale;
@@ -59,13 +80,8 @@ public class FaidareExpressions {
         return urlFactory != null ? urlFactory.apply(taxonSource.getTaxonId()) : null;
     }
 
-    public String toJson(Object value) {
-        try {
-            return objectMapper.writeValueAsString(value);
-        }
-        catch (JsonProcessingException e) {
-            throw new IllegalArgumentException(e);
-        }
+    public List<NavbarEntry> navbarEntries() {
+        return NAVBAR_ENTRIES;
     }
 
     private String collPopTitle(CollPopVO collPopVO, Function<String, String> nameTransformer) {

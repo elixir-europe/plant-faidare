@@ -1,4 +1,4 @@
-import { Popover } from 'bootstrap';
+import Popover from 'bootstrap/js/dist/popover';
 
 export function initializePopovers() {
     const popoverTriggerList: Array<HTMLElement> = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
