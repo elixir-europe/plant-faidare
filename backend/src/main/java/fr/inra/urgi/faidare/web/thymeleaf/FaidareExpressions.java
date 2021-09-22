@@ -84,6 +84,10 @@ public class FaidareExpressions {
         return NAVBAR_ENTRIES;
     }
 
+    public String searchUrl() {
+        return "https://urgi.versailles.inrae.fr/faidare/search";
+    }
+
     private String collPopTitle(CollPopVO collPopVO, Function<String, String> nameTransformer) {
         if (Strings.isBlank(collPopVO.getType())) {
             return nameTransformer.apply(collPopVO.getName());

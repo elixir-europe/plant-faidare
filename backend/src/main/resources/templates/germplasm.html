@@ -652,9 +652,10 @@
                       th:text="${population.germplasmRef.name}"
                     ></span>
                     is composed by
-                    <span th:text="${population.germplasmCount}"></span>
-                    accession(s)
-                    <!-- TODO there was a link pointing at a search here -->
+                    <a
+                      th:href="@{${#faidare.searchUrl()}(gl=${population.name},entry='Germplasm')}"
+                      th:text="${population.germplasmCount + ' accession(s)'}"
+                    ></a>
                   </div>
                 </div>
               </th:block>
@@ -662,9 +663,15 @@
 
             <th:block th:if="${population.germplasmRef == null}">
               <div
-                th:replace="fragments/row::text-row(label=${#faidare.collPopTitle(population)}, text=${population.germplasmCount + ' accession(s)'})"
-              ></div>
-              <!-- TODO there was a link pointing at a search here -->
+                th:replace="fragments/row::row(label=${#faidare.collPopTitle(population)}, content=~{::.population-2})"
+              >
+                <div class="population-2">
+                  <a
+                    th:href="@{${#faidare.searchUrl()}(gl=${population.name},entry='Germplasm')}"
+                    th:text="${population.germplasmCount + ' accession(s)'}"
+                  ></a>
+                </div>
+              </div>
             </th:block>
           </th:block>
         </div>
@@ -678,9 +685,15 @@
         <div class="f-card-body">
           <th:block th:each="collection : ${model.germplasm.collection}">
             <div
-              th:replace="fragments/row::text-row(label=${#faidare.collPopTitle(collection)}, text=${collection.germplasmCount + ' accession(s)'})"
-            ></div>
-            <!-- TODO there was a link pointing at a search here -->
+              th:replace="fragments/row::row(label=${#faidare.collPopTitle(collection)}, content=~{::.collection})"
+            >
+              <div class="collection">
+                <a
+                  th:href="@{${#faidare.searchUrl()}(gl=${collection.name},entry='Germplasm')}"
+                  th:text="${collection.germplasmCount + ' accession(s)'}"
+                ></a>
+              </div>
+            </div>
           </th:block>
         </div>
       </div>
@@ -690,9 +703,15 @@
         <div class="f-card-body">
           <th:block th:each="panel : ${model.germplasm.panel}">
             <div
-              th:replace="fragments/row::text-row(label=${#faidare.collPopTitleWithoutUnderscores(panel)}, text=${panel.germplasmCount + ' accession(s)'})"
-            ></div>
-            <!-- TODO there was a link pointing at a search here -->
+              th:replace="fragments/row::row(label=${#faidare.collPopTitleWithoutUnderscores(panel)}, content=~{::.panel})"
+            >
+              <div class="panel">
+                <a
+                  th:href="@{${#faidare.searchUrl()}(gl=${panel.name},entry='Germplasm')}"
+                  th:text="${panel.germplasmCount + ' accession(s)'}"
+                ></a>
+              </div>
+            </div>
           </th:block>
         </div>
       </div>
