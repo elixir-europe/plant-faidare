@@ -104,11 +104,7 @@ public class GermplasmExportService {
               .map(DonorInfoVO::getDonorAccessionNumber)
               .collect(Collectors.joining(";"))));
         map.put(OTHERNUMB, withFieldAsHeader(OTHERNUMB, vo -> String.join(";", vo.getAlternateIDs())));
-        map.put(DUPLSITE, withFieldAsHeader(DUPLSITE, vo ->
-            vo.getSafetyDuplicateInstitutes()
-              .stream()
-              .map(InstituteVO::getInstituteCode)
-              .collect(Collectors.joining(";"))));
+        map.put(DUPLSITE, withFieldAsHeader(DUPLSITE, vo -> null)); // no value available for DUPLSITE
         map.put(DUPLINSTNAME, withFieldAsHeader(DUPLINSTNAME, vo ->
             vo.getSafetyDuplicateInstitutes()
               .stream()
