@@ -1,14 +1,10 @@
 package fr.inra.urgi.faidare.web.site;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import fr.inra.urgi.faidare.api.NotFoundException;
 import fr.inra.urgi.faidare.config.FaidareProperties;
-import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiAdditionalInfo;
 import fr.inra.urgi.faidare.domain.data.LocationSitemapVO;
 import fr.inra.urgi.faidare.domain.data.LocationVO;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentSearchCriteria;
@@ -54,12 +50,8 @@ public class SiteController {
             throw new NotFoundException("Site with ID " + siteId + " not found");
         }
 
-        // TODO uncomment this and remove the hard-coded xrefs
-        // List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(
-        //     XRefDocumentSearchCriteria.forXRefId(site.getLocationDbId()));
-        List<XRefDocumentVO> crossReferences = Arrays.asList(
-            createXref("foobar"),
-            createXref("bazbing")
+        List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(
+             XRefDocumentSearchCriteria.forXRefId(site.getLocationDbId())
         );
 
         return new ModelAndView("site",
@@ -89,15 +81,5 @@ public class SiteController {
             );
         };
         return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body(body);
-    }
-
-    private XRefDocumentVO createXref(String name) {
-        XRefDocumentVO xref = new XRefDocumentVO();
-        xref.setName(name);
-        xref.setDescription("A very large description for the xref " + name + " which has way more than 120 characters bla bla bla bla bla bla bla bla bla bla bla bla");
-        xref.setDatabaseName("db_" + name);
-        xref.setUrl("https://google.com");
-        xref.setEntryType("type " + name);
-        return xref;
     }
 }

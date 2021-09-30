@@ -1,6 +1,5 @@
 package fr.inra.urgi.faidare.web.study;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -79,12 +78,8 @@ public class StudyController {
             throw new NotFoundException("Study with ID " + studyId + " not found");
         }
 
-        // TODO uncomment this
-        // List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(
-        //     XRefDocumentSearchCriteria.forXRefId(study.getStudyDbId()));
-        List<XRefDocumentVO> crossReferences = Arrays.asList(
-            createXref("foobar"),
-            createXref("bazbing")
+        List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(
+            XRefDocumentSearchCriteria.forXRefId(study.getStudyDbId())
         );
 
         List<GermplasmVO> germplasms = getGermplasms(study);
@@ -166,14 +161,4 @@ public class StudyController {
     }
 
 
-
-    private XRefDocumentVO createXref(String name) {
-        XRefDocumentVO xref = new XRefDocumentVO();
-        xref.setName(name);
-        xref.setDescription("A very large description for the xref " + name + " which has way more than 120 characters bla bla bla bla bla bla bla bla bla bla bla bla");
-        xref.setDatabaseName("db_" + name);
-        xref.setUrl("https://google.com");
-        xref.setEntryType("type " + name);
-        return xref;
-    }
 }
