@@ -49,17 +49,20 @@ public class GermplasmController {
     private final FaidareProperties faidareProperties;
     private final XRefDocumentRepository xRefDocumentRepository;
     private final GermplasmAttributeRepository germplasmAttributeRepository;
+    private final GermplasmMcpdExportService germplasmMcpdExportService;
     private final GermplasmExportService germplasmExportService;
 
     public GermplasmController(GermplasmRepository germplasmRepository,
                                FaidareProperties faidareProperties,
                                XRefDocumentRepository xRefDocumentRepository,
                                GermplasmAttributeRepository germplasmAttributeRepository,
+                               GermplasmMcpdExportService germplasmMcpdExportService,
                                GermplasmExportService germplasmExportService) {
         this.germplasmRepository = germplasmRepository;
         this.faidareProperties = faidareProperties;
         this.xRefDocumentRepository = xRefDocumentRepository;
         this.germplasmAttributeRepository = germplasmAttributeRepository;
+        this.germplasmMcpdExportService = germplasmMcpdExportService;
         this.germplasmExportService = germplasmExportService;
     }
 
@@ -86,13 +89,25 @@ public class GermplasmController {
         return toModelAndView(germplasms.get(0));
     }
 
-    @PostMapping("/exports")
+    @PostMapping("/exports/mcpd")
+    @ResponseBody
+    public ResponseEntity<StreamingResponseBody> export(@Validated @RequestBody GermplasmMcpdExportCommand command) {
+        List<GermplasmMcpdExportableField> fields = getFieldsToExport(command);
+
+        StreamingResponseBody body = out -> {
+            Iterator<GermplasmMcpdVO> iterator = germplasmRepository.scrollGermplasmMcpdsByIds(command.getIds(), 1000);
+            germplasmMcpdExportService.export(out, iterator, fields);
+        };
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType("text/csv")).body(body);
+    }
+
+    @PostMapping("/exports/plant-material")
     @ResponseBody
     public ResponseEntity<StreamingResponseBody> export(@Validated @RequestBody GermplasmExportCommand command) {
         List<GermplasmExportableField> fields = getFieldsToExport(command);
 
         StreamingResponseBody body = out -> {
-            Iterator<GermplasmMcpdVO> iterator = germplasmRepository.scrollGermplasmMcpdsByIds(command.getIds(), 1000);
+            Iterator<GermplasmVO> iterator = germplasmRepository.scrollGermplasmsByIds(command.getIds(), 1000);
             germplasmExportService.export(out, iterator, fields);
         };
         return ResponseEntity.ok().contentType(MediaType.parseMediaType("text/csv")).body(body);
@@ -192,7 +207,17 @@ public class GermplasmController {
         return germplasmRepository.findPedigree(germplasm.getGermplasmDbId());
     }
 
-    private List<GermplasmExportableField> getFieldsToExport(GermplasmExportCommand command) {
+    private List<GermplasmMcpdExportableField> getFieldsToExport(
+        GermplasmMcpdExportCommand command) {
+        List<GermplasmMcpdExportableField> fields = command.getFields();
+        if (fields.isEmpty()) {
+            fields = Arrays.asList(GermplasmMcpdExportableField.values());
+        }
+        return fields;
+    }
+
+    private List<GermplasmExportableField> getFieldsToExport(
+        GermplasmExportCommand command) {
         List<GermplasmExportableField> fields = command.getFields();
         if (fields.isEmpty()) {
             fields = Arrays.asList(GermplasmExportableField.values());

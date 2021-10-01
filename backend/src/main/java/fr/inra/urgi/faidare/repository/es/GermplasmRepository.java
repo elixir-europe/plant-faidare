@@ -59,6 +59,11 @@ public interface GermplasmRepository
     Iterator<GermplasmMcpdVO> scrollGermplasmMcpdsByIds(Set<String> ids, int fetchSize);
 
     /**
+     * Scroll through all germplasm having one of the given IDs.
+     */
+    Iterator<GermplasmVO> scrollGermplasmsByIds(Set<String> ids, int fetchSize);
+
+    /**
      * Find pedigree for germplasm by id.
      */
     PedigreeVO findPedigree(String germplasmDbId);

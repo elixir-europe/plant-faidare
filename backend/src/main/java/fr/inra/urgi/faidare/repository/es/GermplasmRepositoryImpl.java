@@ -126,6 +126,13 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
     }
 
     @Override
+    public Iterator<GermplasmVO> scrollGermplasmsByIds(Set<String> ids,
+                                                       int fetchSize) {
+        QueryBuilder query = QueryBuilders.termsQuery("germplasmDbId", ids);
+        return new ESScrollIterator<>(client, requestFactory, parser, GermplasmVO.class, query, fetchSize);
+    }
+
+    @Override
     public GermplasmVO getById(String germplasmDbId) {
         return getByIdRepository.getById(germplasmDbId);
     }

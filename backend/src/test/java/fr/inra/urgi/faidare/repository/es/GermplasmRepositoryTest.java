@@ -28,6 +28,7 @@ import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -140,7 +141,7 @@ class GermplasmRepositoryTest {
     void shouldScrollGermplasmMcpdsByIds() {
         Iterator<GermplasmMcpdVO> list = repository.scrollGermplasmMcpdsByIds(Collections.singleton("13705"), 1000);
         assertThat(list).toIterable()
-                        .isNotEmpty()
+                        .hasSize(1)
                         .allMatch(vo -> !vo.getGermplasmDbId().isEmpty());
 
         list = repository.scrollGermplasmMcpdsByIds(Collections.singleton("1370"), 1000);
@@ -148,6 +149,27 @@ class GermplasmRepositoryTest {
                         .isEmpty();
 
         list = repository.scrollGermplasmMcpdsByIds(Collections.singleton("Prunus"), 1000);
+        assertThat(list).toIterable()
+                        .isEmpty();
+    }
+
+    @Test
+    void shouldScrollGermplasmsByIds() {
+        Iterator<GermplasmVO> list = repository.scrollGermplasmsByIds(
+            new HashSet<>(
+                Arrays.asList(
+                    "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjM4MTc4MzY5NkUxMg==",
+                    "ZG9pOjEwLjE1NDU0LzEuNDkyMTc4NjM4NDcyNjA1MkUxMg==")
+            ), 1000);
+        assertThat(list).toIterable()
+                        .hasSize(2)
+                        .allMatch(vo -> !vo.getGermplasmDbId().isEmpty());
+
+        list = repository.scrollGermplasmsByIds(Collections.singleton("ZG9pOjEwL"), 1000);
+        assertThat(list).toIterable()
+                        .isEmpty();
+
+        list = repository.scrollGermplasmsByIds(Collections.singleton("ZG9pOjEwL"), 1000);
         assertThat(list).toIterable()
                         .isEmpty();
     }

@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +39,7 @@ import org.springframework.test.web.servlet.MvcResult;
  * @author JB Nizet
  */
 @WebMvcTest(GermplasmController.class)
-@Import(GermplasmExportService.class)
+@Import({GermplasmMcpdExportService.class, GermplasmExportService.class})
 public class GermplasmControllerTest {
 
     @Autowired
@@ -131,20 +130,20 @@ public class GermplasmControllerTest {
     }
 
     @Test
-    void shouldExportGermplasms() throws Exception {
+    void shouldExportMcpds() throws Exception {
         List<GermplasmMcpdVO> germplasms = Arrays.asList(
             Fixtures.createGermplasmMcpd(),
             Fixtures.createGermplasmMcpd()
         );
 
-        GermplasmExportCommand command = new GermplasmExportCommand(
+        GermplasmMcpdExportCommand command = new GermplasmMcpdExportCommand(
             Sets.newHashSet("g1", "g2"),
-            Arrays.asList(GermplasmExportableField.PUID, GermplasmExportableField.INSTCODE));
+            Arrays.asList(GermplasmMcpdExportableField.PUID, GermplasmMcpdExportableField.INSTCODE));
 
         when(mockGermplasmRepository.scrollGermplasmMcpdsByIds(eq(command.getIds()), anyInt()))
             .thenAnswer(invocation -> germplasms.iterator());
 
-        MvcResult mvcResult = mockMvc.perform(post("/germplasms/exports")
+        MvcResult mvcResult = mockMvc.perform(post("/germplasms/exports/mcpd")
                                                   .contentType(MediaType.APPLICATION_JSON)
                                                   .content(objectMapper.writeValueAsBytes(
                                                       command)))
@@ -159,6 +158,37 @@ public class GermplasmControllerTest {
                                                "\"PUI1\";\"Inst1\"\n"));
     }
 
+    @Test
+    void shouldExporPlantMaterials() throws Exception {
+        List<GermplasmVO> germplasms = Arrays.asList(
+            Fixtures.createGermplasm(),
+            Fixtures.createGermplasm()
+        );
+
+        GermplasmExportCommand command = new GermplasmExportCommand(
+            Sets.newHashSet("g1", "g2"),
+            Arrays.asList(GermplasmExportableField.DOI,
+                          GermplasmExportableField.ACCESSION_NUMBER,
+                          GermplasmExportableField.ACCESSION_NAME));
+
+        when(mockGermplasmRepository.scrollGermplasmsByIds(eq(command.getIds()), anyInt()))
+            .thenAnswer(invocation -> germplasms.iterator());
+
+        MvcResult mvcResult = mockMvc.perform(post("/germplasms/exports/plant-material")
+                                                  .contentType(MediaType.APPLICATION_JSON)
+                                                  .content(objectMapper.writeValueAsBytes(
+                                                      command)))
+                                     .andExpect(request().asyncStarted())
+                                     .andReturn();
+
+        this.mockMvc.perform(asyncDispatch(mvcResult))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType("text/csv"))
+                    .andExpect(content().string("\"DOI\";\"Accession number\";\"Accession name\"\n" +
+                                                    "\"germplasmPUI\";\"1408\";\"BLE BARBU DU ROUSSILLON\"\n" +
+                                                    "\"germplasmPUI\";\"1408\";\"BLE BARBU DU ROUSSILLON\"\n"));
+    }
+
     private void testSitemap(int index, String expectedContent) throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/faidare/germplasms/sitemap-" + index + ".txt")
                                                   .contextPath("/faidare"))
@@ -169,6 +199,5 @@ public class GermplasmControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.TEXT_PLAIN))
                     .andExpect(content().string(expectedContent));
-
     }
 }
