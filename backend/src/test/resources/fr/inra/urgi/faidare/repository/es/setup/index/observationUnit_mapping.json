@@ -1,244 +1,241 @@
 {
-	"observationUnit": {
-		"dynamic": "strict",
-		"properties": {
-			"observationUnitURI": {
-				"type": "keyword"
-			},
-			"observationUnitDbId": {
-				"type": "keyword"
-			},
-			"observationUnitName": {
-				"type": "keyword"
-			},
-			"X": {
-				"type": "keyword"
-			},
-			"Y": {
-				"type": "keyword"
-			},
-			"Xname": {
-				"type": "keyword"
-			},
-			"Yname": {
-				"type": "keyword"
-			},
-			"Xm": {
-				"type": "keyword"
-			},
-			"Ym": {
-				"type": "keyword"
-			},
-			"blockNumber": {
-				"type": "keyword",
-				"index": false
-			},
-			"entryNumber": {
-				"type": "keyword",
-				"index": false
-			},
-			"entryType": {
-				"type": "keyword",
-				"index": false
-			},
-			"germplasmURI": {
-				"type": "keyword"
-			},
-			"germplasmDbId": {
-				"type": "keyword"
-			},
-			"germplasmPUI": {
-				"type": "keyword"
-			},
-			"germplasmName": {
-				"type": "keyword"
-			},
-			"accessionNumber": {
-				"type": "keyword"
-			},
-			"observationLevel": {
-				"type": "keyword"
-			},
-			"observationLevels": {
-				"type": "keyword"
-			},
-			"observationLevelDetails": {
-				"properties": {
-					"type": {
-						"type": "keyword"
-					},
-					"name": {
-						"type": "keyword"
-					},
-					"value": {
-						"type": "keyword"
-					}
-				}
-			},
-			"observationUnitXref": {
-				"properties": {
-					"id": {
-						"type": "keyword"
-					},
-					"source": {
-						"type": "keyword"
-					}
-				}
-			},
-			"observations": {
-				"type": "nested",
-				"properties": {
-					"observationURI": {
-						"type": "keyword"
-					},
-					"observationDbId": {
-						"type": "keyword"
-					},
-					"collector": {
-						"type": "keyword",
-						"index": false
-					},
-					"observationTimeStamp": {
-						"type": "date",
-						"format": "yyyy-MM-dd'T'HH:mm:ss'Z'"
-					},
-					"gdd": {
-						"type": "float"
-					},
-					"observationVariableURI": {
-						"type": "keyword"
-					},
-					"observationVariableDbId": {
-						"type": "keyword"
-					},
-					"observationVariableName": {
-						"type": "keyword"
-					},
-					"specificName": {
-						"type": "keyword"
-					},
-					"season": {
-						"type": "keyword"
-					},
-					"value": {
-						"type": "keyword"
-					},
-					"isDataFile": {
-						"type": "boolean",
-						"index": false
-					}
-				}
-			},
-			"plantNumber": {
-				"type": "keyword",
-				"index": false
-			},
-			"plotNumber": {
-				"type": "keyword",
-				"index": false
-			},
-			"programURI": {
-				"type": "keyword"
-			},
-			"programDbId": {
-				"type": "keyword"
-			},
-			"programName": {
-				"type": "keyword"
-			},
-			"replicate": {
-				"type": "keyword",
-				"index": false
-			},
-			"studyURI": {
-				"type": "keyword"
-			},
-			"studyDbId": {
-				"type": "keyword"
-			},
-			"studyName": {
-				"type": "keyword"
-			},
-			"studyLocationURI": {
-				"type": "keyword"
-			},
-			"studyLocationDbId": {
-				"type": "keyword"
-			},
-			"studyLocation": {
-				"type": "keyword"
-			},
-			"treatments": {
-				"properties": {
-					"factor": {
-						"type": "keyword"
-					},
-					"modality": {
-						"type": "keyword"
-					}
-				}
-			},
-			"trials": {
-				"properties": {
-					"id": {
-						"type": "long"
-					},
-					"name": {
-						"type": "keyword"
-					}
-				}
-			},
-			"taxonScientificName": {
-				"type": "keyword"
-			},
-			"germplasmGenus": {
-				"type": "keyword"
-			},
-			"germplasmCollections": {
-				"properties": {
-					"id": {
-						"type": "long"
-					},
-					"name": {
-						"type": "keyword"
-					}
-				}
-			},
-			"germplasmPanels": {
-				"properties": {
-					"id": {
-						"type": "long"
-					},
-					"name": {
-						"type": "keyword"
-					}
-				}
-			},
-
-			"source": {
-				"type": "keyword"
-			},
-			"groupId": {
-				"type": "long"
-			},
-			"@type": {
-				"type": "keyword"
-			},
-			"@id": {
-				"type": "keyword"
-			},
-			"schema:includedInDataCatalog": {
-				"type": "keyword"
-			},
-			"schema:identifier": {
-				"type": "keyword"
-			},
-			"schema:name": {
-				"type": "keyword"
-			},
-			"schema:url": {
-				"type": "keyword"
-			}
-		}
-	}
+  "dynamic": "strict",
+  "properties": {
+    "observationUnitURI": {
+      "type": "keyword"
+    },
+    "observationUnitDbId": {
+      "type": "keyword"
+    },
+    "observationUnitName": {
+      "type": "keyword"
+    },
+    "X": {
+      "type": "keyword"
+    },
+    "Y": {
+      "type": "keyword"
+    },
+    "Xname": {
+      "type": "keyword"
+    },
+    "Yname": {
+      "type": "keyword"
+    },
+    "Xm": {
+      "type": "keyword"
+    },
+    "Ym": {
+      "type": "keyword"
+    },
+    "blockNumber": {
+      "type": "keyword",
+      "index": false
+    },
+    "entryNumber": {
+      "type": "keyword",
+      "index": false
+    },
+    "entryType": {
+      "type": "keyword",
+      "index": false
+    },
+    "germplasmURI": {
+      "type": "keyword"
+    },
+    "germplasmDbId": {
+      "type": "keyword"
+    },
+    "germplasmPUI": {
+      "type": "keyword"
+    },
+    "germplasmName": {
+      "type": "keyword"
+    },
+    "accessionNumber": {
+      "type": "keyword"
+    },
+    "observationLevel": {
+      "type": "keyword"
+    },
+    "observationLevels": {
+      "type": "keyword"
+    },
+    "observationLevelDetails": {
+      "properties": {
+        "type": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "keyword"
+        },
+        "value": {
+          "type": "keyword"
+        }
+      }
+    },
+    "observationUnitXref": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "source": {
+          "type": "keyword"
+        }
+      }
+    },
+    "observations": {
+      "type": "nested",
+      "properties": {
+        "observationURI": {
+          "type": "keyword"
+        },
+        "observationDbId": {
+          "type": "keyword"
+        },
+        "collector": {
+          "type": "keyword",
+          "index": false
+        },
+        "observationTimeStamp": {
+          "type": "date",
+          "format": "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        },
+        "gdd": {
+          "type": "float"
+        },
+        "observationVariableURI": {
+          "type": "keyword"
+        },
+        "observationVariableDbId": {
+          "type": "keyword"
+        },
+        "observationVariableName": {
+          "type": "keyword"
+        },
+        "specificName": {
+          "type": "keyword"
+        },
+        "season": {
+          "type": "keyword"
+        },
+        "value": {
+          "type": "keyword"
+        },
+        "isDataFile": {
+          "type": "boolean",
+          "index": false
+        }
+      }
+    },
+    "plantNumber": {
+      "type": "keyword",
+      "index": false
+    },
+    "plotNumber": {
+      "type": "keyword",
+      "index": false
+    },
+    "programURI": {
+      "type": "keyword"
+    },
+    "programDbId": {
+      "type": "keyword"
+    },
+    "programName": {
+      "type": "keyword"
+    },
+    "replicate": {
+      "type": "keyword",
+      "index": false
+    },
+    "studyURI": {
+      "type": "keyword"
+    },
+    "studyDbId": {
+      "type": "keyword"
+    },
+    "studyName": {
+      "type": "keyword"
+    },
+    "studyLocationURI": {
+      "type": "keyword"
+    },
+    "studyLocationDbId": {
+      "type": "keyword"
+    },
+    "studyLocation": {
+      "type": "keyword"
+    },
+    "treatments": {
+      "properties": {
+        "factor": {
+          "type": "keyword"
+        },
+        "modality": {
+          "type": "keyword"
+        }
+      }
+    },
+    "trials": {
+      "properties": {
+        "id": {
+          "type": "long"
+        },
+        "name": {
+          "type": "keyword"
+        }
+      }
+    },
+    "taxonScientificName": {
+      "type": "keyword"
+    },
+    "germplasmGenus": {
+      "type": "keyword"
+    },
+    "germplasmCollections": {
+      "properties": {
+        "id": {
+          "type": "long"
+        },
+        "name": {
+          "type": "keyword"
+        }
+      }
+    },
+    "germplasmPanels": {
+      "properties": {
+        "id": {
+          "type": "long"
+        },
+        "name": {
+          "type": "keyword"
+        }
+      }
+    },
+    "source": {
+      "type": "keyword"
+    },
+    "groupId": {
+      "type": "long"
+    },
+    "@type": {
+      "type": "keyword"
+    },
+    "@id": {
+      "type": "keyword"
+    },
+    "schema:includedInDataCatalog": {
+      "type": "keyword"
+    },
+    "schema:identifier": {
+      "type": "keyword"
+    },
+    "schema:name": {
+      "type": "keyword"
+    },
+    "schema:url": {
+      "type": "keyword"
+    }
+  }
 }

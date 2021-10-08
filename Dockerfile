@@ -2,6 +2,7 @@ FROM alpine
 LABEL Author="Raphaël FLORES <raphael.flores@inrae.fr>"
 
 COPY scripts/harvest.sh /opt/scripts/
+COPY scripts/to_bulk.jq /opt/scripts/
 
 # COPY dao settings
 COPY backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json /opt/backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json

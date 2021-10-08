@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
     container_name: elasticsearch-faidare
     environment:
       - discovery.type=single-node
@@ -9,7 +9,7 @@ services:
       - 9200:9200
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.6.2
+    image: docker.elastic.co/kibana/kibana:7.13.2
     container_name: kibana-faidare
     environment:
       - "ELASTICSEARCH_URL=http://elasticsearch:9200"

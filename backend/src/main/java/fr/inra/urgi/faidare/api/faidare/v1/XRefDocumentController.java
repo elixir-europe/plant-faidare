@@ -31,12 +31,12 @@ public class XRefDocumentController {
     @ApiOperation("Find xref documents")
     @GetMapping(value = "/faidare/v1/xref/documentbyfulltextid")
     public PaginatedList<XRefDocumentVO> documentByFullTextId(
-        @RequestParam(required = false, value = "entry_type") String entryType,
-        @RequestParam(required = false) List<String> linkedRessourcesID
+        @RequestParam(required = false, value = "entryType") String entryType,
+        @RequestParam(required = false) List<String> linkedResourcesID
     ) {
         XRefDocumentSearchCriteria criteria = new XRefDocumentSearchCriteria();
         criteria.setEntryType(entryType);
-        criteria.setLinkedRessourcesID(linkedRessourcesID);
+        criteria.setLinkedResourcesID(linkedResourcesID);
 	return repository.find(criteria);
     }
 

@@ -2,9 +2,9 @@ export interface XrefModel {
 
     url: string;
     description: string;
-    database_name: string;
-    entry_type: string;
-    db_version: string;
+    databaseName: string;
+    entryType: string;
+    identifier: string;
     name: string;
 
 }

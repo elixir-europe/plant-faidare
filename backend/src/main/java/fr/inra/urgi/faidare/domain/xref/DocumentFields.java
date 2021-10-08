@@ -5,7 +5,7 @@ package fr.inra.urgi.faidare.domain.xref;
  */
 public enum DocumentFields {
 
-	ENTRY_TYPE("entry_type"), LINKEDRESSOURCESID("linkedRessourcesID");
+	ENTRY_TYPE("entryType"), LINKED_RESOURCES_ID("linkedResourcesID");
 
 	private String field;
 

@@ -13,8 +13,8 @@
           <ng-template let-crossRef>
             <tr>
               <td><a [href]="crossRef.url" target="_blank">{{ crossRef.name }}</a></td>
-              <td>{{ crossRef.database_name }}</td>
-              <td>{{ crossRef.entry_type }}</td>
+              <td>{{ crossRef.databaseName }}</td>
+              <td>{{ crossRef.entryType }}</td>
               <td>{{ crossRef.description | slice:0:120 }}...</td>
             </tr>
           </ng-template>

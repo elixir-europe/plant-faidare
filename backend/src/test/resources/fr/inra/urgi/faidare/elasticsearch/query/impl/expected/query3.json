@@ -1,48 +1,49 @@
 {
-  "nested" : {
-    "query" : {
-      "bool" : {
-        "must" : [
+  "nested": {
+    "query": {
+      "bool": {
+        "must": [
           {
-            "term" : {
-              "field2.schema:identifier" : {
-                "value" : "5",
-                "boost" : 1.0
+            "term": {
+              "field2.schema:identifier": {
+                "value": "5",
+                "boost": 1.0
               }
             }
           },
           {
-            "term" : {
-              "field2.field4.subField" : {
-                "value" : "4",
-                "boost" : 1.0
+            "term": {
+              "field2.field4.subField": {
+                "value": "4",
+                "boost": 1.0
               }
             }
           },
           {
-            "term" : {
-              "field2.field3" : {
-                "value" : "3",
-                "boost" : 1.0
+            "term": {
+              "field2.field3": {
+                "value": "3",
+                "boost": 1.0
               }
             }
           }
         ],
-        "adjust_pure_negative" : true,
-        "boost" : 1.0
+        "adjust_pure_negative": true,
+        "boost": 1.0
       }
     },
-    "path" : "field2",
-    "ignore_unmapped" : false,
-    "score_mode" : "none",
-    "boost" : 1.0,
-    "inner_hits" : {
-      "ignore_unmapped" : false,
-      "from" : 0,
-      "size" : 10000,
-      "version" : false,
-      "explain" : false,
-      "track_scores" : false
+    "path": "field2",
+    "ignore_unmapped": false,
+    "score_mode": "none",
+    "boost": 1.0,
+    "inner_hits": {
+      "ignore_unmapped": false,
+      "from": 0,
+      "size": 10000,
+      "version": false,
+      "seq_no_primary_term": false,
+      "explain": false,
+      "track_scores": false
     }
   }
 }

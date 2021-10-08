@@ -182,7 +182,7 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
 
         LOGGER.debug("\n\nQuery from findPedigree :\n" + termQuery.toString() + "\n\n");
 
-        if (hits.totalHits == 1) {
+        if (hits.getTotalHits().value == 1) {
             // result found! \o/
             SearchHit hit = hits.getAt(0);
             String source = hit.getSourceAsString();
@@ -191,7 +191,7 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
             } catch (IOException e) {
                 LOGGER.error("Error occured when converting ES response to PedigreeVO: " + e.getMessage(), e);
             }
-        } else if (hits.totalHits > 1) {
+        } else if (hits.getTotalHits().value > 1) {
             throw new IllegalStateException("Expected only 1 result for pedigree with germplasmDbId: " + germplasmDbId);
         }
         return pedigreeVO;
@@ -211,7 +211,7 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
         final SearchHits hits = response.getHits();
         LOGGER.debug("\n\nQuery from findProgeny :\n" + termQuery.toString() + "\n\n");
 
-        if (hits.totalHits == 1) {
+        if (hits.getTotalHits().value == 1) {
             SearchHit hit = hits.getAt(0);
             String source = hit.getSourceAsString();
             try {
@@ -219,7 +219,7 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
             } catch (IOException e) {
                 LOGGER.error("Error occured when converting ES response to ProgenyVO: " + e.getMessage(), e);
             }
-        } else if (hits.totalHits > 1) {
+        } else if (hits.getTotalHits().value > 1) {
             throw new IllegalStateException("Expected only 1 result for progeny with germplasmDbId: " + germplasmDbId);
         }
         return progenyVO;

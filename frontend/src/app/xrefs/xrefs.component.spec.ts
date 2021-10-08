@@ -35,9 +35,9 @@ describe('XrefsComponent', () => {
         url: 'https://urgi.versailles.inra.fr/association/association/viewer.do#results/analysisIds=1808038',
         description: 'Col-Fa-b*_MLM+Q+K is a GWASd anté paneCol-Fa-b*_MLM+Q+K is aGAS anlysis involving CC_Qualité' +
             'djs dsqdsq djsqpodsjqodsqdsqkpdqpdWOLOLOLOOOOOOOsqpkdsqkdsqkdsqdsdsqdsqdsqddsqffjùsodfusjùfsfsd',
-        database_name: 'GnpIS',
-        entry_type: 'GWAS analysis',
-        db_version: 'GWAS_ANALYSIS_1808038_1',
+        databaseName: 'GnpIS',
+        entryType: 'GWAS analysis',
+        identifier: 'GWAS_ANALYSIS_1808038_1',
         name: 'Col-Fa-b*_MLM+Q+K'
     }];
 
@@ -64,8 +64,8 @@ describe('XrefsComponent', () => {
 
         expect(tester.cardHeader).toContainText('Cross References');
         expect(tester.columns[0]).toContainText(xref[0].name);
-        expect(tester.columns[1]).toContainText(xref[0].database_name);
-        expect(tester.columns[2]).toContainText(xref[0].entry_type);
+        expect(tester.columns[1]).toContainText(xref[0].databaseName);
+        expect(tester.columns[2]).toContainText(xref[0].entryType);
         expect(tester.columns[3].textContent.length).toBeLessThanOrEqual(124);
 
     }));

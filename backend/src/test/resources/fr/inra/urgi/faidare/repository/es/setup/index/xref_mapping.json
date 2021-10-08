@@ -1,0 +1,11 @@
+{
+  "dynamic": "true",
+  "properties": {
+    "entryType": {
+      "type": "keyword"
+    },
+    "linkedResourcesID": {
+      "type": "keyword"
+    }
+  }
+}

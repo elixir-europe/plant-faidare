@@ -44,7 +44,7 @@ public class ESResponseParser {
         if (response == null) return null;
         SearchHits hits = response.getHits();
         if (hits == null) return null;
-        return hits.totalHits;
+        return hits.getTotalHits().value;
     }
 
     /**

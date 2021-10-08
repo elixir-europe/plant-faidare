@@ -5,7 +5,7 @@
 	"analysis": {
 		"filter": {
 			"1-20-edgeNGram": {
-				"type": "edgeNGram",
+				"type": "edge_ngram",
 				"side": "front",
 				"min_gram": 1,
 				"max_gram": 20
@@ -22,7 +22,6 @@
 				"type": "custom",
 				"tokenizer": "special_tokenizer",
 				"filter": [
-					"standard",
 					"lowercase",
 					"asciifolding"
 				]
@@ -31,7 +30,6 @@
 				"type": "custom",
 				"tokenizer": "special_tokenizer",
 				"filter": [
-					"standard",
 					"lowercase",
 					"asciifolding",
 					"1-20-edgeNGram"

@@ -62,12 +62,12 @@ class XRefDocumentRepositoryTest {
     @Test
     void should_Find_By_Linked_Id() {
         String id = "ID2";
-        List<String> linkedRessourcesID = Collections.singletonList(id);
+        List<String> linkedResourcesID = Collections.singletonList(id);
         XRefDocumentSearchCriteria criteria = new XRefDocumentSearchCriteria();
-        criteria.setLinkedRessourcesID(linkedRessourcesID);
+        criteria.setLinkedResourcesID(linkedResourcesID);
         PaginatedList<XRefDocumentVO> documents = repository.find(criteria);
         assertThat(documents).isNotNull().hasSize(2)
-            .flatExtracting("linkedRessourcesID")
+            .flatExtracting("linkedResourcesID")
                 .contains(id);
     }
 

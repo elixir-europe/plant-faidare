@@ -58,10 +58,6 @@ public class ESRequestFactory {
         request.source(new SearchSourceBuilder());
         request.indicesOptions(indicesOptions);
 
-        if (documentType != null) {
-            request.types(documentType);
-        }
-
         if (query != null) {
             request.source().query(query);
         }

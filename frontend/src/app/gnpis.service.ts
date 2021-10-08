@@ -24,7 +24,7 @@ export const BASE_URL = 'faidare/v1';
     providedIn: 'root'
 })
 export class GnpisService {
-    static URGI_SOURCE_URI = 'https://urgi.versailles.inra.fr';
+    static URGI_SOURCE_URI = 'https://urgi.versailles.inrae.fr';
 
     sourceByURI$ = new ReplaySubject<Record<string, DataDiscoverySource>>(1);
     sources$ = new ReplaySubject<DataDiscoverySource[]>(1);
@@ -136,7 +136,7 @@ export class GnpisService {
     }
 
     xref(xrefId: string): Observable<XrefResponse> {
-        return this.http.get<XrefResponse>(`${BASE_URL}/xref/documentbyfulltextid?linkedRessourcesID=${xrefId}`);
+        return this.http.get<XrefResponse>(`${BASE_URL}/xref/documentbyfulltextid?linkedResourcesID=${xrefId}`);
     }
 
     // TODO Change the service's response to return an object with the number of results and handle here if the number is over the limit

@@ -13,15 +13,15 @@ import java.util.List;
 @CriteriaForDocument(XRefDocumentVO.class)
 public class XRefDocumentSearchCriteria extends PaginationCriteriaImpl {
 
-    @DocumentPath("entry_type")
+    @DocumentPath("entryType")
 	private String entryType;
 
-    @DocumentPath("linkedRessourcesID")
-	private List<String> linkedRessourcesID;
+    @DocumentPath("linkedResourcesID") // pragma: allowlist secret
+	private List<String> linkedResourcesID;
 
     public static XRefDocumentSearchCriteria forXRefId(String resourceId) {
         XRefDocumentSearchCriteria criteria = new XRefDocumentSearchCriteria();
-        criteria.setLinkedRessourcesID(Collections.singletonList(resourceId));
+        criteria.setLinkedResourcesID(Collections.singletonList(resourceId));
         return criteria;
     }
 
@@ -33,11 +33,11 @@ public class XRefDocumentSearchCriteria extends PaginationCriteriaImpl {
         this.entryType = entryType;
     }
 
-    public List<String> getLinkedRessourcesID() {
-        return linkedRessourcesID;
+    public List<String> getLinkedResourcesID() {
+        return linkedResourcesID;
     }
 
-    public void setLinkedRessourcesID(List<String> linkedRessourcesID) {
-        this.linkedRessourcesID = linkedRessourcesID;
+    public void setLinkedResourcesID(List<String> linkedResourcesID) {
+        this.linkedResourcesID = linkedResourcesID;
     }
 }

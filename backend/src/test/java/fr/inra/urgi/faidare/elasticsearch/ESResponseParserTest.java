@@ -2,6 +2,7 @@ package fr.inra.urgi.faidare.elasticsearch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.inra.urgi.faidare.elasticsearch.fixture.DocumentObject;
+import org.apache.lucene.search.TotalHits;
 import org.assertj.core.util.Lists;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.bytes.BytesReference;
@@ -50,7 +51,7 @@ class ESResponseParserTest {
         float maxScore = 100;
 
         // Can't mock SearchHits since it is a final class
-        SearchHits hits = new SearchHits(hitsArray, expectedTotalHits, maxScore);
+        SearchHits hits = new SearchHits(hitsArray, new TotalHits(expectedTotalHits, TotalHits.Relation.EQUAL_TO), maxScore);
 
         SearchResponse response = mock(SearchResponse.class);
         when(response.getHits()).thenReturn(hits);
@@ -98,7 +99,7 @@ class ESResponseParserTest {
         SearchHit hit3 = mockSearchHit(object3);
 
         // Can't mock SearchHits since it is a final class
-        SearchHits hits = new SearchHits(new SearchHit[]{hit1, hit2, hit3}, 3, 100);
+        SearchHits hits = new SearchHits(new SearchHit[]{hit1, hit2, hit3}, new TotalHits(3L, TotalHits.Relation.EQUAL_TO), 100);
 
         SearchResponse response = mock(SearchResponse.class);
         when(response.getHits()).thenReturn(hits);
@@ -132,7 +133,7 @@ class ESResponseParserTest {
         assertThat(result).isNull();
 
         // Return null if no hits in hits
-        SearchHits hits = new SearchHits(null, 0, 100);
+        SearchHits hits = new SearchHits(null, new TotalHits(0, TotalHits.Relation.EQUAL_TO), 100);
         when(response.getHits()).thenReturn(hits);
 
         List<DocumentObject> result2 = parser.parseHits(response, DocumentObject.class);

@@ -83,7 +83,7 @@ public class ESScrollIterator<T> implements Iterator<T> {
         }
 
         this.scrollId = response.getScrollId();
-        this.totalHits = response.getHits().getTotalHits();
+        this.totalHits = response.getHits().getTotalHits().value;
         this.hitIndex = 0;
         this.currentIterator = parseIterator(response);
     }

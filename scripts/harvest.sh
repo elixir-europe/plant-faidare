@@ -7,10 +7,9 @@ ES_PORT="9200"
 ENV="dev"
 DOCUMENT_TYPES="all"
 
-ALL_DOCUMENT_TYPES="germplasm germplasmMcpd germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit datadiscovery"
+ALL_DOCUMENT_TYPES="germplasm germplasmMcpd germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit xref"
 ALL_ENVS="dev beta staging int prod test"
-BASEDIR=$(dirname "$0")
-TMP_FILE="log.tmp"
+BASEDIR=$(readlink -f "$(dirname $0)")
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -79,7 +78,7 @@ while [ -n "$1" ]; do
 		-h|--help) help;;
 		-v|--verbose) VERBOSE=1;shift 1;;
 		--debug) set -x;shift 1;;
-		-jsonDir) DATA_DIR="$2"; shift 2;;
+		-jsonDir) DATA_DIR="$(readlink -f $2)"; shift 2;;
 		-es_host) ES_HOST="$2"; shift 2;;
 		-es_port) ES_PORT="$2"; shift 2;;
 		-env) ENV="$2"; shift 2;;
@@ -113,11 +112,6 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	fi
 done
 
-# Compress JSON files
-for FILE in $(find "${DATA_DIR}" -name "*.json"); do
-	gzip "$FILE"
-done
-
 LOG_DIR="${DATA_DIR%/}/indexing-log"
 
 if [[ -d ${LOG_DIR} ]]
@@ -125,22 +119,27 @@ then
     rm -r "${LOG_DIR}"
 fi
 
-export ES_HOST ES_PORT INDEX_NAME LOG_DIR
+TMP_FILE="/tmp/bulk/log.tmp"
+[ -f "$TMP_FILE" ] && rm -f "$TMP_FILE"
 
-process_file() {
-    file=$(basename "$1")
-    logfile="${file%.*}.log.gz"
-    source=$(basename "$(dirname "$1")")
+OUTDIR="/tmp/bulk/${INDEX_NAME}"
+[ -d "$OUTDIR" ] && rm -rf "$OUTDIR"
+mkdir -p "$OUTDIR"
 
-    if ! [[ -d "${LOG_DIR}/$source" ]]
-    then
-        mkdir -p "${LOG_DIR}/$source"
-    fi
+export ES_HOST ES_PORT INDEX_NAME LOG_DIR OUTDIR BASEDIR
 
-    curl -s -H 'Content-Type: application/x-ndjson' -H 'Content-Encoding: gzip' -H 'Accept-Encoding: gzip' -XPOST "${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_bulk" --data-binary @"$1" > "${LOG_DIR}/$source/$logfile"
+
+index_resources() {
+    SOURCE=$(basename $(dirname "$1"))
+    bash -c "set -o pipefail; gunzip -c $1 \
+            | jq -c -f ${BASEDIR}/to_bulk.jq 2> ${OUTDIR}/${SOURCE}-$2.jq.err \
+            | gzip -c \
+            | curl -s -H 'Content-Type: application/x-ndjson' -H 'Content-Encoding: gzip' -H 'Accept-Encoding: gzip' \
+               -XPOST \"${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_bulk\"\
+               --data-binary '@-' 2> ${OUTDIR}/${SOURCE}-$2.jq.err  > ${OUTDIR}/${SOURCE}-$2-resources.log.gz "
 }
 
-export -f process_file
+export -f index_resources
 
 for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	echo && echo -e "${BOLD}Manage ${DOCUMENT_TYPE} documents...${NC}"
@@ -163,13 +162,16 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	INDEX_NAME="${INDEX_PATTERN}-d"$(date +%s)
 	echo -e "* Index documents into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice..."
 	{
-		parallel -j 2 --bar process_file ::: $(find "${DATA_DIR}" -name "${DOCUMENT_TYPE}-*.json.gz")
-	} || {
-		code=$?
-		echo -e "${RED}ERROR: a problem occurred when trying to index data with parallel program.${NC}"
-		exit $code
+		parallel -j 4 --bar index_resources {1} {1/.} ::: "$(find "${DATA_DIR}" -name "${DOCUMENT_TYPE}-*.json.gz")"
 	}
-	parallel "gunzip -c {} | jq '.errors' | grep -q true && echo -e '${ORANGE}ERROR found in {}${NC}' >> ${TMP_FILE} ;" ::: $(find "${DATA_DIR}" -name "${DOCUMENT_TYPE}-*.log.gz")
+
+	# check all JQ err files...
+    FILES_IN_ERROR=$(find "${OUTDIR}" -size "+0" -name "*${DOCUMENT_TYPE}*jq.err")
+    [ -n "${FILES_IN_ERROR}" ] && { echo -e "${RED}ERROR: some problems occured with JQ processing, look at files:${ORANGE} ${FILES_IN_ERROR}${NC}" ; exit 4 ; }
+
+    parallel "gunzip -c {} | jq '.errors' | grep -q true && echo -e '${ORANGE}ERROR found in {}${NC}' >> ${TMP_FILE} ;" ::: "$(find "${OUTDIR}" -name "*${DOCUMENT_TYPE}-*.log.gz")"
+    parallel "gunzip -c {} | jq '.error' | grep -q true && echo -e '${ORANGE}ERROR related to data found when indexing {}${NC}' >> ${TMP_FILE} ;" ::: ${OUTDIR}/*${DOCUMENT_TYPE}*-resources.log.gz
+    parallel "gunzip -c {} | jq '.error? | length == 0' | grep -q false && echo -e '${ORANGE}ERROR related to Elasticsearch API usage found when indexing {}${NC}' >> ${TMP_FILE} ;" ::: ${OUTDIR}/*${DOCUMENT_TYPE}*-resources.log.gz
 	if [ -f "${TMP_FILE}" ] && [ -s "${TMP_FILE}" ]; then
 		echo -e "${RED}ERROR: a problem occurred when trying to index data into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice.${NC}"
 		echo -e "${ORANGE}$(cat ${TMP_FILE})${NC}"
@@ -177,28 +179,28 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 		exit 1;
 	fi
 
-	# Check indexed data
-	echo -e "* Check data indexed from ${DATA_DIR} into ${INDEX_NAME}..."
-	# skip some documents because they contain nested objects that distort the count
-	if [[ "${DOCUMENT_TYPE}" != "germplasmAttribute" && "${DOCUMENT_TYPE}" != "observationUnit" && "${DOCUMENT_TYPE}" != "datadiscovery" ]]; then
-		COUNT_EXTRACTED_DOCS=0
-		for FILE in $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.json.gz"); do
-			COUNT_FILE_DOCS=$(zcat ${FILE} | grep "\"_id\"" | sort | uniq | wc -l)
-			COUNT_EXTRACTED_DOCS=$((COUNT_EXTRACTED_DOCS+COUNT_FILE_DOCS))
-		done
-		curl -s -XGET "${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_refresh" >/dev/null
-		COUNT_INDEXED_DOCS=$(curl -s -XGET "${ES_HOST}:${ES_PORT}/_cat/indices/${INDEX_NAME}?h=docs.count")
-	fi
-	if [ "$COUNT_INDEXED_DOCS" != "$COUNT_EXTRACTED_DOCS" ]; then
-		echo -e "${RED}ERROR: a problem occurred when indexing data from ${DATA_DIR} on FAIDARE ${ENV}.${NC}"
-		echo -e "${ORANGE}Expected ${COUNT_EXTRACTED_DOCS} documents but got ${COUNT_INDEXED_DOCS} indexed documents.${NC}"
-		exit 1;
-	fi
-	sleep 5
+    # Check indexed data
+    echo -e "* Check data indexed from ${DATA_DIR} into ${INDEX_NAME}..."
+    	# skip some documents because they contain nested objects that distort the count
+    	if [[ "${DOCUMENT_TYPE}" != "germplasmAttribute" && "${DOCUMENT_TYPE}" != "trial" ]]; then
+    		COUNT_EXTRACTED_DOCS=0
+    		for FILE in $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.json.gz"); do
+    			COUNT_FILE_DOCS=$(zcat ${FILE} | grep -o "\"@id\"" | wc -l)
+    			COUNT_EXTRACTED_DOCS=$((COUNT_EXTRACTED_DOCS+COUNT_FILE_DOCS))
+    		done
+    		curl -s -XGET "${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_refresh" >/dev/null
+    		COUNT_INDEXED_DOCS=$(curl -s -XGET "${ES_HOST}:${ES_PORT}/_cat/indices/${INDEX_NAME}?h=docs.count")
+    	fi
+    	if [ "$COUNT_INDEXED_DOCS" != "$COUNT_EXTRACTED_DOCS" ]; then
+    		echo -e "${RED}ERROR: a problem occurred when indexing data from ${DATA_DIR} on FAIDARE ${ENV}.${NC}"
+    		echo -e "${ORANGE}Expected ${COUNT_EXTRACTED_DOCS} documents but got ${COUNT_INDEXED_DOCS} indexed documents.${NC}"
+    		exit 1;
+    	fi
+    	sleep 5
 
 	# Add aliases
 	ALIAS_PATTERN="${INDEX_PATTERN}-group*"
-	ALIAS_EXIST=$(curl -s -XGET "${ES_HOST}:${ES_PORT}/_alias/${ALIAS_PATTERN}" | jq '.status' | grep -q "404" && echo "false" || echo "true")
+	ALIAS_EXIST=$(curl -s -XGET "${ES_HOST}:${ES_PORT}/_alias/${ALIAS_PATTERN}" | jq '.status' | grep -q -e "404" -e 'null' && echo "false" || echo "true")
 	if [ "${ALIAS_EXIST}" == "true" ]; then
 		echo -e "* Delete aliases ${ALIAS_PATTERN}..."
 		LOG=$(curl -s -XDELETE "${ES_HOST}:${ES_PORT}/*/_aliases/${ALIAS_PATTERN}")
@@ -219,8 +221,8 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	}
 }' | jq -cr '.aggregations.uniq_group.buckets[].key') # Extract ES aggregation bucket keys
 	[ -z "$GROUP_IDS" ] && {
-		echo -e "${RED}ERROR: could not list 'groupId' values from index.${NC}"
-		exit 1;
+		echo -e "${ORANGE}WARNING: could not list 'groupId' values from index. Defaulting to 'groupId' = 0. ${NC}"
+		GROUP_IDS="0"
 	}
 	echo -e "* Create aliases:"
 	for GROUP_ID in ${GROUP_IDS}; do

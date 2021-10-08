@@ -22,7 +22,7 @@ variables:
   JAR_PATH: "backend/build/libs/${APP_NAME}.jar"
   GIT_DEPTH: 0
   IMAGE_TAG: $CI_COMMIT_REF_SLUG
-  ELASTIC_VERSION: "6.6.2"
+  ELASTIC_VERSION: "7.13.2"
   DOCKER_OPTS: "--mtu=1450"
 
 # Gradle cache for all jobs
@@ -50,6 +50,7 @@ build-loader-docker-image:
   - if [ "master" == "${CI_COMMIT_REF_SLUG}" ] ; then docker push registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest ; fi;
  only:
   changes:
+   - Dockerfile
    - scripts/*
    - backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/*_mapping.json
    - backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json

@@ -7,10 +7,7 @@ import fr.inra.urgi.faidare.config.FaidareProperties;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.faidare.elasticsearch.document.DocumentAnnotationUtil;
 import fr.inra.urgi.faidare.repository.es.XRefDocumentRepositoryImpl;
-import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
-import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
-import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -19,8 +16,12 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -47,8 +48,7 @@ public class ESSetUp {
      * Delete index/alias if it exists
      */
     private void deleteIndex(String indexName) throws IOException {
-        GetIndexRequest existsRequest = new GetIndexRequest();
-        existsRequest.indices(indexName);
+        GetIndexRequest existsRequest = new GetIndexRequest(indexName);
         boolean exists = client.indices().exists(existsRequest, RequestOptions.DEFAULT);
         if (!exists) {
             // Do not delete non existing index
@@ -76,11 +76,11 @@ public class ESSetUp {
 
         // with document mappings
         String mapping = readResource("./index/" + documentType + "_mapping.json");
-        createIndex.mapping(documentType, toXContentBuilder(mapping));
+        createIndex.mapping(mapping, XContentType.JSON);
 
         CreateIndexResponse createResponse = client.indices().create(createIndex, RequestOptions.DEFAULT);
         if (!createResponse.isAcknowledged()) {
-            throw new RuntimeException("Could not create index '" + indexName + "': " + createResponse.toString());
+            throw new RuntimeException("Could not create index '" + indexName + "': " + createResponse);
         }
 
         // Bulk index fixture data
@@ -93,7 +93,7 @@ public class ESSetUp {
         while (elements.hasNext()) {
             JsonNode document = elements.next();
 
-            IndexRequest indexRequest = new IndexRequest(indexName, documentType);
+            IndexRequest indexRequest = new IndexRequest(indexName);
             indexRequest.source(toXContentBuilder(document.toString()));
             bulkRequest.add(indexRequest);
         }

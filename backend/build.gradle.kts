@@ -110,8 +110,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
     // Elasticsearch
-    implementation("org.elasticsearch:elasticsearch:6.6.2")
-    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:6.6.2")
+    implementation("org.elasticsearch:elasticsearch:7.13.2")
+    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.13.2")
 
     // Swagger
     implementation("io.swagger:swagger-annotations:1.5.21")
