@@ -77,6 +77,17 @@ public class GermplasmController {
         return toModelAndView(germplasm);
     }
 
+    @GetMapping(params = "id")
+    public ModelAndView getById(@RequestParam("id") String germplasmId) {
+        GermplasmVO germplasm = germplasmRepository.getById(germplasmId);
+
+        if (germplasm == null) {
+            throw new NotFoundException("Germplasm with ID " + germplasmId + " not found");
+        }
+
+        return toModelAndView(germplasm);
+    }
+
     @GetMapping(params = "pui")
     public ModelAndView getByPui(@RequestParam("pui") String pui) {
         GermplasmGETSearchCriteria criteria = new GermplasmGETSearchCriteria();

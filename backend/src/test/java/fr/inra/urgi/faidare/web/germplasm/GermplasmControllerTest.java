@@ -2,17 +2,21 @@ package fr.inra.urgi.faidare.web.germplasm;
 
 import static fr.inra.urgi.faidare.web.Fixtures.htmlContent;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import fr.inra.urgi.faidare.config.FaidareProperties;
+import fr.inra.urgi.faidare.domain.criteria.GermplasmGETSearchCriteria;
+import fr.inra.urgi.faidare.domain.criteria.GermplasmSearchCriteria;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmAttributeValueListVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmMcpdVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmSitemapVO;
@@ -26,6 +30,7 @@ import fr.inra.urgi.faidare.repository.es.XRefDocumentRepository;
 import fr.inra.urgi.faidare.web.Fixtures;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -102,6 +107,57 @@ public class GermplasmControllerTest {
                                                     "Panel",
                                                     "Cross references"))
                .andExpect(htmlContent().endsCorrectly());
+    }
+
+    @Test
+    void shouldDisplayGermplasmWithIdAsParameter() throws Exception {
+        mockMvc.perform(get("/germplasms").param("id", germplasm.getGermplasmDbId()))
+               .andExpect(status().isOk())
+               .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+               .andExpect(htmlContent().hasTitle("Germplasm: BLE BARBU DU ROUSSILLON"))
+               .andExpect(htmlContent().containsH2s("Identification",
+                                                    "Depositary",
+                                                    "Collector",
+                                                    "Breeder",
+                                                    "Donors",
+                                                    "Distributors",
+                                                    "Evaluation Data",
+                                                    "Genealogy",
+                                                    "Population",
+                                                    "Collection",
+                                                    "Panel",
+                                                    "Cross references"))
+               .andExpect(htmlContent().endsCorrectly());
+    }
+
+    @Test
+    void shouldDisplayGermplasmWithPuiAsParameter() throws Exception {
+        PaginatedList<GermplasmVO> puiList = new PaginatedList<>(null, Collections.singletonList(germplasm));
+        when(mockGermplasmRepository.find(any())).thenReturn(puiList);
+
+        mockMvc.perform(get("/germplasms").param("pui", germplasm.getGermplasmPUI()))
+               .andExpect(status().isOk())
+               .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+               .andExpect(htmlContent().hasTitle("Germplasm: BLE BARBU DU ROUSSILLON"))
+               .andExpect(htmlContent().containsH2s("Identification",
+                                                    "Depositary",
+                                                    "Collector",
+                                                    "Breeder",
+                                                    "Donors",
+                                                    "Distributors",
+                                                    "Evaluation Data",
+                                                    "Genealogy",
+                                                    "Population",
+                                                    "Collection",
+                                                    "Panel",
+                                                    "Cross references"))
+               .andExpect(htmlContent().endsCorrectly());
+
+        ArgumentMatcher<GermplasmSearchCriteria> criteriaMatcher = criteria ->
+            criteria instanceof GermplasmGETSearchCriteria
+                && ((GermplasmGETSearchCriteria) criteria).getGermplasmPUI()
+                                                          .equals(Collections.singletonList(germplasm.getGermplasmPUI()));
+        verify(mockGermplasmRepository).find(argThat(criteriaMatcher));
     }
 
     @Test
