@@ -16,6 +16,12 @@ public class FaidareExpressionFactory implements IExpressionObjectFactory {
     private static final Set<String> ALL_EXPRESSION_OBJECT_NAMES =
         Collections.singleton(FAIDARE_EVALUATION_VARIABLE_NAME);
 
+    private final String searchUrl;
+
+    public FaidareExpressionFactory(String searchUrl) {
+        this.searchUrl = searchUrl;
+    }
+
     @Override
     public Set<String> getAllExpressionObjectNames() {
         return ALL_EXPRESSION_OBJECT_NAMES;
@@ -23,7 +29,7 @@ public class FaidareExpressionFactory implements IExpressionObjectFactory {
 
     @Override
     public Object buildObject(IExpressionContext context, String expressionObjectName) {
-        return new FaidareExpressions(context.getLocale());
+        return new FaidareExpressions(context.getLocale(), searchUrl);
     }
 
     @Override

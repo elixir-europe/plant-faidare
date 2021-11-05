@@ -57,9 +57,11 @@ public class FaidareExpressions {
     }
 
     private final Locale locale;
+    private final String searchUrl;
 
-    public FaidareExpressions(Locale locale) {
+    public FaidareExpressions(Locale locale, String searchUrl) {
         this.locale = locale;
+        this.searchUrl = searchUrl;
     }
 
     public String toSiteParam(String siteId) {
@@ -85,7 +87,7 @@ public class FaidareExpressions {
     }
 
     public String searchUrl() {
-        return "https://urgi.versailles.inrae.fr/faidare/search";
+        return searchUrl;
     }
 
     private String collPopTitle(CollPopVO collPopVO, Function<String, String> nameTransformer) {

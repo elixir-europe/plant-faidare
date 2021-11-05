@@ -31,6 +31,13 @@ public class FaidareProperties {
     private String securityUserGroupWsUrl;
     private String securityUserGroupWsToken;
 
+    /**
+     * The URL used by the germplasm card to generate links to the faidare search application
+     * (i.e. the faidare flavor of data-discovery).
+     */
+    @NotBlank
+    private String searchUrl;
+
     private List<DataSourceImpl> dataSources = new ArrayList<>();
 
     public String getElasticsearchIndexingTemplate() {
@@ -118,6 +125,11 @@ public class FaidareProperties {
             .replace("{documentType}", documentType.toLowerCase());
     }
 
+    public String getSearchUrl() {
+        return searchUrl;
+    }
 
-
+    public void setSearchUrl(String searchUrl) {
+        this.searchUrl = searchUrl;
+    }
 }

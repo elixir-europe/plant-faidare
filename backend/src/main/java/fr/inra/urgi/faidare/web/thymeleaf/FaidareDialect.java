@@ -1,5 +1,6 @@
 package fr.inra.urgi.faidare.web.thymeleaf;
 
+import fr.inra.urgi.faidare.config.FaidareProperties;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.dialect.AbstractDialect;
 import org.thymeleaf.dialect.IExpressionObjectDialect;
@@ -12,14 +13,15 @@ import org.thymeleaf.expression.IExpressionObjectFactory;
 @Component
 public class FaidareDialect extends AbstractDialect implements IExpressionObjectDialect {
 
-    private final IExpressionObjectFactory FAIDARE_EXPRESSION_OBJECTS_FACTORY = new FaidareExpressionFactory();
+    private final IExpressionObjectFactory faidareExpressionFactory;
 
-    protected FaidareDialect() {
+    public FaidareDialect(FaidareProperties faidareProperties) {
         super("faidare");
+        faidareExpressionFactory = new FaidareExpressionFactory(faidareProperties.getSearchUrl());
     }
 
     @Override
     public IExpressionObjectFactory getExpressionObjectFactory() {
-        return FAIDARE_EXPRESSION_OBJECTS_FACTORY;
+        return faidareExpressionFactory;
     }
 }
