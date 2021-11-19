@@ -215,7 +215,7 @@ public class GermplasmControllerTest {
     }
 
     @Test
-    void shouldExporPlantMaterials() throws Exception {
+    void shouldExportPlantMaterials() throws Exception {
         List<GermplasmVO> germplasms = Arrays.asList(
             Fixtures.createGermplasm(),
             Fixtures.createGermplasm()

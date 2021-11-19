@@ -11,7 +11,7 @@ import fr.inra.urgi.faidare.domain.data.germplasm.SiteVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSource;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentVO;
 import fr.inra.urgi.faidare.web.site.MapLocation;
-import org.apache.logging.log4j.util.Strings;
+import org.springframework.util.StringUtils;
 
 /**
  * The model used by the germplasm page
@@ -57,13 +57,13 @@ public final class GermplasmModel {
     }
 
     public String getTaxon() {
-        if (Strings.isNotBlank(this.germplasm.getGenusSpeciesSubtaxa())) {
+        if (StringUtils.hasText(this.germplasm.getGenusSpeciesSubtaxa())) {
             return this.germplasm.getGenusSpeciesSubtaxa();
-        } else if (Strings.isNotBlank(this.germplasm.getGenusSpecies())) {
+        } else if (StringUtils.hasText(this.germplasm.getGenusSpecies())) {
             return this.germplasm.getGenusSpecies();
-        } else if (Strings.isNotBlank(this.germplasm.getSubtaxa())) {
+        } else if (StringUtils.hasText(this.germplasm.getSubtaxa())) {
             return this.germplasm.getGenus() + " " + this.germplasm.getSpecies() + " " + this.germplasm.getSubtaxa();
-        } else if (Strings.isNotBlank(this.germplasm.getSpecies())) {
+        } else if (StringUtils.hasText(this.germplasm.getSpecies())) {
             return this.germplasm.getGenus() + " " + this.germplasm.getSpecies();
         } else {
             return this.germplasm.getGenus();
@@ -71,13 +71,13 @@ public final class GermplasmModel {
     }
 
     public String getTaxonAuthor() {
-        if (Strings.isNotBlank(this.germplasm.getGenusSpeciesSubtaxa())) {
+        if (StringUtils.hasText(this.germplasm.getGenusSpeciesSubtaxa())) {
             return this.germplasm.getSubtaxaAuthority();
-        } else if (Strings.isNotBlank(this.germplasm.getGenusSpecies())) {
+        } else if (StringUtils.hasText(this.germplasm.getGenusSpecies())) {
             return this.germplasm.getSpeciesAuthority();
-        } else if (Strings.isNotBlank(this.germplasm.getSubtaxa())) {
+        } else if (StringUtils.hasText(this.germplasm.getSubtaxa())) {
             return this.germplasm.getSubtaxaAuthority();
-        } else if (Strings.isNotBlank(this.germplasm.getSpecies())) {
+        } else if (StringUtils.hasText(this.germplasm.getSpecies())) {
             return this.germplasm.getSpeciesAuthority();
         } else {
             return null;
@@ -91,34 +91,34 @@ public final class GermplasmModel {
     }
 
     private boolean isCollectingSitePresent() {
-        return this.germplasm.getCollectingSite() != null && Strings.isNotBlank(this.germplasm.getCollectingSite().getSiteName());
+        return this.germplasm.getCollectingSite() != null && StringUtils.hasText(this.germplasm.getCollectingSite().getSiteName());
     }
 
     private boolean isCollectorInstitutePresent() {
         return this.germplasm.getCollector() != null &&
             this.germplasm.getCollector().getInstitute() != null &&
-            Strings.isNotBlank(this.germplasm.getCollector().getInstitute().getInstituteName());
+            StringUtils.hasText(this.germplasm.getCollector().getInstitute().getInstituteName());
     }
 
     private boolean isCollectorIntituteFieldPresent() {
         GermplasmInstituteVO collector = this.germplasm.getCollector();
         return (collector != null) &&
-            (Strings.isNotBlank(collector.getAccessionNumber())
+            (StringUtils.hasText(collector.getAccessionNumber())
                 || collector.getAccessionCreationDate() != null
-                || Strings.isNotBlank(collector.getMaterialType())
-                || Strings.isNotBlank(collector.getCollectors())
+                || StringUtils.hasText(collector.getMaterialType())
+                || StringUtils.hasText(collector.getCollectors())
                 || collector.getRegistrationYear() != null
                 || collector.getDeregistrationYear() != null
-                || Strings.isNotBlank(collector.getDistributionStatus())
+                || StringUtils.hasText(collector.getDistributionStatus())
             );
     }
 
     public boolean isBreeding() {
         GermplasmInstituteVO breeder = this.germplasm.getBreeder();
         return breeder != null &&
-            ((breeder.getInstitute() != null && Strings.isNotBlank(breeder.getInstitute().getInstituteName())) ||
+            ((breeder.getInstitute() != null && StringUtils.hasText(breeder.getInstitute().getInstituteName())) ||
                 breeder.getAccessionCreationDate() != null ||
-                Strings.isNotBlank(breeder.getAccessionNumber()) ||
+                StringUtils.hasText(breeder.getAccessionNumber()) ||
                 breeder.getRegistrationYear() != null ||
                 breeder.getDeregistrationYear() != null);
     }
@@ -133,11 +133,11 @@ public final class GermplasmModel {
 
     private boolean isPedigreePresent() {
         return this.pedigree != null &&
-            (Strings.isNotBlank(this.pedigree.getParent1Name())
-            || Strings.isNotBlank(this.pedigree.getParent2Name())
-            || Strings.isNotBlank(this.pedigree.getCrossingPlan())
-            || Strings.isNotBlank(this.pedigree.getCrossingYear())
-            || Strings.isNotBlank(this.pedigree.getFamilyCode()));
+            (StringUtils.hasText(this.pedigree.getParent1Name())
+            || StringUtils.hasText(this.pedigree.getParent2Name())
+            || StringUtils.hasText(this.pedigree.getCrossingPlan())
+            || StringUtils.hasText(this.pedigree.getCrossingYear())
+            || StringUtils.hasText(this.pedigree.getFamilyCode()));
     }
 
     public List<MapLocation> getMapLocations() {
@@ -153,5 +153,10 @@ public final class GermplasmModel {
         }
 
         return MapLocation.sitesToDisplayableMapLocations(sites);
+    }
+
+    public boolean isPuiDisplayedAsLink() {
+        String pui = this.germplasm.getGermplasmPUI();
+        return pui != null && (pui.startsWith("https://doi.org") || pui.startsWith("http://doi.org"));
     }
 }

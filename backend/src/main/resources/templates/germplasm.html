@@ -90,6 +90,21 @@
               <div
                 th:replace="fragments/row::text-row(label='Accession number', text=${model.germplasm.accessionNumber})"
               ></div>
+              <div
+                th:replace="fragments/row::row(label='Germplasm PUI', content=~{::#germplasm-pui})"
+              >
+                <th:block id="germplasm-pui">
+                  <a
+                    th:if="${model.puiDisplayedAsLink}"
+                    th:href="${model.germplasm.germplasmPUI}"
+                    th:text="${model.germplasm.germplasmPUI}"
+                  ></a>
+                  <span
+                    th:unless="${model.puiDisplayedAsLink}"
+                    th:text="${model.germplasm.germplasmPUI}"
+                  ></span>
+                </th:block>
+              </div>
 
               <div
                 th:replace="fragments/source::source(source=${model.source}, url=${model.germplasm.url}, entityType='germplasm')"
