@@ -103,7 +103,14 @@ Data indexing to your local Elasticsearch is done using the following command (t
 ```sh
 docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest -jsonDir /opt/data/ --help
 ```
+
 Remove the `--help` parameter to run the loading with default params.
+
+If you are depending of commited changes in indexing scripts under a specific branch (the docker image should have been automatically created by the CI), you need to change the tag of the docker image according to the branch name (ie. for branch `epic/merge-faidare-dd`, use tag `epic-merge-faidare-dd`, see `CI_COMMIT_REF_SLUG` [Gitlab predefined variable](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html#predefined-variables-reference)), as following:
+
+```sh
+docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:epic-merge-faidare-dd` -jsonDir /opt/data/ --help
+```
 
 ### Portability
 
