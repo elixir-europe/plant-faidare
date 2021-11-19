@@ -39,10 +39,13 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 /**
  * Controller used to display a germplasm card based on its ID.
+ * Note that this controller is mapped to the /germplasm path in addition to
+ * the canonical /germplasms path in order to still honor legacy URLs used
+ * in external applications
  * @author JB Nizet
  */
 @Controller("webGermplasmController")
-@RequestMapping("/germplasms")
+@RequestMapping({"/germplasms", "/germplasm"})
 public class GermplasmController {
 
     private final GermplasmRepository germplasmRepository;

@@ -161,6 +161,18 @@ public class GermplasmControllerTest {
     }
 
     @Test
+    void shouldSupportLegacyPath() throws Exception {
+        PaginatedList<GermplasmVO> puiList = new PaginatedList<>(null, Collections.singletonList(germplasm));
+        when(mockGermplasmRepository.find(any())).thenReturn(puiList);
+
+        mockMvc.perform(get("/germplasm").param("pui", germplasm.getGermplasmPUI()))
+               .andExpect(status().isOk())
+               .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+               .andExpect(htmlContent().hasTitle("Germplasm: BLE BARBU DU ROUSSILLON"))
+               .andExpect(htmlContent().endsCorrectly());
+    }
+
+    @Test
     void shouldGenerateSitemap() throws Exception {
         List<GermplasmSitemapVO> germplasms = Arrays.asList(
             new GermplasmSitemapVO("germplasm1"),
