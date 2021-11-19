@@ -4,9 +4,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
 import fr.inra.urgi.faidare.api.NotFoundException;
@@ -31,6 +33,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,7 +74,7 @@ public class StudyController {
     }
 
     @GetMapping("/{studyId}")
-    public ModelAndView get(@PathVariable("studyId") String studyId) {
+    public ModelAndView get(@PathVariable("studyId") String studyId, Locale locale) {
         StudyDetailVO study = studyRepository.getById(studyId);
 
         if (study == null) {
@@ -83,7 +86,7 @@ public class StudyController {
         );
 
         List<GermplasmVO> germplasms = getGermplasms(study);
-        List<ObservationVariableVO> variables = getVariables(study);
+        List<ObservationVariableVO> variables = getVariables(study, locale);
         List<TrialVO> trials = getTrials(study);
         LocationVO location = getLocation(study);
 
@@ -139,12 +142,76 @@ public class StudyController {
         }
     }
 
-    private List<ObservationVariableVO> getVariables(StudyDetailVO study) {
+    private List<ObservationVariableVO> getVariables(StudyDetailVO study, Locale locale) {
         Set<String> variableIds = studyRepository.getVariableIds(study.getStudyDbId());
-        return cropOntologyRepository.getVariableByIds(variableIds)
-            .stream()
+        List<ObservationVariableVO> variables = cropOntologyRepository.getVariableByIds(variableIds);
+        return filterVariablesForLocale(variables, locale)
             .sorted(Comparator.comparing(ObservationVariableVO::getObservationVariableDbId))
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Filter the variables by language. The principles are the following. First, the languages of the variables
+     * are normalized (to transform FRA into fr for example).
+     * Then, several cases are possible.
+     *
+     * If there is no variable with the requested language, then we find the reference language.
+     * The reference language is en if there is at least one variable with that language.
+     * The reference is the first non null language found if there is no variable with the en language.
+     * Then, we keep all the variables with the reference language (if any), and all the variables without language.
+     *
+     * If there is at least one variable with the requested language, then we keep all the variables
+     * with the requested language, and all the variables without language.
+     */
+    private Stream<ObservationVariableVO> filterVariablesForLocale(List<ObservationVariableVO> variables, Locale locale) {
+        if (variables.isEmpty()) {
+            return variables.stream();
+        }
+
+        String requestedLanguage = locale.getLanguage();
+        String referenceLanguage = findReferenceLanguage(requestedLanguage, variables);
+
+        return variables.stream()
+                        .filter(variable ->
+                                    referenceLanguage == null
+                                        || !StringUtils.hasText(variable.getLanguage())
+                                        || normalizeLanguage(variable.getLanguage()).equals(referenceLanguage));
+    }
+
+    private String findReferenceLanguage(String requestedLanguage, List<ObservationVariableVO> variables) {
+        Set<String> normalizedVariableLanguages =
+            variables.stream()
+                     .map(ObservationVariableVO::getLanguage)
+                     .filter(StringUtils::hasText)
+                     .map(this::normalizeLanguage)
+                     .collect(Collectors.toSet());
+
+        String referenceLanguage = null;
+        if (normalizedVariableLanguages.contains(requestedLanguage)) {
+            referenceLanguage = requestedLanguage;
+        } else if (normalizedVariableLanguages.contains("en")) {
+            referenceLanguage = "en";
+        } else if (!normalizedVariableLanguages.isEmpty()) {
+            referenceLanguage = normalizedVariableLanguages.iterator().next();
+        }
+        return referenceLanguage;
+    }
+
+    private String normalizeLanguage(String language) {
+        // this is a hack trying to accomodate for languages not bein standard in the data
+        String languageInLowerCase = language.toLowerCase();
+        if (languageInLowerCase.length() == 3) {
+            switch (languageInLowerCase) {
+                case "fra":
+                    return "fr";
+                case "esp":
+                case "spa":
+                    return "es";
+                case "eng":
+                    return "en";
+            }
+        }
+        return languageInLowerCase;
     }
 
     private List<TrialVO> getTrials(StudyDetailVO study) {

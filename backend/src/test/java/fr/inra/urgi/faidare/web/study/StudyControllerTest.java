@@ -2,6 +2,7 @@ package fr.inra.urgi.faidare.web.study;
 
 import static fr.inra.urgi.faidare.web.Fixtures.createSite;
 import static fr.inra.urgi.faidare.web.Fixtures.htmlContent;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -12,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import fr.inra.urgi.faidare.config.FaidareProperties;
@@ -21,6 +23,7 @@ import fr.inra.urgi.faidare.domain.data.TrialVO;
 import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.data.study.StudyDetailVO;
 import fr.inra.urgi.faidare.domain.data.study.StudySitemapVO;
+import fr.inra.urgi.faidare.domain.data.variable.ObservationVariableVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.data.DataSource;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.domain.xref.XRefDocumentSearchCriteria;
@@ -37,6 +40,7 @@ import fr.inra.urgi.faidare.web.site.SiteController;
 import fr.inra.urgi.faidare.web.thymeleaf.CoordinatesDialect;
 import fr.inra.urgi.faidare.web.thymeleaf.FaidareDialect;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -45,6 +49,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * MVC tests for {@link StudyController}
@@ -75,6 +80,9 @@ public class StudyControllerTest {
 
     @MockBean
     private LocationRepository mockLocationRepository;
+
+    @Autowired
+    private StudyController studyController;
 
     private StudyDetailVO study;
     private GermplasmVO germplasm;
@@ -146,6 +154,78 @@ public class StudyControllerTest {
         mockMvc.perform(get("/faidare/studies/sitemap-17.txt")
                             .contextPath("/faidare"))
                .andExpect(status().isNotFound());
+    }
+
+    @Nested
+    class Variables {
+        @Test
+        void shouldFilterVariablesByLanguageWhenRequestedLanguageIsFound() throws Exception {
+            ObservationVariableVO variableWithEnglishLanguage = Fixtures.createVariable();
+            variableWithEnglishLanguage.setLanguage("EN");
+
+            ObservationVariableVO variableWithFrenchLanguage = Fixtures.createVariable();
+            variableWithFrenchLanguage.setLanguage("FRA");
+
+            ObservationVariableVO variableWithNoLanguage = Fixtures.createVariable();
+            variableWithNoLanguage.setLanguage(null);
+
+            when(mockCropOntologyRepository.getVariableByIds(any())).thenReturn(
+                Arrays.asList(variableWithEnglishLanguage, variableWithFrenchLanguage, variableWithNoLanguage)
+            );
+
+            ModelAndView modelAndView = mockMvc.perform(get("/studies/{id}", study.getStudyDbId())
+                                                            .locale(Locale.FRENCH))
+                                               .andReturn()
+                                               .getModelAndView();
+            StudyModel model = (StudyModel) modelAndView.getModel().get("model");
+            assertThat(model.getVariables()).containsOnly(variableWithFrenchLanguage, variableWithNoLanguage);
+        }
+
+        @Test
+        void shouldFilterVariablesByLanguageWhenRequestedLanguageIsNotFound() throws Exception {
+            ObservationVariableVO variableWithEnglishLanguage = Fixtures.createVariable();
+            variableWithEnglishLanguage.setLanguage("EN");
+
+            ObservationVariableVO variableWithFrenchLanguage = Fixtures.createVariable();
+            variableWithFrenchLanguage.setLanguage("FRA");
+
+            ObservationVariableVO variableWithNoLanguage = Fixtures.createVariable();
+            variableWithNoLanguage.setLanguage(null);
+
+            when(mockCropOntologyRepository.getVariableByIds(any())).thenReturn(
+                Arrays.asList(variableWithEnglishLanguage, variableWithFrenchLanguage, variableWithNoLanguage)
+            );
+
+            ModelAndView modelAndView = mockMvc.perform(get("/studies/{id}", study.getStudyDbId())
+                                                            .locale(Locale.CHINA))
+                                               .andReturn()
+                                               .getModelAndView();
+            StudyModel model = (StudyModel) modelAndView.getModel().get("model");
+            assertThat(model.getVariables()).containsOnly(variableWithEnglishLanguage, variableWithNoLanguage);
+        }
+
+        @Test
+        void shouldFilterVariablesByLanguageWhenRequestedLanguageIsNotFoundAndEnglishAbsent() throws Exception {
+            ObservationVariableVO variableWithSpanishLanguage = Fixtures.createVariable();
+            variableWithSpanishLanguage.setLanguage("es");
+
+            ObservationVariableVO variableWithFrenchLanguage = Fixtures.createVariable();
+            variableWithFrenchLanguage.setLanguage("FRA");
+
+            ObservationVariableVO variableWithNoLanguage = Fixtures.createVariable();
+            variableWithNoLanguage.setLanguage(null);
+
+            when(mockCropOntologyRepository.getVariableByIds(any())).thenReturn(
+                Arrays.asList(variableWithSpanishLanguage, variableWithFrenchLanguage, variableWithNoLanguage)
+            );
+
+            ModelAndView modelAndView = mockMvc.perform(get("/studies/{id}", study.getStudyDbId())
+                                                            .locale(Locale.CHINA))
+                                               .andReturn()
+                                               .getModelAndView();
+            StudyModel model = (StudyModel) modelAndView.getModel().get("model");
+            assertThat(model.getVariables()).hasSize(2).contains(variableWithNoLanguage);
+        }
     }
 
     private void testSitemap(int index, String expectedContent) throws Exception {
