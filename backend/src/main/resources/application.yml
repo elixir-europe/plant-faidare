@@ -34,7 +34,7 @@ faidare:
     faidare_{documentType}_dev
 
   elasticsearch-xref-index-name:
-    urgi_xref_dev
+    faidare_xref_dev
 
   cropOntology-repository-url:
     https://urgi.versailles.inrae.fr/files/ephesis/trait-ontology/data_16.3/ontology-repository.json
