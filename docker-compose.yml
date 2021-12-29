@@ -5,6 +5,7 @@ services:
     container_name: elasticsearch-faidare
     environment:
       - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Dlog4j2.formatMsgNoLookups=true"
     ports:
       - 9200:9200
 
