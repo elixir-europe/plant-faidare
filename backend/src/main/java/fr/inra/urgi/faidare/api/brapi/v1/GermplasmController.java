@@ -1,5 +1,10 @@
 package fr.inra.urgi.faidare.api.brapi.v1;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+import java.util.List;
+import javax.validation.Valid;
+
 import fr.inra.urgi.faidare.api.NotFoundException;
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiGermplasm;
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiGermplasmAttributeValueList;
@@ -18,19 +23,19 @@ import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.domain.response.Pagination;
 import fr.inra.urgi.faidare.repository.es.GermplasmAttributeRepository;
 import fr.inra.urgi.faidare.service.es.GermplasmService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-@Api(tags = {"Breeding API"}, description = "BrAPI endpoint")
+@Tag(name = "Breeding API", description = "BrAPI endpoint")
 @RestController
 public class GermplasmController {
 
@@ -48,7 +53,7 @@ public class GermplasmController {
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Germplasm/GermplasmDetailsByGermplasmDbId.md
      */
-    @ApiOperation("Get germplasm by id")
+    @Operation(summary = "Get germplasm by id")
     @GetMapping("/brapi/v1/germplasm/{germplasmDbId}")
     public BrapiResponse<BrapiGermplasm> getGermplasm(@PathVariable String germplasmDbId) {
         LOGGER.debug("germplasmDbId = " + germplasmDbId);
@@ -59,7 +64,7 @@ public class GermplasmController {
         return ApiResponseFactory.createSingleObjectResponse(germplasm, null);
     }
 
-    @ApiOperation("List germplasm")
+    @Operation(summary = "List germplasm")
     @GetMapping("/brapi/v1/germplasm")
     public BrapiListResponse<? extends BrapiGermplasm> listGermplasm(
         @Valid PaginationCriteriaImpl paginationCriteria
@@ -73,7 +78,7 @@ public class GermplasmController {
     /**
      * @link https://brapi.docs.apiary.io/#reference/germplasm/germplasm/get-germplasm-mcpd-by-germplasmdbid
      */
-    @ApiOperation("Get germplasm mcpd by id")
+    @Operation(summary = "Get germplasm mcpd by id")
     @GetMapping("/brapi/v1/germplasm/{germplasmDbId}/mcpd")
     public BrapiResponse<GermplasmMcpdVO> getGermplasmMcpd(@PathVariable String germplasmDbId) {
         LOGGER.debug("germplasmDbId = " + germplasmDbId);
@@ -88,7 +93,7 @@ public class GermplasmController {
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Germplasm/GermplasmSearchGET.md
      */
-    @ApiOperation("Search germplasm")
+    @Operation(summary = "Search germplasm")
     @GetMapping(value = "/brapi/v1/germplasm-search")
     public BrapiListResponse<? extends BrapiGermplasm> searchGermplasm(
         @Valid GermplasmGETSearchCriteria criteria
@@ -99,7 +104,7 @@ public class GermplasmController {
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Germplasm/GermplasmSearchPOST.md
      */
-    @ApiOperation("Search germplasm")
+    @Operation(summary = "Search germplasm")
     @PostMapping(value = "/brapi/v1/germplasm-search", consumes = APPLICATION_JSON_VALUE)
     public BrapiListResponse<? extends BrapiGermplasm> searchGermplasm(
         @Valid @RequestBody(required = false) GermplasmPOSTSearchCriteria criteria
@@ -116,7 +121,7 @@ public class GermplasmController {
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/GermplasmAttributes/GermplasmAttributeValuesByGermplasmDbId.md
      */
-    @ApiOperation("List germplasm attributes")
+    @Operation(summary = "List germplasm attributes")
     @GetMapping("/brapi/v1/germplasm/{germplasmDbId}/attributes")
     public BrapiResponse<BrapiGermplasmAttributeValueList> listGermplasmAttributes(
         @PathVariable String germplasmDbId,
@@ -139,7 +144,7 @@ public class GermplasmController {
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/GermplasmAttributes/GermplasmAttributeValuesByGermplasmDbId.md
      */
-    @ApiOperation("Get germplasm pedigree")
+    @Operation(summary = "Get germplasm pedigree")
     @GetMapping("/brapi/v1/germplasm/{germplasmDbId}/pedigree")
     public BrapiResponse<BrapiPedigree> getPedigree(
         @PathVariable String germplasmDbId
@@ -151,7 +156,7 @@ public class GermplasmController {
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Germplasm/Germplasm_GermplasmDbId_Progeny_GET.yaml
      */
-    @ApiOperation("Get germplasm progeny")
+    @Operation(summary = "Get germplasm progeny")
     @GetMapping("/brapi/v1/germplasm/{germplasmDbId}/progeny")
     public BrapiResponse<BrapiProgeny> getProgeny(
         @PathVariable String germplasmDbId

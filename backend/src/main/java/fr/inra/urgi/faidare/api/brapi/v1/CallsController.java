@@ -1,31 +1,34 @@
 package fr.inra.urgi.faidare.api.brapi.v1;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiCall;
 import fr.inra.urgi.faidare.domain.brapi.v1.response.BrapiListResponse;
 import fr.inra.urgi.faidare.domain.criteria.base.PaginationCriteriaImpl;
 import fr.inra.urgi.faidare.domain.data.CallVO;
 import fr.inra.urgi.faidare.domain.response.ApiResponseFactory;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.webmvc.api.OpenApiWebMvcResource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.Documentation;
-import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.spring.web.plugins.Docket;
-
-import javax.validation.Valid;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author gcornut
  */
-@Api(tags = {"Breeding API"}, description = "BrAPI endpoint")
+@Tag(name = "Breeding API", description = "BrAPI endpoint")
 @RestController
 public class CallsController {
     private static final String BRAPI_PATH = "/brapi/v1/";
@@ -39,28 +42,28 @@ public class CallsController {
         "1.1",
         "1.2"
     );
+    private final OpenApiWebMvcResource openApiResource;
+    private final ObjectMapper objectMapper;
 
-    private List<BrapiCall> implementedCalls;
+    private AtomicReference<List<BrapiCall>> implementedCalls = new AtomicReference<>(null);
 
-    private final DocumentationCache documentationCache;
-
-    @Autowired
-    public CallsController(DocumentationCache documentationCache) {
-        this.documentationCache = documentationCache;
+    public CallsController(OpenApiWebMvcResource openApiResource, ObjectMapper objectMapper) {
+        this.openApiResource = openApiResource;
+        this.objectMapper = objectMapper;
     }
 
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Calls/Calls.md
      */
-    @ApiOperation("List implemented Breeding API calls")
+    @Operation(summary = "List implemented Breeding API calls")
     @GetMapping("/brapi/v1/calls")
-    public BrapiListResponse<BrapiCall> calls(@Valid PaginationCriteriaImpl criteria) {
-        if (implementedCalls == null) {
-            implementedCalls = swaggerToBrapiCalls();
+    public BrapiListResponse<BrapiCall> calls(@Valid PaginationCriteriaImpl criteria, HttpServletRequest request) throws JsonProcessingException {
+        if (implementedCalls.get() == null) {
+            implementedCalls.set(swaggerToBrapiCalls(request));
         }
 
         return ApiResponseFactory.createSubListResponse(
-            criteria.getPageSize(), criteria.getPage(), implementedCalls
+            criteria.getPageSize(), criteria.getPage(), implementedCalls.get()
         );
     }
 
@@ -70,39 +73,25 @@ public class CallsController {
      * This must be done after swagger has time to generate the API
      * documentation and thus can't be done in this class constructor
      */
-    private List<BrapiCall> swaggerToBrapiCalls() {
-        Documentation apiDocumentation = this.documentationCache.documentationByGroup(Docket.DEFAULT_GROUP_NAME);
+    @SuppressWarnings("unchecked")
+    private List<BrapiCall> swaggerToBrapiCalls(HttpServletRequest request) throws JsonProcessingException {
+        String json = openApiResource.openapiJson(request, "/v3/api-docs", Locale.ENGLISH);
 
-        // Get all endpoints
-        return apiDocumentation.getApiListings().values().stream()
-            .flatMap(endpointListing -> endpointListing.getApis().stream())
-            // Only with BrAPI path
-            .filter(endpointDescription -> endpointDescription.getPath().startsWith(BRAPI_PATH))
-            // Group by endpoint path (ex: /brapi/v1/phenotype => [GET, POST, ...])
-            .collect(Collectors.groupingBy(ApiDescription::getPath))
-            .entrySet().stream()
-            // Convert to BrAPI call
-            .map(endpointGroup -> {
-                String path = endpointGroup.getKey();
-                List<ApiDescription> endpoints = endpointGroup.getValue();
+        Map<String, Object> map = objectMapper.readValue(json,
+                                                         new TypeReference<Map<String, Object>>() {});
 
-                // BrAPI call path should not include the base BrAPI path
+        Map<String, Object> pathMap = (Map<String, Object>) map.get("paths");
+        return pathMap.entrySet().stream()
+            .filter(entry -> entry.getKey().startsWith(BRAPI_PATH))
+            .map(entry -> {
+                String path = entry.getKey();
+                Map<String, Object> methodMap = (Map<String, Object>) entry.getValue();
+                Set<String> methods = methodMap.keySet().stream().map(String::toUpperCase).collect(Collectors.toSet());
                 CallVO call = new CallVO(path.replace(BRAPI_PATH, ""));
-
-                // List every endpoint for current path
-                Set<String> methods = endpoints.stream()
-                    // List all operations for each endpoint
-                    .flatMap(endpointDescription -> endpointDescription.getOperations().stream())
-                    // List all methods
-                    .map(operation -> operation.getMethod().toString())
-                    .collect(Collectors.toSet());
                 call.setMethods(methods);
-
                 return call;
             })
-            // Sort by call name
             .sorted(Comparator.comparing(CallVO::getCall))
             .collect(Collectors.toList());
     }
-
 }

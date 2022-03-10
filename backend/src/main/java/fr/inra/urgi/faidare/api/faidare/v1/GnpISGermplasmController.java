@@ -1,5 +1,12 @@
 package fr.inra.urgi.faidare.api.faidare.v1;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+import java.io.File;
+import java.util.Collections;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import com.google.common.base.Strings;
 import fr.inra.urgi.faidare.api.BadRequestException;
 import fr.inra.urgi.faidare.api.NotFoundException;
@@ -11,22 +18,20 @@ import fr.inra.urgi.faidare.domain.data.germplasm.GermplasmVO;
 import fr.inra.urgi.faidare.domain.datadiscovery.response.GermplasmSearchResponse;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.service.es.GermplasmService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.File;
-import java.util.Collections;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-@Api(tags = {"FAIDARE API"}, description = "Extended FAIDARE API")
+@Tag(name = "FAIDARE API", description = "Extended FAIDARE API")
 @RestController
 @RequestMapping(value = "/faidare/v1/germplasm")
 public class GnpISGermplasmController {
@@ -39,7 +44,7 @@ public class GnpISGermplasmController {
         this.germplasmService = germplasmService;
     }
 
-    @ApiOperation(value = "Search germplasm by ID or PUI")
+    @Operation(summary = "Search germplasm by ID or PUI")
     @GetMapping
     public GermplasmVO get(
         @RequestParam(required = false) String id,
@@ -147,7 +152,7 @@ public class GnpISGermplasmController {
         return null;
     }
 
-    @ApiOperation("Search list of germplasm")
+    @Operation(summary = "Search list of germplasm")
     @PostMapping(value = "/search", consumes = APPLICATION_JSON_VALUE)
     public GermplasmSearchResponse germplasmSearch(@RequestBody @Valid FaidareGermplasmPOSTShearchCriteria criteria) {
         try {

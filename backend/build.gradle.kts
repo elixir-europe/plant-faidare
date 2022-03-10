@@ -10,11 +10,11 @@ buildscript {
 plugins {
     java
     jacoco
-    id("org.springframework.boot") version "2.5.4"
-    id("com.gorylenko.gradle-git-properties") version "2.3.1"
+    id("org.springframework.boot") version "2.6.4"
+    id("com.gorylenko.gradle-git-properties") version "2.4.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.sonarqube")
-    id("org.owasp.dependencycheck") version "6.0.3"
+    id("org.owasp.dependencycheck") version "7.0.0"
 }
 
 java {
@@ -91,7 +91,7 @@ tasks {
     }
 }
 
-extra["springCloudVersion"] = "2020.0.3"
+extra["springCloudVersion"] = "2021.0.1"
 dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
@@ -110,19 +110,17 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
     // Elasticsearch
-    implementation("org.elasticsearch:elasticsearch:7.13.2")
-    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.13.2")
+    implementation("org.elasticsearch:elasticsearch")
+    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client")
 
     // Swagger
-    implementation("io.swagger:swagger-annotations:1.5.21")
-    implementation("io.springfox:springfox-swagger2:2.9.2")
-    implementation("io.springfox:springfox-swagger-ui:2.9.2")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
 
     // Others
-    implementation("com.google.guava:guava:27.0.1-jre")
-    implementation("com.opencsv:opencsv:4.4")
+    implementation("com.google.guava:guava:31.1-jre")
+    implementation("com.opencsv:opencsv:5.6")
 
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jsoup:jsoup:1.14.2")
+    testImplementation("org.jsoup:jsoup:1.14.3")
 }

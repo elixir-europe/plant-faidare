@@ -1,5 +1,7 @@
 package fr.inra.urgi.faidare.api.brapi.v1;
 
+import javax.validation.Valid;
+
 import fr.inra.urgi.faidare.api.NotFoundException;
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiLocation;
 import fr.inra.urgi.faidare.domain.brapi.v1.response.BrapiListResponse;
@@ -8,19 +10,17 @@ import fr.inra.urgi.faidare.domain.criteria.LocationCriteria;
 import fr.inra.urgi.faidare.domain.response.ApiResponseFactory;
 import fr.inra.urgi.faidare.domain.response.PaginatedList;
 import fr.inra.urgi.faidare.repository.es.LocationRepository;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 /**
  * @author gcornut
  */
-@Api(tags = {"Breeding API"}, description = "BrAPI endpoint")
+@Tag(name = "Breeding API", description = "BrAPI endpoint")
 @RestController
 public class LocationController {
 
@@ -34,7 +34,7 @@ public class LocationController {
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Locations/LocationDetails.md
      */
-    @ApiOperation("Get location")
+    @Operation(summary = "Get location")
     @GetMapping("/brapi/v1/locations/{locationDbId}")
     public BrapiResponse<BrapiLocation> getLocation(@PathVariable String locationDbId) {
         BrapiLocation location = repository.getById(locationDbId);
@@ -47,7 +47,7 @@ public class LocationController {
     /**
      * @link https://github.com/plantbreeding/API/blob/master/Specification/Locations/ListLocations.md
      */
-    @ApiOperation("List locations")
+    @Operation(summary = "List locations")
     @GetMapping("/brapi/v1/locations")
     public BrapiListResponse<? extends BrapiLocation> listLocations(
         @Valid LocationCriteria criteria
