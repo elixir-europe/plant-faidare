@@ -2,7 +2,7 @@
 
 <html
   xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main}, script=~{::script})}"
+  th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main}, script=~{})}"
 >
   <head>
     <title>Error</title>
@@ -17,5 +17,6 @@
         Unexpected error: <span th:text="${error}">.</span>
       </p>
     </main>
+    <script th:inline="javascript"></script>
   </body>
 </html>
