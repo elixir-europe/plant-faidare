@@ -13,6 +13,6 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI springShopOpenAPI() {
-        return new OpenAPI().info(new Info().title("FaiDARE API"));
+        return new OpenAPI().info(new Info().title("FAIDARE and BrAPI APIs"));
     }
 }

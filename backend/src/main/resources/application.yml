@@ -108,6 +108,9 @@ server:
 springdoc:
   packagesToScan: fr.inra.urgi.faidare.api
   pathsToMatch: /faidare/**, /brapi/**
+  swagger-ui:
+    operationsSorter: alpha
+    tagsSorter: alpha
 
 ---
 spring:
