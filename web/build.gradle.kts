@@ -3,13 +3,13 @@ import com.github.gradle.node.yarn.task.YarnTask
 
 plugins {
     base
-    id("com.github.node-gradle.node") version "3.0.1"
+    id("com.github.node-gradle.node") version "3.2.1"
 }
 
 node {
-    version.set("14.17.0")
+    version.set("14.18.3")
     npmVersion.set("6.14.10")
-    yarnVersion.set("1.22.10")
+    yarnVersion.set("1.22.17")
     download.set(true)
 }
 
