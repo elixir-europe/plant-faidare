@@ -1,0 +1,26 @@
+version: 2.1 # use CircleCI 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.2.4
+jobs: # a collection of steps
+  build: # runs not using Workflows must have a `build` job as entry point
+
+    working_directory: ~/faidare # directory where steps will run
+
+    docker: # run the steps with Docker
+      - image: cimg/openjdk:11.0-browsers # ...with this image as the primary container; this is where all `steps` will run
+      - image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+        name: elasticsearch
+        environment:
+          transport.host: localhost
+          network.host: elasticsearch
+          http.port: 9200
+          cluster.name: es-cluster
+          discovery.type: single-node
+          xpack.security.enabled: false
+          ES_JAVA_OPTS: -Xms750m -Xmx750m
+
+    steps: # a collection of executable commands
+      - browser-tools/install-chrome
+      # check out source code to working directory
+      - checkout
+      - run: ./gradlew check build
