@@ -57,8 +57,8 @@
 * Look at the [README.md](README.md) for installation and execution instructions.
 * Recommanded IDE is [Intellij IDEA](https://www.jetbrains.com/idea/)
 * Use linting to apply code standards within the team:
-  * Use `ng lint` (for frontend code only)
-  * Use [Checkstyle](https://checkstyle.org/) and [PMD](https://pmd.github.io/) (**TODO**: implement) for backend (+frontend?) code
+  * Use `yarn format` (for `web` code only)
+  * Use [Checkstyle](https://checkstyle.org/) and [PMD](https://pmd.github.io/) (**TODO**: implement) for backend code
 * All runtime variables should be externalized from the code in order to facilitate the CI management (database host/port, application name, public URL, JSON location...) and the adoption by partners
 * Configure [Yelp's detect-secrets](https://github.com/Yelp/detect-secrets) pre-commit hook to track any high entropy strings, which could possibly be leaked secrets.
   * Run: `pip3 install pre-commit detect-secrets --user && pre-commit install` to configure you dev environment.

@@ -1,5 +1,5 @@
 # FAIDARE: FAIR Data-finder for Agronomic Research
-This application provides web services (based on the BrAPI standard) and a web interface with easy to use filters to facilitates the access to plant datasets from a federation of sources.
+This application provides web services (based on the BrAPI standard) and a web interface with easy to use filters to facilitate the access to plant datasets from a federation of sources.
 
 [[_TOC_]]
 
@@ -15,8 +15,8 @@ Installation via `nvm` is recommended for easier control of installed version:
 https://github.com/creationix/nvm
 
 ```sh
-nvm install 10.13.0
-nvm use v10.13.0
+nvm install 16.14.0
+nvm use v16.14.0
 ```
 
 - Install JS dependencies
@@ -106,7 +106,7 @@ docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasti
 
 Remove the `--help` parameter to run the loading with default params.
 
-If you are depending of commited changes in indexing scripts under a specific branch (the docker image should have been automatically created by the CI), you need to change the tag of the docker image according to the branch name (ie. for branch `epic/merge-faidare-dd`, use tag `epic-merge-faidare-dd`, see `CI_COMMIT_REF_SLUG` [Gitlab predefined variable](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html#predefined-variables-reference)), as following:
+If you depend on committed changes in indexing scripts under a specific branch (the docker image should have been automatically created by the CI), you need to change the tag of the docker image according to the branch name (ie. for branch `epic/merge-faidare-dd`, use tag `epic-merge-faidare-dd`, see `CI_COMMIT_REF_SLUG` [Gitlab predefined variable](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html#predefined-variables-reference)), as following:
 
 ```sh
 docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:epic-merge-faidare-dd` -jsonDir /opt/data/ --help

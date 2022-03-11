@@ -182,7 +182,6 @@ restart-config-server-openstack:
     changes:
       - .gitlab-ci.yml
       - backend/src/**/*
-      - frontend/**/*
   allow_failure: false
 
 deploy-to-beta:
