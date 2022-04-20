@@ -182,7 +182,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
     # Check indexed data
     echo -e "* Check data indexed from ${DATA_DIR} into ${INDEX_NAME}..."
     	# skip some documents because they contain nested objects that distort the count
-    	if [[ "${DOCUMENT_TYPE}" != "germplasmAttribute" && "${DOCUMENT_TYPE}" != "trial" ]]; then
+    	if [[ "${DOCUMENT_TYPE}" != "germplasmAttribute" && "${DOCUMENT_TYPE}" != "trial" && "${DOCUMENT_TYPE}" != "xref" ]]; then
     		COUNT_EXTRACTED_DOCS=0
     		for FILE in $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.json.gz"); do
     			COUNT_FILE_DOCS=$(zcat ${FILE} | grep -o "\"@id\"" | wc -l)
