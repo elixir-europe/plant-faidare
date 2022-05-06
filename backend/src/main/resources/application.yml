@@ -1,12 +1,12 @@
 spring:
   config:
     import: 'optional:configserver:'
-    name: faidare
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher
   cloud:
     config:
+      name: faidare-cards
       uri: ${SPRING_CONFIG_URI:http://localhost:8888}
 
 data:
