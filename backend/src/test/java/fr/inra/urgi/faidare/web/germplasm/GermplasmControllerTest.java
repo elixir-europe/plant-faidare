@@ -110,6 +110,29 @@ public class GermplasmControllerTest {
     }
 
     @Test
+    void shouldDisplayGermplasmWithNullCollector() throws Exception {
+        germplasm.setCollector(null);
+
+        mockMvc.perform(get("/germplasms/{id}", germplasm.getGermplasmDbId()))
+               .andExpect(status().isOk())
+               .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+               .andExpect(htmlContent().hasTitle("Germplasm: BLE BARBU DU ROUSSILLON"))
+               .andExpect(htmlContent().containsH2s("Identification",
+                                                    "Depositary",
+                                                    "Collector",
+                                                    "Breeder",
+                                                    "Donors",
+                                                    "Distributors",
+                                                    "Evaluation Data",
+                                                    "Genealogy",
+                                                    "Population",
+                                                    "Collection",
+                                                    "Panel",
+                                                    "Cross references"))
+               .andExpect(htmlContent().endsCorrectly());
+    }
+
+    @Test
     void shouldDisplayGermplasmWithIdAsParameter() throws Exception {
         mockMvc.perform(get("/germplasms").param("id", germplasm.getGermplasmDbId()))
                .andExpect(status().isOk())

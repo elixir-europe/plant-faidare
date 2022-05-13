@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main}, script=~{})}"
+>
+  <head>
+    <title>Error</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+
+  <body>
+    <main>
+      <h1 class="display-1" th:text="${status}">404</h1>
+      <p class="lead">Unexpected error: <span th:text="${error}">.</span></p>
+    </main>
+  </body>
+</html>
