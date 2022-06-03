@@ -36,8 +36,9 @@ public class XRefDocumentVO {
     private String url;
 
     @JsonProperty("species")
-    private String species;
+    private List<String> species;
 
+    //@JsonProperty("linkedResourcesID")
     private List<String> linkedResourcesID;
 
     public String getGroupId() {
@@ -96,11 +97,11 @@ public class XRefDocumentVO {
         this.url = url;
     }
 
-    public String getSpecies() {
+    public List<String> getSpecies() {
         return species;
     }
 
-    public void setSpecies(String species) {
+    public void setSpecies(List<String> species) {
         this.species = species;
     }
 
