@@ -12,7 +12,7 @@ public class ContactVO implements BrapiContact {
     private String name;
     private String email;
     private String type;
-    private String institutionName;
+    private String instituteName;
     private String orcid;
 
     @Override
@@ -36,8 +36,8 @@ public class ContactVO implements BrapiContact {
     }
 
     @Override
-    public String getInstitutionName() {
-        return institutionName;
+    public String getInstituteName() {
+        return instituteName;
     }
 
     @Override
@@ -61,8 +61,8 @@ public class ContactVO implements BrapiContact {
         this.type = type;
     }
 
-    public void setInstitutionName(String institutionName) {
-        this.institutionName = institutionName;
+    public void setInstituteName(String instituteName) {
+        this.instituteName = instituteName;
     }
 
     public void setOrcid(String orcid) {

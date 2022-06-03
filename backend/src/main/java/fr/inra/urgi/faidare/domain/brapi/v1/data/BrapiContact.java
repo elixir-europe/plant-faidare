@@ -25,7 +25,7 @@ public interface BrapiContact extends Serializable {
     String getType();
 
     @JsonView(JSONView.BrapiFields.class)
-    String getInstitutionName();
+    String getInstituteName();
 
     @JsonView(JSONView.BrapiFields.class)
     String getOrcid();

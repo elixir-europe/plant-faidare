@@ -111,7 +111,7 @@ public class Fixtures {
         contact.setType("Pro");
         contact.setName("John Doe");
         contact.setEmail("john@doe.com");
-        contact.setInstitutionName("UCLA");
+        contact.setInstituteName("UCLA");
         return contact;
     }
 
