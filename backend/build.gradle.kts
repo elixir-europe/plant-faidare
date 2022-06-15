@@ -51,7 +51,7 @@ tasks {
         // replace the script.js and style.css file names referenced in main.html
         // by their actual name, containing the content hash
         filesMatching("**/layout/main.html") {
-            val webAssetsDir = project(":web").file("build/dist/assets/");
+            val webAssetsDir = project(":web").file("build/dist/resources/");
             val scriptFileName = webAssetsDir.list().first { it.startsWith("script") && it.endsWith(".js") }
             val styleFileName = webAssetsDir.list().first { it.startsWith("style") && it.endsWith(".css") }
 

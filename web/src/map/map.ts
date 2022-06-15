@@ -27,7 +27,7 @@ function markerColor(location: MapLocation) {
 }
 
 function markerIconUrl(contextPath: string, location: MapLocation) {
-    return `${contextPath}/assets/images/marker-icon-${markerColor(location)}.png`;
+    return `${contextPath}/resources/images/marker-icon-${markerColor(location)}.png`;
 }
 
 export function initializeMap(options: MapOptions) {

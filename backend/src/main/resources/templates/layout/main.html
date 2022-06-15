@@ -10,11 +10,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
 
-    <link th:href="@{/assets/style.css}" rel="stylesheet" />
+    <link th:href="@{/resources/style.css}" rel="stylesheet" />
 
     <link
       rel="shortcut icon"
-      th:href="@{/assets/images/favicon.ico}"
+      th:href="@{/resources/images/favicon.ico}"
       type="image/x-icon"
     />
   </head>
@@ -26,7 +26,7 @@
           class="navbar-brand py-0"
           href="https://urgi.versailles.inrae.fr/faidare"
         >
-          <img th:src="@{/assets/images/logo.png}" style="height: 40px" />
+          <img th:src="@{/resources/images/logo.png}" style="height: 40px" />
         </a>
         <button
           class="navbar-toggler"
@@ -86,7 +86,7 @@
         <p>Layout content</p>
       </div>
     </div>
-    <script type="text/javascript" th:src="@{/assets/script.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/script.js}"></script>
     <script type="text/javascript" th:replace="${script}"></script>
   </body>
 </html>

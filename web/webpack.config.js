@@ -58,8 +58,8 @@ module.exports = (env, argv) => ({
         extensions: ['.ts', '.js'],
     },
     output: {
-        // the output is stored in build/dist/assets
-        path: path.resolve(__dirname, 'build/dist/assets'),
+        // the output is stored in build/dist/resources
+        path: path.resolve(__dirname, 'build/dist/resources'),
         filename: argv.mode === 'production' ? '[name].[contenthash].js' : '[name].js'
     },
     optimization: {
