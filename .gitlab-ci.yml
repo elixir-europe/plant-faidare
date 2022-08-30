@@ -18,8 +18,8 @@ image: registry.forgemia.inra.fr/urgi-is/docker-rare/docker-browsers:latest
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
-  APP_NAME: faidare
-  JAR_PATH: "backend/build/libs/${APP_NAME}.jar"
+  SERVICE_NAME: faidare-cards
+  JAR_PATH: "backend/build/libs/faidare.jar"
   GIT_DEPTH: 0
   IMAGE_TAG: $CI_COMMIT_REF_SLUG
   ELASTIC_VERSION: "7.13.2"
@@ -34,33 +34,31 @@ cache:
 # PRE-BUILD
 
 build-loader-docker-image:
- image: registry.forgemia.inra.fr/urgi-is/docker-rare/docker-git:latest
- stage: pre-build
- services:
-  - docker:20.10.6-dind
- script:
-  # build the image
-  - docker build -t registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:${IMAGE_TAG} .
-  - docker build -t registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest .
-  # Login before pushing the image
-  - docker login registry.forgemia.inra.fr -u $CONTAINER_REGISTRY_USERNAME -p $CONTAINER_REGISTRY_TOKEN
-  # push the built image
-  - docker push registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:${IMAGE_TAG}
-  # only push latest tag on master branch
-  - if [ "master" == "${CI_COMMIT_REF_SLUG}" ] ; then docker push registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest ; fi;
- only:
-  changes:
-   - Dockerfile
-   - scripts/*
-   - backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/*_mapping.json
-   - backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json
-   - .gitlab-ci.yml
- allow_failure: true
-
+  image: registry.forgemia.inra.fr/urgi-is/docker-rare/docker-git:latest
+  stage: pre-build
+  services:
+    - docker:20.10.6-dind
+  script:
+    # build the image
+    - docker build -t registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:${IMAGE_TAG} .
+    - docker build -t registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest .
+    # Login before pushing the image
+    - docker login registry.forgemia.inra.fr -u $CONTAINER_REGISTRY_USERNAME -p $CONTAINER_REGISTRY_TOKEN
+    # push the built image
+    - docker push registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:${IMAGE_TAG}
+    # only push latest tag on master branch
+    - if [ "${CI_DEFAULT_BRANCH}" == "${CI_COMMIT_REF_SLUG}" ] ; then docker push registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest ; fi;
+  rules:
+    - changes:
+      - Dockerfile
+      - scripts/*
+      - backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/*_mapping.json
+      - backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json
+      - .gitlab-ci.yml
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  allow_failure: true
 
 # TESTS
-
-
 test-and-sonarqube:
   stage: test
   tags:
@@ -84,6 +82,7 @@ test-and-sonarqube:
     GRADLE_OPTS: "-Dorg.gradle.daemon=true"
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    ES_JAVA_OPTS: "-Xms2g -Xmx2g"
   cache:
     key: "${CI_COMMIT_REF_NAME}"
     policy: pull-push
@@ -95,28 +94,16 @@ test-and-sonarqube:
     # disable sonarqube because it apparently needs node, but I don't know why, and it can't find it anymore now that
     # there is no frontend project anymore, and it takes sooooo much time to complete anyway for results that nobody
     # will ever look
-    # - find /tmp/node/*/bin -name node -exec ln -s {} /tmp/node/node \;
-    # - export PATH="/tmp/node/:$PATH"
-    # - ./gradlew -s sonarqube -x test --parallel
+    - ./gradlew -s sonarqube -x test --parallel
   artifacts:
     reports:
       junit:
         - ./backend/build/test-results/test/TEST-*.xml
-  only:
-    refs:
-      - merge_requests
-
-
-test-and-sonarqube-master:
-  extends: test-and-sonarqube
-  only:
-    refs:
-      - master
-
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  interruptible: true
 
 # BUILD
-
-
 build:
   tags:
     - openstack
@@ -132,9 +119,18 @@ build:
     paths:
       - "$JAR_PATH"
     expire_in: 1 week
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  interruptible: true
 
-
-.restart-config-server: &restart_config_server
+restart-config-server-openstack:
+  tags:
+    - openstack
+  variables:
+    SERVER_IP: ${SERVER_IP_OPENSTACK_DEV}
+    SERVER_USER: ${SERVER_USER_OPENSTACK}
   stage: build
   script:
     - eval $(ssh-agent -s)
@@ -143,28 +139,17 @@ build:
     - ssh ${SERVER_USER}@${SERVER_IP} "sudo systemctl restart bootapp@config-server"
     - eval $(ssh-agent -k)
   allow_failure: true
-
-restart-config-server-proxmox:
-  variables:
-    SERVER_IP: ${SERVER_IP_PROXMOX}
-    SERVER_USER: ${SERVER_USER_PROXMOX}
-  <<: *restart_config_server
-
-restart-config-server-openstack:
-  tags:
-    - openstack
-  variables:
-    SERVER_IP: ${SERVER_IP_OPENSTACK_DEV}
-    SERVER_USER: ${SERVER_USER_OPENSTACK}
-  <<: *restart_config_server
-
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 # DEPLOY
-
-
-.deploy-to-vm: &deploy_to_vm
+.deploy-to-vm:
   # Hidden job which serves as template for executed jobs below.
   # See https://docs.gitlab.com/ee/ci/yaml/#anchors
+  tags:
+   - openstack
   retry: 2
   script:
     ## SSH initialization
@@ -172,21 +157,19 @@ restart-config-server-openstack:
     - ssh-add <(echo "${SSH_PRIVATE_KEY}")
     - ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} 'echo "Successfully connected on $(hostname)"'
     # Copy jar
-    - scp ./backend/build/libs/${APP_NAME}.jar ${SERVER_USER}@${SERVER_IP}:/tmp/${APP_NAME}-${ENV}.jar
-    - ssh ${SERVER_USER}@${SERVER_IP} "sudo mv /tmp/${APP_NAME}-${ENV}.jar /opt/bootapp/${APP_NAME}-${ENV}.jar ; sudo chown -R bootapp:bootapp /opt/bootapp/"
-    # Restarting service with the updated jar and the according Spring profiles enabled
-    - ssh ${SERVER_USER}@${SERVER_IP} "sudo systemctl restart bootapp@${APP_NAME}-${ENV}"
+    - scp ${JAR_PATH} ${SERVER_USER}@${SERVER_IP}:/tmp/${SERVICE_NAME}-${ENV}.jar
+    - ssh ${SERVER_USER}@${SERVER_IP} "sudo mv /tmp/${SERVICE_NAME}-${ENV}.jar /opt/bootapp/ ; sudo chown -R bootapp:bootapp /opt/bootapp/ ; sudo systemctl restart bootapp@${SERVICE_NAME}-${ENV}"
     - eval $(ssh-agent -k)
     - echo "Deploy done. Application should be available at http://${SERVER_IP}:${APP_PORT}/${CONTEXT_PATH}"
-  only:
-    changes:
+  rules:
+    - changes:
       - .gitlab-ci.yml
       - backend/src/**/*
   allow_failure: false
+  interruptible: false
+  needs: ["build"]
 
 deploy-to-beta:
-  tags:
-   - openstack
   stage: deploy-beta
   extends: .deploy-to-vm
   variables:
@@ -194,78 +177,69 @@ deploy-to-beta:
     SERVER_IP: ${SERVER_IP_OPENSTACK_DEV}
     APP_PORT: ${BETA_FAIDARE_PORT}
     ENV: beta
-    CONTEXT_PATH: faidare-beta
-  except:
-    refs:
-      - master
-  only:
-    refs:
-      - branches
-  when: always
+    CONTEXT_PATH: faidare
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: always
 
-deploy-to-staging:
-  tags:
-   - openstack
+deploy-to-staging-public:
   stage: deploy-staging
   extends: .deploy-to-vm
   variables:
     SERVER_USER: ${SERVER_USER_OPENSTACK}
     SERVER_IP: ${SERVER_IP_OPENSTACK_DEV}
-    APP_PORT: ${STAGING_FAIDARE_PORT}
-    ENV: staging
-    CONTEXT_PATH: faidare-staging
-  only:
-    refs:
-      - branches
-  except:
-    refs:
-      - master
-  when: manual
+    APP_PORT: ${STAGING_PUBLIC_FAIDARE_PORT}
+    ENV: staging-public
+    CONTEXT_PATH: faidare
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
 
-deploy-to-int:
-  tags:
-   - proxmox
-  stage: deploy-production
+deploy-to-staging-private:
+  stage: deploy-staging
   extends: .deploy-to-vm
   variables:
-    SERVER_USER: ${SERVER_USER_PROXMOX}
-    SERVER_IP: ${SERVER_IP_PROXMOX}
-    APP_PORT: ${INT_FAIDARE_PORT}
-    ENV: int
-    CONTEXT_PATH: faidare-int
-  only:
-    refs:
-      - master
-  when: manual
+    SERVER_USER: ${SERVER_USER_OPENSTACK}
+    SERVER_IP: ${SERVER_IP_OPENSTACK_DEV}
+    APP_PORT: ${STAGING_PRIVATE_FAIDARE_PORT}
+    ENV: staging-private
+    CONTEXT_PATH: faidare-private
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
 
 deploy-to-prod-public:
-  tags:
-   - proxmox
   stage: deploy-production
   extends: .deploy-to-vm
   variables:
-    SERVER_USER: ${SERVER_USER_PROXMOX}
-    SERVER_IP: ${SERVER_IP_PROXMOX}
+    SERVER_USER: ${SERVER_USER_OPENSTACK}
+    SERVER_IP: ${SERVER_IP_OPENSTACK_PROD}
     APP_PORT: ${PROD_PUBLIC_FAIDARE_PORT}
     ENV: prod-public
     CONTEXT_PATH: faidare
-  only:
-    refs:
-      - master
-  when: manual
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
 
 deploy-to-prod-private:
-  tags:
-   - proxmox
   stage: deploy-production
   extends: .deploy-to-vm
   variables:
-    SERVER_USER: ${SERVER_USER_PROXMOX}
-    SERVER_IP: ${SERVER_IP_PROXMOX}
+    SERVER_USER: ${SERVER_USER_OPENSTACK}
+    SERVER_IP: ${SERVER_IP_OPENSTACK_PROD}
     APP_PORT: ${PROD_PRIVATE_FAIDARE_PORT}
     ENV: prod-private
     CONTEXT_PATH: faidare-private
-  only:
-    refs:
-      - master
-  when: manual
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
