@@ -241,6 +241,42 @@ public class Fixtures {
         return germplasm;
     }
 
+    public static GermplasmVO createGermplasmMinimal() {
+        GermplasmVO germplasm = new GermplasmVO();
+
+        germplasm.setGermplasmDbId("germplasm-mini1");
+        germplasm.setGermplasmName("BLE BARBU DU ROUSSILLON mini");
+        germplasm.setAccessionNumber("1408-mini");
+
+        InstituteVO holdingGenBank = new InstituteVO();
+        holdingGenBank.setLogo("https://urgi.versailles.inra.fr/files/siregal/images/grc/inra_brc_en.png");
+        holdingGenBank.setInstituteName("INRA BRC");
+        holdingGenBank.setWebSite("http://google.fr");
+        germplasm.setHoldingGenbank(holdingGenBank);
+
+        germplasm.setBiologicalStatusOfAccessionCode("Traditional cultivar/landrace ");
+
+
+        germplasm.setGenus("Genus 1");
+        germplasm.setSpecies("Species 1");
+        germplasm.setTaxonIds(Arrays.asList(createTaxonId(), createTaxonId()));
+
+        InstituteVO holdingInstitute = new InstituteVO();
+        holdingInstitute.setInstituteName("GDEC - UMR Génétique, Diversité et Ecophysiologie des Céréales");
+        holdingInstitute.setInstituteCode("GDEC");
+        holdingInstitute.setInstituteType("Type1");
+        holdingInstitute.setAcronym("G.D.E.C");
+        holdingInstitute.setOrganisation("SAS");
+        germplasm.setHoldingInstitute(holdingInstitute);
+
+        germplasm.setPresenceStatus("Maintained");
+
+        germplasm.setGermplasmPUI("germplasmPUI mini");
+
+        return germplasm;
+    }
+
+
     private static DonorVO createDonor() {
         DonorVO result = new DonorVO();
         result.setDonorGermplasmPUI("PUI1");

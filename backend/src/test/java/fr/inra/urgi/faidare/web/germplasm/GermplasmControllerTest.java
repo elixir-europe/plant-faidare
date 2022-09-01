@@ -253,7 +253,8 @@ public class GermplasmControllerTest {
     void shouldExportPlantMaterials() throws Exception {
         List<GermplasmVO> germplasms = Arrays.asList(
             Fixtures.createGermplasm(),
-            Fixtures.createGermplasm()
+            Fixtures.createGermplasm(),
+            Fixtures.createGermplasmMinimal()
         );
 
         GermplasmExportCommand command = new GermplasmExportCommand(
@@ -277,7 +278,8 @@ public class GermplasmControllerTest {
                     .andExpect(content().contentType("text/csv"))
                     .andExpect(content().string("\"DOI\";\"Accession number\";\"Accession name\"\n" +
                                                     "\"germplasmPUI\";\"1408\";\"BLE BARBU DU ROUSSILLON\"\n" +
-                                                    "\"germplasmPUI\";\"1408\";\"BLE BARBU DU ROUSSILLON\"\n"));
+                                                    "\"germplasmPUI\";\"1408\";\"BLE BARBU DU ROUSSILLON\"\n" +
+                                                    "\"germplasmPUI mini\";\"1408-mini\";\"BLE BARBU DU ROUSSILLON mini\"\n"));
     }
 
     private void testSitemap(int index, String expectedContent) throws Exception {

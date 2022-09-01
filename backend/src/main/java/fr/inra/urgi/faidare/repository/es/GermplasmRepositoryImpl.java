@@ -134,6 +134,7 @@ public class GermplasmRepositoryImpl implements GermplasmRepository {
 
     @Override
     public GermplasmVO getById(String germplasmDbId) {
+        //TODO getting byid is not reliable, should move to get by germplasmDbId
         return getByIdRepository.getById(germplasmDbId);
     }
 

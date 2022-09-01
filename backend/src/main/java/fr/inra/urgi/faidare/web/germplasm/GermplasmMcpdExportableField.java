@@ -44,9 +44,6 @@ public enum GermplasmMcpdExportableField {
     DONORNAME,
     DONORNUMB,
     OTHERNUMB,
-    DUPLSITE,
-    DUPLINSTNAME,
-    STORAGE,
     MLSSTAT,
     REMARKS
 }

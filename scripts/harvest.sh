@@ -185,7 +185,7 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
     	if [[ "${DOCUMENT_TYPE}" != "germplasmAttribute" && "${DOCUMENT_TYPE}" != "trial" && "${DOCUMENT_TYPE}" != "xref" ]]; then
     		COUNT_EXTRACTED_DOCS=0
     		for FILE in $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.json.gz"); do
-    			COUNT_FILE_DOCS=$(zcat ${FILE} | grep -o "\"@id\"" | wc -l)
+    			COUNT_FILE_DOCS=$(gunzip -c ${FILE} | grep -o "\"@id\"" | wc -l)
     			COUNT_EXTRACTED_DOCS=$((COUNT_EXTRACTED_DOCS+COUNT_FILE_DOCS))
     		done
     		curl -s -XGET "${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_refresh" >/dev/null

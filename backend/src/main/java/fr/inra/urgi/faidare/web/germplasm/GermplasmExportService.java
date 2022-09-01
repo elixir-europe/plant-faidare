@@ -41,10 +41,10 @@ public class GermplasmExportService {
         map.put(HOLDING_INSTITUTION, new GermplasmExportableFieldDescriptor("Holding institution", vo -> vo.getInstituteName()));
         map.put(LOT_NAME, new GermplasmExportableFieldDescriptor("Lot name", vo -> null));
         map.put(LOT_SYNONYM, new GermplasmExportableFieldDescriptor("Lot synonym", vo -> null));
-        map.put(COLLECTION_NAME, new GermplasmExportableFieldDescriptor("Collection name", vo -> vo.getCollection().stream().map(
+        map.put(COLLECTION_NAME, new GermplasmExportableFieldDescriptor("Collection name", vo -> (vo.getCollection() == null ) ? null : vo.getCollection().stream().map(
             CollPopVO::getName).collect(Collectors.joining(", "))));
         map.put(COLLECTION_TYPE, new GermplasmExportableFieldDescriptor("Collection type", vo -> null));
-        map.put(PANEL_NAME, new GermplasmExportableFieldDescriptor("Panel name", vo -> vo.getPanel().stream().map(CollPopVO::getName).collect(
+        map.put(PANEL_NAME, new GermplasmExportableFieldDescriptor("Panel name", vo -> (vo.getPanel() == null)? null : vo.getPanel().stream().map(CollPopVO::getName).collect(
             Collectors.joining(", "))));
         map.put(PANEL_SIZE, new GermplasmExportableFieldDescriptor("Panel size", vo -> null));
 
