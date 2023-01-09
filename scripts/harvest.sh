@@ -249,6 +249,18 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 		check_acknowledgment "${LOG}" "create aliase"
 	done
 
+	if [ "$ENV" == "prod" ]; then
+		echo ; echo "Update replica setting: ${INDEX_PATTERN}-*"
+		LOG=$(curl -s -X PUT "${ES_HOST}:${ES_PORT}/${INDEX_PATTERN}-*/_settings?pretty" -H 'Content-Type: application/json' -d"
+			{
+				\"index\" : {
+					\"number_of_replicas\" : 1
+				}
+			}
+		")
+		check_acknowledgment "${LOG}" "updating replicas setting for pattern ${INDEX_PATTERN}-*"
+	fi
+
 	# Delete all but last created indices (thanks to the timestamp suffix)
 	echo -e "* Delete old indices ${INDEX_PATTERN} (to avoid accumulation over time):"
 	OLD_INDICES=$(curl -sf -XGET "${ES_HOST}:${ES_PORT}/_cat/indices/${INDEX_PATTERN}*?h=index" | sort | head -n -1)
