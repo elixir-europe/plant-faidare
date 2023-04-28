@@ -190,11 +190,11 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
     		done
     		curl -s -XGET "${ES_HOST}:${ES_PORT}/${INDEX_NAME}/_refresh" >/dev/null
     		COUNT_INDEXED_DOCS=$(curl -s -XGET "${ES_HOST}:${ES_PORT}/_cat/indices/${INDEX_NAME}?h=docs.count")
-    	fi
-    	if [ "$COUNT_INDEXED_DOCS" != "$COUNT_EXTRACTED_DOCS" ]; then
-    		echo -e "${RED}ERROR: a problem occurred when indexing data from ${DATA_DIR} on FAIDARE ${ENV}.${NC}"
-    		echo -e "${ORANGE}Expected ${COUNT_EXTRACTED_DOCS} documents but got ${COUNT_INDEXED_DOCS} indexed documents.${NC}"
-    		exit 1;
+            if [ "$COUNT_INDEXED_DOCS" != "$COUNT_EXTRACTED_DOCS" ]; then
+                echo -e "${RED}ERROR: a problem occurred when indexing data from ${DATA_DIR} on FAIDARE ${ENV}.${NC}"
+                echo -e "${ORANGE}Expected ${COUNT_EXTRACTED_DOCS} documents but got ${COUNT_INDEXED_DOCS} indexed documents.${NC}"
+                exit 1;
+            fi
     	fi
     	sleep 5
 
