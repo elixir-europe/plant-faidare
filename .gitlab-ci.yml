@@ -79,7 +79,7 @@ test-and-sonarqube:
       # `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
       command: ["bin/elasticsearch", "-Ediscovery.type=single-node"]
   variables:
-    GRADLE_OPTS: "-Dorg.gradle.daemon=true"
+    GRADLE_OPTS: "-Xms512m -Xmx8192m -XX:MaxMetaspaceSize=8192m -Dorg.gradle.daemon=false"
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
     ES_JAVA_OPTS: "-Xms2g -Xmx2g"
@@ -90,11 +90,7 @@ test-and-sonarqube:
       - ".gradle"
       - .sonar/cache
   script:
-    - ./gradlew test jacocoTestReport --parallel
-    # disable sonarqube because it apparently needs node, but I don't know why, and it can't find it anymore now that
-    # there is no frontend project anymore, and it takes sooooo much time to complete anyway for results that nobody
-    # will ever look
-    - ./gradlew -s sonarqube -x test --parallel
+    - ./gradlew test jacocoTestReport -s sonarqube
   artifacts:
     reports:
       junit:
