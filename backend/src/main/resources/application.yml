@@ -90,6 +90,12 @@ faidare:
     url: https://terraref.org
     name: TERRA-REF
     image: https://urgi.versailles.inrae.fr/files/faidare/logo/TERRAREF.png
+  # DDBJ
+  - uri: https://ddbj.nig.ac.jp
+    url: https://ddbj.nig.ac.jp
+    name: DDBJ
+    image: https://www.ddbj.nig.ac.jp/../images/logotype.svg
+
 
 server:
   compression:

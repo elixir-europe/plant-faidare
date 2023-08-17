@@ -159,11 +159,22 @@ for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
 	check_acknowledgment "${LOG}" "create template"
 
 	# Index JSON Bulk
-	INDEX_NAME="${INDEX_PATTERN}-d"$(date +%s)
+	TIMESTAMP=$(date +%s)
+	export TIMESTAMP
+	INDEX_NAME="${INDEX_PATTERN}-d"${TIMESTAMP}
 	echo -e "* Index documents into ${ES_HOST}:${ES_PORT}/${INDEX_NAME} indice..."
 	{
 		parallel -j 4 --bar index_resources {1} {1/.} ::: "$(find "${DATA_DIR}" -name "${DOCUMENT_TYPE}-*.json.gz")"
 	}
+
+	log_actions() {
+		if [ -n "$LOGIN" ]; then
+			echo "Indexed $INDEX_PATTERN on: $(date -d @$TIMESTAMP +%Y-%m-%d_%Hh-%Mm-%Ss) (TIMESTAMP=$TIMESTAMP) by: $LOGIN ; used data from $DATA_DIR which last commit was: $(cd "$DATA_DIR" || exit 1 ; git log --oneline|head -1)" >> ~/last_index.log
+		else
+			echo "WARN: no LOGIN variable found. Logging actions is not possible. If you are not launching the scripts from the ETL VM, you can safely ignore this message."
+		fi
+	}
+log_actions
 
 	# check all JQ err files...
     FILES_IN_ERROR=$(find "${OUTDIR}" -size "+0" -name "*${DOCUMENT_TYPE}*jq.err")

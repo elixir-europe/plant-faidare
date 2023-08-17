@@ -8,7 +8,7 @@ stages:
   - deploy-production
 
 
-image: registry.forgemia.inra.fr/urgi-is/docker-rare/docker-browsers:latest
+image: circleci/openjdk:11-jdk-browsers
 
 
 # Disable the Gradle daemon for Continuous Integration servers as correctness
@@ -26,10 +26,10 @@ variables:
   DOCKER_OPTS: "--mtu=1450"
 
 # Gradle cache for all jobs
-cache:
-  key: "$CI_COMMIT_REF_NAME"
-  paths:
-    - ".gradle"
+# cache:
+#   key: "$CI_COMMIT_REF_NAME"
+#   paths:
+#     - ".gradle"
 
 # PRE-BUILD
 
@@ -60,6 +60,7 @@ build-loader-docker-image:
 
 # TESTS
 test-and-sonarqube:
+  # image: circleci/openjdk:11-jdk-browsers
   stage: test
   tags:
     - openstack
@@ -79,18 +80,20 @@ test-and-sonarqube:
       # `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
       command: ["bin/elasticsearch", "-Ediscovery.type=single-node"]
   variables:
-    GRADLE_OPTS: "-Xms512m -Xmx8192m -XX:MaxMetaspaceSize=8192m -Dorg.gradle.daemon=false"
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    # GRADLE_OPTS: "-Xms512m -Xmx8192m -XX:MaxMetaspaceSize=8192m -Dorg.gradle.daemon=false"
+    # SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    # GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
     ES_JAVA_OPTS: "-Xms2g -Xmx2g"
-  cache:
-    key: "${CI_COMMIT_REF_NAME}"
-    policy: pull-push
-    paths:
-      - ".gradle"
-      - .sonar/cache
+  # cache:
+  #   key: "${CI_COMMIT_REF_NAME}"
+  #   policy: pull-push
+  #   paths:
+  #     # - ".gradle"
+  #     - .sonar/cache
   script:
-    - ./gradlew test jacocoTestReport -s sonarqube
+    # - ls -lshR /builds/urgi-is/faidare/.gradle/wrapper/dists/gradle-7.4.1-bin/58kw26xllvsiedyf3nujyarhn
+    - ./gradlew clean test 
+    # jacocoTestReport -s sonarqube
   artifacts:
     reports:
       junit:
@@ -98,6 +101,7 @@ test-and-sonarqube:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   interruptible: true
+  allow_failure: false
 
 # BUILD
 build:
@@ -106,11 +110,11 @@ build:
   stage: build
   script:
     - ./gradlew assemble
-  cache:
-    key: "${CI_COMMIT_REF_NAME}"
-    policy: pull
-    paths:
-      - ".gradle"
+  # cache:
+  #   key: "${CI_COMMIT_REF_NAME}"
+  #   policy: pull
+  #   paths:
+  #     - ".gradle"
   artifacts:
     paths:
       - "$JAR_PATH"
