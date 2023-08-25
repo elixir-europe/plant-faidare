@@ -2,6 +2,7 @@ package fr.inra.urgi.faidare.domain.response;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import fr.inra.urgi.faidare.api.brapi.v1.exception.BrapiPaginationException;
 import fr.inra.urgi.faidare.domain.JSONView;
 import fr.inra.urgi.faidare.domain.brapi.v1.response.BrapiListResponse;
@@ -26,10 +27,10 @@ class ApiResponseTest {
 
     @BeforeAll
     static void beforeClass() {
-        objectMapper = new ObjectMapper();
-
-        // Making sure we always serialize json fields in the same order for test purpose
-        objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        objectMapper = JsonMapper.builder()
+            // Making sure we always serialize json fields in the same order for test purpose
+            .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+            .build();
 
         status1 = ApiResponseFactory.createStatus("status1", "code1");
         status2 = ApiResponseFactory.createStatus("status2", "code2");

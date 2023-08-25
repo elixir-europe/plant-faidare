@@ -8,6 +8,8 @@ spring:
     config:
       name: faidare-cards
       uri: ${SPRING_CONFIG_URI:http://localhost:8888}
+  messages:
+    fallback-to-system-locale: false
 
 data:
   elasticsearch:

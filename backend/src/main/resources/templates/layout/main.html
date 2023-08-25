@@ -20,13 +20,13 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light py-0">
       <div class="container">
         <a
-          class="navbar-brand py-0"
+          class="navbar-brand d-flex align-items-center p-2"
           href="https://urgi.versailles.inrae.fr/faidare"
         >
-          <img th:src="@{/resources/images/logo.png}" style="height: 40px" />
+          <img th:src="@{/resources/images/logo.png}" style="height: 56px" />
         </a>
         <button
           class="navbar-toggler"
@@ -44,9 +44,9 @@
             <th:block th:each="topEntry : ${#faidare.navbarEntries}">
               <li class="nav-item" th:if="${#lists.isEmpty(topEntry.subMenu)}">
                 <a
-                  class="nav-link"
+                  class="nav-link d-flex align-items-center"
                   th:href="${topEntry.url}"
-                  th:text="${topEntry.label}"
+                  th:text="#{${topEntry.labelKey}}"
                 ></a>
               </li>
               <li
@@ -54,24 +54,24 @@
                 th:if="${not #lists.isEmpty(topEntry.subMenu)}"
               >
                 <a
-                  class="nav-link dropdown-toggle"
-                  th:id="${'navbar-dropdown-' + topEntry.label}"
+                  class="nav-link dropdown-toggle d-flex align-items-center"
+                  th:id="${'navbar-dropdown-' + topEntry.labelKey}"
                   href="#"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
-                  th:text="${topEntry.label}"
+                  th:text="#{${topEntry.labelKey}}"
                 >
                 </a>
                 <ul
-                  class="dropdown-menu bg-light"
-                  th:aria-labelledby="${'navbar-dropdown-' + topEntry.label}"
+                  class="dropdown-menu"
+                  th:aria-labelledby="${'navbar-dropdown-' + topEntry.labelKey}"
                 >
-                  <li th:each="subEntry : ${topEntry.subMenu}" class="bg-light">
+                  <li th:each="subEntry : ${topEntry.subMenu}">
                     <a
                       class="dropdown-item"
                       th:href="${subEntry.url}"
-                      th:text="${subEntry.label}"
+                      th:text="#{${subEntry.labelKey}}"
                     ></a>
                   </li>
                 </ul>

@@ -3,6 +3,7 @@ package fr.inra.urgi.faidare.domain.brapi.v1;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiAdditionalInfo;
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiTrial;
 import fr.inra.urgi.faidare.domain.brapi.v1.data.BrapiTrialStudy;
@@ -42,12 +43,12 @@ class BrapiMappingTest {
 
     @BeforeAll
     static void beforeClass() {
-        mapper = new ObjectMapper();
-
-        // Making sure we always serialize json fields in the same order for
-        // test purpose
-        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        mapper = JsonMapper.builder()
+            // Making sure we always serialize json fields in the same order for
+            // test purpose
+            .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+            .serializationInclusion(JsonInclude.Include.NON_NULL)
+            .build();
 
         additionalInfoExample = "{" +
             "  \"prop2\":[\"value2\",\"value3\"]," +

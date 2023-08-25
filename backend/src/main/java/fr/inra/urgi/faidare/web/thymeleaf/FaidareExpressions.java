@@ -41,18 +41,17 @@ public class FaidareExpressions {
 
     private static List<NavbarEntry> createNavbarEntries() {
         return Arrays.asList(
-            NavbarEntry.menu("URGI", Arrays.asList(
-                NavbarEntry.link("Home", "https://urgi.versailles.inrae.fr"),
-                NavbarEntry.link("News", "https://urgi.versailles.inrae.fr/About-us/News"),
-                NavbarEntry.link("About us", "https://urgi.versailles.inrae.fr/About-us")
+            NavbarEntry.menu("navbar.urgi", Arrays.asList(
+                NavbarEntry.link("navbar.urgi.home", "https://urgi.versailles.inrae.fr"),
+                NavbarEntry.link("navbar.urgi.news", "https://urgi.versailles.inrae.fr/About-us/News"),
+                NavbarEntry.link("navbar.urgi.about-us", "https://urgi.versailles.inrae.fr/About-us")
             )),
-            NavbarEntry.menu("More...", Arrays.asList(
-                NavbarEntry.link("About", "https://urgi.versailles.inrae.fr/faidare/about"),
-                NavbarEntry.link("Join us", "https://urgi.versailles.inrae.fr/faidare/join"),
-                NavbarEntry.link("Terms of use", "https://urgi.versailles.inrae.fr/faidare/legal"),
-                NavbarEntry.link("Help", "https://urgi.versailles.inrae.fr/faidare/help"),
-                NavbarEntry.link("News/Perspectives", "https://urgi.versailles.inrae.fr/faidare/news")
-            ))
+            NavbarEntry.link("navbar.about", "https://urgi.versailles.inrae.fr/faidare/about"),
+            NavbarEntry.link("navbar.join-us", "https://urgi.versailles.inrae.fr/faidare/join"),
+            NavbarEntry.link("navbar.terms-of-use", "https://urgi.versailles.inrae.fr/faidare/legal"),
+            NavbarEntry.link("navbar.help", "https://urgi.versailles.inrae.fr/faidare/help"),
+            NavbarEntry.link("navbar.news-perspectives", "https://urgi.versailles.inrae.fr/faidare/news"),
+            NavbarEntry.link("navbar.web-services", "https://urgi.versailles.inrae.fr/faidare/swagger-ui/index.html")
         );
     }
 

@@ -12,6 +12,54 @@ $table-group-separator-color: $table-border-color;
 @import '~leaflet.markercluster/dist/MarkerCluster.css';
 @import '~leaflet.markercluster/dist/MarkerCluster.Default.css';
 
+$theme-navbar-height: 4rem;
+$theme-navbar-color: $black;
+$theme-navbar-bg-color: #eaeaea;
+$theme-navbar-hover-color: $white;
+$theme-navbar-hover-bg-color: #c2c2c2;
+
+.navbar {
+  background-color: $theme-navbar-bg-color;
+  margin-bottom: 10px;
+}
+
+.navbar-toggler {
+  color: $theme-navbar-color;
+  border-color: $theme-navbar-color;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+}
+
+.navbar .navbar-nav .nav-link,
+.navbar .navbar-brand {
+  color: $theme-navbar-color !important;
+  height: $theme-navbar-height;
+  &:hover {
+    color: $theme-navbar-hover-color !important;
+    background-color: $theme-navbar-hover-bg-color;
+  }
+}
+
+.dropdown-menu {
+  background-color: $theme-navbar-bg-color;
+}
+
+.dropdown-item {
+  color: $theme-navbar-color !important;
+  background-color: $theme-navbar-bg-color;
+
+  &:hover {
+    color: $theme-navbar-hover-color !important;
+    background-color: $theme-navbar-hover-bg-color;
+  }
+}
+
+.dropdown-item.active {
+  .text-body-secondary {
+    color: $white !important;
+  }
+}
+
 a[role='button'] {
   color: $link-color !important;
 }

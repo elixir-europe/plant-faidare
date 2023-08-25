@@ -8,26 +8,26 @@ import java.util.List;
  * @author JB Nizet
  */
 public final class NavbarEntry {
-    private final String label;
+    private final String labelKey;
     private final String url;
     private final List<NavbarEntry> subMenu;
 
-    private NavbarEntry(String label, String url, List<NavbarEntry> subMenu) {
-        this.label = label;
+    private NavbarEntry(String labelKey, String url, List<NavbarEntry> subMenu) {
+        this.labelKey = labelKey;
         this.url = url;
         this.subMenu = subMenu;
     }
 
-    public static NavbarEntry link(String label, String url) {
-        return new NavbarEntry(label, url, Collections.emptyList());
+    public static NavbarEntry link(String labelKey, String url) {
+        return new NavbarEntry(labelKey, url, Collections.emptyList());
     }
 
-    public static NavbarEntry menu(String label, List<NavbarEntry> subMenu) {
-        return new NavbarEntry(label, null, subMenu);
+    public static NavbarEntry menu(String labelKey, List<NavbarEntry> subMenu) {
+        return new NavbarEntry(labelKey, null, subMenu);
     }
 
-    public String getLabel() {
-        return label;
+    public String getLabelKey() {
+        return labelKey;
     }
 
     public String getUrl() {
