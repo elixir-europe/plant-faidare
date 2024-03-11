@@ -30,6 +30,7 @@ public class GermplasmVO
     private String defaultDisplayName;
     private String accessionNumber;
     private String germplasmName;
+    private String germplasmPUI;
     private String pedigree;
     private String seedSource;
     private List<String> synonyms;
@@ -169,11 +170,11 @@ public class GermplasmVO
 
     @Override
     public String getGermplasmPUI() {
-        return uri;
+        return germplasmPUI;
     }
 
     public void setGermplasmPUI(String germplasmPUI) {
-        this.uri = germplasmPUI;
+        this.germplasmPUI = germplasmPUI;
     }
 
     @Override
