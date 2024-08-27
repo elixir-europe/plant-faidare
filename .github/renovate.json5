@@ -1,9 +1,8 @@
 {
   "extends": [
-    "config:base"
-  ],
-  "enabledManagers": [
-    "npm"
+    "config:recommended",
+    "group:allNonMajor",
+    "schedule:weekly"
   ],
   // target chore/next branch
   "baseBranches": [
@@ -44,22 +43,6 @@
           "major"
       ],
       "enabled": false
-    },
-    // group all minor dependencies, once a week
-    {
-      "matchDepPatterns": [
-        "*"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "matchCurrentVersion": ">=1",
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch",
-      "schedule": [
-        "after 1am on Thursday"
-      ]
     }
   ]
 }
