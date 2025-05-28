@@ -31,14 +31,15 @@ logging:
     org.springframework:
       boot.web.embedded.tomcat.TomcatWebServer: INFO
       web.client.RestTemplate: DEBUG
-    fr.inra: DEBUG
+    fr.inrae: DEBUG
 
 faidare:
-  elasticsearch-indexing-template:
-    faidare_{documentType}_dev
 
+  env: ${ENV:dev}
+  elasticsearch-indexing-template:
+    faidare_{documentType}_${faidare.env}
   elasticsearch-xref-index-name:
-    faidare_xref_dev
+    faidare_xref_${faidare.env}
 
   cropOntology-repository-url:
     https://urgi.versailles.inrae.fr/files/ephesis/trait-ontology/data_16.3/ontology-repository.json
@@ -49,7 +50,6 @@ faidare:
 
   search-url: https://urgi.versailles.inrae.fr/faidare/search
 
-  # TODO: Update URIs to match URL (update in generated JSON document too)
   # Warning! URIs should match with FAIDARE datadiscovery 'schema:includedInDataCatalog' field value
   data-sources:
   # URGI GnpIS
@@ -98,6 +98,11 @@ faidare:
     name: DDBJ
     image: https://www.ddbj.nig.ac.jp/../images/logotype.svg
 
+  # PHIS
+  - uri: http://www.phis.inrae.fr/
+    url: http://www.phis.inrae.fr/
+    name: PHIS
+    image: https://github.com/OpenSILEX/opensilex/blob/16964775778c2ec2c2880d329c25d50074add40c/opensilex-phis/front/theme/phis/images/logo-phis-lg.png
 
 server:
   compression:
@@ -114,11 +119,13 @@ server:
     context-path: /faidare-dev
 
 springdoc:
-  packagesToScan: fr.inra.urgi.faidare.api
-  pathsToMatch: /faidare/**, /brapi/**
+  packagesToScan: fr.inrae.urgi.faidare.api
+  pathsToMatch: /brapi/**
   swagger-ui:
     operationsSorter: alpha
     tagsSorter: alpha
+    path: /swagger-ui.html
+    doc-expansion: none
 
 ---
 spring:

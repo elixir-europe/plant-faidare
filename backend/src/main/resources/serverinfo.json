@@ -1,0 +1,92 @@
+{
+  "@context": [
+    "https://brapi.org/jsonld/context/metadata.jsonld"
+  ],
+  "metadata": {
+    "datafiles": [],
+    "pagination": {
+      "currentPage": 0,
+      "pageSize": 1000,
+      "totalCount": 10,
+      "totalPages": 1
+    },
+    "status": [
+      {
+        "message": "Request accepted, response successful",
+        "messageType": "INFO"
+      }
+    ]
+  },
+  "result": {
+    "calls": [
+      {
+        "contentTypes": [
+          "application/json"
+        ],
+        "dataTypes": [
+          "application/json"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "service": "germplasm/{germplasmDbId}",
+        "versions": [
+          "2.0",
+          "2.1"
+        ]
+      },{
+        "contentTypes": [
+          "application/json"
+        ],
+        "dataTypes": [
+          "application/json"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "service": "collection",
+        "versions": [
+          "2.0",
+          "2.1"
+        ]
+      },{
+        "contentTypes": [
+          "application/json"
+        ],
+        "dataTypes": [
+          "application/json"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "service": "germplasm",
+        "versions": [
+          "2.0",
+          "2.1"
+        ]
+      },{
+        "contentTypes": [
+          "application/json"
+        ],
+        "dataTypes": [
+          "application/json"
+        ],
+        "methods": [
+          "POST"
+        ],
+        "service": "search/germplasm",
+        "versions": [
+          "2.0",
+          "2.1"
+        ]
+      }
+    ],
+    "contactEmail": "contact@institute.org",
+    "documentationURL": "institute.org/server",
+    "location": "FRA",
+    "organizationName": "INRAE",
+    "organizationURL": "institute.org/home",
+    "serverDescription": "FAIDARE Server",
+    "serverName": "FAIDARE Server"
+  }
+}

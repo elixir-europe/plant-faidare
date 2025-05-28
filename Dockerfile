@@ -5,10 +5,10 @@ COPY scripts/harvest.sh /opt/scripts/
 COPY scripts/to_bulk.jq /opt/scripts/
 
 # COPY dao settings
-COPY backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json /opt/backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json
+COPY backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/settings.json /opt/backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/settings.json
 
 # COPY dao mappings
-COPY backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/*_mapping.json /opt/backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/
+COPY backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/*_mapping.json /opt/backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/
 
 RUN apk add --update --no-cache bash curl jq parallel wget grep gzip sed date coreutils
 

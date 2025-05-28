@@ -8,7 +8,7 @@ stages:
   - deploy-production
 
 
-image: circleci/openjdk:11-jdk-browsers
+image: eclipse-temurin:17-jdk
 
 
 # Disable the Gradle daemon for Continuous Integration servers as correctness
@@ -22,7 +22,7 @@ variables:
   JAR_PATH: "backend/build/libs/faidare.jar"
   GIT_DEPTH: 0
   IMAGE_TAG: $CI_COMMIT_REF_SLUG
-  ELASTIC_VERSION: "7.13.2"
+  ELASTIC_VERSION: "7.17.6"
   DOCKER_OPTS: "--mtu=1450"
 
 # Gradle cache for all jobs
@@ -52,11 +52,13 @@ build-loader-docker-image:
     - changes:
       - Dockerfile
       - scripts/*
-      - backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/*_mapping.json
-      - backend/src/test/resources/fr/inra/urgi/faidare/repository/es/setup/index/settings.json
+      - backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/*_mapping.json
+      - backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/settings.json
       - .gitlab-ci.yml
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-  allow_failure: true
+#  allow_failure: true
+  tags:
+    - openstack
 
 # TESTS
 test-and-sonarqube:
@@ -78,21 +80,36 @@ test-and-sonarqube:
       # so there will be no bootstrap checks that would fail on CI
       # especially the error regarding
       # `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
-      command: ["bin/elasticsearch", "-Ediscovery.type=single-node"]
+      command: [ "bin/elasticsearch", "-Ediscovery.type=single-node" ]
+
   variables:
     # GRADLE_OPTS: "-Xms512m -Xmx8192m -XX:MaxMetaspaceSize=8192m -Dorg.gradle.daemon=false"
     # SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     # GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
     ES_JAVA_OPTS: "-Xms2g -Xmx2g"
-  # cache:
-  #   key: "${CI_COMMIT_REF_NAME}"
-  #   policy: pull-push
-  #   paths:
-  #     # - ".gradle"
-  #     - .sonar/cache
+    ES_HOST: "elasticsearch"  # Set the Elasticsearch host
+    ES_PORT: "9200"  # Set the Elasticsearch port
+    JSON_DIR: "./data/test/"  # Directory containing JSON files for bulk loading
   script:
+    - apt-get update && apt-get install -y parallel jq
+    # Wait for Elasticsearch to be ready to receive requests
+    - echo "Waiting for Elasticsearch to start..."
+    #- until curl -s "http://${ES_HOST}:${ES_PORT}"| grep "You Know, for Search" > /dev/null; do sleep 1; done  # Polling until Elasticsearch is available
+    - until curl -s "http://${ES_HOST}:${ES_PORT}/_cluster/health?wait_for_status=green&timeout=60s"; do sleep 1; done
+    - curl -X GET "http://${ES_HOST}:${ES_PORT}/_cat/shards?v"
+    - echo "Elasticsearch is up and running."  # Confirmation message when Elasticsearch is ready
+    - echo "Listing JSON directory contents:"
+    - ls -la "${JSON_DIR}"  # List files in the JSON directory
+    - echo "${JSON_DIR}"
+    # Launch the data loading script
+    - ./scripts/harvest.sh -jsonDir "${JSON_DIR}" -es_host "${ES_HOST}" -es_port "${ES_PORT}" -env "dev" -type "all" </dev/null # Execute the script to load data into Elasticsearch
+    - curl -X GET "http://${ES_HOST}:${ES_PORT}/_cat/indices?v"
+    - curl -X GET "http://${ES_HOST}:${ES_PORT}/_aliases"
+    - echo "Trying to access Elasticsearch logs..."
+    - curl -s "http://${ES_HOST}:${ES_PORT}/_cluster/health?pretty"
+    # Launch tests
     # - ls -lshR /builds/urgi-is/faidare/.gradle/wrapper/dists/gradle-7.4.1-bin/58kw26xllvsiedyf3nujyarhn
-    - ./gradlew clean test 
+    - ./gradlew clean test
     # jacocoTestReport -s sonarqube
   artifacts:
     reports:
@@ -133,6 +150,7 @@ restart-config-server-openstack:
     SERVER_USER: ${SERVER_USER_OPENSTACK}
   stage: build
   script:
+    - apt-get update && apt-get install -y openssh-client
     - eval $(ssh-agent -s)
     - ssh-add <(echo "${SSH_PRIVATE_KEY}")
     - ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} 'echo "Successfully connected on $(hostname)"'
@@ -152,6 +170,7 @@ restart-config-server-openstack:
    - openstack
   retry: 2
   script:
+    - apt-get update && apt-get install -y openssh-client
     ## SSH initialization
     - eval $(ssh-agent -s)
     - ssh-add <(echo "${SSH_PRIVATE_KEY}")

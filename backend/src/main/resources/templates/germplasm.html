@@ -17,14 +17,6 @@
         <h1 class="flex-grow-1">
           Germplasm: <th:block th:text="${model.germplasm.germplasmName}" />
         </h1>
-        <div
-          th:if="${model.germplasm.holdingGenbank != null && model.germplasm.holdingGenbank.logo != null}"
-        >
-          <img
-            th:src="${model.germplasm.holdingGenbank.logo}"
-            th:alt="${model.germplasm.holdingGenbank.instituteName}"
-          />
-        </div>
       </div>
 
       <div th:replace="fragments/map::map"></div>
@@ -107,7 +99,7 @@
               </div>
 
               <div
-                th:replace="fragments/source::source(source=${model.source}, url=${model.germplasm.url}, entityType='germplasm')"
+                th:replace="fragments/source::source(source=${model.source}, url=${model.germplasm.documentationURL}, entityType='germplasm')"
               ></div>
 
               <th:block th:unless="${#lists.isEmpty(model.germplasm.synonyms)}">
@@ -117,8 +109,11 @@
                   <div
                     id="accession-synonyms"
                     class="content-overflow"
-                    th:text="${#strings.listJoin(model.germplasm.synonyms, ', ')}"
-                  ></div>
+                  >
+                    <th:block th:each="syn, synStat : ${model.germplasm.synonyms}">
+                      <span th:text="${syn.synonym}"></span><span th:if="${!synStat.last}">, </span>
+                    </th:block>
+                  </div>
                 </div>
               </th:block>
 
@@ -252,7 +247,7 @@
               </th:block>
 
               <div
-                th:replace="fragments/row::text-row(label='Biological status', text=${model.germplasm.biologicalStatusOfAccessionCode})"
+                th:replace="fragments/row::text-row(label='Biological status', text=${model.germplasm.biologicalStatusOfAccessionDescription})"
               ></div>
               <div
                 th:replace="fragments/row::text-row(label='Genetic nature', text=${model.germplasm.geneticNature})"
@@ -387,10 +382,6 @@
                 ></a>
               </div>
             </th:block>
-
-            <div
-              th:replace="fragments/row::text-row(label='Accession number', text=${model.germplasm.collector.accessionNumber})"
-            ></div>
           </th:block>
         </div>
       </div>
@@ -424,10 +415,7 @@
           </th:block>
 
           <div
-            th:replace="fragments/row::text-row(label='Accession creation year', text=${model.germplasm.breeder.accessionCreationDate})"
-          ></div>
-          <div
-            th:replace="fragments/row::text-row(label='Accession number', text=${model.germplasm.breeder.accessionNumber})"
+            th:replace="fragments/row::text-row(label='Breeding creation year', text=${model.germplasm.breeder.breedingCreationYear})"
           ></div>
           <div
             th:replace="fragments/row::text-row(label='Catalog registration year', text=${model.germplasm.breeder.registrationYear})"
@@ -475,7 +463,7 @@
                       th:text="${row.donorInstitute.instituteName}"
                     ></a>
                   </td>
-                  <td th:text="${row.donorInstituteCode}"></td>
+                  <td th:text="${row.donorInstitute.instituteCode}"></td>
                   <td th:text="${row.donationDate}"></td>
                   <td th:text="${row.donorAccessionNumber}"></td>
                   <td th:text="${row.donorGermplasmPUI}"></td>
@@ -737,7 +725,7 @@
     <script th:inline="javascript">
       faidare.initializePopovers();
       faidare.initializeMap({
-        contextPath: [[${#request.getContextPath()}]],
+        contextPath: [[${contextPath}]],
         locations: [[${model.mapLocations}]]
       });
     </script>

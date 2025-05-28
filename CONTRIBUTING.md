@@ -68,6 +68,11 @@
       * `detect-secrets scan --update .secrets.baseline` to update the secret baseline, then
       * `detect-secrets audit .secrets.baseline` to tag it as a false positive if relevant.
 
+### Run backend tests
+After loading test data into your local Elasticsearch instance, you can run the following command to run backend tests:
+
+`./gradlew test jacocoTestReport -s sonarqube`
+
 ## Testing recommendations
 
 Behaviour driven development (upon [TDD](https://dannorth.net/2012/05/31/bdd-is-like-tdd-if/)) is recommended for all new developments.

@@ -10,15 +10,13 @@ buildscript {
 plugins {
     java
     jacoco
-    id("org.springframework.boot") version "2.7.4"
+    id("org.springframework.boot") version "3.1.5"
+    id("io.spring.dependency-management") version "1.1.3"
     id("com.gorylenko.gradle-git-properties") version "2.4.1"
-    id("io.spring.dependency-management") version "1.0.14.RELEASE"
-    id("org.sonarqube")
-    id("org.owasp.dependencycheck") version "7.2.1"
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -40,7 +38,7 @@ tasks {
     // makes the test task out of date, which makes the build much longer.
     // See https://github.com/spring-projects/spring-boot/issues/13152
     val buildInfo by registering(BuildInfo::class) {
-        destinationDir = file("$buildDir/buildInfo")
+        destinationDir.set(file(project.layout.buildDirectory.dir("buildInfo")))
     }
 
     bootJar {
@@ -91,7 +89,7 @@ tasks {
     }
 }
 
-extra["springCloudVersion"] = "2021.0.4"
+extra["springCloudVersion"] = "2022.0.4"
 dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
@@ -99,15 +97,6 @@ dependencyManagement {
 }
 
 dependencies {
-    constraints {
-        implementation("org.apache.logging.log4j:log4j-core") {
-            version {
-                strictly("[2.17, 3[")
-                prefer("2.17.0")
-            }
-            because("CVE-2021-44228, CVE-2021-45046, CVE-2021-45105: Log4j vulnerable to remote code execution and other critical security vulnerabilities")
-        }
-    }
     // Spring
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
@@ -115,15 +104,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 
-    // Elasticsearch
-    implementation("org.elasticsearch:elasticsearch")
-    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
 
-    // Swagger
-    implementation("org.springdoc:springdoc-openapi-ui:1.6.11")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
     // Others
     implementation("com.google.guava:guava:31.1-jre")
