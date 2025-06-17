@@ -11,6 +11,7 @@ import fr.inrae.urgi.faidare.dao.v1.GermplasmV1Dao;
 import fr.inrae.urgi.faidare.dao.v2.CollectionV2Dao;
 import fr.inrae.urgi.faidare.domain.CollPopVO;
 import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmV1VO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-//@Tag(name = "Breeding API", description = "BrAPI endpoint")
+@Tag(name = "Breeding API V1", description = "Deprecated version, use latest as much as possible")
 @RestController
 @RequestMapping({"/brapi/v1"})
 public class GermplasmV1Controller {

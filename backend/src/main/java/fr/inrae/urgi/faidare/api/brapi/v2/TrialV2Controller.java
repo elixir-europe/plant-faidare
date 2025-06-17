@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name= "Breeding API", description = "BrAPI endpoint")
+@Tag(name = "Breeding API latest version (V2)", description = "BrAPI full specifications : https://brapi.org/specification")
 @RestController
 @RequestMapping({"/brapi/v2"})
 public class TrialV2Controller {

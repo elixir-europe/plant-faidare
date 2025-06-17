@@ -41,6 +41,29 @@ public class BrapiListResponse<T> implements BrapiResponse {
         return brapiResponse;
     }
 
+    public static <T> BrapiListResponse<T> brapiResponseForPageOf(List<T> listOfVos){
+        BrapiListResponse<T> brapiResponse = new BrapiListResponse<T>();
+        brapiResponse.getResult().setData(listOfVos);
+        Pageable pageable = Pageable.ofSize(listOfVos.size()).withPage(0);
+        setPagination(pageable.getPageSize(), pageable, brapiResponse);
+        return brapiResponse;
+    }
+
+    public static <T> BrapiListResponse<T> brapiResponseForPageOf(List<T> listOfVos, Pageable pageable){
+        if (pageable == null){
+            return brapiResponseForPageOf(listOfVos);
+        }
+        BrapiListResponse<T> brapiResponse = new BrapiListResponse<T>();
+        int page = pageable.getPageNumber();
+        int size = pageable.getPageSize();
+        int fromIndex = Math.min(page * size, listOfVos.size());
+        int toIndex = Math.min(fromIndex + size, listOfVos.size());
+        List<T> pagedList = listOfVos.subList(fromIndex, toIndex);
+        brapiResponse.getResult().setData(pagedList);
+        setPagination(pageable.getPageSize(), pageable, brapiResponse);
+        return brapiResponse;
+    }
+
 
 
 

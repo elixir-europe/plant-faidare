@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Breeding API", description = "BrAPI endpoint")
+@Tag(name = "Breeding API latest version (V2)", description = "BrAPI full specifications : https://brapi.org/specification")
 @RestController
 @RequestMapping({"/brapi/v2"})
 public class StudyV2Controller {
