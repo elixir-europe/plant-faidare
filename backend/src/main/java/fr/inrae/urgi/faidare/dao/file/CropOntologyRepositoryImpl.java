@@ -90,6 +90,21 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
         }
     }
 
+    public Integer getVariablesCount() {
+        try {
+            int count = 0;
+            for (OntologyVO ontology : getOntologies()) {
+                String ontologyKey = getOntologyKey(ontology);
+                count += variablesByOntology.get(ontologyKey).length;
+            }
+            return count;
+        } catch (ExecutionException e) {
+            logger.log(Level.SEVERE,
+                "Could not load all variables count.", e);
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public List<ObservationVariableVO> getVariablesByTraitClass(String searchedTraitClass) {
         try {
@@ -109,6 +124,16 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
         } catch (Exception e) {
             logger.log(Level.SEVERE,
                 "Error while searching variables for trait class: " + searchedTraitClass, e);
+            throw new RuntimeException(e);
+        }
+    }
+    public Integer getVariablesByTraitClassCount(String searchedTraitClass) {
+        // call getVariablesByTraitClass then count the result length
+        try {
+            return getVariablesByTraitClass(searchedTraitClass).size();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE,
+                "Error while counting variables for trait class: " + searchedTraitClass, e);
             throw new RuntimeException(e);
         }
     }

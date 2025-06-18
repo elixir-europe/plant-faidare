@@ -48,14 +48,22 @@ public class ObservationVariableV1Controller {
 
     @GetMapping("/brapi/v1/variables")
     public BrapiResponse<ObservationVariableVO> getVariables(@RequestParam(required = false) String traitClass,
-                                                             @RequestParam(required = false) @Nullable Pageable pageable) {
+                                                             @RequestParam(required = false, defaultValue = "0") @Nullable int page,
+                                                             @RequestParam(required = false, defaultValue = "10") @Nullable int pageSize) {
+
+        Pageable pageable = Pageable.ofSize(pageSize).withPage(page);
         if (traitClass != null && !traitClass.isEmpty()) {
             traitClass = URLDecoder.decode(traitClass, StandardCharsets.UTF_8);
             List<ObservationVariableVO> variables = cropOntologyRepository.getVariablesByTraitClass(traitClass);
-            return BrapiListResponse.brapiResponseForPageOf(variables, pageable);
+            if (variables == null || variables.isEmpty()) {
+                throw new IllegalArgumentException("No variables found for trait class: " + traitClass);
+            }
+            Integer variablesCount = cropOntologyRepository.getVariablesByTraitClassCount(traitClass);
+            return BrapiListResponse.brapiResponseForPageOf(variables, pageable, variablesCount);
         }else {
             List<ObservationVariableVO> variables = cropOntologyRepository.getVariables();
-            return BrapiListResponse.brapiResponseForPageOf(variables, pageable);
+            Integer variablesCount = cropOntologyRepository.getVariablesCount();
+            return BrapiListResponse.brapiResponseForPageOf(variables, pageable, variablesCount);
         }
     }
 

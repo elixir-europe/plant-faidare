@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import fr.inrae.urgi.faidare.Application;
+import fr.inrae.urgi.faidare.domain.variable.ObservationVariableVO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -83,7 +84,7 @@ class ObservationVariableV1ControllerTest {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
-            createURLWithPort("/brapi/v1/variables"),
+            createURLWithPort("/brapi/v1/variables?page=0&pageSize=10000"),
             HttpMethod.GET, entity, String.class);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         List<String> variableNames = JsonPath.parse(response.getBody()).read("$.result.data[*].name");
@@ -93,12 +94,63 @@ class ObservationVariableV1ControllerTest {
         assertThat(traitDbIds).contains("CO_321:0000013");
     }
 
+
+    @Test
+    void should_paginate_variables() throws Exception {
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<String> response = testRestTemplate.exchange(
+            createURLWithPort("/brapi/v1/variables?page=1&pageSize=8"),
+            HttpMethod.GET, entity, String.class);
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        List<ObservationVariableVO> variables = JsonPath.parse(response.getBody()).read("$.result.data[*]");
+        assertThat(variables).isNotNull();
+        assertThat(variables).isNotEmpty();
+        assertThat(variables).hasSize(8);
+
+    }
+    @Test
+    void should_paginate_variables_with_total_count() throws Exception {
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<String> response = testRestTemplate.exchange(
+            createURLWithPort("/brapi/v1/variables?page=1&pageSize=8"),
+            HttpMethod.GET, entity, String.class);
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        int totalCount = JsonPath.parse(response.getBody()).read("$.metadata.pagination.totalCount");
+        int page = JsonPath.parse(response.getBody()).read("$.metadata.pagination.currentPage");
+        int pageSize = JsonPath.parse(response.getBody()).read("$.metadata.pagination.pageSize");
+        assertThat(totalCount).as("totalCount check").isGreaterThan(1000);
+        assertThat(page).as("page check").isEqualTo(1);
+        assertThat(pageSize).as("pageSize check").isEqualTo(8);
+
+    }
+
+
+    @Test
+    void should_paginate_variablesTraitClass_with_total_count() throws Exception {
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<String> response = testRestTemplate.exchange(
+            createURLWithPort("/brapi/v1/variables?page=1&pageSize=8&traitClass=Biotic stress"),
+            HttpMethod.GET, entity, String.class);
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        int totalCount = JsonPath.parse(response.getBody()).read("$.metadata.pagination.totalCount");
+        int page = JsonPath.parse(response.getBody()).read("$.metadata.pagination.currentPage");
+        int pageSize = JsonPath.parse(response.getBody()).read("$.metadata.pagination.pageSize");
+        assertThat(totalCount).as("totalCount check").isGreaterThan(100);
+        assertThat(page).as("page check").isEqualTo(1);
+        assertThat(pageSize).as("pageSize check").isEqualTo(8);
+
+    }
+
+
     @Test
     void should_call_variables_with_traitClass() throws Exception {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
-            createURLWithPort("/brapi/v1/variables?traitClass=Biotic stress"),
+            createURLWithPort("/brapi/v1/variables?page=0&pageSize=10000&traitClass=Biotic stress"),
             HttpMethod.GET, entity, String.class);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         List<String> variableNames = JsonPath.parse(response.getBody()).read("$.result.data[*].name");
@@ -113,7 +165,7 @@ class ObservationVariableV1ControllerTest {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
-            createURLWithPort("/brapi/v1/variables?traitClass=Biotic%20stress"),
+            createURLWithPort("/brapi/v1/variables?traitClass=Biotic%20stress&page=0&pageSize=10000"),
             HttpMethod.GET, entity, String.class);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         List<String> variableNames = JsonPath.parse(response.getBody()).read("$.result.data[*].name");

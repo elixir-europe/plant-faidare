@@ -20,11 +20,13 @@ public interface CropOntologyRepository {
      * List all variables
      */
     List<ObservationVariableVO> getVariables();
+    Integer getVariablesCount();
 
     /**
      * Get variables with specified trait class
      */
     List<ObservationVariableVO> getVariablesByTraitClass(String searchedTraitClass);
+    Integer getVariablesByTraitClassCount(String searchedTraitClass);
 
     /**
      * Get variable by identifier
