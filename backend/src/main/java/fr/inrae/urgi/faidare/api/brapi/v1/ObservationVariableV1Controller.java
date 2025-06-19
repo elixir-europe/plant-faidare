@@ -41,9 +41,11 @@ public class ObservationVariableV1Controller {
     }
 
     @GetMapping("/brapi/v1/ontologies")
-    public BrapiResponse<OntologyVO> getOntologies() {
+    public BrapiResponse<OntologyVO> getOntologies(@RequestParam(required = false, defaultValue = "0") @Nullable int page,
+                                                   @RequestParam(required = false, defaultValue = "1000") @Nullable int pageSize) {
         List<OntologyVO> ontologies = cropOntologyRepository.getOntologies();
-        return BrapiListResponse.brapiResponseForPageOf(ontologies);
+        Pageable pageable = Pageable.ofSize(pageSize).withPage(page);
+        return BrapiListResponse.brapiResponseForPageOf(ontologies, pageable, ontologies.size());
     }
 
     @GetMapping("/brapi/v1/variables")

@@ -1,29 +1,20 @@
 package fr.inrae.urgi.faidare.api.brapi.v1;
 
-/**
- * Unit tests for {@link GermplasmController}
- *
- * @author Cpommier
- */
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import fr.inrae.urgi.faidare.Application;
 import fr.inrae.urgi.faidare.domain.variable.ObservationVariableVO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.util.ResourceUtils;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,7 +41,7 @@ class ObservationVariableV1ControllerTest {
 
 
     @Test
-    void should_call_observationVariable_by_id() throws Exception {
+    void should_call_observationVariable_by_id() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
@@ -66,7 +57,7 @@ class ObservationVariableV1ControllerTest {
     }
 
     @Test
-    void should_call_ontologies() throws Exception {
+    void should_call_ontologies() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
@@ -77,10 +68,16 @@ class ObservationVariableV1ControllerTest {
         assertThat(ontologyNames).contains("Wheat Crop Ontology");
         List<String> ontologyIds = JsonPath.parse(response.getBody()).read("$.result.data[*].ontologyDbId");
         assertThat(ontologyIds).contains("CO_321");
+        int totalCount = JsonPath.parse(response.getBody()).read("$.metadata.pagination.totalCount");
+        int page = JsonPath.parse(response.getBody()).read("$.metadata.pagination.currentPage");
+        int pageSize = JsonPath.parse(response.getBody()).read("$.metadata.pagination.pageSize");
+        assertThat(totalCount).as("totalCount check").isGreaterThan(10);
+        assertThat(page).as("page check").isEqualTo(0);
+        assertThat(pageSize).as("pageSize check").isEqualTo(1000);
     }
 
     @Test
-    void should_call_variables() throws Exception {
+    void should_call_variables() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
@@ -96,7 +93,7 @@ class ObservationVariableV1ControllerTest {
 
 
     @Test
-    void should_paginate_variables() throws Exception {
+    void should_paginate_variables() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
@@ -110,7 +107,7 @@ class ObservationVariableV1ControllerTest {
 
     }
     @Test
-    void should_paginate_variables_with_total_count() throws Exception {
+    void should_paginate_variables_with_total_count() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
@@ -128,7 +125,7 @@ class ObservationVariableV1ControllerTest {
 
 
     @Test
-    void should_paginate_variablesTraitClass_with_total_count() throws Exception {
+    void should_paginate_variablesTraitClass_with_total_count() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
@@ -146,7 +143,7 @@ class ObservationVariableV1ControllerTest {
 
 
     @Test
-    void should_call_variables_with_traitClass() throws Exception {
+    void should_call_variables_with_traitClass() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
@@ -161,7 +158,7 @@ class ObservationVariableV1ControllerTest {
     }
 
     @Test
-    void should_call_variables_with_traitClass_urlencoded() throws Exception {
+    void should_call_variables_with_traitClass_urlencoded() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
