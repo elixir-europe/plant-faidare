@@ -99,6 +99,11 @@ faidare:
     url: https://ddbj.nig.ac.jp
     name: DDBJ
     image: https://www.ddbj.nig.ac.jp/../images/logotype.svg
+  # PHIS
+  - uri: http://www.phis.inrae.fr/
+    url: http://www.phis.inrae.fr/
+    name: PHIS
+    image: http://opensilex.org/img/logo-phis-lg.png
 
   # PHIS
   - uri: http://www.phis.inrae.fr/
