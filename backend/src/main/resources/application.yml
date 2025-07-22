@@ -105,12 +105,6 @@ faidare:
     name: PHIS
     image: http://opensilex.org/img/logo-phis-lg.png
 
-  # PHIS
-  - uri: http://www.phis.inrae.fr/
-    url: http://www.phis.inrae.fr/
-    name: PHIS
-    image: https://github.com/OpenSILEX/opensilex/blob/16964775778c2ec2c2880d329c25d50074add40c/opensilex-phis/front/theme/phis/images/logo-phis-lg.png
-
 server:
   compression:
     enabled: true
