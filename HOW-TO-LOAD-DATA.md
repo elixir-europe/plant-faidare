@@ -41,24 +41,24 @@ This will list all running containers. Look for the container name in the NAMES 
 1.  Linux
     Run the command as is:
 ```sh
-docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest -jsonDir /opt/data/
+docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi/is/docker-rare/faidare-loader:latest -jsonDir /opt/data/
 
 ```
 2. MacOS:
    On Apple Silicon (ARM64), ensure Rosetta is enabled for Docker Desktop and specify the platform explicitly:
 ```sh
-docker run --platform linux/amd64 -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest -jsonDir /opt/data/
+docker run --platform linux/amd64 -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi/is/docker-rare/faidare-loader:latest -jsonDir /opt/data/
 
 ```
 For Intel-based Macs, no additional flags are needed:
 ```sh
-docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest -jsonDir /opt/data/
+docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi/is/docker-rare/faidare-loader:latest -jsonDir /opt/data/
 
 ```
 3.  Windows:
     Adapt the volume path to Windows format (e.g., C:/path/to/local/data):
 ```sh
-docker run -t --volume C:/path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest -jsonDir /opt/data/
+docker run -t --volume C:/path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi/is/docker-rare/faidare-loader:latest -jsonDir /opt/data/
 
 ```
 
@@ -67,7 +67,7 @@ To more help add `--help` parameter to the command.
 If you depend on committed changes in indexing scripts under a specific branch (the docker image should have been automatically created by the CI), you need to change the tag of the docker image according to the branch name (ie. for branch `epic/merge-faidare-dd`, use tag `epic-merge-faidare-dd`, see `CI_COMMIT_REF_SLUG` [Gitlab predefined variable](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html#predefined-variables-reference)), as following:
 
 ```sh
-docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:epic-merge-faidare-dd` -jsonDir /opt/data/ --help
+docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi/is/docker-rare/faidare-loader:epic-merge-faidare-dd` -jsonDir /opt/data/ --help
 ```
 
 ### Docker container maintenance
@@ -76,14 +76,14 @@ docker run -t --volume /path/to/local/data:/opt/data/ --network=container:elasti
 
 ```sh
 # build the image
-docker build -t registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest .
+docker build -t registry.forgemia.inra.fr/urgi/is/docker-rare/faidare-loader:latest .
 
 # Login before pushing the image
 TOKEN= # your PAT from  forgeMIA
-echo "$TOKEN" | docker login registry.forgemia.inra.fr/urgi-is/docker-rare -u <your ForgeMIA username>  --password-stdin
+echo "$TOKEN" | docker login registry.forgemia.inra.fr/urgi/is/docker-rare -u <your ForgeMIA username>  --password-stdin
 
 # push the built image
-docker push registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest
+docker push registry.forgemia.inra.fr/urgi/is/docker-rare/faidare-loader:latest
 ```
 
 That should ease the indexing of data without having to craft a dedicated environment.
@@ -98,13 +98,13 @@ To load the test data  with the necessary indices and mappings, you can use one 
 2.  Running the script locally on your machine.
 
 ### Option 1: Using the Docker Image
-For detailed instructions on using the FAIDARE Docker image, refer to the relevant section in the  [README.md](https://forgemia.inra.fr/urgi-is/faidare/-/blob/fix/NewReadMeHowToDevelopOnFaidare/README.md#data-harvesting-and-indexing).
+For detailed instructions on using the FAIDARE Docker image, refer to the relevant section in the  [README.md](https://forgemia.inra.fr/urgi/is/faidare/-/blob/fix/NewReadMeHowToDevelopOnFaidare/README.md#data-harvesting-and-indexing).
   ```sh
-docker run -t --volume ./data/test:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:latest -jsonDir /opt/data/
+docker run -t --volume ./data/test:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi/is/docker-rare/faidare-loader:latest -jsonDir /opt/data/
   ```
 *NB*: adapt the docker command depending on your [operating system](### Indexing commands with Docker per Operating System). 
 
-*NB2*: Ensure you have an up to date access token to the container registry. If not, you can generate one from the [ForgeMIA](https://forgemia.inra.fr/urgi-is/docker-rare/-/settings/access_tokens) website or contact us.
+*NB2*: Ensure you have an up to date access token to the container registry. If not, you can generate one from the [ForgeMIA](https://forgemia.inra.fr/urgi/is/docker-rare/-/settings/access_tokens) website or contact us.
 
 For instance for **MacOS ARM on the new-api branch**, the command would be:
 ```sh   
@@ -112,7 +112,7 @@ docker compose up
 ```
 
 ```sh   
-docker run --platform linux/amd64 -t --volume ./data/test:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi-is/docker-rare/faidare-loader:feat-upgrade-to-new-api -jsonDir /opt/data/
+docker run --platform linux/amd64 -t --volume ./data/test:/opt/data/ --network=container:elasticsearch-faidare registry.forgemia.inra.fr/urgi/is/docker-rare/faidare-loader:feat-upgrade-to-new-api -jsonDir /opt/data/
 ```
 
 ### Option 2: Running the Script Locally

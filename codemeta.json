@@ -154,11 +154,11 @@
       }
   ],
   "citation": "https://hal.inrae.fr/hal-04638310",
-  "codeRepository": "https://forge.inrae.fr/urgi-is/faidare.git",
+  "codeRepository": "https://forge.inrae.fr/urgi/is/faidare.git",
   "dateCreated": "2018-11-12",
   "description": "FAIDARE: FAIR Data-finder for Agronomic Research\n\nIt provides web services (based on the BrAPI standard) and a web interface with easy to use filters to facilitates the access to plant datasets from a federation of sources.",
-  "downloadUrl": "https://forge.inrae.fr/urgi-is/faidare/-/archive/master/faidare-master.tar.gz",
-  "isPartOf": "https://forge.inrae.fr/urgi-is/data-discovery",
+  "downloadUrl": "https://forge.inrae.fr/urgi/is/faidare/-/archive/master/faidare-master.tar.gz",
+  "isPartOf": "https://forge.inrae.fr/urgi/is/data-discovery",
   "keywords": [
       "data federation",
       "agronomy",
@@ -172,9 +172,9 @@
   "runtimePlatform": "JVM",
   "version": "CURRENT",
   "codemeta:contIntegration": {
-      "id": "https://forge.inrae.fr/urgi-is/faidare/-/pipelines?page=1&scope=all&ref=master"
+      "id": "https://forge.inrae.fr/urgi/is/faidare/-/pipelines?page=1&scope=all&ref=master"
   },
-  "continuousIntegration": "https://forge.inrae.fr/urgi-is/faidare/-/pipelines?page=1&scope=all&ref=master",
+  "continuousIntegration": "https://forge.inrae.fr/urgi/is/faidare/-/pipelines?page=1&scope=all&ref=master",
   "developmentStatus": "active",
-  "issueTracker": "https://forge.inrae.fr/urgi-is/faidare/-/issues"
+  "issueTracker": "https://forge.inrae.fr/urgi/is/faidare/-/issues"
 }
