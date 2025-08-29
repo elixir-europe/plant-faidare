@@ -34,20 +34,20 @@ variables:
 # PRE-BUILD
 
 build-loader-docker-image:
-  image: ${CI_REGISTRY}/urgi/is/docker-rare/docker-git:latest
+  image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/docker-git:latest
   stage: pre-build
   services:
     - docker:20.10.6-dind
   script:
     # build the image
-    - docker build -t ${CI_REGISTRY}/urgi/is/docker-rare/faidare-loader:${IMAGE_TAG} .
-    - docker build -t ${CI_REGISTRY}/urgi/is/docker-rare/faidare-loader:latest .
+    - docker build -t ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/faidare-loader:${IMAGE_TAG} .
+    - docker build -t ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/faidare-loader:latest .
     # Login before pushing the image
     - docker login ${CI_REGISTRY} -u $CONTAINER_REGISTRY_USERNAME -p $CONTAINER_REGISTRY_TOKEN
     # push the built image
-    - docker push ${CI_REGISTRY}/urgi/is/docker-rare/faidare-loader:${IMAGE_TAG}
+    - docker push ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/faidare-loader:${IMAGE_TAG}
     # only push latest tag on master branch
-    - if [ "${CI_DEFAULT_BRANCH}" == "${CI_COMMIT_REF_SLUG}" ] ; then docker push ${CI_REGISTRY}/urgi/is/docker-rare/faidare-loader:latest ; fi;
+    - if [ "${CI_DEFAULT_BRANCH}" == "${CI_COMMIT_REF_SLUG}" ] ; then docker push ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/faidare-loader:latest ; fi;
   rules:
     - changes:
       - Dockerfile
