@@ -1,5 +1,11 @@
 package fr.inrae.urgi.faidare.web.germplasm;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import fr.inrae.urgi.faidare.api.NotFoundException;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.dao.XRefDocumentDao;
@@ -21,15 +27,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Controller used to display a germplasm card based on its ID.
@@ -49,6 +55,7 @@ public class GermplasmController {
     private final GermplasmAttributeV1Dao germplasmAttributeRepository;
     private final GermplasmMcpdExportService germplasmMcpdExportService;
     private final GermplasmExportService germplasmExportService;
+    private final GermplasmMiappeExportService germplasmMiappeExportService;
 
     public GermplasmController(GermplasmV2Dao germplasmRepository,
                                GermplasmMcpdDao germplasmMcpdRepository,
@@ -57,7 +64,8 @@ public class GermplasmController {
                                XRefDocumentDao xRefDocumentRepository,
                                GermplasmAttributeV1Dao germplasmAttributeRepository,
                                GermplasmMcpdExportService germplasmMcpdExportService,
-                               GermplasmExportService germplasmExportService) {
+                               GermplasmExportService germplasmExportService,
+                               GermplasmMiappeExportService germplasmMiappeExportService) {
         this.germplasmRepository = germplasmRepository;
         this.germplasmMcpdRepository = germplasmMcpdRepository;
         this.germplasmPedigreeRepository = germplasmPedigreeRepository;
@@ -66,6 +74,7 @@ public class GermplasmController {
         this.germplasmAttributeRepository = germplasmAttributeRepository;
         this.germplasmMcpdExportService = germplasmMcpdExportService;
         this.germplasmExportService = germplasmExportService;
+        this.germplasmMiappeExportService = germplasmMiappeExportService;
     }
 
     @GetMapping("/{germplasmId}")
@@ -111,7 +120,7 @@ public class GermplasmController {
                 germplasmMcpdExportService.export(out, stream, fields);
             }
         };
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType("text/csv")).body(body);
+        return ResponseEntity.ok().contentType(ExportFormat.CSV.getMediaType()).body(body);
     }
 
     @PostMapping("/exports/plant-material")
@@ -124,7 +133,21 @@ public class GermplasmController {
                 germplasmExportService.export(out, stream, fields);
             }
         };
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType("text/csv")).body(body);
+        return ResponseEntity.ok().contentType(ExportFormat.CSV.getMediaType()).body(body);
+    }
+
+    @PostMapping("/exports/miappe")
+    @ResponseBody
+    public ResponseEntity<StreamingResponseBody> export(@Validated @RequestBody GermplasmMiappeExportCommand command) {
+        StreamingResponseBody body = out -> {
+            try (Stream<GermplasmV2VO> stream = germplasmRepository.findByGermplasmDbIdIn(command.ids())) {
+                switch (command.format()) {
+                    case EXCEL -> germplasmMiappeExportService.exportAsExcel(out, stream);
+                    case CSV -> germplasmMiappeExportService.exportAsCsv(out, stream);
+                }
+            }
+        };
+        return ResponseEntity.ok().contentType(command.format().getMediaType()).body(body);
     }
 
     @GetMapping("/sitemap-{index}.txt")

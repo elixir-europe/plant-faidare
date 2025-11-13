@@ -132,6 +132,10 @@ dependencies {
 
     implementation("org.apache.httpcomponents.client5:httpclient5")
 
+    // Excel POI
+    implementation("org.apache.poi:poi:5.4.1")
+    implementation("org.apache.poi:poi-ooxml:5.4.1")
+
     // Others
     implementation("com.google.guava:guava:33.5.0-jre")
     implementation("com.opencsv:opencsv:5.12.0")

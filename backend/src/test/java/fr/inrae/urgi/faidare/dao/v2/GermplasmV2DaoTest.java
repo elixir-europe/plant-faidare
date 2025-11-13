@@ -6,6 +6,7 @@ import fr.inrae.urgi.faidare.config.ElasticSearchConfig;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.domain.CollPopVO;
 import fr.inrae.urgi.faidare.domain.SynonymsVO;
+import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmV1VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,12 @@ import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @Import({ElasticSearchConfig.class})
 @DataElasticsearchTest
 class GermplasmV2DaoTest {
@@ -305,4 +308,10 @@ class GermplasmV2DaoTest {
         assertThat(indexExists).isTrue();
     }
 
+    @Test
+    void findByGermplasmDbIdIn() {
+        String id = "dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzI0MDU5";
+        List<GermplasmV2VO> list = germplasmDao.findByGermplasmDbIdIn(Set.of(id)).toList();
+        assertThat(list).extracting(GermplasmV2VO::getGermplasmDbId).containsOnly(id);
+    }
 }

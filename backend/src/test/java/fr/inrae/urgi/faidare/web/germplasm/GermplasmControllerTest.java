@@ -1,6 +1,7 @@
 package fr.inrae.urgi.faidare.web.germplasm;
 
 import static fr.inrae.urgi.faidare.web.Fixtures.htmlContent;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -8,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +27,8 @@ import fr.inrae.urgi.faidare.domain.brapi.GermplasmSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmAttributeV1VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import fr.inrae.urgi.faidare.web.Fixtures;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +45,7 @@ import tools.jackson.databind.ObjectMapper;
  * @author JB Nizet
  */
 @WebMvcTest(GermplasmController.class)
-@Import({GermplasmMcpdExportService.class, GermplasmExportService.class})
+@Import({GermplasmMcpdExportService.class, GermplasmExportService.class, GermplasmMiappeExportService.class})
 public class GermplasmControllerTest {
 
     @Autowired
@@ -239,7 +243,7 @@ public class GermplasmControllerTest {
 
         this.mockMvc.perform(asyncDispatch(mvcResult))
                .andExpect(status().isOk())
-               .andExpect(content().contentType("text/csv"))
+               .andExpect(content().contentType(ExportFormat.CSV.getMediaType()))
                .andExpect(content().string("\"PUID\";\"INSTCODE\"\n" +
                                                "\"PUI1\";\"Inst1\"\n" +
                                                "\"PUI1\";\"Inst1\"\n"));
@@ -271,11 +275,76 @@ public class GermplasmControllerTest {
 
         this.mockMvc.perform(asyncDispatch(mvcResult))
                     .andExpect(status().isOk())
-                    .andExpect(content().contentType("text/csv"))
+                    .andExpect(content().contentType(ExportFormat.CSV.getMediaType()))
                     .andExpect(content().string("\"DOI\";\"Accession number\";\"Accession name\"\n" +
                                                     "\"germplasmPUI\";\"1408\";\"BLE BARBU DU ROUSSILLON\"\n" +
                                                     "\"germplasmPUI\";\"1408\";\"BLE BARBU DU ROUSSILLON\"\n" +
                                                     "\"germplasmPUI mini\";\"1408-mini\";\"BLE BARBU DU ROUSSILLON mini\"\n"));
+    }
+
+    @Test
+    void shouldExportMiappeAsExcel() throws Exception {
+        List<GermplasmV2VO> germplasms = List.of(
+            Fixtures.createGermplasmV2ForTrial(),
+            Fixtures.createGermplasmV2ForTrial()
+        );
+
+        GermplasmMiappeExportCommand command = new GermplasmMiappeExportCommand(
+            Sets.newHashSet("g1", "g2"),
+            ExportFormat.EXCEL
+        );
+
+        when(mockGermplasmRepository.findByGermplasmDbIdIn(eq(command.ids())))
+            .thenAnswer(invocation -> germplasms.stream());
+
+        MvcResult mvcResult = mockMvc.perform(post("/germplasms/exports/miappe")
+                                                  .contentType(MediaType.APPLICATION_JSON)
+                                                  .content(objectMapper.writeValueAsBytes(command)))
+                                     .andExpect(request().asyncStarted())
+                                     .andReturn();
+
+        this.mockMvc.perform(asyncDispatch(mvcResult))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(ExportFormat.EXCEL.getMediaType()))
+                    .andExpect(result -> {
+                        byte[] content = result.getResponse().getContentAsByteArray();
+                        try (XSSFWorkbook workbook = new XSSFWorkbook(new ByteArrayInputStream(content))) {
+                            assertThat(workbook.getNumberOfSheets()).isEqualTo(1);
+                            XSSFSheet sheet = workbook.getSheetAt(0);
+                            assertThat(sheet.getPhysicalNumberOfRows()).isEqualTo(3); // header + 2 germplasms
+                        }
+                    });
+    }
+
+    @Test
+    void shouldExportMiappeAsCsv() throws Exception {
+        List<GermplasmV2VO> germplasms = List.of(
+            Fixtures.createGermplasmV2ForTrial(),
+            Fixtures.createGermplasmV2ForTrial()
+        );
+
+        GermplasmMiappeExportCommand command = new GermplasmMiappeExportCommand(
+            Sets.newHashSet("g1", "g2"),
+            ExportFormat.CSV
+        );
+
+        when(mockGermplasmRepository.findByGermplasmDbIdIn(eq(command.ids())))
+            .thenAnswer(invocation -> germplasms.stream());
+
+        MvcResult mvcResult = mockMvc.perform(post("/germplasms/exports/miappe")
+                                                  .contentType(MediaType.APPLICATION_JSON)
+                                                  .content(objectMapper.writeValueAsBytes(command)))
+                                     .andExpect(request().asyncStarted())
+                                     .andReturn();
+
+        this.mockMvc.perform(asyncDispatch(mvcResult))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(ExportFormat.CSV.getMediaType()))
+                    .andExpect(result -> {
+                        String content = result.getResponse().getContentAsString();
+                        List<String> lines = content.lines().toList();
+                        assertThat(lines).hasSize(3); // header + 2 germplasms
+                    });
     }
 
     private void testSitemap(int index, String expectedContent) throws Exception {
