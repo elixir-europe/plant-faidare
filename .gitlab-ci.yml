@@ -7,9 +7,12 @@ stages:
   - deploy-staging
   - deploy-production
 
-
-image: eclipse-temurin:17-jdk
-
+image: eclipse-temurin:21-jdk
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+    - when: never
 
 # Disable the Gradle daemon for Continuous Integration servers as correctness
 # is usually a priority over speed in CI environments. Using a fresh
@@ -33,30 +36,97 @@ variables:
 
 # PRE-BUILD
 
+rotate-project-token:
+  # Note: take care of automatic reuse detection which could lead to token revocation if the job is ran twice: https://docs.gitlab.com/api/personal_access_tokens/#automatic-reuse-detection
+  # In such case, you have to generate a new token from scratch with scopes [api, self_rotate] and OWNER role: https://forge.inrae.fr/groups/urgi/is/-/settings/access_tokens?page=1
+  # Then declare it in group variables with key GROUP_API_TOKEN: https://forge.inrae.fr/groups/urgi/is/-/settings/ci_cd#ci-variables
+  stage: pre-build
+  resource_group: rotate-group-token                 # évite les rotations concurrentes
+  before_script:
+    - apt-get update && apt-get install -y jq
+  script:
+    - |
+      set -euo pipefail
+      GROUP_ID="216"
+      NEXT_EXPIRES_AT="$(date -u -d '+365 days' +%F)"
+      echo "Self rotating group access token for group ${GROUP_ID} with expiration on ${NEXT_EXPIRES_AT}..."
+      HTTP_RESPONSE="$(
+        curl -sS \
+          --request POST \
+          --header "PRIVATE-TOKEN: ${GROUP_API_TOKEN}" \
+          --data "expires_at=${NEXT_EXPIRES_AT}" \
+          --url "${CI_API_V4_URL}/groups/${GROUP_ID}/access_tokens/self/rotate"
+      )"
+
+      ROTATED_TOKEN_VALUE="$(printf '%s' "${HTTP_RESPONSE}" | jq -r '.token')"
+      ROTATED_TOKEN_NAME="$(printf '%s' "${HTTP_RESPONSE}" | jq -r '.name')"
+      ACCESS_LEVEL="$(printf '%s' "${HTTP_RESPONSE}" | jq -r '.access_level')"
+      EXPIRES_AT="$(printf '%s' "${HTTP_RESPONSE}" | jq -r '.expires_at')"
+
+      if [ -z "${ROTATED_TOKEN_VALUE}" ] || [ "${ROTATED_TOKEN_VALUE}" = "null" ]; then
+        echo "ERROR: no field .token in rotating HTTP response:"
+        echo "${HTTP_RESPONSE}" | jq 'del(.token)'
+        exit 1
+      fi
+
+      echo "Token rotated successfully. Name='${ROTATED_TOKEN_NAME}', access_level=${ACCESS_LEVEL}, expires_at='${EXPIRES_AT}'."
+
+      set +e
+      HTTP="$(curl -sS -w '%{http_code}' -o /tmp/put_body \
+        --request PUT \
+        --header "PRIVATE-TOKEN: ${ROTATED_TOKEN_VALUE}" \
+        --url "${CI_API_V4_URL}/groups/${GROUP_ID}/variables/GROUP_API_TOKEN" \
+        --form "value=${ROTATED_TOKEN_VALUE}" \
+        --form "masked=true" \
+        --form "raw=true")"
+      set -e
+
+      if [ "${HTTP}" = "200" ] || [ "${HTTP}" = "201" ]; then
+        echo "Group variable GROUP_API_TOKEN updated for future pipelines."
+      else
+        echo "WARN: unable to update GROUP_API_TOKEN (HTTP=${HTTP}). Likely insufficient access_level."
+      fi
+
+      # Propagation au pipeline courant via dotenv
+      {
+        echo "ROTATED_TOKEN=${ROTATED_TOKEN_VALUE}"
+        echo "ROTATED_TOKEN_EXPIRES_AT=${EXPIRES_AT}"
+      } > rotated.env
+  artifacts:
+    reports:
+      dotenv: rotated.env
+    expire_in: 1 hour
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  tags:
+    - openstack
+  retry: 0
+
 build-loader-docker-image:
   image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/docker-git:latest
   stage: pre-build
   services:
-    - docker:20.10.6-dind
+    - docker:29.0.4-dind
   script:
     # build the image
     - docker build -t ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/faidare-loader:${IMAGE_TAG} .
     - docker build -t ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/faidare-loader:latest .
     # Login before pushing the image
-    - docker login ${CI_REGISTRY} -u $CONTAINER_REGISTRY_USERNAME -p $CONTAINER_REGISTRY_TOKEN
+    - docker login ${CI_REGISTRY} -u whatever -p $ROTATED_TOKEN
     # push the built image
     - docker push ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/faidare-loader:${IMAGE_TAG}
     # only push latest tag on master branch
     - if [ "${CI_DEFAULT_BRANCH}" == "${CI_COMMIT_REF_SLUG}" ] ; then docker push ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/faidare-loader:latest ; fi;
   rules:
     - changes:
-      - Dockerfile
-      - scripts/*
-      - backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/*_mapping.json
-      - backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/settings.json
-      - .gitlab-ci.yml
+        - Dockerfile
+        - scripts/*
+        - backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/*_mapping.json
+        - backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/settings.json
+        - .gitlab-ci.yml
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-#  allow_failure: true
+  needs:
+    - job: rotate-project-token
   tags:
     - openstack
 
@@ -81,7 +151,6 @@ test-and-sonarqube:
       # especially the error regarding
       # `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
       command: [ "bin/elasticsearch", "-Ediscovery.type=single-node" ]
-
   variables:
     # GRADLE_OPTS: "-Xms512m -Xmx8192m -XX:MaxMetaspaceSize=8192m -Dorg.gradle.daemon=false"
     # SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -102,15 +171,14 @@ test-and-sonarqube:
     - ls -la "${JSON_DIR}"  # List files in the JSON directory
     - echo "${JSON_DIR}"
     # Launch the data loading script
-    - ./scripts/harvest.sh -jsonDir "${JSON_DIR}" -es_host "${ES_HOST}" -es_port "${ES_PORT}" -env "dev" -type "all" </dev/null # Execute the script to load data into Elasticsearch
+    - ./scripts/harvest.sh -jsonDir "${JSON_DIR}" -es_host "${ES_HOST}" -es_port "${ES_PORT}" -env "dev" -type "all" </dev/null
     - curl -X GET "http://${ES_HOST}:${ES_PORT}/_cat/indices?v"
     - curl -X GET "http://${ES_HOST}:${ES_PORT}/_aliases"
     - echo "Trying to access Elasticsearch logs..."
     - curl -s "http://${ES_HOST}:${ES_PORT}/_cluster/health?pretty"
     # Launch tests
-    # - ls -lshR /builds/urgi/is/faidare/.gradle/wrapper/dists/gradle-7.4.1-bin/58kw26xllvsiedyf3nujyarhn
     - ./gradlew clean test
-    # jacocoTestReport -s sonarqube
+    - ./gradlew test jacocoTestReport -s sonar
   artifacts:
     reports:
       junit:
@@ -167,7 +235,7 @@ restart-config-server-openstack:
   # Hidden job which serves as template for executed jobs below.
   # See https://docs.gitlab.com/ee/ci/yaml/#anchors
   tags:
-   - openstack
+    - openstack
   retry: 2
   script:
     - apt-get update && apt-get install -y openssh-client
@@ -180,13 +248,11 @@ restart-config-server-openstack:
     - ssh ${SERVER_USER}@${SERVER_IP} "sudo mv /tmp/${SERVICE_NAME}-${ENV}.jar /opt/bootapp/ ; sudo chown -R bootapp:bootapp /opt/bootapp/ ; sudo systemctl restart bootapp@${SERVICE_NAME}-${ENV}"
     - eval $(ssh-agent -k)
     - echo "Deploy done. Application should be available at http://${SERVER_IP}:${APP_PORT}/${CONTEXT_PATH}"
-  rules:
-    - changes:
-      - .gitlab-ci.yml
-      - backend/src/**/*
   allow_failure: false
   interruptible: false
-  needs: ["build"]
+  needs:
+    - job: build
+      optional: false
 
 deploy-to-beta:
   stage: deploy-beta
@@ -197,11 +263,14 @@ deploy-to-beta:
     APP_PORT: ${BETA_FAIDARE_PORT}
     ENV: beta
     CONTEXT_PATH: faidare
+  environment:
+    name: beta
+    url: "http://${SERVER_IP_OPENSTACK_DEV}:${BETA_FAIDARE_PORT}/faidare"
+  resource_group: env-beta
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: always
 
 deploy-to-staging-public:
   stage: deploy-staging
@@ -212,6 +281,10 @@ deploy-to-staging-public:
     APP_PORT: ${STAGING_PUBLIC_FAIDARE_PORT}
     ENV: staging-public
     CONTEXT_PATH: faidare
+  environment:
+    name: beta
+    url: "http://${SERVER_IP_OPENSTACK_DEV}:${STAGING_PUBLIC_FAIDARE_PORT}/faidare"
+  resource_group: env-staging-public
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
       when: never
@@ -227,6 +300,10 @@ deploy-to-staging-private:
     APP_PORT: ${STAGING_PRIVATE_FAIDARE_PORT}
     ENV: staging-private
     CONTEXT_PATH: faidare-private
+  environment:
+    name: beta
+    url: "http://${SERVER_IP_OPENSTACK_DEV}:${STAGING_PRIVATE_FAIDARE_PORT}/faidare"
+  resource_group: env-staging-private
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
       when: never
@@ -242,6 +319,10 @@ deploy-to-prod-public:
     APP_PORT: ${PROD_PUBLIC_FAIDARE_PORT}
     ENV: prod-public
     CONTEXT_PATH: faidare
+  environment:
+    name: beta
+    url: "http://${SERVER_IP_OPENSTACK_PROD}:${PROD_PUBLIC_FAIDARE_PORT}/faidare"
+  resource_group: env-prod-public
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
       when: never
@@ -257,6 +338,10 @@ deploy-to-prod-private:
     APP_PORT: ${PROD_PRIVATE_FAIDARE_PORT}
     ENV: prod-private
     CONTEXT_PATH: faidare-private
+  environment:
+    name: beta
+    url: "http://${SERVER_IP_OPENSTACK_PROD}:${PROD_PRIVATE_FAIDARE_PORT}/faidare"
+  resource_group: env-prod-private
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
       when: never

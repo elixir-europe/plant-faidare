@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,7 +23,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     public SecurityFilterChain httpSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
             .authorizeHttpRequests(
-                registry -> registry.requestMatchers(AntPathRequestMatcher.antMatcher("/actuator**")).authenticated()
+                registry -> registry.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/actuator/**")).authenticated()
             )
             .httpBasic(configurer -> {})
             .csrf(configurer -> configurer.disable())

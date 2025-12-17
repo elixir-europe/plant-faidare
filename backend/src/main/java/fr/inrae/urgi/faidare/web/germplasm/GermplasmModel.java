@@ -23,17 +23,19 @@ public final class GermplasmModel {
     private final List<GermplasmAttributeValueV1VO> attributes;
     private final GermplasmPedigreeV1VO pedigree;
     private final List<XRefDocumentVO> crossReferences;
+    private final String contextPath;
 
     public GermplasmModel(GermplasmV2VO germplasm,
                           DataSource source,
                           List<GermplasmAttributeValueV1VO> attributes,
                           GermplasmPedigreeV1VO pedigree,
-                          List<XRefDocumentVO> crossReferences) {
+                          List<XRefDocumentVO> crossReferences, String contextPath) {
         this.germplasm = germplasm;
         this.source = source;
         this.attributes = attributes;
         this.pedigree = pedigree;
         this.crossReferences = crossReferences;
+        this.contextPath = contextPath;
     }
 
     public GermplasmV2VO getGermplasm() {
@@ -130,10 +132,10 @@ public final class GermplasmModel {
     private boolean isPedigreePresent() {
         return this.pedigree != null &&
             (StringUtils.hasText(this.pedigree.getParent1Name())
-            || StringUtils.hasText(this.pedigree.getParent2Name())
-            || StringUtils.hasText(this.pedigree.getCrossingPlan())
-            || StringUtils.hasText(this.pedigree.getCrossingYear())
-            || StringUtils.hasText(this.pedigree.getFamilyCode()));
+                || StringUtils.hasText(this.pedigree.getParent2Name())
+                || StringUtils.hasText(this.pedigree.getCrossingPlan())
+                || StringUtils.hasText(this.pedigree.getCrossingYear())
+                || StringUtils.hasText(this.pedigree.getFamilyCode()));
     }
 
     public List<MapLocation> getMapLocations() {
@@ -149,6 +151,10 @@ public final class GermplasmModel {
         }
 
         return MapLocation.sitesToDisplayableMapLocations(sites);
+    }
+
+    public String getContextPath() {
+        return contextPath;
     }
 
     public boolean isPuiDisplayedAsLink() {

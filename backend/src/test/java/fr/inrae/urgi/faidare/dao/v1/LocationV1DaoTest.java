@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.data.elasticsearch.DataElasti
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,5 +34,12 @@ public class LocationV1DaoTest {
         assertThat(list.size()).isGreaterThan(1);
         assertThat(list.get(0)).isInstanceOf(LocationSitemapVO.class);
         assertThat(list.get(0).getLocationDbId()).isNotNull();
+    }
+
+    @Test
+    void getByLocationDbIdIn() {
+        Set<String> locationDbIds = Set.of("dXJuOklOUkFFLVVSR0kvbG9jYXRpb24vMzM0Mjg=", "dXJuOklOUkFFLVVSR0kvbG9jYXRpb24vMzQwNjQ=");
+        List<LocationVO> result = locDao.getByLocationDbIdIn(locationDbIds);
+        assertThat(result).hasSize(2);
     }
 }

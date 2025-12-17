@@ -10,17 +10,27 @@ buildscript {
 plugins {
     java
     jacoco
-    id("org.springframework.boot") version "3.1.5"
-    id("io.spring.dependency-management") version "1.1.3"
-    id("com.gorylenko.gradle-git-properties") version "2.4.1"
+    id("org.springframework.boot") version "3.5.0"
+    id("com.gorylenko.gradle-git-properties") version "2.5.0"
+    id("io.spring.dependency-management") version "1.1.7"
+    id("org.sonarqube")
+    id("org.owasp.dependencycheck") version "12.1.3"
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://repo.spring.io/milestone")
+    }
+}
+
+gitProperties {
+    // necessary, at least until https://github.com/n0mer/gradle-git-properties/issues/240 is fixed
+    dotGitDirectory = project.rootProject.layout.projectDirectory.dir(".git")
 }
 
 tasks {
@@ -38,7 +48,7 @@ tasks {
     // makes the test task out of date, which makes the build much longer.
     // See https://github.com/spring-projects/spring-boot/issues/13152
     val buildInfo by registering(BuildInfo::class) {
-        destinationDir.set(file(project.layout.buildDirectory.dir("buildInfo")))
+        destinationDir = file(layout.buildDirectory.dir("buildInfo"))
     }
 
     bootJar {
@@ -74,10 +84,20 @@ tasks {
         launchScript()
     }
 
+    bootRun {
+        // set the active directory to the root (instead of backend by default)
+        workingDir = project.rootDir
+    }
+
     test {
         useJUnitPlatform()
         testLogging {
             exceptionFormat = TestExceptionFormat.FULL
+        }
+        if (System.getenv("CI") != null) {
+            systemProperties(
+                "spring.elasticsearch.uris" to "http://elasticsearch:9200",
+            )
         }
     }
 
@@ -89,7 +109,7 @@ tasks {
     }
 }
 
-extra["springCloudVersion"] = "2022.0.4"
+extra["springCloudVersion"] = "2025.0.0"
 dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
@@ -107,15 +127,18 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 
-    implementation("org.springframework.cloud:spring-cloud-starter-config")
+    // Elasticsearch
+    implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+
+    implementation("org.apache.httpcomponents.client5:httpclient5")
 
     // Others
-    implementation("com.google.guava:guava:31.1-jre")
-    implementation("com.opencsv:opencsv:5.7.0")
+    implementation("com.google.guava:guava:33.4.8-jre")
+    implementation("com.opencsv:opencsv:5.11.1")
 
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jsoup:jsoup:1.15.3")
+    testImplementation("org.jsoup:jsoup:1.20.1")
 }

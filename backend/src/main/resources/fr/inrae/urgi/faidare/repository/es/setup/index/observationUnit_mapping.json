@@ -2,7 +2,8 @@
   "dynamic": "false",
   "properties": {
     "observationUnitURI": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "observationUnitDbId": {
       "type": "keyword"
@@ -10,120 +11,85 @@
     "observationUnitName": {
       "type": "keyword"
     },
-    "X": {
-      "type": "keyword"
-    },
-    "Y": {
-      "type": "keyword"
-    },
-    "Xname": {
-      "type": "keyword"
-    },
-    "Yname": {
-      "type": "keyword"
-    },
-    "Xm": {
-      "type": "keyword"
-    },
-    "Ym": {
-      "type": "keyword"
+    "observationUnitPosition": {
+      "properties": {
+        "entryNumber": {
+          "type": "keyword",
+          "index": false
+        },
+        "entryType": {
+          "type": "keyword",
+          "index": false
+        },
+        "observationLevel": {
+          "properties": {
+            "levelCode": {
+              "type": "keyword"
+            },
+            "levelName": {
+              "type": "keyword"
+            }
+
+          }
+        },
+        "observationLevelRelationships": {
+          "type": "keyword",
+          "index": "false"
+        },
+        "positionCoordinateX": {
+          "type": "keyword",
+          "index": "false"
+        },
+        "positionCoordinateXType": {
+          "type": "keyword",
+          "index": "false"
+        },
+        "positionCoordinateY": {
+          "type": "keyword",
+          "index": "false"
+        },
+        "positionCoordinateYType": {
+          "type": "keyword",
+          "index": "false"
+        }
+
+      }
     },
     "blockNumber": {
       "type": "keyword",
       "index": false
     },
-    "entryNumber": {
-      "type": "keyword",
-      "index": false
-    },
-    "entryType": {
-      "type": "keyword",
-      "index": false
-    },
+
     "germplasmURI": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "germplasmDbId": {
       "type": "keyword"
     },
     "germplasmPUI": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "germplasmName": {
       "type": "keyword"
     },
     "accessionNumber": {
-      "type": "keyword"
-    },
-    "observationLevel": {
-      "type": "keyword"
-    },
-    "observationLevels": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "observationLevelDetails": {
       "properties": {
         "type": {
-          "type": "keyword"
-        },
-        "name": {
-          "type": "keyword"
-        },
-        "value": {
-          "type": "keyword"
-        }
-      }
-    },
-    "observationUnitXref": {
-      "properties": {
-        "id": {
-          "type": "keyword"
-        },
-        "source": {
-          "type": "keyword"
-        }
-      }
-    },
-    "observations": {
-      "type": "nested",
-      "properties": {
-        "observationURI": {
-          "type": "keyword"
-        },
-        "observationDbId": {
-          "type": "keyword"
-        },
-        "collector": {
           "type": "keyword",
           "index": false
         },
-        "observationTimeStamp": {
-          "type": "date",
-          "format": "yyyy-MM-dd'T'HH:mm:ss'Z'"
-        },
-        "gdd": {
-          "type": "float"
-        },
-        "observationVariableURI": {
-          "type": "keyword"
-        },
-        "observationVariableDbId": {
-          "type": "keyword"
-        },
-        "observationVariableName": {
-          "type": "keyword"
-        },
-        "specificName": {
-          "type": "keyword"
-        },
-        "season": {
-          "type": "keyword"
+        "name": {
+          "type": "keyword",
+          "index": false
         },
         "value": {
-          "type": "keyword"
-        },
-        "isDataFile": {
-          "type": "boolean",
+          "type": "keyword",
           "index": false
         }
       }
@@ -137,7 +103,8 @@
       "index": false
     },
     "programURI": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "programDbId": {
       "type": "keyword"
@@ -150,7 +117,8 @@
       "index": false
     },
     "studyURI": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "studyDbId": {
       "type": "keyword"
@@ -159,7 +127,8 @@
       "type": "keyword"
     },
     "studyLocationURI": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "studyLocationDbId": {
       "type": "keyword"
@@ -170,25 +139,24 @@
     "treatments": {
       "properties": {
         "factor": {
-          "type": "keyword"
+          "type": "keyword",
+          "index": false
         },
         "modality": {
-          "type": "keyword"
+          "type": "keyword",
+          "index": false
         }
       }
     },
-    "trials": {
-      "properties": {
-        "id": {
-          "type": "long"
-        },
-        "name": {
-          "type": "keyword"
-        }
-      }
+    "trialDbId":{
+      "type": "keyword"
+    },
+    "trialName": {
+      "type": "keyword"
     },
     "taxonScientificName": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "germplasmGenus": {
       "type": "keyword"
@@ -206,36 +174,45 @@
     "germplasmPanels": {
       "properties": {
         "id": {
-          "type": "long"
+          "type": "long",
+          "index": false
         },
         "name": {
-          "type": "keyword"
+          "type": "keyword",
+          "index": false
         }
       }
     },
     "source": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "groupId": {
       "type": "long"
     },
     "@type": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "@id": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "schema:includedInDataCatalog": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "schema:identifier": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "schema:name": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     },
     "schema:url": {
-      "type": "keyword"
+      "type": "keyword",
+      "index": false
     }
   }
 }

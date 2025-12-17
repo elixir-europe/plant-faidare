@@ -14,9 +14,40 @@
   // auto-merge if build is OK
   "automerge": true,
   "packageRules": [
+    // allow only patch and minor updates for elasticsearch docker image
+    {
+      "packageNames": [
+          "docker.elastic.co/elasticsearch/elasticsearch"
+      ],
+      "updateTypes": [
+          "major"
+      ],
+      "enabled": false
+    },
+    // allow only patch and minor updates for elasticsearch dependencies
+    {
+      "packageNames": [
+          "org.elasticsearch:elasticsearch",
+          "org.elasticsearch.client:elasticsearch-rest-high-level-client"
+      ],
+      "updateTypes": [
+          "major"
+      ],
+      "enabled": false
+    },
+    // allow only patch and minor updates for kibana docker image
+    {
+      "packageNames": [
+          "docker.elastic.co/kibana/kibana"
+      ],
+      "updateTypes": [
+          "major"
+      ],
+      "enabled": false
+    },
     // group all minor dependencies, once a week
     {
-      "matchPackagePatterns": [
+      "matchDepPatterns": [
         "*"
       ],
       "matchUpdateTypes": [

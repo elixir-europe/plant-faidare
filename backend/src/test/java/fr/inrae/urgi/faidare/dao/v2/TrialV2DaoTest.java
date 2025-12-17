@@ -2,6 +2,8 @@ package fr.inrae.urgi.faidare.dao.v2;
 
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
 import fr.inrae.urgi.faidare.config.ElasticSearchConfig;
+import fr.inrae.urgi.faidare.domain.brapi.StudySitemapVO;
+import fr.inrae.urgi.faidare.domain.brapi.TrialSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.TrialV2VO;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -80,7 +82,7 @@ public class TrialV2DaoTest {
     @Test
     public void should_search_by_programName() {
         TrialCriteria tCrit = new TrialCriteria();
-        tCrit.setProgramNames(List.of("Optimising the management and sustainable use of forest genetic resources in Europe"));
+        tCrit.setProgramName(List.of("Optimising the management and sustainable use of forest genetic resources in Europe"));
         BrapiListResponse<TrialV2VO> trialVOs = dao.findTrialsByCriteria(tCrit);
         assertThat(trialVOs).isNotNull();
         assertThat(trialVOs.getResult().getData().get(0).getProgramName()).isEqualTo("Optimising the management and sustainable use of forest genetic resources in Europe");
@@ -89,11 +91,18 @@ public class TrialV2DaoTest {
     @Test
     public void should_search_by_studyDbId() {
         TrialCriteria tCrit = new TrialCriteria();
-        tCrit.setStudyDbIds(List.of("dXJuOklOUkFFLVVSR0kvc3R1ZHkvUE9QWU9NSUNTLVBPUDItSQ=="));
+        tCrit.setStudyDbId(List.of("dXJuOklOUkFFLVVSR0kvc3R1ZHkvUE9QWU9NSUNTLVBPUDItSQ=="));
         BrapiListResponse<TrialV2VO> trialVOs = dao.findTrialsByCriteria(tCrit);
         assertThat(trialVOs).isNotNull();
 //        assertThat(trialVOs.getResult().getData()).isNotEmpty();
 //        assertThat(trialVOs.getResult().getData().get(0).getStudyDbIds()).isEqualTo("dXJuOklOUkFFLVVSR0kvc3R1ZHkvUE9QWU9NSUNTLVBPUDItSQ==");
     }
 
+    @Test
+    void findAllForSitemap() {
+        List<TrialSitemapVO> list = dao.findAllForSitemap().toList();
+        assertThat(list.size()).isGreaterThan(1);
+        assertThat(list.get(0)).isInstanceOf(TrialSitemapVO.class);
+        assertThat(list.get(0).getTrialDbId()).isNotNull();
+    }
 }

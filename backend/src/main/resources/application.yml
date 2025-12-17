@@ -10,6 +10,8 @@ spring:
       uri: ${SPRING_CONFIG_URI:http://localhost:8888}
   messages:
     fallback-to-system-locale: false
+  elasticsearch:
+    uris: http://localhost:9200
 
 data:
   elasticsearch:

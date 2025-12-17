@@ -1,5 +1,13 @@
 package fr.inrae.urgi.faidare.web.study;
 
+import static fr.inrae.urgi.faidare.web.Fixtures.htmlContent;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import fr.inrae.urgi.faidare.config.DataSource;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.dao.XRefDocumentDao;
@@ -14,7 +22,7 @@ import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.LocationV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.StudyV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.TrialV2VO;
-import fr.inrae.urgi.faidare.domain.variable.ObservationVariableVO;
+import fr.inrae.urgi.faidare.domain.variable.ObservationVariableV1VO;
 import fr.inrae.urgi.faidare.web.Fixtures;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -23,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.servlet.ModelAndView;
@@ -47,25 +56,25 @@ public class StudyControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private StudyV2Dao mockStudyRepository;
 
-    @MockBean
+    @MockitoBean
     private FaidareProperties mockFaidareProperties;
 
-    @MockBean
+    @MockitoBean
     private XRefDocumentDao mockXRefDocumentRepository;
 
-    @MockBean
+    @MockitoBean
     private GermplasmV2Dao mockGermplasmRepository;
 
-    @MockBean
+    @MockitoBean
     private CropOntologyRepository mockCropOntologyRepository;
 
-    @MockBean
+    @MockitoBean
     private TrialV2Dao mockTrialRepository;
 
-    @MockBean
+    @MockitoBean
     private LocationV2Dao mockLocationRepository;
 
     @Autowired
@@ -77,6 +86,7 @@ public class StudyControllerTest {
     private DataSource dataSource;
     private LocationV2VO location;
     private TrialV2VO trial;
+
 
 
     @BeforeEach
@@ -100,7 +110,7 @@ public class StudyControllerTest {
 
         when(mockFaidareProperties.getByUri(study.getSourceUri())).thenReturn(dataSource);
 
-        location = Fixtures.createSite();
+        location = Fixtures.createSiteV2();
         when(mockLocationRepository.getByLocationDbId(study.getLocationDbId())).thenReturn(location);
 
         trial = Fixtures.createTrial();
@@ -154,16 +164,16 @@ public class StudyControllerTest {
         @Test
         void shouldFilterVariablesByLanguageWhenRequestedLanguageIsFound() throws Exception {
             study.setObservationVariableDbIds(List.of("var1", "var2", "var3"));
-            ObservationVariableVO variableWithEnglishLanguage = Fixtures.createVariable();
+            ObservationVariableV1VO variableWithEnglishLanguage = Fixtures.createVariable();
             variableWithEnglishLanguage.setLanguage("EN");
             variableWithEnglishLanguage.setObservationVariableDbId("var2");
 
-            ObservationVariableVO variableWithFrenchLanguage = Fixtures.createVariable();
+            ObservationVariableV1VO variableWithFrenchLanguage = Fixtures.createVariable();
             variableWithFrenchLanguage.setLanguage("FRA");
             variableWithFrenchLanguage.setObservationVariableDbId("var1");
 
 
-            ObservationVariableVO variableWithNoLanguage = Fixtures.createVariable();
+            ObservationVariableV1VO variableWithNoLanguage = Fixtures.createVariable();
             variableWithNoLanguage.setLanguage(null);
             variableWithNoLanguage.setObservationVariableDbId("var3");
 
@@ -183,17 +193,17 @@ public class StudyControllerTest {
         void shouldFilterVariablesByLanguageWhenRequestedLanguageIsNotFound() throws Exception {
             study.setObservationVariableDbIds(List.of("var1", "var2", "var3"));
 
-            ObservationVariableVO variableWithEnglishLanguage = Fixtures.createVariable();
+            ObservationVariableV1VO variableWithEnglishLanguage = Fixtures.createVariable();
             variableWithEnglishLanguage.setLanguage("EN");
             variableWithEnglishLanguage.setObservationVariableDbId("var2");
 
 
-            ObservationVariableVO variableWithFrenchLanguage = Fixtures.createVariable();
+            ObservationVariableV1VO variableWithFrenchLanguage = Fixtures.createVariable();
             variableWithFrenchLanguage.setLanguage("FRA");
             variableWithFrenchLanguage.setObservationVariableDbId("var1");
 
 
-            ObservationVariableVO variableWithNoLanguage = Fixtures.createVariable();
+            ObservationVariableV1VO variableWithNoLanguage = Fixtures.createVariable();
             variableWithNoLanguage.setLanguage(null);
             variableWithNoLanguage.setObservationVariableDbId("var3");
 
@@ -213,17 +223,17 @@ public class StudyControllerTest {
         @Test
         void shouldFilterVariablesByLanguageWhenRequestedLanguageIsNotFoundAndEnglishAbsent() throws Exception {
             study.setObservationVariableDbIds(List.of("var1", "var2", "var3"));
-            ObservationVariableVO variableWithSpanishLanguage = Fixtures.createVariable();
+            ObservationVariableV1VO variableWithSpanishLanguage = Fixtures.createVariable();
             variableWithSpanishLanguage.setLanguage("es");
             variableWithSpanishLanguage.setObservationVariableDbId("var2");
 
 
-            ObservationVariableVO variableWithFrenchLanguage = Fixtures.createVariable();
+            ObservationVariableV1VO variableWithFrenchLanguage = Fixtures.createVariable();
             variableWithFrenchLanguage.setLanguage("FRA");
             variableWithFrenchLanguage.setObservationVariableDbId("var1");
 
 
-            ObservationVariableVO variableWithNoLanguage = Fixtures.createVariable();
+            ObservationVariableV1VO variableWithNoLanguage = Fixtures.createVariable();
             variableWithNoLanguage.setObservationVariableDbId("var3");
             variableWithNoLanguage.setLanguage(null);
 

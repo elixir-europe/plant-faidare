@@ -20,34 +20,26 @@ public class StudyV2Controller {
         this.studyDao = studyDao;
     }
 
-    @GetMapping("study")
+    @GetMapping("studies")
     public BrapiListResponse<StudyV2VO> study(
         @ModelAttribute StudyCriteria sCrit){
         BrapiListResponse<StudyV2VO> studyV2VOs = studyDao.findStudiesByCriteria(sCrit);
         return studyV2VOs;
     }
 
-    @PostMapping(value = "/search/study", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/search/studies", consumes = "application/json", produces = "application/json")
     public BrapiListResponse<StudyV2VO> searchStudy(@RequestBody StudyCriteria sCrit){
 
         return studyDao.findStudiesByCriteria(sCrit);
     }
 
-    @GetMapping("/study/{studyDbId}")
+    @GetMapping("/studies/{studyDbId}")
     public BrapiSingleResponse<StudyV2VO> byStudyDbId(@PathVariable String studyDbId) throws Exception {
 
         StudyV2VO sV2Vo = studyDao.getByStudyDbId(studyDbId);
         return BrapiSingleResponse.brapiResponseOf(sV2Vo, Pageable.ofSize(1));
     }
 
-    @GetMapping("/studies/{trialDbId}")
-    public  BrapiListResponse<StudyV2VO> studiesByTrialDbId(@PathVariable List <String> trialDbId) throws Exception {
-
-        StudyCriteria sCrit = new StudyCriteria();
-        sCrit.setTrialDbIds(trialDbId);
-        BrapiListResponse<StudyV2VO> studyV2VOs = studyDao.findStudiesByCriteria(sCrit);
-        return  studyV2VOs;
-    }
 
 
 

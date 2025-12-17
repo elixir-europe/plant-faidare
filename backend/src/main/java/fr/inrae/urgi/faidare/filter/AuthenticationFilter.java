@@ -10,6 +10,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -45,7 +46,7 @@ public class AuthenticationFilter implements Filter {
         if (authorization != null && authorization.startsWith("Basic")) {
             // Parse to extract the user name
             String base64Credentials = authorization.substring("Basic".length()).trim();
-            String authCode = new String(BaseEncoding.base64().decode(base64Credentials), Charsets.UTF_8);
+            String authCode = new String(BaseEncoding.base64().decode(base64Credentials), StandardCharsets.UTF_8);
             final String userName = authCode.split(":", 2)[0];
 
             logger.debug("Intercepting HTTP Authorization with user: " + userName);

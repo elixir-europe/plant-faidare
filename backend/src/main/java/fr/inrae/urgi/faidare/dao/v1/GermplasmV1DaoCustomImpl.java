@@ -1,14 +1,15 @@
 package fr.inrae.urgi.faidare.dao.v1;
 
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
+import fr.inrae.urgi.faidare.config.DocumentType;
 import fr.inrae.urgi.faidare.config.ElasticSearchConfig;
-import fr.inrae.urgi.faidare.dao.v1.GermplasmV1Criteria;
-import fr.inrae.urgi.faidare.domain.SynonymsVO;
+import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.domain.brapi.GermplasmSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmV1VO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
@@ -33,6 +34,8 @@ public class GermplasmV1DaoCustomImpl implements GermplasmV1DaoCustom{
     private ElasticsearchOperations elasticsearchOperations;
     @Autowired
     private ElasticsearchTemplate esTemplate;
+    @Autowired
+    private FaidareProperties faidareProperties;
 
     @Override
     public SearchHitsIterator<GermplasmV1VO> scrollGermplasmsByGermplasmDbIds(Set<String> germplasmDbIds, int fetchSize) {
@@ -50,38 +53,37 @@ public class GermplasmV1DaoCustomImpl implements GermplasmV1DaoCustom{
                 .withQuery(builder -> builder.matchAll(Queries.matchAllQuery()))
                 .withSourceFilter(new FetchSourceFilterBuilder().withIncludes("germplasmDbId").build())
                 .build();
-        query.setTrackTotalHits(true);
-        return elasticsearchOperations.searchForStream(query, GermplasmSitemapVO.class, IndexCoordinates.of("faidare_germplasm_dev-group0"))
+        return elasticsearchOperations.searchForStream(query, GermplasmSitemapVO.class, IndexCoordinates.of(faidareProperties.getAliasName(DocumentType.GERMPLASM, 0)))
                 .stream()
                 .map(SearchHit::getContent);
     }
 
     @Override
-    public BrapiListResponse<GermplasmV1VO> findGermplasmsByCriteria(GermplasmV1Criteria germplasmV2Criteria) {
+    public BrapiListResponse<GermplasmV1VO> findGermplasmsByCriteria(GermplasmV1Criteria germplasmCriteria) {
 
         Criteria esCrit = new Criteria();
         Map<String, List<String>> fieldMappings = new HashMap<>();
-        fieldMappings.put("accessionNumber", germplasmV2Criteria.getAccessionNumber());
-        fieldMappings.put("genusSpecies", germplasmV2Criteria.getBinomialNames());
-        fieldMappings.put("commonCropName", germplasmV2Criteria.getCommonCropNames());
-        fieldMappings.put("externalReferenceIDs", germplasmV2Criteria.getExternalReferenceIDs());
-        fieldMappings.put("externalReferenceIds", germplasmV2Criteria.getExternalReferenceIds());
-        fieldMappings.put("externalReferenceSources", germplasmV2Criteria.getExternalReferenceSources());
-        fieldMappings.put("familyCodes", germplasmV2Criteria.getFamilyCodes());
-        fieldMappings.put("genus", germplasmV2Criteria.getGenus());
-        fieldMappings.put("germplasmDbId", germplasmV2Criteria.getGermplasmDbIds());
-        fieldMappings.put("germplasmName", germplasmV2Criteria.getGermplasmName());
-        fieldMappings.put("germplasmPUI", germplasmV2Criteria.getGermplasmPUIs());
-        fieldMappings.put("instituteCode", germplasmV2Criteria.getInstituteCodes());
-        fieldMappings.put("parentDbIds", germplasmV2Criteria.getParentDbIds());
-        fieldMappings.put("progenyDbIds", germplasmV2Criteria.getProgenyDbIds());
-        fieldMappings.put("programDbIds", germplasmV2Criteria.getProgramDbIds());
-        fieldMappings.put("programNames", germplasmV2Criteria.getProgramNames());
-        fieldMappings.put("species", germplasmV2Criteria.getSpecies());
-        fieldMappings.put("studyDbIds", germplasmV2Criteria.getStudyDbIds());
-        fieldMappings.put("studyNames", germplasmV2Criteria.getStudyNames());
-        fieldMappings.put("trialDbIds", germplasmV2Criteria.getTrialDbIds());
-        fieldMappings.put("synonyms", germplasmV2Criteria.getSynonyms());
+        fieldMappings.put("accessionNumber", germplasmCriteria.getAccessionNumber());
+        fieldMappings.put("genusSpecies", germplasmCriteria.getBinomialNames());
+        fieldMappings.put("commonCropName", germplasmCriteria.getCommonCropNames());
+        fieldMappings.put("externalReferenceIDs", germplasmCriteria.getExternalReferenceIDs());
+        fieldMappings.put("externalReferenceIds", germplasmCriteria.getExternalReferenceIds());
+        fieldMappings.put("externalReferenceSources", germplasmCriteria.getExternalReferenceSources());
+        fieldMappings.put("familyCodes", germplasmCriteria.getFamilyCodes());
+        fieldMappings.put("genus", germplasmCriteria.getGenus());
+        fieldMappings.put("germplasmDbId", germplasmCriteria.getGermplasmDbIds());
+        fieldMappings.put("germplasmName", germplasmCriteria.getGermplasmName());
+        fieldMappings.put("germplasmPUI", germplasmCriteria.getGermplasmPUIs());
+        fieldMappings.put("instituteCode", germplasmCriteria.getInstituteCodes());
+        fieldMappings.put("parentDbIds", germplasmCriteria.getParentDbIds());
+        fieldMappings.put("progenyDbIds", germplasmCriteria.getProgenyDbIds());
+        fieldMappings.put("programDbIds", germplasmCriteria.getProgramDbIds());
+        fieldMappings.put("programNames", germplasmCriteria.getProgramNames());
+        fieldMappings.put("species", germplasmCriteria.getSpecies());
+        fieldMappings.put("studyDbIds", germplasmCriteria.getStudyDbIds());
+        fieldMappings.put("studyNames", germplasmCriteria.getStudyNames());
+        fieldMappings.put("trialDbIds", germplasmCriteria.getTrialDbIds());
+        fieldMappings.put("synonyms", germplasmCriteria.getSynonyms());
 
         fieldMappings.forEach((key, value) ->
             Optional.ofNullable(value)
@@ -89,7 +91,7 @@ public class GermplasmV1DaoCustomImpl implements GermplasmV1DaoCustom{
                 .ifPresent(v -> esCrit.and(new Criteria(key).in(v)))
         );
 
-        Optional.ofNullable(germplasmV2Criteria.getCollections())
+        Optional.ofNullable(germplasmCriteria.getCollections())
             .filter(c -> !c.isEmpty())
             .ifPresent(c -> {
                 Criteria panelCrit = new Criteria("panel.name").in(c);
@@ -101,8 +103,8 @@ public class GermplasmV1DaoCustomImpl implements GermplasmV1DaoCustom{
 
         CriteriaQuery criteriaQuery = new CriteriaQueryBuilder(esCrit).build();
         criteriaQuery.setPageable(PageRequest.of(
-            Optional.ofNullable(germplasmV2Criteria.getPage()).orElse(0),
-            Optional.ofNullable(germplasmV2Criteria.getPageSize()).orElse(10)
+            Optional.ofNullable(germplasmCriteria.getPage()).orElse(0),
+            Optional.ofNullable(germplasmCriteria.getPageSize()).orElse(10)
         ));
 
         criteriaQuery.setTrackTotalHits(true);
@@ -110,5 +112,38 @@ public class GermplasmV1DaoCustomImpl implements GermplasmV1DaoCustom{
         SearchHits<GermplasmV1VO> searchHits = esTemplate.search(criteriaQuery, GermplasmV1VO.class);
         return BrapiListResponse.brapiResponseForPageOf(searchHits, criteriaQuery.getPageable());
 
+    }
+    @Override
+    public BrapiListResponse<GermplasmV1VO> findByFilters(
+        String germplasmPUI,
+        String germplasmDbId,
+        String germplasmName,
+        String commonCropName,
+        Pageable pageable) {
+
+        Criteria criteria = new Criteria();
+
+        if (germplasmPUI != null && !germplasmPUI.isEmpty()) {
+            criteria = criteria.and("germplasmPUI").is(germplasmPUI);
+        }
+
+        if (germplasmDbId != null && !germplasmDbId.isEmpty()) {
+            criteria = criteria.and("germplasmDbId").is(germplasmDbId);
+        }
+
+        if (germplasmName != null && !germplasmName.isEmpty()) {
+            criteria = criteria.and("germplasmName.keyword").is(germplasmName);
+        }
+
+        if (commonCropName != null && !commonCropName.isEmpty()) {
+            criteria = criteria.and("commonCropName.keyword").is(commonCropName);
+        }
+
+        CriteriaQuery query = new CriteriaQuery(criteria);
+        query.setPageable(pageable);
+        query.setTrackTotalHits(true);
+
+        SearchHits<GermplasmV1VO> hits = elasticsearchOperations.search(query, GermplasmV1VO.class);
+        return BrapiListResponse.brapiResponseForPageOf(hits, query.getPageable());
     }
 }

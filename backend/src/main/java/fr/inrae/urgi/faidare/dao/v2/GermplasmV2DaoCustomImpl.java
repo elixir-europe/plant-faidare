@@ -4,8 +4,9 @@ package fr.inrae.urgi.faidare.dao.v2;
 //https://docs.spring.io/spring-data/elasticsearch/docs/current/reference/html/#repositories.single-repository-behavior
 //https://www.baeldung.com/spring-data-elasticsearch-queries
 
+import co.elastic.clients.elasticsearch._types.FieldValue;
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
-import fr.inrae.urgi.faidare.domain.SynonymsVO;
+import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.domain.brapi.GermplasmSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.StudyV2miniVO;
@@ -39,6 +40,9 @@ public class GermplasmV2DaoCustomImpl implements GermplasmV2DaoCustom {
     @Autowired
     TrialV2Dao trialV2Dao;
 
+    @Autowired
+    private FaidareProperties faidareProperties;
+
     @Override
     public BrapiListResponse<GermplasmV2VO> findGermplasmsByCriteria(GermplasmV2Criteria germplasmCriteria) {
 
@@ -49,44 +53,39 @@ public class GermplasmV2DaoCustomImpl implements GermplasmV2DaoCustom {
             esCrit.and(new Criteria("accessionNumber").in(germplasmCriteria.getAccessionNumber()));
         }
 
-        if (germplasmCriteria.getBinomialNames() != null
-            && !germplasmCriteria.getBinomialNames().isEmpty()) {
-            esCrit.and(new Criteria("genusSpecies").in(germplasmCriteria.getBinomialNames()));
+        if (germplasmCriteria.getBinomialName() != null
+            && !germplasmCriteria.getBinomialName().isEmpty()) {
+            esCrit.and(new Criteria("genusSpecies").in(germplasmCriteria.getBinomialName()));
         }
 
-        if (germplasmCriteria.getCollections() != null
-            && !germplasmCriteria.getCollections().isEmpty()) {
+        if (germplasmCriteria.getCollection() != null
+            && !germplasmCriteria.getCollection().isEmpty()) {
             Criteria collPopCrit = new Criteria();
-            Criteria panelCrit = new Criteria("panel.name").in(germplasmCriteria.getCollections());
-            Criteria popCrit = new Criteria("population.name").in(germplasmCriteria.getCollections());
-            Criteria collCrit = new Criteria("collection.name").in(germplasmCriteria.getCollections());
-            collPopCrit.or("panel.name").in(germplasmCriteria.getCollections());
+            Criteria panelCrit = new Criteria("panel.name").in(germplasmCriteria.getCollection());
+            Criteria popCrit = new Criteria("population.name").in(germplasmCriteria.getCollection());
+            Criteria collCrit = new Criteria("collection.name").in(germplasmCriteria.getCollection());
+            collPopCrit.or("panel.name").in(germplasmCriteria.getCollection());
             esCrit.subCriteria(popCrit.or(panelCrit).or(collCrit));
         }
 
-        if (germplasmCriteria.getCommonCropNames() != null
-            && !germplasmCriteria.getCommonCropNames().isEmpty()) {
-            esCrit.and(new Criteria("commonCropName").in(germplasmCriteria.getCommonCropNames()));
+        if (germplasmCriteria.getCommonCropName() != null
+            && !germplasmCriteria.getCommonCropName().isEmpty()) {
+            esCrit.and(new Criteria("commonCropName").in(germplasmCriteria.getCommonCropName()));
         }
 
-        if (germplasmCriteria.getExternalReferenceIDs() != null
-            && !germplasmCriteria.getExternalReferenceIDs().isEmpty()) {
-            esCrit.and(new Criteria("externalReferenceIDs").in(germplasmCriteria.getExternalReferenceIDs()));
+        if (germplasmCriteria.getExternalReferenceId() != null
+            && !germplasmCriteria.getExternalReferenceId().isEmpty()) {
+            esCrit.and(new Criteria("externalReferenceIDs").in(germplasmCriteria.getExternalReferenceId()));
         }
 
-        if (germplasmCriteria.getExternalReferenceIds() != null
-            && !germplasmCriteria.getExternalReferenceIds().isEmpty()) {
-            esCrit.and(new Criteria("externalReferenceIds").in(germplasmCriteria.getExternalReferenceIds()));
+        if (germplasmCriteria.getExternalReferenceSource() != null
+            && !germplasmCriteria.getExternalReferenceSource().isEmpty()) {
+            esCrit.and(new Criteria("externalReferenceSources").in(germplasmCriteria.getExternalReferenceSource()));
         }
 
-        if (germplasmCriteria.getExternalReferenceSources() != null
-            && !germplasmCriteria.getExternalReferenceSources().isEmpty()) {
-            esCrit.and(new Criteria("externalReferenceSources").in(germplasmCriteria.getExternalReferenceSources()));
-        }
-
-        if (germplasmCriteria.getFamilyCodes() != null
-            && !germplasmCriteria.getFamilyCodes().isEmpty()) {
-            esCrit.and(new Criteria("familyCodes").in(germplasmCriteria.getFamilyCodes()));
+        if (germplasmCriteria.getFamilyCode() != null
+            && !germplasmCriteria.getFamilyCode().isEmpty()) {
+            esCrit.and(new Criteria("familyCodes").in(germplasmCriteria.getFamilyCode()));
         }
 
         if (germplasmCriteria.getGenus() != null
@@ -96,7 +95,7 @@ public class GermplasmV2DaoCustomImpl implements GermplasmV2DaoCustom {
 
         if(germplasmCriteria.getGermplasmDbId() != null
                 && !germplasmCriteria.getGermplasmDbId().isEmpty()){
-                esCrit.and(new Criteria("germplasmDbId").in(germplasmCriteria.getGermplasmDbId()));
+            esCrit.and(new Criteria("germplasmDbId").in(germplasmCriteria.getGermplasmDbId()));
         }
 
         if (germplasmCriteria.getGermplasmName() != null
@@ -104,34 +103,34 @@ public class GermplasmV2DaoCustomImpl implements GermplasmV2DaoCustom {
             esCrit.and(new Criteria("germplasmName").in(germplasmCriteria.getGermplasmName()));
         }
 
-        if (germplasmCriteria.getGermplasmPUIs() != null
-            && !germplasmCriteria.getGermplasmPUIs().isEmpty()) {
-            esCrit.and(new Criteria("germplasmPUI").in(germplasmCriteria.getGermplasmPUIs()));
+        if (germplasmCriteria.getGermplasmPUI() != null
+            && !germplasmCriteria.getGermplasmPUI().isEmpty()) {
+            esCrit.and(new Criteria("germplasmPUI").in(germplasmCriteria.getGermplasmPUI()));
         }
 
-        if (germplasmCriteria.getInstituteCodes() != null
-            && !germplasmCriteria.getInstituteCodes().isEmpty()) {
-            esCrit.and(new Criteria("instituteCode").in(germplasmCriteria.getInstituteCodes()));
+        if (germplasmCriteria.getInstituteCode() != null
+            && !germplasmCriteria.getInstituteCode().isEmpty()) {
+            esCrit.and(new Criteria("instituteCode").in(germplasmCriteria.getInstituteCode()));
         }
 
-        if (germplasmCriteria.getParentDbIds() != null
-            && !germplasmCriteria.getParentDbIds().isEmpty()) {
-            esCrit.and(new Criteria("parentDbIds").in(germplasmCriteria.getParentDbIds()));
+        if (germplasmCriteria.getParentDbId() != null
+            && !germplasmCriteria.getParentDbId().isEmpty()) {
+            esCrit.and(new Criteria("parentDbIds").in(germplasmCriteria.getParentDbId()));
         }
 
-        if (germplasmCriteria.getProgenyDbIds() != null
-            && !germplasmCriteria.getProgenyDbIds().isEmpty()) {
-            esCrit.and(new Criteria("progenyDbIds").in(germplasmCriteria.getProgenyDbIds()));
+        if (germplasmCriteria.getProgenyDbId() != null
+            && !germplasmCriteria.getProgenyDbId().isEmpty()) {
+            esCrit.and(new Criteria("progenyDbIds").in(germplasmCriteria.getProgenyDbId()));
         }
 
-        if (germplasmCriteria.getProgramDbIds() != null
-            && !germplasmCriteria.getProgramDbIds().isEmpty()) {
-            esCrit.and(new Criteria("programDbIds").in(germplasmCriteria.getProgramDbIds()));
+        if (germplasmCriteria.getProgramDbId() != null
+            && !germplasmCriteria.getProgramDbId().isEmpty()) {
+            esCrit.and(new Criteria("programDbIds").in(germplasmCriteria.getProgramDbId()));
         }
 
-        if (germplasmCriteria.getProgramNames() != null
-            && !germplasmCriteria.getProgramNames().isEmpty()) {
-            esCrit.and(new Criteria("programNames").in(germplasmCriteria.getProgramNames()));
+        if (germplasmCriteria.getProgramName() != null
+            && !germplasmCriteria.getProgramName().isEmpty()) {
+            esCrit.and(new Criteria("programNames").in(germplasmCriteria.getProgramName()));
         }
 
         if (germplasmCriteria.getSpecies() != null
@@ -139,31 +138,54 @@ public class GermplasmV2DaoCustomImpl implements GermplasmV2DaoCustom {
             esCrit.and(new Criteria("species").in(germplasmCriteria.getSpecies()));
         }
 
-        if (germplasmCriteria.getStudyDbIds() != null
-            && !germplasmCriteria.getStudyDbIds().isEmpty()) {
-            esCrit.and(new Criteria("studyDbIds").in(germplasmCriteria.getStudyDbIds()));
+        if (germplasmCriteria.getStudyDbId() != null
+            && !germplasmCriteria.getStudyDbId().isEmpty()) {
+            esCrit.and(new Criteria("studyDbIds").in(germplasmCriteria.getStudyDbId()));
         }
 
-        if (germplasmCriteria.getStudyNames() != null
-            && !germplasmCriteria.getStudyNames().isEmpty()) {
-            esCrit.and(new Criteria("studyNames").in(germplasmCriteria.getStudyNames()));
+        if (germplasmCriteria.getStudyName() != null
+            && !germplasmCriteria.getStudyName().isEmpty()) {
+            esCrit.and(new Criteria("studyNames").in(germplasmCriteria.getStudyName()));
         }
 
-        if (germplasmCriteria.getSynonyms() != null
-            && !germplasmCriteria.getSynonyms().isEmpty()) {
-            List<String> synonymValues = germplasmCriteria.getSynonyms()
-                .stream()
-                .map(SynonymsVO::getSynonym)
-                .toList();
-            esCrit.and(new Criteria("synonymsV2").subCriteria(
-                new Criteria("synonymsV2.synonym").in(synonymValues)));
-            //esCrit.and(new Criteria("synonyms").in(germplasmCriteria.getSynonyms()));
+        if (germplasmCriteria.getSynonym() != null
+            && !germplasmCriteria.getSynonym().isEmpty()) {
+            NativeQuery query = new NativeQueryBuilder()
+                .withQuery(q -> q
+                    .nested(n -> n
+                        .path("synonymsV2")
+                        .query(nq -> nq
+                            .terms(t -> t
+                                .field("synonymsV2.synonym")
+                                .terms(v -> v.value(
+                                    germplasmCriteria.getSynonym()
+                                        .stream()
+                                        .map(FieldValue::of)
+                                        .toList()
+                                ))
+                            )
+                        )
+                    )
+                )
+                .withPageable(PageRequest.of(
+                    germplasmCriteria.getPage() != null ? germplasmCriteria.getPage() : 0,
+                    germplasmCriteria.getPageSize() != null ? germplasmCriteria.getPageSize() : 10
+                ))
+                .build();
+
+            //Waiting to merge with the spring bot migration to use Crtieria.nested instead of this
+            SearchHits<GermplasmV2VO> searchHits = elasticsearchOperations.search(
+                query,
+                GermplasmV2VO.class,
+                IndexCoordinates.of(faidareProperties.getAliasName("germplasm", 0L)) // remplace par ton alias réel
+            );
+            return BrapiListResponse.brapiResponseForPageOf(searchHits, query.getPageable());
         }
 
-        if (germplasmCriteria.getTrialDbIds() != null
-            && !germplasmCriteria.getTrialDbIds().isEmpty()) {
+        if (germplasmCriteria.getTrialDbId() != null
+            && !germplasmCriteria.getTrialDbId().isEmpty()) {
             TrialCriteria tCrit = new TrialCriteria();
-            tCrit.setTrialDbId(germplasmCriteria.getTrialDbIds()); // Use this instead of trialV2Dao.getByTrialDbId because the latter takes only a single String as a parameter, whereas this one takes a List<String>, allowing searches with multiple trialDbIds
+            tCrit.setTrialDbId(germplasmCriteria.getTrialDbId()); // Use this instead of trialV2Dao.getByTrialDbId because the latter takes only a single String as a parameter, whereas this one takes a List<String>, allowing searches with multiple trialDbIds
             List<TrialV2VO> trials = trialV2Dao.findTrialsByCriteria(tCrit).getResult().getData();
             List<String> studyDbIds = trials.stream()
                 .flatMap(trial -> trial.getStudies().stream())
@@ -172,9 +194,9 @@ public class GermplasmV2DaoCustomImpl implements GermplasmV2DaoCustom {
             esCrit.and(new Criteria("studyDbIds").in(studyDbIds));
         }
 
-        if (germplasmCriteria.getTrialNames() != null
-            && !germplasmCriteria.getTrialNames().isEmpty()) {
-            esCrit.and(new Criteria("trialNames").in(germplasmCriteria.getTrialNames()));
+        if (germplasmCriteria.getTrialName() != null
+            && !germplasmCriteria.getTrialName().isEmpty()) {
+            esCrit.and(new Criteria("trialNames").in(germplasmCriteria.getTrialName()));
         }
 
 

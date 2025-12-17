@@ -37,7 +37,7 @@ class TrialV2ControllerTest {
     @Test
     void should_get_trial_by_trialDbId() throws Exception{
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = testRestTemplate.exchange(createURLWithPort("/brapi/v2/trial/dXJuOklOUkFFLVVSR0kvdHJpYWwvNw=="),
+        ResponseEntity<String> response = testRestTemplate.exchange(createURLWithPort("/brapi/v2/trials/dXJuOklOUkFFLVVSR0kvdHJpYWwvNw=="),
             HttpMethod.GET, entity, String.class);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         String trialName = JsonPath.parse(response.getBody()).read("$.result.trialName");
@@ -61,9 +61,18 @@ class TrialV2ControllerTest {
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>("{\"trialDbIds\": [\"dXJuOklOUkFFLVVSR0kvdHJpYWwvMjQ=\"]}", headers);
 
-        URI uri = new URI(createURLWithPort("/brapi/v2/search/trial"));
+        URI uri = new URI(createURLWithPort("/brapi/v2/search/trials"));
         ResponseEntity<String> response = testRestTemplate.postForEntity(uri, entity, String.class);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+    }
+
+    @Test
+    void should_get_studies_by_trialDbId() throws Exception{
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = testRestTemplate.exchange(createURLWithPort("/brapi/v2/trials/dXJuOklOUkFFLVVSR0kvdHJpYWwvNw==/studies"), HttpMethod.GET, entity, String.class);
+        System.out.println(response.getBody());
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+
     }
 
 //    @Test

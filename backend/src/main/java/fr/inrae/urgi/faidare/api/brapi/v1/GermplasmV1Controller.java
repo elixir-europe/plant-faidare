@@ -56,12 +56,22 @@ public class GermplasmV1Controller {
     }
 
     @GetMapping("/germplasm")
-    public BrapiListResponse<GermplasmV1VO> allGermplasms(@RequestParam(required = false, defaultValue = "0") Integer page,
+    public BrapiListResponse<GermplasmV1VO> allGermplasms(@RequestParam (required = false) String germplasmPUI,
+                                                          @RequestParam (required = false) String germplasmDbId,
+                                                          @RequestParam (required = false) String germplasmName,
+                                                          @RequestParam (required = false) String commonCropName,
+                                                          @RequestParam(required = false, defaultValue = "0") Integer page,
                                                           @RequestParam(required = false, defaultValue = "10")  Integer pageSize) throws Exception {
 
 
-        Page<GermplasmV1VO> gVos = germplasmDao.findAll(Pageable.ofSize(pageSize).withPage(page));
-        return BrapiListResponse.brapiResponseForPageOf(gVos);
+        Pageable pageable = Pageable.ofSize(pageSize).withPage(page);
+        return germplasmDao.findByFilters(
+            germplasmPUI,
+            germplasmDbId,
+            germplasmName,
+            commonCropName,
+            pageable
+        );
     }
 
     //GemplasmMCPD is assumed to be broken/not loaded and not used in curent FAIDARE cards

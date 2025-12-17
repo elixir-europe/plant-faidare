@@ -88,9 +88,8 @@ docker push registry.forgemia.inra.fr/urgi/is/docker-rare/faidare-loader:latest
 
 That should ease the indexing of data without having to craft a dedicated environment.
 
-
-
 ## Test data
+
 `docker compose up` will start an Elasticsearch instance
 
 To load the test data  with the necessary indices and mappings, you can use one of the following methods:

@@ -16,7 +16,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.domain.variable.BrapiTrait;
-import fr.inrae.urgi.faidare.domain.variable.ObservationVariableVO;
+import fr.inrae.urgi.faidare.domain.variable.ObservationVariableV1VO;
 import fr.inrae.urgi.faidare.domain.variable.OntologyVO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
     private final RestTemplate client;
 
     private final LoadingCache<String, OntologyVO[]> ontologyCache;
-    private final LoadingCache<String, ObservationVariableVO[]> variablesByOntology;
+    private final LoadingCache<String, ObservationVariableV1VO[]> variablesByOntology;
 
     public CropOntologyRepositoryImpl(
         FaidareProperties properties,
@@ -75,9 +75,9 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
     }
 
     @Override
-    public List<ObservationVariableVO> getVariables() {
+    public List<ObservationVariableV1VO> getVariables() {
         try {
-            List<ObservationVariableVO> variables = Lists.newArrayList();
+            List<ObservationVariableV1VO> variables = Lists.newArrayList();
             for (OntologyVO ontology : getOntologies()) {
                 String ontologyKey = getOntologyKey(ontology);
                 variables.addAll(Arrays.asList(variablesByOntology.get(ontologyKey)));
@@ -106,11 +106,11 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
     }
 
     @Override
-    public List<ObservationVariableVO> getVariablesByTraitClass(String searchedTraitClass) {
+    public List<ObservationVariableV1VO> getVariablesByTraitClass(String searchedTraitClass) {
         try {
-            List<ObservationVariableVO> variables = Lists.newArrayList();
+            List<ObservationVariableV1VO> variables = Lists.newArrayList();
 
-            for (ObservationVariableVO variable : getVariables()) {
+            for (ObservationVariableV1VO variable : getVariables()) {
                 BrapiTrait trait = variable.getTrait();
                 if (trait != null) {
                     String traitClass = trait.getTraitClass();
@@ -139,11 +139,11 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
     }
 
     @Override
-    public ObservationVariableVO getVariableById(String identifier) {
+    public ObservationVariableV1VO getVariableById(String identifier) {
         try {
             for (OntologyVO ontology : getOntologies()) {
                 String ontologyKey = getOntologyKey(ontology);
-                for (ObservationVariableVO variable : variablesByOntology.get(ontologyKey)) {
+                for (ObservationVariableV1VO variable : variablesByOntology.get(ontologyKey)) {
                     if (identifier.equals(variable.getObservationVariableDbId())) {
                         return variable;
                     }
@@ -158,12 +158,12 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
     }
 
     @Override
-    public List<ObservationVariableVO> getVariableByIds(Set<String> identifiers) {
+    public List<ObservationVariableV1VO> getVariableByIds(Set<String> identifiers) {
         try {
-            List<ObservationVariableVO> variables = new ArrayList<>();
+            List<ObservationVariableV1VO> variables = new ArrayList<>();
             for (OntologyVO ontology : getOntologies()) {
                 String ontologyKey = getOntologyKey(ontology);
-                for (ObservationVariableVO variable : variablesByOntology.get(ontologyKey)) {
+                for (ObservationVariableV1VO variable : variablesByOntology.get(ontologyKey)) {
                     if (identifiers.contains(variable.getObservationVariableDbId())) {
                         variables.add(variable);
                     }
@@ -202,17 +202,17 @@ public class CropOntologyRepositoryImpl implements CropOntologyRepository {
     /**
      * Guava cache loader that loads variables of a specific ontology from a JSON file.
      */
-    class VariableCacheLoader extends CacheLoader<String, ObservationVariableVO[]> {
+    class VariableCacheLoader extends CacheLoader<String, ObservationVariableV1VO[]> {
 
         @Override
-        public ObservationVariableVO[] load(String ontologyKey) {
+        public ObservationVariableV1VO[] load(String ontologyKey) {
             String ontologyJsonUrl = getOntologyBaseUrl() + ontologyKey + ".json";
 
-            ResponseEntity<ObservationVariableVO[]> response =
-                client.getForEntity(ontologyJsonUrl, ObservationVariableVO[].class);
-            ObservationVariableVO[] variables = response.getBody();
+            ResponseEntity<ObservationVariableV1VO[]> response =
+                client.getForEntity(ontologyJsonUrl, ObservationVariableV1VO[].class);
+            ObservationVariableV1VO[] variables = response.getBody();
             if (variables != null) {
-                for (ObservationVariableVO variable : variables) {
+                for (ObservationVariableV1VO variable : variables) {
                     if (Strings.isNullOrEmpty(variable.getDocumentationURL())) {
                         variable.setDocumentationURL(properties.getCropOntologyPortalLink() + variable.getObservationVariableDbId());
                     }

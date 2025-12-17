@@ -7,7 +7,7 @@ ES_PORT="9200"
 ENV="dev"
 DOCUMENT_TYPES="all"
 
-ALL_DOCUMENT_TYPES="germplasm germplasmMcpd germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit xref"
+ALL_DOCUMENT_TYPES="germplasm germplasmMcpd germplasmAttribute germplasmPedigree germplasmProgeny location program study trial observationUnit observation xref"
 ALL_ENVS="dev beta staging int prod test"
 BASEDIR=$(readlink -f "$(dirname $0)")
 
@@ -142,6 +142,7 @@ index_resources() {
 export -f index_resources
 
 for DOCUMENT_TYPE in ${DOCUMENT_TYPES}; do
+    TYPE_START_TIME=$(date +%s)
 	echo && echo -e "${BOLD}Manage ${DOCUMENT_TYPE} documents...${NC}"
 	INDEX_PATTERN=$(echo "faidare_${DOCUMENT_TYPE}_${ENV}" | sed -E "s/([a-z])([A-Z])/\1-\2/" | tr '[:upper:]' '[:lower:]')
 
@@ -193,7 +194,7 @@ log_actions
     # Check indexed data
     echo -e "* Check data indexed from ${DATA_DIR} into ${INDEX_NAME}..."
     	# Skipping xref document because it has no '@id' field.
-    	if [[ "${DOCUMENT_TYPE}" != "xref" && "${DOCUMENT_TYPE}" != "germplasmPedigree" && "${DOCUMENT_TYPE}" != "germplasmProgeny" ]]; then
+    	if [[ "${DOCUMENT_TYPE}" != "xref" && "${DOCUMENT_TYPE}" != "germplasmPedigree" && "${DOCUMENT_TYPE}" != "germplasmProgeny" && "${DOCUMENT_TYPE}" != "observationUnit" && "${DOCUMENT_TYPE}" != "observation"  ]]; then
     		COUNT_EXTRACTED_DOCS=0
     		for FILE in $(find ${DATA_DIR} -name "${DOCUMENT_TYPE}-*.json.gz"); do
     			COUNT_FILE_DOCS=$(gunzip -c ${FILE} | jq 'length')
@@ -281,4 +282,7 @@ log_actions
 		LOG=$(curl -s -XDELETE "${ES_HOST}:${ES_PORT}/${OLD_INDEX}")
 		check_acknowledgment "${LOG}" "delete index ${OLD_INDEX}"
 	done
+    TYPE_END_TIME=$(date +%s)
+    TYPE_DURATION=$((TYPE_END_TIME - TYPE_START_TIME))
+    echo -e "⏱ Durée pour ${DOCUMENT_TYPE} : ${TYPE_DURATION}s"
 done

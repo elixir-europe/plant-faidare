@@ -4,19 +4,17 @@ import fr.inrae.urgi.faidare.api.NotFoundException;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.dao.XRefDocumentDao;
 import fr.inrae.urgi.faidare.dao.file.CropOntologyRepository;
-import fr.inrae.urgi.faidare.dao.v1.LocationV1Dao;
 import fr.inrae.urgi.faidare.dao.v2.LocationV2Dao;
 import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Dao;
 import fr.inrae.urgi.faidare.dao.v2.StudyV2Dao;
 import fr.inrae.urgi.faidare.dao.v2.TrialV2Dao;
-import fr.inrae.urgi.faidare.domain.LocationVO;
 import fr.inrae.urgi.faidare.domain.XRefDocumentVO;
 import fr.inrae.urgi.faidare.domain.brapi.StudySitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.LocationV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.StudyV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.TrialV2VO;
-import fr.inrae.urgi.faidare.domain.variable.ObservationVariableVO;
+import fr.inrae.urgi.faidare.domain.variable.ObservationVariableV1VO;
 import fr.inrae.urgi.faidare.utils.Sitemaps;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.MediaType;
@@ -32,10 +30,10 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Controller used to display a study card based on its ID.
@@ -71,7 +69,7 @@ public class StudyController {
     }
 
     @GetMapping("/{studyId}")
-    public ModelAndView get(@PathVariable("studyId") String studyId, Locale locale) {
+    public ModelAndView get(@PathVariable("studyId") String studyId, Locale locale, HttpServletRequest request) {
         StudyV2VO study = studyRepository.getByStudyDbId(studyId);
 
         if (study == null) {
@@ -81,7 +79,7 @@ public class StudyController {
         List<XRefDocumentVO> crossReferences = xRefDocumentRepository.findByLinkedResourcesID(study.getStudyDbId());
 
         List<GermplasmV2VO> germplasms = getGermplasms(study);
-        List<ObservationVariableVO> variables = getVariables(study, locale);
+        List<ObservationVariableV1VO> variables = getVariables(study, locale);
         List<TrialV2VO> trials = getTrials(study);
         LocationV2VO location = getLocation(study);
 
@@ -110,7 +108,8 @@ public class StudyController {
             trials,
             crossReferences,
             location,
-            study.getUrl()
+            study.getUrl(),
+            request.getContextPath()
         ));
         modelMap.put("dateRange", dateRange);
 
@@ -126,13 +125,14 @@ public class StudyController {
         StreamingResponseBody body = out -> {
             try (Stream<StudySitemapVO> stream = studyRepository.findAllForSitemap()) {
                 Sitemaps.generateSitemap(
-                    "/sudies/sitemap-" + index + ".txt",
+                    "/studies/sitemap-" + index + ".txt",
                     out,
                     stream,
                     vo -> Math.floorMod(vo.getStudyDbId().hashCode(),
                         Sitemaps.BUCKET_COUNT) == index,
                     vo -> "/studies/" + vo.getStudyDbId());
             }
+
         };
         return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body(body);
     }
@@ -154,16 +154,16 @@ public class StudyController {
         }
     }
 
-    private List<ObservationVariableVO> getVariables(StudyV2VO study, Locale locale) {
+    private List<ObservationVariableV1VO> getVariables(StudyV2VO study, Locale locale) {
         // FIXME JBN uncomment this line once StudyV1Dao has a getVariableIds() method
         // Set<String> variableIds = studyRepository.getVariableIds(study.getStudyDbId());
         if (study.getObservationVariableDbIds() == null || study.getObservationVariableDbIds().isEmpty()) {
             return Collections.emptyList();
         } else {
             Set<String> variableIds = new HashSet<>(study.getObservationVariableDbIds());
-            List<ObservationVariableVO> variables = cropOntologyRepository.getVariableByIds(variableIds);
+            List<ObservationVariableV1VO> variables = cropOntologyRepository.getVariableByIds(variableIds);
             return filterVariablesForLocale(variables, locale)
-                .sorted(Comparator.comparing(ObservationVariableVO::getObservationVariableDbId))
+                .sorted(Comparator.comparing(ObservationVariableV1VO::getObservationVariableDbId))
                 .collect(Collectors.toList());
         }
     }
@@ -181,7 +181,7 @@ public class StudyController {
      * If there is at least one variable with the requested language, then we keep all the variables
      * with the requested language, and all the variables without language.
      */
-    private Stream<ObservationVariableVO> filterVariablesForLocale(List<ObservationVariableVO> variables, Locale locale) {
+    private Stream<ObservationVariableV1VO> filterVariablesForLocale(List<ObservationVariableV1VO> variables, Locale locale) {
         if (variables.isEmpty()) {
             return Stream.empty();
         }
@@ -196,10 +196,10 @@ public class StudyController {
                     || normalizeLanguage(variable.getLanguage()).equals(referenceLanguage));
     }
 
-    private String findReferenceLanguage(String requestedLanguage, List<ObservationVariableVO> variables) {
+    private String findReferenceLanguage(String requestedLanguage, List<ObservationVariableV1VO> variables) {
         Set<String> normalizedVariableLanguages =
             variables.stream()
-                .map(ObservationVariableVO::getLanguage)
+                .map(ObservationVariableV1VO::getLanguage)
                 .filter(StringUtils::hasText)
                 .map(this::normalizeLanguage)
                 .collect(Collectors.toSet());

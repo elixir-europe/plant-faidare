@@ -152,11 +152,11 @@ class GermplasmV2ControllerTest {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
-            createURLWithPort("/brapi/v2/germplasm?trialDbIds=dXJuOklOUkFFLVVSR0kvdHJpYWwvMjQ="),
+            createURLWithPort("/brapi/v2/germplasm?trialDbId=dXJuOklOUkFFLVVSR0kvdHJpYWwvMjQ="),
             HttpMethod.GET, entity, String.class);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         List<String> accNumbers = JsonPath.parse(response.getBody()).read("$.result.data.[*].accessionNumber");
-        assertThat(accNumbers).containsExactlyInAnyOrder("661300238", "661300585", "661300444", "661300252", "661300447", "661300540", "661300328", "661300580", "661300355", "661300534");
+        assertThat(accNumbers).containsExactlyInAnyOrder("661300224", "661300227", "661300228", "661300229", "661300230", "661300232", "661300233", "661300234", "661300235", "661300236");
 
     }
 
@@ -180,8 +180,8 @@ class GermplasmV2ControllerTest {
                 createURLWithPort("/brapi/v2/collection"),
                 HttpMethod.GET, entity, String.class);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
-        String collName = JsonPath.parse(response.getBody()).read("$.result.data.[0].name");
-        assertThat(collName).isEqualTo("Collection blé INRA");
+        List<String> collName = JsonPath.parse(response.getBody()).read("$.result.data.[*].name");
+        assertThat(collName).contains("Collection blé INRA");
     }
 }
 

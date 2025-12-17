@@ -3,7 +3,7 @@ package fr.inrae.urgi.faidare.repository.ontology;
 import com.google.common.collect.Sets;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.dao.file.CropOntologyRepositoryImpl;
-import fr.inrae.urgi.faidare.domain.variable.ObservationVariableVO;
+import fr.inrae.urgi.faidare.domain.variable.ObservationVariableV1VO;
 import fr.inrae.urgi.faidare.domain.variable.OntologyVO;
 import fr.inrae.urgi.faidare.domain.variable.TraitVO;
 import org.junit.jupiter.api.Test;
@@ -56,9 +56,9 @@ class CropOntologyRepositoryTest {
 
     @Test
     void should_Return_All_Variables() {
-        List<ObservationVariableVO> expectedVariables = mockVariables();
+        List<ObservationVariableV1VO> expectedVariables = mockVariables();
 
-        List<ObservationVariableVO> actualVariables = repository.getVariables();
+        List<ObservationVariableV1VO> actualVariables = repository.getVariables();
         assertThat(actualVariables).isEqualTo(expectedVariables);
 
         assertThat(actualVariables).extracting("documentationURL").doesNotContainNull();
@@ -69,7 +69,7 @@ class CropOntologyRepositoryTest {
         mockVariables();
 
         String traitClass = "Phenological";
-        List<ObservationVariableVO> variables = repository.getVariablesByTraitClass(traitClass);
+        List<ObservationVariableV1VO> variables = repository.getVariablesByTraitClass(traitClass);
 
         assertThat(variables).isNotNull().isNotEmpty()
             .extracting("observationVariableDbId").contains("WIPO:0000033", "WIPO:0000032");
@@ -77,12 +77,12 @@ class CropOntologyRepositoryTest {
 
     @Test
     void should_Return_Variable_By_Identifier() {
-        List<ObservationVariableVO> expectedVariables = mockVariables();
+        List<ObservationVariableV1VO> expectedVariables = mockVariables();
 
-        ObservationVariableVO expectedVariable = expectedVariables.get(0);
+        ObservationVariableV1VO expectedVariable = expectedVariables.get(0);
         String identifier = expectedVariable.getObservationVariableDbId();
 
-        ObservationVariableVO actualVariable = repository.getVariableById(identifier);
+        ObservationVariableV1VO actualVariable = repository.getVariableById(identifier);
 
         assertThat(actualVariable).isNotNull();
         assertThat(actualVariable.getObservationVariableDbId()).isEqualTo(identifier);
@@ -91,17 +91,17 @@ class CropOntologyRepositoryTest {
 
     @Test
     void should_Return_Variable_By_Identifiers() {
-        List<ObservationVariableVO> expectedVariables = mockVariables();
+        List<ObservationVariableV1VO> expectedVariables = mockVariables();
 
-        ObservationVariableVO expectedVariable1 = expectedVariables.get(0);
-        ObservationVariableVO expectedVariable2 = expectedVariables.get(1);
+        ObservationVariableV1VO expectedVariable1 = expectedVariables.get(0);
+        ObservationVariableV1VO expectedVariable2 = expectedVariables.get(1);
 
         Set<String> identifiers = Sets.newHashSet(
             expectedVariable1.getObservationVariableDbId(),
             expectedVariable2.getObservationVariableDbId()
         );
 
-        List<ObservationVariableVO> actualVariables = repository.getVariableByIds(identifiers);
+        List<ObservationVariableV1VO> actualVariables = repository.getVariableByIds(identifiers);
 
         assertThat(actualVariables).isNotNull().hasSize(2);
         assertThat(actualVariables).extracting("observationVariableDbId")
@@ -137,7 +137,7 @@ class CropOntologyRepositoryTest {
         return Arrays.asList(expectedOntologies);
     }
 
-    private List<ObservationVariableVO> mockVariables() {
+    private List<ObservationVariableV1VO> mockVariables() {
         when(properties.getCropOntologyPortalLink()).thenReturn("http://repo.com/ontology#termIdentifier=");
         List<OntologyVO> ontologies = mockOntologies();
 
@@ -147,37 +147,37 @@ class CropOntologyRepositoryTest {
         TraitVO trait = new TraitVO();
         trait.setTraitClass("Phenological");
 
-        ObservationVariableVO variable1 = new ObservationVariableVO();
+        ObservationVariableV1VO variable1 = new ObservationVariableV1VO();
         variable1.setOntologyDbId(ontology1.getOntologyDbId());
         variable1.setObservationVariableDbId("WIPO:0000033");
         variable1.setTrait(trait);
 
-        ObservationVariableVO variable2 = new ObservationVariableVO();
+        ObservationVariableV1VO variable2 = new ObservationVariableV1VO();
         variable2.setOntologyDbId(ontology1.getOntologyDbId());
         variable2.setObservationVariableDbId("WIPO:0000032");
         variable2.setTrait(trait);
 
-        ObservationVariableVO variable3 = new ObservationVariableVO();
+        ObservationVariableV1VO variable3 = new ObservationVariableV1VO();
         variable3.setOntologyDbId(ontology1.getOntologyDbId());
 
-        ResponseEntity<ObservationVariableVO[]> response1 = new ResponseEntity<>(new ObservationVariableVO[]{
+        ResponseEntity<ObservationVariableV1VO[]> response1 = new ResponseEntity<>(new ObservationVariableV1VO[]{
             variable1, variable2, variable3
         }, HttpStatus.OK);
-        doReturn(response1).when(restClient).getForEntity("1-O1.json", ObservationVariableVO[].class);
+        doReturn(response1).when(restClient).getForEntity("1-O1.json", ObservationVariableV1VO[].class);
 
         // Response for ontology 2
         OntologyVO ontology2 = ontologies.get(1);
-        ObservationVariableVO variable4 = new ObservationVariableVO();
+        ObservationVariableV1VO variable4 = new ObservationVariableV1VO();
         variable4.setOntologyDbId(ontology2.getOntologyDbId());
 
-        ResponseEntity<ObservationVariableVO[]> response2 = new ResponseEntity<>(new ObservationVariableVO[]{
+        ResponseEntity<ObservationVariableV1VO[]> response2 = new ResponseEntity<>(new ObservationVariableV1VO[]{
             variable4
         }, HttpStatus.OK);
-        doReturn(response2).when(restClient).getForEntity("2-O2.json", ObservationVariableVO[].class);
+        doReturn(response2).when(restClient).getForEntity("2-O2.json", ObservationVariableV1VO[].class);
 
         // Response for ontology 3
-        ResponseEntity<ObservationVariableVO[]> response3 = new ResponseEntity<>(new ObservationVariableVO[]{}, HttpStatus.OK);
-        doReturn(response3).when(restClient).getForEntity("3-O3.json", ObservationVariableVO[].class);
+        ResponseEntity<ObservationVariableV1VO[]> response3 = new ResponseEntity<>(new ObservationVariableV1VO[]{}, HttpStatus.OK);
+        doReturn(response3).when(restClient).getForEntity("3-O3.json", ObservationVariableV1VO[].class);
 
         return Arrays.asList(
             variable1, variable2, variable3, variable4

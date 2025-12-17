@@ -15,8 +15,8 @@ public class BrapiListResponse<T> implements BrapiResponse {
 
     public BrapiListResponse(BrapiMetadata brapiMetadata, List<T> result) {
         this.metadata = brapiMetadata;
-
-        this.getResult().data = result;
+        this.result = new Result();
+        this.result.data = result;
     }
 
 

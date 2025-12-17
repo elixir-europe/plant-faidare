@@ -1,6 +1,8 @@
 package fr.inrae.urgi.faidare.dao.v1;
 
+import fr.inrae.urgi.faidare.config.DocumentType;
 import fr.inrae.urgi.faidare.config.ElasticSearchConfig;
+import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.dao.v2.StudyCriteria;
 import fr.inrae.urgi.faidare.domain.brapi.StudySitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.StudyV2VO;
@@ -27,6 +29,8 @@ public class StudyV1DaoCustomImpl implements StudyV1DaoCustom {
     private ElasticsearchTemplate esTemplate;
     @Autowired
     private ElasticsearchOperations elasticsearchOperations;
+    @Autowired
+    private FaidareProperties faidareProperties;
 
     @Override
     public SearchHits<StudyV2VO> findStudiesByCriteria(StudyCriteria studyCriteria) {
@@ -38,9 +42,9 @@ public class StudyV1DaoCustomImpl implements StudyV1DaoCustom {
             esCrit.and(new Criteria("commonCropName").in(studyCriteria.getCommonCropName()));
         }
 
-        if (studyCriteria.getExternalReferenceID() != null
-                && !studyCriteria.getExternalReferenceID().isEmpty()) {
-            esCrit.and(new Criteria("externalReferenceIDs").in(studyCriteria.getExternalReferenceID()));
+        if (studyCriteria.getExternalReferenceId() != null
+                && !studyCriteria.getExternalReferenceId().isEmpty()) {
+            esCrit.and(new Criteria("externalReferenceIDs").in(studyCriteria.getExternalReferenceId()));
         }
 
         if (studyCriteria.getExternalReferenceSource() != null
@@ -48,9 +52,9 @@ public class StudyV1DaoCustomImpl implements StudyV1DaoCustom {
             esCrit.and(new Criteria("externalReferenceSources").in(studyCriteria.getExternalReferenceSource()));
         }
 
-        if (studyCriteria.getGermplasmDbIds() != null
-                && !studyCriteria.getGermplasmDbIds().isEmpty()) {
-            esCrit.and(new Criteria("germplasmDbIds").in(studyCriteria.getGermplasmDbIds()));
+        if (studyCriteria.getGermplasmDbId() != null
+                && !studyCriteria.getGermplasmDbId().isEmpty()) {
+            esCrit.and(new Criteria("germplasmDbIds").in(studyCriteria.getGermplasmDbId()));
         }
 
         if (studyCriteria.getGermplasmNames() != null
@@ -156,7 +160,7 @@ public class StudyV1DaoCustomImpl implements StudyV1DaoCustom {
                 .withSourceFilter(new FetchSourceFilterBuilder().withIncludes("studyDbId").build())
                 .build();
         query.setTrackTotalHits(true);
-        return esTemplate.searchForStream(query, StudySitemapVO.class, IndexCoordinates.of("faidare_study_dev-group0"))
+        return esTemplate.searchForStream(query, StudySitemapVO.class, IndexCoordinates.of(faidareProperties.getAliasName(DocumentType.STUDY, 0)))
                 .stream()
                 .map(SearchHit::getContent);
     }

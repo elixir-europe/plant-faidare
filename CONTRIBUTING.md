@@ -57,7 +57,7 @@
 * Look at the [README.md](README.md) for installation and execution instructions.
 * Recommanded IDE is [Intellij IDEA](https://www.jetbrains.com/idea/)
 * Use linting to apply code standards within the team:
-  * Use `yarn format` (for `web` code only)
+  * Use `pnpm format` (for `web` code only)
   * Use [Checkstyle](https://checkstyle.org/) and [PMD](https://pmd.github.io/) (**TODO**: implement) for backend code
 * All runtime variables should be externalized from the code in order to facilitate the CI management (database host/port, application name, public URL, JSON location...) and the adoption by partners
 * Configure [Yelp's detect-secrets](https://github.com/Yelp/detect-secrets) pre-commit hook to track any high entropy strings, which could possibly be leaked secrets.
@@ -68,6 +68,9 @@
       * `detect-secrets scan --update .secrets.baseline` to update the secret baseline, then
       * `detect-secrets audit .secrets.baseline` to tag it as a false positive if relevant.
 
+### Test data
+`docker compose up` will start an Elasticsearch instance
+`./scripts/harvest.sh -jsonDir data/test/ -es_host localhost -env dev -v` will load the test data  with the necessary indices and mappings.
 ### Run backend tests
 After loading test data into your local Elasticsearch instance, you can run the following command to run backend tests:
 

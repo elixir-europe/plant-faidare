@@ -125,7 +125,7 @@
 
     <script th:inline="javascript">
       faidare.initializeMap({
-        contextPath: [[${contextPath}]],
+        contextPath: [[${model.contextPath}]],
         locations: [[${model.mapLocations}]]
       });
     </script>

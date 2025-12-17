@@ -10,7 +10,7 @@ import fr.inrae.urgi.faidare.domain.jsonld.data.IncludedInDataCatalog;
 /**
  * @author gcornut
  */
-public class ObservationVariableVO implements BrapiObservationVariable, HasURI, HasURL, IncludedInDataCatalog {
+public class ObservationVariableV1VO implements BrapiObservationVariable, HasURI, HasURL, IncludedInDataCatalog {
 
     private String observationVariableDbId;
     private String name;

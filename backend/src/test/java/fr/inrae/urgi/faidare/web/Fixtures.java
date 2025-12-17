@@ -4,7 +4,7 @@ import fr.inrae.urgi.faidare.config.DataSource;
 import fr.inrae.urgi.faidare.domain.*;
 import fr.inrae.urgi.faidare.domain.brapi.v1.*;
 import fr.inrae.urgi.faidare.domain.brapi.v2.*;
-import fr.inrae.urgi.faidare.domain.variable.ObservationVariableVO;
+import fr.inrae.urgi.faidare.domain.variable.ObservationVariableV1VO;
 import fr.inrae.urgi.faidare.domain.variable.TraitVO;
 
 import java.time.LocalDate;
@@ -17,7 +17,20 @@ import java.util.List;
  * @author JB Nizet
  */
 public class Fixtures {
-    public static LocationV2VO createSite() {
+
+    public static LocationVO createSite() {
+        LocationVO site = new LocationVO();
+        site.setLocationDbId("france");
+        site.setLocationName("France");
+        site.setSourceUri("https://urgi.versailles.inrae.fr/gnpis");
+        site.setUri("Test URI");
+        site.setUrl("https://google.com");
+        site.setLatitude(45.65);
+        site.setLongitude(1.34);
+        return site;
+    }
+
+    public static LocationV2VO createSiteV2() {
         LocationV2VO site = new LocationV2VO();
         site.setLocationDbId("france");
         site.setLocationName("France");
@@ -86,7 +99,7 @@ public class Fixtures {
         return study;
     }
 
-    private static ContactVO createContact() {
+    public static ContactVO createContact() {
         ContactVO contact = new ContactVO();
         contact.setType("Pro");
         contact.setName("John Doe");
@@ -261,6 +274,18 @@ public class Fixtures {
         return germplasm;
     }
 
+    public static GermplasmV2VO createGermplasmV2ForTrial() {
+        GermplasmV2VO germplasm = new GermplasmV2VO();
+
+        germplasm.setGermplasmDbId("germplasm-mini1");
+        germplasm.setGermplasmName("BLE BARBU DU ROUSSILLON mini");
+        germplasm.setAccessionNumber("1408-mini");
+
+        germplasm.setGenus("Genus 1");
+        germplasm.setSpecies("Species 1");
+        germplasm.setSubtaxa("Subtaxa 1");
+        return germplasm;
+    }
 
     private static DonorVO createDonor() {
         DonorVO result = new DonorVO();
@@ -373,17 +398,50 @@ public class Fixtures {
         trial.setTrialName("Trail 1");
         trial.setTrialType("Trial type 1");
         trial.setDocumentationURL("http://trials.com");
-        trial.setStudies(List.of(createTrialStudy()));
+        trial.setStudies(List.of(createTrialV2Study()));
         return trial;
     }
 
-    private static StudyV2miniVO createTrialStudy() {
-        StudyV2miniVO study = new StudyV2miniVO();
+    public static TrialV2VO createTrialV2() {
+        TrialV2VO trial = new TrialV2VO();
+        trial.setTrialDbId("trial1");
+        trial.setTrialName("Trial 1");
+        trial.setTrialType("Trial type 1");
+        trial.setDocumentationURL("http://trials.com");
+        trial.setContact(List.of(createContact()));
+        trial.setStudies(List.of(createTrialV2Study()));
+
+        trial.setProgramName("Program 1");
+        // FIXME JBN trial.startDate should be a LocalDate, not a String
+        // answer: on the Brapi starDate and endDate are Strings
+        trial.setStartDate(LocalDate.of(2020, 1, 1).toString());
+        trial.setEndDate(LocalDate.of(2022, 1, 1).toString());
+
+        return trial;
+    }
+
+    private static StudyV1miniVO createTrialStudy() {
+        StudyV1miniVO study = new StudyV1miniVO();
         study.setStudyDbId("study2");
         study.setStudyName("Study 2");
+        LocationVO site = createSite();
+        study.setLocationDbId(site.getLocationDbId());
+        study.setLocationName(site.getLocationName());
+
         return study;
     }
 
+    private static StudyV2miniVO createTrialV2Study() {
+        StudyV2miniVO study = new StudyV2miniVO();
+        study.setStudyDbId("study2");
+        study.setStudyName("Study 2");
+
+        LocationVO site = createSite();
+        study.setLocationDbId(site.getLocationDbId());
+        study.setLocationName(site.getLocationName());
+
+        return study;
+    }
 
     public static GermplasmAttributeV1VO createGermplasmAttribute() {
         GermplasmAttributeValueV1VO value = new GermplasmAttributeValueV1VO();
@@ -395,8 +453,8 @@ public class Fixtures {
         return germplasmAttribute;
     }
 
-    public static ObservationVariableVO createVariable() {
-        ObservationVariableVO variable = new ObservationVariableVO();
+    public static ObservationVariableV1VO createVariable() {
+        ObservationVariableV1VO variable = new ObservationVariableV1VO();
         variable.setObservationVariableDbId("variable1");
         variable.setDocumentationURL("http://variables.com");
         variable.setName("Variable 1");

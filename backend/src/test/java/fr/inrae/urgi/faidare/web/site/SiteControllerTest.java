@@ -12,8 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -36,13 +36,13 @@ public class SiteControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private LocationV2Dao mockLocationRepository;
 
-    @MockBean
+    @MockitoBean
     private XRefDocumentDao mockXRefDocumentRepository;
 
-    @MockBean
+    @MockitoBean
     private FaidareProperties mockFaidareProperties;
 
     private LocationV2VO site;
@@ -51,7 +51,7 @@ public class SiteControllerTest {
 
     @BeforeEach
     void prepare() {
-        site = Fixtures.createSite();
+        site = Fixtures.createSiteV2();
         when(mockLocationRepository.getByLocationDbId(site.getLocationDbId())).thenReturn(site);
 
         crossReferences = Arrays.asList(

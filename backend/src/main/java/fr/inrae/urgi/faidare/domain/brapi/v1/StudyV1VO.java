@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
-
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +33,7 @@ public final class StudyV1VO {
 
     private String documentationURL;
 
-    private LocalDate endDate;
+    private String endDate;
 
     private List<EnvironmentParametersVO> environmentParameters;
 
@@ -74,7 +72,7 @@ public final class StudyV1VO {
     @Field("schema:includedInDataCatalog")
     private String sourceUri;
 
-    private LocalDate startDate;
+    private String startDate;
 
     private String studyCode;
 
@@ -138,9 +136,9 @@ public final class StudyV1VO {
         this.documentationURL = documentationURL;
     }
 
-    public LocalDate getEndDate() { return endDate; }
+    public String getEndDate() { return endDate; }
 
-    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+    public void setEndDate(String endDate) { this.endDate = endDate; }
 
     public List<EnvironmentParametersVO> getEnvironmentParameters() {
         return environmentParameters;
@@ -274,11 +272,11 @@ public final class StudyV1VO {
         this.sourceUri = sourceUri;
     }
 
-    public LocalDate getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 

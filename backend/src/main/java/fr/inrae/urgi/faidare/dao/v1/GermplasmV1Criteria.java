@@ -1,6 +1,5 @@
 package fr.inrae.urgi.faidare.dao.v1;
 
-import fr.inrae.urgi.faidare.domain.SynonymsVO;
 
 import java.util.List;
 

@@ -7,10 +7,65 @@ public class TrialCriteria {
     private List<String> trialDbId;
     private List<String> trialName;
     private List<String> trialType;
+    private List<String> active;
+    private List<String> contactDbId;
+    private List<String> trialPUI;
+    private List<String> commonCropName;
     private List<String> instituteName;
     private List<String> programDbId;
-    private List<String> programNames;
-    private List<String> studyDbIds;
+    private List<String> programName;
+    private List<String> studyDbId;
+    private List<String> externalReferenceId;
+    private List<String> externalReferenceSource;
+
+
+    public List<String> getActive() {
+        return active;
+    }
+
+    public void setActive(List<String> active) {
+        this.active = active;
+    }
+
+    public List<String> getCommonCropName() {
+        return commonCropName;
+    }
+
+    public void setCommonCropName(List<String> commonCropName) {
+        this.commonCropName = commonCropName;
+    }
+
+    public List<String> getContactDbId() {
+        return contactDbId;
+    }
+
+    public void setContactDbId(List<String> contactDbId) {
+        this.contactDbId = contactDbId;
+    }
+
+    public List<String> getExternalReferenceId() {
+        return externalReferenceId;
+    }
+
+    public void setExternalReferenceId(List<String> externalReferenceId) {
+        this.externalReferenceId = externalReferenceId;
+    }
+
+    public List<String> getExternalReferenceSource() {
+        return externalReferenceSource;
+    }
+
+    public void setExternalReferenceSource(List<String> externalReferenceSource) {
+        this.externalReferenceSource = externalReferenceSource;
+    }
+
+    public List<String> getTrialPUI() {
+        return trialPUI;
+    }
+
+    public void setTrialPUI(List<String> trialPUI) {
+        this.trialPUI = trialPUI;
+    }
 
     public List<String> getTrialDbId() {
         return trialDbId;
@@ -52,18 +107,18 @@ public class TrialCriteria {
         this.programDbId = programDbId;
     }
 
-    public List<String> getProgramNames() {
-        return programNames;
+    public List<String> getProgramName() {
+        return programName;
     }
 
-    public void setProgramNames(List<String> programNames) {
-        this.programNames = programNames;
+    public void setProgramName(List<String> programName) {
+        this.programName = programName;
     }
-    public List<String> getStudyDbIds() {
-        return studyDbIds;
+    public List<String> getStudyDbId() {
+        return studyDbId;
     }
 
-    public void setStudyDbIds(List<String> studyDbIds) {
-        this.studyDbIds = studyDbIds;
+    public void setStudyDbId(List<String> studyDbId) {
+        this.studyDbId = studyDbId;
     }
 }

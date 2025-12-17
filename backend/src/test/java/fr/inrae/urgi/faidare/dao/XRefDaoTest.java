@@ -19,7 +19,7 @@ public class XRefDaoTest {
     protected XRefDocumentDao dao;
 
     /**
-     * To be used in thymeleaf controlers for the following code :
+     * To be used in thymeleaf controllers for the following code :
      * List<XRefDocumentVO> crossReferences = xRefDocumentRepository.find(
      *             XRefDocumentSearchCriteria.forXRefId(study.getStudyDbId())
      */

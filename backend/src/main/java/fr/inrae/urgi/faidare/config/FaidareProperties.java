@@ -3,6 +3,7 @@ package fr.inrae.urgi.faidare.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -34,7 +35,7 @@ public class FaidareProperties {
     @NotBlank
     private String cropOntologyPortalLink;
 
-    private List<DataSource> dataSources = new ArrayList<>();
+    private List<@Valid DataSource> dataSources = new ArrayList<>();
 
     public void setSecurityUserGroupWsUrl(String securityUserGroupWsUrl) {
         this.securityUserGroupWsUrl = securityUserGroupWsUrl;
@@ -103,14 +104,24 @@ public class FaidareProperties {
 
     /**
      * Get Elasticearch alias name using the template property, the document type and the group id
+     *
+     * Currently, the groupId is always 0 because we only support a single default security group.
+     * However, the groupId parameter is kept to support future extension to multiple security groups.
+     *
      */
-    public String getAliasName (String documentType, long groupId) {
+    public String getAliasName (DocumentType documentType, long groupId) {
         return getBaseIndexName(documentType) + "-group" + groupId;
     }
 
+    public String getAliasName(String documentTypeStr, long groupId) {
+        DocumentType documentType = DocumentType.fromString(documentTypeStr);
+        return getAliasName(documentType, groupId);
+    }
 
-    private String getBaseIndexName(String documentType) {
-        documentType = documentType.replaceAll("([a-z0-9])([A-Z])", "$1-$2").toLowerCase();
-        return elasticsearchIndexingTemplate.replace("{documentType}", documentType);
+
+
+    private String getBaseIndexName(DocumentType documentType) {
+        String transformedDocumentType = documentType.toKebabCase().replaceAll("([a-z0-9])([A-Z])", "$1-$2");
+        return elasticsearchIndexingTemplate.replace("{documentType}", transformedDocumentType);
     }
 }

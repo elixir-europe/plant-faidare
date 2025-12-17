@@ -4,15 +4,15 @@ import java.util.List;
 
 public class Geometry {
 
-    private List<String> coordinates;
+    private List<String> geometry;
     private String type;
 
-    public List<String> getCoordinates() {
-        return coordinates;
+    public List<String> getGeometry() {
+        return geometry;
     }
 
-    public void setCoordinates(List<String> coordinates) {
-        this.coordinates = coordinates;
+    public void setGeometry(List<String> geometry) {
+        this.geometry = geometry;
     }
 
     public String getType() {

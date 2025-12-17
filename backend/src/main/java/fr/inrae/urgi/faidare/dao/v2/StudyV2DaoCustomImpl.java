@@ -3,7 +3,6 @@ package fr.inrae.urgi.faidare.dao.v2;
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
 import fr.inrae.urgi.faidare.domain.brapi.StudySitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.StudyV2VO;
-import fr.inrae.urgi.faidare.domain.variable.ObservationVariableVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
@@ -17,7 +16,6 @@ import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.CriteriaQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilterBuilder;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
 public class StudyV2DaoCustomImpl implements StudyV2DaoCustom {
@@ -35,9 +33,9 @@ public class StudyV2DaoCustomImpl implements StudyV2DaoCustom {
             esCrit.and(new Criteria("commonCropName").in(studyCriteria.getCommonCropName()));
         }
 
-        if (studyCriteria.getExternalReferenceID() != null
-                && !studyCriteria.getExternalReferenceID().isEmpty()) {
-            esCrit.and(new Criteria("externalReferenceID").in(studyCriteria.getExternalReferenceID()));
+        if (studyCriteria.getExternalReferenceId() != null
+                && !studyCriteria.getExternalReferenceId().isEmpty()) {
+            esCrit.and(new Criteria("externalReferenceID").in(studyCriteria.getExternalReferenceId()));
         }
 
         if (studyCriteria.getExternalReferenceSource() != null
@@ -45,9 +43,9 @@ public class StudyV2DaoCustomImpl implements StudyV2DaoCustom {
             esCrit.and(new Criteria("externalReferenceSources").in(studyCriteria.getExternalReferenceSource()));
         }
 
-        if (studyCriteria.getGermplasmDbIds() != null
-                && !studyCriteria.getGermplasmDbIds().isEmpty()) {
-            esCrit.and(new Criteria("germplasmDbIds").in(studyCriteria.getGermplasmDbIds()));
+        if (studyCriteria.getGermplasmDbId() != null
+                && !studyCriteria.getGermplasmDbId().isEmpty()) {
+            esCrit.and(new Criteria("germplasmDbIds").in(studyCriteria.getGermplasmDbId()));
         }
 
         if (studyCriteria.getGermplasmNames() != null

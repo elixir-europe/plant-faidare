@@ -33,9 +33,9 @@ class StudyV2DaoTest {
 
     @Test
     void getByStudyDbID_studyDbId(){
-        StudyV2VO studyVO = studyV2Dao.getByStudyDbId("dXJuOklOUkFFLVVSR0kvc3R1ZHkvQlRIX0VzdHIlQzMlQTllcy1Nb25zXzIwMDRfVEVDSA==");
+        StudyV2VO studyVO = studyV2Dao.getByStudyDbId("dXJuOklOUkFFLVVSR0kvc3R1ZHkvQ2FtMTE=");
         assertThat(studyVO).isNotNull();
-        assertThat(studyVO.getStudyDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvc3R1ZHkvQlRIX0VzdHIlQzMlQTllcy1Nb25zXzIwMDRfVEVDSA==");
+        assertThat(studyVO.getStudyDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvc3R1ZHkvQ2FtMTE=");
     }
 //    It is commented because in the actual data test we have just null commonCropNames
 //    @Test
@@ -50,7 +50,7 @@ class StudyV2DaoTest {
     @Test
     void custom_should_search_by_germplasmDbIds(){
         StudyCriteria sCrit = new StudyCriteria();
-        sCrit.setGermplasmDbIds((List.of("dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzI0MzI4")));
+        sCrit.setGermplasmDbId((List.of("dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzI0MzI4")));
         BrapiListResponse<StudyV2VO> studyVOs = studyV2Dao.findStudiesByCriteria(sCrit);
         assertThat(studyVOs).isNotNull();
         assertThat(studyVOs.getResult().getData().get(0).getGermplasmDbIds()).contains("dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzI0MzI4");
@@ -59,64 +59,64 @@ class StudyV2DaoTest {
     @Test
     void custom_should_search_by_locationDbIds(){
         StudyCriteria sCrit = new StudyCriteria();
-        sCrit.setLocationDbId(List.of("dXJuOklOUkFFLVVSR0kvbG9jYXRpb24vMzQwNjQ="));
+        sCrit.setLocationDbId(List.of("dXJuOklOUkFFLVVSR0kvbG9jYXRpb24vNDA4MTk="));
         BrapiListResponse<StudyV2VO> studyVOs = studyV2Dao.findStudiesByCriteria(sCrit);
         assertThat(studyVOs).isNotNull();
-        assertThat(studyVOs.getResult().getData().get(0).getLocationDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvbG9jYXRpb24vMzQwNjQ=");
+        assertThat(studyVOs.getResult().getData().get(0).getLocationDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvbG9jYXRpb24vNDA4MTk=");
     }
 
     @Test
     void custom_should_search_by_locationNames(){
         StudyCriteria sCrit = new StudyCriteria();
-        sCrit.setLocationName(List.of("Le Moulon"));
+        sCrit.setLocationName(List.of("Gaillac"));
         BrapiListResponse<StudyV2VO> studyVOs = studyV2Dao.findStudiesByCriteria(sCrit);
         assertThat(studyVOs).isNotNull();
-        assertThat(studyVOs.getResult().getData().get(0).getLocationName()).isEqualTo("Le Moulon");
+        assertThat(studyVOs.getResult().getData().get(0).getLocationName()).isEqualTo("Gaillac");
     }
 
     @Test
     void custom_should_search_by_observationVariableDbIds(){
         StudyCriteria sCrit = new StudyCriteria();
-        sCrit.setObservationVariableDbId(List.of("CO_321:1000070"));
+        sCrit.setObservationVariableDbId(List.of("EIPO:0000002"));
         BrapiListResponse<StudyV2VO> studyVOs = studyV2Dao.findStudiesByCriteria(sCrit);
         assertThat(studyVOs).isNotNull();
-        assertThat(studyVOs.getResult().getData().get(0).getObservationVariableDbIds()).contains("CO_321:1000070");
+        assertThat(studyVOs.getResult().getData().get(0).getObservationVariableDbIds()).contains("EIPO:0000002");
     }
 
     @Test
     void custom_should_search_by_programDbIds(){
         StudyCriteria sCrit = new StudyCriteria();
-        sCrit.setProgramDbId(List.of("dXJuOklOUkFFLVVSR0kvcHJvZ3JhbS9JTlJBX1doZWF0X0JyZWVkaW5nX05ldHdvcms="));
+        sCrit.setProgramDbId(List.of("dXJuOklOUkFFLVVSR0kvcHJvZ3JhbS9GbGVzaGxlc3M="));
         BrapiListResponse<StudyV2VO> studyVOs = studyV2Dao.findStudiesByCriteria(sCrit);
         assertThat(studyVOs).isNotNull();
-        assertThat(studyVOs.getResult().getData().get(0).getProgramDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvcHJvZ3JhbS9JTlJBX1doZWF0X0JyZWVkaW5nX05ldHdvcms=");
+        assertThat(studyVOs.getResult().getData().get(0).getProgramDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvcHJvZ3JhbS9GbGVzaGxlc3M=");
     }
 
     @Test
     void custom_should_search_by_programNames(){
         StudyCriteria sCrit = new StudyCriteria();
-        sCrit.setProgramName(List.of("INRA Wheat Breeding Network"));
+        sCrit.setProgramName(List.of("IN_VITRO_PETRAEA_SNP"));
         BrapiListResponse<StudyV2VO> studyVOs = studyV2Dao.findStudiesByCriteria(sCrit);
         assertThat(studyVOs).isNotNull();
-        assertThat(studyVOs.getResult().getData().get(0).getProgramName()).isEqualTo("INRA Wheat Breeding Network");
+        assertThat(studyVOs.getResult().getData().get(0).getProgramName()).isEqualTo("IN_VITRO_PETRAEA_SNP");
     }
 
     @Test
     void custom_should_search_by_studyDbIds(){
         StudyCriteria sCrit = new StudyCriteria();
-        sCrit.setStudyDbId(List.of("dXJuOklOUkFFLVVSR0kvc3R1ZHkvQlRIX0NsZXJtb250LUZlcnJhbmRfMjAwNV9URUNI"));
+        sCrit.setStudyDbId(List.of("dXJuOklOUkFFLVVSR0kvc3R1ZHkvQ2FtMTM="));
         BrapiListResponse<StudyV2VO> studyVOs = studyV2Dao.findStudiesByCriteria(sCrit);
         assertThat(studyVOs).isNotNull();
-        assertThat(studyVOs.getResult().getData().get(0).getStudyDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvc3R1ZHkvQlRIX0NsZXJtb250LUZlcnJhbmRfMjAwNV9URUNI");
+        assertThat(studyVOs.getResult().getData().get(0).getStudyDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvc3R1ZHkvQ2FtMTM=");
     }
 
     @Test
     void custom_should_search_by_studyName(){
         StudyCriteria sCrit = new StudyCriteria();
-        sCrit.setStudyName(List.of("BTH_Estrées-Mons_2005_TECH"));
+        sCrit.setStudyName(List.of("SNPGrapeMap SNP calling analysis"));
         BrapiListResponse<StudyV2VO> studyVOs = studyV2Dao.findStudiesByCriteria(sCrit);
         assertThat(studyVOs).isNotNull();
-        assertThat(studyVOs.getResult().getData().get(0).getStudyName()).isEqualTo("BTH_Estrées-Mons_2005_TECH");
+        assertThat(studyVOs.getResult().getData().get(0).getStudyName()).isEqualTo("SNPGrapeMap SNP calling analysis");
     }
 
     @Test
@@ -131,19 +131,19 @@ class StudyV2DaoTest {
     @Test
     void custom_should_search_by_trialDbIds(){
         StudyCriteria sCrit = new StudyCriteria();
-        sCrit.setTrialDbIds(List.of("dXJuOklOUkFFLVVSR0kvdHJpYWwvNw=="));
+        sCrit.setTrialDbIds(List.of("dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI="));
         BrapiListResponse<StudyV2VO> studyVOs = studyV2Dao.findStudiesByCriteria(sCrit);
         assertThat(studyVOs).isNotNull();
-        assertThat(studyVOs.getResult().getData().get(0).getTrialDbId()).contains("dXJuOklOUkFFLVVSR0kvdHJpYWwvNw==");
+        assertThat(studyVOs.getResult().getData().get(0).getTrialDbId()).contains("dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI=");
     }
 
     @Test
     void custom_should_search_by_trialNames(){
         StudyCriteria sCrit = new StudyCriteria();
-        sCrit.setTrialNames(List.of("INRA Wheat Network technological variables"));
+        sCrit.setTrialNames(List.of("Drops Phenotyping Network"));
         BrapiListResponse<StudyV2VO> studyVOs = studyV2Dao.findStudiesByCriteria(sCrit);
         assertThat(studyVOs).isNotNull();
-        assertThat(studyVOs.getResult().getData().get(0).getTrialName()).isEqualTo("INRA Wheat Network technological variables");
+        assertThat(studyVOs.getResult().getData().get(0).getTrialName()).isEqualTo("Drops Phenotyping Network");
     }
 
 }

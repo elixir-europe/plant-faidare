@@ -723,9 +723,8 @@
     </main>
 
     <script th:inline="javascript">
-      faidare.initializePopovers();
       faidare.initializeMap({
-        contextPath: [[${contextPath}]],
+        contextPath: [[${model.contextPath}]],
         locations: [[${model.mapLocations}]]
       });
     </script>

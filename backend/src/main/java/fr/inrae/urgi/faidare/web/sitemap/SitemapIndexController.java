@@ -42,6 +42,9 @@ public class SitemapIndexController {
         for (int i = 0; i < Sitemaps.BUCKET_COUNT; i++) {
             appendSiteMap(builder, "/studies/sitemap-" + i + ".txt");
         }
+        for (int i = 0; i < Sitemaps.BUCKET_COUNT; i++) {
+            appendSiteMap(builder, "/trials/sitemap-" + i + ".txt");
+        }
         builder.append("</sitemapindex>");
 
         return ResponseEntity.ok()

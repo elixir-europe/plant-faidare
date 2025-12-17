@@ -1,0 +1,94 @@
+{
+  "dynamic": "false",
+  "properties": {
+    "observationURI": {
+      "type": "keyword",
+      "index": false
+    },
+    "observationDbId": {
+      "type": "keyword"
+    },
+    "observationUnitDbId": {
+      "type": "keyword"
+    },
+    "observationUnitName": {
+      "type": "keyword"
+    },
+    "collector": {
+      "type": "keyword",
+      "index": false
+    },
+    "observationTimeStamp": {
+      "type": "date",
+      "format": "yyyy-MM-dd'T'HH:mm:ss'Z'",
+      "index": false
+    },
+    "gdd": {
+      "type": "float",
+      "index": false
+    },
+    "observationVariableURI": {
+      "type": "keyword",
+      "index": false
+    },
+    "observationVariableDbId": {
+      "type": "keyword"
+    },
+    "observationVariableName": {
+      "type": "keyword"
+    },
+    "season": {
+      "properties": {
+        "seasonDbId": {
+          "type": "long"
+        },
+        "seasonName": {
+          "type": "keyword"
+        }
+      }
+    },
+    "germplasmDbId": {
+      "type": "keyword"
+    },
+    "germplasmName": {
+      "type": "keyword"
+    },
+    "germplasmURI": {
+      "type": "keyword",
+      "index": false
+    },
+    "studyDbId": {
+      "type": "keyword"
+    },
+    "studyName": {
+      "type": "keyword"
+    },
+    "studyURI": {
+      "type": "keyword",
+      "index": false
+    },
+    "trialDbId": {
+      "type": "keyword"
+    },
+    "trialName": {
+      "type": "keyword"
+    },
+    "studyLocationDbId": {
+      "type": "keyword"
+    },
+    "studyLocation": {
+      "type": "keyword",
+      "index": false
+    },
+    "value": {
+      "type": "keyword"
+    },
+    "isDataFile": {
+      "type": "boolean",
+      "index": false
+    },
+    "groupId": {
+      "type": "long"
+    }
+  }
+}

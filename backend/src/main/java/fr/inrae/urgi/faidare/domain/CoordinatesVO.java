@@ -1,6 +1,5 @@
 package fr.inrae.urgi.faidare.domain;
 
-
 import fr.inrae.urgi.faidare.domain.brapi.v2.Geometry;
 
 public class CoordinatesVO {

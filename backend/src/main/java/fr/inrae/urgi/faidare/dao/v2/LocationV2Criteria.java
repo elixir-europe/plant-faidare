@@ -11,7 +11,7 @@ public class LocationV2Criteria {
     private List<String> countryName;
     private List<String> documentationURL;
     private List<String> exposure;
-    private List<String> externalReferences;
+    private List<String> externalReferenceId;
     private List<String> instituteAddress;
     private List<String> instituteName;
     private List<String> locationDbId;
@@ -66,12 +66,12 @@ public class LocationV2Criteria {
         this.exposure = exposure;
     }
 
-    public List<String> getExternalReferences() {
-        return externalReferences;
+    public List<String> getExternalReferenceId() {
+        return externalReferenceId;
     }
 
-    public void setExternalReferences(List<String> externalReferences) {
-        this.externalReferences = externalReferences;
+    public void setExternalReferenceId(List<String> externalReferenceId) {
+        this.externalReferenceId = externalReferenceId;
     }
 
     public List<String> getInstituteAddress() {

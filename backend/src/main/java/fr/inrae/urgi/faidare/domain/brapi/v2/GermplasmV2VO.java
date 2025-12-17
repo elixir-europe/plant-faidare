@@ -15,8 +15,8 @@ import java.util.Objects;
 
 @Import({ElasticSearchConfig.class})
 @Document(
-    indexName = "#{@faidarePropertiesBean.getAliasName('germplasm', 0L)}",
-    createIndex = false
+        indexName = "#{@faidarePropertiesBean.getAliasName('germplasm', 0L)}",
+        createIndex = false
 )
 public class GermplasmV2VO {
 

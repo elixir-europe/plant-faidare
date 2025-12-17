@@ -22,13 +22,11 @@ For loading data in the FAIDARE Elasticsearch, see [HOW-TO-LOAD-DATA.md](HOW-TO-
 ## Setting Up the Development Environment
 
 ### Prerequisites
-1. Node.js and Yarn
-Install Node.js (v16.14.0 recommended) and Yarn. Using nvm is advised for version control: https://github.com/creationix/nvm.
 
-```sh
-nvm install 16.14.0
-nvm use v16.14.0
-```
+1. Node.js and Pnpm
+Install Node.js and Pnpm. Using nvm or volta is advised for version control: https://github.com/creationix/nvm.
+Check out the versions in the `package.json` file.
+
 2. Java JDK17
 Install the latest JDK17 version for your operating system.
 
@@ -36,11 +34,12 @@ Install the latest JDK17 version for your operating system.
 Required to run Elasticsearch and Kibana locally. Ensure Docker and Docker Compose are installed.
 
 ### Installation Steps
+
 1. Install JavaScript Dependencies
 Navigate to the web directory and install dependencies:
 ```sh
 cd web
-yarn
+pnpm install
 ```
 
 2. Start Elasticsearch and Kibana
@@ -92,16 +91,16 @@ The build process for these assets can be run with the following command:
 
 ```sh
 cd web
-yarn watch
+pnpm watch
 ```
 
-`yarn watch` automatically picks up the changes in any files,
+`pnpm watch` automatically picks up the changes in any files,
 and rebuild the resulting assets (thanks to Webpack).
 Make sure the backend is running with the `dev` profile if you do so (see above),
 otherwise the changes won't be shown in the browser.
 
-`yarn watch:prod` is also available to use production settings,
-while `yarn build` and `yarn build:prod` do the same but without watching the changes. 
+`pnpm watch:prod` is also available to use production settings,
+while `pnpm build` and `pnpm build:prod` do the same but without watching the changes. 
 
 ## GitLab CI
 
@@ -128,7 +127,7 @@ While gitlab-runner exec is deprecated, third-party tools and emulators can help
 
 On bootstrap, the application will try to connect to a remote Spring Cloud config server
 to fetch its configuration.
-The details of this remote server are filled in the `bootstrap.yml` file. ( TODO: This file is not found )
+The details of this remote server are filled in the `application.yml` file.
 By default, it tries to connect to the remote server on http://localhost:8888
 but it can of course be changed, or even configured via the `SPRING_CONFIG_URI` environment variable.
 

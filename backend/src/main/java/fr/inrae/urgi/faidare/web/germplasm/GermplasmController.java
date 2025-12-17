@@ -16,6 +16,7 @@ import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmAttributeValueV1VO;
 import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmPedigreeV1VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import fr.inrae.urgi.faidare.utils.Sitemaps;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -69,36 +70,36 @@ public class GermplasmController {
     }
 
     @GetMapping("/{germplasmId}")
-    public ModelAndView get(@PathVariable("germplasmId") String germplasmId) {
+    public ModelAndView get(@PathVariable("germplasmId") String germplasmId, HttpServletRequest request) {
         GermplasmV2VO germplasm = germplasmRepository.getByGermplasmDbId(germplasmId);
 
         if (germplasm == null) {
             throw new NotFoundException("Germplasm with ID " + germplasmId + " not found");
         }
 
-        return toModelAndView(germplasm);
+        return toModelAndView(germplasm, request);
     }
 
     @GetMapping(params = "id")
-    public ModelAndView getById(@RequestParam("id") String germplasmId) {
+    public ModelAndView getById(@RequestParam("id") String germplasmId, HttpServletRequest request) {
         GermplasmV2VO germplasm = germplasmRepository.getByGermplasmDbId(germplasmId);
 
         if (germplasm == null) {
             throw new NotFoundException("Germplasm with ID " + germplasmId + " not found");
         }
 
-        return toModelAndView(germplasm);
+        return toModelAndView(germplasm, request);
     }
 
     @GetMapping(params = "pui")
-    public ModelAndView getByPui(@RequestParam("pui") String pui) {
+    public ModelAndView getByPui(@RequestParam("pui") String pui, HttpServletRequest request) {
         GermplasmV2VO germplasm = germplasmRepository.getByGermplasmPUI(pui);
 
         if (germplasm == null) {
             throw new NotFoundException("Germplasm with PUI " + pui + " not found");
         }
 
-        return toModelAndView(germplasm);
+        return toModelAndView(germplasm, request);
     }
 
     @PostMapping("/exports/mcpd")
@@ -140,7 +141,7 @@ public class GermplasmController {
                     out,
                     stream,
                     vo -> Math.floorMod(vo.getGermplasmDbId().hashCode(),
-                                        Sitemaps.BUCKET_COUNT) == index,
+                        Sitemaps.BUCKET_COUNT) == index,
                     vo -> "/germplasms/" + vo.getGermplasmDbId()
                 );
             }
@@ -148,7 +149,7 @@ public class GermplasmController {
         return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body(body);
     }
 
-    private ModelAndView toModelAndView(GermplasmV2VO germplasm) {
+    private ModelAndView toModelAndView(GermplasmV2VO germplasm, HttpServletRequest request) {
         List<GermplasmAttributeValueV1VO> attributes = getAttributes(germplasm);
         GermplasmPedigreeV1VO pedigree = getPedigree(germplasm);
 
@@ -160,51 +161,52 @@ public class GermplasmController {
         sortCollections(germplasm);
         sortPanels(germplasm);
         return new ModelAndView("germplasm",
-                                "model",
-                                new GermplasmModel(
-                                    germplasm,
-                                    faidareProperties.getByUri(germplasm.getSourceUri()),
-                                    attributes,
-                                    pedigree,
-                                    crossReferences)
+            "model",
+            new GermplasmModel(
+                germplasm,
+                faidareProperties.getByUri(germplasm.getSourceUri()),
+                attributes,
+                pedigree,
+                crossReferences,
+                request.getContextPath())
         );
     }
 
     private void sortPopulations(GermplasmV2VO germplasm) {
         if (germplasm.getPopulation() != null) {
             germplasm.setPopulation(germplasm.getPopulation()
-                                             .stream()
-                                             .sorted(Comparator.comparing(
-                                                 CollPopVO::getName))
-                                             .collect(Collectors.toList()));
+                .stream()
+                .sorted(Comparator.comparing(
+                    CollPopVO::getName))
+                .collect(Collectors.toList()));
         }
     }
 
     private void sortCollections(GermplasmV2VO germplasm) {
         if (germplasm.getCollection() != null) {
             germplasm.setCollection(germplasm.getCollection()
-                                             .stream()
-                                             .sorted(Comparator.comparing(CollPopVO::getName))
-                                             .collect(Collectors.toList()));
+                .stream()
+                .sorted(Comparator.comparing(CollPopVO::getName))
+                .collect(Collectors.toList()));
         }
     }
 
     private void sortPanels(GermplasmV2VO germplasm) {
         if (germplasm.getPanel() != null) {
             germplasm.setPanel(germplasm.getPanel()
-                                        .stream()
-                                        .sorted(Comparator.comparing(CollPopVO::getName))
-                                        .collect(Collectors.toList()));
+                .stream()
+                .sorted(Comparator.comparing(CollPopVO::getName))
+                .collect(Collectors.toList()));
         }
     }
 
     private void sortDonors(GermplasmV2VO germplasm) {
         if (germplasm.getDonors() != null) {
             germplasm.setDonors(germplasm.getDonors()
-                                         .stream()
-                                         .sorted(Comparator.comparing(donor -> donor.getDonorInstitute()
-                                                                                    .getInstituteName()))
-                                         .collect(Collectors.toList()));
+                .stream()
+                .sorted(Comparator.comparing(donor -> donor.getDonorInstitute()
+                    .getInstituteName()))
+                .collect(Collectors.toList()));
         }
     }
 

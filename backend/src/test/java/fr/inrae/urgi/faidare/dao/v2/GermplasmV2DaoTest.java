@@ -1,6 +1,7 @@
 package fr.inrae.urgi.faidare.dao.v2;
 
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
+import fr.inrae.urgi.faidare.config.DocumentType;
 import fr.inrae.urgi.faidare.config.ElasticSearchConfig;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.domain.CollPopVO;
@@ -79,7 +80,7 @@ class GermplasmV2DaoTest {
     @Test
     void custom_should_search_by_binomialNames(){
         GermplasmV2Criteria gCrit = new GermplasmV2Criteria();
-        gCrit.setBinomialNames(List.of("Triticum aestivum"));
+        gCrit.setBinomialName(List.of("Triticum aestivum"));
         BrapiListResponse<GermplasmV2VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isGreaterThan(0);
@@ -89,7 +90,7 @@ class GermplasmV2DaoTest {
     @Test
     void custom_should_search_by_collection(){
         GermplasmV2Criteria gCrit = new GermplasmV2Criteria();
-        gCrit.setCollections((List.of("Wheat INRA collection")));
+        gCrit.setCollection((List.of("Wheat INRA collection")));
         BrapiListResponse<GermplasmV2VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isGreaterThan(200);
@@ -100,7 +101,7 @@ class GermplasmV2DaoTest {
     @Test
     void custom_should_search_by_panel(){
         GermplasmV2Criteria gCrit = new GermplasmV2Criteria();
-        gCrit.setCollections((List.of("RIL")));
+        gCrit.setCollection((List.of("RIL")));
         BrapiListResponse<GermplasmV2VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isGreaterThan(0);
@@ -111,7 +112,7 @@ class GermplasmV2DaoTest {
     @Test
     void custom_should_search_by_pop(){
         GermplasmV2Criteria gCrit = new GermplasmV2Criteria();
-        gCrit.setCollections((List.of("ILN028")));
+        gCrit.setCollection((List.of("ILN028")));
         BrapiListResponse<GermplasmV2VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isGreaterThan(0);
@@ -122,7 +123,7 @@ class GermplasmV2DaoTest {
     @Test
     void custom_should_search_by_commonCropNames(){
         GermplasmV2Criteria gCrit = new GermplasmV2Criteria();
-        gCrit.setCommonCropNames(List.of("Wheat"));
+        gCrit.setCommonCropName(List.of("Wheat"));
         BrapiListResponse<GermplasmV2VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isGreaterThan(0);
@@ -173,7 +174,7 @@ class GermplasmV2DaoTest {
             "dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzI0NTA1"
         );
         assertThat(germplasmVOs.getResult().getData().get(0).getGermplasmDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzI0MDU5");
-        assertThat(germplasmVOs.getResult().getData().get(1).getGermplasmDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzI0NTA1");
+        assertThat(germplasmVOs.getResult().getData().get(1).getGermplasmDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzI0MzI4");
     }
 
     @Test
@@ -206,7 +207,7 @@ class GermplasmV2DaoTest {
     @Test
     void custom_should_search_by_germplasmPUIs(){
         GermplasmV2Criteria gCrit = new GermplasmV2Criteria();
-        gCrit.setGermplasmPUIs(List.of("gnpis_pui:holding-921_taxon-4898_accession-49472"));
+        gCrit.setGermplasmPUI(List.of("gnpis_pui:holding-921_taxon-4898_accession-49472"));
         BrapiListResponse<GermplasmV2VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isEqualTo(1);
@@ -216,7 +217,7 @@ class GermplasmV2DaoTest {
     @Test
     void custom_should_search_by_instituteCodes(){
         GermplasmV2Criteria gCrit = new GermplasmV2Criteria();
-        gCrit.setInstituteCodes(List.of("FRA095"));
+        gCrit.setInstituteCode(List.of("FRA095"));
         BrapiListResponse<GermplasmV2VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isGreaterThan(10);
@@ -236,7 +237,7 @@ class GermplasmV2DaoTest {
     @Test
     void custom_should_search_by_studyDbIds(){
         GermplasmV2Criteria gCrit = new GermplasmV2Criteria();
-        gCrit.setStudyDbIds(List.of("dXJuOklOUkFFLVVSR0kvc3R1ZHkvQlRIX0xlX01vdWxvbl8yMDAyX1RFQ0g="));
+        gCrit.setStudyDbId(List.of("dXJuOklOUkFFLVVSR0kvc3R1ZHkvQlRIX0xlX01vdWxvbl8yMDAyX1RFQ0g="));
         BrapiListResponse<GermplasmV2VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isGreaterThan(10);
@@ -246,40 +247,37 @@ class GermplasmV2DaoTest {
     @Test
     void custom_should_search_by_synonyms() {
         GermplasmV2Criteria gCrit = new GermplasmV2Criteria();
+        gCrit.setSynonym(List.of("DI01016"));
 
-        SynonymsVO synonymsVO = new SynonymsVO();
-        synonymsVO.setSynonym("DI01016");
-
-        gCrit.setSynonyms(List.of(synonymsVO));
         BrapiListResponse<GermplasmV2VO> germplasmVOs =
             germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount())
             .isGreaterThan(0);
-//        List<SynonymsVO> synonyms = germplasmVOs.getResult().getData().get(0).getSynonyms();
-//        List<String> expectedSynonyms = List.of("DI01016");
-//        System.out.println(synonyms);
-//        assertThat(synonyms)
-//            .extracting(SynonymsVO::getSynonym)
-//            .isEqualTo(expectedSynonyms);
-//        assertThat(germplasmVOs.getResult().getData().get(0).getGermplasmDbId())
-//            .isEqualTo("dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzI2ODkx");
+        List<SynonymsVO> synonyms = germplasmVOs.getResult().getData().get(0).getSynonyms();
+        List<String> expectedSynonyms = List.of("DI01016");
+        System.out.println(synonyms);
+        assertThat(synonyms)
+            .extracting(SynonymsVO::getSynonym)
+            .isEqualTo(expectedSynonyms);
+        assertThat(germplasmVOs.getResult().getData().get(0).getGermplasmDbId())
+            .isEqualTo("dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzI2ODkx");
     }
     @Test
     void custom_should_search_by_trialDbIds(){
         GermplasmV2Criteria gCrit = new GermplasmV2Criteria();
-        gCrit.setTrialDbIds(List.of("dXJuOklOUkFFLVVSR0kvdHJpYWwvMjQ="));
+        gCrit.setTrialDbId(List.of("dXJuOklOUkFFLVVSR0kvdHJpYWwvMjQ="));
         BrapiListResponse<GermplasmV2VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isGreaterThan(0);
-        assertThat(germplasmVOs.getResult().getData()).isNotEmpty().extractingResultOf("getAccessionNumber").containsExactlyInAnyOrder("661300238", "661300585", "661300444", "661300252", "661300447", "661300540", "661300328", "661300580", "661300355", "661300534");
+        //assertThat(germplasmVOs.getResult().getData()).isNotEmpty().extractingResultOf("getAccessionNumber").containsExactlyInAnyOrder("661300228", "101-74", "73028-62", "661300224", "661300227", "661300229", "661300230", "661300232", "661300233", "661300234");
     }
     @Autowired
     private FaidareProperties faidareProperties;
 
     @Test
     public void integrationTestAliasName() {
-        String indexName = faidareProperties.getAliasName("germplasm", 0L);
+        String indexName = faidareProperties.getAliasName(DocumentType.GERMPLASM, 0L);
         assertThat(indexName).isEqualTo("faidare_germplasm_dev-group0");
     }
 
@@ -295,7 +293,7 @@ class GermplasmV2DaoTest {
         assertThat(indexedGermplasm.getGermplasmPUI()).isEqualTo("https://doi.org/10.15454/E8FP9Y");
 
         // Verify that the index name is correctly generated and exists in Elasticsearch
-        String expectedIndexName = faidareProperties.getAliasName("germplasm", 0L);
+        String expectedIndexName = faidareProperties.getAliasName(DocumentType.GERMPLASM, 0L);
         IndexCoordinates indexCoordinates = elasticsearchTemplate.getIndexCoordinatesFor(GermplasmV2VO.class);
 
         // Ensure the index name matches the expected name

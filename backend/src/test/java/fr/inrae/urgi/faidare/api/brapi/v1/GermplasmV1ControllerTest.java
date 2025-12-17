@@ -106,29 +106,16 @@ class GermplasmV1ControllerTest {
 //    }
 //
     @Test
-    void should_get_germplasm_by_accessionNumber_by_page_O_pageSize_1() throws Exception {
+    void should_get_germplasm_by_germplasmDbId_by_page_O_pageSize_1() throws Exception {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
-                createURLWithPort("/brapi/v1/germplasm?accessionNumber=36785&page=0&pageSize=1"),
+                createURLWithPort("/brapi/v1/germplasm?germplasmDbId=dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzQzMTY1&page=0&pageSize=1"),
                 HttpMethod.GET, entity, String.class);
-        String accNumber = JsonPath.parse(response.getBody()).read("$.result.data.[0].accessionNumber");
-        assertThat(accNumber).isEqualTo("36785");
+        String germplasmDbId = JsonPath.parse(response.getBody()).read("$.result.data.[0].germplasmDbId");
+        assertThat(germplasmDbId).isEqualTo("dXJuOklOUkFFLVVSR0kvZ2VybXBsYXNtLzQzMTY1");
         Integer pageSize = JsonPath.parse(response.getBody()).read("$.metadata.pagination.pageSize");
         assertThat(pageSize).isEqualTo(1);
-    }
-
-
-    @Test
-    void should_get_germplasm_by_accessionNumber() throws Exception {
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
-
-        ResponseEntity<String> response = testRestTemplate.exchange(
-                createURLWithPort("/brapi/v1/germplasm?accessionNumber=36785"),
-                HttpMethod.GET, entity, String.class);
-        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
-        String accNumber = JsonPath.parse(response.getBody()).read("$.result.data.[0].accessionNumber");
-        assertThat(accNumber).isEqualTo("36785");
     }
 
     @Test

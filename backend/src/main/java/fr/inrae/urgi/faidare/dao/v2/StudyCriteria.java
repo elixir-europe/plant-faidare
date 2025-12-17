@@ -5,9 +5,9 @@ import java.util.List;
 public class StudyCriteria {
 
     private List<String> commonCropName;
-    private List<String> externalReferenceID;
+    private List<String> externalReferenceId;
     private List<String> externalReferenceSource;
-    private List<String> germplasmDbIds;
+    private List<String> germplasmDbId;
     private List<String> germplasmNames;
     private List<String> locationDbId;
     private List<String> locationName;
@@ -19,12 +19,14 @@ public class StudyCriteria {
     private List<String> seasonDbId;
     private List<String> sortBy;
     private List<String> sortOrder;
+    private List<String> active;
     private List<String> studyCode;
     private List<String> studyDbId;
     private List<String> studyName;
     private List<String> studyPUI;
     private List<String> studyType;
     private List<String> trialDbIds;
+    private String trialDbId;
     private List<String> trialNames;
     private Integer page;
     private Integer pageSize;
@@ -49,17 +51,17 @@ public class StudyCriteria {
 
     public void setCommonCropName(List<String> commonCropNames) { this.commonCropName = commonCropNames; }
 
-    public List<String> getExternalReferenceID() { return externalReferenceID; }
+    public List<String> getExternalReferenceId() { return externalReferenceId; }
 
-    public void setExternalReferenceID(List<String> externalReferenceIDs) { this.externalReferenceID = externalReferenceIDs; }
+    public void setExternalReferenceId(List<String> externalReferenceIDs) { this.externalReferenceId = externalReferenceIDs; }
 
     public List<String> getExternalReferenceSource() { return externalReferenceSource; }
 
     public void setExternalReferenceSource(List<String> externalReferenceSources) { this.externalReferenceSource = externalReferenceSources; }
 
-    public List<String> getGermplasmDbIds() { return germplasmDbIds; }
+    public List<String> getGermplasmDbId() { return germplasmDbId; }
 
-    public void setGermplasmDbIds(List<String> germplasmDbIds) { this.germplasmDbIds = germplasmDbIds; }
+    public void setGermplasmDbId(List<String> germplasmDbId) { this.germplasmDbId = germplasmDbId; }
 
     public List<String> getGermplasmNames() { return germplasmNames; }
 
@@ -105,6 +107,10 @@ public class StudyCriteria {
 
     public void setSortOrder(List<String> sortOrder) { this.sortOrder = sortOrder; }
 
+    public List<String> getActive() { return active; }
+
+    public void setActive(List<String> active) { this.active = active; }
+
     public List<String> getStudyCode() { return studyCode; }
 
     public void setStudyCode(List<String> studyCodes) { this.studyCode = studyCodes; }
@@ -128,6 +134,10 @@ public class StudyCriteria {
     public List<String> getTrialDbIds() { return trialDbIds; }
 
     public void setTrialDbIds(List<String> trialDbIds) { this.trialDbIds = trialDbIds; }
+
+    public String getTrialDbId() { return trialDbId; }
+
+    public void setTrialDbId(String trialDbId) { this.trialDbId = trialDbId; }
 
     public List<String> getTrialNames() { return trialNames; }
 
