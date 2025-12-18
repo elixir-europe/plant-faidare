@@ -1,21 +1,23 @@
 package fr.inrae.urgi.faidare.repository.http;
 
+import java.time.Duration;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
+import fr.inrae.urgi.faidare.config.RestClientCustomizations;
 import fr.inrae.urgi.faidare.filter.AuthenticationStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriBuilder;
 
 /**
  * User group client used to list the group ids for a user
@@ -37,14 +39,16 @@ public class UserGroupsResourceClient {
     private static final List<Integer> PUBLIC_GROUPS = Collections.singletonList(0);
 
     private final FaidareProperties properties;
-    private final RestTemplate client;
+    private final RestClient client;
+    private final RestClient.Builder clientBuilder;
 
     @Autowired
     public UserGroupsResourceClient(
         FaidareProperties properties,
-        RestTemplate client
+        RestClient.Builder clientBuilder
     ) {
-        this.client = client;
+        this.clientBuilder = clientBuilder;
+        this.client = clientBuilder.build();
         this.properties = properties;
     }
 
@@ -79,17 +83,17 @@ public class UserGroupsResourceClient {
             logger.warn("No configured security group WS in application properties. Only public data will be shown.");
             return PUBLIC_GROUPS;
         }
-
-        String url = baseUrl + "?token=" + token + "&userName=" + userName;
-        logger.info("Fetching user groups from: " + baseUrl);
-
-        ResponseEntity<Integer[]> response = this.client.getForEntity(url, Integer[].class);
-
-        Integer[] groupsArray = response.getBody();
-        if (groupsArray != null) {
-            return Arrays.asList(groupsArray);
-        }
-        return null;
+        
+        return this.client
+            .get()
+            .uri(baseUrl, uriBuilder ->
+                uriBuilder
+                    .queryParam("token", token)
+                    .queryParam("userName", userName)
+                    .build()
+            )
+            .retrieve()
+            .toEntity(new ParameterizedTypeReference<List<Integer>>() {}).getBody();
     }
 
 }

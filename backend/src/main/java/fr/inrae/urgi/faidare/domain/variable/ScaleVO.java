@@ -1,6 +1,7 @@
 package fr.inrae.urgi.faidare.domain.variable;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * @author gcornut

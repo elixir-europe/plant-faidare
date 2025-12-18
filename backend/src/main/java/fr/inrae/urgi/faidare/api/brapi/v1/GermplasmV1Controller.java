@@ -3,8 +3,6 @@ package fr.inrae.urgi.faidare.api.brapi.v1;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiSingleResponse;
 import fr.inrae.urgi.faidare.dao.v1.GermplasmV1Dao;
@@ -22,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @Tag(name = "Breeding API V1", description = "Deprecated version, use latest as much as possible")
 @RestController

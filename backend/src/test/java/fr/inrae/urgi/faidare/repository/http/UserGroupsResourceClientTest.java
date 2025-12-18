@@ -1,50 +1,48 @@
 package fr.inrae.urgi.faidare.repository.http;
 
-import fr.inrae.urgi.faidare.config.FaidareProperties;
-import fr.inrae.urgi.faidare.filter.AuthenticationStore;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import fr.inrae.urgi.faidare.filter.AuthenticationStore;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.restclient.test.autoconfigure.RestClientTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.client.MockRestServiceServer;
 
-@ExtendWith(MockitoExtension.class)
+@RestClientTest(
+    value = UserGroupsResourceClient.class,
+    properties = {
+        "faidare.securityUserGroupWsUrl=http://example.com/api",
+        "faidare.securityUserGroupWsToken=TOKEN"
+    }
+)
 class UserGroupsResourceClientTest {
 
-    @Mock
-    FaidareProperties properties;
+    @Autowired
+    private MockRestServiceServer mockServer;
 
-    @Mock
-    RestTemplate restClient;
-
-    @InjectMocks
-    UserGroupsResourceClient client;
+    @Autowired
+    private UserGroupsResourceClient client;
 
     @Test
     void should_Return_User_Groups_When_User_Is_Authenticated() {
         String userName = "ekimmel";
 
-        when(properties.getSecurityUserGroupWsUrl()).thenReturn("http://example.com/api");
-        when(properties.getSecurityUserGroupWsToken()).thenReturn("<TOKEN>");
-
-        Integer[] expectedGroups = {0, 34, 43, 25, 32, 8};
-        ResponseEntity<Integer[]> response = new ResponseEntity<>(expectedGroups, HttpStatus.OK);
-        when(restClient.getForEntity("http://example.com/api?token=<TOKEN>&userName=" + userName, Integer[].class))
-            .thenReturn(response);
+        String json = "[0, 34, 43, 25, 32, 8]";
+        String expectedUri = "http://example.com/api?token=TOKEN&userName=" + userName;
+        mockServer.expect(requestTo(expectedUri)).andRespond(
+            withSuccess(json, MediaType.APPLICATION_JSON)
+        );
 
         AuthenticationStore.set(userName);
 
         List<Integer> actualGroups = client.getUserGroups();
 
-        assertThat(actualGroups).isNotNull().contains(expectedGroups);
+        assertThat(actualGroups).containsExactly(0, 34, 43, 25, 32, 8);
         AuthenticationStore.reset();
     }
 
@@ -53,5 +51,4 @@ class UserGroupsResourceClientTest {
         List<Integer> groups = client.getUserGroups();
         assertThat(groups).isNotNull().isNotEmpty().containsExactly(0);
     }
-
 }

@@ -2,10 +2,10 @@ package fr.inrae.urgi.faidare.domain.variable;
 
 import java.util.List;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.inrae.urgi.faidare.domain.jsonld.data.HasURI;
 import fr.inrae.urgi.faidare.domain.jsonld.data.HasURL;
 import fr.inrae.urgi.faidare.domain.jsonld.data.IncludedInDataCatalog;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * @author gcornut

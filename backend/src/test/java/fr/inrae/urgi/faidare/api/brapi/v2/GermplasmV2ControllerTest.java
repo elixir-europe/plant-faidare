@@ -13,10 +13,11 @@ import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Dao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -67,7 +68,9 @@ class GermplasmV2ControllerTest {
         JsonNode serverInfoFileJson = mapper.readTree(ResourceUtils.getFile("classpath:serverinfo.json"));
         JSONAssert.assertEquals(
             serverInfoFileJson.toString(),
-            response.getBody(), false);
+            response.getBody(),
+            JSONCompareMode.LENIENT
+        );
 
 
     }

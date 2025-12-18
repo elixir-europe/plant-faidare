@@ -10,11 +10,11 @@ buildscript {
 plugins {
     java
     jacoco
-    id("org.springframework.boot") version "3.5.0"
-    id("com.gorylenko.gradle-git-properties") version "2.5.0"
+    id("org.springframework.boot") version "4.0.0"
+    id("com.gorylenko.gradle-git-properties") version "2.5.4"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.sonarqube")
-    id("org.owasp.dependencycheck") version "12.1.3"
+    id("org.owasp.dependencycheck") version "12.1.9"
 }
 
 java {
@@ -23,9 +23,6 @@ java {
 
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://repo.spring.io/milestone")
-    }
 }
 
 gitProperties {
@@ -36,7 +33,7 @@ gitProperties {
 tasks {
 
     withType(JavaCompile::class.java) {
-        // make sur the parameter names are writtn in the byte code and available using reflection.
+        // make sur the parameter names are written in the byte code and available using reflection.
         // this is useful for Jackson and Spring to automatically deduce propert names or path variable names
         // based on the name of the parameter
         options.compilerArgs.add("-parameters")
@@ -81,7 +78,6 @@ tasks {
         into("BOOT-INF/classes/static") {
             from(project(":web").file("build/dist"))
         }
-        launchScript()
     }
 
     bootRun {
@@ -109,7 +105,7 @@ tasks {
     }
 }
 
-extra["springCloudVersion"] = "2025.0.0"
+extra["springCloudVersion"] = "2025.1.0"
 dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
@@ -120,7 +116,8 @@ dependencies {
     // Spring
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
+    implementation("org.springframework.boot:spring-boot-starter-restclient")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -130,15 +127,19 @@ dependencies {
     // Elasticsearch
     implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
 
     implementation("org.apache.httpcomponents.client5:httpclient5")
 
     // Others
-    implementation("com.google.guava:guava:33.4.8-jre")
-    implementation("com.opencsv:opencsv:5.11.1")
+    implementation("com.google.guava:guava:33.5.0-jre")
+    implementation("com.opencsv:opencsv:5.12.0")
 
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jsoup:jsoup:1.20.1")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-restclient-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-elasticsearch-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-security-test")
+    testImplementation("org.jsoup:jsoup:1.21.2")
 }

@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.inrae.urgi.faidare.domain.jsonld.data.HasURI;
 import fr.inrae.urgi.faidare.domain.jsonld.data.HasURL;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * @author gcornut

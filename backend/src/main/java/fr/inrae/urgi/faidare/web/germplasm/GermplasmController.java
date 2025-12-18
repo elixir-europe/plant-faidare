@@ -41,7 +41,6 @@ import java.util.stream.Stream;
 @Controller("webGermplasmController")
 @RequestMapping({"/germplasms", "/germplasm"})
 public class GermplasmController {
-
     private final GermplasmV2Dao germplasmRepository;
     private final GermplasmMcpdDao germplasmMcpdRepository;
     private final GermplasmPedigreeV1Dao germplasmPedigreeRepository;

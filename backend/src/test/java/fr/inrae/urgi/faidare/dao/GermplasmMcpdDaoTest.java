@@ -4,7 +4,7 @@ import fr.inrae.urgi.faidare.dao.v2.GermplasmMcpdDao;
 import fr.inrae.urgi.faidare.domain.GermplasmMcpdVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.elasticsearch.DataElasticsearchTest;
+import org.springframework.boot.data.elasticsearch.test.autoconfigure.DataElasticsearchTest;
 
 import java.util.List;
 import java.util.Set;

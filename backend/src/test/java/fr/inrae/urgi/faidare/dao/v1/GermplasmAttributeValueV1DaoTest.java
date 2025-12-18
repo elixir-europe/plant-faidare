@@ -4,7 +4,7 @@ import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmAttributeV1VO;
 import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmAttributeValueV1VO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.elasticsearch.DataElasticsearchTest;
+import org.springframework.boot.data.elasticsearch.test.autoconfigure.DataElasticsearchTest;
 
 import java.util.List;
 
