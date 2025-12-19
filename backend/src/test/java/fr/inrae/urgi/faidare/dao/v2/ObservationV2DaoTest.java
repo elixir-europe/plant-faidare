@@ -1,5 +1,11 @@
 package fr.inrae.urgi.faidare.dao.v2;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
+
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
 import fr.inrae.urgi.faidare.config.ElasticSearchConfig;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationVO;
@@ -8,10 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.elasticsearch.test.autoconfigure.DataElasticsearchTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Import({ElasticSearchConfig.class})
 @DataElasticsearchTest
@@ -139,5 +141,23 @@ public class ObservationV2DaoTest {
         assertThat(observationUnitVOs).isNotNull();
         assertThat(observationUnitVOs.getMetadata().getPagination().getTotalCount()).isEqualTo(25);
         assertThat(observationUnitVOs.getResult().getData().get(0).getValue()).isEqualTo("77,9");
+    }
+
+    @Test
+    void shouldFindByExportCriteria() {
+        ObservationExportCriteria exportCriteria = new ObservationExportCriteria(
+            "dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI=",
+            Set.of("Gaillac"),
+            Set.of("2013"),
+            Set.of("Psi_Fill")
+        );
+        try (Stream<ObservationVO> stream = observationDao.findByExportCriteria(exportCriteria)) {
+            List<ObservationVO> result = stream.toList();
+            assertThat(result).isNotEmpty();
+            assertThat(result).allSatisfy(obs -> assertThat(obs.getTrialDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI="));
+            assertThat(result).allSatisfy(obs -> assertThat(obs.getStudyLocation()).isEqualTo("Gaillac"));
+            assertThat(result).allSatisfy(obs -> assertThat(obs.getSeason().getSeasonName()).isEqualTo("2013"));
+            assertThat(result).allSatisfy(obs -> assertThat(obs.getObservationVariableName()).isEqualTo("Psi_Fill"));
+        }
     }
 }

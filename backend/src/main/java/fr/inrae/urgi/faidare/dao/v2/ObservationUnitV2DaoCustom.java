@@ -7,10 +7,17 @@ import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2V
 import org.springframework.data.elasticsearch.core.SearchHits;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 
 public interface ObservationUnitV2DaoCustom {
     BrapiListResponse<ObservationUnitV2VO> findObservationUnitByCriteria(ObservationUnitV2Criteria observationUnitCriteria);
 
     BrapiListResponse<ObservationLevelVO> findObservationLevels(ObservationUnitV2Criteria criteria);
+
+    /**
+     * Returns a stream of all the observation units matching the given criteria.
+     * This stream must be closed after consumption.
+     */
+    Stream<ObservationUnitV2VO> findByExportCriteria(ObservationUnitExportCriteria criteria);
 }

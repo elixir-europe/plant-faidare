@@ -7,16 +7,20 @@ import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2V
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.SearchScrollHits;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.CriteriaQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class ObservationUnitV2DaoCustomImpl implements ObservationUnitV2DaoCustom{
 
@@ -191,5 +195,16 @@ public class ObservationUnitV2DaoCustomImpl implements ObservationUnitV2DaoCusto
             query.getPageable(),
             Math.toIntExact(hits.getTotalHits())
         );
+    }
+
+    @Override
+    public Stream<ObservationUnitV2VO> findByExportCriteria(ObservationUnitExportCriteria exportCriteria) {
+        Criteria criteria = Criteria
+            .where("trialDbId").is(exportCriteria.trialDbId())
+            .and(Criteria.where("observationUnitPosition.observationLevel.levelCode").is(exportCriteria.observationLevelCode()));
+
+        return esTemplate.searchForStream(new CriteriaQuery(criteria), ObservationUnitV2VO.class)
+            .stream()
+            .map(SearchHit::getContent);
     }
 }

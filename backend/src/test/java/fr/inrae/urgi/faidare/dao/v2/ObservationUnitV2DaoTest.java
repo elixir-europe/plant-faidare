@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -152,4 +153,18 @@ public class ObservationUnitV2DaoTest {
 //        assertThat(observationUnitVOs.getMetadata().getPagination().getTotalCount()).isEqualTo(3843);
 //        assertThat(observationUnitVOs.getResult().getData().get(0).getGermplasmCollections()).isEqualTo("");
 //    }
+
+    @Test
+    void shouldFindByExportCriteria() {
+        ObservationUnitExportCriteria exportCriteria = new ObservationUnitExportCriteria(
+            "dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI=",
+            "VIRTUAL_TRIAL"
+        );
+        try (Stream<ObservationUnitV2VO> stream = observationUnitDao.findByExportCriteria(exportCriteria)) {
+            List<ObservationUnitV2VO> result = stream.toList();
+            assertThat(result).isNotEmpty();
+            assertThat(result).allSatisfy(unit -> assertThat(unit.getTrialDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI="));
+            assertThat(result).allSatisfy(unit -> assertThat(unit.getObservationUnitPosition().getObservationLevel().getLevelOrder()).isEqualTo("VIRTUAL_TRIAL"));
+        }
+    }
 }

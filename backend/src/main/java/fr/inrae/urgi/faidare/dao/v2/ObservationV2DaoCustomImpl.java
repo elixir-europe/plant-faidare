@@ -1,11 +1,15 @@
 package fr.inrae.urgi.faidare.dao.v2;
 
+import java.util.stream.Stream;
+
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
+import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
@@ -103,7 +107,25 @@ public class ObservationV2DaoCustomImpl implements ObservationV2DaoCustom{
             observationCriteria.getPageSize() != null ? observationCriteria.getPageSize() : 10));
         SearchHits<ObservationVO> searchHits = esTemplate.search(criteriaQuery, ObservationVO.class);
         return BrapiListResponse.brapiResponseForPageOf(searchHits, criteriaQuery.getPageable());
+    }
 
+    @Override
+    public Stream<ObservationVO> findByExportCriteria(ObservationExportCriteria exportCriteria) {
+        Criteria criteria = Criteria
+            .where("trialDbId").is(exportCriteria.trialDbId());
+        if (!exportCriteria.studyLocations().isEmpty()) {
+            criteria.and(Criteria.where("studyLocation").in(exportCriteria.studyLocations()));
+        }
+        if (!exportCriteria.seasonNames().isEmpty()) {
+            criteria.and(Criteria.where("season.seasonName").in(exportCriteria.seasonNames()));
+        }
+        if (!exportCriteria.observationVariableNames().isEmpty()) {
+            criteria.and(Criteria.where("observationVariableName").in(exportCriteria.observationVariableNames()));
+        }
 
+        return esTemplate
+            .searchForStream(new CriteriaQuery(criteria), ObservationVO.class)
+            .stream()
+            .map(SearchHit::getContent);
     }
 }
