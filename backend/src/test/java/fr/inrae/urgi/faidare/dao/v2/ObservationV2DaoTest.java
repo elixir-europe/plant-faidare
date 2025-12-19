@@ -160,4 +160,12 @@ public class ObservationV2DaoTest {
             assertThat(result).allSatisfy(obs -> assertThat(obs.getObservationVariableName()).isEqualTo("Psi_Fill"));
         }
     }
+
+    @Test
+    void shouldFindChoosableObservationExportCriteriaByTrialDbId() {
+        ChoosableObservationExportCriteria result = observationDao.findChoosableObservationExportCriteriaByTrialDbId("dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI=");
+        assertThat(result.seasonNames()).contains("2013");
+        assertThat(result.studyLocations()).contains("Gaillac");
+        assertThat(result.observationVariableNames()).contains("Psi_Fill");
+    }
 }

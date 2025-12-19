@@ -20,4 +20,6 @@ public interface ObservationUnitV2DaoCustom {
      * This stream must be closed after consumption.
      */
     Stream<ObservationUnitV2VO> findByExportCriteria(ObservationUnitExportCriteria criteria);
+
+    List<String> findObservationLevelCodesByTrialDbId(String trialDbId);
 }

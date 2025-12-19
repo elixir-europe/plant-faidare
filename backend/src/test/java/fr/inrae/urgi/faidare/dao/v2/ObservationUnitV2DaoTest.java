@@ -167,4 +167,10 @@ public class ObservationUnitV2DaoTest {
             assertThat(result).allSatisfy(unit -> assertThat(unit.getObservationUnitPosition().getObservationLevel().getLevelOrder()).isEqualTo("VIRTUAL_TRIAL"));
         }
     }
+
+    @Test
+    void shouldFindObservationLevelCodesByTrialDbId() {
+        List<String> codes = observationUnitDao.findObservationLevelCodesByTrialDbId("dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI=");
+        assertThat(codes).contains("VIRTUAL_TRIAL");
+    }
 }

@@ -1,19 +1,32 @@
 package fr.inrae.urgi.faidare.dao.v2;
 
+import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
+import co.elastic.clients.elasticsearch._types.aggregations.TermsAggregation;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiSingleResponse;
+import fr.inrae.urgi.faidare.domain.brapi.GermplasmSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationLevelVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2VO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregation;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
+import org.springframework.data.elasticsearch.client.elc.Queries;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchScrollHits;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.CriteriaQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilterBuilder;
+import org.springframework.data.elasticsearch.core.query.SqlQuery;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -206,5 +219,42 @@ public class ObservationUnitV2DaoCustomImpl implements ObservationUnitV2DaoCusto
         return esTemplate.searchForStream(new CriteriaQuery(criteria), ObservationUnitV2VO.class)
             .stream()
             .map(SearchHit::getContent);
+    }
+
+    @Override
+    public List<String> findObservationLevelCodesByTrialDbId(String trialDbId) {
+        NativeQueryBuilder nativeQueryBuilder = NativeQuery.builder();
+        NativeQuery query = nativeQueryBuilder
+            .withQuery(new CriteriaQuery(Criteria.where("trialDbId").is(trialDbId)))
+            .withAggregation(
+                "code",
+                Aggregation.of(
+                    aggregationBuilder ->
+                        aggregationBuilder.terms(
+                            termsBuilder ->
+                                termsBuilder
+                                    .field("observationUnitPosition.observationLevel.levelCode")
+                                    .size(1000)
+                        )
+                )
+            )
+            .withMaxResults(0)
+            .build();
+        SearchHits<?> searchHits = esTemplate.search(query, ObservationUnitV2VO.class);
+
+        ElasticsearchAggregations aggregations =
+            (ElasticsearchAggregations) searchHits.getAggregations();
+        ElasticsearchAggregation codeAggregation = aggregations.get("code");
+        List<String> codes = codeAggregation
+            .aggregation()
+            .getAggregate()
+            .sterms()
+            .buckets()
+            .array()
+            .stream()
+            .map(bucket -> bucket.key().stringValue())
+            .sorted()
+            .toList();
+        return codes;
     }
 }

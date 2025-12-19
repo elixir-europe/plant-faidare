@@ -1,13 +1,19 @@
 package fr.inrae.urgi.faidare.dao.v2;
 
+import java.util.List;
 import java.util.stream.Stream;
 
+import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregation;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -127,5 +133,51 @@ public class ObservationV2DaoCustomImpl implements ObservationV2DaoCustom{
             .searchForStream(new CriteriaQuery(criteria), ObservationVO.class)
             .stream()
             .map(SearchHit::getContent);
+    }
+
+    @Override
+    public ChoosableObservationExportCriteria findChoosableObservationExportCriteriaByTrialDbId(String trialDbId) {
+        NativeQueryBuilder nativeQueryBuilder = NativeQuery.builder();
+        NativeQuery query = nativeQueryBuilder
+            .withQuery(new CriteriaQuery(Criteria.where("trialDbId").is(trialDbId)))
+            .withAggregation("seasonNames", fieldAggregation("season.seasonName"))
+            .withAggregation("studyLocations", fieldAggregation("studyLocation"))
+            .withAggregation("observationVariableNames", fieldAggregation("observationVariableName"))
+            .withMaxResults(0)
+            .build();
+        SearchHits<?> searchHits = esTemplate.search(query, ObservationVO.class);
+
+        ElasticsearchAggregations aggregations =
+            (ElasticsearchAggregations) searchHits.getAggregations();
+        return new ChoosableObservationExportCriteria(
+            choosableValues(aggregations.get("seasonNames")),
+            choosableValues(aggregations.get("studyLocations")),
+            choosableValues(aggregations.get("observationVariableNames"))
+        );
+    }
+
+    private Aggregation fieldAggregation(String field) {
+        return Aggregation.of(
+            aggregationBuilder ->
+                aggregationBuilder.terms(
+                    termsBuilder ->
+                        termsBuilder
+                            .field(field)
+                            .size(1000)
+                )
+        );
+    }
+
+    private List<String> choosableValues(ElasticsearchAggregation aggregation) {
+        return aggregation
+            .aggregation()
+            .getAggregate()
+            .sterms()
+            .buckets()
+            .array()
+            .stream()
+            .map(bucket -> bucket.key().stringValue())
+            .sorted()
+            .toList();
     }
 }
