@@ -17,19 +17,21 @@ public final class TrialModel {
     private final DataSource source;
     private final List<LocationVO> locations;
     private final List<GermplasmV2VO> germplasms;
+    private final TrialChoosableExportCriteria choosableExportCriteria;
     private final String contextPath;
 
     public TrialModel(
         TrialV2VO trial,
         DataSource source,
         List<LocationVO> locations,
-        List<GermplasmV2VO> germplasms,
+        List<GermplasmV2VO> germplasms, TrialChoosableExportCriteria choosableExportCriteria,
         String contextPath
     ) {
         this.trial = trial;
         this.source = source;
         this.locations = locations;
         this.germplasms = germplasms;
+        this.choosableExportCriteria = choosableExportCriteria;
         this.contextPath = contextPath;
     }
 
@@ -47,6 +49,10 @@ public final class TrialModel {
 
     public List<GermplasmV2VO> getGermplasms() {
         return germplasms;
+    }
+
+    public TrialChoosableExportCriteria getChoosableExportCriteria() {
+        return choosableExportCriteria;
     }
 
     public String getContextPath() {

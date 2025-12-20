@@ -31,6 +31,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,12 +41,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ObservationUnitExportService {
-
-    private final ObservationUnitV2Dao observationUnitV2Dao;
-
-    public ObservationUnitExportService(ObservationUnitV2Dao observationUnitV2Dao) {
-        this.observationUnitV2Dao = observationUnitV2Dao;
-    }
 
     public void exportAsExcel(OutputStream out, List<ExportedObservationUnit> observationUnits) {
         List<Row> rows = createRows(observationUnits);

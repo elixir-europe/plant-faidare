@@ -1,10 +1,5 @@
 package fr.inrae.urgi.faidare.web.observationunit;
 
-/**
- * Controller allowing to export observation units
- * @author JB Nizet
- */
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,6 +11,8 @@ import fr.inrae.urgi.faidare.dao.v2.ObservationUnitV2Dao;
 import fr.inrae.urgi.faidare.dao.v2.ObservationV2Dao;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,10 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
- * Controller used to display a germplasm card based on its ID.
- * Note that this controller is mapped to the /germplasm path in addition to
- * the canonical /germplasms path in order to still honor legacy URLs used
- * in external applications
+ * Controller allowing to export observation units
  * @author JB Nizet
  */
 @Controller("webObservationUnitController")

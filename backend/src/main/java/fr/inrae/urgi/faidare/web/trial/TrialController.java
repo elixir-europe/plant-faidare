@@ -14,8 +14,11 @@ import fr.inrae.urgi.faidare.api.NotFoundException;
 import fr.inrae.urgi.faidare.config.DataSource;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.dao.v1.LocationV1Dao;
+import fr.inrae.urgi.faidare.dao.v2.ChoosableObservationExportCriteria;
 import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Criteria;
 import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Dao;
+import fr.inrae.urgi.faidare.dao.v2.ObservationUnitV2Dao;
+import fr.inrae.urgi.faidare.dao.v2.ObservationV2Dao;
 import fr.inrae.urgi.faidare.dao.v2.TrialV2Dao;
 import fr.inrae.urgi.faidare.domain.LocationVO;
 import fr.inrae.urgi.faidare.domain.brapi.TrialSitemapVO;
@@ -45,15 +48,21 @@ public class TrialController {
     private final FaidareProperties faidareProperties;
     private final LocationV1Dao locationRepository;
     private final GermplasmV2Dao germplasmRepository;
+    private final ObservationUnitV2Dao observationUnitRepository;
+    private final ObservationV2Dao observationRepository;
 
     public TrialController(TrialV2Dao trialRepository,
                            FaidareProperties faidareProperties,
                            LocationV1Dao locationRepository,
-                           GermplasmV2Dao germplasmRepository) {
+                           GermplasmV2Dao germplasmRepository,
+                           ObservationUnitV2Dao observationUnitRepository,
+                           ObservationV2Dao observationRepository) {
         this.trialRepository = trialRepository;
         this.faidareProperties = faidareProperties;
         this.locationRepository = locationRepository;
         this.germplasmRepository = germplasmRepository;
+        this.observationUnitRepository = observationUnitRepository;
+        this.observationRepository = observationRepository;
     }
 
     @GetMapping("/{trialId}")
@@ -83,6 +92,9 @@ public class TrialController {
         // Clarification: the spec was not fully explicit — the goal is to show the 4 fields from the screenshot (name, source, type, description) plus the location.
         // Agreed: no need to use a BrAPI endpoint — using the DAO directly is fine here.
 
+        List<String> observationLevelCodes = observationUnitRepository.findObservationLevelCodesByTrialDbId(trialId);
+        ChoosableObservationExportCriteria choosableObservationExportCriteria = observationRepository.findChoosableObservationExportCriteriaByTrialDbId(trialId);
+
         return new ModelAndView("trial",
                                 "model",
                                 new TrialModel(
@@ -90,6 +102,12 @@ public class TrialController {
                                     source,
                                     locations,
                                     germplasms,
+                                    new TrialChoosableExportCriteria(
+                                        observationLevelCodes,
+                                        choosableObservationExportCriteria.seasonNames(),
+                                        choosableObservationExportCriteria.studyLocations(),
+                                        choosableObservationExportCriteria.observationVariableNames()
+                                    ),
                                     request.getContextPath()
                                 )
         );

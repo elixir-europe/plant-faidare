@@ -15,7 +15,10 @@ import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
 import fr.inrae.urgi.faidare.config.DataSource;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.dao.v1.LocationV1Dao;
+import fr.inrae.urgi.faidare.dao.v2.ChoosableObservationExportCriteria;
 import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Dao;
+import fr.inrae.urgi.faidare.dao.v2.ObservationUnitV2Dao;
+import fr.inrae.urgi.faidare.dao.v2.ObservationV2Dao;
 import fr.inrae.urgi.faidare.dao.v2.TrialV2Dao;
 import fr.inrae.urgi.faidare.domain.LocationVO;
 import fr.inrae.urgi.faidare.domain.brapi.TrialSitemapVO;
@@ -52,6 +55,12 @@ public class TrialControllerTest {
     @MockitoBean
     private GermplasmV2Dao mockGermplasmRepository;
 
+    @MockitoBean
+    private ObservationUnitV2Dao mockObservationUnitRepository;
+
+    @MockitoBean
+    private ObservationV2Dao mockObservationRepository;
+
     @Autowired
     private TrialController trialController;
 
@@ -76,6 +85,14 @@ public class TrialControllerTest {
 
         location = Fixtures.createSite();
         when(mockLocationRepository.getByLocationDbIdIn(anySet())).thenReturn(List.of(location));
+
+        when(mockObservationRepository.findChoosableObservationExportCriteriaByTrialDbId(trial.getTrialDbId())).thenReturn(
+            new ChoosableObservationExportCriteria(
+                List.of(),
+                List.of(),
+                List.of()
+            )
+        );
     }
 
     @Test
