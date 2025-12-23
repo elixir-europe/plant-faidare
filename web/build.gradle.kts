@@ -40,4 +40,36 @@ tasks {
     assemble {
         dependsOn(pnpmBuildProd)
     }
+
+    val checkFormat by registering(PnpmTask::class) {
+        args.set(listOf("run", "format:check"))
+        dependsOn(prepare)
+        inputs.dir("src")
+        inputs.dir("e2e")
+        inputs.file("package.json")
+        outputs.file(layout.buildDirectory.file("prettier-result.txt"))
+    }
+
+    val e2e by registering(PnpmTask::class) {
+        // On CI, we need to start the app with a different postgres host
+        // so we have a dedicated task in the package.json
+        if (project.findProperty("CI") != null) {
+            args.set(listOf("run", "e2e:standalone:ci"))
+            environment.put("CI", "true")
+        } else {
+            args.set(listOf("run", "e2e:standalone"))
+        }
+        dependsOn(prepare)
+        dependsOn(":backend:assemble")
+        inputs.dir("e2e")
+        inputs.file("package.json")
+        inputs.file("playwright.config.ts")
+        inputs.file(project(":backend").layout.buildDirectory.file("libs/faidare.jar"))
+        outputs.dir("playwright-report")
+    }
+
+    check {
+        dependsOn(checkFormat)
+        dependsOn(e2e)
+    }
 }

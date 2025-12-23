@@ -227,3 +227,5 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/gradle,eclipse,intellij,visualstudiocode,kotlin,git,macos,linux
 /web/node_modules/
 /exports/*
+/backend/exports/*
+/web/test-results/

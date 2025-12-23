@@ -142,3 +142,27 @@ spring:
       static-locations:
         - classpath:/static/
         - file:./web/build/dist/
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        e2e
+  elasticsearch:
+    uris:
+      - http://elasticsearch:9200
+server:
+  port: 8381
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        ci
+  elasticsearch:
+    uris:
+      - http://elasticsearch:9200
+
+

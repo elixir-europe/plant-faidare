@@ -22,6 +22,7 @@
       <div
         id="running"
         class="d-flex gap-3 alert alert-info"
+        role="alert"
         th:classappend="${model.job.status == T(fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJob.Status).RUNNING} ? '' : 'd-none'"
       >
         <div>
@@ -37,6 +38,7 @@
       <div
         id="failed"
         class="alert alert-danger"
+        role="alert"
         th:classappend="${model.job.status == T(fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJob.Status).FAILED} ? '' : 'd-none'"
       >
         The export failed, sorry.<br />
@@ -45,12 +47,14 @@
       <div
         id="done"
         class="alert alert-success"
+        role="alert"
         th:classappend="${model.job.status == T(fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJob.Status).DONE} ? '' : 'd-none'"
       >
         <div>The export succeeded.</div>
         <div>
           <a
             class="btn btn-success"
+            role="button"
             th:href="@{/observation-units/exports/{jobId}/content(jobId=${model.job.id})}"
             >Download</a
           >
