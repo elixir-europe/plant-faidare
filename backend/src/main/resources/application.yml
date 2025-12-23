@@ -105,6 +105,9 @@ faidare:
     name: PHIS
     image: http://opensilex.org/img/logo-phis-lg.png
 
+  obervation-unit-export:
+    directory: ./exports
+
 server:
   compression:
     enabled: true

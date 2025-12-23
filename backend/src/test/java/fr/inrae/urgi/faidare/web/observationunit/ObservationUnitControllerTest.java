@@ -4,7 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import fr.inrae.urgi.faidare.dao.v2.ObservationExportCriteria;
@@ -23,6 +27,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
@@ -44,21 +51,10 @@ class ObservationUnitControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private ObservationUnitV2Dao mockObservationUnitRepository;
-
-    @MockitoBean
-    private ObservationV2Dao mockObservationRepository;
+    private ObservationUnitExportJobService mockJobService;
 
     @Test
-    void shouldExportAsExcel() throws Exception {
-        List<ObservationUnitV2VO> units = List.of(
-            createObservationUnit()
-        );
-
-        List<ObservationVO> observations = List.of(
-            createObservation(1),
-            createObservation(2)
-        );
+    void shouldCreateExportJob() {
 
         ObservationUnitExportCommand command = new ObservationUnitExportCommand(
             "trial1",
@@ -69,25 +65,8 @@ class ObservationUnitControllerTest {
             ExportFormat.EXCEL
         );
 
-        when(
-            mockObservationUnitRepository.findByExportCriteria(
-                new ObservationUnitExportCriteria(
-                    "trial1",
-                    "levelCode"
-                )
-            )
-        ).thenAnswer(invocation -> units.stream());
-
-        when(
-            mockObservationRepository.findByExportCriteria(
-                new ObservationExportCriteria(
-                    "trial1",
-                    Set.of("Verviers"),
-                    Set.of("2025"),
-                    Set.of("Variable 1", "Variable 2")
-                )
-            )
-        ).thenAnswer(invocation -> observations.stream());
+        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.EXCEL);
+        when(mockJobService.createExportJob(command)).thenReturn(job);
 
         MvcTestResult result = mockMvc
             .post()
@@ -95,106 +74,62 @@ class ObservationUnitControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(command))
             .exchange();
-        assertThat(result).hasStatusOk().hasContentType(ExportFormat.EXCEL.getMediaType());
-
-        byte[] content = result.getResponse().getContentAsByteArray();
-        try (XSSFWorkbook workbook = new XSSFWorkbook(new ByteArrayInputStream(content))) {
-            assertThat(workbook.getNumberOfSheets()).isEqualTo(1);
-            XSSFSheet sheet = workbook.getSheetAt(0);
-            assertThat(sheet.getPhysicalNumberOfRows()).isEqualTo(2); // header + 1 unit with 2 variables
-        }
+        assertThat(result)
+            .hasStatus(HttpStatus.CREATED)
+            .hasContentType(MediaType.APPLICATION_JSON)
+            .bodyJson().isEqualTo(
+                //language=json
+                """
+                {
+                  "id": "job1",
+                  "status": "RUNNING"
+                }
+              """
+            );
     }
 
     @Test
-    void shouldExportAsCsv() throws Exception {
-        List<ObservationUnitV2VO> units = List.of(
-            createObservationUnit()
-        );
-
-        List<ObservationVO> observations = List.of(
-            createObservation(1),
-            createObservation(2)
-        );
-
-        ObservationUnitExportCommand command = new ObservationUnitExportCommand(
-            "trial1",
-            "levelCode",
-            Set.of("Verviers"),
-            Set.of("2025"),
-            Set.of("Variable 1", "Variable 2"),
-            ExportFormat.CSV
-        );
-
-        when(
-            mockObservationUnitRepository.findByExportCriteria(
-                new ObservationUnitExportCriteria(
-                    "trial1",
-                    "levelCode"
-                )
-            )
-        ).thenAnswer(invocation -> units.stream());
-
-        when(
-            mockObservationRepository.findByExportCriteria(
-                new ObservationExportCriteria(
-                    "trial1",
-                    Set.of("Verviers"),
-                    Set.of("2025"),
-                    Set.of("Variable 1", "Variable 2")
-                )
-            )
-        ).thenAnswer(invocation -> observations.stream());
+    void shouldGetExportJob() {
+        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.EXCEL);
+        job.done(Path.of("foo.xlsx"));
+        when(mockJobService.getJob(job.getId())).thenReturn(Optional.of(job));
 
         MvcTestResult result = mockMvc
-            .post()
-            .uri("/observation-units/exports")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsBytes(command))
+            .get()
+            .uri("/observation-units/exports/{jobId}", job.getId())
             .exchange();
-        assertThat(result).hasStatusOk().hasContentType(ExportFormat.CSV.getMediaType());
-
-        String content = result.getResponse().getContentAsString();
-        List<String> lines = content.lines().toList();
-        assertThat(lines).hasSize(2); // header + 1 unit with 2 variables
+        assertThat(result)
+            .hasStatus(HttpStatus.OK)
+            .hasContentType(MediaType.APPLICATION_JSON)
+            .bodyJson().isEqualTo(
+                //language=json
+                """
+                {
+                  "id": "job1",
+                  "status": "DONE"
+                }
+              """
+            );
     }
 
-    private ObservationUnitV2VO createObservationUnit() {
-        ObservationUnitV2VO vo = new ObservationUnitV2VO();
-        vo.setTrialDbId("trial1");
-        vo.setObservationUnitDbId("unit1");
-        vo.setObservationUnitName("Unit1");
-        vo.setObservationUnitPosition(createObservationUnitPosition());
-        vo.setGermplasmName("Germplasm1");
-        vo.setGermplasmGenus("Germplasm Genus 1");
-        vo.setTrialName("Trial 1");
-        vo.setStudyName("Study 1");
-        vo.setTreatments(List.of(createTreatment()));
-        return vo;
-    }
+    @Test
+    void shouldGetExportJobContent() throws IOException {
+        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.CSV);
+        Path file = Files.createTempFile("foo", ".csv");
+        Files.writeString(file, "hello");
+        job.done(file);
+        when(mockJobService.getJob(job.getId())).thenReturn(Optional.of(job));
 
-    private ObservationVO createObservation(int index) {
-        ObservationVO vo = new ObservationVO();
-        vo.setObservationVariableDbId("variable" + index);
-        vo.setObservationVariableName("Variable " + index);
-        vo.setValue("OK");
-        vo.setObservationTimeStamp("2025-12-03T13:00:00Z");
-        vo.setObservationUnitDbId("unit1");
-        return vo;
-    }
-
-    private TreatmentVO createTreatment() {
-        TreatmentVO vo = new TreatmentVO();
-        vo.setFactor("Factor");
-        vo.setModality("Modality");
-        return vo;
-    }
-
-    private ObservationUnitPositionVO createObservationUnitPosition() {
-        ObservationUnitPositionVO vo = new ObservationUnitPositionVO();
-        ObservationLevelVO observationLevel = new ObservationLevelVO();
-        observationLevel.setLevelName("levelName");
-        observationLevel.setLevelOrder("levelCode");
-        vo.setObservationLevel(observationLevel);
-        return vo;
+        MvcTestResult result = mockMvc
+            .get()
+            .uri("/observation-units/exports/{jobId}/content", job.getId())
+            .exchange();
+        assertThat(result)
+            .hasStatus(HttpStatus.OK)
+            .hasContentType(ExportFormat.CSV.getMediaType())
+            .bodyText().isEqualTo("hello");
+        ContentDisposition disposition = ContentDisposition.parse(result.getResponse().getHeader(HttpHeaders.CONTENT_DISPOSITION));
+        assertThat(disposition.isAttachment()).isTrue();
+        assertThat(disposition.getFilename().endsWith(".csv")).isTrue();
     }
 }

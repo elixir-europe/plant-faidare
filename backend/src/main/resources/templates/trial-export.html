@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{layout/main :: layout(title=~{::title}, content=~{::main}, script=~{::script})}"
+>
+  <head>
+    <title>Export for trial <th:block th:text="${model.trial.trialType}" />: <th:block
+      th:text="${model.trial.trialName}" /></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+
+  <body>
+    <main>
+      <h1>Export for trial <th:block th:text="${model.trial.trialType}" />: <th:block
+        th:text="${model.trial.trialName}" /></h1>
+
+      <div id="running" class="d-flex gap-3 alert alert-info" th:classappend="${model.job.status == T(fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJob.Status).RUNNING} ? '' : 'd-none'">
+        <div>
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Exporting...</span>
+          </div>
+        </div>
+        <div>
+          The export is in progress.<br/>
+          This page will refresh automatically until it's done.
+        </div>
+      </div>
+      <div id="failed" class="alert alert-danger" th:classappend="${model.job.status == T(fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJob.Status).FAILED} ? '' : 'd-none'">
+        The export failed, sorry.<br/>
+        Please contact support.
+      </div>
+      <div id="done" class="alert alert-success" th:classappend="${model.job.status == T(fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJob.Status).DONE} ? '' : 'd-none'">
+         <div>The export succeeded.</div>
+         <div>
+           <a class="btn btn-success" th:href="@{/observation-units/exports/{jobId}/content(jobId=${model.job.id})}">Download</a>
+         </div>
+      </div>
+    </main>
+
+    <script th:inline="javascript">
+      faidare.initializeTrialExport({
+        contextPath: [[${model.contextPath}]],
+        jobId: [[${model.job.id}]]
+      })
+    </script>
+  </body>
+</html>

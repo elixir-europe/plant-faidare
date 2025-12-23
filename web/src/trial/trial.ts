@@ -1,12 +1,35 @@
-export function initializeTrialExport(options: { contextPath: string; trialDbId: string }) {
+import Modal from 'bootstrap/js/dist/modal';
+
+/**
+ * An export job, matching the backend response for the endpoints allowing to create and get jobs.
+ */
+export interface Job {
+  id: string;
+  status: 'RUNNING' | 'DONE' | 'FAILED';
+}
+
+/**
+ * Function called by the trial page when it loads.
+ * It binds a listener to the N export dropdown buttons in order to display the export modal
+ * defined in the page.
+ * This modal contains a form, and the submission of that form is also handled by a listener
+ * added by this function.
+ * When submitted, a new export job is started on the backend (because exporting observation
+ * units can be very long), and a new tab is opened in order to monitor the progress of this job.
+ * Finally, this function also binds listeners for the Check All / Uncheck all buttons
+ * inside the form.
+ */
+export function initializeTrial(options: { contextPath: string; trialDbId: string }) {
+  // when opening the modal using one of the N export dropdown buttons, this variable is set
+  // to the level code corresponding to the clicked button
   let selectedLevelCode: string;
 
   document.querySelectorAll<HTMLButtonElement>('button[data-level-code]').forEach(button => {
     button.addEventListener('click', () => (selectedLevelCode = button.getAttribute('data-level-code')!));
   });
 
+  // bind click listeners to the three Check all / Uncheck all buttons of the form
   const exportForm = document.querySelector<HTMLFormElement>('#export-form')!;
-
   ['#season-names', '#study-locations', '#observation-variable-names'].forEach(checkListId => {
     exportForm.querySelector<HTMLButtonElement>(`${checkListId} .check-all`)!.addEventListener('click', () => {
       Array.from(exportForm.querySelectorAll<HTMLInputElement>(`${checkListId} input`)).forEach(checkbox => (checkbox.checked = true));
@@ -16,6 +39,7 @@ export function initializeTrialExport(options: { contextPath: string; trialDbId:
     });
   });
 
+  // handle the export form submission
   exportForm.addEventListener('submit', async event => {
     event.preventDefault();
     const seasonNames = Array.from(exportForm.querySelectorAll<HTMLInputElement>('#season-names input:checked')).map(el => el.value);
@@ -54,14 +78,9 @@ export function initializeTrialExport(options: { contextPath: string; trialDbId:
       if (!response.ok) {
         error.classList.remove('d-none');
       } else {
-        const blob = await response.blob();
-        const downloadUrl = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = `observations.${exportFormat === 'EXCEL' ? 'xlsx' : 'csv'}`;
-        link.click();
-
-        URL.revokeObjectURL(downloadUrl);
+        const job = (await response.json()) as Job;
+        window.open(`${options.contextPath}/trials/${options.trialDbId}/exports/${job.id}`);
+        Modal.getInstance(document.querySelector('#exportModal')!)!.hide();
       }
     } catch (_error) {
       error.classList.remove('d-none');

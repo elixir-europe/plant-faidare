@@ -146,5 +146,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-restclient-test")
     testImplementation("org.springframework.boot:spring-boot-starter-data-elasticsearch-test")
     testImplementation("org.springframework.boot:spring-boot-starter-security-test")
-    testImplementation("org.jsoup:jsoup:1.21.2")
+    testImplementation("org.jsoup:jsoup:1.22.1")
+    testImplementation("org.awaitility:awaitility:4.3.0")
 }

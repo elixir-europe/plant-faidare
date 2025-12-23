@@ -26,6 +26,9 @@ import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.StudyV2miniVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.TrialV2VO;
 import fr.inrae.urgi.faidare.utils.Sitemaps;
+import fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJob;
+import fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJobDTO;
+import fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJobService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -50,26 +53,28 @@ public class TrialController {
     private final GermplasmV2Dao germplasmRepository;
     private final ObservationUnitV2Dao observationUnitRepository;
     private final ObservationV2Dao observationRepository;
+    private final ObservationUnitExportJobService jobService;
 
     public TrialController(TrialV2Dao trialRepository,
                            FaidareProperties faidareProperties,
                            LocationV1Dao locationRepository,
                            GermplasmV2Dao germplasmRepository,
                            ObservationUnitV2Dao observationUnitRepository,
-                           ObservationV2Dao observationRepository) {
+                           ObservationV2Dao observationRepository, ObservationUnitExportJobService jobService) {
         this.trialRepository = trialRepository;
         this.faidareProperties = faidareProperties;
         this.locationRepository = locationRepository;
         this.germplasmRepository = germplasmRepository;
         this.observationUnitRepository = observationUnitRepository;
         this.observationRepository = observationRepository;
+        this.jobService = jobService;
     }
 
     @GetMapping("/{trialId}")
     public ModelAndView get(@PathVariable("trialId") String trialId, HttpServletRequest request) {
         TrialV2VO trial = trialRepository.getByTrialDbId(trialId);
 
-        if (trialId == null) {
+        if (trial == null) {
             throw new NotFoundException("Trial with ID " + trialId + " not found");
         }
 
@@ -110,6 +115,29 @@ public class TrialController {
                                     ),
                                     request.getContextPath()
                                 )
+        );
+    }
+
+    @GetMapping("/{trialId}/exports/{jobId}")
+    public ModelAndView exportPage(
+        @PathVariable("trialId") String trialId,
+        @PathVariable("jobId") String jobId,
+        HttpServletRequest request
+    ) {
+        TrialV2VO trial = trialRepository.getByTrialDbId(trialId);
+        if (trial == null) {
+            throw new NotFoundException("Trial with ID " + trialId + " not found");
+        }
+        ObservationUnitExportJob job =
+            jobService.getJob(jobId).orElseThrow(() -> new NotFoundException("no export job with ID " + jobId));
+        return new ModelAndView(
+            "trial-export",
+            "model",
+            new TrialExportModel(
+                request.getContextPath(),
+                trial,
+                new ObservationUnitExportJobDTO(job)
+            )
         );
     }
 

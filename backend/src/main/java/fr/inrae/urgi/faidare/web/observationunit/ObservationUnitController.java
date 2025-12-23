@@ -1,83 +1,64 @@
 package fr.inrae.urgi.faidare.web.observationunit;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.io.IOException;
 
-import fr.inrae.urgi.faidare.dao.v2.ObservationExportCriteria;
-import fr.inrae.urgi.faidare.dao.v2.ObservationUnitExportCriteria;
-import fr.inrae.urgi.faidare.dao.v2.ObservationUnitV2Dao;
-import fr.inrae.urgi.faidare.dao.v2.ObservationV2Dao;
-import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2VO;
-import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationVO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
+import fr.inrae.urgi.faidare.api.NotFoundException;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller allowing to export observation units
  * @author JB Nizet
  */
-@Controller("webObservationUnitController")
+@RestController
 @RequestMapping({"/observation-units"})
 public class ObservationUnitController {
 
-    private final ObservationUnitV2Dao observationUnitRepository;
-    private final ObservationV2Dao observationRepository;
-    private final ObservationUnitExportService observationUnitExportService;
+    private final ObservationUnitExportJobService jobService;
 
-    public ObservationUnitController(ObservationUnitV2Dao observationUnitRepository, ObservationV2Dao observationRepository, ObservationUnitExportService observationUnitExportService) {
-        this.observationUnitRepository = observationUnitRepository;
-        this.observationRepository = observationRepository;
-        this.observationUnitExportService = observationUnitExportService;
+    public ObservationUnitController(ObservationUnitExportJobService jobService) {
+        this.jobService = jobService;
     }
 
     @PostMapping("/exports")
-    @ResponseBody
-    public ResponseEntity<StreamingResponseBody> export(@Validated @RequestBody ObservationUnitExportCommand command) {
-        StreamingResponseBody body = out -> {
-            try (
-                Stream<ObservationUnitV2VO> observationUnits = observationUnitRepository.findByExportCriteria(
-                    new ObservationUnitExportCriteria(command.trialDbId(), command.observationLevelCode())
-                );
-                Stream<ObservationVO> observations = observationRepository.findByExportCriteria(
-                    new ObservationExportCriteria(
-                        command.trialDbId(),
-                        command.studyLocations(),
-                        command.seasonNames(),
-                        command.observationVariableNames()
-                    )
-                )
-            ) {
-                List<ExportedObservationUnit> exportedObservationUnits = join(observationUnits, observations);
-
-                switch (command.format()) {
-                    case CSV -> observationUnitExportService.exportAsCsv(out, exportedObservationUnits);
-                    case EXCEL -> observationUnitExportService.exportAsExcel(out, exportedObservationUnits);
-                }
-            }
-        };
-        return ResponseEntity.ok().contentType(command.format().getMediaType()).body(body);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ObservationUnitExportJobDTO export(@Validated @RequestBody ObservationUnitExportCommand command) {
+        ObservationUnitExportJob exportJob = jobService.createExportJob(command);
+        return new ObservationUnitExportJobDTO(exportJob);
     }
 
-    private List<ExportedObservationUnit> join(Stream<ObservationUnitV2VO> observationUnits, Stream<ObservationVO> observations) {
-        Map<String, List<ObservationVO>> observationsByObservationUnitDbId =
-            observations.collect(Collectors.groupingBy(ObservationVO::getObservationUnitDbId));
-        return observationUnits.map(
-            observationUnit -> new ExportedObservationUnit(
-                observationUnit,
-                observationsByObservationUnitDbId
-                    .getOrDefault(observationUnit.getObservationUnitDbId(), List.of())
-            )
-        ).toList();
+    @GetMapping("/exports/{jobId}")
+    public ObservationUnitExportJobDTO getJob(@PathVariable String jobId) {
+        ObservationUnitExportJob exportJob = jobService.getJob(jobId).orElseThrow(() -> new NotFoundException("No export job with ID " + jobId));
+        return new ObservationUnitExportJobDTO(exportJob);
+    }
+
+    @GetMapping("/exports/{jobId}/content")
+    public ResponseEntity<Resource> getExportResult(@PathVariable String jobId) throws IOException {
+        ObservationUnitExportJob exportJob = jobService.getJob(jobId).orElseThrow(() -> new NotFoundException("No export job with ID " + jobId));
+        if (exportJob.getStatus() != ObservationUnitExportJob.Status.DONE) {
+            throw new NotFoundException("Export job with ID " + jobId + " is not done");
+        }
+        return ResponseEntity.ok()
+            .contentType(exportJob.getFormat().getMediaType())
+            .header(
+                HttpHeaders.CONTENT_DISPOSITION,
+                ContentDisposition.builder("attachment")
+                                  .filename(exportJob.getFile().getFileName().toString())
+                                  .build()
+                                  .toString())
+            .body(new FileSystemResource(exportJob.getFile()));
     }
 }

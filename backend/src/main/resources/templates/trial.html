@@ -255,7 +255,7 @@
               </form>
             </div>
             <div class="modal-footer">
-              <div class="d-none text-secondary" id="export-in-progress">Export in progress. Please be patient.</div>
+              <div class="d-none text-secondary" id="export-in-progress">Export in progress...</div>
               <div class="d-none text-danger" role="alert" id="export-error">The export failed. Please contact support.</div>
               <button type="submit" class="btn btn-secondary" form="export-form" id="export-submit">
                 <span class="spinner-border spinner-border-sm me-1 d-none" aria-hidden="true" id="export-spinner"></span>
@@ -272,7 +272,7 @@
         contextPath: [[${model.contextPath}]],
         locations: [[${model.mapLocations}]]
       });
-      faidare.initializeTrialExport({
+      faidare.initializeTrial({
         contextPath: [[${model.contextPath}]],
         trialDbId: [[${model.trial.trialDbId}]]
       });
