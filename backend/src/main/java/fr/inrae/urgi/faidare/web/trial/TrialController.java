@@ -60,7 +60,8 @@ public class TrialController {
                            LocationV1Dao locationRepository,
                            GermplasmV2Dao germplasmRepository,
                            ObservationUnitV2Dao observationUnitRepository,
-                           ObservationV2Dao observationRepository, ObservationUnitExportJobService jobService) {
+                           ObservationV2Dao observationRepository,
+                           ObservationUnitExportJobService jobService) {
         this.trialRepository = trialRepository;
         this.faidareProperties = faidareProperties;
         this.locationRepository = locationRepository;

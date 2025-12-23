@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html
   xmlns:th="http://www.thymeleaf.org"
@@ -61,14 +61,30 @@
 
           <!-- FIXME the spec mentions DatasetAuthorships.license and DataetAuthorships.datasetPUI without specifying what we should do about it -->
 
-          <div th:if="${model.choosableExportCriteria.observationLevelCodes}" class="d-flex justify-content-end">
+          <div
+            th:if="${model.choosableExportCriteria.observationLevelCodes}"
+            class="d-flex justify-content-end"
+          >
             <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
                 Export observations
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li th:each="levelCode : ${model.choosableExportCriteria.observationLevelCodes}">
-                  <button class="dropdown-item" th:text="${levelCode}" data-bs-toggle="modal" data-bs-target="#exportModal" th:attr="data-level-code=${levelCode}"></button>
+                <li
+                  th:each="levelCode : ${model.choosableExportCriteria.observationLevelCodes}"
+                >
+                  <button
+                    class="dropdown-item"
+                    th:text="${levelCode}"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exportModal"
+                    th:attr="data-level-code=${levelCode}"
+                  ></button>
                 </li>
               </ul>
             </div>
@@ -81,9 +97,7 @@
         <div class="f-card-body">
           <div class="scroll-table-container scroll-table-container-big">
             <table
-              class="
-                table table-sm table-striped table-sticky table-responsive-sm
-              "
+              class="table table-sm table-striped table-sticky table-responsive-sm"
             >
               <thead>
                 <tr>
@@ -118,9 +132,7 @@
         <div class="f-card-body">
           <div class="scroll-table-container scroll-table-container-big">
             <table
-              class="
-                table table-sm table-striped table-sticky table-responsive-sm
-              "
+              class="table table-sm table-striped table-sticky table-responsive-sm"
             >
               <thead>
                 <tr>
@@ -154,9 +166,7 @@
         <div class="f-card-body">
           <div class="scroll-table-container">
             <table
-              class="
-                table table-sm table-striped table-sticky table-responsive-sm
-              "
+              class="table table-sm table-striped table-sticky table-responsive-sm"
             >
               <thead>
                 <tr>
@@ -179,86 +189,195 @@
         </div>
       </div>
 
-
-      <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="export-modal-label" aria-hidden="true">
+      <div
+        class="modal fade"
+        id="exportModal"
+        tabindex="-1"
+        aria-labelledby="export-modal-label"
+        aria-hidden="true"
+      >
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="export-modal-label">
-                Export observations for trial <em th:text="${model.trial.trialName}"></em>
+                Export observations for trial
+                <em th:text="${model.trial.trialName}"></em>
               </h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
             <div class="modal-body">
               <form id="export-form">
                 <div class="d-flex flex-column gap-3">
-              <div class="row g-2">
-                <div class="col-md" id="season-names">
-                  <h2 class="fs-6">Year</h2>
-                  <div class="small">
-                    <button type="button" class="btn btn-link btn-sm py-0 check-all">All</button>
-                    |
-                    <button type="button" class="btn btn-link btn-sm py-0 uncheck-all">None</button>
+                  <div class="row g-2">
+                    <div class="col-md" id="season-names">
+                      <h2 class="fs-6">Year</h2>
+                      <div class="small">
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm py-0 check-all"
+                        >
+                          All
+                        </button>
+                        |
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm py-0 uncheck-all"
+                        >
+                          None
+                        </button>
+                      </div>
+                      <div class="f-trial-checklist">
+                        <div
+                          th:each="seasonName, iterStat: ${model.choosableExportCriteria.seasonNames}"
+                          class="form-check"
+                        >
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            th:value="${seasonName}"
+                            th:id="|season-name-${iterStat.index}|"
+                          />
+                          <label
+                            class="form-check-label"
+                            th:for="|season-name-${iterStat.index}|"
+                            th:text="${seasonName}"
+                          ></label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md" id="study-locations">
+                      <h2 class="fs-6">Study Location</h2>
+                      <div class="small">
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm py-0 check-all"
+                        >
+                          All
+                        </button>
+                        |
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm py-0 uncheck-all"
+                        >
+                          None
+                        </button>
+                      </div>
+                      <div class="f-trial-checklist">
+                        <div
+                          th:each="studyLocation, iterStat: ${model.choosableExportCriteria.studyLocations}"
+                          class="form-check"
+                        >
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            th:value="${studyLocation}"
+                            th:id="|study-location-${iterStat.index}|"
+                          />
+                          <label
+                            class="form-check-label"
+                            th:for="|study-location-${iterStat.index}|"
+                            th:text="${studyLocation}"
+                          ></label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md" id="observation-variable-names">
+                      <h2 class="fs-6">Obs. variable</h2>
+                      <div class="small">
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm py-0 check-all"
+                        >
+                          All
+                        </button>
+                        |
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm py-0 uncheck-all"
+                        >
+                          None
+                        </button>
+                      </div>
+                      <div class="f-trial-checklist">
+                        <div
+                          th:each="observationVariableName, iterStat: ${model.choosableExportCriteria.obervationVariableNames}"
+                          class="form-check"
+                        >
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            th:value="${observationVariableName}"
+                            th:id="|observation-variable-name-${iterStat.index}|"
+                          />
+                          <label
+                            class="form-check-label"
+                            th:for="|observation-variable-name-${iterStat.index}|"
+                            th:text="${observationVariableName}"
+                          ></label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="f-trial-checklist">
-                    <div th:each="seasonName, iterStat: ${model.choosableExportCriteria.seasonNames}" class="form-check">
-                      <input class="form-check-input" type="checkbox" th:value="${seasonName}" th:id="|season-name-${iterStat.index}|">
-                      <label class="form-check-label" th:for="|season-name-${iterStat.index}|" th:text="${seasonName}"></label>
+                  <div class="row align-items-baseline g-2">
+                    <div class="col-md-auto">
+                      <h2 class="fs-6">Export format</h2>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="exportFormat"
+                          id="export-format-excel"
+                          value="EXCEL"
+                          checked
+                        />
+                        <label
+                          class="form-check-label"
+                          for="export-format-excel"
+                          >Excel</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="exportFormat"
+                          id="export-format-csv"
+                          value="CSV"
+                        />
+                        <label class="form-check-label" for="export-format-csv"
+                          >CSV</label
+                        >
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="col-md" id="study-locations">
-                  <h2 class="fs-6">Study Location</h2>
-                  <div class="small">
-                    <button type="button" class="btn btn-link btn-sm py-0 check-all">All</button>
-                    |
-                    <button type="button" class="btn btn-link btn-sm py-0 uncheck-all">None</button>
-                  </div>
-                  <div class="f-trial-checklist">
-                    <div th:each="studyLocation, iterStat: ${model.choosableExportCriteria.studyLocations}" class="form-check">
-                      <input class="form-check-input" type="checkbox" th:value="${studyLocation}" th:id="|study-location-${iterStat.index}|">
-                      <label class="form-check-label" th:for="|study-location-${iterStat.index}|" th:text="${studyLocation}"></label>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md" id="observation-variable-names">
-                  <h2 class="fs-6">Obs. variable</h2>
-                  <div class="small">
-                    <button type="button" class="btn btn-link btn-sm py-0 check-all">All</button>
-                    |
-                    <button type="button" class="btn btn-link btn-sm py-0 uncheck-all">None</button>
-                  </div>
-                  <div class="f-trial-checklist">
-                    <div th:each="observationVariableName, iterStat: ${model.choosableExportCriteria.obervationVariableNames}" class="form-check">
-                      <input class="form-check-input" type="checkbox" th:value="${observationVariableName}" th:id="|observation-variable-name-${iterStat.index}|">
-                      <label class="form-check-label" th:for="|observation-variable-name-${iterStat.index}|" th:text="${observationVariableName}"></label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-                <div class="row align-items-baseline g-2">
-                  <div class="col-md-auto">
-                    <h2 class="fs-6">Export format</h2>
-                  </div>
-                  <div class="col-md">
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="exportFormat" id="export-format-excel" value="EXCEL" checked>
-                      <label class="form-check-label" for="export-format-excel">Excel</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="exportFormat" id="export-format-csv" value="CSV">
-                      <label class="form-check-label" for="export-format-csv">CSV</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
               </form>
             </div>
             <div class="modal-footer">
-              <div class="d-none text-secondary" id="export-in-progress">Export in progress...</div>
-              <div class="d-none text-danger" role="alert" id="export-error">The export failed. Please contact support.</div>
-              <button type="submit" class="btn btn-secondary" form="export-form" id="export-submit">
-                <span class="spinner-border spinner-border-sm me-1 d-none" aria-hidden="true" id="export-spinner"></span>
+              <div class="d-none text-secondary" id="export-in-progress">
+                Export in progress...
+              </div>
+              <div class="d-none text-danger" role="alert" id="export-error">
+                The export failed. Please contact support.
+              </div>
+              <button
+                type="submit"
+                class="btn btn-secondary"
+                form="export-form"
+                id="export-submit"
+              >
+                <span
+                  class="spinner-border spinner-border-sm me-1 d-none"
+                  aria-hidden="true"
+                  id="export-spinner"
+                ></span>
                 Export
               </button>
             </div>

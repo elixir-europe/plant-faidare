@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html
   xmlns:th="http://www.thymeleaf.org"
@@ -106,12 +106,12 @@
                 <div
                   th:replace="fragments/row::row(label='Accession synonyms', content=~{::#accession-synonyms})"
                 >
-                  <div
-                    id="accession-synonyms"
-                    class="content-overflow"
-                  >
-                    <th:block th:each="syn, synStat : ${model.germplasm.synonyms}">
-                      <span th:text="${syn.synonym}"></span><span th:if="${!synStat.last}">, </span>
+                  <div id="accession-synonyms" class="content-overflow">
+                    <th:block
+                      th:each="syn, synStat : ${model.germplasm.synonyms}"
+                    >
+                      <span th:text="${syn.synonym}"></span
+                      ><span th:if="${!synStat.last}">, </span>
                     </th:block>
                   </div>
                 </div>

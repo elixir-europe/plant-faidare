@@ -1,10 +1,6 @@
 package fr.inrae.urgi.faidare.web.observationunit;
 
 import java.nio.file.Path;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.atomic.AtomicReference;
 
 import fr.inrae.urgi.faidare.web.germplasm.ExportFormat;
 
@@ -19,12 +15,13 @@ public final class ObservationUnitExportJob {
 
     private final String id;
     private final ExportFormat format;
+    private final Path file;
     private Status status = Status.RUNNING;
-    private Path file;
 
-    public ObservationUnitExportJob(String id, ExportFormat format) {
+    public ObservationUnitExportJob(String id, ExportFormat format, Path file) {
         this.id = id;
         this.format = format;
+        this.file = file;
     }
 
     public String getId() {
@@ -35,17 +32,16 @@ public final class ObservationUnitExportJob {
         return format;
     }
 
+    public Path getFile() {
+        return file;
+    }
+
     public synchronized Status getStatus() {
         return this.status;
     }
 
-    public synchronized Path getFile() {
-        return file;
-    }
-
-    public synchronized void done(Path file) {
+    public synchronized void done() {
         this.status = Status.DONE;
-        this.file = file;
     }
 
     public synchronized void fail() {

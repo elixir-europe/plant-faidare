@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -114,7 +115,7 @@ public class TrialControllerTest {
 
     @Test
     void shouldDisplayTrialExport() throws Exception {
-        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.EXCEL);
+        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.EXCEL, Path.of("/tmp/export.xlsx"));
         when(mockObservationUnitExportJobService.getJob(job.getId())).thenReturn(Optional.of(job));
         mockMvc.perform(get("/trials/{id}/exports/{jobId}", trial.getTrialDbId(), job.getId()))
                .andExpect(status().isOk())

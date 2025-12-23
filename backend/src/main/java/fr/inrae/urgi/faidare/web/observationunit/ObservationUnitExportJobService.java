@@ -67,7 +67,11 @@ public class ObservationUnitExportJobService {
 
     public ObservationUnitExportJob createExportJob(ObservationUnitExportCommand command) {
         String id = UUID.randomUUID().toString();
-        ObservationUnitExportJob job = new ObservationUnitExportJob(id, command.format());
+
+        String fileName = "export_" + DATE_TIME_FORMATTER.format(Instant.now().atOffset(ZoneOffset.UTC)) + "." + command.format().getExtension();
+        Path file = properties.directory().resolve(fileName);
+
+        ObservationUnitExportJob job = new ObservationUnitExportJob(id, command.format(), file);
         jobCache.put(id, job);
 
         Thread.ofVirtual().name("observation-unit-export-" + id).start(() -> export(command, job));
@@ -79,8 +83,7 @@ public class ObservationUnitExportJobService {
     }
 
     private void export(ObservationUnitExportCommand command, ObservationUnitExportJob job) {
-        String fileName = "export_" + DATE_TIME_FORMATTER.format(Instant.now().atOffset(ZoneOffset.UTC)) + "." + command.format().getExtension();
-        Path file = properties.directory().resolve(fileName);
+        Path file = job.getFile();
         try (
             FileOutputStream fos = new FileOutputStream(file.toFile());
             BufferedOutputStream out = new BufferedOutputStream(fos, 128 * 1024);
@@ -103,7 +106,7 @@ public class ObservationUnitExportJobService {
                 case EXCEL -> exportService.exportAsExcel(out, exportedObservationUnits);
             }
             out.close();
-            job.done(file);
+            job.done();
         } catch (Exception e) {
             LOGGER.error("Export failed for command {}", command, e);
             job.fail();

@@ -65,7 +65,7 @@ class ObservationUnitControllerTest {
             ExportFormat.EXCEL
         );
 
-        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.EXCEL);
+        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.EXCEL, Path.of("/tmp/export.xlsx"));
         when(mockJobService.createExportJob(command)).thenReturn(job);
 
         MvcTestResult result = mockMvc
@@ -90,8 +90,8 @@ class ObservationUnitControllerTest {
 
     @Test
     void shouldGetExportJob() {
-        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.EXCEL);
-        job.done(Path.of("foo.xlsx"));
+        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.EXCEL, Path.of("/tmp/export.xlsx"));
+        job.done();
         when(mockJobService.getJob(job.getId())).thenReturn(Optional.of(job));
 
         MvcTestResult result = mockMvc
@@ -114,10 +114,10 @@ class ObservationUnitControllerTest {
 
     @Test
     void shouldGetExportJobContent() throws IOException {
-        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.CSV);
         Path file = Files.createTempFile("foo", ".csv");
         Files.writeString(file, "hello");
-        job.done(file);
+        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.CSV, file);
+        job.done();
         when(mockJobService.getJob(job.getId())).thenReturn(Optional.of(job));
 
         MvcTestResult result = mockMvc

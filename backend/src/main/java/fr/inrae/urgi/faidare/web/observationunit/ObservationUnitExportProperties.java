@@ -11,9 +11,11 @@ import org.springframework.validation.annotation.Validated;
 /**
  * Properties for obervation unit exports
  * @author JB Nizet
+ *
+ * @param directory The directory where observation unit exports are generated before being downloaded.
  */
 @Validated
-@ConfigurationProperties(prefix = "faidare.obervation-unit-export")
+@ConfigurationProperties(prefix = "faidare.observation-unit-export")
 public record ObservationUnitExportProperties(
     @NotNull Path directory
 ) {
