@@ -123,6 +123,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
 
     // Elasticsearch
     implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
