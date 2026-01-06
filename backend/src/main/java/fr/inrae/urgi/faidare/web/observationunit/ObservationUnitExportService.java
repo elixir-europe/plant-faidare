@@ -9,9 +9,13 @@ import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -94,7 +98,42 @@ public class ObservationUnitExportService {
     }
 
     private List<Row> createRows(List<ExportedObservationUnit> observationUnits) {
-        return observationUnits.stream().map(Row::new).toList();
+        return observationUnits.stream().flatMap(
+            exportedObservationUnit -> createRows(exportedObservationUnit).stream()
+        ).toList();
+    }
+
+    private List<Row> createRows(ExportedObservationUnit exportedObservationUnit) {
+        if (exportedObservationUnit.observations().isEmpty()) {
+            return List.of();
+        }
+
+        // each year/season has its row.
+        // but if there are several observation for the same variable and the same year, then it goes to a different row
+        Map<String, List<Row>> rowsBySeason = new TreeMap<>();
+        List<ObservationVO> observationsSortedByTimestamp =
+            exportedObservationUnit
+                .observations()
+                .stream()
+                .sorted(Comparator.comparing(ObservationVO::getObservationTimeStamp, Comparator.nullsLast(Comparator.naturalOrder())))
+                .toList();
+        for (var observation : observationsSortedByTimestamp) {
+            String season = observation.getSeason().getSeasonName();
+            String observationVariableDbId = observation.getObservationVariableDbId();
+
+            List<Row> rowsOfSeason = rowsBySeason.computeIfAbsent(season, ignored -> new ArrayList<>());
+            Row row = rowsOfSeason
+                .stream()
+                .filter(r -> !r.observationsByVariableDbId.containsKey(observationVariableDbId))
+                .findFirst()
+                .orElseGet(() -> {
+                    Row newRow = new Row(exportedObservationUnit.observationUnit(), new HashMap<>());
+                    rowsOfSeason.add(newRow);
+                    return newRow;
+                });
+            row.observationsByVariableDbId().put(observationVariableDbId, observation);
+        }
+        return rowsBySeason.values().stream().flatMap(List::stream).toList();
     }
 
     private List<Column> createColumns(List<Row> rows) {
@@ -117,7 +156,7 @@ public class ObservationUnitExportService {
         columns.add(
             new Column(
                 "Observation Level",
-                row -> row.observationUnit().getObservationUnitPosition().getObservationLevel().getLevelName()
+                row -> row.observationUnit().getObservationUnitPosition().getObservationLevel().getLevelOrder()
             )
         );
 
@@ -151,6 +190,13 @@ public class ObservationUnitExportService {
 
         columns.add(
             new Column(
+                "Study Location",
+                row -> row.observationUnit().getStudyLocation()
+            )
+        );
+
+        columns.add(
+            new Column(
                 "Treatments",
                 row -> row.observationUnit()
                           .getTreatments()
@@ -161,35 +207,22 @@ public class ObservationUnitExportService {
             )
         );
 
-        // TODO add season (column K), but where does it come from?
-        // TODO add column L, but where does it come from and why isn't it repeated?
+        columns.add(
+            new Column(
+                "Season",
+                Row::getSeason
+            )
+        );
 
-        List<String> distinctObservationVariableDbIds =
-            rows.stream()
-                .flatMap(row -> row.observationsByVariableDbId().keySet().stream())
-                .distinct()
-                .sorted()
-                .toList();
 
-        for (String observationVariableDbId : distinctObservationVariableDbIds) {
+        List<Variable> distinctVariables = getDistinctVariables(rows);
+
+        for (Variable variable : distinctVariables) {
             columns.add(
                 new Column(
-                    "Observation Variable Name (ID)",
+                    String.format("%s(%s)", variable.name(), variable.id()),
                     row -> {
-                        ObservationVO observation = row.observationsByVariableDbId.get(observationVariableDbId);
-                        if (observation == null) {
-                            return null;
-                        }
-                        return String.format("%s (%s)", observation.getObservationVariableName(), observationVariableDbId);
-                    }
-                )
-            );
-
-            columns.add(
-                new Column(
-                    "Value",
-                    row -> {
-                        ObservationVO observation = row.observationsByVariableDbId.get(observationVariableDbId);
+                        ObservationVO observation = row.observationsByVariableDbId.get(variable.id());
                         if (observation == null) {
                             return null;
                         }
@@ -198,14 +231,11 @@ public class ObservationUnitExportService {
                 )
             );
 
-            // TODO missing column (O), but I have no idea what I should put there.
-
-            // TODO what should be the header name and the value?
             columns.add(
                 new Column(
-                    "Timestamp",
+                    String.format("%s(%s)_date", variable.name(), variable.id()),
                     row -> {
-                        ObservationVO observation = row.observationsByVariableDbId.get(observationVariableDbId);
+                        ObservationVO observation = row.observationsByVariableDbId.get(variable.id());
                         if (observation == null) {
                             return null;
                         }
@@ -216,6 +246,23 @@ public class ObservationUnitExportService {
         }
 
         return columns;
+    }
+
+    private List<Variable> getDistinctVariables(List<Row> rows) {
+        Map<String, Variable> variablesById = new HashMap<>();
+        for (Row row : rows) {
+            for (var observation : row.observationsByVariableDbId.values()) {
+                variablesById.put(
+                    observation.getObservationVariableDbId(),
+                    new Variable(observation.getObservationVariableDbId(), observation.getObservationVariableName())
+                );
+            }
+        }
+        return variablesById
+            .values()
+            .stream()
+            .sorted(Comparator.comparing(Variable::name).thenComparing(Variable::id))
+            .toList();
     }
 
     private void writeHeaders(SXSSFRow row, List<Column> columns) {
@@ -248,24 +295,16 @@ public class ObservationUnitExportService {
         return headerStyle;
     }
 
+    /**
+     * A row, having at least one observation, and where all observations have the same year/season.
+     * There is at most one observation for a given observationVariableDbId
+     */
     private record Row(
         ObservationUnitV2VO observationUnit,
         Map<String, ObservationVO> observationsByVariableDbId
     ) {
-
-        Row(ExportedObservationUnit exportedObservationUnit) {
-            this(
-                exportedObservationUnit.observationUnit(),
-                exportedObservationUnit
-                    .observations()
-                    .stream()
-                    .collect(
-                        Collectors.toMap(
-                            ObservationVO::getObservationVariableDbId,
-                            Function.identity()
-                        )
-                    )
-            );
+        String getSeason() {
+            return observationsByVariableDbId.values().iterator().next().getSeason().getSeasonName();
         }
     }
 
@@ -314,4 +353,6 @@ public class ObservationUnitExportService {
     private interface CellProducer {
         Cell createCell(SXSSFRow excelRow, int columnIndex, Row row);
     }
+
+    private record Variable(String id, String name) {}
 }

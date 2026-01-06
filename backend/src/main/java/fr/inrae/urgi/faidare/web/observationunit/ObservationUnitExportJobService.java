@@ -88,7 +88,7 @@ public class ObservationUnitExportJobService {
             FileOutputStream fos = new FileOutputStream(file.toFile());
             BufferedOutputStream out = new BufferedOutputStream(fos, 128 * 1024);
             Stream<ObservationUnitV2VO> observationUnits = observationUnitRepository.findByExportCriteria(
-                new ObservationUnitExportCriteria(command.trialDbId(), command.observationLevelCode())
+                new ObservationUnitExportCriteria(command.trialDbId(), command.observationLevelCode(), command.studyLocations())
             );
             Stream<ObservationVO> observations = observationRepository.findByExportCriteria(
                 new ObservationExportCriteria(

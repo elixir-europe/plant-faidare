@@ -9,9 +9,12 @@ import java.util.Set;
  * @param trialDbId (mandatory) the observation units must have the given trialDbId (<code>ObservationUnitV2VO.trialDbId</code>)
  * @param observationLevelCode (mandatory) the observation units must have the given observation level code
  *                             (<code>ObservationUnitV2VO.observationUnitPosition.observationLevel.levelCode</code>)
+ * @param studyLocations if not empty, then the observation units must have one of the provided study locations
+ *                       (<code>ObservationVO.studyLocation</code>)
  */
 public record ObservationUnitExportCriteria(
     String trialDbId,
-    String observationLevelCode
+    String observationLevelCode,
+    Set<String> studyLocations
 ) {
 }

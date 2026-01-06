@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -158,13 +159,27 @@ public class ObservationUnitV2DaoTest {
     void shouldFindByExportCriteria() {
         ObservationUnitExportCriteria exportCriteria = new ObservationUnitExportCriteria(
             "dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI=",
-            "VIRTUAL_TRIAL"
+            "VIRTUAL_TRIAL",
+            Set.of()
         );
         try (Stream<ObservationUnitV2VO> stream = observationUnitDao.findByExportCriteria(exportCriteria)) {
             List<ObservationUnitV2VO> result = stream.toList();
             assertThat(result).isNotEmpty();
             assertThat(result).allSatisfy(unit -> assertThat(unit.getTrialDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI="));
             assertThat(result).allSatisfy(unit -> assertThat(unit.getObservationUnitPosition().getObservationLevel().getLevelOrder()).isEqualTo("VIRTUAL_TRIAL"));
+        }
+
+        exportCriteria = new ObservationUnitExportCriteria(
+            "dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI=",
+            "VIRTUAL_TRIAL",
+            Set.of("Gaillac")
+        );
+        try (Stream<ObservationUnitV2VO> stream = observationUnitDao.findByExportCriteria(exportCriteria)) {
+            List<ObservationUnitV2VO> result = stream.toList();
+            assertThat(result).isNotEmpty();
+            assertThat(result).allSatisfy(unit -> assertThat(unit.getTrialDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI="));
+            assertThat(result).allSatisfy(unit -> assertThat(unit.getObservationUnitPosition().getObservationLevel().getLevelOrder()).isEqualTo("VIRTUAL_TRIAL"));
+            assertThat(result).allSatisfy(unit -> assertThat(unit.getStudyLocation()).isEqualTo("Gaillac"));
         }
     }
 

@@ -1,14 +1,11 @@
 package fr.inrae.urgi.faidare.web.observationunit;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static org.awaitility.Awaitility.with;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -22,6 +19,7 @@ import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationLevelVO
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitPositionVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationVO;
+import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.SeasonVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.TreatmentVO;
 import fr.inrae.urgi.faidare.web.germplasm.ExportFormat;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -29,8 +27,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.assertj.MvcTestResult;
 
 /**
  * Unit tests for {@link ObservationUnitExportJobService}
@@ -83,7 +79,8 @@ class ObservationUnitExportJobServiceTest {
             mockObservationUnitRepository.findByExportCriteria(
                 new ObservationUnitExportCriteria(
                     "trial1",
-                    "levelCode"
+                    "levelCode",
+                    Set.of("Verviers")
                 )
             )
         ).thenAnswer(invocation -> units.stream());
@@ -135,7 +132,8 @@ class ObservationUnitExportJobServiceTest {
             mockObservationUnitRepository.findByExportCriteria(
                 new ObservationUnitExportCriteria(
                     "trial1",
-                    "levelCode"
+                    "levelCode",
+                    Set.of("Verviers")
                 )
             )
         ).thenAnswer(invocation -> units.stream());
@@ -171,6 +169,7 @@ class ObservationUnitExportJobServiceTest {
         vo.setGermplasmGenus("Germplasm Genus 1");
         vo.setTrialName("Trial 1");
         vo.setStudyName("Study 1");
+        vo.setStudyLocation("Gaillac");
         vo.setTreatments(List.of(createTreatment()));
         return vo;
     }
@@ -182,6 +181,9 @@ class ObservationUnitExportJobServiceTest {
         vo.setValue("OK");
         vo.setObservationTimeStamp("2025-12-03T13:00:00Z");
         vo.setObservationUnitDbId("unit1");
+        SeasonVO season = new SeasonVO();
+        season.setSeasonName("2025");
+        vo.setSeason(season);
         return vo;
     }
 

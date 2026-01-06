@@ -68,7 +68,7 @@ test.describe('Trial', () => {
     await expect(exportPage.getByRole('alert')).toContainText('The export succeeded.', { timeout: 30_000 });
 
     const downloadPromise = exportPage.waitForEvent('download');
-    await exportPage.getByRole('button', { name: 'Download' }).click();
+    await exportPage.getByRole('link', { name: 'Download' }).click();
 
     const download = await downloadPromise;
     expect(download.suggestedFilename().endsWith('.csv')).toBe(true);

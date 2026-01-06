@@ -215,7 +215,9 @@ public class ObservationUnitV2DaoCustomImpl implements ObservationUnitV2DaoCusto
         Criteria criteria = Criteria
             .where("trialDbId").is(exportCriteria.trialDbId())
             .and(Criteria.where("observationUnitPosition.observationLevel.levelCode").is(exportCriteria.observationLevelCode()));
-
+        if (!exportCriteria.studyLocations().isEmpty()) {
+            criteria.and(Criteria.where("studyLocation").in(exportCriteria.studyLocations()));
+        }
         return esTemplate.searchForStream(new CriteriaQuery(criteria), ObservationUnitV2VO.class)
             .stream()
             .map(SearchHit::getContent);
