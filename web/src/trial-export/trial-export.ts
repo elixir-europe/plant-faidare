@@ -8,7 +8,7 @@ export function initializeTrialExport(options: { contextPath: string; jobId: str
 }
 
 async function refresh(options: { contextPath: string; jobId: string }, interval: any) {
-  const response = await fetch(`${options.contextPath}/observation-units/exports/${options.jobId}`);
+  const response = await fetch(`${options.contextPath}/observations/exports/${options.jobId}`);
   const job = (await response.json()) as Job;
   if (job.status === 'DONE') {
     document.querySelector<HTMLDivElement>('#running')!.classList.add('d-none');

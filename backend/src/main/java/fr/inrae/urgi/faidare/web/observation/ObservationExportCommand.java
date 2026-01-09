@@ -1,4 +1,4 @@
-package fr.inrae.urgi.faidare.web.observationunit;
+package fr.inrae.urgi.faidare.web.observation;
 
 import java.util.Set;
 import jakarta.validation.constraints.NotBlank;
@@ -7,10 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import fr.inrae.urgi.faidare.web.germplasm.ExportFormat;
 
 /**
- * Command sent to export observation units and observations
+ * Command sent to export observations
  * @author JB Nizet
  */
-public record ObservationUnitExportCommand(
+public record ObservationExportCommand(
     @NotBlank String trialDbId,
     @NotBlank String observationLevelCode,
     Set<String> studyLocations,

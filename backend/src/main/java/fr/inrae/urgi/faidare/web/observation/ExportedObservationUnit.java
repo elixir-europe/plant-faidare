@@ -1,4 +1,4 @@
-package fr.inrae.urgi.faidare.web.observationunit;
+package fr.inrae.urgi.faidare.web.observation;
 
 import java.util.List;
 

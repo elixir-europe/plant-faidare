@@ -1,4 +1,4 @@
-package fr.inrae.urgi.faidare.web.observationunit;
+package fr.inrae.urgi.faidare.web.observation;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,29 +29,29 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Unit tests for {@link ObservationUnitExportJobService}
+ * Unit tests for {@link ObservationExportJobService}
  * @author JB Nizet
  */
-class ObservationUnitExportJobServiceTest {
+class ObservationExportJobServiceTest {
 
     @TempDir
     private Path exportDirectory;
 
     private ObservationUnitV2Dao mockObservationUnitRepository;
     private ObservationV2Dao mockObservationRepository;
-    private ObservationUnitExportJobService jobService;
+    private ObservationExportJobService jobService;
 
     @BeforeEach
     void prepare() {
         mockObservationUnitRepository = mock(ObservationUnitV2Dao.class);
         mockObservationRepository = mock(ObservationV2Dao.class);
-        jobService = new ObservationUnitExportJobService(
+        jobService = new ObservationExportJobService(
             mockObservationUnitRepository,
             mockObservationRepository,
-            new ObservationUnitExportProperties(
+            new ObservationExportProperties(
                 exportDirectory
             ),
-            new ObservationUnitExportService()
+            new ObservationExportService()
         );
     }
 
@@ -66,7 +66,7 @@ class ObservationUnitExportJobServiceTest {
             createObservation(2)
         );
 
-        ObservationUnitExportCommand command = new ObservationUnitExportCommand(
+        ObservationExportCommand command = new ObservationExportCommand(
             "trial1",
             "levelCode",
             Set.of("Verviers"),
@@ -96,10 +96,10 @@ class ObservationUnitExportJobServiceTest {
             )
         ).thenAnswer(invocation -> observations.stream());
 
-        ObservationUnitExportJob exportJob = jobService.createExportJob(command);
-        await().atMost(5, SECONDS).until(() -> exportJob.getStatus() != ObservationUnitExportJob.Status.RUNNING);
+        ObservationExportJob exportJob = jobService.createExportJob(command);
+        await().atMost(5, SECONDS).until(() -> exportJob.getStatus() != ObservationExportJob.Status.RUNNING);
 
-        assertThat(exportJob.getStatus()).isEqualTo(ObservationUnitExportJob.Status.DONE);
+        assertThat(exportJob.getStatus()).isEqualTo(ObservationExportJob.Status.DONE);
 
         try (XSSFWorkbook workbook = new XSSFWorkbook(exportJob.getFile().toFile())) {
             assertThat(workbook.getNumberOfSheets()).isEqualTo(1);
@@ -119,7 +119,7 @@ class ObservationUnitExportJobServiceTest {
             createObservation(2)
         );
 
-        ObservationUnitExportCommand command = new ObservationUnitExportCommand(
+        ObservationExportCommand command = new ObservationExportCommand(
             "trial1",
             "levelCode",
             Set.of("Verviers"),
@@ -149,10 +149,10 @@ class ObservationUnitExportJobServiceTest {
             )
         ).thenAnswer(invocation -> observations.stream());
 
-        ObservationUnitExportJob exportJob = jobService.createExportJob(command);
-        await().atMost(5, SECONDS).until(() -> exportJob.getStatus() != ObservationUnitExportJob.Status.RUNNING);
+        ObservationExportJob exportJob = jobService.createExportJob(command);
+        await().atMost(5, SECONDS).until(() -> exportJob.getStatus() != ObservationExportJob.Status.RUNNING);
 
-        assertThat(exportJob.getStatus()).isEqualTo(ObservationUnitExportJob.Status.DONE);
+        assertThat(exportJob.getStatus()).isEqualTo(ObservationExportJob.Status.DONE);
 
         String content = Files.readString(exportJob.getFile());
         List<String> lines = content.lines().toList();

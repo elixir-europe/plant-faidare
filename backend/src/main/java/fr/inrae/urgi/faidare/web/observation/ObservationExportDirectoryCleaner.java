@@ -1,4 +1,4 @@
-package fr.inrae.urgi.faidare.web.observationunit;
+package fr.inrae.urgi.faidare.web.observation;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,18 +10,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 /**
- * A component that cleans the observation unit export directory of leftover
+ * A component that cleans the observation export directory of leftover
  * files at startup.
  * These files might exist because the server was shut down (or crashed) during
- * the 1 hour interval between the last access to the job and its removal.
+ * the one-hour interval between the last access to the job and its removal.
  * @author JB Nizet
  */
 @Component
-public class ObservationUnitExportDirectoryCleaner implements CommandLineRunner {
+public class ObservationExportDirectoryCleaner implements CommandLineRunner {
 
-    private final ObservationUnitExportProperties properties;
+    private final ObservationExportProperties properties;
 
-    public ObservationUnitExportDirectoryCleaner(ObservationUnitExportProperties properties) {
+    public ObservationExportDirectoryCleaner(ObservationExportProperties properties) {
         this.properties = properties;
     }
 

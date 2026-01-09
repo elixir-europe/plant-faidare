@@ -1,4 +1,4 @@
-package fr.inrae.urgi.faidare.web.observationunit;
+package fr.inrae.urgi.faidare.web.observation;
 
 import java.io.IOException;
 
@@ -19,36 +19,36 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Controller allowing to export observation units
+ * Controller allowing to export observations
  * @author JB Nizet
  */
 @RestController
-@RequestMapping({"/observation-units"})
-public class ObservationUnitController {
+@RequestMapping({"/observations"})
+public class ObservationController {
 
-    private final ObservationUnitExportJobService jobService;
+    private final ObservationExportJobService jobService;
 
-    public ObservationUnitController(ObservationUnitExportJobService jobService) {
+    public ObservationController(ObservationExportJobService jobService) {
         this.jobService = jobService;
     }
 
     @PostMapping("/exports")
     @ResponseStatus(HttpStatus.CREATED)
-    public ObservationUnitExportJobDTO export(@Validated @RequestBody ObservationUnitExportCommand command) {
-        ObservationUnitExportJob exportJob = jobService.createExportJob(command);
-        return new ObservationUnitExportJobDTO(exportJob);
+    public ObservationExportJobDTO export(@Validated @RequestBody ObservationExportCommand command) {
+        ObservationExportJob exportJob = jobService.createExportJob(command);
+        return new ObservationExportJobDTO(exportJob);
     }
 
     @GetMapping("/exports/{jobId}")
-    public ObservationUnitExportJobDTO getJob(@PathVariable String jobId) {
-        ObservationUnitExportJob exportJob = jobService.getJob(jobId).orElseThrow(() -> new NotFoundException("No export job with ID " + jobId));
-        return new ObservationUnitExportJobDTO(exportJob);
+    public ObservationExportJobDTO getJob(@PathVariable String jobId) {
+        ObservationExportJob exportJob = jobService.getJob(jobId).orElseThrow(() -> new NotFoundException("No export job with ID " + jobId));
+        return new ObservationExportJobDTO(exportJob);
     }
 
     @GetMapping("/exports/{jobId}/content")
     public ResponseEntity<Resource> getExportResult(@PathVariable String jobId) throws IOException {
-        ObservationUnitExportJob exportJob = jobService.getJob(jobId).orElseThrow(() -> new NotFoundException("No export job with ID " + jobId));
-        if (exportJob.getStatus() != ObservationUnitExportJob.Status.DONE) {
+        ObservationExportJob exportJob = jobService.getJob(jobId).orElseThrow(() -> new NotFoundException("No export job with ID " + jobId));
+        if (exportJob.getStatus() != ObservationExportJob.Status.DONE) {
             throw new NotFoundException("Export job with ID " + jobId + " is not done");
         }
         return ResponseEntity.ok()

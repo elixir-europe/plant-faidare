@@ -1,28 +1,15 @@
-package fr.inrae.urgi.faidare.web.observationunit;
+package fr.inrae.urgi.faidare.web.observation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import fr.inrae.urgi.faidare.dao.v2.ObservationExportCriteria;
-import fr.inrae.urgi.faidare.dao.v2.ObservationUnitExportCriteria;
-import fr.inrae.urgi.faidare.dao.v2.ObservationUnitV2Dao;
-import fr.inrae.urgi.faidare.dao.v2.ObservationV2Dao;
-import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationLevelVO;
-import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitPositionVO;
-import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2VO;
-import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationVO;
-import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.TreatmentVO;
 import fr.inrae.urgi.faidare.web.germplasm.ExportFormat;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -37,12 +24,12 @@ import org.springframework.test.web.servlet.assertj.MvcTestResult;
 import tools.jackson.databind.ObjectMapper;
 
 /**
- * MVC tests for {@link ObservationUnitController}
+ * MVC tests for {@link ObservationController}
  * @author JB Nizet
  */
-@WebMvcTest(ObservationUnitController.class)
-@Import({ObservationUnitExportService.class})
-class ObservationUnitControllerTest {
+@WebMvcTest(ObservationController.class)
+@Import({ObservationExportService.class})
+class ObservationControllerTest {
 
     @Autowired
     private MockMvcTester mockMvc;
@@ -51,12 +38,12 @@ class ObservationUnitControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private ObservationUnitExportJobService mockJobService;
+    private ObservationExportJobService mockJobService;
 
     @Test
     void shouldCreateExportJob() {
 
-        ObservationUnitExportCommand command = new ObservationUnitExportCommand(
+        ObservationExportCommand command = new ObservationExportCommand(
             "trial1",
             "levelCode",
             Set.of("Verviers"),
@@ -65,12 +52,12 @@ class ObservationUnitControllerTest {
             ExportFormat.EXCEL
         );
 
-        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.EXCEL, Path.of("/tmp/export.xlsx"));
+        ObservationExportJob job = new ObservationExportJob("job1", ExportFormat.EXCEL, Path.of("/tmp/export.xlsx"));
         when(mockJobService.createExportJob(command)).thenReturn(job);
 
         MvcTestResult result = mockMvc
             .post()
-            .uri("/observation-units/exports")
+            .uri("/observations/exports")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(command))
             .exchange();
@@ -90,13 +77,13 @@ class ObservationUnitControllerTest {
 
     @Test
     void shouldGetExportJob() {
-        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.EXCEL, Path.of("/tmp/export.xlsx"));
+        ObservationExportJob job = new ObservationExportJob("job1", ExportFormat.EXCEL, Path.of("/tmp/export.xlsx"));
         job.done();
         when(mockJobService.getJob(job.getId())).thenReturn(Optional.of(job));
 
         MvcTestResult result = mockMvc
             .get()
-            .uri("/observation-units/exports/{jobId}", job.getId())
+            .uri("/observations/exports/{jobId}", job.getId())
             .exchange();
         assertThat(result)
             .hasStatus(HttpStatus.OK)
@@ -116,13 +103,13 @@ class ObservationUnitControllerTest {
     void shouldGetExportJobContent() throws IOException {
         Path file = Files.createTempFile("foo", ".csv");
         Files.writeString(file, "hello");
-        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.CSV, file);
+        ObservationExportJob job = new ObservationExportJob("job1", ExportFormat.CSV, file);
         job.done();
         when(mockJobService.getJob(job.getId())).thenReturn(Optional.of(job));
 
         MvcTestResult result = mockMvc
             .get()
-            .uri("/observation-units/exports/{jobId}/content", job.getId())
+            .uri("/observations/exports/{jobId}/content", job.getId())
             .exchange();
         assertThat(result)
             .hasStatus(HttpStatus.OK)

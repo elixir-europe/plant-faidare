@@ -1,4 +1,4 @@
-package fr.inrae.urgi.faidare.web.observationunit;
+package fr.inrae.urgi.faidare.web.observation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,13 +22,13 @@ import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.TreatmentVO;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit tests for {@link ObservationUnitExportService}
+ * Unit tests for {@link ObservationExportService}
  * @author JB Nizet
  */
 class ObservationUnitExportServiceTest {
     @Test
     void shouldGenerateCorrectColumnsAndRows() throws IOException, CsvException {
-        ObservationUnitExportService service = new ObservationUnitExportService();
+        ObservationExportService service = new ObservationExportService();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 

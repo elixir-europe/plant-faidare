@@ -1,8 +1,6 @@
 package fr.inrae.urgi.faidare.web.trial;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,9 +24,9 @@ import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.StudyV2miniVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.TrialV2VO;
 import fr.inrae.urgi.faidare.utils.Sitemaps;
-import fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJob;
-import fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJobDTO;
-import fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJobService;
+import fr.inrae.urgi.faidare.web.observation.ObservationExportJob;
+import fr.inrae.urgi.faidare.web.observation.ObservationExportJobDTO;
+import fr.inrae.urgi.faidare.web.observation.ObservationExportJobService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -53,7 +51,7 @@ public class TrialController {
     private final GermplasmV2Dao germplasmRepository;
     private final ObservationUnitV2Dao observationUnitRepository;
     private final ObservationV2Dao observationRepository;
-    private final ObservationUnitExportJobService jobService;
+    private final ObservationExportJobService jobService;
 
     public TrialController(TrialV2Dao trialRepository,
                            FaidareProperties faidareProperties,
@@ -61,7 +59,7 @@ public class TrialController {
                            GermplasmV2Dao germplasmRepository,
                            ObservationUnitV2Dao observationUnitRepository,
                            ObservationV2Dao observationRepository,
-                           ObservationUnitExportJobService jobService) {
+                           ObservationExportJobService jobService) {
         this.trialRepository = trialRepository;
         this.faidareProperties = faidareProperties;
         this.locationRepository = locationRepository;
@@ -129,7 +127,7 @@ public class TrialController {
         if (trial == null) {
             throw new NotFoundException("Trial with ID " + trialId + " not found");
         }
-        ObservationUnitExportJob job =
+        ObservationExportJob job =
             jobService.getJob(jobId).orElseThrow(() -> new NotFoundException("no export job with ID " + jobId));
         return new ModelAndView(
             "trial-export",
@@ -137,7 +135,7 @@ public class TrialController {
             new TrialExportModel(
                 request.getContextPath(),
                 trial,
-                new ObservationUnitExportJobDTO(job)
+                new ObservationExportJobDTO(job)
             )
         );
     }

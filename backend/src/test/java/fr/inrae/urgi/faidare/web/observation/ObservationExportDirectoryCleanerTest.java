@@ -1,7 +1,6 @@
-package fr.inrae.urgi.faidare.web.observationunit;
+package fr.inrae.urgi.faidare.web.observation;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Unit tests for {@link ObservationUnitExportDirectoryCleaner}
+ * Unit tests for {@link ObservationExportDirectoryCleaner}
  * @author JB Nizet
  */
-class ObservationUnitExportDirectoryCleanerTest {
+class ObservationExportDirectoryCleanerTest {
     @TempDir
     private Path exportDirectory;
 
@@ -27,8 +26,8 @@ class ObservationUnitExportDirectoryCleanerTest {
         Files.createFile(exportDirectory.resolve("README.md"));
         Files.createDirectory(exportDirectory.resolve("subdir"));
 
-        ObservationUnitExportProperties properties = new ObservationUnitExportProperties(exportDirectory);
-        ObservationUnitExportDirectoryCleaner cleaner = new ObservationUnitExportDirectoryCleaner(properties);
+        ObservationExportProperties properties = new ObservationExportProperties(exportDirectory);
+        ObservationExportDirectoryCleaner cleaner = new ObservationExportDirectoryCleaner(properties);
         cleaner.run();
 
         List<String> remainingFileNames = Files.list(exportDirectory).map(file -> file.getFileName().toString()).toList();

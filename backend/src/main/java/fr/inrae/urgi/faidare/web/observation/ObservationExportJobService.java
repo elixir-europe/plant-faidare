@@ -1,4 +1,4 @@
-package fr.inrae.urgi.faidare.web.observationunit;
+package fr.inrae.urgi.faidare.web.observation;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -34,30 +34,31 @@ import org.springframework.stereotype.Component;
  * Service which starts observation unit export jobs in the background, and
  * caches them for one hour after access.
  * When the job expires, the file it has generated on disk (if any) is deleted.
+ * At startup, leftover files are cleaned up by {@link ObservationExportDirectoryCleaner}.
  * @author JB Nizet
  */
 @Component
-public class ObservationUnitExportJobService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ObservationUnitExportJobService.class);
+public class ObservationExportJobService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ObservationExportJobService.class);
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
         "yyyy-MM-dd-HH-mm-ss-SSS"
     );
 
     private final ObservationUnitV2Dao observationUnitRepository;
     private final ObservationV2Dao observationRepository;
-    private final ObservationUnitExportProperties properties;
-    private final ObservationUnitExportService exportService;
+    private final ObservationExportProperties properties;
+    private final ObservationExportService exportService;
 
-    private final Cache<String, ObservationUnitExportJob> jobCache = CacheBuilder.newBuilder()
-        .expireAfterAccess(Duration.ofHours(1))
-        .removalListener(this::handleRemoval)
-        .build();
+    private final Cache<String, ObservationExportJob> jobCache = CacheBuilder.newBuilder()
+                                                                             .expireAfterAccess(Duration.ofHours(1))
+                                                                             .removalListener(this::handleRemoval)
+                                                                             .build();
 
-    public ObservationUnitExportJobService(
+    public ObservationExportJobService(
         ObservationUnitV2Dao observationUnitRepository,
         ObservationV2Dao observationRepository,
-        ObservationUnitExportProperties properties,
-        ObservationUnitExportService exportService
+        ObservationExportProperties properties,
+        ObservationExportService exportService
     ) {
         this.observationUnitRepository = observationUnitRepository;
         this.observationRepository = observationRepository;
@@ -65,24 +66,24 @@ public class ObservationUnitExportJobService {
         this.exportService = exportService;
     }
 
-    public ObservationUnitExportJob createExportJob(ObservationUnitExportCommand command) {
+    public ObservationExportJob createExportJob(ObservationExportCommand command) {
         String id = UUID.randomUUID().toString();
 
         String fileName = "export_" + DATE_TIME_FORMATTER.format(Instant.now().atOffset(ZoneOffset.UTC)) + "." + command.format().getExtension();
         Path file = properties.directory().resolve(fileName);
 
-        ObservationUnitExportJob job = new ObservationUnitExportJob(id, command.format(), file);
+        ObservationExportJob job = new ObservationExportJob(id, command.format(), file);
         jobCache.put(id, job);
 
         Thread.ofVirtual().name("observation-unit-export-" + id).start(() -> export(command, job));
         return job;
     }
 
-    public Optional<ObservationUnitExportJob> getJob(String id) {
+    public Optional<ObservationExportJob> getJob(String id) {
         return Optional.ofNullable(jobCache.getIfPresent(id));
     }
 
-    private void export(ObservationUnitExportCommand command, ObservationUnitExportJob job) {
+    private void export(ObservationExportCommand command, ObservationExportJob job) {
         Path file = job.getFile();
         try (
             FileOutputStream fos = new FileOutputStream(file.toFile());
@@ -125,7 +126,7 @@ public class ObservationUnitExportJobService {
         ).toList();
     }
 
-    private void handleRemoval(RemovalNotification<String, ObservationUnitExportJob> removal) {
+    private void handleRemoval(RemovalNotification<String, ObservationExportJob> removal) {
         try {
             Path file = removal.getValue().getFile();
             if (file != null) {

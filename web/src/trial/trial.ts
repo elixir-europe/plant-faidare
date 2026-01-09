@@ -68,7 +68,7 @@ export function initializeTrial(options: { contextPath: string; trialDbId: strin
     };
 
     try {
-      const response = await fetch(`${options.contextPath}/observation-units/exports`, {
+      const response = await fetch(`${options.contextPath}/observations/exports`, {
         method: 'POST',
         body: JSON.stringify(command),
         headers: {

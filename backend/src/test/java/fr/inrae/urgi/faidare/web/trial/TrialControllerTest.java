@@ -28,8 +28,8 @@ import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.TrialV2VO;
 import fr.inrae.urgi.faidare.web.Fixtures;
 import fr.inrae.urgi.faidare.web.germplasm.ExportFormat;
-import fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJob;
-import fr.inrae.urgi.faidare.web.observationunit.ObservationUnitExportJobService;
+import fr.inrae.urgi.faidare.web.observation.ObservationExportJob;
+import fr.inrae.urgi.faidare.web.observation.ObservationExportJobService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +67,7 @@ public class TrialControllerTest {
     private ObservationV2Dao mockObservationRepository;
 
     @MockitoBean
-    private ObservationUnitExportJobService mockObservationUnitExportJobService;
+    private ObservationExportJobService mockObservationExportJobService;
 
     @Autowired
     private TrialController trialController;
@@ -115,8 +115,8 @@ public class TrialControllerTest {
 
     @Test
     void shouldDisplayTrialExport() throws Exception {
-        ObservationUnitExportJob job = new ObservationUnitExportJob("job1", ExportFormat.EXCEL, Path.of("/tmp/export.xlsx"));
-        when(mockObservationUnitExportJobService.getJob(job.getId())).thenReturn(Optional.of(job));
+        ObservationExportJob job = new ObservationExportJob("job1", ExportFormat.EXCEL, Path.of("/tmp/export.xlsx"));
+        when(mockObservationExportJobService.getJob(job.getId())).thenReturn(Optional.of(job));
         mockMvc.perform(get("/trials/{id}/exports/{jobId}", trial.getTrialDbId(), job.getId()))
                .andExpect(status().isOk())
                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))

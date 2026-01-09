@@ -1,4 +1,4 @@
-package fr.inrae.urgi.faidare.web.observationunit;
+package fr.inrae.urgi.faidare.web.observation;
 
 import static org.apache.poi.ss.util.WorkbookUtil.createSafeSheetName;
 
@@ -9,7 +9,6 @@ import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +20,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.opencsv.CSVWriter;
-import fr.inrae.urgi.faidare.dao.v2.ObservationUnitV2Dao;
-import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.TreatmentVO;
-import fr.inrae.urgi.faidare.web.germplasm.GermplasmMiappeExportService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
@@ -35,16 +31,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * Service allowing to export observation units as Excel and CSV
+ * Service allowing to export observations as Excel and CSV
  * @author JB Nizet
  */
 @Component
-public class ObservationUnitExportService {
+public class ObservationExportService {
 
     public void exportAsExcel(OutputStream out, List<ExportedObservationUnit> observationUnits) {
         List<Row> rows = createRows(observationUnits);
