@@ -13,6 +13,8 @@ import org.springframework.validation.annotation.Validated;
  * @author JB Nizet
  *
  * @param directory The directory where observation unit exports are generated before being downloaded.
+ *                  At startup, all files in this directory that ends with an export fomat extension
+ *                  (.csv or .xlsx) are deleted.
  */
 @Validated
 @ConfigurationProperties(prefix = "faidare.observation-unit-export")
