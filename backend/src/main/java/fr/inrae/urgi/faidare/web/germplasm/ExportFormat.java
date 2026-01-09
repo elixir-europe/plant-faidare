@@ -8,7 +8,8 @@ import org.springframework.http.MediaType;
  */
 public enum ExportFormat {
     CSV("text/csv", "csv"),
-    EXCEL("application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet", "xlsx");
+    EXCEL("application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet", "xlsx"),
+    JSON("application/json", "json");
 
     private final String contentType;
     private final MediaType mediaType;

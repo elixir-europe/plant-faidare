@@ -6,8 +6,10 @@ import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 
@@ -22,11 +24,13 @@ import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.SeasonVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.TreatmentVO;
 import fr.inrae.urgi.faidare.web.germplasm.ExportFormat;
+import fr.inrae.urgi.faidare.web.observation.json.JsonObservationExport;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Unit tests for {@link ObservationExportJobService}
@@ -51,7 +55,7 @@ class ObservationExportJobServiceTest {
             new ObservationExportProperties(
                 exportDirectory
             ),
-            new ObservationExportService()
+            new ObservationExportService(new ObjectMapper())
         );
     }
 
@@ -159,14 +163,66 @@ class ObservationExportJobServiceTest {
         assertThat(lines).hasSize(2); // header + 1 unit with 2 variables
     }
 
+    @Test
+    void shouldExportAsJson() throws Exception {
+        List<ObservationUnitV2VO> units = List.of(
+            createObservationUnit()
+        );
+
+        List<ObservationVO> observations = List.of(
+            createObservation(1),
+            createObservation(2)
+        );
+
+        ObservationExportCommand command = new ObservationExportCommand(
+            "trial1",
+            "levelCode",
+            Set.of("Verviers"),
+            Set.of("2025"),
+            Set.of("Variable 1", "Variable 2"),
+            ExportFormat.JSON
+        );
+
+        when(
+            mockObservationUnitRepository.findByExportCriteria(
+                new ObservationUnitExportCriteria(
+                    "trial1",
+                    "levelCode",
+                    Set.of("Verviers")
+                )
+            )
+        ).thenAnswer(invocation -> units.stream());
+
+        when(
+            mockObservationRepository.findByExportCriteria(
+                new ObservationExportCriteria(
+                    "trial1",
+                    Set.of("Verviers"),
+                    Set.of("2025"),
+                    Set.of("Variable 1", "Variable 2")
+                )
+            )
+        ).thenAnswer(invocation -> observations.stream());
+
+        ObservationExportJob exportJob = jobService.createExportJob(command);
+        await().atMost(5, SECONDS).until(() -> exportJob.getStatus() != ObservationExportJob.Status.RUNNING);
+
+        assertThat(exportJob.getStatus()).isEqualTo(ObservationExportJob.Status.DONE);
+
+        String content = Files.readString(exportJob.getFile());
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonObservationExport jsonExport = objectMapper.readValue(content, JsonObservationExport.class);
+        assertThat(jsonExport.data()).hasSize(2); // unit with 2 variables
+    }
+
     private ObservationUnitV2VO createObservationUnit() {
         ObservationUnitV2VO vo = new ObservationUnitV2VO();
-        vo.setTrialDbId("trial1");
-        vo.setObservationUnitDbId("unit1");
+        vo.setObservationUnitDbId(encode("unit1"));
         vo.setObservationUnitName("Unit1");
         vo.setObservationUnitPosition(createObservationUnitPosition());
         vo.setGermplasmName("Germplasm1");
         vo.setGermplasmGenus("Germplasm Genus 1");
+        vo.setTrialDbId(encode("trial1"));
         vo.setTrialName("Trial 1");
         vo.setStudyName("Study 1");
         vo.setStudyLocation("Gaillac");
@@ -176,11 +232,11 @@ class ObservationExportJobServiceTest {
 
     private ObservationVO createObservation(int index) {
         ObservationVO vo = new ObservationVO();
-        vo.setObservationVariableDbId("variable" + index);
+        vo.setObservationVariableDbId(encode("variable" + index));
         vo.setObservationVariableName("Variable " + index);
         vo.setValue("OK");
         vo.setObservationTimeStamp("2025-12-03T13:00:00Z");
-        vo.setObservationUnitDbId("unit1");
+        vo.setObservationUnitDbId(encode("unit1"));
         SeasonVO season = new SeasonVO();
         season.setSeasonName("2025");
         vo.setSeason(season);
@@ -201,5 +257,12 @@ class ObservationExportJobServiceTest {
         observationLevel.setLevelOrder("levelCode");
         vo.setObservationLevel(observationLevel);
         return vo;
+    }
+
+    private String encode(String value) {
+        if (value == null) {
+            return null;
+        }
+        return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
     }
 }

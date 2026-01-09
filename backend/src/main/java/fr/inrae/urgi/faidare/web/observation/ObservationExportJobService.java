@@ -105,6 +105,7 @@ public class ObservationExportJobService {
             switch (command.format()) {
                 case CSV -> exportService.exportAsCsv(out, exportedObservationUnits);
                 case EXCEL -> exportService.exportAsExcel(out, exportedObservationUnits);
+                case JSON -> exportService.exportAsJson(out, exportedObservationUnits);
             }
             out.close();
             job.done();
