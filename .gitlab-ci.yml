@@ -282,8 +282,8 @@ deploy-to-staging-public:
     ENV: staging-public
     CONTEXT_PATH: faidare
   environment:
-    name: beta
-    url: "http://${SERVER_IP_OPENSTACK_DEV}:${STAGING_PUBLIC_FAIDARE_PORT}/faidare"
+    name: staging-public
+    url: "http://staging-urgi.versailles.inrae.fr/faidare"
   resource_group: env-staging-public
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
@@ -301,8 +301,8 @@ deploy-to-staging-private:
     ENV: staging-private
     CONTEXT_PATH: faidare-private
   environment:
-    name: beta
-    url: "http://${SERVER_IP_OPENSTACK_DEV}:${STAGING_PRIVATE_FAIDARE_PORT}/faidare"
+    name: staging-private
+    url: "http://staging-urgi.versailles.inrae.fr/faidare-private"
   resource_group: env-staging-private
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
@@ -320,8 +320,8 @@ deploy-to-prod-public:
     ENV: prod-public
     CONTEXT_PATH: faidare
   environment:
-    name: beta
-    url: "http://${SERVER_IP_OPENSTACK_PROD}:${PROD_PUBLIC_FAIDARE_PORT}/faidare"
+    name: prod-public
+    url: "http://urgi.versailles.inrae.fr/faidare"
   resource_group: env-prod-public
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
@@ -339,8 +339,8 @@ deploy-to-prod-private:
     ENV: prod-private
     CONTEXT_PATH: faidare-private
   environment:
-    name: beta
-    url: "http://${SERVER_IP_OPENSTACK_PROD}:${PROD_PRIVATE_FAIDARE_PORT}/faidare"
+    name: prod-private
+    url: "http://urgi.versailles.inrae.fr/faidare-private"
   resource_group: env-prod-private
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
