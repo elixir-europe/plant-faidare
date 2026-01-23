@@ -1,11 +1,16 @@
 package fr.inrae.urgi.faidare.web.germplasm;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.collect.Lists;
 import fr.inrae.urgi.faidare.api.NotFoundException;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.dao.XRefDocumentDao;
@@ -116,7 +121,7 @@ public class GermplasmController {
         List<GermplasmMcpdExportableField> fields = getFieldsToExport(command);
 
         StreamingResponseBody body = out -> {
-            try (Stream<GermplasmMcpdVO> stream = germplasmMcpdRepository.findByGermplasmDbIdIn(command.getIds())) {
+            try (Stream<GermplasmMcpdVO> stream = findByIdsInBatches(command.getIds(), germplasmMcpdRepository::findByGermplasmDbIdIn)) {
                 germplasmMcpdExportService.export(out, stream, fields);
             }
         };
@@ -129,7 +134,7 @@ public class GermplasmController {
         List<GermplasmExportableField> fields = getFieldsToExport(command);
 
         StreamingResponseBody body = out -> {
-            try (Stream<GermplasmV2VO> stream = germplasmRepository.findByGermplasmDbIdIn(command.getIds())) {
+            try (Stream<GermplasmV2VO> stream = findByIdsInBatches(command.getIds(), germplasmRepository::findByGermplasmDbIdIn)) {
                 germplasmExportService.export(out, stream, fields);
             }
         };
@@ -140,7 +145,7 @@ public class GermplasmController {
     @ResponseBody
     public ResponseEntity<StreamingResponseBody> export(@Validated @RequestBody GermplasmMiappeExportCommand command) {
         StreamingResponseBody body = out -> {
-            try (Stream<GermplasmV2VO> stream = germplasmRepository.findByGermplasmDbIdIn(command.ids())) {
+            try (Stream<GermplasmV2VO> stream = findByIdsInBatches(command.ids(), germplasmRepository::findByGermplasmDbIdIn)) {
                 switch (command.format()) {
                     case EXCEL -> germplasmMiappeExportService.exportAsExcel(out, stream);
                     case CSV -> germplasmMiappeExportService.exportAsCsv(out, stream);
@@ -264,5 +269,12 @@ public class GermplasmController {
             fields = Arrays.asList(GermplasmExportableField.values());
         }
         return fields;
+    }
+
+    private <T> Stream<T> findByIdsInBatches(Set<String> ids, Function<Set<String>, Stream<T>> finder) {
+        List<String> idList = new ArrayList<>(ids);
+        List<List<String>> partitions = Lists.partition(idList, 1000);
+        return partitions.stream()
+            .flatMap(partition -> finder.apply(new HashSet<>(partition)));
     }
 }
