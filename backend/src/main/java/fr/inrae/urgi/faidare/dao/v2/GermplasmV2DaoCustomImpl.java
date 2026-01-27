@@ -6,6 +6,7 @@ package fr.inrae.urgi.faidare.dao.v2;
 
 import co.elastic.clients.elasticsearch._types.FieldValue;
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
+import fr.inrae.urgi.faidare.config.DocumentType;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.domain.brapi.GermplasmSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
@@ -219,7 +220,8 @@ public class GermplasmV2DaoCustomImpl implements GermplasmV2DaoCustom {
             .withSourceFilter(new FetchSourceFilterBuilder().withIncludes("germplasmDbId").build())
             .build();
         query.setTrackTotalHits(true);
-        return elasticsearchOperations.searchForStream(query, GermplasmSitemapVO.class, IndexCoordinates.of("#{@faidarePropertiesBean.getAliasName('germplasm', 0L)}"))
+        String germplasmAliasName = faidareProperties.getAliasName(DocumentType.GERMPLASM, 0L);
+        return elasticsearchOperations.searchForStream(query, GermplasmSitemapVO.class, IndexCoordinates.of(germplasmAliasName))
             .stream()
             .map(SearchHit::getContent);
     }

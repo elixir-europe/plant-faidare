@@ -2,6 +2,8 @@ package fr.inrae.urgi.faidare.dao.v2;
 
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
 import fr.inrae.urgi.faidare.config.ElasticSearchConfig;
+import fr.inrae.urgi.faidare.domain.brapi.GermplasmSitemapVO;
+import fr.inrae.urgi.faidare.domain.brapi.StudySitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.StudyV2VO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.boot.data.elasticsearch.test.autoconfigure.DataElasti
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -146,4 +149,15 @@ class StudyV2DaoTest {
         assertThat(studyVOs.getResult().getData().get(0).getTrialName()).isEqualTo("Drops Phenotyping Network");
     }
 
+    @Test
+    void findAllForSitemap() {
+        try (Stream<StudySitemapVO> stream = studyV2Dao.findAllForSitemap().limit(10)) {
+            List<StudySitemapVO> list = stream.toList();
+            assertThat(list).isNotEmpty();
+            for (StudySitemapVO vo : list) {
+                assertThat(vo).isInstanceOf(StudySitemapVO.class);
+                assertThat(vo.getStudyDbId()).isNotBlank();
+            }
+        }
+    }
 }

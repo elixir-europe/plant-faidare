@@ -1,7 +1,9 @@
 package fr.inrae.urgi.faidare.dao.v2;
 
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
+import fr.inrae.urgi.faidare.config.DocumentType;
 import fr.inrae.urgi.faidare.config.ElasticSearchConfig;
+import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.domain.brapi.LocationSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.LocationV2VO;
@@ -27,6 +29,9 @@ public class LocationV2DaoCustomImpl implements LocationV2DaoCustom{
     @Autowired
     private ElasticsearchTemplate esTemplate;
 
+    @Autowired
+    private FaidareProperties faidareProperties;
+
     @Override
     public Stream<LocationSitemapVO> findAllForSitemap() {
         NativeQueryBuilder nativeQueryBuilder = NativeQuery.builder();
@@ -35,7 +40,8 @@ public class LocationV2DaoCustomImpl implements LocationV2DaoCustom{
             .withSourceFilter(new FetchSourceFilterBuilder().withIncludes("locationDbId").build())
             .build();
         query.setTrackTotalHits(true);
-        return esTemplate.searchForStream(query, LocationSitemapVO.class, IndexCoordinates.of("faidare_location_dev-group0"))
+        String locationAliasName = faidareProperties.getAliasName(DocumentType.LOCATION, 0L);
+        return esTemplate.searchForStream(query, LocationSitemapVO.class, IndexCoordinates.of(locationAliasName))
             .stream()
             .map(SearchHit::getContent);
     }

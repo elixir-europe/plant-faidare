@@ -2,6 +2,8 @@ package fr.inrae.urgi.faidare.dao.v2;
 
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
 import fr.inrae.urgi.faidare.config.ElasticSearchConfig;
+import fr.inrae.urgi.faidare.domain.brapi.GermplasmSitemapVO;
+import fr.inrae.urgi.faidare.domain.brapi.LocationSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.LocationV2VO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -92,6 +95,18 @@ public class LocationV2DaoTest {
         assertThat(locationVOs.getMetadata().getPagination().getCurrentPage()).isEqualTo(0);
         assertThat(locationVOs.getMetadata().getPagination().getTotalCount()).isEqualTo(1);
         assertThat(locationVOs.getResult().getData().get(0).getLocationName()).isEqualTo("Lusignan");
+    }
+
+    @Test
+    void findAllForSitemap() {
+        try (Stream<LocationSitemapVO> stream = locationDao.findAllForSitemap().limit(10)) {
+            List<LocationSitemapVO> list = stream.toList();
+            assertThat(list).isNotEmpty();
+            for (LocationSitemapVO vo : list) {
+                assertThat(vo).isInstanceOf(LocationSitemapVO.class);
+                assertThat(vo.getLocationDbId()).isNotBlank();
+            }
+        }
     }
 
 }

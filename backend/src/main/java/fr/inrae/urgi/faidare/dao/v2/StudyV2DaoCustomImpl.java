@@ -1,6 +1,8 @@
 package fr.inrae.urgi.faidare.dao.v2;
 
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
+import fr.inrae.urgi.faidare.config.DocumentType;
+import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.domain.brapi.StudySitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.StudyV2VO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class StudyV2DaoCustomImpl implements StudyV2DaoCustom {
 
     @Autowired
     private ElasticsearchTemplate esTemplate;
+
+    @Autowired
+    private FaidareProperties faidareProperties;
 
     @Override
     public BrapiListResponse<StudyV2VO> findStudiesByCriteria(StudyCriteria studyCriteria) {
@@ -152,7 +157,8 @@ public class StudyV2DaoCustomImpl implements StudyV2DaoCustom {
             .withSourceFilter(new FetchSourceFilterBuilder().withIncludes("studyDbId").build())
             .build();
         query.setTrackTotalHits(true);
-        return esTemplate.searchForStream(query, StudySitemapVO.class, IndexCoordinates.of("faidare_study_dev-group0"))
+        String studyAliasName = faidareProperties.getAliasName(DocumentType.STUDY, 0L);
+        return esTemplate.searchForStream(query, StudySitemapVO.class, IndexCoordinates.of(studyAliasName))
             .stream()
             .map(SearchHit::getContent);
     }
