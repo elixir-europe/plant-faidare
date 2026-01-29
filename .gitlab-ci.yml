@@ -177,7 +177,7 @@ test-and-sonarqube:
     - echo "Trying to access Elasticsearch logs..."
     - curl -s "http://${ES_HOST}:${ES_PORT}/_cluster/health?pretty"
     # Launch tests
-    - ./gradlew clean test
+    - ./gradlew clean check
     - ./gradlew test jacocoTestReport -s sonar
   artifacts:
     reports:
