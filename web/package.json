@@ -22,7 +22,7 @@
     "start:e2e:ci": "cd .. && java -jar backend/build/libs/faidare.jar --spring.profiles.active=e2e,ci",
     "e2e:standalone": "start-server-and-test 'pnpm start:e2e' http-get://localhost:8381/faidare-dev 'pnpm e2e:headless'",
     "e2e:standalone:ci": "start-server-and-test 'pnpm start:e2e:ci' http-get://localhost:8381/faidare-dev 'pnpm e2e:headless'",
-    "postinstall": "playwright install"
+    "postinstall": "playwright install-deps; playwright install"
   },
   "author": "",
   "license": "MIT",
