@@ -27,7 +27,6 @@ variables:
   IMAGE_TAG: $CI_COMMIT_REF_SLUG
   ELASTIC_VERSION: "7.17.6"
   DOCKER_OPTS: "--mtu=1450"
-  PNPM_STORE_DIR: "$CI_PROJECT_DIR/.pnpm-store"
 
 # Gradle cache for all jobs
 # cache:
