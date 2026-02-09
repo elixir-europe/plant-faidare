@@ -195,6 +195,8 @@ build:
     - openstack
   stage: build
   script:
+    - mkdir -p $CI_PROJECT_DIR/.pnpm-store
+    - chmod -R 777 $CI_PROJECT_DIR/.pnpm-store
     - ./gradlew assemble
   # cache:
   #   key: "${CI_COMMIT_REF_NAME}"
