@@ -10,6 +10,8 @@ stages:
 image: eclipse-temurin:21-jdk
 workflow:
   rules:
+    - if: $CI_COMMIT_TAG
+      when: always
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
     - when: never
@@ -97,6 +99,7 @@ rotate-project-token:
       dotenv: rotated.env
     expire_in: 1 hour
   rules:
+    - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   tags:
     - openstack
@@ -106,7 +109,7 @@ build-loader-docker-image:
   image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/docker-git:latest
   stage: pre-build
   services:
-    - docker:29.1.3-dind
+    - docker:29.2.0-dind
   script:
     # build the image
     - docker build -t ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/faidare-loader:${IMAGE_TAG} .
@@ -124,6 +127,7 @@ build-loader-docker-image:
         - backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/*_mapping.json
         - backend/src/main/resources/fr/inrae/urgi/faidare/repository/es/setup/index/settings.json
         - .gitlab-ci.yml
+    - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   needs:
     - job: rotate-project-token
@@ -177,13 +181,14 @@ test-and-sonarqube:
     - echo "Trying to access Elasticsearch logs..."
     - curl -s "http://${ES_HOST}:${ES_PORT}/_cluster/health?pretty"
     # Launch tests
-    - ./gradlew clean test
+    - ./gradlew clean check
     - ./gradlew test jacocoTestReport -s sonar
   artifacts:
     reports:
       junit:
         - ./backend/build/test-results/test/TEST-*.xml
   rules:
+    - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   interruptible: true
   allow_failure: false
@@ -207,6 +212,7 @@ build:
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
       when: never
+    - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   interruptible: true
 
@@ -228,6 +234,7 @@ restart-config-server-openstack:
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
       when: never
+    - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 # DEPLOY
@@ -270,6 +277,7 @@ deploy-to-beta:
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
       when: never
+    - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 deploy-to-staging-public:
@@ -282,12 +290,13 @@ deploy-to-staging-public:
     ENV: staging-public
     CONTEXT_PATH: faidare
   environment:
-    name: beta
-    url: "http://${SERVER_IP_OPENSTACK_DEV}:${STAGING_PUBLIC_FAIDARE_PORT}/faidare"
+    name: staging-public
+    url: "http://staging-urgi.versailles.inrae.fr/faidare"
   resource_group: env-staging-public
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
       when: never
+    - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: manual
 
@@ -301,12 +310,13 @@ deploy-to-staging-private:
     ENV: staging-private
     CONTEXT_PATH: faidare-private
   environment:
-    name: beta
-    url: "http://${SERVER_IP_OPENSTACK_DEV}:${STAGING_PRIVATE_FAIDARE_PORT}/faidare"
+    name: staging-private
+    url: "http://staging-urgi.versailles.inrae.fr/faidare-private"
   resource_group: env-staging-private
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
       when: never
+    - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: manual
 
@@ -320,8 +330,8 @@ deploy-to-prod-public:
     ENV: prod-public
     CONTEXT_PATH: faidare
   environment:
-    name: beta
-    url: "http://${SERVER_IP_OPENSTACK_PROD}:${PROD_PUBLIC_FAIDARE_PORT}/faidare"
+    name: prod-public
+    url: "http://urgi.versailles.inrae.fr/faidare"
   resource_group: env-prod-public
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
@@ -339,8 +349,8 @@ deploy-to-prod-private:
     ENV: prod-private
     CONTEXT_PATH: faidare-private
   environment:
-    name: beta
-    url: "http://${SERVER_IP_OPENSTACK_PROD}:${PROD_PRIVATE_FAIDARE_PORT}/faidare"
+    name: prod-private
+    url: "http://urgi.versailles.inrae.fr/faidare-private"
   resource_group: env-prod-private
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /SKIP_DEPLOY/i
