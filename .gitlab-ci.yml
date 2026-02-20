@@ -164,14 +164,6 @@ test-and-sonarqube:
     ES_PORT: "9200"  # Set the Elasticsearch port
     JSON_DIR: "./data/test/"  # Directory containing JSON files for bulk loading
   script:
-    - echo "Debugging CI..."
-    - id
-    - whoami
-    - ls -ld /builds
-    - ls -ld /builds/.pnpm-store || true
-    - echo "PNPM_STORE_PATH=$PNPM_STORE_PATH"
-    - env
-
     - apt-get update && apt-get install -y parallel jq
     # Wait for Elasticsearch to be ready to receive requests
     - echo "Waiting for Elasticsearch to start..."
