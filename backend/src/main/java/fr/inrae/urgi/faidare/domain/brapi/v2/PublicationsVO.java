@@ -7,6 +7,8 @@ public class PublicationsVO {
     private String publicationPUI;
     private String publicationReference;
 
+    public PublicationsVO() {}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

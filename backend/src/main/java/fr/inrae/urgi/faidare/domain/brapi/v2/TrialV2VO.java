@@ -25,7 +25,7 @@ public class TrialV2VO {
     //private String additionalInfo;
     private String commonCropName;
     private List<ExternalReferencesVO> externalReferences;
-    private PublicationsVO publications;
+    private List<PublicationsVO> publications;
     private String trialDbId;
     private String trialName;
     private String trialPUI;
@@ -209,11 +209,11 @@ public class TrialV2VO {
         this.externalReferences = externalReferences;
     }
 
-    public PublicationsVO getPublications() {
+    public List<PublicationsVO> getPublications() {
         return publications;
     }
 
-    public void setPublications(PublicationsVO publications) {
+    public void setPublications(List<PublicationsVO> publications) {
         this.publications = publications;
     }
 
