@@ -145,13 +145,26 @@ public class StudyController {
     }
 
     private List<GermplasmV2VO> getGermplasms(StudyV2VO study) {
+
         if (study.getGermplasmDbIds() == null || study.getGermplasmDbIds().isEmpty()) {
             return Collections.emptyList();
-        } else {
-            return germplasmRepository.findByGermplasmDbIdIn(Set.copyOf(study.getGermplasmDbIds()))
-                .sorted(Comparator.comparing(GermplasmV2VO::getGermplasmName))
-                .collect(Collectors.toList());
         }
+
+        List<String> ids = new ArrayList<>(study.getGermplasmDbIds());
+        int batchSize = 500;
+
+        List<GermplasmV2VO> result = new ArrayList<>();
+
+        for (int i = 0; i < ids.size(); i += batchSize) {
+            Set<String> batch = new HashSet<>(ids.subList(i, Math.min(i + batchSize, ids.size())));
+
+            germplasmRepository.findByGermplasmDbIdIn(batch)
+                .forEach(result::add);
+        }
+
+        return result.stream()
+            .sorted(Comparator.comparing(GermplasmV2VO::getGermplasmName))
+            .collect(Collectors.toList());
     }
 
     private List<ObservationVariableV1VO> getVariables(StudyV2VO study, Locale locale) {
