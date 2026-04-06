@@ -19,8 +19,8 @@ importers:
         version: 1.9.4
     devDependencies:
       '@playwright/test':
-        specifier: 1.58.2
-        version: 1.58.2
+        specifier: 1.59.1
+        version: 1.59.1
       '@types/bootstrap':
         specifier: 5.2.10
         version: 5.2.10
@@ -31,8 +31,8 @@ importers:
         specifier: 10.4.27
         version: 10.4.27(postcss@8.5.8)
       baseline-browser-mapping:
-        specifier: 2.10.12
-        version: 2.10.12
+        specifier: 2.10.15
+        version: 2.10.15
       clean-webpack-plugin:
         specifier: 4.0.0
         version: 4.0.0(webpack@5.105.4)
@@ -58,17 +58,17 @@ importers:
         specifier: 3.8.1
         version: 3.8.1
       sass:
-        specifier: 1.98.0
-        version: 1.98.0
+        specifier: 1.99.0
+        version: 1.99.0
       sass-loader:
         specifier: 16.0.7
-        version: 16.0.7(sass@1.98.0)(webpack@5.105.4)
+        version: 16.0.7(sass@1.99.0)(webpack@5.105.4)
       start-server-and-test:
         specifier: 2.1.5
         version: 2.1.5
       ts-loader:
-        specifier: 9.5.4
-        version: 9.5.4(typescript@5.9.3)(webpack@5.105.4)
+        specifier: 9.5.7
+        version: 9.5.7(typescript@5.9.3)(webpack@5.105.4)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -234,8 +234,8 @@ packages:
     resolution: {integrity: sha512-i0GV1yJnm2n3Yq1qw6QrUrd/LI9bE8WEBOTtOkpCXHHdyN3TAGgqAK/DAT05z4fq2x04cARXt2pDmjWjL92iTQ==}
     engines: {node: '>= 10.0.0'}
 
-  '@playwright/test@1.58.2':
-    resolution: {integrity: sha512-akea+6bHYBBfA9uQqSYmlJXn61cTa+jbO87xVLCWbTqbWadRVmhxlXATaOjOgcBaWU4ePo0wB41KMFv3o35IXA==}
+  '@playwright/test@1.59.1':
+    resolution: {integrity: sha512-PG6q63nQg5c9rIi4/Z5lR5IVF7yU5MqmKaPOe0HSc0O2cX1fPi96sUQu5j7eo4gKCkB2AnNGoWt7y4/Xx3Kcqg==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -440,8 +440,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  baseline-browser-mapping@2.10.12:
-    resolution: {integrity: sha512-qyq26DxfY4awP2gIRXhhLWfwzwI+N5Nxk6iQi8EFizIaWIjqicQTE4sLnZZVdeKPRcVNoJOkkpfzoIYuvCKaIQ==}
+  baseline-browser-mapping@2.10.15:
+    resolution: {integrity: sha512-1nfKCq9wuAZFTkA2ey/3OXXx7GzFjLdkTiFVNwlJ9WqdI706CZRIhEqjuwanjMIja+84jDLa9rcyZDPDiVkASQ==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -688,10 +688,6 @@ packages:
 
   electron-to-chromium@1.5.267:
     resolution: {integrity: sha512-0Drusm6MVRXSOJpGbaSVgcQsuB4hEkMpHXaVstcPmhu5LIedxs1xNK/nIxmQIU/RPC0+1/o0AVZfBTkTNJOdUw==}
-
-  enhanced-resolve@5.18.0:
-    resolution: {integrity: sha512-0/r0MySGYG8YqlayBZ6MuCfECmHFdJ5qyPh8s8wa5Hnm6SaFLSK1VYCbj+NKp090Nm1caZhD+QTnmxO7esYGyQ==}
-    engines: {node: '>=10.13.0'}
 
   enhanced-resolve@5.20.0:
     resolution: {integrity: sha512-/ce7+jQ1PQ6rVXwe+jKEg5hW5ciicHwIQUagZkp6IufBoY3YDgdTTY1azVs0qoRgVmvsNB+rbjLJxDAeHHtwsQ==}
@@ -1172,13 +1168,13 @@ packages:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
 
-  playwright-core@1.58.2:
-    resolution: {integrity: sha512-yZkEtftgwS8CsfYo7nm0KE8jsvm6i/PTgVtB8DL726wNf6H2IMsDuxCpJj59KDaxCtSnrWan2AeDqM7JBaultg==}
+  playwright-core@1.59.1:
+    resolution: {integrity: sha512-HBV/RJg81z5BiiZ9yPzIiClYV/QMsDCKUyogwH9p3MCP6IYjUFu/MActgYAvK0oWyV9NlwM3GLBjADyWgydVyg==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.58.2:
-    resolution: {integrity: sha512-vA30H8Nvkq/cPBnNw4Q8TWz1EJyqgpuinBcHET0YVJVFldr8JDNiU9LaWAE1KqSkRYazuaBhTpB5ZzShOezQ6A==}
+  playwright@1.59.1:
+    resolution: {integrity: sha512-C8oWjPR3F81yljW9o5OxcWzfh6avkVwDD2VYdwIGqTkl+OGFISgypqzfu7dOe4QNLL2aqcWBmI3PMtLIK233lw==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1467,8 +1463,8 @@ packages:
       webpack:
         optional: true
 
-  sass@1.98.0:
-    resolution: {integrity: sha512-+4N/u9dZ4PrgzGgPlKnaaRQx64RO0JBKs9sDhQ2pLgN6JQZ25uPQZKQYaBJU48Kd5BxgXoJ4e09Dq7nMcOUW3A==}
+  sass@1.99.0:
+    resolution: {integrity: sha512-kgW13M54DUB7IsIRM5LvJkNlpH+WhMpooUcaWGFARkF1Tc82v9mIWkCbCYf+MBvpIUBSeSOTilpZjEPr2VYE6Q==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -1585,8 +1581,8 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
-  ts-loader@9.5.4:
-    resolution: {integrity: sha512-nCz0rEwunlTZiy6rXFByQU1kVVpCIgUpc/psFiKVrUwrizdnIbRFu8w7bxhUF0X613DYwT4XzrZHpVyMe758hQ==}
+  ts-loader@9.5.7:
+    resolution: {integrity: sha512-/ZNrKgA3K3PtpMYOC71EeMWIloGw3IYEa5/t1cyz2r5/PyUwTXGzYJvcD3kfUvmhlfpz1rhV8B2O6IVTQ0avsg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       typescript: '*'
@@ -1794,9 +1790,9 @@ snapshots:
       '@parcel/watcher-win32-x64': 2.5.0
     optional: true
 
-  '@playwright/test@1.58.2':
+  '@playwright/test@1.59.1':
     dependencies:
-      playwright: 1.58.2
+      playwright: 1.59.1
 
   '@popperjs/core@2.11.8': {}
 
@@ -2015,7 +2011,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  baseline-browser-mapping@2.10.12: {}
+  baseline-browser-mapping@2.10.15: {}
 
   bluebird@3.7.2: {}
 
@@ -2036,7 +2032,7 @@ snapshots:
 
   browserslist@4.28.1:
     dependencies:
-      baseline-browser-mapping: 2.10.12
+      baseline-browser-mapping: 2.10.15
       caniuse-lite: 1.0.30001775
       electron-to-chromium: 1.5.267
       node-releases: 2.0.27
@@ -2266,11 +2262,6 @@ snapshots:
   duplexer@0.1.2: {}
 
   electron-to-chromium@1.5.267: {}
-
-  enhanced-resolve@5.18.0:
-    dependencies:
-      graceful-fs: 4.2.11
-      tapable: 2.3.0
 
   enhanced-resolve@5.20.0:
     dependencies:
@@ -2695,11 +2686,11 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  playwright-core@1.58.2: {}
+  playwright-core@1.59.1: {}
 
-  playwright@1.58.2:
+  playwright@1.59.1:
     dependencies:
-      playwright-core: 1.58.2
+      playwright-core: 1.59.1
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -2940,14 +2931,14 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  sass-loader@16.0.7(sass@1.98.0)(webpack@5.105.4):
+  sass-loader@16.0.7(sass@1.99.0)(webpack@5.105.4):
     dependencies:
       neo-async: 2.6.2
     optionalDependencies:
-      sass: 1.98.0
+      sass: 1.99.0
       webpack: 5.105.4(webpack-cli@6.0.1)
 
-  sass@1.98.0:
+  sass@1.99.0:
     dependencies:
       chokidar: 4.0.3
       immutable: 5.1.5
@@ -3061,10 +3052,10 @@ snapshots:
     dependencies:
       is-number: 7.0.0
 
-  ts-loader@9.5.4(typescript@5.9.3)(webpack@5.105.4):
+  ts-loader@9.5.7(typescript@5.9.3)(webpack@5.105.4):
     dependencies:
       chalk: 4.1.2
-      enhanced-resolve: 5.18.0
+      enhanced-resolve: 5.20.0
       micromatch: 4.0.8
       semver: 7.6.3
       source-map: 0.7.4
