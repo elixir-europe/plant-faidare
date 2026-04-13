@@ -47,7 +47,7 @@
     "prettier": "3.8.2",
     "sass": "1.99.0",
     "sass-loader": "16.0.7",
-    "start-server-and-test": "2.1.5",
+    "start-server-and-test": "3.0.2",
     "ts-loader": "9.5.7",
     "typescript": "5.9.3",
     "webpack": "5.106.1",
