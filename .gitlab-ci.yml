@@ -109,7 +109,7 @@ build-loader-docker-image:
   image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/docker-git:latest
   stage: pre-build
   services:
-    - docker:29.3.1-dind
+    - docker:29.4.0-dind
   script:
     # build the image
     - docker build -t ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/faidare-loader:${IMAGE_TAG} .
