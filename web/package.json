@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "engines": {
-    "node": "24.14.1"
+    "node": "24.15.0"
   },
   "packageManager": "pnpm@10.33.0",
   "scripts": {
@@ -35,22 +35,22 @@
     "@playwright/test": "1.59.1",
     "@types/bootstrap": "5.2.10",
     "@types/leaflet.markercluster": "1.5.6",
-    "autoprefixer": "10.4.27",
-    "baseline-browser-mapping": "2.10.18",
+    "autoprefixer": "10.5.0",
+    "baseline-browser-mapping": "2.10.20",
     "clean-webpack-plugin": "4.0.0",
     "css-loader": "7.1.4",
     "css-minimizer-webpack-plugin": "8.0.0",
     "leaflet.markercluster": "1.5.3",
     "mini-css-extract-plugin": "2.10.2",
-    "postcss": "8.5.9",
+    "postcss": "8.5.10",
     "postcss-loader": "8.2.1",
-    "prettier": "3.8.2",
+    "prettier": "3.8.3",
     "sass": "1.99.0",
     "sass-loader": "16.0.7",
     "start-server-and-test": "3.0.2",
     "ts-loader": "9.5.7",
     "typescript": "5.9.3",
-    "webpack": "5.106.1",
+    "webpack": "5.106.2",
     "webpack-cli": "6.0.1"
   },
   "browserslist": [
