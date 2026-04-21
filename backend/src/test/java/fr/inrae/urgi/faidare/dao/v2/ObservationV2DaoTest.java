@@ -27,11 +27,11 @@ public class ObservationV2DaoTest {
     @Test
     void getByObservationDbId_should_return_one_result() {
         ObservationVO observationvo =
-            observationDao.getByObservationDbId("dXJuOklOUkFFLVVSR0kvb2JzZXJ2YXRpb24vMzQzMzU1Nw==");
+            observationDao.getByObservationDbId("dXJuOklOUkFFLVVSR0kvb2JzZXJ2YXRpb24vMzY2NDc0My03");
 
         assertThat(observationvo).isNotNull();
         assertThat(observationvo.getObservationDbId())
-            .isEqualTo("dXJuOklOUkFFLVVSR0kvb2JzZXJ2YXRpb24vMzQzMzU1Nw==");
+            .isEqualTo("dXJuOklOUkFFLVVSR0kvb2JzZXJ2YXRpb24vMzY2NDc0My03");
     }
 
     @Test
@@ -46,11 +46,11 @@ public class ObservationV2DaoTest {
     @Test
     void custom_should_search_by_observationVariableDbId(){
         ObservationV2Criteria obsCrit = new ObservationV2Criteria();
-        obsCrit.setObservationVariableDbId(List.of("dXJuOklOUkFFLVVSR0kvb2JzZXJ2YXRpb25WYXJpYWJsZS9DT18zMjElM0ExMDAwMjM2"));
+        obsCrit.setObservationVariableDbId(List.of("CO_321:1000236"));
         BrapiListResponse<ObservationVO> observationUnitVOs = observationDao.findObservationByCriteria(obsCrit);
         assertThat(observationUnitVOs).isNotNull();
         assertThat(observationUnitVOs.getMetadata().getPagination().getTotalCount()).isEqualTo(3867);
-        assertThat(observationUnitVOs.getResult().getData().get(0).getObservationVariableDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvb2JzZXJ2YXRpb25WYXJpYWJsZS9DT18zMjElM0ExMDAwMjM2");
+        assertThat(observationUnitVOs.getResult().getData().get(0).getObservationVariableDbId()).isEqualTo("CO_321:1000236");
     }
 //    @Test
 //    void custom_should_search_by_season(){

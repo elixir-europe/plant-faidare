@@ -96,7 +96,7 @@ public class GermplasmV1DaoCustomImpl implements GermplasmV1DaoCustom{
             .ifPresent(c -> {
                 Criteria panelCrit = new Criteria("panel.name").in(c);
                 Criteria popCrit = new Criteria("population.name").in(c);
-                Criteria collCrit = new Criteria("collection.name").in(c);
+                Criteria collCrit = new Criteria("collection.collectionName").in(c);
                 esCrit.subCriteria(popCrit.or(panelCrit).or(collCrit));
             });
 

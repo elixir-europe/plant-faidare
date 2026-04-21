@@ -346,8 +346,8 @@ public class Fixtures {
         return result;
     }
 
-    private static CollPopVO createPopulation1() {
-        CollPopVO result = new CollPopVO("Population 1", "collpop1");
+    private static PanelVO createPopulation1() {
+        PanelVO result = new PanelVO("Population 1", "collpop1");
         result.setName("Population 1");
         result.setType("Pop Type 1");
         result.setGermplasmCount(3);
@@ -355,8 +355,8 @@ public class Fixtures {
         return result;
     }
 
-    private static CollPopVO createPopulation2() {
-        CollPopVO result = new CollPopVO("Population 2", "collpop2");
+    private static PanelVO createPopulation2() {
+        PanelVO result = new PanelVO("Population 2", "collpop2");
         result.setName("Population 2");
         result.setGermplasmCount(3);
         PuiNameValueVO puiNameValueVO = createPuiNameValueVO();
@@ -365,8 +365,8 @@ public class Fixtures {
         return result;
     }
 
-    private static CollPopVO createPopulation3() {
-        CollPopVO result = new CollPopVO("Population 3", "collpop3");
+    private static PanelVO createPopulation3() {
+        PanelVO result = new PanelVO("Population 3", "collpop3");
         result.setName("Population 3");
         result.setGermplasmCount(5);
         return result;
@@ -374,13 +374,13 @@ public class Fixtures {
 
     private static CollPopVO createCollection() {
         CollPopVO result = new CollPopVO("Collection 1", "collpop4");
-        result.setName("Collection 1");
+        result.setCollectionName("Collection 1");
         result.setGermplasmCount(7);
         return result;
     }
 
-    private static CollPopVO createPanel() {
-        CollPopVO result = new CollPopVO("The_panel_1", "collpop5");
+    private static PanelVO createPanel() {
+        PanelVO result = new PanelVO("The_panel_1", "collpop5");
         result.setName("The_panel_1");
         result.setGermplasmCount(2);
         return result;

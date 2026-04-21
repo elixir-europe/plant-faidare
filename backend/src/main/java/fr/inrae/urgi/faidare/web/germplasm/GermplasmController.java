@@ -20,6 +20,7 @@ import fr.inrae.urgi.faidare.dao.v2.GermplasmMcpdDao;
 import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Dao;
 import fr.inrae.urgi.faidare.domain.CollPopVO;
 import fr.inrae.urgi.faidare.domain.GermplasmMcpdVO;
+import fr.inrae.urgi.faidare.domain.PanelVO;
 import fr.inrae.urgi.faidare.domain.XRefDocumentVO;
 import fr.inrae.urgi.faidare.domain.brapi.GermplasmSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmAttributeV1VO;
@@ -204,7 +205,7 @@ public class GermplasmController {
             germplasm.setPopulation(germplasm.getPopulation()
                 .stream()
                 .sorted(Comparator.comparing(
-                    CollPopVO::getName))
+                    PanelVO::getName))
                 .collect(Collectors.toList()));
         }
     }
@@ -213,7 +214,7 @@ public class GermplasmController {
         if (germplasm.getCollection() != null) {
             germplasm.setCollection(germplasm.getCollection()
                 .stream()
-                .sorted(Comparator.comparing(CollPopVO::getName))
+                .sorted(Comparator.comparing(CollPopVO::getCollectionName))
                 .collect(Collectors.toList()));
         }
     }
@@ -222,7 +223,7 @@ public class GermplasmController {
         if (germplasm.getPanel() != null) {
             germplasm.setPanel(germplasm.getPanel()
                 .stream()
-                .sorted(Comparator.comparing(CollPopVO::getName))
+                .sorted(Comparator.comparing(PanelVO::getName))
                 .collect(Collectors.toList()));
         }
     }

@@ -82,7 +82,7 @@ class GermplasmV1ControllerTest {
                 HttpMethod.GET, entity, String.class);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         String accNumber = JsonPath.parse(response.getBody()).read("$.result.accessionNumber");
-        assertThat(accNumber).isEqualTo("36785");
+        assertThat(accNumber).isEqualTo("ERGE36785");
     }
 
 //    To be implemented in July

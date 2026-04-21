@@ -3,12 +3,9 @@ package fr.inrae.urgi.faidare.api.brapi.v2;
 
 import java.io.IOException;
 
-import fr.inrae.urgi.faidare.dao.v2.CollectionV2Dao;
-import fr.inrae.urgi.faidare.dao.v2.GermplasmMcpdDao;
-import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Criteria;
-import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Dao;
-import fr.inrae.urgi.faidare.domain.CollPopVO;
+import fr.inrae.urgi.faidare.dao.v2.*;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
+import fr.inrae.urgi.faidare.utils.GermplasmV2Mapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -31,13 +28,10 @@ public class GermplasmV2Controller {
 
     private final GermplasmV2Dao germplasmDao;
 
-    private final CollectionV2Dao collectionDao;
-
     private final GermplasmMcpdDao germplasmMcpdDao;
 
-    public GermplasmV2Controller(GermplasmV2Dao germplasmDao, CollectionV2Dao collectionDao, GermplasmMcpdDao germplasmMcpdDao) {
+    public GermplasmV2Controller(GermplasmV2Dao germplasmDao, GermplasmMcpdDao germplasmMcpdDao) {
         this.germplasmDao = germplasmDao;
-        this.collectionDao = collectionDao;
         this.germplasmMcpdDao = germplasmMcpdDao;
     }
 
@@ -58,20 +52,15 @@ public class GermplasmV2Controller {
     }
 
     @GetMapping("/germplasm")
-    public BrapiListResponse<GermplasmV2VO> germplasm(
-        @ModelAttribute GermplasmV2Criteria gCrit){
-        // We used @ModelAttribute because GermplasmCriteria is an object.
-        // This allows Spring to bind the request parameters directly to the fields of the GermplasmCriteria object.
-
-        BrapiListResponse<GermplasmV2VO> germplasmV2VOs = germplasmDao.findGermplasmsByCriteria(gCrit);
-
-        return germplasmV2VOs;
+    public BrapiListResponse<GermplasmV2VO> germplasm(@ModelAttribute GermplasmV2CriteriaGet germplasmCriteria){
+        GermplasmV2Criteria criteria = GermplasmV2Mapper.convertGetToPost(germplasmCriteria);
+        return germplasmDao.findGermplasmsByCriteria(criteria);
     }
 
     @PostMapping(value = "/search/germplasm", consumes = "application/json", produces = "application/json")
-    public BrapiListResponse<GermplasmV2VO> searchGermplasm(@RequestBody GermplasmV2Criteria gCrit){
+    public BrapiListResponse<GermplasmV2VO> searchGermplasm(@RequestBody GermplasmV2Criteria germplasmCriteria){
 
-        return germplasmDao.findGermplasmsByCriteria(gCrit);
+        return germplasmDao.findGermplasmsByCriteria(germplasmCriteria);
     }
 
     @GetMapping("/germplasm/{germplasmDbId}")
@@ -82,11 +71,4 @@ public class GermplasmV2Controller {
         //return gV2Vo;
     }
 
-
-
-    @GetMapping("/collection")
-    public BrapiListResponse<CollPopVO> getCollections(){
-        return collectionDao.getAllCollections();
-
-    }
 }

@@ -172,7 +172,7 @@ public class TrialController {
 
     private List<GermplasmV2VO> findGermplasms(TrialV2VO trial) {
         GermplasmV2Criteria criteria = new GermplasmV2Criteria();
-        criteria.setTrialDbId(List.of(trial.getTrialDbId()));
+        criteria.setTrialDbIds(List.of(trial.getTrialDbId()));
         criteria.setPage(0);
         // This should hopefully be sufficient, and I guess nobody cares nor will use this page
         // to find what they want to find if there are more than 1000

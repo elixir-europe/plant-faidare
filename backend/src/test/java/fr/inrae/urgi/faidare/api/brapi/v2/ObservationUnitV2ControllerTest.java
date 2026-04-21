@@ -70,21 +70,6 @@ public class ObservationUnitV2ControllerTest {
     }
 
 
-
-    @Test
-    void should_get_germplasm_by_accessionNumber_by_page_O_pageSize_1() throws Exception {
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
-
-        ResponseEntity<String> response = testRestTemplate.exchange(
-            createURLWithPort("/brapi/v2/germplasm?accessionNumber=32100&page=0&pageSize=1"),
-            HttpMethod.GET, entity, String.class);
-        String accNumber = JsonPath.parse(response.getBody()).read("$.result.data.[0].accessionNumber");
-        assertThat(accNumber).isEqualTo("32100");
-        Integer pageSize = JsonPath.parse(response.getBody()).read("$.metadata.pagination.pageSize");
-        assertThat(pageSize).isEqualTo(1);
-    }
-
-
     @Test
     void should_get_germplasm_by_accessionNumber() throws Exception {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);

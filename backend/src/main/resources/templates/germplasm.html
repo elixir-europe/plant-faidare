@@ -690,7 +690,7 @@
             >
               <div class="collection">
                 <a
-                  th:href="@{${#faidare.searchUrl()}(gl=${collection.name},entry='Germplasm')}"
+                  th:href="@{${#faidare.searchUrl()}(gl=${collection.collectionName},entry='Germplasm')}"
                   th:text="${collection.germplasmCount + ' accession(s)'}"
                 ></a>
               </div>

@@ -9,7 +9,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import fr.inrae.urgi.faidare.Application;
-import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Dao;
+import fr.inrae.urgi.faidare.dao.v2.*;
+import fr.inrae.urgi.faidare.utils.GermplasmV2Mapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -28,6 +29,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(SpringExtension.class)
@@ -116,10 +118,10 @@ class GermplasmV2ControllerTest {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
-                createURLWithPort("/brapi/v2/germplasm?accessionNumber=32100&page=0&pageSize=1"),
+                createURLWithPort("/brapi/v2/germplasm?accessionNumber=29814&page=0&pageSize=1"),
                 HttpMethod.GET, entity, String.class);
         String accNumber = JsonPath.parse(response.getBody()).read("$.result.data.[0].accessionNumber");
-        assertThat(accNumber).isEqualTo("32100");
+        assertThat(accNumber).isEqualTo("29814");
         Integer pageSize = JsonPath.parse(response.getBody()).read("$.metadata.pagination.pageSize");
         assertThat(pageSize).isEqualTo(1);
     }
@@ -183,8 +185,74 @@ class GermplasmV2ControllerTest {
                 createURLWithPort("/brapi/v2/collection"),
                 HttpMethod.GET, entity, String.class);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
-        List<String> collName = JsonPath.parse(response.getBody()).read("$.result.data.[*].name");
+        List<String> collName = JsonPath.parse(response.getBody()).read("$.result.data.[*].collectionName");
         assertThat(collName).contains("Collection blé INRA");
+    }
+    @Test
+    void should_convert_get_to_post_with_constructor() {
+        GermplasmV2Dao germplasmDaoMock = mock(GermplasmV2Dao.class);
+        GermplasmMcpdDao germplasmMcpdDaoMock = mock(GermplasmMcpdDao.class);
+
+        GermplasmV2Criteria post = getGermplasmV2Criteria(germplasmDaoMock, germplasmMcpdDaoMock);
+
+        assertThat(post.getAccessionNumbers()).containsExactly("12345");
+        assertThat(post.getBinomialNames()).containsExactly("Triticum aestivum");
+        assertThat(post.getCollections()).containsExactly("Wheat INRA");
+        assertThat(post.getCommonCropNames()).containsExactly("Wheat");
+        assertThat(post.getGermplasmDbIds()).containsExactly("dbId123");
+        assertThat(post.getGermplasmNames()).containsExactly("APACHE");
+        assertThat(post.getPage()).isEqualTo(0);
+        assertThat(post.getPageSize()).isEqualTo(10);
+    }
+
+    @Test
+    void should_handle_empty_get_to_post() {
+        GermplasmV2Dao gDao = mock(GermplasmV2Dao.class);
+        GermplasmMcpdDao mDao = mock(GermplasmMcpdDao.class);
+
+        GermplasmV2Controller controller = new GermplasmV2Controller(gDao, mDao);
+
+        GermplasmV2CriteriaGet emptyGet = new GermplasmV2CriteriaGet();
+        emptyGet.setPage(0);
+        emptyGet.setPageSize(5);
+
+        GermplasmV2Criteria post = null;
+        try {
+            var method = GermplasmV2Mapper.class.getDeclaredMethod("convertGetToPost", GermplasmV2CriteriaGet.class);
+            method.setAccessible(true);
+            post = (GermplasmV2Criteria) method.invoke(controller, emptyGet);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertThat(post.getAccessionNumbers()).isNullOrEmpty();
+        assertThat(post.getPage()).isEqualTo(0);
+        assertThat(post.getPageSize()).isEqualTo(5);
+    }
+
+    private static GermplasmV2Criteria getGermplasmV2Criteria(GermplasmV2Dao germplasmDaoMock, GermplasmMcpdDao germplasmMcpdDaoMock) {
+        GermplasmV2Controller controller =
+            new GermplasmV2Controller(germplasmDaoMock, germplasmMcpdDaoMock);
+
+        GermplasmV2CriteriaGet get = new GermplasmV2CriteriaGet();
+        get.setAccessionNumber("12345");
+        get.setBinomialName("Triticum aestivum");
+        get.setCollection("Wheat INRA");
+        get.setCommonCropName("Wheat");
+        get.setGermplasmDbId("dbId123");
+        get.setGermplasmName("APACHE");
+        get.setPage(0);
+        get.setPageSize(10);
+
+        GermplasmV2Criteria post = null;
+        try {
+            var method = GermplasmV2Mapper.class.getDeclaredMethod("convertGetToPost", GermplasmV2CriteriaGet.class);
+            method.setAccessible(true);
+            post = (GermplasmV2Criteria) method.invoke(controller, get);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return post;
     }
 }
 

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import fr.inrae.urgi.faidare.domain.CollPopVO;
+import fr.inrae.urgi.faidare.domain.PanelVO;
 import fr.inrae.urgi.faidare.domain.TaxonSourceVO;
 import fr.inrae.urgi.faidare.utils.Sites;
 import org.apache.logging.log4j.util.Strings;
@@ -65,9 +66,15 @@ public class FaidareExpressions {
     public String collPopTitle(CollPopVO collPopVO) {
         return collPopTitle(collPopVO, Function.identity());
     }
+    public String collPopTitle(PanelVO panelVO) {
+        return collPopTitle(panelVO, Function.identity());
+    }
 
     public String collPopTitleWithoutUnderscores(CollPopVO collPopVO) {
         return collPopTitle(collPopVO, s -> s.replace('_', ' '));
+    }
+    public String collPopTitleWithoutUnderscores(PanelVO panelVO) {
+        return collPopTitle(panelVO, s -> s.replace('_', ' '));
     }
 
     public String taxonIdUrl(TaxonSourceVO taxonSource) {
@@ -85,10 +92,17 @@ public class FaidareExpressions {
     }
 
     private String collPopTitle(CollPopVO collPopVO, Function<String, String> nameTransformer) {
-        if (Strings.isBlank(collPopVO.getType())) {
-            return nameTransformer.apply(collPopVO.getName());
+        if (Strings.isBlank(collPopVO.getCollectionType())) {
+            return nameTransformer.apply(collPopVO.getCollectionName());
         } else {
-            return nameTransformer.apply(collPopVO.getName()) + " (" + collPopVO.getType() + ")";
+            return nameTransformer.apply(collPopVO.getCollectionName()) + " (" + collPopVO.getCollectionType() + ")";
+        }
+    }
+    private String collPopTitle(PanelVO panelVO, Function<String, String> nameTransformer) {
+        if (Strings.isBlank(panelVO.getType())) {
+            return nameTransformer.apply(panelVO.getName());
+        } else {
+            return nameTransformer.apply(panelVO.getName()) + " (" + panelVO.getType() + ")";
         }
     }
 }

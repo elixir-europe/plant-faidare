@@ -3,6 +3,7 @@ package fr.inrae.urgi.faidare.dao.v1;
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
 import fr.inrae.urgi.faidare.config.ElasticSearchConfig;
 import fr.inrae.urgi.faidare.domain.CollPopVO;
+import fr.inrae.urgi.faidare.domain.PanelVO;
 import fr.inrae.urgi.faidare.domain.PuiNameValueVO;
 import fr.inrae.urgi.faidare.domain.brapi.GermplasmSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmV1VO;
@@ -213,7 +214,7 @@ class GermplasmV1DaoTest {
         BrapiListResponse<GermplasmV1VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isGreaterThan(0);
-        Predicate<CollPopVO> streamsPredicate = item -> item.getName().equals("Wheat INRA collection") ;
+        Predicate<CollPopVO> streamsPredicate = item -> item.getCollectionName().equals("Wheat INRA collection") ;
         assertThat(germplasmVOs.getResult().getData().get(0).getCollection().stream().filter(streamsPredicate)).isNotEmpty();
     }
 
@@ -224,7 +225,7 @@ class GermplasmV1DaoTest {
         BrapiListResponse<GermplasmV1VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isGreaterThan(0);
-        Predicate<CollPopVO> streamsPredicate = item -> item.getName().equals("RIL") ;
+        Predicate<PanelVO> streamsPredicate = item -> item.getName().equals("RIL") ;
         assertThat(germplasmVOs.getResult().getData().get(0).getPanel().stream().filter(streamsPredicate)).isNotEmpty();
     }
 
@@ -235,7 +236,7 @@ class GermplasmV1DaoTest {
         BrapiListResponse<GermplasmV1VO> germplasmVOs = germplasmDao.findGermplasmsByCriteria(gCrit);
         assertThat(germplasmVOs).isNotNull();
         assertThat(germplasmVOs.getMetadata().getPagination().getTotalCount()).isGreaterThan(0);
-        Predicate<CollPopVO> streamsPredicate = item -> item.getName().equals("ILN028") ;
+        Predicate<PanelVO> streamsPredicate = item -> item.getName().equals("ILN028") ;
         assertThat(germplasmVOs.getResult().getData().get(0).getPopulation().stream().filter(streamsPredicate)).isNotEmpty();
     }
 

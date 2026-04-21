@@ -102,13 +102,13 @@ public class GermplasmV2VO {
 
     private SiteVO originSite; //GnpIS
 
-    private List<CollPopVO> panel; //GnpIS
+    private List<PanelVO> panel; //GnpIS
 
     private String pedigree;
 
     private PhotoVO photo; //GnpIS
 
-    private List<CollPopVO> population; //GnpIS
+    private List<PanelVO> population; //GnpIS
 
     private String presenceStatus; //GnpIS
 
@@ -451,11 +451,11 @@ public class GermplasmV2VO {
         this.originSite = originSite;
     }
 
-    public List<CollPopVO> getPanel() {
+    public List<PanelVO> getPanel() {
         return panel;
     }
 
-    public void setPanel(List<CollPopVO> panel) {
+    public void setPanel(List<PanelVO> panel) {
         this.panel = panel;
     }
 
@@ -475,11 +475,11 @@ public class GermplasmV2VO {
         this.photo = photo;
     }
 
-    public List<CollPopVO> getPopulation() {
+    public List<PanelVO> getPopulation() {
         return population;
     }
 
-    public void setPopulation(List<CollPopVO> population) {
+    public void setPopulation(List<PanelVO> population) {
         this.population = population;
     }
 

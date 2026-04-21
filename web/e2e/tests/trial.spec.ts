@@ -8,7 +8,8 @@ test.describe('Trial', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Trial Network: Drops Phenotyping Network');
 
     await page.getByRole('button', { name: 'Export observations' }).click();
-    await page.getByRole('button', { name: 'VIRTUAL_TRIAL' }).click();
+    const dropdown = page.locator('.dropdown-menu');
+    await dropdown.getByRole('button', { name: 'REPLICATE>BLOCK>PLOT', exact: true }).click();
 
     await expect(page.getByRole('heading', { level: 1, name: 'Export observations for trial Drops Phenotyping Network' })).toBeVisible();
 

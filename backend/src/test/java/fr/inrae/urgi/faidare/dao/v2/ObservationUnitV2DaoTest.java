@@ -159,26 +159,26 @@ public class ObservationUnitV2DaoTest {
     void shouldFindByExportCriteria() {
         ObservationUnitExportCriteria exportCriteria = new ObservationUnitExportCriteria(
             "dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI=",
-            "VIRTUAL_TRIAL",
+            "REPLICATE>BLOCK>PLOT",
             Set.of()
         );
         try (Stream<ObservationUnitV2VO> stream = observationUnitDao.findByExportCriteria(exportCriteria)) {
             List<ObservationUnitV2VO> result = stream.toList();
             assertThat(result).isNotEmpty();
             assertThat(result).allSatisfy(unit -> assertThat(unit.getTrialDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI="));
-            assertThat(result).allSatisfy(unit -> assertThat(unit.getObservationUnitPosition().getObservationLevel().getLevelOrder()).isEqualTo("VIRTUAL_TRIAL"));
+            assertThat(result).allSatisfy(unit -> assertThat(unit.getObservationUnitPosition().getObservationLevel().getLevelOrder()).isEqualTo("REPLICATE>BLOCK>PLOT"));
         }
 
         exportCriteria = new ObservationUnitExportCriteria(
             "dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI=",
-            "VIRTUAL_TRIAL",
+            "REPLICATE>BLOCK>PLOT",
             Set.of("Gaillac")
         );
         try (Stream<ObservationUnitV2VO> stream = observationUnitDao.findByExportCriteria(exportCriteria)) {
             List<ObservationUnitV2VO> result = stream.toList();
             assertThat(result).isNotEmpty();
             assertThat(result).allSatisfy(unit -> assertThat(unit.getTrialDbId()).isEqualTo("dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI="));
-            assertThat(result).allSatisfy(unit -> assertThat(unit.getObservationUnitPosition().getObservationLevel().getLevelOrder()).isEqualTo("VIRTUAL_TRIAL"));
+            assertThat(result).allSatisfy(unit -> assertThat(unit.getObservationUnitPosition().getObservationLevel().getLevelOrder()).isEqualTo("REPLICATE>BLOCK>PLOT"));
             assertThat(result).allSatisfy(unit -> assertThat(unit.getStudyLocation()).isEqualTo("Gaillac"));
         }
     }
@@ -186,6 +186,6 @@ public class ObservationUnitV2DaoTest {
     @Test
     void shouldFindObservationLevelCodesByTrialDbId() {
         List<String> codes = observationUnitDao.findObservationLevelCodesByTrialDbId("dXJuOklOUkFFLVVSR0kvdHJpYWwvNDI=");
-        assertThat(codes).contains("VIRTUAL_TRIAL");
+        assertThat(codes).contains("REPLICATE>BLOCK>PLOT");
     }
 }

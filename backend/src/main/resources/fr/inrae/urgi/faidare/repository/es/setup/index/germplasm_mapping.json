@@ -528,14 +528,14 @@
     },
     "collection": {
       "properties": {
-        "id": {
+        "collectionDbId": {
           "type": "long"
         },
-        "name": {
+        "collectionName": {
           "type": "keyword",
           "doc_values": true
         },
-        "type": {
+        "collectionType": {
           "type": "keyword"
         },
         "germplasmCount": {

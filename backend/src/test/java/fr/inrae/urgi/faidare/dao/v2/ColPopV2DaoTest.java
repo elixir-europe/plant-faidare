@@ -22,7 +22,7 @@ public class ColPopV2DaoTest {
         BrapiListResponse<CollPopVO> response = dao.getAllCollections();
         assertThat(response).isNotNull();
         assertThat(response.getMetadata().getPagination().getTotalCount()).isGreaterThan(11);
-        assertThat(response.getResult().getData()).anyMatch(collPop -> collPop.getName().equals("SMALL_GRAIN_CEREALS_NETWORK_COL"));
+        assertThat(response.getResult().getData()).anyMatch(collPop -> collPop.getCollectionName().equals("SMALL_GRAIN_CEREALS_NETWORK_COL"));
 
     }
 }

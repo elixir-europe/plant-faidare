@@ -2,6 +2,7 @@ package fr.inrae.urgi.faidare.domain;
 
 import fr.inrae.urgi.faidare.config.ElasticSearchConfig;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 @Import({ElasticSearchConfig.class})
@@ -15,15 +16,16 @@ public class CollPopVO {
 
     private PuiNameValueVO germplasmRef;
 
-    private String id;
+    @Id
+    private String collectionDbId;
 
-    private String name;
+    private String collectionName;
 
-    private String type;
+    private String collectionType;
 
-    public CollPopVO(String name, String id) {
-        this.name = name;
-        this.id = id;
+    public CollPopVO(String collectionName, String collectionDbId) {
+        this.collectionName = collectionName;
+        this.collectionDbId = collectionDbId;
     }
 
 
@@ -43,27 +45,27 @@ public class CollPopVO {
         this.germplasmRef = germplasmRef;
     }
 
-    public String getId() {
-        return id;
+    public String getCollectionDbId() {
+        return collectionDbId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCollectionDbId(String collectionDbId) {
+        this.collectionDbId = collectionDbId;
     }
 
-    public String getName() {
-        return name;
+    public String getCollectionName() {
+        return collectionName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCollectionName(String collectionName) {
+        this.collectionName = collectionName;
     }
 
-    public String getType() {
-        return type;
+    public String getCollectionType() {
+        return collectionType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCollectionType(String collectionType) {
+        this.collectionType = collectionType;
     }
 }

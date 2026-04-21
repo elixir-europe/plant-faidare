@@ -2,6 +2,7 @@ package fr.inrae.urgi.faidare.api.brapi;
 
 import fr.inrae.urgi.faidare.domain.CollPopVO;
 import fr.inrae.urgi.faidare.domain.InstituteVO;
+import fr.inrae.urgi.faidare.domain.PanelVO;
 import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmV1VO;
 import fr.inrae.urgi.faidare.domain.SiteVO;
 
@@ -122,10 +123,10 @@ public class Fixtures {
 
 
 
-    private static List<CollPopVO> createPanel() {
-        CollPopVO result = new CollPopVO("SMALL_GRAIN_CEREALS_NETWORK_COL", "8");
+    private static List<PanelVO> createPanel() {
+        PanelVO result = new PanelVO("SMALL_GRAIN_CEREALS_NETWORK_COL", "8");
         result.setGermplasmCount(1728);
-        CollPopVO result2 = new CollPopVO("BREEDWHEAT_PANEL", "11");
+        PanelVO result2 = new PanelVO("BREEDWHEAT_PANEL", "11");
         result.setGermplasmCount(3047);
         return List.of(result,result2);
     }

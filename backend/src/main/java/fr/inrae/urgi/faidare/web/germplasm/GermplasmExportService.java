@@ -2,7 +2,7 @@ package fr.inrae.urgi.faidare.web.germplasm;
 
 import com.opencsv.CSVWriter;
 import fr.inrae.urgi.faidare.domain.CollPopVO;
-import fr.inrae.urgi.faidare.domain.brapi.v1.GermplasmV1VO;
+import fr.inrae.urgi.faidare.domain.PanelVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import org.springframework.stereotype.Component;
 
@@ -38,9 +38,9 @@ public class GermplasmExportService {
         map.put(LOT_NAME, new GermplasmExportableFieldDescriptor("Lot name", vo -> null));
         map.put(LOT_SYNONYM, new GermplasmExportableFieldDescriptor("Lot synonym", vo -> null));
         map.put(COLLECTION_NAME, new GermplasmExportableFieldDescriptor("Collection name", vo -> (vo.getCollection() == null ) ? null : vo.getCollection().stream().map(
-            CollPopVO::getName).collect(Collectors.joining(", "))));
+            CollPopVO::getCollectionName).collect(Collectors.joining(", "))));
         map.put(COLLECTION_TYPE, new GermplasmExportableFieldDescriptor("Collection type", vo -> null));
-        map.put(PANEL_NAME, new GermplasmExportableFieldDescriptor("Panel name", vo -> (vo.getPanel() == null)? null : vo.getPanel().stream().map(CollPopVO::getName).collect(
+        map.put(PANEL_NAME, new GermplasmExportableFieldDescriptor("Panel name", vo -> (vo.getPanel() == null)? null : vo.getPanel().stream().map(PanelVO::getName).collect(
             Collectors.joining(", "))));
         map.put(PANEL_SIZE, new GermplasmExportableFieldDescriptor("Panel size", vo -> null));
 

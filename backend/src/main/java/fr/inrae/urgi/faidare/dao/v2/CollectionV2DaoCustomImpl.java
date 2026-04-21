@@ -26,7 +26,7 @@ public class CollectionV2DaoCustomImpl implements CollectionV2DaoCustom{
         Query query= esTemplate.matchAllQuery();
         query.setTrackTotalHits(true);
         Query q = NativeQuery.builder()
-                .withAggregation("collection_name", Aggregation.of(a -> a.terms(ta -> ta.field("collection.name").size(20000))))
+                .withAggregation("collection_name", Aggregation.of(a -> a.terms(ta -> ta.field("collection.collectionName").size(20000))))
                 //.withQuery(QueryBuilders.matchAllQueryAsQuery())
                 .withMaxResults(0)
                 .build();

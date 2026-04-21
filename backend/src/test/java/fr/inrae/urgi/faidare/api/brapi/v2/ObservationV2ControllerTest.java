@@ -42,11 +42,11 @@ public class ObservationV2ControllerTest {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = testRestTemplate.exchange(
-            createURLWithPort("/brapi/v2/observations/dXJuOklOUkFFLVVSR0kvb2JzZXJ2YXRpb24vNzAwOTQwMA=="),
+            createURLWithPort("/brapi/v2/observations/dXJuOklOUkFFLVVSR0kvb2JzZXJ2YXRpb24vMzY2NDY5MC03"),
             HttpMethod.GET, entity, String.class);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         String value = JsonPath.parse(response.getBody()).read("$.result.value");
-        assertThat(value).isEqualTo("88.0415676541");
+        assertThat(value).isEqualTo("NA");
     }
 
     @Test
