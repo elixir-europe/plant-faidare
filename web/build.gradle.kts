@@ -51,9 +51,9 @@ tasks {
     }
 
     val e2e by registering(PnpmTask::class) {
-        // On CI, we need to start the app with a different postgres host
+        // On CI, we need to start the app with a different postgres and elastic host
         // so we have a dedicated task in the package.json
-        if (project.findProperty("CI") != null) {
+        if (System.getenv("CI") != null) {
             args.set(listOf("run", "e2e:standalone:ci"))
             environment.put("CI", "true")
         } else {

@@ -19,6 +19,7 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.opencsv.CSVWriter;
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2VO;
@@ -116,7 +117,7 @@ public class ObservationExportService {
         List<JsonObservationVariable> observationVariables =
             getDistinctVariables(rows)
                 .stream()
-                .map(v -> new JsonObservationVariable(decode(v.id()), v.name()))
+                .map(v -> new JsonObservationVariable(v.id(), v.name()))
                 .toList();
 
         List<List<String>> data =
@@ -150,9 +151,10 @@ public class ObservationExportService {
             return List.of();
         }
 
-        // each year/season has its row.
-        // but if there are several observation for the same variable and the same year, then it goes to a different row
-        Map<String, List<Row>> rowsBySeason = new TreeMap<>();
+        // each year/season + GDD has its row.
+        // but if there are several observations for the same variable and the
+        // same year + GDD, then the duplicates go to a different row
+        Map<SeasonAndGdd, List<Row>> rowsBySeasonAndGdd = new TreeMap<>();
         List<ObservationVO> observationsSortedByTimestamp =
             exportedObservationUnit
                 .observations()
@@ -161,21 +163,23 @@ public class ObservationExportService {
                 .toList();
         for (var observation : observationsSortedByTimestamp) {
             String season = observation.getSeason().getSeasonName();
+            Float gdd = observation.getGdd();
+            SeasonAndGdd seasonAndGdd = new SeasonAndGdd(season, gdd);
             String observationVariableDbId = observation.getObservationVariableDbId();
 
-            List<Row> rowsOfSeason = rowsBySeason.computeIfAbsent(season, ignored -> new ArrayList<>());
-            Row row = rowsOfSeason
+            List<Row> rowsOfSeasonAndGdd = rowsBySeasonAndGdd.computeIfAbsent(seasonAndGdd, ignored -> new ArrayList<>());
+            Row row = rowsOfSeasonAndGdd
                 .stream()
                 .filter(r -> !r.observationsByVariableDbId.containsKey(observationVariableDbId))
                 .findFirst()
                 .orElseGet(() -> {
                     Row newRow = new Row(exportedObservationUnit.observationUnit(), new HashMap<>());
-                    rowsOfSeason.add(newRow);
+                    rowsOfSeasonAndGdd.add(newRow);
                     return newRow;
                 });
             row.observationsByVariableDbId().put(observationVariableDbId, observation);
         }
-        return rowsBySeason.values().stream().flatMap(List::stream).toList();
+        return rowsBySeasonAndGdd.values().stream().flatMap(List::stream).toList();
     }
 
     private List<Row> createJsonRows(List<ExportedObservationUnit> observationUnits) {
@@ -203,14 +207,14 @@ public class ObservationExportService {
 
         columns.add(
             new Column(
-                new Header("Observation Unit ID", "observationUnitDbId"),
+                new Header("obsUnitId", "observationUnitDbId"),
                 row -> decode(row.observationUnit().getObservationUnitDbId())
             )
         );
 
         columns.add(
             new Column(
-                new Header("Observation Unit Name", "observationUnitName"),
+                new Header("observationUnitName", "observationUnitName"),
                 row -> row.observationUnit().getObservationUnitName()
             )
         );
@@ -218,21 +222,21 @@ public class ObservationExportService {
 
         columns.add(
             new Column(
-                new Header("Observation Level", "observationLevel"),
+                new Header("obsUnitType", "observationLevel"),
                 row -> row.observationUnit().getObservationUnitPosition().getObservationLevel().getLevelOrder()
             )
         );
 
         columns.add(
             new Column(
-                new Header("Germplasm ID", "germplasmDbId"),
+                new Header("germplasmId", "germplasmDbId"),
                 row -> decode(row.observationUnit().getGermplasmDbId())
             )
         );
 
         columns.add(
             new Column(
-                new Header("Germplasm Name", "germplasmName"),
+                new Header("germplasmName", "germplasmName"),
                 row -> row.observationUnit().getGermplasmName()
             )
         );
@@ -240,55 +244,78 @@ public class ObservationExportService {
 
         columns.add(
             new Column(
-                new Header("Germplasm Genus", "germplasmGenus"),
+                new Header("genus", "germplasmGenus"),
                 row -> row.observationUnit().getGermplasmGenus()
             )
         );
 
         columns.add(
             new Column(
-                new Header("Trial Name", "trialName"),
+                new Header("trialName", "trialName"),
                 row -> row.observationUnit().getTrialName()
             )
         );
 
         columns.add(
             new Column(
-                new Header("Study ID", "studyDbId"),
+                new Header("studyId", "studyDbId"),
                 row -> decode(row.observationUnit().getStudyDbId())
             )
         );
 
         columns.add(
             new Column(
-                new Header("Study Name", "studyName"),
+                new Header("studyName", "studyName"),
                 row -> row.observationUnit().getStudyName()
             )
         );
 
         columns.add(
             new Column(
-                new Header("Study Location", "studyLocation"),
+                new Header("siteName", "studyLocation"),
                 row -> row.observationUnit().getStudyLocation()
             )
         );
 
+        List<String> distinctTreatmentFactors =
+            rows.stream()
+                .flatMap(row ->
+                             row.observationUnit().getTreatments() == null
+                                 ? Stream.empty()
+                                 : row.observationUnit().getTreatments().stream()
+                )
+                .map(TreatmentVO::getFactor)
+                .filter(Objects::nonNull)
+                .distinct()
+                .sorted()
+                .toList();
+
+        for (String treatmentFactor: distinctTreatmentFactors) {
+            columns.add(
+                new Column(
+                    new Header(treatmentFactor, treatmentFactor),
+                    row -> row.observationUnit()
+                              .getTreatments()
+                              .stream()
+                              .filter(treatment -> treatmentFactor.equals(treatment.getFactor()))
+                              .map(TreatmentVO::getModality)
+                              .findAny()
+                              .orElse(null)
+                )
+            );
+        }
+
         columns.add(
             new Column(
-                new Header("Treatments", "treatments"),
-                row -> row.observationUnit()
-                          .getTreatments()
-                          .stream()
-                          .map(TreatmentVO::getModality)
-                          .filter(Objects::nonNull)
-                          .collect(Collectors.joining(", "))
+                new Header("season", "year"),
+                Row::getSeason
             )
         );
 
         columns.add(
             new Column(
-                new Header("Season", "year"),
-                Row::getSeason
+                new Header("gdd", "gdd"),
+                Row::getGdd
             )
         );
 
@@ -296,7 +323,7 @@ public class ObservationExportService {
             columns.add(
                 new Column(
                     new Header(null, "observationTimeStamp"),
-                    row -> row.observationsByVariableDbId.values().iterator().next().getObservationTimeStamp()
+                    Row::getFirstObservationTimeStamp
                 )
             );
         }
@@ -306,7 +333,7 @@ public class ObservationExportService {
         for (Variable variable : distinctVariables) {
             columns.add(
                 new Column(
-                    new Header(String.format("%s(%s)", variable.name(), decode(variable.id())), null),
+                    new Header(String.format("%s(%s)", variable.name(), variable.id()), null),
                     row -> {
                         ObservationVO observation = row.observationsByVariableDbId.get(variable.id());
                         if (observation == null) {
@@ -320,7 +347,7 @@ public class ObservationExportService {
             if (exportFormat != ExportFormat.JSON) {
                 columns.add(
                     new Column(
-                        new Header(String.format("%s(%s)_date", variable.name(), decode(variable.id())), null),
+                        new Header(String.format("%s(%s)_date", variable.name(), variable.id()), null),
                         row -> {
                             ObservationVO observation = row.observationsByVariableDbId.get(variable.id());
                             if (observation == null) {
@@ -391,7 +418,7 @@ public class ObservationExportService {
     }
 
     /**
-     * A row, having at least one observation, and where all observations have the same year/season.
+     * A row, having at least one observation, and where all observations have the same year/season and GDD.
      * There is at most one observation for a given observationVariableDbId.
      * JSON rows have only one observation in the map.
      */
@@ -401,6 +428,15 @@ public class ObservationExportService {
     ) {
         String getSeason() {
             return observationsByVariableDbId.values().iterator().next().getSeason().getSeasonName();
+        }
+
+        String getGdd() {
+            Float gdd = observationsByVariableDbId.values().iterator().next().getGdd();
+            return gdd == null ? null : gdd.toString();
+        }
+
+        String getFirstObservationTimeStamp() {
+            return observationsByVariableDbId.values().iterator().next().getObservationTimeStamp();
         }
     }
 
@@ -463,6 +499,17 @@ public class ObservationExportService {
     }
 
     private record Variable(String id, String name) {}
+
+    private record SeasonAndGdd(String season, Float gdd) implements Comparable<SeasonAndGdd> {
+        private static final Comparator<SeasonAndGdd> COMPARATOR =
+            Comparator.comparing(SeasonAndGdd::season)
+                      .thenComparing(SeasonAndGdd::gdd, Comparator.nullsFirst(Comparator.naturalOrder()));
+
+        @Override
+        public int compareTo(SeasonAndGdd o) {
+            return COMPARATOR.compare(this, o);
+        }
+    }
 
     /**
      * A column header. The label is used for CSV and Excel. The jsonLabel is used

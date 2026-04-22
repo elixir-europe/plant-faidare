@@ -40,19 +40,20 @@ class ObservationExportServiceTest {
         ExportedObservationUnit unit1 = new ExportedObservationUnit(
             createObservationUnit(1),
             List.of(
-                createObservation("2015", 1), // row 1
-                createObservation("2015", 2), // row 1 (same year, different variable)
-                createObservation("2015", 3), // row 1 (same year, different variable)
-                createObservation("2015", 1), // row 2 (same year, same variable)
-                createObservation("2016", 1), // row 3 (different year)
-                createObservation("2016", 2) // row 3  (different year, different variable)
+                createObservation("2015", 1.0F, 1), // row 1
+                createObservation("2015", 1.0F, 2), // row 1 (same year, same gdd, different variable)
+                createObservation("2015", 1.0F, 3), // row 1 (same year, same gdd different variable)
+                createObservation("2015", 1.0F, 1), // row 2 (same year, same gdd, same variable)
+                createObservation("2015", 2.0F, 1), // row 3 (same year, different gdd, same variable)
+                createObservation("2016", 2.0F, 1), // row 4 (different year, different gdd)
+                createObservation("2016", 2.0F, 2) // row 4  (different year, different gdd, different variable)
             )
         );
         ExportedObservationUnit unit2 = new ExportedObservationUnit(
             createObservationUnit(2),
             List.of(
-                createObservation("2015", 1), // row 4
-                createObservation("2015", 2)  // row 4 (same year, different variable)
+                createObservation("2015", 1.0F, 1), // row 5
+                createObservation("2015", 1.0F, 2)  // row 5 (same year, same gdd)
             )
         );
 
@@ -69,21 +70,23 @@ class ObservationExportServiceTest {
         ).build();
         List<String[]> lines = csvReader.readAll();
 
-        assertThat(lines).hasSize(5);
+        assertThat(lines).hasSize(6);
         String[] header = lines.getFirst();
         assertThat(header).containsExactly(
-            "Observation Unit ID",
-            "Observation Unit Name",
-            "Observation Level",
-            "Germplasm ID",
-            "Germplasm Name",
-            "Germplasm Genus",
-            "Trial Name",
-            "Study ID",
-            "Study Name",
-            "Study Location",
-            "Treatments",
-            "Season",
+            "obsUnitId",
+            "observationUnitName",
+            "obsUnitType",
+            "germplasmId",
+            "germplasmName",
+            "genus",
+            "trialName",
+            "studyId",
+            "studyName",
+            "siteName",
+            "factor1",
+            "factor2",
+            "season",
+            "gdd",
             "Variable 1(variable1)",
             "Variable 1(variable1)_date",
             "Variable 2(variable2)",
@@ -102,8 +105,10 @@ class ObservationExportServiceTest {
             "study1",
             "Study 1",
             "Location 1",
-            "Modality",
+            "modality1",
+            "modality2",
             "2015",
+            "1.0",
             "v1",
             "2015-01-01T01:00:00Z",
             "v2",
@@ -122,8 +127,10 @@ class ObservationExportServiceTest {
             "study1",
             "Study 1",
             "Location 1",
-            "Modality",
+            "modality1",
+            "modality2",
             "2015",
+            "1.0",
             "v1",
             "2015-01-01T01:00:00Z",
             "",
@@ -142,8 +149,32 @@ class ObservationExportServiceTest {
             "study1",
             "Study 1",
             "Location 1",
-            "Modality",
+            "modality1",
+            "modality2",
+            "2015",
+            "2.0",
+            "v1",
+            "2015-01-01T01:00:00Z",
+            "",
+            "",
+            "",
+            ""
+        );
+        assertThat(lines.get(4)).containsExactly(
+            "unit1",
+            "Unit1",
+            "levelCode",
+            "germplasm1",
+            "Germplasm 1",
+            "Germplasm Genus 1",
+            "Trial 1",
+            "study1",
+            "Study 1",
+            "Location 1",
+            "modality1",
+            "modality2",
             "2016",
+            "2.0",
             "v1",
             "2016-01-01T01:00:00Z",
             "v2",
@@ -151,7 +182,7 @@ class ObservationExportServiceTest {
             "",
             ""
         );
-        assertThat(lines.get(4)).containsExactly(
+        assertThat(lines.get(5)).containsExactly(
             "unit2",
             "Unit2",
             "levelCode",
@@ -162,8 +193,10 @@ class ObservationExportServiceTest {
             "study2",
             "Study 2",
             "Location 2",
-            "Modality",
+            "modality1",
+            "modality2",
             "2015",
+            "1.0",
             "v1",
             "2015-01-01T01:00:00Z",
             "v2",
@@ -182,19 +215,20 @@ class ObservationExportServiceTest {
         ExportedObservationUnit unit1 = new ExportedObservationUnit(
             createObservationUnit(1),
             List.of(
-                createObservation("2015", 1),
-                createObservation("2015", 2),
-                createObservation("2015", 3),
-                createObservation("2015", 1),
-                createObservation("2016", 1),
-                createObservation("2016", 2)
+                createObservation("2015", 1.0F, 1),
+                createObservation("2015", 1.0F, 2),
+                createObservation("2015", 1.0F, 3),
+                createObservation("2015", 1.0F, 1),
+                createObservation("2015", 2.0F, 1),
+                createObservation("2016", 2.0F, 1),
+                createObservation("2016", 2.0F, 2)
             )
         );
         ExportedObservationUnit unit2 = new ExportedObservationUnit(
             createObservationUnit(2),
             List.of(
-                createObservation("2015", 1),
-                createObservation("2015", 2)
+                createObservation("2015", 1.0F, 1),
+                createObservation("2015", 1.0F, 2)
             )
         );
 
@@ -218,8 +252,10 @@ class ObservationExportServiceTest {
                 "studyDbId",
                 "studyName",
                 "studyLocation",
-                "treatments",
+                "factor1",
+                "factor2",
                 "year",
+                "gdd",
                 "observationTimeStamp"
               ],
               "observationVariables": [
@@ -248,8 +284,10 @@ class ObservationExportServiceTest {
                   "study1",
                   "Study 1",
                   "Location 1",
-                  "Modality",
+                  "modality1",
+                  "modality2",
                   "2015",
+                  "1.0",
                   "2015-01-01T01:00:00Z",
                   "v1",
                   null,
@@ -266,8 +304,10 @@ class ObservationExportServiceTest {
                   "study1",
                   "Study 1",
                   "Location 1",
-                  "Modality",
+                  "modality1",
+                  "modality2",
                   "2015",
+                  "1.0",
                   "2015-01-01T01:00:00Z",
                   "v1",
                   null,
@@ -284,8 +324,30 @@ class ObservationExportServiceTest {
                   "study1",
                   "Study 1",
                   "Location 1",
-                  "Modality",
+                  "modality1",
+                  "modality2",
                   "2015",
+                  "2.0",
+                  "2015-01-01T01:00:00Z",
+                  "v1",
+                  null,
+                  null
+                ],
+                [
+                  "unit1",
+                  "Unit1",
+                  "levelCode",
+                  "germplasm1",
+                  "Germplasm 1",
+                  "Germplasm Genus 1",
+                  "Trial 1",
+                  "study1",
+                  "Study 1",
+                  "Location 1",
+                  "modality1",
+                  "modality2",
+                  "2015",
+                  "1.0",
                   "2015-01-01T02:00:00Z",
                   null,
                   "v2",
@@ -302,8 +364,10 @@ class ObservationExportServiceTest {
                   "study1",
                   "Study 1",
                   "Location 1",
-                  "Modality",
+                  "modality1",
+                  "modality2",
                   "2015",
+                  "1.0",
                   "2015-01-01T03:00:00Z",
                   null,
                   null,
@@ -320,8 +384,10 @@ class ObservationExportServiceTest {
                   "study1",
                   "Study 1",
                   "Location 1",
-                  "Modality",
+                  "modality1",
+                  "modality2",
                   "2016",
+                  "2.0",
                   "2016-01-01T01:00:00Z",
                   "v1",
                   null,
@@ -338,8 +404,10 @@ class ObservationExportServiceTest {
                   "study1",
                   "Study 1",
                   "Location 1",
-                  "Modality",
+                  "modality1",
+                  "modality2",
                   "2016",
+                  "2.0",
                   "2016-01-01T02:00:00Z",
                   null,
                   "v2",
@@ -356,8 +424,10 @@ class ObservationExportServiceTest {
                   "study2",
                   "Study 2",
                   "Location 2",
-                  "Modality",
+                  "modality1",
+                  "modality2",
                   "2015",
+                  "1.0",
                   "2015-01-01T01:00:00Z",
                   "v1",
                   null,
@@ -374,8 +444,10 @@ class ObservationExportServiceTest {
                   "study2",
                   "Study 2",
                   "Location 2",
-                  "Modality",
+                  "modality1",
+                  "modality2",
                   "2015",
+                  "1.0",
                   "2015-01-01T02:00:00Z",
                   null,
                   "v2",
@@ -400,13 +472,13 @@ class ObservationExportServiceTest {
         vo.setStudyDbId(encode("study" + index));
         vo.setStudyName("Study " + index);
         vo.setStudyLocation("Location " + index);
-        vo.setTreatments(List.of(createTreatment()));
+        vo.setTreatments(List.of(createTreatment(1), createTreatment(2)));
         return vo;
     }
 
-    private ObservationVO createObservation(String year, int index) {
+    private ObservationVO createObservation(String year, Float gdd, int index) {
         ObservationVO vo = new ObservationVO();
-        vo.setObservationVariableDbId(encode("variable" + index));
+        vo.setObservationVariableDbId("variable" + index);
         vo.setObservationVariableName("Variable " + index);
         vo.setValue("v" + index);
         vo.setObservationTimeStamp("2025-12-03T13:00:00Z");
@@ -415,13 +487,14 @@ class ObservationExportServiceTest {
         season.setSeasonName(year);
         vo.setSeason(season);
         vo.setObservationTimeStamp(Instant.parse(year + "-01-01T0" + index + ":00:00Z").toString());
+        vo.setGdd(gdd);
         return vo;
     }
 
-    private TreatmentVO createTreatment() {
+    private TreatmentVO createTreatment(int index) {
         TreatmentVO vo = new TreatmentVO();
-        vo.setFactor("Factor");
-        vo.setModality("Modality");
+        vo.setFactor("factor" + index);
+        vo.setModality("modality" + index);
         return vo;
     }
 

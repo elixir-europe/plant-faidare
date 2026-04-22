@@ -9,7 +9,7 @@ test.describe('Trial', () => {
 
     await page.getByRole('button', { name: 'Export observations' }).click();
     const dropdown = page.locator('.dropdown-menu');
-    await dropdown.getByRole('button', { name: 'REPLICATE>BLOCK>PLOT', exact: true }).click();
+    await dropdown.getByRole('button', { name: 'Level: REPLICATE>BLOCK>PLOT', exact: true }).click();
 
     await expect(page.getByRole('heading', { level: 1, name: 'Export observations for trial Drops Phenotyping Network' })).toBeVisible();
 

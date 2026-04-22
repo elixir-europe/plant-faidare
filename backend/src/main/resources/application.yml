@@ -149,9 +149,6 @@ spring:
     activate:
       on-profile:
         e2e
-  elasticsearch:
-    uris:
-      - http://elasticsearch:9200
 server:
   port: 8381
 
