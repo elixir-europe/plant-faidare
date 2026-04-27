@@ -10,7 +10,7 @@ buildscript {
 plugins {
     java
     jacoco
-    id("org.springframework.boot") version "4.0.5"
+    id("org.springframework.boot") version "4.0.6"
     id("com.gorylenko.gradle-git-properties") version "2.5.7"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.sonarqube")
@@ -146,6 +146,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-restclient-test")
     testImplementation("org.springframework.boot:spring-boot-starter-data-elasticsearch-test")
     testImplementation("org.springframework.boot:spring-boot-starter-security-test")
-    testImplementation("org.jsoup:jsoup:1.22.1")
+    testImplementation("org.jsoup:jsoup:1.22.2")
     testImplementation("org.awaitility:awaitility:4.3.0")
 }
