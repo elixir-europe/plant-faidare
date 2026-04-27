@@ -27,7 +27,7 @@ import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.CriteriaQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilterBuilder;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class GermplasmV2DaoCustomImpl implements GermplasmV2DaoCustom {
@@ -185,14 +185,44 @@ public class GermplasmV2DaoCustomImpl implements GermplasmV2DaoCustom {
 
         if (germplasmCriteria.getTrialDbIds() != null
             && !germplasmCriteria.getTrialDbIds().isEmpty()) {
+
             TrialCriteria tCrit = new TrialCriteria();
-            tCrit.setTrialDbId(germplasmCriteria.getTrialDbIds()); // Use this instead of trialV2Dao.getByTrialDbId because the latter takes only a single String as a parameter, whereas this one takes a List<String>, allowing searches with multiple trialDbIds
+            tCrit.setTrialDbId(germplasmCriteria.getTrialDbIds());
+
             List<TrialV2VO> trials = trialV2Dao.findTrialsByCriteria(tCrit).getResult().getData();
+
             List<String> studyDbIds = trials.stream()
-                .flatMap(trial -> trial.getStudies().stream())
+                .flatMap(trial -> trial.getStudies() == null ? Stream.empty() : trial.getStudies().stream())
                 .map(StudyV2miniVO::getStudyDbId)
+                .filter(Objects::nonNull)
+                .distinct()
                 .toList();
-            esCrit.and(new Criteria("studyDbIds").in(studyDbIds));
+
+            int batchSize = 500;
+            Map<String, GermplasmV2VO> resultById = new LinkedHashMap<>();
+
+            for (int i = 0; i < studyDbIds.size(); i += batchSize) {
+                List<String> batch = studyDbIds.subList(i, Math.min(i + batchSize, studyDbIds.size()));
+
+                Criteria batchCrit = new Criteria();
+                batchCrit.subCriteria(esCrit);
+                batchCrit.and(new Criteria("studyDbIds").in(batch));
+
+                CriteriaQuery batchQuery = new CriteriaQueryBuilder(batchCrit).build();
+                batchQuery.setTrackTotalHits(true);
+                batchQuery.setPageable(PageRequest.of(
+                    germplasmCriteria.getPage() != null ? germplasmCriteria.getPage() : 0,
+                    germplasmCriteria.getPageSize() != null ? germplasmCriteria.getPageSize() : 10
+                ));
+
+                SearchHits<GermplasmV2VO> batchHits = esTemplate.search(batchQuery, GermplasmV2VO.class);
+
+                batchHits.stream()
+                    .map(SearchHit::getContent)
+                    .forEach(germplasm -> resultById.putIfAbsent(germplasm.getGermplasmDbId(), germplasm));
+            }
+
+            return BrapiListResponse.brapiResponseForPageOf(new ArrayList<>(resultById.values()));
         }
 
         if (germplasmCriteria.getTrialNames() != null
