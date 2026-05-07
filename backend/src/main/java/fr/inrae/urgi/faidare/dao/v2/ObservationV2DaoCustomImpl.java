@@ -9,6 +9,7 @@ import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationUnitV2V
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.ObservationVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregation;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
@@ -31,6 +32,11 @@ public class ObservationV2DaoCustomImpl implements ObservationV2DaoCustom{
 
     @Override
     public BrapiListResponse<ObservationVO> findObservationByCriteria(ObservationV2Criteria observationCriteria) {
+
+        int size = observationCriteria.getPageSize() != null
+            ? observationCriteria.getPageSize()
+            : 1000;
+
         Criteria esCrit = new Criteria();
         if(observationCriteria.getObservationDbId() != null
             && !observationCriteria.getObservationDbId().isEmpty()){
@@ -105,14 +111,88 @@ public class ObservationV2DaoCustomImpl implements ObservationV2DaoCustom{
             esCrit.and(new Criteria("value").in(observationCriteria.getValue()));
         }
 
-        CriteriaQuery criteriaQuery = new CriteriaQueryBuilder(esCrit).build();
-        criteriaQuery.setTrackTotalHits(true);
+        if (observationCriteria.getSearchAfter() != null && observationCriteria.getPage() != null) {
+            throw new IllegalArgumentException("Cannot use page and searchAfter together.");
+        }
 
+        boolean isCursorMode = observationCriteria.getSearchAfter() != null;
 
-        criteriaQuery.setPageable(PageRequest.of(observationCriteria.getPage() != null ? observationCriteria.getPage() : 0,
-            observationCriteria.getPageSize() != null ? observationCriteria.getPageSize() : 10));
-        SearchHits<ObservationVO> searchHits = esTemplate.search(criteriaQuery, ObservationVO.class);
-        return BrapiListResponse.brapiResponseForPageOf(searchHits, criteriaQuery.getPageable());
+        List<ObservationVO> content;
+        long totalHits;
+        String nextSearchAfter = null;
+
+        if (!isCursorMode) {
+            //  Pagination mode
+
+            int page = observationCriteria.getPage() != null
+                ? observationCriteria.getPage()
+                : 0;
+
+            if ((long) page * size + size > 20000) {
+                throw new IllegalArgumentException(
+                    "Pagination exceeds Elasticsearch max_result_window (20000). Use searchAfter for deep pagination."
+                );
+            }
+
+            CriteriaQuery query = new CriteriaQuery(esCrit);
+            query.setTrackTotalHits(true);
+            query.setPageable(PageRequest.of(page, size));
+
+            SearchHits<ObservationVO> searchHits =
+                esTemplate.search(query, ObservationVO.class);
+
+            content = searchHits.getSearchHits()
+                .stream()
+                .map(SearchHit::getContent)
+                .toList();
+
+            totalHits = searchHits.getTotalHits();
+
+            boolean hasNext = (long) (page + 1) * size < totalHits;
+
+            if (hasNext && !searchHits.getSearchHits().isEmpty()) {
+                nextSearchAfter = searchHits.getSearchHits()
+                    .get(searchHits.getSearchHits().size() - 1)
+                    .getId();
+            }
+
+        } else {
+            //  Cursor mode
+            NativeQuery query = NativeQuery.builder()
+                .withQuery(new CriteriaQuery(esCrit))
+                .withSort(Sort.by(Sort.Direction.ASC, "_id"))
+                .withMaxResults(size)
+                .withSearchAfter(List.of(observationCriteria.getSearchAfter()))
+                .build();
+
+            SearchHits<ObservationVO> searchHits =
+                esTemplate.search(query, ObservationVO.class);
+
+            content = searchHits.getSearchHits()
+                .stream()
+                .map(SearchHit::getContent)
+                .toList();
+
+            totalHits = elasticsearchOperations.count(
+                new CriteriaQuery(esCrit),
+                ObservationVO.class
+            );
+
+            if (content.size() == size && !searchHits.getSearchHits().isEmpty()) {
+                nextSearchAfter = searchHits.getSearchHits()
+                    .get(searchHits.getSearchHits().size() - 1)
+                    .getSortValues()
+                    .get(0)
+                    .toString();
+            }
+        }
+
+        return BrapiListResponse.brapiResponseForCursor(
+            content,
+            size,
+            nextSearchAfter,
+            totalHits
+        );
     }
 
     @Override

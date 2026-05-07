@@ -1,6 +1,7 @@
 package fr.inrae.urgi.faidare.dao.v2;
 
 import fr.inrae.urgi.faidare.domain.brapi.v2.observationUnits.SeasonVO;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
@@ -23,8 +24,20 @@ public class ObservationV2Criteria {
     private List<String> trialDbId;
     private List<String> trialName;
     private List<String> value;
+    @Schema(
+        description = "Page number for classic pagination (UI usage only). " +
+            "If provided, page × pageSize must not exceed 20000."
+    )
     private Integer page;
+    @Schema(
+        description = "Number of results per page. Default is 1000."
+    )
     private Integer pageSize;
+    @Schema(
+        description = "Cursor value returned as nextPageToken from a previous request. " +
+            "Use this for deep pagination (recommended for scripts)."
+    )
+    private String searchAfter;
 
     public List<String> getObservationDbId() {
         return observationDbId;
@@ -184,5 +197,13 @@ public class ObservationV2Criteria {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getSearchAfter() {
+        return searchAfter;
+    }
+
+    public void setSearchAfter(String searchAfter) {
+        this.searchAfter = searchAfter;
     }
 }

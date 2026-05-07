@@ -1,6 +1,7 @@
 package fr.inrae.urgi.faidare.dao.v2;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import java.util.Set;
@@ -141,6 +142,80 @@ public class ObservationV2DaoTest {
         assertThat(observationUnitVOs).isNotNull();
         assertThat(observationUnitVOs.getMetadata().getPagination().getTotalCount()).isEqualTo(25);
         assertThat(observationUnitVOs.getResult().getData().get(0).getValue()).isEqualTo("77,9");
+    }
+
+    @Test
+    void should_use_page_based_mode_when_no_searchAfter() {
+        ObservationV2Criteria crit = new ObservationV2Criteria();
+        crit.setPage(0);
+        crit.setPageSize(10);
+
+        BrapiListResponse<ObservationVO> result =
+            observationDao.findObservationByCriteria(crit);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getResult().getData()).isNotEmpty();
+        assertThat(result.getMetadata().getPagination().getPageSize()).isEqualTo(10);
+    }
+
+    @Test
+    void should_use_cursor_based_mode_when_searchAfter_is_set() {
+        ObservationV2Criteria crit = new ObservationV2Criteria();
+        crit.setSearchAfter("urn:INRAE-URGI/observation/3623290-7");
+        crit.setPageSize(10);
+
+        BrapiListResponse<ObservationVO> result =
+            observationDao.findObservationByCriteria(crit);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getResult().getData()).isNotNull();
+    }
+
+    @Test
+    void should_throw_exception_when_page_and_searchAfter_are_both_set() {
+        ObservationV2Criteria crit = new ObservationV2Criteria();
+        crit.setPage(1);
+        crit.setSearchAfter("abc");
+        crit.setPageSize(10);
+
+        assertThatThrownBy(() ->
+            observationDao.findObservationByCriteria(crit)
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void cursor_mode_should_return_nextPageToken_when_full_page() {
+        ObservationV2Criteria crit = new ObservationV2Criteria();
+        crit.setPageSize(5);
+
+        BrapiListResponse<ObservationVO> firstPage =
+            observationDao.findObservationByCriteria(crit);
+
+        String nextToken = firstPage.getMetadata().getNextPageToken();
+
+        assertThat(nextToken).isNotNull();
+
+        ObservationV2Criteria nextCrit = new ObservationV2Criteria();
+        nextCrit.setSearchAfter(nextToken);
+        nextCrit.setPageSize(5);
+
+        BrapiListResponse<ObservationVO> secondPage =
+            observationDao.findObservationByCriteria(nextCrit);
+
+        assertThat(secondPage.getResult().getData()).isNotEmpty();
+
+        assertThat(secondPage.getResult().getData())
+            .isNotEqualTo(firstPage.getResult().getData());
+    }
+    @Test
+    void should_throw_exception_when_pagination_exceeds_max_window() {
+        ObservationV2Criteria crit = new ObservationV2Criteria();
+        crit.setPage(1000);
+        crit.setPageSize(100);
+
+        assertThatThrownBy(() ->
+            observationDao.findObservationByCriteria(crit)
+        ).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

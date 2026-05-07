@@ -12,11 +12,13 @@ public class BrapiMetadata {
     private List<Map<String, String>> status;
     private List<Map<String, String>> datafiles;
     private BrapiPagination pagination;
+    private String nextPageToken;
 
     public BrapiMetadata() {
         this.pagination = new BrapiPagination();
         this.datafiles = new ArrayList<Map<String, String>>();
         this.status = new ArrayList<Map<String, String>>();
+        this.nextPageToken = null;
     }
 
 
@@ -48,6 +50,13 @@ public class BrapiMetadata {
 
     public void setStatus(List<Map<String, String>> status) {
         this.status = status;
+    }
+    public String getNextPageToken() {
+        return nextPageToken;
+    }
+
+    public void setNextPageToken(String nextPageToken) {
+        this.nextPageToken = nextPageToken;
     }
 
 

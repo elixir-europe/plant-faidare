@@ -64,6 +64,24 @@ public class BrapiListResponse<T> implements BrapiResponse {
         return brapiResponse;
     }
 
+    public static <T> BrapiListResponse<T> brapiResponseForCursor(
+        List<T> content,
+        int pageSize,
+        String nextPageToken,
+        long totalCount
+    ) {
+        BrapiListResponse<T> brapiResponse = new BrapiListResponse<>();
+
+        brapiResponse.getResult().setData(content);
+
+        Pageable pageable = Pageable.ofSize(pageSize).withPage(0);
+        BrapiMetadata.setPagination(totalCount, pageable, brapiResponse);
+
+        brapiResponse.getMetadata().setNextPageToken(nextPageToken);
+
+        return brapiResponse;
+    }
+
 
 
 
