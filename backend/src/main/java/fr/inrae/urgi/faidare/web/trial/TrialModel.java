@@ -6,6 +6,7 @@ import fr.inrae.urgi.faidare.config.DataSource;
 import fr.inrae.urgi.faidare.domain.LocationVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.TrialV2VO;
+import fr.inrae.urgi.faidare.domain.variable.ObservationVariableV1VO;
 import fr.inrae.urgi.faidare.web.site.MapLocation;
 
 /**
@@ -18,6 +19,7 @@ public final class TrialModel {
     private final List<LocationVO> locations;
     private final List<GermplasmV2VO> germplasms;
     private final TrialChoosableExportCriteria choosableExportCriteria;
+    private final List<ObservationVariableV1VO> observationVariables;
     private final String contextPath;
 
     public TrialModel(
@@ -25,6 +27,7 @@ public final class TrialModel {
         DataSource source,
         List<LocationVO> locations,
         List<GermplasmV2VO> germplasms, TrialChoosableExportCriteria choosableExportCriteria,
+        List<ObservationVariableV1VO> observationVariables,
         String contextPath
     ) {
         this.trial = trial;
@@ -32,6 +35,7 @@ public final class TrialModel {
         this.locations = locations;
         this.germplasms = germplasms;
         this.choosableExportCriteria = choosableExportCriteria;
+        this.observationVariables = observationVariables;
         this.contextPath = contextPath;
     }
 
@@ -53,6 +57,10 @@ public final class TrialModel {
 
     public TrialChoosableExportCriteria getChoosableExportCriteria() {
         return choosableExportCriteria;
+    }
+
+    public List<ObservationVariableV1VO> getObservationVariables() {
+        return observationVariables;
     }
 
     public String getContextPath() {

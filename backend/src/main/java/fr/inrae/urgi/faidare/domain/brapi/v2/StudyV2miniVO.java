@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -29,7 +30,6 @@ public final class StudyV2miniVO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StudyV2miniVO that = (StudyV2miniVO) o;
         return Objects.equals(locationDbId, that.locationDbId) && Objects.equals(locationName, that.locationName) && Objects.equals(_id, that._id) && Objects.equals(studyDbId, that.studyDbId) && Objects.equals(studyName, that.studyName) && Objects.equals(studyPUI, that.studyPUI) && Objects.equals(studyURI, that.studyURI);
@@ -95,4 +95,5 @@ public final class StudyV2miniVO {
     public void setStudyURI(String studyURI) {
         this.studyURI = studyURI;
     }
+
 }

@@ -435,7 +435,6 @@ public class Fixtures {
         StudyV2miniVO study = new StudyV2miniVO();
         study.setStudyDbId("study2");
         study.setStudyName("Study 2");
-
         LocationVO site = createSite();
         study.setLocationDbId(site.getLocationDbId());
         study.setLocationName(site.getLocationName());

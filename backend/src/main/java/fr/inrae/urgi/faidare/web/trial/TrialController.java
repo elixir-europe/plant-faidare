@@ -6,18 +6,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import fr.inrae.urgi.faidare.dao.file.CropOntologyRepository;
+import fr.inrae.urgi.faidare.dao.v2.*;
+import fr.inrae.urgi.faidare.domain.brapi.v2.StudyV2VO;
+import fr.inrae.urgi.faidare.domain.variable.ObservationVariableV1VO;
 import jakarta.servlet.http.HttpServletRequest;
 
 import fr.inrae.urgi.faidare.api.NotFoundException;
 import fr.inrae.urgi.faidare.config.DataSource;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
 import fr.inrae.urgi.faidare.dao.v1.LocationV1Dao;
-import fr.inrae.urgi.faidare.dao.v2.ChoosableObservationExportCriteria;
-import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Criteria;
-import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Dao;
-import fr.inrae.urgi.faidare.dao.v2.ObservationUnitV2Dao;
-import fr.inrae.urgi.faidare.dao.v2.ObservationV2Dao;
-import fr.inrae.urgi.faidare.dao.v2.TrialV2Dao;
 import fr.inrae.urgi.faidare.domain.LocationVO;
 import fr.inrae.urgi.faidare.domain.brapi.TrialSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
@@ -51,6 +49,8 @@ public class TrialController {
     private final GermplasmV2Dao germplasmRepository;
     private final ObservationUnitV2Dao observationUnitRepository;
     private final ObservationV2Dao observationRepository;
+    private final StudyV2Dao studyRepository;
+    private final CropOntologyRepository cropOntologyRepository;
     private final ObservationExportJobService jobService;
 
     public TrialController(TrialV2Dao trialRepository,
@@ -58,7 +58,7 @@ public class TrialController {
                            LocationV1Dao locationRepository,
                            GermplasmV2Dao germplasmRepository,
                            ObservationUnitV2Dao observationUnitRepository,
-                           ObservationV2Dao observationRepository,
+                           ObservationV2Dao observationRepository, StudyV2Dao studyRepository, CropOntologyRepository cropOntologyRepository,
                            ObservationExportJobService jobService) {
         this.trialRepository = trialRepository;
         this.faidareProperties = faidareProperties;
@@ -66,6 +66,8 @@ public class TrialController {
         this.germplasmRepository = germplasmRepository;
         this.observationUnitRepository = observationUnitRepository;
         this.observationRepository = observationRepository;
+        this.studyRepository = studyRepository;
+        this.cropOntologyRepository = cropOntologyRepository;
         this.jobService = jobService;
     }
 
@@ -80,6 +82,8 @@ public class TrialController {
         DataSource source = faidareProperties.getByUri(trial.getSourceUri());
         List<LocationVO> locations = findLocations(trial);
         List<GermplasmV2VO> germplasms = findGermplasms(trial);
+        List<ObservationVariableV1VO> observationVariables = findObservationVariables(trial);
+
 
         // FIXME there should be variables, but there's no way to get them.
         //   The method used by the STudyController is not fixed yet, and what
@@ -100,20 +104,21 @@ public class TrialController {
         ChoosableObservationExportCriteria choosableObservationExportCriteria = observationRepository.findChoosableObservationExportCriteriaByTrialDbId(trialId);
 
         return new ModelAndView("trial",
-                                "model",
-                                new TrialModel(
-                                    trial,
-                                    source,
-                                    locations,
-                                    germplasms,
-                                    new TrialChoosableExportCriteria(
-                                        observationLevelCodes,
-                                        choosableObservationExportCriteria.seasonNames(),
-                                        choosableObservationExportCriteria.studyLocations(),
-                                        choosableObservationExportCriteria.observationVariableNames()
-                                    ),
-                                    request.getContextPath()
-                                )
+            "model",
+            new TrialModel(
+                trial,
+                source,
+                locations,
+                germplasms,
+                new TrialChoosableExportCriteria(
+                    observationLevelCodes,
+                    choosableObservationExportCriteria.seasonNames(),
+                    choosableObservationExportCriteria.studyLocations(),
+                    choosableObservationExportCriteria.observationVariableNames()
+                ),
+                observationVariables,
+                request.getContextPath()
+            )
         );
     }
 
@@ -153,7 +158,7 @@ public class TrialController {
                     out,
                     stream,
                     vo -> Math.floorMod(vo.getTrialDbId().hashCode(),
-                                        Sitemaps.BUCKET_COUNT) == index,
+                        Sitemaps.BUCKET_COUNT) == index,
                     vo -> "/trials/" + vo.getTrialDbId());
             }
         };
@@ -178,5 +183,28 @@ public class TrialController {
         // to find what they want to find if there are more than 1000
         criteria.setPageSize(1000);
         return germplasmRepository.findGermplasmsByCriteria(criteria).getResult().getData();
+    }
+
+    private List<ObservationVariableV1VO> findObservationVariables(TrialV2VO trial) {
+
+        List<StudyV2VO> studies = trial.getStudies().stream()
+            .map(StudyV2miniVO::getStudyDbId)
+            .filter(Objects::nonNull)
+            .map(studyRepository::getByStudyDbId)
+            .filter(Objects::nonNull)
+            .toList();
+
+        Set<String> observationVariableDbIds = studies.stream()
+            .map(StudyV2VO::getObservationVariableDbIds)
+            .filter(Objects::nonNull)
+            .flatMap(List::stream)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
+
+        if (observationVariableDbIds.isEmpty()) {
+            return List.of();
+        }
+
+        return cropOntologyRepository.getVariableByIds(observationVariableDbIds);
     }
 }

@@ -12,20 +12,20 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import fr.inrae.urgi.faidare.api.brapi.v2.BrapiListResponse;
 import fr.inrae.urgi.faidare.config.DataSource;
 import fr.inrae.urgi.faidare.config.FaidareProperties;
+import fr.inrae.urgi.faidare.dao.file.CropOntologyRepository;
 import fr.inrae.urgi.faidare.dao.v1.LocationV1Dao;
-import fr.inrae.urgi.faidare.dao.v2.ChoosableObservationExportCriteria;
-import fr.inrae.urgi.faidare.dao.v2.GermplasmV2Dao;
-import fr.inrae.urgi.faidare.dao.v2.ObservationUnitV2Dao;
-import fr.inrae.urgi.faidare.dao.v2.ObservationV2Dao;
-import fr.inrae.urgi.faidare.dao.v2.TrialV2Dao;
+import fr.inrae.urgi.faidare.dao.v2.*;
 import fr.inrae.urgi.faidare.domain.LocationVO;
 import fr.inrae.urgi.faidare.domain.brapi.TrialSitemapVO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.GermplasmV2VO;
+import fr.inrae.urgi.faidare.domain.brapi.v2.StudyV2VO;
 import fr.inrae.urgi.faidare.domain.brapi.v2.TrialV2VO;
+import fr.inrae.urgi.faidare.domain.variable.ObservationVariableV1VO;
 import fr.inrae.urgi.faidare.web.Fixtures;
 import fr.inrae.urgi.faidare.web.germplasm.ExportFormat;
 import fr.inrae.urgi.faidare.web.observation.ObservationExportJob;
@@ -69,6 +69,12 @@ public class TrialControllerTest {
     @MockitoBean
     private ObservationExportJobService mockObservationExportJobService;
 
+    @MockitoBean
+    private StudyV2Dao studyRepository;
+
+    @MockitoBean
+    private CropOntologyRepository cropOntologyRepository;
+
     @Autowired
     private TrialController trialController;
 
@@ -80,6 +86,17 @@ public class TrialControllerTest {
     @BeforeEach
     void prepare() {
         trial = Fixtures.createTrialV2();
+        trial.setStudyDbIds(List.of("study2"));
+
+        StudyV2VO study = new StudyV2VO();
+        study.setStudyDbId("study2");
+        study.setObservationVariableDbIds(List.of("variable1"));
+
+        ObservationVariableV1VO variable = Fixtures.createVariable();
+
+        when(studyRepository.getByStudyDbId("study2")).thenReturn(study);
+        when(cropOntologyRepository.getVariableByIds(Set.of("variable1")))
+            .thenReturn(List.of(variable));
         when(mockTrialRepository.getByTrialDbId(trial.getTrialDbId())).thenReturn(trial);
 
         germplasm = Fixtures.createGermplasmV2ForTrial();
@@ -101,27 +118,28 @@ public class TrialControllerTest {
                 List.of()
             )
         );
+        when(cropOntologyRepository.getVariableByIds(any()))
+            .thenReturn(List.of(Fixtures.createVariable()));
     }
 
     @Test
     void shouldDisplayTrial() throws Exception {
-        mockMvc.perform(get("/trials/{id}", trial.getTrialDbId()))
-               .andExpect(status().isOk())
-               .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-               .andExpect(htmlContent().hasTitle("Trial Trial type 1: Trial 1"))
-               .andExpect(htmlContent().containsH2s("Identification", "Genotype", "Studies", "Contact"))
-               .andExpect(htmlContent().endsCorrectly());
+          mockMvc.perform(get("/trials/{id}", trial.getTrialDbId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+            .andExpect(htmlContent().hasTitle("Trial Trial type 1: Trial 1"))
+            .andExpect(htmlContent().containsH2s("Identification", "Genotype", "Variables", "Studies", "Contact"))
+            .andExpect(htmlContent().endsCorrectly());
     }
-
     @Test
     void shouldDisplayTrialExport() throws Exception {
         ObservationExportJob job = new ObservationExportJob("job1", ExportFormat.EXCEL, Path.of("/tmp/export.xlsx"));
         when(mockObservationExportJobService.getJob(job.getId())).thenReturn(Optional.of(job));
         mockMvc.perform(get("/trials/{id}/exports/{jobId}", trial.getTrialDbId(), job.getId()))
-               .andExpect(status().isOk())
-               .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-               .andExpect(htmlContent().hasTitle("Export for trial Trial type 1: Trial 1"))
-               .andExpect(htmlContent().endsCorrectly());
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+            .andExpect(htmlContent().hasTitle("Export for trial Trial type 1: Trial 1"))
+            .andExpect(htmlContent().endsCorrectly());
     }
 
     @Test
@@ -144,20 +162,20 @@ public class TrialControllerTest {
         testSitemap(7, "");
 
         mockMvc.perform(get("/faidare/trials/sitemap-17.txt")
-                            .contextPath("/faidare"))
-               .andExpect(status().isNotFound());
+                .contextPath("/faidare"))
+            .andExpect(status().isNotFound());
     }
 
     private void testSitemap(int index, String expectedContent) throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/faidare/trials/sitemap-" + index + ".txt")
-                                                  .contextPath("/faidare"))
-                                     .andExpect(request().asyncStarted())
-                                     .andReturn();
+                .contextPath("/faidare"))
+            .andExpect(request().asyncStarted())
+            .andReturn();
 
         this.mockMvc.perform(asyncDispatch(mvcResult))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.TEXT_PLAIN))
-                    .andExpect(content().string(expectedContent));
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.TEXT_PLAIN))
+            .andExpect(content().string(expectedContent));
 
     }
 }
