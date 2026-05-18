@@ -32,11 +32,11 @@
     "leaflet": "1.9.4"
   },
   "devDependencies": {
-    "@playwright/test": "1.59.1",
+    "@playwright/test": "1.60.0",
     "@types/bootstrap": "5.2.10",
     "@types/leaflet.markercluster": "1.5.6",
     "autoprefixer": "10.5.0",
-    "baseline-browser-mapping": "2.10.29",
+    "baseline-browser-mapping": "2.10.30",
     "clean-webpack-plugin": "4.0.0",
     "css-loader": "7.1.4",
     "css-minimizer-webpack-plugin": "8.0.0",
@@ -47,7 +47,7 @@
     "prettier": "3.8.3",
     "sass": "1.99.0",
     "sass-loader": "16.0.8",
-    "start-server-and-test": "3.0.4",
+    "start-server-and-test": "3.0.5",
     "ts-loader": "9.5.7",
     "typescript": "5.9.3",
     "webpack": "5.106.2",

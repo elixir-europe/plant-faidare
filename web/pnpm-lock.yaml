@@ -19,8 +19,8 @@ importers:
         version: 1.9.4
     devDependencies:
       '@playwright/test':
-        specifier: 1.59.1
-        version: 1.59.1
+        specifier: 1.60.0
+        version: 1.60.0
       '@types/bootstrap':
         specifier: 5.2.10
         version: 5.2.10
@@ -31,8 +31,8 @@ importers:
         specifier: 10.5.0
         version: 10.5.0(postcss@8.5.14)
       baseline-browser-mapping:
-        specifier: 2.10.29
-        version: 2.10.29
+        specifier: 2.10.30
+        version: 2.10.30
       clean-webpack-plugin:
         specifier: 4.0.0
         version: 4.0.0(webpack@5.106.2)
@@ -64,8 +64,8 @@ importers:
         specifier: 16.0.8
         version: 16.0.8(sass@1.99.0)(webpack@5.106.2)
       start-server-and-test:
-        specifier: 3.0.4
-        version: 3.0.4
+        specifier: 3.0.5
+        version: 3.0.5
       ts-loader:
         specifier: 9.5.7
         version: 9.5.7(typescript@5.9.3)(webpack@5.106.2)
@@ -234,8 +234,8 @@ packages:
     resolution: {integrity: sha512-i0GV1yJnm2n3Yq1qw6QrUrd/LI9bE8WEBOTtOkpCXHHdyN3TAGgqAK/DAT05z4fq2x04cARXt2pDmjWjL92iTQ==}
     engines: {node: '>= 10.0.0'}
 
-  '@playwright/test@1.59.1':
-    resolution: {integrity: sha512-PG6q63nQg5c9rIi4/Z5lR5IVF7yU5MqmKaPOe0HSc0O2cX1fPi96sUQu5j7eo4gKCkB2AnNGoWt7y4/Xx3Kcqg==}
+  '@playwright/test@1.60.0':
+    resolution: {integrity: sha512-O71yZIbAh/PxDMNGns37GHBIfrVkEVyn+AXyIa5dOTfb4/xNvRWV+Vv/NMbNCtODB/pO7vLlF2OTmMVLhmr7Ag==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -441,8 +441,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  baseline-browser-mapping@2.10.29:
-    resolution: {integrity: sha512-Asa2krT+XTPZINCS+2QcyS8WTkObE77RwkydwF7h6DmnKqbvlalz93m/dnphUyCa6SWSP51VgtEUf2FN+gelFQ==}
+  baseline-browser-mapping@2.10.30:
+    resolution: {integrity: sha512-xjOFN16Ha1+Rz4nFYKqHU/LSB+gx/Vi3yQLX7r7sAW+Wa+8hhF2h4pvqTrTMc8+WcDBEunnUurr46Jvv0jk3Vg==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -1172,13 +1172,13 @@ packages:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
 
-  playwright-core@1.59.1:
-    resolution: {integrity: sha512-HBV/RJg81z5BiiZ9yPzIiClYV/QMsDCKUyogwH9p3MCP6IYjUFu/MActgYAvK0oWyV9NlwM3GLBjADyWgydVyg==}
+  playwright-core@1.60.0:
+    resolution: {integrity: sha512-9bW6zvX/m0lEbgTKJ6YppOKx8H3VOPBMOCFh2irXFOT4BbHgrx5hPjwJYLT40Lu+4qtD36qKc/Hn56StUW57IA==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.59.1:
-    resolution: {integrity: sha512-C8oWjPR3F81yljW9o5OxcWzfh6avkVwDD2VYdwIGqTkl+OGFISgypqzfu7dOe4QNLL2aqcWBmI3PMtLIK233lw==}
+  playwright@1.60.0:
+    resolution: {integrity: sha512-hheHdokM8cdqCb0lcE3s+zT4t4W+vvjpGxsZlDnikarzx8tSzMebh3UiFtgqwFwnTnjYQcsyMF8ei2mCO/tpeA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1511,8 +1511,8 @@ packages:
     resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
     engines: {node: '>= 8'}
 
-  start-server-and-test@3.0.4:
-    resolution: {integrity: sha512-y9j+VvFW5SH8deed5GvyNQs8gk8t8TJRDZYBvEPhCwdr/VhISvVvyamMNcNV4h9PxOptPGgPigb6yz4C67O1Qw==}
+  start-server-and-test@3.0.5:
+    resolution: {integrity: sha512-2SvI2UR+rVM4FQ3GqEnjjfVATln6JgJGsZjRRyAqgl1EI6fJFH5zVCawqJLcmU9vBxwI0ZX9i3M+GFpY+sxWcw==}
     engines: {node: ^22 || >=24}
     hasBin: true
 
@@ -1609,8 +1609,8 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  wait-on@9.0.6:
-    resolution: {integrity: sha512-KR+Te+NBg6DmPVil4anyIO72mpt/QDHjRo3nVFkwRgb26oweUp3DDW2szO3EeUY4cqafWy4rQuOOeEk4n+7Oeg==}
+  wait-on@9.0.10:
+    resolution: {integrity: sha512-rCoJEhvMr0X6alHmwc9abbrA5ZrLZFKpFQVKPNFwl2h7DapXOGdmimIHDtLOWhT4PjhZhxFEtZoQgEXbkDWdZw==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
@@ -1791,9 +1791,9 @@ snapshots:
       '@parcel/watcher-win32-x64': 2.5.0
     optional: true
 
-  '@playwright/test@1.59.1':
+  '@playwright/test@1.60.0':
     dependencies:
-      playwright: 1.59.1
+      playwright: 1.60.0
 
   '@popperjs/core@2.11.8': {}
 
@@ -2012,7 +2012,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  baseline-browser-mapping@2.10.29: {}
+  baseline-browser-mapping@2.10.30: {}
 
   bluebird@3.7.2: {}
 
@@ -2033,7 +2033,7 @@ snapshots:
 
   browserslist@4.28.1:
     dependencies:
-      baseline-browser-mapping: 2.10.29
+      baseline-browser-mapping: 2.10.30
       caniuse-lite: 1.0.30001775
       electron-to-chromium: 1.5.267
       node-releases: 2.0.27
@@ -2041,7 +2041,7 @@ snapshots:
 
   browserslist@4.28.2:
     dependencies:
-      baseline-browser-mapping: 2.10.29
+      baseline-browser-mapping: 2.10.30
       caniuse-lite: 1.0.30001788
       electron-to-chromium: 1.5.340
       node-releases: 2.0.37
@@ -2683,11 +2683,11 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  playwright-core@1.59.1: {}
+  playwright-core@1.60.0: {}
 
-  playwright@1.59.1:
+  playwright@1.60.0:
     dependencies:
-      playwright-core: 1.59.1
+      playwright-core: 1.60.0
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -2973,7 +2973,7 @@ snapshots:
 
   source-map@0.7.4: {}
 
-  start-server-and-test@3.0.4:
+  start-server-and-test@3.0.5:
     dependencies:
       arg: 5.0.2
       bluebird: 3.7.2
@@ -2982,7 +2982,7 @@ snapshots:
       execa: 5.1.1
       lazy-ass: 1.6.0
       tree-kill: 1.2.2
-      wait-on: 9.0.6(debug@4.4.3)
+      wait-on: 9.0.10(debug@4.4.3)
     transitivePeerDependencies:
       - supports-color
 
@@ -3067,7 +3067,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  wait-on@9.0.6(debug@4.4.3):
+  wait-on@9.0.10(debug@4.4.3):
     dependencies:
       axios: 1.16.0(debug@4.4.3)
       joi: 18.2.1
