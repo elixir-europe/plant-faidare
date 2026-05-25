@@ -7,7 +7,7 @@ stages:
   - deploy-staging
   - deploy-production
 
-image: cimg/openjdk:21.0.9-browsers
+image: cimg/openjdk:21.0.11-browsers
 workflow:
   rules:
     - if: $CI_COMMIT_TAG
@@ -109,7 +109,7 @@ build-loader-docker-image:
   image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/docker-git:latest
   stage: pre-build
   services:
-    - docker:29.5.0-dind
+    - docker:29.5.2-dind
   script:
     # build the image
     - docker build -t ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/docker-rare/faidare-loader:${IMAGE_TAG} .

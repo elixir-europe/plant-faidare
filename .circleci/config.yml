@@ -7,7 +7,7 @@ jobs: # a collection of steps
     working_directory: ~/faidare # directory where steps will run
 
     docker: # run the steps with Docker
-      - image: cimg/openjdk:21.0.9-browsers # ...with this image as the primary container; this is where all `steps` will run
+      - image: cimg/openjdk:21.0.11-browsers # ...with this image as the primary container; this is where all `steps` will run
       - image: docker.elastic.co/elasticsearch/elasticsearch:7.17.29
         name: elasticsearch
         environment:
