@@ -6,7 +6,7 @@
   "engines": {
     "node": "24.16.0"
   },
-  "packageManager": "pnpm@10.33.4",
+  "packageManager": "pnpm@11.3.0",
   "scripts": {
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
