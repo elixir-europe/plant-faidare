@@ -31,8 +31,8 @@ importers:
         specifier: 10.5.0
         version: 10.5.0(postcss@8.5.15)
       baseline-browser-mapping:
-        specifier: 2.10.33
-        version: 2.10.33
+        specifier: 2.10.34
+        version: 2.10.34
       clean-webpack-plugin:
         specifier: 4.0.0
         version: 4.0.0(webpack@5.107.2)
@@ -64,8 +64,8 @@ importers:
         specifier: 17.0.0
         version: 17.0.0(sass@1.100.0)(webpack@5.107.2)
       start-server-and-test:
-        specifier: 3.0.7
-        version: 3.0.7
+        specifier: 3.0.8
+        version: 3.0.8
       ts-loader:
         specifier: 9.6.0
         version: 9.6.0(typescript@6.0.3)(webpack@5.107.2)
@@ -410,13 +410,13 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  baseline-browser-mapping@2.10.32:
-    resolution: {integrity: sha512-wbPvpyjJPC0zdfdKXxqEL3Ea+bOMD/87X4lftiJkkaBiuG6ALQy1SLmEd7BSmVCuwCQsBrCamgBoLyfFDD1EPg==}
+  baseline-browser-mapping@2.10.33:
+    resolution: {integrity: sha512-bA6+tcSLpz2tIEdDXZPpPTIuxBcC4+w6SieaYyfigIa4h8GlFxbA17v22Vx3JUtuZQj9SgOsnbK+aTBzyDyEuw==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  baseline-browser-mapping@2.10.33:
-    resolution: {integrity: sha512-bA6+tcSLpz2tIEdDXZPpPTIuxBcC4+w6SieaYyfigIa4h8GlFxbA17v22Vx3JUtuZQj9SgOsnbK+aTBzyDyEuw==}
+  baseline-browser-mapping@2.10.34:
+    resolution: {integrity: sha512-IMDedajPifLnHNY0X9n8hKxRTQ6/eTHwr5bDo04WnuqxyKw6LYtQywCuuqPZwhl3aBXMvQpJov42GLCwRRdQzw==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -1461,8 +1461,8 @@ packages:
     resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
     engines: {node: '>= 8'}
 
-  start-server-and-test@3.0.7:
-    resolution: {integrity: sha512-bREV2smSYwybdmnkNUjzoL7WTolg+6MN7sXaZC2/JB7zZSUKmkcqQ3eaRX2yoL+ZnrUMk2FRHMwmmD9LPwKGzg==}
+  start-server-and-test@3.0.8:
+    resolution: {integrity: sha512-BG1tHNyEW/mPhw50DFPb0uKoq7f7yNQFO+CJb83MKZkCPKmWqb522YGMM3f4XG1Kra2v3xU3ou6O+s8taChM6A==}
     engines: {node: ^22 || >=24}
     hasBin: true
 
@@ -1966,9 +1966,9 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  baseline-browser-mapping@2.10.32: {}
-
   baseline-browser-mapping@2.10.33: {}
+
+  baseline-browser-mapping@2.10.34: {}
 
   boolbase@1.0.0: {}
 
@@ -1987,7 +1987,7 @@ snapshots:
 
   browserslist@4.28.2:
     dependencies:
-      baseline-browser-mapping: 2.10.32
+      baseline-browser-mapping: 2.10.33
       caniuse-lite: 1.0.30001788
       electron-to-chromium: 1.5.340
       node-releases: 2.0.37
@@ -2909,7 +2909,7 @@ snapshots:
 
   source-map@0.7.4: {}
 
-  start-server-and-test@3.0.7:
+  start-server-and-test@3.0.8:
     dependencies:
       arg: 5.0.2
       check-more-types: 2.24.0

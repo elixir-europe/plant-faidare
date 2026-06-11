@@ -10,7 +10,7 @@ buildscript {
 plugins {
     java
     jacoco
-    id("org.springframework.boot") version "4.0.6"
+    id("org.springframework.boot") version "4.1.0"
     id("com.gorylenko.gradle-git-properties") version "4.0.1"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.sonarqube")
@@ -105,7 +105,7 @@ tasks {
     }
 }
 
-extra["springCloudVersion"] = "2025.1.1"
+extra["springCloudVersion"] = "2025.1.2"
 dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
