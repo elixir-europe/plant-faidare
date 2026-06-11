@@ -11,7 +11,7 @@ plugins {
     java
     jacoco
     id("org.springframework.boot") version "4.0.6"
-    id("com.gorylenko.gradle-git-properties") version "2.5.7"
+    id("com.gorylenko.gradle-git-properties") version "4.0.1"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.sonarqube")
     id("org.owasp.dependencycheck") version "12.2.2"
