@@ -73,3 +73,9 @@ tasks {
         dependsOn(e2e)
     }
 }
+tasks.withType<PnpmTask>().configureEach {
+    environment.put(
+        "NPM_CONFIG_STORE_DIR",
+        "${project.projectDir}/.pnpm-store"
+    )
+}
