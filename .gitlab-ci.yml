@@ -24,6 +24,7 @@ variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
   SERVICE_NAME: faidare-cards
+  PNPM_CONFIG_STORE_DIR: $CI_PROJECT_DIR/web/.pnpm-store
   JAR_PATH: "backend/build/libs/faidare.jar"
   GIT_DEPTH: 0
   IMAGE_TAG: $CI_COMMIT_REF_SLUG
@@ -181,7 +182,6 @@ test-and-sonarqube:
     - echo "Trying to access Elasticsearch logs..."
     - curl -s "http://${ES_HOST}:${ES_PORT}/_cluster/health?pretty"
     # Launch tests
-    - export PNPM_CONFIG_STORE_DIR="$CI_PROJECT_DIR/web/.pnpm-store"
     - ./gradlew clean check
     - ./gradlew test jacocoTestReport -s sonar
   artifacts:
