@@ -26,7 +26,8 @@ public class BrapiMetadata {
         brapiResponse.getMetadata().getPagination().setCurrentPage(pageable.getPageNumber());
         brapiResponse.getMetadata().getPagination().setPageSize(pageable.getPageSize());
         brapiResponse.getMetadata().getPagination().setTotalCount(totalHits);
-        brapiResponse.getMetadata().getPagination().setTotalPages(totalHits / pageable.getPageSize());
+        //0 based in the BrAPI specs, should be plus 1
+        brapiResponse.getMetadata().getPagination().setTotalPages(totalHits / pageable.getPageSize() + 1);
     }
     public List<Map<String, String>> getDatafiles() {
         return datafiles;
