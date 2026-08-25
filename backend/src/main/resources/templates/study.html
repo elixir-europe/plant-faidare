@@ -151,7 +151,7 @@
                   <td>
                     <a
                       th:unless="${#strings.isEmpty(row.documentationURL)}"
-                      th:href="${row.documentationURL}"
+                      th:href="@{'/ontology#' + ${row.observationVariableDbId}}"
                       th:text="${row.observationVariableDbId}"
                       target="_blank"
                     ></a>
